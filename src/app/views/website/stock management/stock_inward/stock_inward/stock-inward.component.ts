@@ -36,7 +36,7 @@ export class StockInwardComponent implements OnInit {
 
   companyRef = this.companystatemanagement.SelectedCompanyRef;
 
-  headers: string[] = ['Sr.No.', 'Chalan No', 'Site', 'Vendor', 'Material', 'Unit', 'Ordered Qty', 'Total Inward Qty', 'Remaining Qty','Inward Date', 'Status', 'Action & Print'];
+  headers: string[] = ['Sr.No.', 'Chalan No', 'Site', 'Vendor', 'Material', 'Unit', 'Ordered Qty', 'Total Inward Qty', 'Remaining Qty', 'Inward Date', 'Action & Print'];
 
   constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private screenSizeService: ScreenSizeService,
     private companystatemanagement: CompanyStateManagement, private DateconversionService: DateconversionService, private dtu: DTU,
@@ -104,11 +104,17 @@ export class StockInwardComponent implements OnInit {
     await this.router.navigate(['/homepage/Website/Stock_Inward_Details']);
   }
 
-  onEditClicked = async (item: StockInward) => {
-    this.router.navigate(['/homepage/Website/Stock_Inward_Details'], {
-      state: { inwardref: item.p.Ref }
-    });
+  // onEditClicked = async (item: StockInward) => {
+  //   this.router.navigate(['/homepage/Website/Stock_Inward_Details'], {
+  //     state: { inwardref: item.p.Ref }
+  //   });
+  // };
 
+  onEditClicked = async (item: StockInward) => {
+    this.SelectedStockInward = item.GetEditableVersion();
+    StockInward.SetCurrentInstance(this.SelectedStockInward);
+    this.appStateManage.StorageKey.setItem('Editable', 'Edit');
+    await this.router.navigate(['/homepage/Website/Stock_Inward_Details']);
   };
 
   navigateToPrint = async (item: StockInward) => {

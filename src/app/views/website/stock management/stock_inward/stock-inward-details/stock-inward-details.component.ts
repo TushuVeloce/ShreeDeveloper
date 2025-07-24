@@ -6,8 +6,8 @@ import { Material } from 'src/app/classes/domain/entities/website/masters/materi
 import { MaterialFromOrder } from 'src/app/classes/domain/entities/website/masters/material/orderedmaterial/materialfromorder';
 import { Site } from 'src/app/classes/domain/entities/website/masters/site/site';
 import { Vendor } from 'src/app/classes/domain/entities/website/masters/vendor/vendor';
+import { PurchaseOrderChalanFetchRequest } from 'src/app/classes/domain/entities/website/stock_management/stock_inward/actualstagechalan/purchaseorderfetchrequest';
 import { InwardMaterial, InwardMaterialDetailProps } from 'src/app/classes/domain/entities/website/stock_management/stock_inward/inwardmaterial/inwardmaterial';
-import { PurchaseOrderChalanFetchRequest } from 'src/app/classes/domain/entities/website/stock_management/stock_inward/purchaseorderchalan/purchaseorderfetchrequest';
 import { StockInward } from 'src/app/classes/domain/entities/website/stock_management/stock_inward/stockinward';
 import { MaterialStockOrder } from 'src/app/classes/domain/entities/website/stock_management/stock_order/materialstockorder/materialstockorder';
 import { Order } from 'src/app/classes/domain/entities/website/stock_management/stock_order/order';
@@ -31,9 +31,9 @@ import { Utils } from 'src/app/services/utils.service';
 })
 export class StockInwardDetailsComponent implements OnInit {
   Entity: StockInward = StockInward.CreateNewInstance();
-  private IsNewEntity: boolean = true;
+  IsNewEntity: boolean = true;
   isSaveDisabled: boolean = false;
-  DetailsFormTitle: string = 'Edit Stock Inward';
+  DetailsFormTitle: 'New Stock Inward' | 'Edit Stock Inward' = 'New Stock Inward';
   IsDropdownDisabled: boolean = false;
   InitialEntity: StockInward = null as any;
   SiteList: Site[] = [];
@@ -108,6 +108,8 @@ export class StockInwardDetailsComponent implements OnInit {
       this.Entity = StockInward.GetCurrentInstance();
       this.imagePostView = `${this.ImageBaseUrl}${this.Entity.p.MaterialInwardInvoicePath}/${this.LoginToken}?${this.TimeStamp}`;
       this.selectedFileName = this.Entity.p.MaterialInwardInvoicePath;
+      this.InwardDate = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.InwardDate);
+      this.getOrderIdListByCompanySiteAndVendorRef();
       this.appStateManage.StorageKey.removeItem('Editable');
     } else {
       this.Entity = StockInward.CreateNewInstance();
@@ -116,8 +118,8 @@ export class StockInwardDetailsComponent implements OnInit {
       let parts = this.strCDT.substring(0, 16).split('-');
       // Construct the new date format
       this.InwardDate = `${parts[0]}-${parts[1]}-${parts[2]}`;
+      await this.ChalanNo()
     }
-    await this.ChalanNo()
   }
 
 
@@ -224,7 +226,6 @@ export class StockInwardDetailsComponent implements OnInit {
       return;
     }
     const lst = await MaterialFromOrder.FetchOrderedMaterials(this.Entity.p.MaterialPurchaseOrderRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-    console.log('lst :', lst);
     this.MaterialListOriginal = lst?.filter(item => item.p.IsMaterialExist == 1);
     this.MaterialListOriginal?.forEach((item, index) => {
       item.p.InternalRef = index + 1;
@@ -422,9 +423,8 @@ export class StockInwardDetailsComponent implements OnInit {
       await this.uiUtils.showSuccessToster('Material added successfully');
     }
 
-    let Date = this.newInward.Date;
     this.newInward = InwardMaterialDetailProps.Blank();
-    this.newInward.Date = Date;
+    this.newInward.Date = this.InwardDate;
     this.NewRemainingQty = 0;
     this.editingIndex = null;
   }
@@ -466,7 +466,6 @@ export class StockInwardDetailsComponent implements OnInit {
     this.Entity.p.CreatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
     this.Entity.p.InwardDate = this.dtu.ConvertStringDateToFullFormat(this.InwardDate);
 
-    debugger
     let entityToSave = this.Entity.GetEditableVersion();
 
     let entitiesToSave = [entityToSave];
@@ -492,14 +491,13 @@ export class StockInwardDetailsComponent implements OnInit {
       if (this.IsNewEntity) {
         await this.uiUtils.showSuccessToster('Stock Inward saved successfully');
         this.Entity = StockInward.CreateNewInstance();
-        this.resetAllControls()
         this.SessionAddedRefs = [];
         this.filterMaterialList();
       } else {
         await this.uiUtils.showSuccessToster('Stock Inward Updated successfully');
-        await this.router.navigate(['/homepage/Website/Stock_Inward']);
       }
     }
+    await this.router.navigate(['/homepage/Website/Stock_Inward']);
   };
 
 
@@ -523,7 +521,7 @@ export class StockInwardDetailsComponent implements OnInit {
   }
 
   resetAllControls() {
-    this.requisitionForm.resetForm();
+    // this.requisitionForm.resetForm();
   }
 
 }

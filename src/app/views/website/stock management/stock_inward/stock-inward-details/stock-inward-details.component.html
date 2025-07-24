@@ -30,7 +30,7 @@
       <div class="row" style="margin-top: 1rem">
         <div class="col-md-4">
           <label>Inward Date</label>
-          <input type="date" name="InwardDate" class="form-control" id="InwardDate" [(ngModel)]="InwardDate"
+          <input type="date" name="InwardDate" [disabled]="!this.IsNewEntity" class="form-control" id="InwardDate" [(ngModel)]="InwardDate"
             #InwardDateCtrl="ngModel" required (blur)="InwardDateCtrl.control.markAsTouched()"
             placeholder="Enter Site Name" [min]="Entity.p.PurchaseOrderDate" />
           <div *ngIf="InwardDateCtrl.invalid && (InwardDateCtrl.touched || InwardDateCtrl.dirty)">
@@ -39,13 +39,13 @@
         </div>
         <div class="col-md-4">
           <label><b>Chalan No</b></label>
-          <input type="number" [(ngModel)]="Entity.p.ChalanNo" name="ChalanNo" class="form-control" id="ChalanNo"
+          <input type="number" [(ngModel)]="Entity.p.ChalanNo" [disabled]="!this.IsNewEntity" name="ChalanNo" class="form-control" id="ChalanNo"
             placeholder="Chalan No" readonly />
         </div>
         <div class="col-md-4">
 
           <label for="SiteRef"><b>Site</b></label>
-          <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
+          <nz-select class="nzSelect-light" [disabled]="!this.IsNewEntity" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
             nzPlaceHolder="Select" [nzSize]="'large'" name="SiteRef" id="SiteRef" [(ngModel)]="Entity.p.SiteRef"
             (ngModelChange)="getOrderIdListByCompanySiteAndVendorRef()">
             <nz-option *ngFor="let Site of SiteList" [nzValue]="Site.p.Ref" [nzLabel]="Site.p.Name"></nz-option>
@@ -53,7 +53,7 @@
         </div>
         <div class="col-md-4">
           <label for="VendorRef"><b>Vendor</b></label>
-          <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
+          <nz-select class="nzSelect-light" [disabled]="!this.IsNewEntity" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
             nzPlaceHolder="Select" [nzSize]="'large'" name="VendorRef" id="VendorRef" [(ngModel)]="Entity.p.VendorRef"
             (ngModelChange)="getOrderIdListByCompanySiteAndVendorRef(); onVendorSelection(Entity.p.VendorRef);">
             <nz-option *ngFor="let Vendor of VendorList" [nzValue]="Vendor.p.Ref" [nzLabel]="Vendor.p.Name"></nz-option>
@@ -61,12 +61,12 @@
         </div>
         <div class="col-md-4">
           <label><b>Vendor Trade Name</b></label>
-          <input type="text" [(ngModel)]="Entity.p.VendorTradeName" name="VendorTradeName" class="form-control"
+          <input type="text" [(ngModel)]="Entity.p.VendorTradeName" [disabled]="!this.IsNewEntity" name="VendorTradeName" class="form-control"
             id="VendorTradeName" placeholder="Vendor Trade Name" readonly />
         </div>
         <div class="col-md-4">
           <label><b>Vendor Mobile No</b></label>
-          <input type="text" [(ngModel)]="Entity.p.VendorPhoneNo" name="VendorPhoneNo" class="form-control"
+          <input type="text" [(ngModel)]="Entity.p.VendorPhoneNo" [disabled]="!this.IsNewEntity" name="VendorPhoneNo" class="form-control"
             id="VendorPhoneNo" placeholder="Vendor Mob No" readonly />
         </div>
 
@@ -77,7 +77,7 @@
         </div>
         <div class="col-md-4">
           <label for="MaterialPurchaseOrderRef"><b>Purchase ID</b></label>
-          <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
+          <nz-select class="nzSelect-light" [disabled]="!this.IsNewEntity" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
             nzPlaceHolder="Select" [nzSize]="'large'" name="MaterialPurchaseOrderRef" id="MaterialPurchaseOrderRef"
             [(ngModel)]="Entity.p.MaterialPurchaseOrderRef"
             (ngModelChange)="getMaterialListByCompanySiteVendorRefAndPurchaseOrderID();">

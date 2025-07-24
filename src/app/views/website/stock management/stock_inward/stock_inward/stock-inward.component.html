@@ -82,47 +82,41 @@
                 {{ detail.Date ? formatDate(detail.Date) : '--'}}
               </td>
               <!-- Optional: Requisition status -->
-              <td class="tbldata" *ngIf="j === 0" [attr.rowspan]="Inward.p.MaterialInwardDetailsArray.length">
-                <!-- PENDING -->
+              <!-- <td class="tbldata" *ngIf="j === 0" [attr.rowspan]="Inward.p.MaterialInwardDetailsArray.length">
                 <span class="status" *ngIf="Inward.p.MaterialInwardStatus == MaterialInwardStatus.Pending"
                   ngClass="pending">
                   Pending
                 </span>
 
-                <!-- APPROVED -->
                 <span class="status" style="cursor: pointer;"
                   *ngIf="Inward.p.MaterialInwardStatus == MaterialInwardStatus.Approved" ngClass="approved">
                   Approved
                 </span>
 
-                <!-- REJECTED -->
                 <span class="status" *ngIf="Inward.p.MaterialInwardStatus == MaterialInwardStatus.Rejected"
                   ngClass="rejected">
                   Rejected
                 </span>
 
-                <!-- Completed -->
                 <span class="status" *ngIf="Inward.p.MaterialInwardStatus == MaterialInwardStatus.Completed"
                   ngClass="completed">
                   Completed
                 </span>
 
-                <!-- Incomplete -->
                 <span class="status" *ngIf="Inward.p.MaterialInwardStatus == MaterialInwardStatus.Incomplete"
                   ngClass="incomplete">
                   Incomplete
                 </span>
 
-                <!-- Ordered -->
                 <span class="status" *ngIf="Inward.p.MaterialInwardStatus == MaterialInwardStatus.Ordered"
                   ngClass="ordered">
                   Ordered
                 </span>
-              </td>
+              </td> -->
 
               <td class="tbldata" *ngIf="j === 0" [attr.rowspan]="Inward.p.MaterialInwardDetailsArray.length">
                 <span style="margin-left: 5px; margin-right: 5px; cursor: pointer;">
-                  <img src="\assets\icons\printer.png" alt="logo" title="Print" width="20px" height="20px" />
+                  <img src="\assets\icons\printer.png" alt="logo" title="Print" width="20px" height="20px" (click)="navigateToPrint(Inward)"/>
                 </span>
                 <span style="margin-left: 5px;" (click)="onEditClicked(Inward)">
                   <img src="/assets/icons/edit.png" alt="Edit" title="Edit" width="20px" height="20px" />
