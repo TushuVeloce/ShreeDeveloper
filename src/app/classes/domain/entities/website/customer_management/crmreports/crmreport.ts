@@ -46,6 +46,7 @@ export class CRMReportsProps {
   public GovermentRatePerSqm: number = 0;
   public RegTaxValueInPercentage: number = 0;
   public GoodsServicesTax: number = 0;
+  public GstToatalAmount: number = 0;
   public TotalChequeRecieved: number = 0;
   public TotalCashRecieved: number = 0;
   public TotalAmountRecieved: number = 0;

@@ -359,7 +359,7 @@ export class StockOrderViewMobileAppComponent  implements OnInit {
   openModal(requisition: any) {
     console.log('requisition: any:', requisition);
     this.SelectedOrder = requisition;
-    this.prepareInvoiceUrl(requisition.p.MaterialPurchaseInvoicePath)
+    // this.prepareInvoiceUrl(requisition.p.MaterialPurchaseInvoicePath)
     this.modalOpen = true;
   }
 

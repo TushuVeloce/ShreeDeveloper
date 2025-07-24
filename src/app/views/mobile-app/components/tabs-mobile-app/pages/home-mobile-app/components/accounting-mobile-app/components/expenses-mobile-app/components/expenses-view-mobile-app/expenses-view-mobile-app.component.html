@@ -2,7 +2,7 @@
   backRoute="mobile-app/tabs/dashboard/accounting"></app-header-with-back-handler>
 <app-chip-filter-mobile-app [filters]="filters" (filtersChanged)="onFiltersChanged($event)">
 </app-chip-filter-mobile-app>
-<ion-content  class="ion-padding">
+<ion-content class="ion-padding">
   <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
@@ -14,7 +14,9 @@
         <h2>Site : {{ Expense.p.SiteName || 'Unknown Site' }}</h2>
         <p class="date-label">Expense Date : {{ formatDate(Expense.p.Date) || '-' }}</p>
         <p class="date-label">Ledger : {{ Expense.p.LedgerName || '-' }}</p>
-        <p class="date-label">Sub Ledger : {{ Expense.p.SubLedgerName || '-' }}
+        <p class="date-label">Recipient Name : {{ Expense.p.RecipientName || '-' }}
+        </p>
+        <p class="date-label">Given Amount : {{ (Expense.p.GivenAmount| currency : "INR") || '-' }}
         </p>
       </ion-label>
 
@@ -43,57 +45,73 @@
   <ion-modal [isOpen]="modalOpen" (didDismiss)="closeModal()" class="custom-modal-mobile-app">
     <ng-template>
 
-        <!-- Header -->
-        <ion-header class="modal-toolbar-mobile-app">
-          <ion-toolbar color="primary">
-            <ion-title>Expense Details</ion-title>
-            <ion-buttons slot="end">
-              <ion-button fill="clear" (click)="closeModal()">
-                <ion-icon name="close-outline"></ion-icon>
-              </ion-button>
-            </ion-buttons>
-          </ion-toolbar>
-        </ion-header>
+      <!-- Header -->
+      <ion-header class="modal-toolbar-mobile-app">
+        <ion-toolbar color="primary">
+          <ion-title>Expense Details</ion-title>
+          <ion-buttons slot="end">
+            <ion-button fill="clear" (click)="closeModal()">
+              <ion-icon name="close-outline"></ion-icon>
+            </ion-button>
+          </ion-buttons>
+        </ion-toolbar>
+      </ion-header>
 
-        <!-- Body -->
-       <ion-content scroll-y="true" class="ion-padding modal-content-mobile-app">
-          <!-- Info Rows -->
-          <div class="info-row-of-model-mobile-app">
-            <span class="label-mobile-app">Expense Date:</span>
-            <span class="value-mobile-app">{{ formatDate(SelectedExpense.p.Date) || '-' }}</span>
-          </div>
-          <div class="info-row-of-model-mobile-app">
-            <span class="label-mobile-app">Site Name:</span>
-            <span class="value-mobile-app">{{ SelectedExpense.p.SiteName || '-' }}</span>
-          </div>
-          <div class="info-row-of-model-mobile-app">
-            <span class="label-mobile-app">Ledger Name :</span>
-            <span class="value-mobile-app">{{ SelectedExpense.p.LedgerName || '-' }}</span>
-          </div>
-          <div class="info-row-of-model-mobile-app">
-            <span class="label-mobile-app">Sub Ledger Name:</span>
-            <span class="value-mobile-app">{{ SelectedExpense.p.SubLedgerName || '-' }}</span>
-          </div>
-          <!-- <div class="info-row-of-model-mobile-app">
-            <span class="label-mobile-app">Description :</span>
-            <span class="value-mobile-app">{{ SelectedExpense.p.Description || '-' }}</span>
-          </div> -->
-          <div class="info-row-of-model-mobile-app">
-            <span class="label-mobile-app">Recipient Name :</span>
-            <span class="value-mobile-app">{{ SelectedExpense.p.RecipientName || '-' }}</span>
-          </div>
-          <!-- <div class="info-row-of-model-mobile-app">
-            <span class="label-mobile-app">Expense Amount :</span>
-            <span class="value-mobile-app">{{ SelectedExpense.p.ExpenseAmount || '-' }}</span>
-          </div> -->
-        </ion-content>
+      <!-- Body -->
+      <ion-content scroll-y="true" class="ion-padding modal-content-mobile-app">
+        <!-- Info Rows -->
+        <div class="info-row-of-model-mobile-app">
+          <span class="label-mobile-app">Expense Date:</span>
+          <span class="value-mobile-app">{{ formatDate(SelectedExpense.p.Date) || '-' }}</span>
+        </div>
+        <div class="info-row-of-model-mobile-app">
+          <span class="label-mobile-app">Site Name:</span>
+          <span class="value-mobile-app">{{ SelectedExpense.p.SiteName || '-' }}</span>
+        </div>
+        <div class="info-row-of-model-mobile-app">
+          <span class="label-mobile-app">Ledger Name :</span>
+          <span class="value-mobile-app">{{ SelectedExpense.p.LedgerName || '-' }}</span>
+        </div>
+        <div class="info-row-of-model-mobile-app">
+          <span class="label-mobile-app">Sub Ledger Name:</span>
+          <span class="value-mobile-app">{{ SelectedExpense.p.SubLedgerName || '-' }}</span>
+        </div>
+        <div class="info-row-of-model-mobile-app">
+          <span class="label-mobile-app">Recipient Name :</span>
+          <span class="value-mobile-app">{{ SelectedExpense.p.RecipientName || '-' }}</span>
+        </div>
+        <div class="info-row-of-model-mobile-app">
+          <span class="label-mobile-app">Reason :</span>
+          <span class="value-mobile-app">{{ SelectedExpense.p.Reason || '-' }}</span>
+        </div>
+        <div class="info-row-of-model-mobile-app">
+          <span class="label-mobile-app">Billing Amount :</span>
+          <span class="value-mobile-app">{{ (SelectedExpense.p.InvoiceAmount| currency : "INR") || '-' }}</span>
+        </div>
+        <div class="info-row-of-model-mobile-app">
+          <span class="label-mobile-app">Given Amount :</span>
+          <span class="value-mobile-app">{{ (SelectedExpense.p.GivenAmount| currency : "INR") || '-' }}</span>
+        </div>
+        <div class="info-row-of-model-mobile-app">
+          <span class="label-mobile-app">Remaining Amount :</span>
+          <span class="value-mobile-app">{{ (SelectedExpense.p.RemainingAmount| currency : "INR") || '-' }}</span>
+        </div>
+        <div class="info-row-of-model-mobile-app">
+          <span class="label-mobile-app">Shree's Balance :</span>
+          <span class="value-mobile-app">{{ (SelectedExpense.p.ShreesBalance| currency : "INR") || '-' }}</span>
+        </div>
+        <div class="info-row-of-model-mobile-app">
+          <span class="label-mobile-app">Mode Of Payment :</span>
+          <span class="value-mobile-app">{{ SelectedExpense.p.ModeOfPaymentName || '-' }}</span>
+        </div>
+      </ion-content>
 
-        <!-- Footer -->
-       <ion-footer class="modal-footer-mobile-app">
-          <ion-button expand="block" color="primary" shape="round" (click)="closeModal()">
-            Close
-          </ion-button>
-        </ion-footer>
+      <!-- Footer -->
+      <ion-footer class="modal-footer-mobile-app">
+        <ion-button expand="block" color="primary" shape="round" (click)="closeModal()">
+          Close
+        </ion-button>
+      </ion-footer>
     </ng-template>
   </ion-modal>
 
@@ -105,7 +123,7 @@
     </ion-fab-button>
     <ion-fab-list side="top">
       <ion-fab-button color="primary" (click)="handlePrintOrShare()">
-        <ion-icon name="print-outline"></ion-icon> 
+        <ion-icon name="print-outline"></ion-icon>
       </ion-fab-button>
       <ion-fab-button color="primary" (click)="AddExpense()">
         <ion-icon name="add-outline"></ion-icon>

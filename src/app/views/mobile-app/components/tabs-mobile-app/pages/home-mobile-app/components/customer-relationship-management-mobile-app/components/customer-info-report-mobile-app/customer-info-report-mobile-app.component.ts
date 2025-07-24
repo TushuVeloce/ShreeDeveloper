@@ -68,12 +68,12 @@ export class CustomerInfoReportMobileAppComponent implements OnInit {
 
   async handlePrintOrShare() {
     if (this.DisplayMasterList.length == 0) {
-      await this.toastService.present('No Income Records Found', 1000, 'warning');
+      await this.toastService.present('No Customer Info Records Found', 1000, 'warning');
       await this.haptic.warning();
       return;
     }
     if (!this.PrintContainer) return;
-    await this.pdfService.generatePdfAndHandleAction(this.PrintContainer.nativeElement, `Receipt_${this.Entity.p.Ref}.pdf`);
+    await this.pdfService.generatePdfAndHandleAction(this.PrintContainer.nativeElement, `Receipt_${this.Entity.p.RegisterDate}.pdf`);
   }
   loadFilters() {
     this.filters = [
