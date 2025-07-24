@@ -131,15 +131,6 @@ export class AttendanceDetailsComponent implements OnInit {
     }
   }
 
-  // calculateTotalWorkingHours = () => {
-  //   this.Entity.p.TotalWorkingHrs = this.Entity.p.AttendanceLogDetailsArray.reduce((total: number, item: any) => {
-  //     return total + Number(item.WorkingHrs || 0);
-  //   }, 0);
-
-  //   this.Entity.p.DisplayTotalWorkingHrs = this.convertFractionTimeToHM(this.Entity.p.TotalWorkingHrs);
-  //   return;
-  // }
-
   openModal = () => {
     if (this.Entity.p.EmployeeRef <= 0) {
       this.uiUtils.showErrorToster('Please Select Employee');

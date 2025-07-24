@@ -79,13 +79,13 @@
               <!-- Optional: Requisition status -->
               <td class="tbldata" *ngIf="j === 0" [attr.rowspan]="Order.p.MaterialPurchaseOrderDetailsArray.length">
                 <!-- PENDING -->
-                <span class="status" *ngIf="Order.p.MaterialPurchaseOrderStatus == MaterialPurchaseOrderStatus.Pending"
+                <span class="status" style="cursor: pointer;" *ngIf="Order.p.MaterialPurchaseOrderStatus == MaterialPurchaseOrderStatus.Pending"
                   ngClass="pending" (click)="NavigateOrderstatus(Order)">
                   Pending
                 </span>
 
                 <!-- APPROVED -->
-                <span class="status" style="cursor: pointer;"
+                <span class="status"
                   *ngIf="Order.p.MaterialPurchaseOrderStatus == MaterialPurchaseOrderStatus.Approved"
                   ngClass="approved">
                   Approved
@@ -119,9 +119,9 @@
               </td>
 
               <td class="tbldata" *ngIf="j === 0" [attr.rowspan]="Order.p.MaterialPurchaseOrderDetailsArray.length">
-                <span style="margin-left: 5px; margin-right: 5px; cursor: pointer;" (click)="navigateToPrint(Order)">
+                <!-- <span style="margin-left: 5px; margin-right: 5px; cursor: pointer;" (click)="navigateToPrint(Order)">
                   <img src="\assets\icons\printer.png" alt="logo" title="Print" width="20px" height="20px" />
-                </span>
+                </span> -->
                 <span style="margin-left: 5px;"
                   *ngIf="!checkIsEnable(Order.p.MaterialPurchaseOrderDetailsArray) || Order.p.MaterialPurchaseOrderStatus == MaterialPurchaseOrderStatus.Approved"
                   (click)="onEditClicked(Order)">
