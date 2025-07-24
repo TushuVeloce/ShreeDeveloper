@@ -125,7 +125,7 @@
             <td Class="tbldata">{{ formatDate(attendancelog.p.TransDateTime) }}</td>
             <td Class="tbldata">{{attendancelog.p.FirstCheckInTime ? attendancelog.p.FirstCheckInTime : "--"}}</td>
             <td Class="tbldata">{{attendancelog.p.LastCheckOutTime? attendancelog.p.LastCheckOutTime : "--"}}</td>
-            <td Class="tbldata">{{attendancelog.p.TotalWorkingHrs? attendancelog.p.TotalWorkingHrs: "--"}}</td>
+            <td Class="tbldata">{{attendancelog.p.TotalWorkingHrs? convertFractionTimeToHM(attendancelog.p.TotalWorkingHrs): "--"}}</td>
             <td Class="tbldata">{{attendancelog.p.OnLeave ?
               attendancelog.p.OnLeave :
               '--'}}</td>

@@ -83,10 +83,24 @@ export class AttendanceLogsComponent implements OnInit {
     this.isTodayAttendanceView = true;
   }
 
+  convertFractionTimeToHM = (fractionTime: number) => {
+    const hours = Math.floor(fractionTime);
+    const fractionalMinutes = fractionTime - hours;
+
+    // Convert fractional part (base 100) to minutes (base 60)
+    const minutes = Math.round(fractionalMinutes * 100 * 60 / 100);
+
+    // Pad minutes with leading zero if needed
+    const paddedMinutes = String(minutes).padStart(2, '0');
+
+    return `${hours}h ${paddedMinutes}m`;
+  }
+
   getEmployeeListByCompanyRef = async () => {
     if (this.companyRef() <= 0) {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
+      
     }
     let lst = await Employee.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.EmployeeList = lst;
