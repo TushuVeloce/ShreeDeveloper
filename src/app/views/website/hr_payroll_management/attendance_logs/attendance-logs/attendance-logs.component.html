@@ -5,17 +5,17 @@
     <div class="row">
       <div class="col-12 col-md-2">
         <button type="button" [class]="isTodayAttendanceView ? 'btnglow' : 'mybtn'"
-          (click)="getTodayAttendanceLogByAttendanceListType()">
+          (click)="getTodayAttendanceLogByAttendanceListType(); setTodayViewStatus(); getViewStatus();">
           MY TEAM TODAY
         </button>
       </div>
       <div class="col-12 col-md-2">
-        <button type="button" [class]="isDaysShow ? 'btnglow' : 'mybtn'" (click)="selectWeek()">
+        <button type="button" [class]="isDaysShow ? 'btnglow' : 'mybtn'" (click)="selectWeek(); setWeeklyViewStatus(); getViewStatus();">
           MY TEAM WEEKLY
         </button>
       </div>
       <div class="col-12 col-md-3">
-        <button type="button" [class]="ToDispayMonthlyRequirement ? 'btnglow' : 'mybtn'" (click)="selectMonth()">
+        <button type="button" [class]="ToDispayMonthlyRequirement ? 'btnglow' : 'mybtn'" (click)="selectMonth(); setMonthlyViewStatus(); getViewStatus();">
           MY TEAM MONTHLY
         </button>
       </div>
