@@ -59,6 +59,10 @@
               </td>
               <td class="tbldata" *ngIf="j === 0 && !Entity.p.SiteRef"
                 [attr.rowspan]="Inward.p.MaterialInwardDetailsArray.length">
+                {{ Inward.p.ChalanNo }}
+              </td>
+              <td class="tbldata" *ngIf="j === 0 && !Entity.p.SiteRef"
+                [attr.rowspan]="Inward.p.MaterialInwardDetailsArray.length">
                 {{ Inward.p.SiteName }}
               </td>
               <!-- <td class="tbldata" *ngIf="j === 0" [attr.rowspan]="Inward.p.MaterialInwardDetailsArray.length"
