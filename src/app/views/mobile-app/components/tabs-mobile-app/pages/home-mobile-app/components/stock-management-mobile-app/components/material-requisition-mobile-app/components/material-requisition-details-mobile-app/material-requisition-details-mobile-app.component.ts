@@ -71,7 +71,7 @@ export class MaterialRequisitionDetailsMobileAppComponent implements OnInit {
   ) { }
 
   ngOnInit = async () => {
-    await this.loadMaterialRequisitionDetailsIfCompanyExists();
+    // await this.loadMaterialRequisitionDetailsIfCompanyExists();
 
   }
   ionViewWillEnter = async () => {
@@ -139,11 +139,6 @@ export class MaterialRequisitionDetailsMobileAppComponent implements OnInit {
     }
   }
 
-
-  // public async onDateChange(date: any): Promise<void> {
-  //   this.Date = this.datePipe.transform(date, 'yyyy-MM-dd') ?? '';
-  //   this.Entity.p.Date = this.Date;
-  // }
   public async onDateChange(date: any): Promise<void> {
     this.Date = this.datePipe.transform(date, 'yyyy-MM-dd') ?? '';
     this.DisplayDate = this.Date;
@@ -297,9 +292,9 @@ export class MaterialRequisitionDetailsMobileAppComponent implements OnInit {
 
       if (this.editingIndex !== null && this.editingIndex !== undefined && this.editingIndex >= 0) {
         this.Entity.p.MaterialRequisitionDetailsArray[this.editingIndex] = { ...this.newRequisition };
+        this.ismaterialModalOpen = false;
         await this.toastService.present('material details updated successfully.', 1000, 'success');
         await this.haptic.success();
-        this.ismaterialModalOpen = false;
       } else {
         this.newRequisition.MaterialRequisitionRef = this.Entity.p.Ref;
         this.Entity.p.MaterialRequisitionDetailsArray.push({ ...this.newRequisition });
@@ -385,8 +380,8 @@ export class MaterialRequisitionDetailsMobileAppComponent implements OnInit {
         this.isSaveDisabled = false;
         if (this.IsNewEntity) {
           await this.toastService.present('MaterialRequisition saved successfully', 1000, 'success')
-          await this.haptic.success();
           this.Entity = MaterialRequisition.CreateNewInstance();
+          await this.haptic.success();
         } else {
           await this.toastService.present('Material Requisition Updated successfully', 1000, 'success')
           await this.haptic.success();

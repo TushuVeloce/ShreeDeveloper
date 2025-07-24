@@ -276,6 +276,7 @@ export class StockOrderViewMobileAppComponent  implements OnInit {
       }
     );
     this.MasterList = lst;
+    console.log('lst :', lst);
     this.DisplayMasterList = this.MasterList;
   };
 

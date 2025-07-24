@@ -52,13 +52,13 @@
     <!-- Vendor Trade Name input-->
     <ion-item class="input-item">
       <ion-input label="Vendor Trade" labelPlacement="floating" placeholder="Enter Vendor Trade"
-        [(ngModel)]="Entity.p.VendorTradeName" readonly></ion-input>
+        [(ngModel)]="Entity.p.VendorTradeName" [disabled]="'true'"></ion-input>
     </ion-item>
 
     <!-- Address input-->
     <ion-item class="input-item">
       <ion-input label="Address" labelPlacement="floating" placeholder="Enter Address"
-        [(ngModel)]="Entity.p.AddressLine1" readonly></ion-input>
+        [(ngModel)]="Entity.p.AddressLine1" [disabled]="'true'"></ion-input>
     </ion-item>
 
     <!-- Material List Header -->
@@ -269,26 +269,26 @@
             <!-- Material input-->
             <ion-item class="input-item" *ngIf="ModalEditable">
               <ion-input label="Material Name" labelPlacement="floating" placeholder="Enter Material Name"
-                [(ngModel)]="newOrderMaterial.MaterialName" readonly></ion-input>
+                [(ngModel)]="newOrderMaterial.MaterialName" [disabled]="'true'"></ion-input>
             </ion-item>
 
             <!-- Unit -->
             <ion-item class="input-item">
               <ion-input label="Unit" labelPlacement="floating" placeholder="Enter Unit"
-                [(ngModel)]="newOrderMaterial.UnitName" readonly></ion-input>
+                [(ngModel)]="newOrderMaterial.UnitName" [disabled]="'true'"></ion-input>
             </ion-item>
 
             <!--Requisition Quantity -->
             <ion-item class="input-item">
               <ion-input label="Requisition Qty" labelPlacement="floating" type="number" placeholder="Enter Quantity"
-                [(ngModel)]="newOrderMaterial.RequisitionQty" clearInput="true" clearOnEdit="true" readonly></ion-input>
+                [(ngModel)]="newOrderMaterial.RequisitionQty" clearInput="true" clearOnEdit="true" [disabled]="'true'"></ion-input>
             </ion-item>
 
             <!--Total Ordered Quantity -->
             <ion-item class="input-item">
               <ion-input label="Total Ordered Qty" labelPlacement="floating" type="number"
                 placeholder="Enter Total Ordered Quantity" [(ngModel)]="newOrderMaterial.TotalOrderedQty"
-                clearInput="true" clearOnEdit="true" readonly></ion-input> </ion-item>
+                clearInput="true" clearOnEdit="true" [disabled]="'true'"></ion-input> </ion-item>
 
             <!--Ordered Quantity -->
             <ion-item class="input-item">
@@ -300,13 +300,13 @@
             <ion-item class="input-item">
               <ion-input label="Requisition Remaining Qty" labelPlacement="floating"
                 placeholder="Enter Requisition Remaining Qty" [(ngModel)]="newOrderMaterial.RequisitionRemainingQty"
-                readonly></ion-input>
+                [disabled]="'true'"></ion-input>
             </ion-item>
 
             <!-- Extra Ordered Quantity -->
             <ion-item class="input-item">
               <ion-input label="Extra Ordered Qty" labelPlacement="floating" placeholder="Enter Extra Ordered Qty"
-                [(ngModel)]="newOrderMaterial.ExtraOrderedQty" readonly></ion-input> </ion-item>
+                [(ngModel)]="newOrderMaterial.ExtraOrderedQty" [disabled]="'true'"></ion-input> </ion-item>
 
             <!-- Rate -->
             <ion-item class="input-item">
@@ -325,7 +325,7 @@
             <!-- Net Amount-->
             <ion-item class="input-item">
               <ion-input label="Net Amount" labelPlacement="floating" placeholder="Enter Net Amount"
-                [(ngModel)]="newOrderMaterial.NetAmount" readonly></ion-input>
+                [(ngModel)]="newOrderMaterial.NetAmount" [disabled]="'true'"></ion-input>
             </ion-item>
 
             <!-- GST Dropdown -->
@@ -373,7 +373,7 @@
             <!--Total Amount -->
             <ion-item class="input-item">
               <ion-input label="Total Amount" labelPlacement="floating" type="number" placeholder="Enter Total Amount"
-                [(ngModel)]="newOrderMaterial.TotalAmount" clearInput="true" clearOnEdit="true" readonly></ion-input>
+                [(ngModel)]="newOrderMaterial.TotalAmount" clearInput="true" clearOnEdit="true" [disabled]="'true'"></ion-input>
             </ion-item>
           </ion-list>
         </ion-content>

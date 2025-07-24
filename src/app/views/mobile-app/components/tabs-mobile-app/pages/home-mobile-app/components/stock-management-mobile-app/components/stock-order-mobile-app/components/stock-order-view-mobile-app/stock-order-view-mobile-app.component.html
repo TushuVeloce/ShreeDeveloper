@@ -1,4 +1,4 @@
-<app-header-with-back-handler title="Stock Order"
+<app-header-with-back-handler title="Purchase Order"
   backRoute="mobile-app/tabs/dashboard/stock-management"></app-header-with-back-handler>
 <app-chip-filter-mobile-app [filters]="filters" (filtersChanged)="onFiltersChanged($event)">
 </app-chip-filter-mobile-app>
@@ -10,7 +10,8 @@
   <ion-list class="requisition-list" [lines]="'none'">
     <ion-item *ngFor="let order of DisplayMasterList" class="requisition-item" button detail (click)="openModal(order)">
       <ion-label>
-        <h2>Site : {{ order.p.SiteName || 'Unknown Site' }}</h2>
+        <h2>Purchase Order ID : {{ order.p.DisplayPurchaseOrderId || '-' }}</h2>
+        <p>Site : {{ order.p.SiteName || 'Unknown Site' }}</p>
         <p class="date-label">Date : {{ formatDate(order.p.PurchaseOrderDate) || 'Unknown Date' }}</p>
         <p class="date-label">Status : <span class="status-badge"
             [ngClass]="getStatusClass(order.p.MaterialPurchaseOrderStatus)">
@@ -25,12 +26,12 @@
         <ion-button fill="clear" size="small" color="primary" (click)="onDeleteClicked(order)">
           <ion-icon name="trash-outline" slot="icon-only"></ion-icon>
         </ion-button>
-           <ion-button fill="clear" size="small" color="primary" (click)="navigateToPrint(order)">
-          <ion-icon name="trash-outline" slot="icon-only"></ion-icon>
-        </ion-button>
+        <!-- <ion-button fill="clear" size="small" color="primary" (click)="navigateToPrint(order)">
+          <ion-icon name="print-outline" slot="icon-only"></ion-icon>
+        </ion-button> -->
       </div>
     </ion-item>
-  </ion-list>  
+  </ion-list>
 
   <!-- Show "Data not found" if list is empty -->
   <div *ngIf="DisplayMasterList.length === 0 && !loadingService.isLoaderActive()" class="no-data-mobile-app">
@@ -39,144 +40,146 @@
   </div>
 
   <!-- Modal -->
-<ion-modal [isOpen]="modalOpen" (didDismiss)="closeModal()" class="custom-modal-mobile-app">
+  <ion-modal [isOpen]="modalOpen" (didDismiss)="closeModal()" class="custom-modal-mobile-app">
     <ng-template>
-        <!-- Header -->
-         <ion-header class="modal-toolbar-mobile-app">
-          <ion-toolbar color="primary">
-            <ion-title>Material Details</ion-title>
-            <ion-buttons slot="end">
-              <ion-button fill="clear" (click)="closeModal()">
-                <ion-icon name="close-outline"></ion-icon>
-              </ion-button>
-            </ion-buttons>
-          </ion-toolbar>
-        </ion-header>
-
-        <!-- Body -->
-        <ion-content scroll-y="true" class="ion-padding modal-content-mobile-app">
-          <!-- Info Rows -->
-          <div class="info-row-of-model-mobile-app">
-            <span class="label-mobile-app">Date:</span>
-            <span class="value-mobile-app">{{ formatDate(SelectedOrder.p.PurchaseOrderDate) || '-' }}</span>
-          </div>
-          <div class="info-row-of-model-mobile-app">
-            <span class="label-mobile-app">Site:</span>
-            <span class="value-mobile-app">{{ SelectedOrder.p.SiteName || '-' }}</span>
-          </div>
-          <div class="info-row-of-model-mobile-app">
-            <span class="label-mobile-app">Vendor:</span>
-            <span class="value-mobile-app">{{ SelectedOrder.p.VendorName || '-' }}</span>
-          </div>
-          <div class="info-row-of-model-mobile-app">
-            <span class="label-mobile-app">Trade Name:</span>
-            <span class="value-mobile-app">{{ SelectedOrder.p.VendorTradeName || '-' }}</span>
-          </div>
-          <div class="info-row-of-model-mobile-app">
-            <span class="label-mobile-app">Address:</span>
-            <span class="value-mobile-app">{{ SelectedOrder.p.AddressLine1 || '-' }}</span>
-          </div>
-          <!-- Invoice Preview Button -->
-          <div class="info-row-of-model-mobile-app" *ngIf="SelectedOrder?.p?.MaterialPurchaseInvoicePath">
-            <span class="label-mobile-app">Invoice:</span>
-            <ion-button size="small" fill="clear" color="primary"
-              (click)="prepareInvoiceUrl(SelectedOrder.p.MaterialPurchaseInvoicePath)">
-              <ion-icon [name]="showInvoicePreview?'eye-outline':'eye-off-outline'" slot="icon-only"></ion-icon>
+      <ion-header class="modal-toolbar-mobile-app">
+        <ion-toolbar color="primary">
+          <ion-title>Material Details</ion-title>
+          <ion-buttons slot="end">
+            <ion-button fill="clear" (click)="closeModal()">
+              <ion-icon name="close-outline"></ion-icon>
             </ion-button>
-          </div>
+          </ion-buttons>
+        </ion-toolbar>
+      </ion-header>
 
-          <!-- Invoice Viewer Section -->
-          <div *ngIf="showInvoicePreview" class="invoice-preview-container">
-            <ng-container *ngIf="isPDF(SelectedOrder.p.MaterialPurchaseInvoicePath); else imageBlock">
-              <img [src]="'assets/icons/doc-placeholder.png'" alt="Invoice Image" class="invoice-pdf" (click)="fileNavigation(SelectedOrder.p.MaterialPurchaseInvoicePath)" />
-            </ng-container>
+      <!-- Body -->
+      <ion-content scroll-y="true" class="ion-padding modal-content-mobile-app">
+        <!-- Info Rows -->
+        <div class="info-row-of-model-mobile-app">
+          <span class="label-mobile-app">Date:</span>
+          <span class="value-mobile-app">{{ formatDate(SelectedOrder.p.PurchaseOrderDate) || '-' }}</span>
+        </div>
+        <div class="info-row-of-model-mobile-app">
+          <span class="label-mobile-app">Site:</span>
+          <span class="value-mobile-app">{{ SelectedOrder.p.SiteName || '-' }}</span>
+        </div>
+        <div class="info-row-of-model-mobile-app">
+          <span class="label-mobile-app">Vendor:</span>
+          <span class="value-mobile-app">{{ SelectedOrder.p.VendorName || '-' }}</span>
+        </div>
+        <div class="info-row-of-model-mobile-app">
+          <span class="label-mobile-app">Trade Name:</span>
+          <span class="value-mobile-app">{{ SelectedOrder.p.VendorTradeName || '-' }}</span>
+        </div>
+        <div class="info-row-of-model-mobile-app">
+          <span class="label-mobile-app">Address:</span>
+          <span class="value-mobile-app">{{ SelectedOrder.p.AddressLine1 || '-' }}</span>
+        </div>
+        <!-- Invoice Preview Button -->
+        <div class="info-row-of-model-mobile-app" *ngIf="SelectedOrder?.p?.MaterialPurchaseInvoicePath">
+          <span class="label-mobile-app">Invoice:</span>
+          <ion-button size="small" fill="clear" color="primary"
+            (click)="prepareInvoiceUrl(SelectedOrder.p.MaterialPurchaseInvoicePath)">
+            <ion-icon [name]="showInvoicePreview?'eye-outline':'eye-off-outline'" slot="icon-only"></ion-icon>
+          </ion-button>
+        </div>
 
-            <ng-template #imageBlock>
-              <img [src]="sanitizedInvoiceUrl" alt="Invoice Image" class="invoice-image" />
-            </ng-template>
-          </div>
+        <!-- Invoice Viewer Section -->
+        <div *ngIf="showInvoicePreview" class="invoice-preview-container">
+          <ng-container *ngIf="isPDF(SelectedOrder.p.MaterialPurchaseInvoicePath); else imageBlock">
+            <img [src]="'assets/icons/doc-placeholder.png'" alt="Invoice Image" class="invoice-pdf"
+              (click)="fileNavigation(SelectedOrder.p.MaterialPurchaseInvoicePath)" />
+          </ng-container>
 
+          <ng-template #imageBlock>
+            <img [src]="sanitizedInvoiceUrl" alt="Invoice Image" class="invoice-image" />
+          </ng-template>
+        </div>
 
-          <div class="table-container">
-            <div class="table-scroll">
-              <table class="custom-table">
-                <thead>
-                  <tr>
-                    <th class="sticky-col sticky-header">#</th>
-                    <th *ngFor="let item of tableHeaderData" class="sticky-header">{{ item }}</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr *ngFor="let item of SelectedOrder.p.MaterialPurchaseOrderDetailsArray; let i = index">
-                    <td class="sticky-col">{{i + 1 }}</td>
-                    <td>
-                      {{ item.MaterialName || '-' }}
-                    </td>
-                    <td>
-                      {{ item.UnitName || '-' }}
-                    </td>
-                    <td>
-                      {{ item.RequisitionQty || '-' }}
-                    </td>
-                    <td>
-                      {{ item.OrderedQty || '-' }}
-                    </td>
-                    <td>
-                      {{ item.RequisitionRemainingQty || '-' }}
-                    </td>
-                    <td>
-                      {{ item.Rate | currency : "INR" }}
-                    </td>
-                    <td>
-                      {{ item.DiscountedRate | currency : "INR" }}
-                    </td>
-                    <td>
-                      {{ item.Gst || '-' }}
-                    </td>
-                    <td>
-                      {{ item.DeliveryCharges | currency : "INR" }}
-                    </td>
-                    <td>
-                      {{ formatDate(item.ExpectedDeliveryDate) || '-' }}
-                    </td>
-                    <td>
-                      {{ item.NetAmount | currency : "INR" }}
-                    </td>
-                    <td>
-                      {{ item.TotalAmount | currency : "INR" }}
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
+        <div class="info-row-of-model-mobile-app">
+          <span class="label-mobile-app">Materials :</span>
+        </div>
+        <div class="table-container">
+          <div class="table-scroll">
+            <table class="custom-table">
+              <thead>
+                <tr>
+                  <th class="sticky-col sticky-header">#</th>
+                  <th *ngFor="let item of tableHeaderData" class="sticky-header">{{ item }}</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let item of SelectedOrder.p.MaterialPurchaseOrderDetailsArray; let i = index">
+                  <td class="sticky-col">{{i + 1 }}</td>
+                  <td>
+                    {{ item.MaterialName || '-' }}
+                  </td>
+                  <td>
+                    {{ item.UnitName || '-' }}
+                  </td>
+                  <td>
+                    {{ item.RequisitionQty || '-' }}
+                  </td>
+                  <td>
+                    {{ item.OrderedQty || '-' }}
+                  </td>
+                  <td>
+                    {{ item.RequisitionRemainingQty || '-' }}
+                  </td>
+                  <td>
+                    {{ item.Rate | currency : "INR" }}
+                  </td>
+                  <td>
+                    {{ item.DiscountedRate | currency : "INR" }}
+                  </td>
+                  <td>
+                    {{ item.Gst || '-' }}
+                  </td>
+                  <td>
+                    {{ item.DeliveryCharges | currency : "INR" }}
+                  </td>
+                  <td>
+                    {{ formatDate(item.ExpectedDeliveryDate) || '-' }}
+                  </td>
+                  <td>
+                    {{ item.NetAmount | currency : "INR" }}
+                  </td>
+                  <td>
+                    {{ item.TotalAmount | currency : "INR" }}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
           </div>
-          <!-- Summary -->
-          <div class="info-row-of-model-mobile-app">
-            <span class="label-mobile-app">Grand Total:</span>
-            <span class="value-mobile-app">{{ SelectedOrder.p.GrandTotal || '-' }}</span>
-          </div>
-          <div class="info-row-of-model-mobile-app">
-            <span class="label-mobile-app">Status:</span>
-            <!-- <span class="value-mobile-app">{{ SelectedOrder.p.MaterialPurchaseOrderStatus || '-' }}</span> -->
-            <span class="status-badge" [ngClass]="getStatusClass(SelectedOrder.p.MaterialPurchaseOrderStatus)">
-              {{ getStatusText(SelectedOrder.p.MaterialPurchaseOrderStatus) }}
-            </span>
-          </div>
-        </ion-content>
+        </div>
+        <!-- Summary -->
+        <div class="info-row-of-model-mobile-app">
+          <span class="label-mobile-app">Grand Total:</span>
+          <span class="value-mobile-app">{{ SelectedOrder.p.GrandTotal || '-' }}</span>
+        </div>
+        <div class="info-row-of-model-mobile-app">
+          <span class="label-mobile-app">Status:</span>
+          <!-- <span class="value-mobile-app">{{ SelectedOrder.p.MaterialPurchaseOrderStatus || '-' }}</span> -->
+          <span class="status-badge" [ngClass]="getStatusClass(SelectedOrder.p.MaterialPurchaseOrderStatus)">
+            {{ getStatusText(SelectedOrder.p.MaterialPurchaseOrderStatus) }}
+          </span>
+        </div>
+      </ion-content>
 
-        <!-- Footer -->
-      <ion-footer class="modal-footer-mobile-app" *ngIf="SelectedOrder.p.MaterialPurchaseOrderStatus == MaterialPurchaseOrderStatus.Approved">
-          <div class="action-buttons">
-            <ion-button expand="block" color="success" shape="round"
-              (click)="SaveOrder(MaterialPurchaseOrderStatus.Ordered)">
-              Order
-            </ion-button>
-            <ion-button expand="block" color="danger" shape="round"
-              (click)="SaveOrder(MaterialPurchaseOrderStatus.Incomplete)">
-              Reject
-            </ion-button>
-          </div>
-        </ion-footer>
+      <!-- Footer -->
+      <ion-footer class="modal-footer-mobile-app"
+        *ngIf="SelectedOrder.p.MaterialPurchaseOrderStatus == MaterialPurchaseOrderStatus.Pending">
+        <div class="action-buttons">
+          <ion-button color="danger" shape="round" (click)="SaveOrder(MaterialPurchaseOrderStatus.Incomplete)">
+            Reject
+          </ion-button>
+          <ion-button color="success" shape="round" (click)="SaveOrder(MaterialPurchaseOrderStatus.Ordered)">
+            Order
+          </ion-button>
+        </div>
+      </ion-footer>
+
     </ng-template>
   </ion-modal>
 

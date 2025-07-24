@@ -1,14 +1,11 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
-import { Directory, Filesystem } from '@capacitor/filesystem';
-import { Share } from '@capacitor/share';
-import html2canvas from 'html2canvas';
-import jsPDF from 'jspdf';
 import { Company } from 'src/app/classes/domain/entities/website/masters/company/company';
 import { Vendor } from 'src/app/classes/domain/entities/website/masters/vendor/vendor';
 import { StockInward } from 'src/app/classes/domain/entities/website/stock_management/stock_inward/stockinward';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
+import { DateconversionService } from 'src/app/services/dateconversion.service';
 import { DTU } from 'src/app/services/dtu.service';
 import { UIUtils } from 'src/app/services/uiutils.service';
 import { Utils } from 'src/app/services/utils.service';
@@ -44,7 +41,8 @@ export class StockInwardPrintMobileAppComponent implements OnInit {
     private utils: Utils,
     private dtu: DTU,
     private companystatemanagement: CompanyStateManagement,
-    private pdfService: PDFService
+    private pdfService: PDFService,
+    private DateconversionService: DateconversionService,
   ) { }
 
   ngOnInit() {
@@ -85,24 +83,12 @@ export class StockInwardPrintMobileAppComponent implements OnInit {
     }
   }
 
-  // getCompanySingleRecord = async () => {
-  //   this.CompanyEntity = Company.CreateNewInstance();
-  //   if (this.Entity.p.CompanyRef > 0) {
-  //     let CompanyData = await Company.FetchInstance(this.Entity.p.CompanyRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-  //     this.CompanyEntity = CompanyData;
-  //   }
-  // }
-
   totalAmountInWords(number: number): string {
     return this.utils.convertNumberToWords(number);
   }
-
-  // getVendorSingleRecord = async () => {
-  //   this.VendorEntity = Vendor.CreateNewInstance();
-  //   if (this.Entity.p.VendorRef > 0 && this.Entity.p.CompanyRef > 0) {
-  //     let CompanyData = await Vendor.FetchInstance(this.Entity.p.VendorRef, this.Entity.p.CompanyRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-  //     this.VendorEntity = CompanyData;
-  //   }
-  // }
+  // Extracted from services date conversion //
+  formatDate = (date: string | Date): string => {
+    return this.DateconversionService.formatDate(date);
+  }
 
 }

@@ -604,10 +604,17 @@ export class StockOrderDetailsMobileAppComponent implements OnInit {
       console.log('this.newOrderMaterial.ExpectedDeliveryDate  :', this.newOrderMaterial.ExpectedDeliveryDate);
       console.log('this.ExpectedDeliveryDate :', this.ExpectedDeliveryDate);
 
-      // await this.uiUtils.showSuccessToster('Material updated successfully');
       await this.toastService.present('Material updated successfully', 1000, 'success');
-      await this.haptic.success();
+      this.newOrderMaterial = OrderMaterialDetailProps.Blank();
+      this.editingIndex = null;
       this.isOrderMaterialModalOpen = false;
+      this.selectedMaterial = [];
+      this.selectedGST = [];
+      this.MaterialName = '';
+      this.gstName = '';
+      this.ExpectedDeliveryDate = '';
+      this.DisplayExpectedDeliveryDate = '';
+      await this.haptic.success();
 
     } else {
       let OrderMaterialInstance = new OrderMaterial(this.newOrderMaterial, true);
@@ -618,21 +625,20 @@ export class StockOrderDetailsMobileAppComponent implements OnInit {
       this.newOrderMaterial.MaterialPurchaseOrderRef = this.Entity.p.Ref;
       this.Entity.p.MaterialPurchaseOrderDetailsArray.push({ ...OrderMaterialInstance.p });
       this.selectedGST = [{ p: { Ref: this.newOrderMaterial.Gst, Name: this.newOrderMaterial.Gst } }];
-      // this.filterMaterialList();
-      // await this.uiUtils.showSuccessToster('Material added successfully');
+  
       console.log('this.newOrderMaterial :', this.newOrderMaterial);
       await this.toastService.present('Material added successfully', 1000, 'success');
+      this.newOrderMaterial = OrderMaterialDetailProps.Blank();
+      this.editingIndex = null;
+      this.isOrderMaterialModalOpen = false;
+      this.selectedMaterial = [];
+      this.selectedGST = [];
+      this.MaterialName = '';
+      this.gstName = '';
+      this.ExpectedDeliveryDate = '';
+      this.DisplayExpectedDeliveryDate = '';
       await this.haptic.success();
     }
-    this.newOrderMaterial = OrderMaterialDetailProps.Blank();
-    this.editingIndex = null;
-    this.isOrderMaterialModalOpen = false;
-    this.selectedMaterial = [];
-    this.selectedGST = [];
-    this.MaterialName = '';
-    this.gstName = '';
-    this.ExpectedDeliveryDate = '';
-    this.DisplayExpectedDeliveryDate = '';
   }
 
   editOrderMaterial(index: number) {

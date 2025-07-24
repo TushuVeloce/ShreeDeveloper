@@ -24,11 +24,16 @@
 }
 
 .action-buttons {
-    display: flex;
-    flex-direction: row;
-    align-items: flex-end;
-    gap: 6px;
+  display: flex;
+  justify-content: space-between;
+  padding: 0 16px; /* Add spacing on left/right */
+ion-button {
+        width: 45%;
+        /* Or adjust to your liking */
+    }
 }
+
+
 
 .status-badge {
     padding: 0.25em 0.75em;

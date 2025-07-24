@@ -3,7 +3,6 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { Site } from 'src/app/classes/domain/entities/website/masters/site/site';
 import { Vendor } from 'src/app/classes/domain/entities/website/masters/vendor/vendor';
-import { MaterialInwardAgainstPOStatus } from 'src/app/classes/domain/entities/website/stock_management/stock_inward/materialinwardagainstpostatus';
 import { StockInward } from 'src/app/classes/domain/entities/website/stock_management/stock_inward/stockinward';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { BaseUrlService } from 'src/app/services/baseurl.service';
@@ -24,14 +23,14 @@ import { FilterItem } from 'src/app/views/mobile-app/components/shared/chip-filt
   standalone: false
 })
 export class StockInwardViewMobileAppComponent implements OnInit {
-  Entity: MaterialInwardAgainstPOStatus = MaterialInwardAgainstPOStatus.CreateNewInstance();
-  MasterList: MaterialInwardAgainstPOStatus[] = [];
-  DisplayMasterList: MaterialInwardAgainstPOStatus[] = [];
+  Entity: StockInward = StockInward.CreateNewInstance();
+  MasterList: StockInward[] = [];
+  DisplayMasterList: StockInward[] = [];
   list: [] = []
   SiteList: Site[] = [];
   VendorList: Vendor[] = [];
   SearchString: string = '';
-  SelectedStockInward: MaterialInwardAgainstPOStatus = MaterialInwardAgainstPOStatus.CreateNewInstance();
+  SelectedStockInward: StockInward = StockInward.CreateNewInstance();
   CustomerRef: number = 0;
 
   modalOpen = false;
@@ -40,6 +39,9 @@ export class StockInwardViewMobileAppComponent implements OnInit {
   companyRef: number = 0;
   // Store current selected values here to preserve selections on filter reload
   selectedFilterValues: Record<string, any> = {};
+
+  showInvoicePreview = false;
+  sanitizedInvoiceUrl: SafeResourceUrl | null = null;
 
   constructor(
     private router: Router,
@@ -69,7 +71,6 @@ export class StockInwardViewMobileAppComponent implements OnInit {
     await this.loadStockInwordsIfEmployeeExists();
     (event.target as HTMLIonRefresherElement).complete();
   }
-
 
   loadFilters() {
     this.filters = [
@@ -118,6 +119,39 @@ export class StockInwardViewMobileAppComponent implements OnInit {
     }
     await this.getInwardListByCompanySiteAndVendorRef();
     this.loadFilters(); // Reload filters with updated options & preserve selections
+  }
+
+  prepareInvoiceUrl(path: string) {
+    this.showInvoicePreview = !this.showInvoicePreview
+    const ImageBaseUrl = this.baseUrl.GenerateImageBaseUrl();
+    const LoginToken = this.appStateManage.localStorage.getItem('LoginToken');
+    // const path = this.SelectedQuotation.p.InvoicePath;
+
+
+    if (!path) return;
+
+    const TimeStamp = Date.now();
+    const fileUrl = `${ImageBaseUrl}${path}/${LoginToken}?${TimeStamp}`;
+    console.log('Invoice Preview URL:', fileUrl);
+
+    this.sanitizedInvoiceUrl = this.sanitizer.bypassSecurityTrustResourceUrl(fileUrl);
+  }
+
+  isPDF(filePath: string): boolean {
+    return filePath?.toLowerCase().endsWith('.pdf');
+  }
+
+  fileNavigation(filePath: string) {
+    const ImageBaseUrl = this.baseUrl.GenerateImageBaseUrl();
+    const LoginToken = this.appStateManage.localStorage.getItem('LoginToken');
+
+    if (!filePath) return;
+
+    const TimeStamp = Date.now();
+    const fileUrl = `${ImageBaseUrl}${filePath}/${LoginToken}?${TimeStamp}`;
+    console.log('Invoice Preview URL:', fileUrl);
+
+    window.open(fileUrl, '_blank');
   }
 
   private async loadStockInwordsIfEmployeeExists() {
@@ -191,7 +225,7 @@ export class StockInwardViewMobileAppComponent implements OnInit {
     this.DisplayMasterList = [];
 
     // console.log('this.Entity.p.SiteRef, this.Entity.p.VendorRef :', this.Entity.p.SiteRef, this.Entity.p.VendorRef);
-    let lst = await MaterialInwardAgainstPOStatus.FetchEntireListByCompanyRefSiteAndVendorRef(this.companyRef, this.Entity.p.SiteRef, this.Entity.p.VendorRef,
+    let lst = await StockInward.FetchEntireListByCompanyRefSiteAndVendorRef(this.companyRef, this.Entity.p.SiteRef, this.Entity.p.VendorRef,
       async (errMsg) => {
         // await this.uiUtils.showErrorMessage('Error', errMsg)
         await this.toastService.present(errMsg, 1000, 'danger');
@@ -213,37 +247,20 @@ export class StockInwardViewMobileAppComponent implements OnInit {
     await this.router.navigate(['mobile-app/tabs/dashboard/stock-management/stock-inward/add']);
   }
 
-  onEditClicked = async (item: MaterialInwardAgainstPOStatus) => {
+  onEditClicked = async (item: StockInward) => {
     this.router.navigate(['mobile-app/tabs/dashboard/stock-management/stock-inward/edit'], {
-      state: { inwardref: item.p.InwardRef }
+      state: { inwardref: item.p.Ref }
     });
 
   };
 
-  navigateToPrint = async (item: MaterialInwardAgainstPOStatus) => {
+  navigateToPrint = async (item: StockInward) => {
     this.router.navigate(['mobile-app/tabs/dashboard/stock-management/stock-inward/print'], {
-      state: { inwardref: item.p.InwardRef }
+      state: { inwardref: item.p.Ref }
     });
   }
 
-  onDeleteClicked = async (StockInward: MaterialInwardAgainstPOStatus) => {
-    // await this.uiUtils.showConfirmationMessage(
-    //   'Delete',
-    //   `This process is <strong>IRREVERSIBLE!</strong> <br/>
-    //   Are you sure that you want to DELETE this Material Requisition?`,
-    //   async () => {
-    //     await StockInward.DeleteInstance(async () => {
-    //       await this.uiUtils.showSuccessToster(
-    //         `StockInward ${StockInward.p.SiteName} has been deleted!`
-    //       );
-    //       if (this.Entity.p.SiteRef <= 0) {
-    //         this.getInwardListByCompanySiteAndVendorRef();
-    //       } else {
-    //         this.getInwardListByCompanySiteAndVendorRef();
-    //       }
-    //     });
-    //   }
-    // );
+  onDeleteClicked = async (StockInward: StockInward) => {
     this.alertService.presentDynamicAlert({
       header: 'Delete',
       subHeader: 'Confirmation needed',
@@ -262,23 +279,23 @@ export class StockInwardViewMobileAppComponent implements OnInit {
           cssClass: 'custom-confirm',
           handler: async () => {
             try {
+              this.loadingService.show();
               await StockInward.DeleteInstance(async () => {
                 await this.toastService.present(
-                  `Stock Inward on ${this.formatDate(StockInward.p.SiteName)} has been deleted!`,
+                  `Stock Inward oF ${StockInward.p.ChalanNo} has been deleted!`,
                   1000,
                   'success'
                 );
-                await this.haptic.success();
               });
-              if (this.Entity.p.SiteRef <= 0) {
-                this.getInwardListByCompanySiteAndVendorRef();
-              } else {
-                this.getInwardListByCompanySiteAndVendorRef();
-              }
+              // await this.haptic.success();
+              await this.getInwardListByCompanySiteAndVendorRef();
             } catch (err) {
-              console.error('Error deleting Stock Inward:', err);
-              await this.toastService.present('Failed to delete Stock Inward', 1000, 'danger');
-              await this.haptic.error();
+              // console.error('Error deleting Stock Inward:', err);
+              // await this.toastService.present('Failed to delete Stock Inward', 1000, 'danger');
+              // await this.haptic.error();
+            }
+            finally {
+              this.loadingService.hide();
             }
           }
         }
@@ -286,7 +303,7 @@ export class StockInwardViewMobileAppComponent implements OnInit {
     });
   };
 
-  openModal(stockInward: MaterialInwardAgainstPOStatus) {
+  openModal(stockInward: StockInward) {
     this.SelectedStockInward = stockInward;
     console.log('stockInward :', stockInward);
     this.modalOpen = true;
@@ -294,6 +311,6 @@ export class StockInwardViewMobileAppComponent implements OnInit {
 
   closeModal() {
     this.modalOpen = false;
-    this.SelectedStockInward = MaterialInwardAgainstPOStatus.CreateNewInstance();
+    this.SelectedStockInward = StockInward.CreateNewInstance();
   }
 }

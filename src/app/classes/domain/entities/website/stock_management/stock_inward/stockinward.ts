@@ -21,6 +21,7 @@ export class StockInwardProps {
   public CreatedDate: string = '';
   public UpdatedBy: number = 0;
   public UpdatedByName: string = '';
+  public UpdatedDate: string = '';
   // public MaterialInwardRef: number = 0;
   public Ref: number = 0;
   public SiteRef: number = 0;
@@ -44,6 +45,7 @@ export class StockInwardProps {
   public CompanyAddressLine1: string = '';
   public CompanyAddressLine2: string = '';
   public SiteAddressLine1: string = '';
+  public SiteAddressLine2: string = '';
   public MaterialInwardInvoicePath: string = "";
   public MaterialInwardDetailsArray: InwardMaterialDetailProps[] = [];
 

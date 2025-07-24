@@ -150,13 +150,13 @@
               <!-- Material input-->
               <ion-item class="input-item" *ngIf="ModalEditable">
                 <ion-input label="Material Name" labelPlacement="floating" placeholder="Enter Material Name"
-                  [(ngModel)]="newRequisition.MaterialName" readonly></ion-input>
+                  [(ngModel)]="newRequisition.MaterialName" [disabled]="'true'"></ion-input>
               </ion-item>
 
               <!-- Unit -->
               <ion-item class="input-item">
                 <ion-input label="Unit" labelPlacement="floating" placeholder="Enter Unit"
-                  [(ngModel)]="newRequisition.UnitName" readonly></ion-input>
+                  [(ngModel)]="newRequisition.UnitName" [disabled]="'true'"></ion-input>
               </ion-item>
 
               <!-- Quantity -->
