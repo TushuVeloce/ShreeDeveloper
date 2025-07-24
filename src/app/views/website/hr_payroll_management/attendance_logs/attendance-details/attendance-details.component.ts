@@ -103,7 +103,6 @@ export class AttendanceDetailsComponent implements OnInit {
   };
 
   getDefaultWorkingHrsByEmployeeRef = async () => {
-
     if (this.Entity.p.EmployeeRef <= 0) {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
@@ -122,37 +121,24 @@ export class AttendanceDetailsComponent implements OnInit {
     }
   }
 
-  SaveAttendence = async () => {
-    this.isSaveDisabled = true;
-    this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef()
-    if (this.Entity.p.CreatedBy == 0) {
-      this.Entity.p.CreatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
-      this.Entity.p.UpdatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
-    }
-
-    this.Entity.p.IsAttendanceVerified = true;
-
-    this.Entity.p.TransDateTime = this.dtu.ConvertStringDateToFullFormat(this.Date);
-    let entityToSave = this.Entity.GetEditableVersion();
-    let entitiesToSave = [entityToSave]
-    let tr = await this.utils.SavePersistableEntities(entitiesToSave);
-    if (!tr.Successful) {
-      this.isSaveDisabled = false;
-      this.uiUtils.showErrorMessage('Error', tr.Message);
-      return
-    }
-    else {
-      this.isSaveDisabled = false;
-      if (this.IsNewEntity) {
-        await this.uiUtils.showSuccessToster('Attendance saved successfully');
-        this.Entity = WebAttendaneLog.CreateNewInstance();
-        this.resetAllControls()
-      } else {
-        await this.uiUtils.showSuccessToster('Attendance Updated successfully');
-        await this.router.navigate(['/homepage/Website/Attendance_Logs']);
-      }
+  onSiteSelection = () => {
+    if (this.newAttendance.SiteRef == 0) {
+      this.newAttendance.SiteName = 'Office'
+    } else {
+      const SingleRecord = this.SiteList.find(data => data.p.Ref == this.newAttendance.SiteRef);
+      if (SingleRecord)
+        this.newAttendance.SiteName = SingleRecord.p.Name
     }
   }
+
+  // calculateTotalWorkingHours = () => {
+  //   this.Entity.p.TotalWorkingHrs = this.Entity.p.AttendanceLogDetailsArray.reduce((total: number, item: any) => {
+  //     return total + Number(item.WorkingHrs || 0);
+  //   }, 0);
+
+  //   this.Entity.p.DisplayTotalWorkingHrs = this.convertFractionTimeToHM(this.Entity.p.TotalWorkingHrs);
+  //   return;
+  // }
 
   openModal = () => {
     if (this.Entity.p.EmployeeRef <= 0) {
@@ -185,16 +171,6 @@ export class AttendanceDetailsComponent implements OnInit {
         this.Entity.p.AttendanceLogDetailsArray.splice(index, 1);
       }
     );
-  }
-
-  onSiteSelection = () => {
-    if (this.newAttendance.SiteRef == 0) {
-      this.newAttendance.SiteName = 'Office'
-    } else {
-      const SingleRecord = this.SiteList.find(data => data.p.Ref == this.newAttendance.SiteRef);
-      if (SingleRecord)
-        this.newAttendance.SiteName = SingleRecord.p.Name
-    }
   }
 
   convertFractionTimeToHM = (fractionTime: number) => {
@@ -251,6 +227,9 @@ export class AttendanceDetailsComponent implements OnInit {
   }
 
   IsLateMarkChange = () => {
+    if (this.Entity.p.IsLateMark) {
+      this.calculateLateMarkHrs();
+    }
     if (this.Entity.p.IsLateMark || this.Entity.p.IsHalfDay) {
       this.Entity.p.TotalWorkingHrs = this.ActualTotalWorkingHrs / 2;
       this.Entity.p.DisplayTotalWorkingHrs = this.convertFractionTimeToHM(this.Entity.p.TotalWorkingHrs);
@@ -263,7 +242,6 @@ export class AttendanceDetailsComponent implements OnInit {
       this.Entity.p.DisplayTotalLateMarkHrs = '0h 00m';
       this.Entity.p.DisplayTotalWorkingHrs = this.convertFractionTimeToHM(this.Entity.p.TotalWorkingHrs);
     }
-    this.calculateLateMarkHrs();
   }
 
   calculateLateMarkHrs = () => {
@@ -363,6 +341,38 @@ export class AttendanceDetailsComponent implements OnInit {
     this.Entity.p.LastCheckOutTime = this.Entity.p.AttendanceLogDetailsArray[this.Entity.p.AttendanceLogDetailsArray.length - 1].CheckOutTime;
 
     this.IsLateMarkChange();
+  }
+
+  SaveAttendence = async () => {
+    this.isSaveDisabled = true;
+    this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef()
+    if (this.Entity.p.CreatedBy == 0) {
+      this.Entity.p.CreatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
+      this.Entity.p.UpdatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
+    }
+
+    this.Entity.p.IsAttendanceVerified = true;
+
+    this.Entity.p.TransDateTime = this.dtu.ConvertStringDateToFullFormat(this.Date);
+    let entityToSave = this.Entity.GetEditableVersion();
+    let entitiesToSave = [entityToSave]
+    let tr = await this.utils.SavePersistableEntities(entitiesToSave);
+    if (!tr.Successful) {
+      this.isSaveDisabled = false;
+      this.uiUtils.showErrorMessage('Error', tr.Message);
+      return
+    }
+    else {
+      this.isSaveDisabled = false;
+      if (this.IsNewEntity) {
+        await this.uiUtils.showSuccessToster('Attendance saved successfully');
+        this.Entity = WebAttendaneLog.CreateNewInstance();
+        this.resetAllControls()
+      } else {
+        await this.uiUtils.showSuccessToster('Attendance Updated successfully');
+        await this.router.navigate(['/homepage/Website/Attendance_Logs']);
+      }
+    }
   }
 
   BackAttendence = async () => {
