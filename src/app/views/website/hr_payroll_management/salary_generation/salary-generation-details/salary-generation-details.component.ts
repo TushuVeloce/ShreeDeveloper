@@ -160,11 +160,11 @@ export class SalaryGenerationDetailsComponent implements OnInit {
       this.Entity.p.TotalDays = 0;
     }
     this.Entity.p.TotalWorkingDays = 0
-    this.Entity.p.TotalLeaves = 0
+    // this.Entity.p.TotalLeaves = 0
     this.Entity.p.TotalOverTimeHrs = 0
-    this.Entity.p.TotalWorkingHrs = 0
-    this.Entity.p.TotalLeavesHrs = 0
-    this.Entity.p.OverallWorkingHrs = 0
+    // this.Entity.p.TotalWorkingHrs = 0
+    // this.Entity.p.TotalLeavesHrs = 0
+    // this.Entity.p.OverallWorkingHrs = 0
     this.Entity.p.BasicSalary = 0
     this.Entity.p.AdvancePayment = 0
     if (employee === 0 || month === 0) {
@@ -178,12 +178,12 @@ export class SalaryGenerationDetailsComponent implements OnInit {
       this.Entity.p.BasicSalary = Number(lst[0].p.BasicSalary)
       this.Entity.p.DisplayTotalOverTimeHrs = lst[0].p.DisplayTotalOverTimeHrs;
       this.Entity.p.OverTimeHrsRate = Number(lst[0].p.OverTimeHrsRate)
-      this.Entity.p.TotalLateMarkAndHalfDays = Number(lst[0].p.TotalLateMarkAndHalfDays)
+      // this.Entity.p.TotalLateMarkAndHalfDays = Number(lst[0].p.TotalLateMarkAndHalfDays)
       this.Entity.p.TotalLeaveDeduction = Number(lst[0].p.TotalLeaveDeduction)
-      this.Entity.p.TotalLeaves = lst[0].p.TotalLeaves
+      // this.Entity.p.TotalLeaves = lst[0].p.TotalLeaves
       this.Entity.p.TotalOverTimeHrs = Number(lst[0].p.TotalOverTimeHrs)
       this.Entity.p.TotalWorkingDays = Number(lst[0].p.TotalWorkingDays)
-      this.Entity.p.HalfdayAndLateMarkDeduction = Number(lst[0].p.HalfdayAndLateMarkDeduction)
+      // this.Entity.p.HalfdayAndLateMarkDeduction = Number(lst[0].p.HalfdayAndLateMarkDeduction)
       this.Entity.p.GrossTotal = Number(lst[0].p.GrossTotal)
       this.GrossTotal = Number(lst[0].p.GrossTotal)
 

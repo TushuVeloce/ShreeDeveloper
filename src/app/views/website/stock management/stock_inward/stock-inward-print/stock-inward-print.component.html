@@ -35,9 +35,7 @@
               </strong>
               <br>
               <div>
-                <strong>Date -
-                  {{formatDate(Entity.p.PurchaseOrderDate)}}
-                </strong>
+                <strong>Chalan No - {{Entity.p.ChalanNo}}</strong>
               </div>
             </td>
             <td style="width: 10%; border-width:  1px; padding: 5px;">
@@ -77,10 +75,6 @@
               </div>
               <br>
               <div>
-                <strong>Chalan No - {{Entity.p.ChalanNo}}</strong>
-              </div>
-              <br>
-              <div>
                 <strong>Address No - {{Entity.p.VendorAddressLine1}}</strong>
               </div>
             </td>
@@ -93,6 +87,7 @@
         <thead>
           <tr style="background-color: maroon; color: white">
             <th style="padding: 8px; border: none">Sr.No</th>
+            <th style="padding: 8px; border: none">Inward Date</th>
             <th style="padding: 8px; border: none">Material Name</th>
             <th style="padding: 8px; border: none">UNIT</th>
             <th style="padding: 8px; border: none">Ordered Qty.</th>
@@ -106,6 +101,9 @@
               let i = index
             ">
             <td style="padding: 8px; border: none">{{ i + 1 }}</td>
+            <td style="padding: 8px; border: none">
+              {{formatDate(Entity.p.InwardDate )}}
+            </td>
             <td style="padding: 8px; border: none">
               {{ material.MaterialName }}
             </td>

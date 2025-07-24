@@ -17,44 +17,50 @@ import { SalaryGenerationCustomRequest } from "./salarygenerationcustomrequest";
 export class SalaryGenerationProps {
   public readonly Db_Table_Name = "SalarySlipGeneration";
   public Ref: number = 0;
+
+  public CreatedBy: number = 0;
+  public CreatedDate: string = '';
+  public CreatedByName: string = '';
+  public UpdatedBy: number = 0;
+  public UpdatedDate: string = '';
+  public UpdatedByName: number = 0;
+
+  public CompanyRef: number = 0;
+  public CompanyName: string = '';
+
+
   public EmployeeRef: number = 0;
   public readonly EmployeeName: string = '';
   public Month: number = 0;
   public readonly MonthName: string = '';
   public TotalDays: number = 0;
   public TotalWorkingDays: number = 0;
-  public TotalLeaves: number = 0;
   public TotalOverTimeHrs: number = 0;
-  public TotalWorkingHrs: number = 0;
-  public TotalLeavesHrs: number = 0;
-  public OverallWorkingHrs: number = 0;
-  public DisplayTotalOverTimeHrs: string = '';
-  public DisplayTotalWorkingHrs: string = '';
-  public DisplayTotalLeavesHrs: string = '';
-  public DisplayOverAllWorkingHrs: string = '';
-  public LateMarksAndHalfDayRate: number = 0;
-  public HalfdayAndLateMarkDeduction: number = 0;
   public BasicSalary: number = 0;
   public TotalAllowance: number = 0;
   public TotalIncentive: number = 0;
   public Other: number = 0;
+  public TotalDeduction: number = 0;
   public GrossTotal: number = 0;
   public TDS: number = 0;
   public PF: number = 0;
   public TotalLeaveDeduction: number = 0;
   public AdvancePayment: number = 0;
-  public AdvanceDeduction: number = 0;
-  public TotalDeduction: number = 0;
   public NetSalary: number = 0;
-  public CompanyRef: number = 0;
-  public CompanyName: string = '';
-  public CreatedBy: number = 0;
-  public CreatedByName: string = '';
-  public UpdatedBy: number = 0;
-  public UpdatedByName: number = 0;
+  public SalarySlipMonthIndicator: string = '';
+  public AdvanceDeduction: number = 0;
+  public DisplayTotalOverTimeHrs: string = '';
   public OverTimeHrsRate: number = 0;
-  public TotalLateMarkAndHalfDays: number = 0;
-  public SalarySlipMonthIndicator: string = 'A';
+  public TotalWorkedDays: number = 0;
+  public TotalFullDayLeavesWithAbsent: number = 0;
+  public HalfDayLeaves: number = 0;
+  public FullDayWorked: number = 0;
+  public TotalFullDaysSalary: number = 0;
+  public HalfDaysIncludingLateMarks: number = 0;
+  public TotalHalfDaysAndLateMarkDaysSalary: number = 0;
+  public TotalOverTimeSalary: number = 0;
+  public RemainingAdvance: number = 0;
+
 
   public readonly IsNewlyCreated: boolean = false;
   // public readonly AccountTypeName: string = '';
