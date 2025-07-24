@@ -35,6 +35,7 @@ export class PlotMasterDetailsComponent implements OnInit {
   CustomerList: Owner[] = [];
   CompanyList: Company[] = [];
   SiteList: Site[] = [];
+  Site:number = 0
   RequiredFieldMsg: string = ValidationMessages.RequiredFieldMsg;
   CompanyName = this.companystatemanagement.SelectedCompanyName;
   CompanyRef = this.companystatemanagement.SelectedCompanyRef;
@@ -116,7 +117,8 @@ export class PlotMasterDetailsComponent implements OnInit {
     this.CustomerEntity = CuctomerData;
   }
 
-  onsitechange = () => {
+  onsitechange = (Site:number) => {
+    this.Site = Site
     this.Entity.p.CurrentBookingRemark = 0
     this.CompanyEntity = Company.CreateNewInstance();
     this.CustomerEntity = Owner.CreateNewInstance();
@@ -166,6 +168,7 @@ export class PlotMasterDetailsComponent implements OnInit {
         await this.uiUtils.showSuccessToster('Plot Updated successfully');
         await this.router.navigate(['/homepage/Website/Plot_Master']);
       }
+      this.Entity.p.SiteManagementRef = this.Site
     }
   };
 

@@ -28,7 +28,7 @@
           <label>Site Name</label>
           <nz-select class="nzSelect-light" nzShowSearch [nzNotFoundContent]="noDataTpl" nzAllowClear
             nzPlaceHolder="Select" id="SiteRef" name="SiteRef" [nzSize]="'large'" [(ngModel)]="Entity.p.SiteManagementRef"
-            required (ngModelChange)="getCustomerListBySiteandBookingRef(Entity.p.SiteManagementRef); onsitechange()">
+            required (ngModelChange)="getCustomerListBySiteandBookingRef(Entity.p.SiteManagementRef); onsitechange(Entity.p.SiteManagementRef)">
             <nz-option *ngFor="let site of SiteList" [nzValue]="site.p.Ref" [nzLabel]="site.p.Name"></nz-option>
           </nz-select>
         </div>
