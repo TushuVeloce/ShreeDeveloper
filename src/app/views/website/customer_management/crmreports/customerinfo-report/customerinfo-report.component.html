@@ -52,16 +52,17 @@
         <tbody>
           <tr *ngFor="let material of paginatedList(); index as i">
             <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
-            <td Class="tbldata">{{material.p.CustID}}</td>
+            <td Class="tbldata">{{material.p.CustID ? material.p.CustID : '--'}}</td>
             <td Class="tbldata">{{material.p.CustomerName}}</td>
             <td Class="tbldata">{{material.p.CustomerAddress}}</td>
             <td Class="tbldata">{{material.p.ContactNos}}</td>
-            <td Class="tbldata">{{material.p.PANNo}}</td>
-            <td Class="tbldata">{{material.p.AdharNo}}</td>
+            <td Class="tbldata">{{material.p.PANNo ? material.p.PANNo : '--'}}</td>
+            <td Class="tbldata">{{material.p.AdharNo ? material.p.AdharNo : '--'}}</td>
             <td Class="tbldata">{{material.p.LeadSourceName}}</td>
             <td Class="tbldata">{{material.p.LeadHandleByName}}</td>
-            <td Class="tbldata">{{material.p.BrokerName}}</td>
-            <td Class="tbldata">{{material.p.RegisterCustomerBookingRemarkName}}</td>
+            <td Class="tbldata">{{material.p.BrokerName ? material.p.BrokerName : '--'}}</td>
+            <td Class="tbldata">{{material.p.RegisterCustomerBookingRemarkName ?
+              material.p.RegisterCustomerBookingRemarkName : '--'}}</td>
             <td Class="tbldata">{{material.p.PlotNo}}</td>
             <td Class="tbldata">{{material.p.AreaInSqm}}</td>
             <td Class="tbldata">{{material.p.AreaInSqft}}</td>
@@ -73,12 +74,13 @@
             <td Class="tbldata">{{material.p.GovernmentValue | currency : "INR"}}</td>
             <td Class="tbldata">{{material.p.ValueOfAgreement | currency : "INR"}}</td>
             <td Class="tbldata">{{material.p.RegTaxValueInPercentage}}</td>
+            <td Class="tbldata">{{material.p.RegistrationFees}}</td>
             <td Class="tbldata">{{material.p.TaxValueInPercentage }}%</td>
             <td Class="tbldata">{{material.p.StampDuties | currency : "INR"}}</td>
             <td Class="tbldata">{{material.p.GoodsServicesTax }}%</td>
             <td Class="tbldata">{{material.p.LegalCharges | currency : "INR"}}</td>
-
             <td Class="tbldata">{{material.p.TotalExtraCharges | currency : "INR"}}</td>
+            <td Class="tbldata">{{material.p.GrandTotal | currency : "INR"}}</td>
             <td Class="tbldata">{{material.p.TotalChequeRecieved | currency : "INR"}}</td>
             <td Class="tbldata">{{material.p.TotalCashRecieved | currency : "INR"}}</td>
             <td Class="tbldata">{{material.p.TotalAmountRecieved | currency : "INR"}}</td>
@@ -86,7 +88,6 @@
             <td Class="tbldata">{{material.p.TotalChequeBalance | currency : "INR"}}</td>
             <td Class="tbldata">{{material.p.TotalCashBalance | currency : "INR"}}</td>
             <td Class="tbldata">{{material.p.TotalBalance | currency : "INR"}}</td>
-            <td Class="tbldata">{{material.p.GrandTotal | currency : "INR"}}</td>
           </tr>
         </tbody>
       </nz-table>
@@ -99,56 +100,56 @@
     <Data-Not-Found />
   </div>
 
-    <!-- Print Section with automatic page breaks -->
-    <div id="print-section" style="display: none;" #PrintContainer>
-      <h2 style="text-align: center; margin-bottom: 1rem;">Customer Info Report</h2>
-      <table class="table table-bordered print-table" style="width: 100%; border-collapse: collapse;">
-        <thead>
-          <tr>
-            <th style="background-color: maroon; color: white;">#</th>
-            <th *ngFor="let header of headers.slice(1)" style="background-color: maroon; color: white;">
-              {{ header }}
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let item of DisplayMasterList; let i = index">
-            <td class="tbldata">{{ i + 1 }}</td>
-            <td class="tbldata">{{ item.p.CustID || '-' }}</td>
-            <td class="tbldata">{{ item.p.CustomerName || '-' }}</td>
-            <td class="tbldata">{{ item.p.CustomerAddress || '-' }}</td>
-            <td class="tbldata">{{ item.p.ContactNos || '-' }}</td>
-            <td class="tbldata">{{ item.p.PANNo || '-' }}</td>
-            <td class="tbldata">{{ item.p.AdharNo || '-' }}</td>
-            <td class="tbldata">{{ item.p.LeadSourceName || '-' }}</td>
-            <td class="tbldata">{{ item.p.LeadHandleByName || '-' }}</td>
-            <td class="tbldata">{{ item.p.BrokerName || '-' }}</td>
-            <td class="tbldata">{{ item.p.RegisterCustomerBookingRemarkName || '-' }}</td>
-            <td class="tbldata">{{ item.p.PlotNo || '-' }}</td>
-            <td class="tbldata">{{ item.p.AreaInSqm || '-' }}</td>
-            <td class="tbldata">{{ item.p.AreaInSqft || '-' }}</td>
-            <td class="tbldata">{{ (item.p.BasicRate | currency : 'INR') || '-' }}</td>
-            <td class="tbldata">{{ (item.p.DiscountedRateOnArea | currency : 'INR') || '-' }}</td>
-            <td class="tbldata">{{ (item.p.DiscountOnTotalPlotAmount | currency : 'INR') || '-' }}</td>
-            <td class="tbldata">{{ (item.p.TotalPlotAmount | currency : 'INR') || '-' }}</td>
-            <td class="tbldata">{{ (item.p.GovermentRatePerSqm | currency : 'INR') || '-' }}</td>
-            <td class="tbldata">{{ (item.p.GovernmentValue | currency : 'INR') || '-' }}</td>
-            <td class="tbldata">{{ (item.p.ValueOfAgreement | currency : 'INR') || '-' }}</td>
-            <td class="tbldata">{{ item.p.RegTaxValueInPercentage != null ? item.p.RegTaxValueInPercentage + '%' : '-' }}
-            </td>
-            <td class="tbldata">{{ item.p.TaxValueInPercentage != null ? item.p.TaxValueInPercentage + '%' : '-' }}</td>
-            <td class="tbldata">{{ (item.p.StampDuties | currency : 'INR') || '-' }}</td>
-            <td class="tbldata">{{ item.p.GoodsServicesTax != null ? item.p.GoodsServicesTax + '%' : '-' }}</td>
-            <td class="tbldata">{{ (item.p.TotalExtraCharges | currency : 'INR') || '-' }}</td>
-            <td class="tbldata">{{ (item.p.LegalCharges | currency : 'INR') || '-' }}</td>
-            <td class="tbldata">{{ (item.p.TotalChequeRecieved | currency : 'INR') || '-' }}</td>
-            <td class="tbldata">{{ (item.p.TotalCashRecieved | currency : 'INR') || '-' }}</td>
-            <td class="tbldata">{{ (item.p.TotalAmountRecieved | currency : 'INR') || '-' }}</td>
-            <td class="tbldata">{{ (item.p.TotalChequeBalance | currency : 'INR') || '-' }}</td>
-            <td class="tbldata">{{ (item.p.TotalCashBalance | currency : 'INR') || '-' }}</td>
-            <td class="tbldata">{{ (item.p.TotalBalance | currency : 'INR') || '-' }}</td>
-            <td class="tbldata">{{ (item.p.GrandTotal | currency : 'INR') || '-' }}</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+  <!-- Print Section with automatic page breaks -->
+  <div id="print-section" style="display: none;" #PrintContainer>
+    <h2 style="text-align: center; margin-bottom: 1rem;">Customer Info Report</h2>
+    <table class="table table-bordered print-table" style="width: 100%; border-collapse: collapse;">
+      <thead>
+        <tr>
+          <th style="background-color: maroon; color: white;">#</th>
+          <th *ngFor="let header of headers.slice(1)" style="background-color: maroon; color: white;">
+            {{ header }}
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of DisplayMasterList; let i = index">
+          <td class="tbldata">{{ i + 1 }}</td>
+          <td class="tbldata">{{ item.p.CustID || '-' }}</td>
+          <td class="tbldata">{{ item.p.CustomerName || '-' }}</td>
+          <td class="tbldata">{{ item.p.CustomerAddress || '-' }}</td>
+          <td class="tbldata">{{ item.p.ContactNos || '-' }}</td>
+          <td class="tbldata">{{ item.p.PANNo || '-' }}</td>
+          <td class="tbldata">{{ item.p.AdharNo || '-' }}</td>
+          <td class="tbldata">{{ item.p.LeadSourceName || '-' }}</td>
+          <td class="tbldata">{{ item.p.LeadHandleByName || '-' }}</td>
+          <td class="tbldata">{{ item.p.BrokerName || '-' }}</td>
+          <td class="tbldata">{{ item.p.RegisterCustomerBookingRemarkName || '-' }}</td>
+          <td class="tbldata">{{ item.p.PlotNo || '-' }}</td>
+          <td class="tbldata">{{ item.p.AreaInSqm || '-' }}</td>
+          <td class="tbldata">{{ item.p.AreaInSqft || '-' }}</td>
+          <td class="tbldata">{{ (item.p.BasicRate | currency : 'INR') || '-' }}</td>
+          <td class="tbldata">{{ (item.p.DiscountedRateOnArea | currency : 'INR') || '-' }}</td>
+          <td class="tbldata">{{ (item.p.DiscountOnTotalPlotAmount | currency : 'INR') || '-' }}</td>
+          <td class="tbldata">{{ (item.p.TotalPlotAmount | currency : 'INR') || '-' }}</td>
+          <td class="tbldata">{{ (item.p.GovermentRatePerSqm | currency : 'INR') || '-' }}</td>
+          <td class="tbldata">{{ (item.p.GovernmentValue | currency : 'INR') || '-' }}</td>
+          <td class="tbldata">{{ (item.p.ValueOfAgreement | currency : 'INR') || '-' }}</td>
+          <td class="tbldata">{{ item.p.RegTaxValueInPercentage != null ? item.p.RegTaxValueInPercentage + '%' : '-' }}
+          </td>
+          <td class="tbldata">{{ item.p.TaxValueInPercentage != null ? item.p.TaxValueInPercentage + '%' : '-' }}</td>
+          <td class="tbldata">{{ (item.p.StampDuties | currency : 'INR') || '-' }}</td>
+          <td class="tbldata">{{ item.p.GoodsServicesTax != null ? item.p.GoodsServicesTax + '%' : '-' }}</td>
+          <td class="tbldata">{{ (item.p.TotalExtraCharges | currency : 'INR') || '-' }}</td>
+          <td class="tbldata">{{ (item.p.LegalCharges | currency : 'INR') || '-' }}</td>
+          <td class="tbldata">{{ (item.p.TotalChequeRecieved | currency : 'INR') || '-' }}</td>
+          <td class="tbldata">{{ (item.p.TotalCashRecieved | currency : 'INR') || '-' }}</td>
+          <td class="tbldata">{{ (item.p.TotalAmountRecieved | currency : 'INR') || '-' }}</td>
+          <td class="tbldata">{{ (item.p.TotalChequeBalance | currency : 'INR') || '-' }}</td>
+          <td class="tbldata">{{ (item.p.TotalCashBalance | currency : 'INR') || '-' }}</td>
+          <td class="tbldata">{{ (item.p.TotalBalance | currency : 'INR') || '-' }}</td>
+          <td class="tbldata">{{ (item.p.GrandTotal | currency : 'INR') || '-' }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
