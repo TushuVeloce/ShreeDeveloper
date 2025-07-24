@@ -20,9 +20,17 @@
     </ng-template>
     <form autocomplete="off">
       <div class="row" style="margin-top: 1rem">
-        <div class="col-md-4 col-6">
+        <!-- <div class="col-md-4 col-6">
           <label>Site Name</label>
           <input class="form-control date-input" value={{SiteName}} readonly />
+        </div> -->
+        <div class="col-md-4">
+          <label>Site Name</label>
+          <nz-select class="nzSelect-light" nzShowSearch [nzNotFoundContent]="noDataTpl" nzAllowClear
+            nzPlaceHolder="Select" id="SiteRef" name="SiteRef" [nzSize]="'large'" [(ngModel)]="Entity.p.SiteManagementRef"
+            required>
+            <nz-option *ngFor="let site of SiteList" [nzValue]="site.p.Ref" [nzLabel]="site.p.Name"></nz-option>
+          </nz-select>
         </div>
         <div class="col-md-4 col-6">
           <label>Plot No.</label>
@@ -33,6 +41,16 @@
             <span class="validation-text" *ngIf="PlotNoCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
           </div>
         </div>
+         <div class="col-md-4 col-6">
+          <label for="AreaInSqft">Area in Sqft</label>
+          <input type="number" class="form-control" name="AreaInSqft" id="AreaInSqft" [(ngModel)]="Entity.p.AreaInSqft"
+            (ngModelChange)="convertSqftToSqm()" #AreaInSqftCtrl="ngModel" required
+            (blur)="AreaInSqftCtrl.control.markAsTouched()" placeholder="Enter Area in Sqft"
+            (click)="selectAllValue($event)" />
+          <!-- <div *ngIf="(AreaInSqftCtrl.invalid && (AreaInSqftCtrl.touched || AreaInSqftCtrl.dirty))">
+            <span class="validation-text" *ngIf="AreaInSqftCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
+          </div> -->
+        </div>
         <div class="col-md-4 col-6">
           <label for="AreaInSqm">Area in Sqm</label>
           <input type="number" class="form-control" name="AreaInSqm" id="AreaInSqm" [(ngModel)]="Entity.p.AreaInSqm"
@@ -41,16 +59,6 @@
             (click)="selectAllValue($event)" />
           <!-- <div *ngIf="(AreaInSqmCtrl.invalid && (AreaInSqmCtrl.touched || AreaInSqmCtrl.dirty))">
             <span class="validation-text" *ngIf="AreaInSqmCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
-          </div> -->
-        </div>
-        <div class="col-md-4 col-6">
-          <label for="AreaInSqft">Area in Sqft</label>
-          <input type="number" class="form-control" name="AreaInSqft" id="AreaInSqft" [(ngModel)]="Entity.p.AreaInSqft"
-            (ngModelChange)="convertSqftToSqm()" #AreaInSqftCtrl="ngModel" required
-            (blur)="AreaInSqftCtrl.control.markAsTouched()" placeholder="Enter Area in Sqft"
-            (click)="selectAllValue($event)" />
-          <!-- <div *ngIf="(AreaInSqftCtrl.invalid && (AreaInSqftCtrl.touched || AreaInSqftCtrl.dirty))">
-            <span class="validation-text" *ngIf="AreaInSqftCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
           </div> -->
         </div>
         <div class="col-md-4 col-6">

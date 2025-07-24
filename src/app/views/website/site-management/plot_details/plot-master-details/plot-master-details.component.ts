@@ -34,6 +34,7 @@ export class PlotMasterDetailsComponent implements OnInit {
   SiteName: string = ''
   CustomerList: Owner[] = [];
   CompanyList: Company[] = [];
+  SiteList: Site[] = [];
   RequiredFieldMsg: string = ValidationMessages.RequiredFieldMsg;
   CompanyName = this.companystatemanagement.SelectedCompanyName;
   CompanyRef = this.companystatemanagement.SelectedCompanyRef;
@@ -53,6 +54,7 @@ export class PlotMasterDetailsComponent implements OnInit {
 
   async ngOnInit() {
     this.CompanyList = await Company.FetchEntireList();
+     this.getSiteListByCompanyRef()
     const siteref = this.appStateManage.StorageKey.getItem('siteRef')
     const siteName = this.appStateManage.StorageKey.getItem('siteName')
     this.SiteRf = siteref ? Number(siteref) : 0;
@@ -99,6 +101,15 @@ export class PlotMasterDetailsComponent implements OnInit {
     }
   }
 
+    getSiteListByCompanyRef = async () => {
+    if (this.CompanyRef() <= 0) {
+      await this.uiUtils.showErrorToster('Company not Selected');
+      return;
+    }
+    let lst = await Site.FetchEntireListByCompanyRef(this.CompanyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    this.SiteList = lst;
+  }
+
   getCustomerDataBycustomerRef = async (customerref: number) => {
     this.CustomerEntity = Owner.CreateNewInstance();
     let CuctomerData = await Owner.FetchInstance(customerref, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
@@ -121,7 +132,6 @@ export class PlotMasterDetailsComponent implements OnInit {
     this.Entity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName()
     this.Entity.p.LoginEmployeeRef = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
     this.Entity.p.SiteManagementRef = this.SiteRf
-    this.Entity.p.AreaInSqft = this.Entity.p.AreaInSqm * 10.7639
     if (this.Entity.p.CurrentBookingRemark == BookingRemark.Shree_Booked) {
       this.Entity.p.CurrentOwnerRef = 0
     }

@@ -187,6 +187,14 @@ export class PlotMasterComponent implements OnInit {
     }
   };
 
+formatToFixed(value: number): string {
+  if (value == null) return '0';
+  
+  const fixed = value.toFixed(2);
+  // Remove trailing .00 or .0 if not needed
+  return fixed.replace(/\.?0+$/, '');
+}
+
   AddPlot = async () => {
     if (this.siteref > 0) {
       this.shouldDestroy = false;

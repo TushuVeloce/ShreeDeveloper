@@ -326,7 +326,6 @@ export class SiteManagementDetailsComponent implements OnInit {
     this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef()
     this.Entity.p.LoginEmployeeRef = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
     this.newOwner.SiteManagementRef = this.Entity.p.Ref
-    this.Entity.p.TotalLandAreaInSqft = this.Entity.p.TotalLandAreaInSqm * 10.7639
     this.Entity.p.EstimatedStartingDate = this.dtu.ConvertStringDateToFullFormat(this.localEstimatedStartingDate)
     this.Entity.p.EstimatedEndDate = this.dtu.ConvertStringDateToFullFormat(this.localEstimatedEndDate)
     if (this.Entity.p.CreatedBy == 0) {
@@ -358,7 +357,7 @@ export class SiteManagementDetailsComponent implements OnInit {
 
   convertSqmToSqft() {
     if (this.Entity.p.TotalLandAreaInSqm) {
-      this.Entity.p.TotalLandAreaInSqft = parseFloat((this.Entity.p.TotalLandAreaInSqm * 10.7639).toFixed(3));
+      this.Entity.p.TotalLandAreaInSqft = parseFloat((this.Entity.p.TotalLandAreaInSqm * 10.7639).toFixed(2));
     } else {
       this.Entity.p.TotalLandAreaInSqft = 0;
     }
@@ -366,7 +365,7 @@ export class SiteManagementDetailsComponent implements OnInit {
 
   convertSqftToSqm() {
     if (this.Entity.p.TotalLandAreaInSqft) {
-      this.Entity.p.TotalLandAreaInSqm = parseFloat((this.Entity.p.TotalLandAreaInSqft / 10.7639).toFixed(3));
+      this.Entity.p.TotalLandAreaInSqm = parseFloat((this.Entity.p.TotalLandAreaInSqft / 10.7639).toFixed(2));
     } else {
       this.Entity.p.TotalLandAreaInSqm = 0;
     }
