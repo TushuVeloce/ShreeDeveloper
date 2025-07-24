@@ -336,7 +336,7 @@
             <div class="col-4 d-flex justify-content-end align-items-center">
               <label for="ReportNOCAirportNOC">Yes</label>
               <input type="checkbox" id="ReportNOCAirportNOC" [(ngModel)]="Entity.p.ReportNOCAirportNOC"
-                name="ReportNOCAirportNOC" class="custom-checkbox" />
+                name="ReportNOCAirportNOC" class="custom-checkbox" (ngModelChange)="ResetNOC()"/>
             </div>
           </div>
 

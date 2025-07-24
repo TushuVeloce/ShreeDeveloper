@@ -125,9 +125,16 @@ export class FinalLayoutComponent implements OnInit {
     return status;
   }
 
+  ResetRoadNOC = () => {
+    if (!this.Entity.p.IsRoadNOCSubmit) {
+      this.Entity.p.IsArjInwardSubmit = false;
+      this.Entity.p.IsRoadNOCSaatBaaraUtaraSubmit = false;
+      this.Entity.p.IsRoadNOCTentativeOrdervaNakashaSubmit = false;
+    }
+  }
+
 
   SaveFinalLayout = async () => {
-
     this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef();
     this.Entity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName();
     if (this.Entity.p.CreatedBy == 0) {

@@ -114,7 +114,6 @@ export class TpOfficeComponent implements OnInit {
 
     status = requiredFields.every(field => Entity.p?.[field] === true);
     if (status) {
-
       if (!Entity.p.ReportNOCAirportNOC) {
         status = true;
       } else {
@@ -124,6 +123,12 @@ export class TpOfficeComponent implements OnInit {
     return status;
   }
 
+  ResetNOC = () => {
+    if (!this.Entity.p.ReportNOCAirportNOC) {
+      this.Entity.p.IsReportNOCSubmit = false;
+      this.Entity.p.IsAirportNOCSubmit = false;
+    }
+  }
 
   SaveTPOffice = async () => {
     this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef();

@@ -204,7 +204,7 @@
           <div class="col-4 d-flex justify-content-end align-items-center">
             <label for="IsRoadNOCSubmit">Yes</label>
             <input type="checkbox" id="IsRoadNOCSubmit" [(ngModel)]="Entity.p.IsRoadNOCSubmit" name="IsRoadNOCSubmit"
-              class="custom-checkbox" />
+              class="custom-checkbox" (ngModelChange)="ResetRoadNOC()"/>
           </div>
         </div>
 

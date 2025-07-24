@@ -115,6 +115,33 @@ export class NaLetterComponent implements OnInit {
     return status;
   }
 
+  ResetInampatra = () => {
+    if (!this.Entity.p.IsInamPatraSubmitTwo) {
+      this.Entity.p.IsArjSubmit = false;
+      this.Entity.p.IsInamEkonisheEkonPanasPasuncheSatbaraVaFerfarSubmit = false;
+      this.Entity.p.IsInamZoneDakhalaMapSubmit = false;
+      this.Entity.p.IsPratijnaPatraSubmit = false;
+      this.Entity.p.IsValuationReportSubmit = false;
+      this.Entity.p.IsInamPatraSubmitThree = false;
+      this.Entity.p.IsChalanSubmit = false;
+      this.Entity.p.IsvargDonTeVargEkChaAadeshSubmit = false;
+    }
+  }
+
+  ResetArj = () => {
+    if (!this.Entity.p.IsArjSubmit) {
+      this.Entity.p.IsInamEkonisheEkonPanasPasuncheSatbaraVaFerfarSubmit = false;
+      this.Entity.p.IsInamZoneDakhalaMapSubmit = false;
+      this.Entity.p.IsPratijnaPatraSubmit = false;
+      this.Entity.p.IsValuationReportSubmit = false;
+      this.Entity.p.IsInamPatraSubmitThree = false;
+      this.Entity.p.IsChalanSubmit = false;
+      this.Entity.p.IsvargDonTeVargEkChaAadeshSubmit = false;
+    }
+  }
+
+
+
 
   SaveNaLetter = async () => {
     this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef();
