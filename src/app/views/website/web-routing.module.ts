@@ -157,6 +157,7 @@ import { FinalLayoutComponent } from './government_office/final-layout/final-lay
 import { CustomersummarryReportComponent } from './customer_management/crmreports/customersummarry-report/customersummarry-report.component';
 import { CustomerinfoReportComponent } from './customer_management/crmreports/customerinfo-report/customerinfo-report.component';
 import { StockSummaryComponent } from './stock management/stock-summary/stock-summary.component';
+import { CustomerVisitReportComponent } from './customer_management/customervisitreport/customer-visit-report/customer-visit-report.component';
 
 
 const routes: Routes = [
@@ -304,6 +305,8 @@ const routes: Routes = [
 
       { path: 'Customer_Summary_Report', component: CustomersummarryReportComponent },
       { path: 'Customer_Info_Report', component: CustomerinfoReportComponent },
+
+      { path: 'Customer_Visit_Report', component: CustomerVisitReportComponent },
 
 
       //Registrar Office

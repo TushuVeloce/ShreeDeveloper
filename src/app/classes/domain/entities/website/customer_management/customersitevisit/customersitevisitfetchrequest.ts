@@ -4,17 +4,17 @@ import { Utils } from 'src/app/services/utils.service';
 import { RequestTypes } from 'src/app/classes/infrastructure/enums';
 import { DataCollection } from 'src/app/classes/infrastructure/datacollection';
 
-export class RegisteredCustomerFetchRequest
+export class CustomerSiteVisitFetchRequest
 {
-    public static readonly FetchRequestType: string = "RegisterCustomerFetchRequest";
+    public static readonly FetchRequestType: string = "CustomerSiteVisitFetchRequest";
 
-    RegisteredCustomerRefs: number[] = [];
+    CustomerSiteVisitRefs: number[] = [];
     CompanyRefs: number[] = [];
-    SiteRefs: number[] = [];
+    SiteRef: number= 0;
 
     public MergeIntoTransportData = (td: TransportData) =>
     {
-        let coll = DataContainerService.GetInstance().GetOrCreateCollection(td.MainData, RegisteredCustomerFetchRequest.FetchRequestType) as DataCollection;
+        let coll = DataContainerService.GetInstance().GetOrCreateCollection(td.MainData, CustomerSiteVisitFetchRequest.FetchRequestType) as DataCollection;
         coll.Entries.push(this);
     }
 

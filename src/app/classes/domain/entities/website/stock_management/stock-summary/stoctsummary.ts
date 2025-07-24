@@ -30,9 +30,9 @@ export class StockSummaryProps {
   public TotalOrderQty: number = 0;
   public TotalInwardQty: number = 0;
   public TotalTransferredInQty: number = 0;
-  public TotalTransferredOutQty : number = 0;
-  public EffectiveInwardQty : number = 0;
-  public TotalConsumedQty  : number = 0;
+  public TotalTransferredOutQty: number = 0;
+  public EffectiveInwardQty: number = 0;
+  public TotalConsumedQty: number = 0;
   public CurrentStock: number = 0;
   public RemainingQty: number = 0;
   public UnitRef: number = 0;
@@ -179,6 +179,14 @@ export class StockSummary implements IPersistable<StockSummary> {
   public static async FetchEntireListByCompanyRef(CompanyRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let req = new StockSummaryFetchRequest();
     req.CompanyRef = CompanyRef
+    let tdResponse = await StockSummary.FetchTransportData(req, errorHandler) as TransportData;
+    return StockSummary.ListFromTransportData(tdResponse);
+  }
+
+  public static async FetchEntireListByCompanyRefAndSiteRef(CompanyRef: number, SiteRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+    let req = new StockSummaryFetchRequest();
+    req.CompanyRef = CompanyRef
+    req.SiteRef = SiteRef
     let tdResponse = await StockSummary.FetchTransportData(req, errorHandler) as TransportData;
     return StockSummary.ListFromTransportData(tdResponse);
   }

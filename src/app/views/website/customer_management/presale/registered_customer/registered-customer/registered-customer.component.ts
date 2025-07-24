@@ -10,6 +10,7 @@ import { ServerCommunicatorService } from 'src/app/services/server-communicator.
 import { TransportData } from 'src/app/classes/infrastructure/transportdata';
 import { Utils } from 'src/app/services/utils.service';
 import { CancelDealCustomRequest } from 'src/app/classes/domain/entities/website/customer_management/registeredcustomer/custom_process/CancelDealCustomRequest';
+import { Site } from 'src/app/classes/domain/entities/website/masters/site/site';
 
 
 @Component({
@@ -23,6 +24,7 @@ export class RegisteredCustomerComponent  implements OnInit {
   Entity: RegisteredCustomer = RegisteredCustomer.CreateNewInstance();
   MasterList: RegisteredCustomer[] = [];
   DisplayMasterList: RegisteredCustomer[] = [];
+  SiteList: Site[] = [];
   SearchString: string = '';
   SelectedRegisteredCustomer: RegisteredCustomer = RegisteredCustomer.CreateNewInstance();
   pageSize = 10; // Items per page
@@ -43,7 +45,7 @@ export class RegisteredCustomerComponent  implements OnInit {
         private serverCommunicator: ServerCommunicatorService
   ) {
     effect(async() => {
-     await this.getRegisterCustomerListByCompanyRef()
+     await this.getRegisterCustomerListByCompanyRef();  await this.getSiteListByCompanyRef();
     });
   }
 
@@ -52,6 +54,16 @@ export class RegisteredCustomerComponent  implements OnInit {
     this.appStateManage.setDropdownDisabled();
     this.loadPaginationData();
     this.pageSize = this.screenSizeService.getPageSize('withoutDropdown');
+  }
+
+  getSiteListByCompanyRef = async () => {
+    this.Entity.p.SiteRef = 0
+    if (this.companyRef() <= 0) {
+      await this.uiUtils.showErrorToster('Company not Selected');
+      return;
+    }
+    let lst = await Site.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    this.SiteList = lst;
   }
 
   getRegisterCustomerListByCompanyRef = async () => {
@@ -67,7 +79,20 @@ export class RegisteredCustomerComponent  implements OnInit {
     this.loadPaginationData();
   };
 
-
+ getRegisterCustomerListByCompanyRefAndSiteRef = async () => {
+    this.MasterList = [];
+    this.DisplayMasterList = [];
+    if (this.Entity.p.SiteRef <= 0) {
+      this.getRegisterCustomerListByCompanyRef();
+      return;
+    }
+    let lst = await RegisteredCustomer.FetchEntireListByCompanyRefAndSiteRef(this.companyRef(), this.Entity.p.SiteRef,
+      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+    );
+    this.MasterList = lst;
+    this.DisplayMasterList = this.MasterList;
+    this.loadPaginationData();
+  };
 
   onEditClicked = async (item: RegisteredCustomer) => {
 
@@ -96,7 +121,7 @@ export class RegisteredCustomerComponent  implements OnInit {
        let tdResult = JSON.parse(tr.Tag) as TransportData;
       }
     );
-    this.getRegisterCustomerListByCompanyRef()
+    this.getRegisterCustomerListByCompanyRefAndSiteRef()
     this.loadPaginationData()
 };
 

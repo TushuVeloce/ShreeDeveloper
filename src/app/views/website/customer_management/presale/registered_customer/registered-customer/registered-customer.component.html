@@ -1,38 +1,55 @@
 <div>
   <div class="row">
     <div class="col-4 mb-2">
-      <h1 style="padding-top: 3px;" class="title title_light">Registered Customer</h1>
+      <h1 style="padding-top: 3px" class="title title_light">
+        Registered Customer
+      </h1>
     </div>
     <div class="col-4 mb-2 search-container_light">
-      <app-shared-filter [masterList]="MasterList"
-        [filterFields]="['SiteName', 'PlotName', 'CustomerName', 'CustomerMobileNo', 'CustomerAddress']"
-        (filteredList)="DisplayMasterList = $event"></app-shared-filter>
+      <app-shared-filter [masterList]="MasterList" [filterFields]="[ 'SiteName', 'PlotName', 'CustomerName', 'CustomerMobileNo', 'CustomerAddress']" (filteredList)="DisplayMasterList = $event"></app-shared-filter>
     </div>
-    <div>
+    <div></div>
+  </div>
+  <div class="row" style="margin-top: 1rem">
+    <div class="col-md-4">
+      <div>
+        <label for="SiteRef"><b>Site</b></label>
+        <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
+          nzPlaceHolder="Select" [nzSize]="'large'" name="SiteRef" [(ngModel)]="Entity.p.SiteRef" required id="SiteRef"
+          (ngModelChange)="getRegisterCustomerListByCompanyRefAndSiteRef()">
+          <nz-option nzLabel="All" [nzValue]="0"></nz-option>
+          <nz-option *ngFor="let Site of SiteList" [nzValue]="Site.p.Ref" [nzLabel]="Site.p.Name"></nz-option>
+        </nz-select>
+      </div>
     </div>
   </div>
+  <ng-template #noDataTpl>
+    <div class="no-data-text">Data Not Found</div>
+  </ng-template>
   <div class="table-wrapper" class="tblcard_light" style="margin-top: 2rem" *ngIf="DisplayMasterList.length > 0">
     <div class="table-container">
       <nz-table #basicTable nzSize="small" class="no-hover-table bgtable_light" [nzData]="paginatedList"
-        [nzScroll]="{x:'auto' }" nzFrontPagination="false" [nzShowSizeChanger]="false">
+        [nzScroll]="{ x: 'auto' }" nzFrontPagination="false" [nzShowSizeChanger]="false">
         <thead>
           <tr>
-            <th *ngFor="let header of headers" class="tblheader">{{ header }}</th>
+            <th *ngFor="let header of headers" class="tblheader">
+              {{ header }}
+            </th>
           </tr>
         </thead>
         <tbody>
           <tr *ngFor="let registercustomer of paginatedList; index as i">
             <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
-            <td Class="tbldata">{{ registercustomer.p.SiteName}}</td>
-            <td Class="tbldata">{{ registercustomer.p.PlotName}}</td>
-            <td Class="tbldata">{{ registercustomer.p.CustomerName}}</td>
-            <td Class="tbldata">{{ registercustomer.p.CustomerMobileNo}}</td>
+            <td Class="tbldata">{{ registercustomer.p.SiteName }}</td>
+            <td Class="tbldata">{{ registercustomer.p.PlotName }}</td>
+            <td Class="tbldata">{{ registercustomer.p.CustomerName }}</td>
+            <td Class="tbldata">{{ registercustomer.p.CustomerMobileNo }}</td>
             <td Class="tbldata">{{ registercustomer.p.CustomerAddress }}</td>
             <td class="tbldata">
-              <span style="margin-left: 9px;" (click)="onEditClicked(registercustomer);">
+              <span style="margin-left: 9px" (click)="onEditClicked(registercustomer)">
                 <img src="\assets\icons\edit.png" alt="logo" title="Edit" width="20px" height="20px" />
               </span>
-              <span style="margin-left: 9px;" (click)="CancelDeal(registercustomer);">
+              <span style="margin-left: 9px" (click)="CancelDeal(registercustomer)">
                 <img src="\assets\icons\Cancel.png" alt="logo" title="Edit" width="20px" height="20px" />
               </span>
             </td>
@@ -51,3 +68,4 @@
       <span class="title_light"> Data Not Found</span>
     </div>
   </div>
+</div>

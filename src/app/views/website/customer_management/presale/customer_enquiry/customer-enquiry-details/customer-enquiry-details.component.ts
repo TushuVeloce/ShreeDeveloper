@@ -99,6 +99,7 @@ export class CustomerEnquiryDetailsComponent implements OnInit {
     'Area in Sqft',
     'Customer Status',
     'Remark',
+    'Action'
   ];
 
   constructor(
@@ -337,6 +338,17 @@ export class CustomerEnquiryDetailsComponent implements OnInit {
     }
   }
 
+  async removePlot(index: number) {
+    await this.uiUtils.showConfirmationMessage(
+      'Delete',
+      `This process is <strong>IRREVERSIBLE!</strong> <br/>
+     Are you sure that you want to DELETE this Plot?`,
+      async () => {
+        this.Entity.p.CustomerFollowUps[0].CustomerFollowUpPlotDetails.splice(index, 1);
+      }
+    );
+  }
+
   // On lead source broker selected
   showAgentBrokerInput: boolean = false;
 
@@ -397,6 +409,17 @@ export class CustomerEnquiryDetailsComponent implements OnInit {
     this.localOfficeVisitDateDateInputControl.control.markAsPristine();
   };
 
+  CheckBlankStatusofAddedPlots = () => {
+    const hasBlankStatus = this.Entity.p.CustomerFollowUps[0]?.CustomerFollowUpPlotDetails?.some(
+      (item: any) => !item.CustomerStatus
+    );
+    if (hasBlankStatus) {
+      this.uiUtils.showWarningToster('Please select Customer Status for all added plots.');
+      return true;
+    }
+    return false;
+  }
+
   SaveCustomerEnquiry = async () => {
     this.Entity.p.CompanyRef =
       this.companystatemanagement.getCurrentCompanyRef();
@@ -413,6 +436,7 @@ export class CustomerEnquiryDetailsComponent implements OnInit {
       });
     });
 
+
     this.Entity.p.IsNewlyCreated = this.IsNewEntity;
 
     // if (this.Entity.p.CustomerFollowUps[0].CustomerStatus == 30 || this.Entity.p.CustomerFollowUps[0].CustomerStatus == 40) {
@@ -420,17 +444,21 @@ export class CustomerEnquiryDetailsComponent implements OnInit {
     // }
 
     this.Entity.p.CustomerFollowUps[0].TransDateTime = this.DateWithTime!;
-    this.Entity.p.CustomerFollowUps[0].SiteVisitDate =
-      this.dtu.ConvertStringDateToFullFormat(this.localSiteVisitDate);
-    this.Entity.p.CustomerFollowUps[0].OfficeVisitDate =
-      this.dtu.ConvertStringDateToFullFormat(this.localOfficeVisitDate);
-    this.Entity.p.CustomerFollowUps[0].ReminderDate =
-      this.dtu.ConvertStringDateToFullFormat(this.localReminderDate);
-    this.Entity.p.CustomerFollowUps[0].CompanyRef =
-      this.companystatemanagement.getCurrentCompanyRef();
+    this.Entity.p.CustomerFollowUps[0].SiteVisitDate = this.dtu.ConvertStringDateToFullFormat(this.localSiteVisitDate);
+    this.Entity.p.CustomerFollowUps[0].OfficeVisitDate = this.dtu.ConvertStringDateToFullFormat(this.localOfficeVisitDate);
+    this.Entity.p.CustomerFollowUps[0].ReminderDate = this.dtu.ConvertStringDateToFullFormat(this.localReminderDate);
+    this.Entity.p.CustomerFollowUps[0].CompanyRef = this.companystatemanagement.getCurrentCompanyRef();
+    if (this.SiteManagementRef || this.InterestedPlotRef) {
+      this.uiUtils.showWarningToster(
+        'Please add selected plot or remove it'
+      );
+      return;
+    }
+    if (this.CheckBlankStatusofAddedPlots()) {
+      return;
+    }
     let entityToSave = this.Entity.GetEditableVersion();
     let entitiesToSave = [entityToSave];
-
     await this.Entity.EnsurePrimaryKeysWithValidValues()
     let tr = await this.utils.SavePersistableEntities(entitiesToSave);
     if (!tr.Successful) {

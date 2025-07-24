@@ -1,5 +1,6 @@
 import { Component, effect, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { Site } from 'src/app/classes/domain/entities/website/masters/site/site';
 import { StockSummary } from 'src/app/classes/domain/entities/website/stock_management/stock-summary/stoctsummary';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
@@ -18,6 +19,7 @@ export class StockSummaryComponent implements OnInit {
   Entity: StockSummary = StockSummary.CreateNewInstance();
   MasterList: StockSummary[] = [];
   DisplayMasterList: StockSummary[] = [];
+  SiteList: Site[] = [];
   SearchString: string = '';
   SelectedStockSummary: StockSummary = StockSummary.CreateNewInstance();
   CustomerRef: number = 0;
@@ -33,7 +35,7 @@ export class StockSummaryComponent implements OnInit {
     private companystatemanagement: CompanyStateManagement
   ) {
     effect(async () => {
-      await this.getStockSummaryListByCompanyRef();
+      await this.getStockSummaryListByCompanyRef(); await this.getSiteListByCompanyRef();
     });
   }
 
@@ -41,6 +43,16 @@ export class StockSummaryComponent implements OnInit {
     this.appStateManage.setDropdownDisabled();
     this.loadPaginationData();
     this.pageSize = this.screenSizeService.getPageSize('withoutDropdown');
+  }
+
+    getSiteListByCompanyRef = async () => {
+    this.Entity.p.SiteRef = 0
+    if (this.companyRef() <= 0) {
+      await this.uiUtils.showErrorToster('Company not Selected');
+      return;
+    }
+    let lst = await Site.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    this.SiteList = lst;
   }
 
   getStockSummaryListByCompanyRef = async () => {
@@ -51,11 +63,25 @@ export class StockSummaryComponent implements OnInit {
       return;
     }
     let lst = await StockSummary.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-    console.log('lst :', lst);
     this.MasterList = lst;
     this.DisplayMasterList = this.MasterList;
     this.loadPaginationData();
   }
+
+   getStockSummaryListByCompanyRefAndSiteRef = async () => {
+      this.MasterList = [];
+      this.DisplayMasterList = [];
+      if (this.Entity.p.SiteRef <= 0) {
+        this.getStockSummaryListByCompanyRef();
+        return;
+      }
+      let lst = await StockSummary.FetchEntireListByCompanyRefAndSiteRef(this.companyRef(), this.Entity.p.SiteRef,
+        async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+      );
+      this.MasterList = lst;
+      this.DisplayMasterList = this.MasterList;
+      this.loadPaginationData();
+    };
 
   // Extracted from services date conversion //
   formatDate = (date: string | Date): string => {

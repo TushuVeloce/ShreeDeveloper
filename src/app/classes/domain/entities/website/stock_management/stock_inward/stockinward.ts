@@ -196,7 +196,6 @@ export class StockInward implements IPersistable<StockInward> {
 
   public static async FetchEntireListByCompanyRefSiteAndVendorRef(CompanyRef: number, SiteRef: number, VendorRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let req = new StockInwardFetchRequest();
-
     req.CompanyRefs.push(CompanyRef)
     SiteRef && req.SiteRefs.push(SiteRef)
     VendorRef && req.VendorRefs.push(VendorRef)

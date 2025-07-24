@@ -139,14 +139,14 @@
           </nz-select>
         </div>
         <!-- Add button  -->
-        <div class="col-md-4" style="margin-top: 48px;" *ngIf="InterestedPlotRef != 0 && SiteManagementRef != 0">
+        <div class="col-md-4" style="margin-top: 48px;" *ngIf="InterestedPlotRef && SiteManagementRef">
           <div>
             <button type="button" class="btn" (click)="addDataToTable()">Add</button>
           </div>
         </div>
       </div>
       <!-- Table For SIte and Plot details -->
-      <div class="table-container" style="margin-top: 2rem" *ngIf="IsPlotDetails && IsNewEntity">
+      <div class="table-container" style="margin-top: 2rem" *ngIf="IsPlotDetails && IsNewEntity && Entity.p.CustomerFollowUps[0].CustomerFollowUpPlotDetails.length > 0">
         <div class="row">
           <div class="col-12">
             <h3 class="TableHeading">Intrested Plots</h3>
@@ -182,9 +182,10 @@
                 <input type="text" name="{{plot.PlotName.trim() + '_' + i + 1000}}" class="form-control"
                   [(ngModel)]="plot.Reason" required placeholder="Enter Reason" />
               </td>
-              <!-- <td Class="tbldata">{{ plot.CustomerStatus }}</td> -->
-              <!-- <td Class="tbldata">{{ plot.Reason }}</td> -->
-              <!-- <td Class="tbldata">{{ plot.p.BookingRemark }}</td>  -->
+               <td class="tbldata">
+                  <span style="margin-left: 9px" (click)="removePlot(i)">
+                    <img src="\assets\icons\delete.png" alt="logo" title="Delete" width="20px" height="20px" /></span>
+                </td>
             </tr>
           </tbody>
         </nz-table>

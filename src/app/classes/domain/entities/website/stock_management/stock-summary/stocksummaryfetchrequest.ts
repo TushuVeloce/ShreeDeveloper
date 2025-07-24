@@ -10,6 +10,7 @@ export class StockSummaryFetchRequest {
   StockSummaryManagementRefs: number[] = [];
   CompanyRef: number = 0;
   CompanyRefs: number[] = [];
+  SiteRef: number = 0;
 
   public MergeIntoTransportData = (td: TransportData) => {
     let coll = DataContainerService.GetInstance().GetOrCreateCollection(td.MainData, StockSummaryFetchRequest.FetchRequestType) as DataCollection;
