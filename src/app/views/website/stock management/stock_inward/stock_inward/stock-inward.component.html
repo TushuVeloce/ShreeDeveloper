@@ -49,134 +49,110 @@
           <th *ngFor="let header of headers" class="tblheader">{{ header }}</th>
         </tr>
       </thead>
-      <!-- <tbody>
-        <tr *ngFor="let requisition of paginatedList; index as i">
-          <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
-          <td Class="tbldata">{{requisition.p.Date}}</td>
-          <td Class="tbldata">{{requisition.p.SiteName}}</td>
-          <td Class="tbldata">{{requisition.p.MaterialRequisitionDetailsArray[0].MaterialName}}</td>
-           <td Class="tbldata">{{requisition.p.MaterialRequisitionDetailsArray[0].UnitName}}</td>
-            <td Class="tbldata">{{requisition.p.MaterialRequisitionDetailsArray[0].EstimatedQty}}</td>
-            <td Class="tbldata">{{requisition.p.Status}}</td>
-          <td class="tbldata">
-            <span style="margin-left: 9px;" (click)="onEditClicked(requisition);">
-              <img src="\assets\icons\edit.png" alt="logo" title="Edit" width="20px" height="20px" />
-            </span>
-            <span style="margin-left: 9px;" (click)="onDeleteClicked(requisition);">
-              <img src="\assets\icons\delete.png" alt="logo" title="Delete" width="20px" height="20px" /></span>
-          </td>
-        </tr>
-  </ng-container>
-</tr>
 
-      </tbody> -->
-      <!-- <tbody>
-  <ng-container *ngFor="let requisition of paginatedList; let i = index">
-    <ng-container *ngFor="let detail of requisition.p.MaterialRequisitionDetailsArray; let j = index">
-      <tr >
-        <td class="tbldata" *ngIf="j === 0" [attr.rowspan]="requisition.p.MaterialRequisitionDetailsArray.length">
-          {{ (currentPage - 1) * pageSize + i + 1 }}
-        </td>
-
-        <td class="tbldata" *ngIf="j === 0" [attr.rowspan]="requisition.p.MaterialRequisitionDetailsArray.length">
-          {{ formatDate(requisition.p.Date) }}
-        </td>
-
-        <td class="tbldata" *ngIf="j === 0" [attr.rowspan]="requisition.p.MaterialRequisitionDetailsArray.length">
-          {{ requisition.p.SiteName }}
-        </td>
-
-        <td class="tbldata">{{ detail.MaterialName }}</td>
-        <td class="tbldata">{{ detail.UnitName }}</td>
-        <td class="tbldata">{{ detail.EstimatedQty }}</td>
-
-        <td class="tbldata" *ngIf="j === 0" [attr.rowspan]="requisition.p.MaterialRequisitionDetailsArray.length">
-          {{ requisition.p.Status }}
-        </td>
-
-        <td class="tbldata" *ngIf="j === 0" [attr.rowspan]="requisition.p.MaterialRequisitionDetailsArray.length">
-          <span style="margin-left: 9px;" (click)="onEditClicked(requisition)">
-            <img src="/assets/icons/edit.png" alt="Edit" title="Edit" width="20px" height="20px" />
-          </span>
-          <span style="margin-left: 9px;" (click)="onDeleteClicked(requisition)">
-            <img src="/assets/icons/delete.png" alt="Delete" title="Delete" width="20px" height="20px" />
-          </span>
-        </td>
-      </tr>
-      <tr *ngIf="j === requisition.p.MaterialRequisitionDetailsArray.length - 1">
-        <td colspan="8" style="background-color: #333; height: 2px; padding: 0;"></td>
-      </tr>
-    </ng-container>
-  </ng-container>
-</tbody> -->
-
-      <!-- <tbody>
-        <ng-container *ngFor="let inward of paginatedList; let i = index">
-          <ng-container
-            *ngFor="let detail of inward.p.MaterialInwardDetailsArray; let materialRowIndex = index">
+      <tbody>
+        <ng-container *ngFor="let Inward of paginatedList; let i = index">
+          <ng-container *ngFor="let detail of Inward.p.MaterialInwardDetailsArray; let j = index">
             <tr>
-              <td class="tbldata">{{ (currentPage - 1) * pageSize + materialRowIndex + 1 }}</td>
-                <td class="tbldata">{{ inward.p.ChalanNo }}</td>
-                <td class="tbldata">{{ inward.p.SiteName }}</td>
-                  <td class="tbldata">{{ formatDate(inward.p.PurchaseOrderDate)}}</td>
-                  <td class="tbldata">{{ formatDate(inward.p.InwardDate)}}</td>
-                <td class="tbldata">{{ inward.p.VendorName }}</td>
+              <td class="tbldata" *ngIf="j === 0" [attr.rowspan]="Inward.p.MaterialInwardDetailsArray.length">
+                {{ (currentPage - 1) * pageSize + i + 1 }}
+              </td>
+              <td class="tbldata" *ngIf="j === 0 && !Entity.p.SiteRef"
+                [attr.rowspan]="Inward.p.MaterialInwardDetailsArray.length">
+                {{ Inward.p.SiteName }}
+              </td>
+              <!-- <td class="tbldata" *ngIf="j === 0" [attr.rowspan]="Inward.p.MaterialInwardDetailsArray.length"
+                width="9%">
+                {{ formatDate(Inward.p.PurchaseOrderDate ) }}
+              </td> -->
+              <td class="tbldata" *ngIf="j === 0" [attr.rowspan]="Inward.p.MaterialInwardDetailsArray.length">
+                {{ Inward.p.VendorName }}
+              </td>
+
               <td class="tbldata">{{ detail.MaterialName }}</td>
               <td class="tbldata">{{ detail.UnitName }}</td>
-              <td class="tbldata">{{ detail.OrderedQty }}</td>
-               <td class="tbldata">{{ detail.InwardQty }}</td>
-                <td class="tbldata">{{ detail.RemainingQty }}</td>
-              <td class="tbldata">
-                <span class="status" style="cursor: pointer;" ngClass="pending">
+              <td class="tbldata">{{ detail.PurchaseOrderQty }}</td>
+              <td class="tbldata">{{ detail.InwardQty }}</td>
+              <td class="tbldata">{{ detail.PurchaseOrderRemainingQty }}</td>
+              <td Class="tbldata" width="9%">
+                {{ detail.Date ? formatDate(detail.Date) : '--'}}
+              </td>
+              <!-- Optional: Requisition status -->
+              <td class="tbldata" *ngIf="j === 0" [attr.rowspan]="Inward.p.MaterialInwardDetailsArray.length">
+                <!-- PENDING -->
+                <span class="status" *ngIf="Inward.p.MaterialInwardStatus == MaterialInwardStatus.Pending"
+                  ngClass="pending">
                   Pending
                 </span>
+
+                <!-- APPROVED -->
+                <span class="status" style="cursor: pointer;"
+                  *ngIf="Inward.p.MaterialInwardStatus == MaterialInwardStatus.Approved" ngClass="approved">
+                  Approved
+                </span>
+
+                <!-- REJECTED -->
+                <span class="status" *ngIf="Inward.p.MaterialInwardStatus == MaterialInwardStatus.Rejected"
+                  ngClass="rejected">
+                  Rejected
+                </span>
+
+                <!-- Completed -->
+                <span class="status" *ngIf="Inward.p.MaterialInwardStatus == MaterialInwardStatus.Completed"
+                  ngClass="completed">
+                  Completed
+                </span>
+
+                <!-- Incomplete -->
+                <span class="status" *ngIf="Inward.p.MaterialInwardStatus == MaterialInwardStatus.Incomplete"
+                  ngClass="incomplete">
+                  Incomplete
+                </span>
+
+                <!-- Ordered -->
+                <span class="status" *ngIf="Inward.p.MaterialInwardStatus == MaterialInwardStatus.Ordered"
+                  ngClass="ordered">
+                  Ordered
+                </span>
               </td>
-              <td class="tbldata">
-                <span style="margin-left: 9px;" (click)="onEditClicked(inward)">
+
+              <td class="tbldata" *ngIf="j === 0" [attr.rowspan]="Inward.p.MaterialInwardDetailsArray.length">
+                <span style="margin-left: 5px; margin-right: 5px; cursor: pointer;">
+                  <img src="\assets\icons\printer.png" alt="logo" title="Print" width="20px" height="20px" />
+                </span>
+                <span style="margin-left: 5px;" (click)="onEditClicked(Inward)">
                   <img src="/assets/icons/edit.png" alt="Edit" title="Edit" width="20px" height="20px" />
                 </span>
-                <span style="margin-left: 9px;" (click)="onDeleteClicked(inward)">
+                <span style="margin-left: 5px;" (click)="onDeleteClicked(Inward)">
                   <img src="/assets/icons/delete.png" alt="Delete" title="Delete" width="20px" height="20px" />
                 </span>
+                <!-- <span style="margin-left: 5px;"
+                  *ngIf="!checkIsEnable(Inward.p.MaterialInwardDetailsArray) || Inward.p.MaterialInwardStatus == MaterialInwardStatus.Approved"
+                  (click)="onEditClicked(Order)">
+                  <img src="/assets/icons/edit.png" alt="Edit" title="Edit" width="20px" height="20px" />
+                </span>
+                <span style="margin-left: 5px;"
+                  *ngIf="!checkIsEnable(Inward.p.MaterialInwardDetailsArray) || Inward.p.MaterialInwardStatus == MaterialInwardStatus.Approved"
+                  (click)="onDeleteClicked(Order)">
+                  <img src="/assets/icons/delete.png" alt="Delete" title="Delete" width="20px" height="20px" />
+                </span>
+                <span style="margin-left: 5px;"
+                  *ngIf="checkIsEnable(Inward.p.MaterialInwardDetailsArray) && Inward.p.MaterialInwardStatus != MaterialInwardStatus.Approved">
+                  <img src="/assets/icons/GrayEditIcon.png" alt="Edit" title="Disable Edit" width="20px"
+                    height="20px" />
+                </span>
+                <span style="margin-left: 5px;"
+                  *ngIf="checkIsEnable(Inward.p.MaterialInwardDetailsArray) && Inward.p.MaterialInwardStatus != MaterialInwardStatus.Approved">
+                  <img src="/assets/icons/GreyDustbin.png" alt="Delete" title="Disable Delete" width="20px"
+                    height="20px" />
+                </span> -->
               </td>
             </tr>
-            <tr *ngIf="materialRowIndex + 1 === inward.p.MaterialInwardDetailsArray.length">
-              <td colspan="100%" style="border-top: 2px solid #444;"></td>
+            <tr *ngIf="j === Inward.p.MaterialInwardDetailsArray.length - 1 && !Entity.p.SiteRef">
+              <td colspan="17" style="background-color: #333; height: 2px; padding: 0;"></td>
             </tr>
           </ng-container>
         </ng-container>
-      </tbody> -->
-
-
-      <tbody>
-        <tr *ngFor="let inward of paginatedList; index as i">
-          <td *ngIf="inward.p.SiteRef" Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
-          <td *ngIf="inward.p.SiteRef" Class="tbldata">{{inward.p.ChalanNo}}</td>
-          <td *ngIf="inward.p.SiteRef" Class="tbldata">{{formatDate(inward.p.PurchaseOrderDate)}}</td>
-          <td *ngIf="inward.p.SiteRef" Class="tbldata">{{inward.p.SiteName}}</td>
-          <td *ngIf="inward.p.SiteRef" Class="tbldata">{{inward.p.VendorName }}</td>
-          <!-- <td *ngIf="inward.p.SiteRef" Class="tbldata">{{inward.p.MaterialName}}</td> -->
-          <!-- <td *ngIf="inward.p.SiteRef" Class="tbldata">{{inward.p.UnitName}}</td> -->
-          <!-- <td *ngIf="inward.p.SiteRef" Class="tbldata">{{inward.p.OrderedQty}}</td> -->
-          <!-- <td *ngIf="inward.p.SiteRef" Class="tbldata">{{inward.p.TotalInwardQty }}</td> -->
-          <!-- <td *ngIf="inward.p.SiteRef" Class="tbldata">{{inward.p.BalanceQty > 0 ? inward.p.BalanceQty : 0}}</td> -->
-          <td *ngIf="inward.p.SiteRef" Class="tbldata">
-            <!-- Completed -->
-            <!-- <span class="status" *ngIf="inward.p.Status == 'Complete'" ngClass="completed">
-              Completed
-            </span> -->
-            <!-- Incomplete -->
-            <!-- <span class="status" *ngIf="inward.p.Status == 'Incomplete'" ngClass="incomplete">
-              Incomplete
-            </span> -->
-          </td>
-          <!-- <td *ngIf="inward.p.SiteRef" class="tbldata">
-            <span style="margin-left: 3px; margin-right: 3px; cursor: pointer;" (click)="navigateToPrint(inward)">
-              <img src="\assets\icons\printer.png" alt="logo" title="Print" width="20px" height="20px" /></span>
-            <Edit-Icon (editClick)="onEditClicked(inward)" />
-            <Delete-Icon (deleteClicked)="onDeleteClicked(inward)" />
-          </td> -->
-        </tr>
       </tbody>
     </nz-table>
   </div>

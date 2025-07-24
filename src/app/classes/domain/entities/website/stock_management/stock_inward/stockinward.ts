@@ -30,6 +30,7 @@ export class StockInwardProps {
   public VendorRef: number = 0;
   public readonly VendorName: string = '';
   public MaterialPurchaseOrderRef: number = 0;
+  public MaterialInwardStatus: number = 0;
   public DisplayPurchaseOrderId: string = '';
   public VendorTradeName: string = '';
   public VendorPhoneNo: string = '';
