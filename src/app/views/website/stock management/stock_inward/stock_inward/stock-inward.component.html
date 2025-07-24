@@ -155,27 +155,27 @@
           <td *ngIf="inward.p.SiteRef" Class="tbldata">{{formatDate(inward.p.PurchaseOrderDate)}}</td>
           <td *ngIf="inward.p.SiteRef" Class="tbldata">{{inward.p.SiteName}}</td>
           <td *ngIf="inward.p.SiteRef" Class="tbldata">{{inward.p.VendorName }}</td>
-          <td *ngIf="inward.p.SiteRef" Class="tbldata">{{inward.p.MaterialName}}</td>
-          <td *ngIf="inward.p.SiteRef" Class="tbldata">{{inward.p.UnitName}}</td>
-          <td *ngIf="inward.p.SiteRef" Class="tbldata">{{inward.p.OrderedQty}}</td>
-          <td *ngIf="inward.p.SiteRef" Class="tbldata">{{inward.p.TotalInwardQty }}</td>
-          <td *ngIf="inward.p.SiteRef" Class="tbldata">{{inward.p.BalanceQty > 0 ? inward.p.BalanceQty : 0}}</td>
+          <!-- <td *ngIf="inward.p.SiteRef" Class="tbldata">{{inward.p.MaterialName}}</td> -->
+          <!-- <td *ngIf="inward.p.SiteRef" Class="tbldata">{{inward.p.UnitName}}</td> -->
+          <!-- <td *ngIf="inward.p.SiteRef" Class="tbldata">{{inward.p.OrderedQty}}</td> -->
+          <!-- <td *ngIf="inward.p.SiteRef" Class="tbldata">{{inward.p.TotalInwardQty }}</td> -->
+          <!-- <td *ngIf="inward.p.SiteRef" Class="tbldata">{{inward.p.BalanceQty > 0 ? inward.p.BalanceQty : 0}}</td> -->
           <td *ngIf="inward.p.SiteRef" Class="tbldata">
             <!-- Completed -->
-            <span class="status" *ngIf="inward.p.Status == 'Complete'" ngClass="completed">
+            <!-- <span class="status" *ngIf="inward.p.Status == 'Complete'" ngClass="completed">
               Completed
-            </span>
+            </span> -->
             <!-- Incomplete -->
-            <span class="status" *ngIf="inward.p.Status == 'Incomplete'" ngClass="incomplete">
+            <!-- <span class="status" *ngIf="inward.p.Status == 'Incomplete'" ngClass="incomplete">
               Incomplete
-            </span>
+            </span> -->
           </td>
-          <td *ngIf="inward.p.SiteRef" class="tbldata">
+          <!-- <td *ngIf="inward.p.SiteRef" class="tbldata">
             <span style="margin-left: 3px; margin-right: 3px; cursor: pointer;" (click)="navigateToPrint(inward)">
               <img src="\assets\icons\printer.png" alt="logo" title="Print" width="20px" height="20px" /></span>
             <Edit-Icon (editClick)="onEditClicked(inward)" />
             <Delete-Icon (deleteClicked)="onDeleteClicked(inward)" />
-          </td>
+          </td> -->
         </tr>
       </tbody>
     </nz-table>

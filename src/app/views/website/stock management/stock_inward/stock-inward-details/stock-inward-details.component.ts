@@ -7,15 +7,19 @@ import { MaterialFromOrder } from 'src/app/classes/domain/entities/website/maste
 import { Site } from 'src/app/classes/domain/entities/website/masters/site/site';
 import { Vendor } from 'src/app/classes/domain/entities/website/masters/vendor/vendor';
 import { InwardMaterial, InwardMaterialDetailProps } from 'src/app/classes/domain/entities/website/stock_management/stock_inward/inwardmaterial/inwardmaterial';
+import { PurchaseOrderChalanFetchRequest } from 'src/app/classes/domain/entities/website/stock_management/stock_inward/purchaseorderchalan/purchaseorderfetchrequest';
 import { StockInward } from 'src/app/classes/domain/entities/website/stock_management/stock_inward/stockinward';
 import { MaterialStockOrder } from 'src/app/classes/domain/entities/website/stock_management/stock_order/materialstockorder/materialstockorder';
 import { Order } from 'src/app/classes/domain/entities/website/stock_management/stock_order/order';
 import { FileTransferObject } from 'src/app/classes/infrastructure/filetransferobject';
+import { PayloadPacketFacade } from 'src/app/classes/infrastructure/payloadpacket/payloadpacketfacade';
 import { CurrentDateTimeRequest } from 'src/app/classes/infrastructure/request_response/currentdatetimerequest';
+import { TransportData } from 'src/app/classes/infrastructure/transportdata';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
 import { DateconversionService } from 'src/app/services/dateconversion.service';
 import { DTU } from 'src/app/services/dtu.service';
+import { ServerCommunicatorService } from 'src/app/services/server-communicator.service';
 import { UIUtils } from 'src/app/services/uiutils.service';
 import { Utils } from 'src/app/services/utils.service';
 
@@ -87,7 +91,9 @@ export class StockInwardDetailsComponent implements OnInit {
     private utils: Utils,
     private companystatemanagement: CompanyStateManagement,
     private dtu: DTU,
-    private DateconversionService: DateconversionService
+    private DateconversionService: DateconversionService,
+    private payloadPacketFacade: PayloadPacketFacade,
+    private serverCommunicator: ServerCommunicatorService,
   ) { }
 
   async ngOnInit() {
@@ -111,7 +117,41 @@ export class StockInwardDetailsComponent implements OnInit {
       // Construct the new date format
       this.InwardDate = `${parts[0]}-${parts[1]}-${parts[2]}`;
     }
+    await this.ChalanNo()
   }
+
+
+  ChalanNo = async () => {
+    let req = new PurchaseOrderChalanFetchRequest();
+    let td = req.FormulateTransportData();
+    let pkt = this.payloadPacketFacade.CreateNewPayloadPacket2(td);
+    let tr = await this.serverCommunicator.sendHttpRequest(pkt);
+
+    if (!tr.Successful) {
+      await this.uiUtils.showErrorMessage('Error', tr.Message);
+      return;
+    }
+
+    let tdResult = JSON.parse(tr.Tag) as TransportData;
+    let collections = tdResult?.MainData?.Collections;
+
+    if (Array.isArray(collections)) {
+      for (const item of collections) {
+        console.log('item.Name :', item.Name);
+        if (
+          item.Name === 'ActualStage' &&
+          Array.isArray(item.Entries) &&
+          item.Entries.length > 0
+        ) {
+          const entry = item.Entries[0] as { NextChalanNo: number };
+          const nextChalanNo = entry.NextChalanNo;
+          this.Entity.p.ChalanNo = nextChalanNo
+          return;
+        }
+      }
+    }
+    await this.uiUtils.showErrorMessage('Error', 'Chalan number could not be retrieved.');
+  };
 
   getSiteListByCompanyRef = async () => {
     if (this.companyRef() <= 0) {
@@ -368,7 +408,7 @@ export class StockInwardDetailsComponent implements OnInit {
       this.ismaterialModalOpen = false;
     } else {
       this.newInward.Date = this.dtu.ConvertStringDateToFullFormat(this.newInward.Date);
-      this.newInward.MaterialInwardRef = this.Entity.p.MaterialInwardRef;
+      this.newInward.MaterialInwardRef = this.Entity.p.Ref;
       this.newInward.PurchaseOrderRemainingQty = this.NewRemainingQty;
       this.Entity.p.MaterialInwardDetailsArray.push({ ...this.newInward });
 
@@ -429,7 +469,7 @@ export class StockInwardDetailsComponent implements OnInit {
 
     let entitiesToSave = [entityToSave];
     console.log('entitiesToSave :', entitiesToSave);
-    
+
     if (this.InvoiceFile) {
       lstFTO.push(
         FileTransferObject.FromFile(

@@ -510,7 +510,7 @@ export class StockInwardDetailsMobileAppComponent implements OnInit {
       await this.haptic.success();
       this.ismaterialModalOpen = false;
     } else {
-      this.newInward.MaterialInwardRef = this.Entity.p.MaterialInwardRef;
+      this.newInward.MaterialInwardRef = this.Entity.p.Ref;
       this.newInward.PurchaseOrderRemainingQty = this.NewRemainingQty;
       this.Entity.p.MaterialInwardDetailsArray.push({ ...this.newInward });
 

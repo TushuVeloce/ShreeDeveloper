@@ -38,31 +38,27 @@
           </div>
         </div>
         <div class="col-md-4">
-          <div>
-            <label for="SiteRef"><b>Site</b></label>
-            <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
-              nzPlaceHolder="Select" [nzSize]="'large'" name="SiteRef" id="SiteRef" [(ngModel)]="Entity.p.SiteRef"
-              (ngModelChange)="getOrderIdListByCompanySiteAndVendorRef()">
-              <nz-option *ngFor="let Site of SiteList" [nzValue]="Site.p.Ref" [nzLabel]="Site.p.Name"></nz-option>
-            </nz-select>
-          </div>
+          <label><b>Chalan No</b></label>
+          <input type="number" [(ngModel)]="Entity.p.ChalanNo" name="ChalanNo" class="form-control" id="ChalanNo"
+            placeholder="Chalan No" readonly />
         </div>
         <div class="col-md-4">
-          <div>
-            <label for="VendorRef"><b>Vendor</b></label>
-            <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
-              nzPlaceHolder="Select" [nzSize]="'large'" name="VendorRef" id="VendorRef" [(ngModel)]="Entity.p.VendorRef"
-              (ngModelChange)="getOrderIdListByCompanySiteAndVendorRef(); onVendorSelection(Entity.p.VendorRef);">
-              <nz-option *ngFor="let Vendor of VendorList" [nzValue]="Vendor.p.Ref"
-                [nzLabel]="Vendor.p.Name"></nz-option>
-            </nz-select>
-          </div>
+
+          <label for="SiteRef"><b>Site</b></label>
+          <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
+            nzPlaceHolder="Select" [nzSize]="'large'" name="SiteRef" id="SiteRef" [(ngModel)]="Entity.p.SiteRef"
+            (ngModelChange)="getOrderIdListByCompanySiteAndVendorRef()">
+            <nz-option *ngFor="let Site of SiteList" [nzValue]="Site.p.Ref" [nzLabel]="Site.p.Name"></nz-option>
+          </nz-select>
         </div>
-        <!-- <div class="col-md-4">
-          <label>Purchase Ordered Date</label>
-          <input type="date" name="PurchaseOrderDate" class="form-control" id="PurchaseOrderDate"
-            [(ngModel)]="PurchaseOrderDate" placeholder="Ordered Date" readonly />
-        </div> -->
+        <div class="col-md-4">
+          <label for="VendorRef"><b>Vendor</b></label>
+          <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
+            nzPlaceHolder="Select" [nzSize]="'large'" name="VendorRef" id="VendorRef" [(ngModel)]="Entity.p.VendorRef"
+            (ngModelChange)="getOrderIdListByCompanySiteAndVendorRef(); onVendorSelection(Entity.p.VendorRef);">
+            <nz-option *ngFor="let Vendor of VendorList" [nzValue]="Vendor.p.Ref" [nzLabel]="Vendor.p.Name"></nz-option>
+          </nz-select>
+        </div>
         <div class="col-md-4">
           <label><b>Vendor Trade Name</b></label>
           <input type="text" [(ngModel)]="Entity.p.VendorTradeName" name="VendorTradeName" class="form-control"
@@ -73,27 +69,21 @@
           <input type="text" [(ngModel)]="Entity.p.VendorPhoneNo" name="VendorPhoneNo" class="form-control"
             id="VendorPhoneNo" placeholder="Vendor Mob No" readonly />
         </div>
-        <div class="col-md-4">
-          <label><b>Chalan No</b></label>
-          <input type="number" [(ngModel)]="Entity.p.ChalanNo" name="ChalanNo" class="form-control" id="ChalanNo"
-            placeholder="Chalan No" readonly />
-        </div>
+
         <div class="col-md-4">
           <label><b>Vehicle No</b></label>
           <input type="text" [(ngModel)]="Entity.p.VehicleNo" name="VehicleNo" class="form-control" id="VehicleNo"
             placeholder="Vehicle No" />
         </div>
         <div class="col-md-4">
-          <div>
-            <label for="MaterialPurchaseOrderRef"><b>Purchase ID</b></label>
-            <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
-              nzPlaceHolder="Select" [nzSize]="'large'" name="MaterialPurchaseOrderRef" id="MaterialPurchaseOrderRef"
-              [(ngModel)]="Entity.p.MaterialPurchaseOrderRef"
-              (ngModelChange)="getMaterialListByCompanySiteVendorRefAndPurchaseOrderID();">
-              <nz-option *ngFor="let OrderId of PurchaseOrderIdList" [nzValue]="OrderId.p.Ref"
-                [nzLabel]="OrderId.p.DisplayPurchaseOrderId"></nz-option>
-            </nz-select>
-          </div>
+          <label for="MaterialPurchaseOrderRef"><b>Purchase ID</b></label>
+          <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
+            nzPlaceHolder="Select" [nzSize]="'large'" name="MaterialPurchaseOrderRef" id="MaterialPurchaseOrderRef"
+            [(ngModel)]="Entity.p.MaterialPurchaseOrderRef"
+            (ngModelChange)="getMaterialListByCompanySiteVendorRefAndPurchaseOrderID();">
+            <nz-option *ngFor="let OrderId of PurchaseOrderIdList" [nzValue]="OrderId.p.Ref"
+              [nzLabel]="OrderId.p.DisplayPurchaseOrderId"></nz-option>
+          </nz-select>
         </div>
       </div>
       <div class="row mt-1">

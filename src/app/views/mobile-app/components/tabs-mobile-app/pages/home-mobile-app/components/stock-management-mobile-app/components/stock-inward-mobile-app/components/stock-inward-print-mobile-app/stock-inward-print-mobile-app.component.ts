@@ -64,11 +64,11 @@ export class StockInwardPrintMobileAppComponent implements OnInit {
 
   async handlePrintOrShare() {
     if (!this.printContainer) return;
-    await this.pdfService.generatePdfAndHandleAction(this.printContainer.nativeElement, `Receipt_${this.Entity.p.MaterialInwardRef}.pdf`);
+    await this.pdfService.generatePdfAndHandleAction(this.printContainer.nativeElement, `Receipt_${this.Entity.p.Ref}.pdf`);
   }
 
 
-  //Get Print Data 
+  //Get Print Data
 
   getInwardSingleInstanceByInwardRef = async (InwardRef: number) => {
     if (this.companyRef <= 0) {
