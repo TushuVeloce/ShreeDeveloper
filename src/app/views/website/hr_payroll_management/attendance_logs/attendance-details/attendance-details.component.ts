@@ -227,9 +227,6 @@ export class AttendanceDetailsComponent implements OnInit {
   }
 
   IsLateMarkChange = () => {
-    if (this.Entity.p.IsLateMark) {
-      this.calculateLateMarkHrs();
-    }
     if (this.Entity.p.IsLateMark || this.Entity.p.IsHalfDay) {
       this.Entity.p.TotalWorkingHrs = this.ActualTotalWorkingHrs / 2;
       this.Entity.p.DisplayTotalWorkingHrs = this.convertFractionTimeToHM(this.Entity.p.TotalWorkingHrs);
@@ -341,6 +338,9 @@ export class AttendanceDetailsComponent implements OnInit {
     this.Entity.p.LastCheckOutTime = this.Entity.p.AttendanceLogDetailsArray[this.Entity.p.AttendanceLogDetailsArray.length - 1].CheckOutTime;
 
     this.IsLateMarkChange();
+    if (!this.Entity.p.IsHalfDay) {
+      this.calculateLateMarkHrs();
+    }
   }
 
   SaveAttendence = async () => {
