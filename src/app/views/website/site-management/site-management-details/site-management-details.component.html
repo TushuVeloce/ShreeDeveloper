@@ -138,21 +138,9 @@
             <span class="validation-text" *ngIf="EstimatedCostCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
           </div> -->
         </div>
-        <div class="col-md-4 col-6">
-          <label for="TotalLandAreaInSqm">Total Land Area in Sqm</label>
-          <input type="number" class="form-control" name="TotalLandAreaInSqm" id="TotalLandAreaInSqm"
-            [(ngModel)]="Entity.p.TotalLandAreaInSqm" (ngModelChange)="convertSqmToSqft()"
-            #TotalLandAreaInSqmCtrl="ngModel" required (blur)="TotalLandAreaInSqmCtrl.control.markAsTouched()"
-            placeholder="Enter Total Land Area in Sqm" (click)="selectAllValue($event)" />
-          <!-- <div
-            *ngIf="(TotalLandAreaInSqmCtrl.invalid && (TotalLandAreaInSqmCtrl.touched || TotalLandAreaInSqmCtrl.dirty))">
-            <span class="validation-text"
-              *ngIf="TotalLandAreaInSqmCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
-          </div> -->
-        </div>
-        <div class="col-md-4 col-6">
+         <div class="col-md-4 col-6">
           <label for="TotalLandAreaInSqft">Total Land Area in Sqft</label>
-          <input type="number" class="form-control" name="TotalLandAreaInSqft" id="TotalLandAreaInSqft"
+          <input type="number" class="form-control" name="TotalLandAreaInSqft" id="TotalLandAreaInSqft" 
             [(ngModel)]="Entity.p.TotalLandAreaInSqft" (ngModelChange)="convertSqftToSqm()"
             #TotalLandAreaInSqftCtrl="ngModel" required (blur)="TotalLandAreaInSqftCtrl.control.markAsTouched()"
             placeholder="Enter Total Land Area in Sqft" (click)="selectAllValue($event)" />
@@ -160,6 +148,18 @@
             *ngIf="(TotalLandAreaInSqftCtrl.invalid && (TotalLandAreaInSqftCtrl.touched || TotalLandAreaInSqftCtrl.dirty))">
             <span class="validation-text"
               *ngIf="TotalLandAreaInSqftCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
+          </div> -->
+        </div>
+        <div class="col-md-4 col-6">
+          <label for="TotalLandAreaInSqm">Total Land Area in Sqm</label>
+          <input type="number" class="form-control" name="TotalLandAreaInSqm" id="TotalLandAreaInSqm" 
+            [(ngModel)]="Entity.p.TotalLandAreaInSqm" (ngModelChange)="convertSqmToSqft()" 
+            #TotalLandAreaInSqmCtrl="ngModel" required (blur)="TotalLandAreaInSqmCtrl.control.markAsTouched()"
+            placeholder="Enter Total Land Area in Sqm" (click)="selectAllValue($event)" />
+          <!-- <div
+            *ngIf="(TotalLandAreaInSqmCtrl.invalid && (TotalLandAreaInSqmCtrl.touched || TotalLandAreaInSqmCtrl.dirty))">
+            <span class="validation-text"
+              *ngIf="TotalLandAreaInSqmCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
           </div> -->
         </div>
         <div class="col-md-4 col-6">

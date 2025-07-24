@@ -1,9 +1,10 @@
 <div class="row">
- <div class="col-4 mb-2">
+  <div class="col-4 mb-2">
     <h1 style="padding-top: 3px;" class="title title_light">Site List</h1>
   </div>
-   <div class="col-4 mb-2 search-container_light">
-    <app-shared-filter [masterList]="MasterList" [filterFields]="['Name', 'NumberOfPlots', 'EstimatedStartingDate', 'EstimatedEndDate','AddressLine2']"
+  <div class="col-4 mb-2 search-container_light">
+    <app-shared-filter [masterList]="MasterList"
+      [filterFields]="['Name', 'NumberOfPlots', 'EstimatedStartingDate', 'EstimatedEndDate','AddressLine2']"
       (filteredList)="DisplayMasterList = $event"></app-shared-filter>
   </div>
   <div class="col-4 mb-2" routerLinkActive="active">
@@ -27,6 +28,8 @@
           <td Class="tbldata">{{site.p.Name}}</td>
           <td Class="tbldata">{{site.p.NumberOfPlots}}</td>
           <!-- <td Class="tbldata">{{site.p.SiteInchargeName}}</td> -->
+          <td class="tbldata">{{ formatToFixed(site.p.TotalLandAreaInSqft) }}</td>
+          <td class="tbldata">{{ formatToFixed(site.p.TotalLandAreaInSqm) }}</td>
           <td Class="tbldata">{{formatDate(site.p.EstimatedStartingDate)}}</td>
           <td Class="tbldata">{{formatDate(site.p.EstimatedEndDate)}}</td>
           <td Class="tbldata">{{site.p.AddressLine2}}</td>

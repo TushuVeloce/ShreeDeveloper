@@ -25,7 +25,7 @@ export class SiteManagementMasterComponent implements OnInit {
   currentPage = 1;
   total = 0;
   companyRef = this.companystatemanagement.SelectedCompanyRef;
-  headers: string[] = ['Sr.No.', 'Site Name', 'No of Plots', 'Starting Date', 'Estimated End Date', 'Site Location', 'Action'];
+  headers: string[] = ['Sr.No.', 'Site Name', 'No of Plots','Area in Sq/ft','Area in Sq/m', 'Starting Date', 'Estimated End Date', 'Site Location', 'Action'];
   constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private screenSizeService: ScreenSizeService,
     private companystatemanagement: CompanyStateManagement, private DateconversionService: DateconversionService,
   ) {
@@ -42,6 +42,14 @@ export class SiteManagementMasterComponent implements OnInit {
   formatDate = (date: string | Date): string => {
     return this.DateconversionService.formatDate(date);
   }
+
+ formatToFixed(value: number): string {
+  if (value == null) return '0';
+  
+  const fixed = value.toFixed(2);
+  // Remove trailing .00 or .0 if not needed
+  return fixed.replace(/\.?0+$/, '');
+}
 
   getSiteListByCompanyRef = async () => {
     this.MasterList = [];
