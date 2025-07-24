@@ -35,7 +35,8 @@ export class StockInwardProps {
   public DisplayPurchaseOrderId: string = '';
   public VendorTradeName: string = '';
   public VendorPhoneNo: string = '';
-  public VendorAddress: string = '';
+  public VendorAddressLine1: string = '';
+  public VendorAddressLine2: string = '';
   public ChalanNo: number = 0
   public VehicleNo: string = ''
   public RemainingQty: number = 0
