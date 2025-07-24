@@ -67,9 +67,14 @@
               [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="PayerRef"
               name="PayerRef" [nzSize]="'large'" [(ngModel)]="Entity.p.PayerRef" (ngModelChange)="onPayerChange()">
               <nz-option *ngFor="let payer of PayerList" [nzValue]="payer.p.Ref"
-                [nzLabel]="payer.p.PayerName | titleCase" nzCustomContent>
-                <span [ngClass]="payer.p.IsRegisterCustomerRef == 1 ? 'sitecus' : 'nonsitecus'">
-                  {{ payer.p.PayerName | titleCase }}
+                [nzLabel]="payer.p.PayerName + ' - ' + payer.p.PlotName | titleCase" nzCustomContent>
+                <span *ngIf="Entity.p.PayerType == DealDoneCustomer"
+                  [ngClass]="payer.p.IsRegisterCustomerRef == 1 ? 'sitecus' : 'nonsitecus'">
+                  {{ payer.p.PayerName + ' - ' + payer.p.PlotName| titleCase }}
+                </span>
+                <span *ngIf="Entity.p.PayerType != DealDoneCustomer"
+                  [ngClass]="payer.p.IsRegisterCustomerRef == 1 ? 'sitecus' : 'nonsitecus'">
+                  {{ payer.p.PayerName| titleCase }}
                 </span>
               </nz-option>
             </nz-select>
