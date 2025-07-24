@@ -446,7 +446,7 @@ export class SidebarlayoutComponent implements OnInit {
         RouterLink: '/homepage/Website/Vendor_Master',
         LogoPath: '/assets/icons/Vendor Master.png',
       },
-      
+
       // {
       //   Name: 'Sub Stage Master',
       //   RouterLink: '/homepage/Website/Sub_Stage_Master',
@@ -457,22 +457,22 @@ export class SidebarlayoutComponent implements OnInit {
       //   RouterLink: '/homepage/Website/Expense_Type_Master',
       //   LogoPath: '/assets/icons/Expense Type.png',
       // },
-    
-      
+
+
       // {
       //   Name: 'Marketing Type Master',
       //   RouterLink: '/homepage/Website/Marketing_Type_Master',
       //   LogoPath: '/assets/icons/Marketing Type Master.png',
       // },
-      
-     
+
+
       // {
       //   Name: 'Vehicle Master',
       //   RouterLink: '/homepage/Website/Vehicle_Master',
       //  LogoPath:'/assets/icons/Material Master.png',
       // },
-     
-   
+
+
       // {
       //   Name: 'Country Master',
       //   RouterLink: '/homepage/Website/Country',
@@ -488,27 +488,27 @@ export class SidebarlayoutComponent implements OnInit {
       //   RouterLink: '/homepage/Website/City',
       //   LogoPath: '/assets/icons/Material Master.png',
       // },
-    
+
       // {
       //   Name: 'User Role Master',
       //   RouterLink: '/homepage/Website/User_Role_Master',
       //  LogoPath:'/assets/icons/Material Master.png',
       // },
-      
+
       // {
       //   Name: 'External Users',
       //   RouterLink: '/homepage/Website/External_Users',
       //  LogoPath:'/assets/icons/Material Master.png',
       // },
-    
-      
-      
+
+
+
       {
         Name: 'Recipient Master',
         RouterLink: '/homepage/Website/Recipient_Master',
         LogoPath: '/assets/icons/Employee Master.png',
       },
-     
+
       {
         Name: 'Payer Master',
         RouterLink: '/homepage/Website/Payer_Master',
@@ -722,7 +722,7 @@ export class SidebarlayoutComponent implements OnInit {
 
     let RequestSubModulelist = [
       {
-        Name: 'Employee Attendance Logs',
+        Name: 'Attendance',
         RouterLink: '/homepage/Website/Employee_Attendance_Logs',
         LogoPath: '/assets/icons/Employee Attendance Logs.png',
       },
@@ -818,30 +818,30 @@ export class SidebarlayoutComponent implements OnInit {
         SubModuleList: RequestSubModulelist,
       },
        {
-        Name: 'Hr-Payroll Management',
+        Name: 'HR Management',
         RouterLink: '',
         WhiteLogo: '/assets/icons/Hr-Payroll Management.png',
         SubModuleList: HrPayrollManagement,
       },
-     
+
       {
         Name: 'Accounting',
         RouterLink: '',
         WhiteLogo: '/assets/icons/Expense Type.png',
         SubModuleList: AccountingSubModuleList,
       },
-      
-      
+
+
       // {
       //   Name: 'Marketing Management',
       //   RouterLink: '/homepage/Website/Marketing_Management',
       //   WhiteLogo: '/assets/icons/Marketing Management.png',
       //   // SubModuleList: MarketingManagementSubModuleList,
       // },
-      
-     
-      
-      
+
+
+
+
       // {
       //   Name: 'RazorPay',
       //   RouterLink: '/homepage/Website/Razorpay',
