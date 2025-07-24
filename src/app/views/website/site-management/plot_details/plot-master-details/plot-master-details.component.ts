@@ -73,6 +73,7 @@ export class PlotMasterDetailsComponent implements OnInit {
       if (this.Entity.p.CurrentBookingRemark == BookingRemark.Shree_Booked) {
         this.getCompanySingleRecord()
       }
+      this.getCustomerListBySiteandBookingRef(this.Entity.p.SiteManagementRef)
     } else {
       this.Entity = Plot.CreateNewInstance();
       Plot.SetCurrentInstance(this.Entity);
@@ -81,7 +82,6 @@ export class PlotMasterDetailsComponent implements OnInit {
       Plot.CreateNewInstance(),
       this.utils.DeepCopy(this.Entity)
     ) as Plot;
-    this.getCustomerListBySiteandBookingRef(this.SiteRf)
   }
 
   getCustomerListBySiteandBookingRef = async (SiteRf: number) => {
@@ -114,6 +114,13 @@ export class PlotMasterDetailsComponent implements OnInit {
     this.CustomerEntity = Owner.CreateNewInstance();
     let CuctomerData = await Owner.FetchInstance(customerref, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.CustomerEntity = CuctomerData;
+  }
+
+  onsitechange = () => {
+    this.Entity.p.CurrentBookingRemark = 0
+    this.CompanyEntity = Company.CreateNewInstance();
+    this.CustomerEntity = Owner.CreateNewInstance();
+    this.getCompanySingleRecord()
   }
 
   getCompanySingleRecord = async () => {

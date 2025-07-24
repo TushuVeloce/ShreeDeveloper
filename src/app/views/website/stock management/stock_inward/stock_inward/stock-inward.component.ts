@@ -1,8 +1,8 @@
 import { Component, effect, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { MaterialRequisitionStatuses } from 'src/app/classes/domain/domainenums/domainenums';
 import { Site } from 'src/app/classes/domain/entities/website/masters/site/site';
 import { Vendor } from 'src/app/classes/domain/entities/website/masters/vendor/vendor';
-import { MaterialInwardAgainstPOStatus } from 'src/app/classes/domain/entities/website/stock_management/stock_inward/materialinwardagainstpostatus';
 import { StockInward } from 'src/app/classes/domain/entities/website/stock_management/stock_inward/stockinward';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
@@ -31,10 +31,12 @@ export class StockInwardComponent implements OnInit {
   pageSize = 10;
   currentPage = 1;
   total = 0;
+  MaterialInwardStatus = MaterialRequisitionStatuses;
+
 
   companyRef = this.companystatemanagement.SelectedCompanyRef;
 
-  headers: string[] = ['Sr.No.', 'Chalan No', 'Purchase Order Date', 'Site', 'Vendor', 'Material', 'Unit', 'Ordered Qty', 'Total Inward Qty', 'Remaining Qty', 'Status', 'Action & Print'];
+  headers: string[] = ['Sr.No.', 'Chalan No', 'Site', 'Vendor', 'Material', 'Unit', 'Ordered Qty', 'Total Inward Qty', 'Remaining Qty', 'Status', 'Action & Print'];
 
   constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private screenSizeService: ScreenSizeService,
     private companystatemanagement: CompanyStateManagement, private DateconversionService: DateconversionService, private dtu: DTU,
@@ -86,9 +88,9 @@ export class StockInwardComponent implements OnInit {
     this.DisplayMasterList = [];
 
     let lst = await StockInward.FetchEntireListByCompanyRefSiteAndVendorRef(this.companyRef(), this.Entity.p.SiteRef, this.Entity.p.VendorRef,
-    async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
-  );
-  console.log('lst :', lst);
+      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+    );
+    console.log('lst :', lst);
     this.MasterList = lst;
     this.DisplayMasterList = this.MasterList;
     this.loadPaginationData();
@@ -102,20 +104,20 @@ export class StockInwardComponent implements OnInit {
     await this.router.navigate(['/homepage/Website/Stock_Inward_Details']);
   }
 
-  onEditClicked = async (item: MaterialInwardAgainstPOStatus) => {
+  onEditClicked = async (item: StockInward) => {
     this.router.navigate(['/homepage/Website/Stock_Inward_Details'], {
-      state: { inwardref: item.p.InwardRef }
+      state: { inwardref: item.p.Ref }
     });
 
   };
 
-  navigateToPrint = async (item: MaterialInwardAgainstPOStatus) => {
+  navigateToPrint = async (item: StockInward) => {
     this.router.navigate(['/homepage/Website/Stock_Inward_Print'], {
-       state: { inwardref: item.p.InwardRef }
+      state: { inwardref: item.p.Ref }
     });
   }
 
-  onDeleteClicked = async (StockInward: MaterialInwardAgainstPOStatus) => {
+  onDeleteClicked = async (StockInward: StockInward) => {
     await this.uiUtils.showConfirmationMessage(
       'Delete',
       `This process is <strong>IRREVERSIBLE!</strong> <br/>

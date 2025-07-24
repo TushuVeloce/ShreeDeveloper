@@ -560,7 +560,7 @@ export class SidebarlayoutComponent implements OnInit {
       {
         Name: 'Stock Consume',
         RouterLink: '/homepage/Website/Stock_Consume',
-        LogoPath: '/assets/icons/Office Duty_Time.png',
+        LogoPath: '/assets/icons/stock_consume.png',
       },
       {
         Name: 'Stock Transfer',
