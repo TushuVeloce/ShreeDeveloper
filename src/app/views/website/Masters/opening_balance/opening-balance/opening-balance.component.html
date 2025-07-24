@@ -31,8 +31,8 @@
           <td Class="tbldata">{{OpeningBalance.p.BankName? OpeningBalance.p.BankName : '--'}}</td>
           <td Class="tbldata">{{OpeningBalance.p.OpeningBalanceAmount | currency : "INR" }}</td>
           <td class="tbldata">
-            <!-- <Edit-Icon (editClick)="onEditClicked(OpeningBalance)" /> -->
-            <Delete-Icon (deleteClicked)="onDeleteClicked(OpeningBalance)" />
+            <Edit-Icon (editClick)="onEditClicked(OpeningBalance)" />
+            <!-- <Delete-Icon (deleteClicked)="onDeleteClicked(OpeningBalance)" /> -->
           </td>
         </tr>
         <tr *ngIf="paginatedList().length > 0">

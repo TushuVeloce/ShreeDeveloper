@@ -72,16 +72,16 @@ export class AttendanceDetailsComponent implements OnInit {
       this.DetailsFormTitle = this.IsNewEntity ? 'New Attendance' : 'Edit Attendance';
       this.Entity = WebAttendaneLog.GetCurrentInstance();
       this.appStateManage.StorageKey.removeItem('Editable')
+      this.Date = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.TransDateTime);
       this.getDefaultWorkingHrsByEmployeeRef();
-
     } else {
       this.Entity = WebAttendaneLog.CreateNewInstance();
       WebAttendaneLog.SetCurrentInstance(this.Entity);
+      this.strCDT = await CurrentDateTimeRequest.GetCurrentDateTime();
+      let parts = this.strCDT.substring(0, 16).split('-');
+      // Construct the new date format
+      this.Date = `${parts[0]}-${parts[1]}-${parts[2]}`;
     }
-    this.strCDT = await CurrentDateTimeRequest.GetCurrentDateTime();
-    let parts = this.strCDT.substring(0, 16).split('-');
-    // Construct the new date format
-    this.Date = `${parts[0]}-${parts[1]}-${parts[2]}`;
     this.InitialEntity = Object.assign(WebAttendaneLog.CreateNewInstance(), this.utils.DeepCopy(this.Entity)) as WebAttendaneLog;
   }
 
