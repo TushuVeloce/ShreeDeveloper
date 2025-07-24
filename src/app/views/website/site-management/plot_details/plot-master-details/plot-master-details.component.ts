@@ -191,6 +191,7 @@ export class PlotMasterDetailsComponent implements OnInit {
 
     // Update model manually
     this.Entity.p.AreaInSqft = parseFloat(event.target.value) || 0;
+     this.convertSqftToSqm()
   }
 
   restrictToTwoDecimalsForSqm(event: any): void {
@@ -203,6 +204,7 @@ export class PlotMasterDetailsComponent implements OnInit {
     }
 
     this.Entity.p.AreaInSqm = parseFloat(event.target.value) || 0;
+     this.convertSqmToSqft()
   }
 
   selectAllValue(event: MouseEvent): void {

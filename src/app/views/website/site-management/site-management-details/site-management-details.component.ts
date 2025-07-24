@@ -351,6 +351,7 @@ export class SiteManagementDetailsComponent implements OnInit {
 
   // Update model manually
   this.Entity.p.TotalLandAreaInSqft = parseFloat(event.target.value) || 0;
+  this.convertSqftToSqm()
 }
 
 restrictToTwoDecimalsForSqm(event: any): void {
@@ -363,6 +364,7 @@ restrictToTwoDecimalsForSqm(event: any): void {
   }
 
   this.Entity.p.TotalLandAreaInSqm = parseFloat(event.target.value) || 0;
+  this.convertSqmToSqft()
 }
 
 
