@@ -134,6 +134,12 @@ export class CompanyMasterDetailsComponent implements OnInit {
       this.dateOfInCorporation = ''; // Clear Date
       this.lastDateOfFirstFinancialYear = ''; // Clear Date
     }
+    this.focusInput();
+  }
+
+  focusInput = () => {
+    let txtName = document.getElementById('Name')!;
+    txtName.focus();
   }
 
   // Call this when editing existing data

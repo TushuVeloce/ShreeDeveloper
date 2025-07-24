@@ -93,21 +93,21 @@ export class EmployeeMasterDetailsComponent implements OnInit {
   async ngOnInit() {
     this.appStateManage.setDropdownDisabled(true);
     await this.getDepartmentListByCompanyRef()
-   await this.getOfficeDutyTime();
+    await this.getOfficeDutyTime();
     await this.FormulateCountryList();
     const date = new Date();
     date.setFullYear(date.getFullYear() - 14); // Subtract 14 years
     this.maxDOB = date.toISOString().split('T')[0];
     if (this.appStateManage.StorageKey.getItem('Editable') == 'Edit') {
       this.IsNewEntity = false;
-      this.DetailsFormTitle = this.IsNewEntity? 'New Employee': 'Edit Employee';
+      this.DetailsFormTitle = this.IsNewEntity ? 'New Employee' : 'Edit Employee';
       this.Entity = Employee.GetCurrentInstance();
       // While Edit Converting date String into Date Format //
-      this.dateofjoining = this.datePipe.transform(this.dtu.FromString(this.Entity.p.DateOfJoining),'yyyy-MM-dd');
+      this.dateofjoining = this.datePipe.transform(this.dtu.FromString(this.Entity.p.DateOfJoining), 'yyyy-MM-dd');
       // While Edit Converting date String into Date Format //
-      this.dob = this.datePipe.transform(this.dtu.FromString(this.Entity.p.DOB),'yyyy-MM-dd');
-      if(this.Entity.p.DepartmentRef){
-       await this.getDesignationListByDepartmentRef();
+      this.dob = this.datePipe.transform(this.dtu.FromString(this.Entity.p.DOB), 'yyyy-MM-dd');
+      if (this.Entity.p.DepartmentRef) {
+        await this.getDesignationListByDepartmentRef();
       }
       this.appStateManage.StorageKey.removeItem('Editable');
       if (this.Entity.p.CountryRef) {
@@ -120,6 +120,12 @@ export class EmployeeMasterDetailsComponent implements OnInit {
       this.Entity = Employee.CreateNewInstance();
       Employee.SetCurrentInstance(this.Entity);
     }
+    this.focusInput();
+  }
+
+  focusInput = () => {
+    let txtName = document.getElementById('Name')!;
+    txtName.focus();
   }
 
   getDepartmentListByCompanyRef = async () => {
@@ -155,7 +161,7 @@ export class EmployeeMasterDetailsComponent implements OnInit {
   }
 
   getStateListByCountryRef = async (CountryRef: number) => {
-    this.StateList = await State.FetchEntireListByCountryRef(CountryRef,async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg));
+    this.StateList = await State.FetchEntireListByCountryRef(CountryRef, async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg));
     // Set default state if exists
     if (this.StateList.length) {
       const defaultState = this.StateList.find(s => s.p.Ref === this.Entity.p.StateRef);
@@ -166,7 +172,7 @@ export class EmployeeMasterDetailsComponent implements OnInit {
   }
 
   getCityListByStateRef = async (StateRef: number) => {
-    this.CityList = await City.FetchEntireListByStateRef(StateRef,async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg));
+    this.CityList = await City.FetchEntireListByStateRef(StateRef, async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg));
     // Set default city if exists
     if (this.CityList.length) {
       const defaultCity = this.CityList.find(c => c.p.Ref === this.Entity.p.CityRef);

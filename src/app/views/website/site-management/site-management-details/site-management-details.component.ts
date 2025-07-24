@@ -121,6 +121,13 @@ export class SiteManagementDetailsComponent implements OnInit {
       Site.CreateNewInstance(),
       this.utils.DeepCopy(this.Entity)
     ) as Site;
+
+    this.focusInput();
+  }
+
+    focusInput = () => {
+    let txtName = document.getElementById('Name')!;
+    txtName.focus();
   }
 
   getEmployeeListByCompanyRef = async () => {
@@ -132,7 +139,7 @@ export class SiteManagementDetailsComponent implements OnInit {
     this.EmployeeList = lst;
   }
 
-    
+
   FormulateCountryListforSite = async () => {
     this.CountryListforSite = await Country.FetchEntireList(
       async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)

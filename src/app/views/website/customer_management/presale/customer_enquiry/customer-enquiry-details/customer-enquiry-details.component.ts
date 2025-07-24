@@ -210,6 +210,12 @@ export class CustomerEnquiryDetailsComponent implements OnInit {
       );
       this.DateWithTime = this.Entity.p.CustomerFollowUps[0].TransDateTime;
     }
+    this.focusInput();
+  }
+
+  focusInput = () => {
+    let txtName = document.getElementById('Name')!;
+    txtName.focus();
   }
 
   FormulateCountryList = async () => {

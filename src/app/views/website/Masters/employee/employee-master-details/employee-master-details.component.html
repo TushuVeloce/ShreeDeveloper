@@ -22,7 +22,7 @@
         <div class="col-md-4 col-6">
           <div>
             <label>Employee Name</label>
-            <input type="text" name="Name " [(ngModel)]="Entity.p.Name " class="form-control" id="Name " required
+            <input type="text" name="Name" [(ngModel)]="Entity.p.Name " class="form-control" id="Name" required
               placeholder="Enter Employee Name" [pattern]="NameWithoutNos" #NameCtrl="ngModel"
               (blur)="NameCtrl.control.markAsTouched()" />
             <div *ngIf="(NameCtrl.invalid && (NameCtrl.touched || NameCtrl.dirty))">
@@ -89,8 +89,8 @@
         <div class="col-md-6">
           <div>
             <label>Address Line 1</label>
-            <input type="text" name="AddressLine1" [(ngModel)]="Entity.p.AddressLine1" class="form-control" id="AddressLine1"
-              required placeholder="Enter Address Line 1" #AddressLine1Ctrl="ngModel"
+            <input type="text" name="AddressLine1" [(ngModel)]="Entity.p.AddressLine1" class="form-control"
+              id="AddressLine1" required placeholder="Enter Address Line 1" #AddressLine1Ctrl="ngModel"
               (blur)="AddressLine1Ctrl.control.markAsTouched()" />
             <div *ngIf="(AddressLine1Ctrl.invalid && (AddressLine1Ctrl.touched || AddressLine1Ctrl.dirty))">
               <span class="validation-text" *ngIf="AddressLine1Ctrl.errors?.['required']">{{RequiredFieldMsg}}</span>
@@ -100,8 +100,8 @@
         <div class="col-md-6">
           <div>
             <label>Address Line 2</label>
-            <input type="text" name="AddressLine2" [(ngModel)]="Entity.p.AddressLine2" class="form-control" id="AddressLine2"
-              required placeholder="Enter Address Line 2" />
+            <input type="text" name="AddressLine2" [(ngModel)]="Entity.p.AddressLine2" class="form-control"
+              id="AddressLine2" required placeholder="Enter Address Line 2" />
           </div>
         </div>
         <div class="col-md-4 col-6">
@@ -226,7 +226,8 @@
             <label>Salary Per Month</label>
             <input type="number" name="SalaryPerMonth" [(ngModel)]="Entity.p.SalaryPerMonth  " class="form-control"
               id="SalaryPerMonth" placeholder="Enter Salary Per Month" required #SalaryPerMonthCtrl="ngModel"
-              (blur)="SalaryPerMonthCtrl.control.markAsTouched()" (click)="selectAllValue($event)" (ngModelChange)="CalculatePerYearSalary()"/>
+              (blur)="SalaryPerMonthCtrl.control.markAsTouched()" (click)="selectAllValue($event)"
+              (ngModelChange)="CalculatePerYearSalary()" />
             <div *ngIf="(SalaryPerMonthCtrl.invalid && (SalaryPerMonthCtrl.touched || SalaryPerMonthCtrl.dirty))">
               <span class="validation-text" *ngIf="SalaryPerMonthCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
             </div>
@@ -236,7 +237,7 @@
           <div>
             <label>Salary Per Year</label>
             <input type="number" name="SalaryPerYear" [(ngModel)]="Entity.p.SalaryPerYear" class="form-control"
-              id="SalaryPerYear" placeholder="Salary Per Year" readonly/>
+              id="SalaryPerYear" placeholder="Salary Per Year" readonly />
           </div>
         </div>
         <div class="col-md-4 col-6">
