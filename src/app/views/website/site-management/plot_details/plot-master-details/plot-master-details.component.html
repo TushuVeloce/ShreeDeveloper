@@ -43,7 +43,7 @@
         </div>
          <div class="col-md-4 col-6">
           <label for="AreaInSqft">Area in Sqft</label>
-          <input type="number" class="form-control" name="AreaInSqft" id="AreaInSqft" [(ngModel)]="Entity.p.AreaInSqft" (input)="restrictToTwoDecimalsForSqFt($event)"
+          <input type="number" class="form-control" name="AreaInSqft" id="AreaInSqft" [(ngModel)]="Entity.p.AreaInSqft" 
             (ngModelChange)="convertSqftToSqm()" #AreaInSqftCtrl="ngModel" required
             (blur)="AreaInSqftCtrl.control.markAsTouched()" placeholder="Enter Area in Sqft"
             (click)="selectAllValue($event)" />
@@ -53,7 +53,7 @@
         </div>
         <div class="col-md-4 col-6">
           <label for="AreaInSqm">Area in Sqm</label>
-          <input type="number" class="form-control" name="AreaInSqm" id="AreaInSqm" [(ngModel)]="Entity.p.AreaInSqm" (input)="restrictToTwoDecimalsForSqm($event)"
+          <input type="number" class="form-control" name="AreaInSqm" id="AreaInSqm" [(ngModel)]="Entity.p.AreaInSqm" 
             (ngModelChange)="convertSqmToSqft()" #AreaInSqmCtrl="ngModel" required
             (blur)="AreaInSqmCtrl.control.markAsTouched()" placeholder="Enter Area in Sqm"
             (click)="selectAllValue($event)" />
