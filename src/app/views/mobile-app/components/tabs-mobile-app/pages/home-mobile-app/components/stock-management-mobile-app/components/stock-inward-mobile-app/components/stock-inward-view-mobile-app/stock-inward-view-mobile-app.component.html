@@ -42,7 +42,7 @@
   </div>
 
 
-  <!-- Modal -->
+  <!-- Modal --> 
   <ion-modal [isOpen]="modalOpen" (didDismiss)="closeModal()" class="custom-modal-mobile-app">
     <ng-template>
       <!-- Header -->
@@ -128,9 +128,9 @@
 
 
   <!-- Floating Action Button for adding new stock inward -->
-  <!-- <ion-fab vertical="bottom" horizontal="end" slot="fixed">
-    <ion-fab-button>
-      <ion-icon name="filter-outline"></ion-icon>
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button color="primary" (click)="AddStockInward()">
+      <ion-icon name="add-outline"></ion-icon>
     </ion-fab-button>
-  </ion-fab> -->
+  </ion-fab>
 </ion-content>
