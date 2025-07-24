@@ -25,17 +25,10 @@ export class CustomerSiteVisitProps {
   public CustomerAddress: string = '';
   public CustomerPhoneNo: string = '';
   public SiteRef: number = 0;
+  public readonly SiteName: number = 0;
   public PlotNo: string = '';
   public CustomerRequirement: string = '';
   public TransDateTime: string = '';
-  public CompanyRef: number = 0;
-  public CompanyName: string = '';
-  public CustomerStatus: number = 0;
-  public CustomerStatusName: string = '';
-
-  public CustomerFollowUps: CustomerFollowUpProps[] = [
-    CustomerFollowUpProps.Blank(),
-  ];
 
   public IsNewlyCreated: boolean = false;
 
@@ -229,17 +222,10 @@ export class CustomerSiteVisit implements IPersistable<CustomerSiteVisit> {
     return CustomerSiteVisit.ListFromTransportData(tdResponse);
   }
 
-  public static async FetchEntireListByCompanyRef(
-    CompanyRef: number,
-    errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance()
-      .GlobalUIErrorHandler
-  ) {
+  public static async FetchEntireListByCompanyRef(CompanyRef: number,errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let req = new CustomerSiteVisitFetchRequest();
     req.CompanyRefs.push(CompanyRef);
-    let tdResponse = (await CustomerSiteVisit.FetchTransportData(
-      req,
-      errorHandler
-    )) as TransportData;
+    let tdResponse = (await CustomerSiteVisit.FetchTransportData(req,errorHandler)) as TransportData;
     return CustomerSiteVisit.ListFromTransportData(tdResponse);
   }
 

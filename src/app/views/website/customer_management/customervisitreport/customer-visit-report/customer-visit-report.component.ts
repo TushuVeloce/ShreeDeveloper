@@ -11,11 +11,11 @@ import { UIUtils } from 'src/app/services/uiutils.service';
 
 @Component({
   selector: 'app-customer-visit-report',
-  standalone:false,
+  standalone: false,
   templateUrl: './customer-visit-report.component.html',
   styleUrls: ['./customer-visit-report.component.scss'],
 })
-export class CustomerVisitReportComponent  implements OnInit {
+export class CustomerVisitReportComponent implements OnInit {
 
   Entity: CustomerSiteVisit = CustomerSiteVisit.CreateNewInstance();
   MasterList: CustomerSiteVisit[] = [];
@@ -30,18 +30,20 @@ export class CustomerVisitReportComponent  implements OnInit {
   total = 0;
   companyRef = this.companystatemanagement.SelectedCompanyRef;
 
-  headers: string[] = ['Sr.No.', 'Chalan No', 'Site', 'Vendor', 'Material', 'Unit', 'Ordered Qty', 'Total Inward Qty', 'Remaining Qty', 'Inward Date', 'Action & Print'];
+  headers: string[] = ['Sr.No.', 'Site Name', 'Plot No', 'Customer Name', 'Address', 'Contact No', 'Customer Requirement '];
 
-  constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private screenSizeService: ScreenSizeService,private companystatemanagement: CompanyStateManagement, private DateconversionService: DateconversionService, private dtu: DTU,
+  constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private screenSizeService: ScreenSizeService, private companystatemanagement: CompanyStateManagement, private DateconversionService: DateconversionService, private dtu: DTU,
   ) {
     effect(async () => {
-      await this.getInwardListBySiteRef();
       await this.getSiteListByCompanyRef();
+      await this.getInwardListByComapnyRef();
     });
   }
 
   ngOnInit() {
     this.appStateManage.setDropdownDisabled();
+    const pageSize = this.screenSizeService.getPageSize('withDropdown');
+    this.pageSize = pageSize
   }
 
   getSiteListByCompanyRef = async () => {
@@ -63,24 +65,35 @@ export class CustomerVisitReportComponent  implements OnInit {
     return this.DateconversionService.formatDate(date);
   }
 
-  getInwardListBySiteRef = async () => {
+  getInwardListByComapnyRef = async () => {
     this.MasterList = [];
     this.DisplayMasterList = [];
-
-    let lst = await CustomerSiteVisit.FetchEntireListBySiteRef(this.Entity.p.SiteRef,
+    if (this.companyRef() <= 0) {
+      await this.uiUtils.showErrorToster('Company not Selected');
+      return;
+    }
+    let lst = await CustomerSiteVisit.FetchEntireListBySiteRef(this.companyRef(),
       async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
     );
-    console.log('lst :', lst);
     this.MasterList = lst;
     this.DisplayMasterList = this.MasterList;
     this.loadPaginationData();
   };
 
-  navigateToPrint = async (item: CustomerSiteVisit) => {
-    this.router.navigate(['/homepage/Website/Stock_Inward_Print'], {
-      state: { inwardref: item.p.Ref }
-    });
-  }
+  getInwardListBySiteRef = async () => {
+    this.MasterList = [];
+    this.DisplayMasterList = [];
+    if (this.Entity.p.SiteRef <= 0) {
+      this.getInwardListByComapnyRef();
+      return;
+    }
+    let lst = await CustomerSiteVisit.FetchEntireListBySiteRef(this.Entity.p.SiteRef,
+      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+    );
+    this.MasterList = lst;
+    this.DisplayMasterList = this.MasterList;
+    this.loadPaginationData();
+  };
 
   // For Pagination  start ----
   loadPaginationData = () => {
@@ -103,6 +116,41 @@ export class CustomerVisitReportComponent  implements OnInit {
     }
     else {
       this.DisplayMasterList = this.MasterList
+    }
+  }
+
+  printReport(): void {
+    const printContents = document.getElementById('print-section')?.innerHTML;
+    if (printContents) {
+      const popupWin = window.open('', '_blank', 'top=0,left=0,height=100%,width=auto');
+      popupWin?.document.write(`
+      <html>
+        <head>
+          <title>Office Report</title>
+         <style>
+         * {
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+            font-family: sans-serif;
+           }
+            table {
+              border-collapse: collapse;
+              width: 100%;
+            }
+
+            th, td {
+              border: 1px solid  rgb(169, 167, 167);
+              text-align: center;
+              padding: 15px;
+            }
+          </style>
+        </head>
+        <body onload="window.print();window.close()">
+          ${printContents}
+        </body>
+      </html>
+    `);
+      popupWin?.document.close();
     }
   }
 

@@ -109,10 +109,10 @@ export class RegisteredCustomerDetailsComponent implements OnInit {
       this.uiUtils.showErrorToster("Value of Agreement cannot be greater than Government Value.");
       this.Entity.p.ValueOfAgreement = 0;
       this.Entity.p.StampDuties = 0;
-       this.calculateRegistrationFees()
-       return;
-  }
-   this.Entity.p.StampDuties = Math.floor(ValueOfAgreement * (TaxValueInPercentage / 100) * 100) / 100;
+      this.calculateRegistrationFees()
+      return;
+    }
+    this.Entity.p.StampDuties = Math.floor(ValueOfAgreement * (TaxValueInPercentage / 100) * 100) / 100;
     this.calculateRegistrationFees()
   }
 
@@ -127,9 +127,9 @@ export class RegisteredCustomerDetailsComponent implements OnInit {
     const LegalCharges = Number(this.Entity.p.LegalCharges);
     const StampDuties = Number(this.Entity.p.StampDuties);
     const RegistrationFees = Number(this.Entity.p.RegistrationFees);
-    const GSTonValueofAgreement = Number((this.Entity.p.GoodsServicesTax / 100) * (this.Entity.p.ValueOfAgreement));
-    this.Entity.p.TotalExtraCharges = Math.ceil(LegalCharges + StampDuties + RegistrationFees + GSTonValueofAgreement);
-    this.Entity.p.GstToatalAmount = GSTonValueofAgreement
+    const GSTonValueofAgreement = (Number(this.Entity.p.GoodsServicesTax) / 100) * Number(this.Entity.p.ValueOfAgreement); 
+    this.Entity.p.GstToatalAmount = Math.trunc(GSTonValueofAgreement * 100) / 100;
+    this.Entity.p.TotalExtraCharges = Math.trunc((LegalCharges + StampDuties + RegistrationFees + GSTonValueofAgreement) * 100) / 100;
     this.calculateGrandTotal()
   }
 
@@ -138,7 +138,7 @@ export class RegisteredCustomerDetailsComponent implements OnInit {
     const ValueOfAgreement = Number(this.Entity.p.ValueOfAgreement);
     const TotalExtraCharges = Number(this.Entity.p.TotalExtraCharges);
     // const GSTonValueofAgreement = Number((this.Entity.p.GoodsServicesTax / 100) * (this.Entity.p.ValueOfAgreement));
-    this.Entity.p.GrandTotal = Math.ceil(TotalPlotAmount + ValueOfAgreement + TotalExtraCharges);
+    this.Entity.p.GrandTotal = Math.trunc((TotalPlotAmount + ValueOfAgreement + TotalExtraCharges) * 100) / 100;
     // this.Entity.p.GstToatalAmount = GSTonValueofAgreement
   }
 
