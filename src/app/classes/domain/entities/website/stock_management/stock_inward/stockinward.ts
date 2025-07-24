@@ -21,7 +21,7 @@ export class StockInwardProps {
   public CreatedDate: string = '';
   public UpdatedBy: number = 0;
   public UpdatedByName: string = '';
-  public MaterialInwardRef: number = 0;
+  // public MaterialInwardRef: number = 0;
   public Ref: number = 0;
   public SiteRef: number = 0;
   public readonly SiteName: string = '';
@@ -65,11 +65,11 @@ export class StockInward implements IPersistable<StockInward> {
   }
 
   public async EnsurePrimaryKeysWithValidValues(): Promise<void> {
-    if (this.p.MaterialInwardRef === undefined || this.p.MaterialInwardRef === 0) {
+    if (this.p.Ref === undefined || this.p.Ref === 0) {
       const newRefs = await IdProvider.GetInstance().GetNextEntityId();
       // const newRefs = await IdProvider.GetInstance().GetAllocateSingleIds();
-      this.p.MaterialInwardRef = newRefs[0];
-      if (this.p.MaterialInwardRef <= 0) throw new Error("Cannot assign Id. Please try again");
+      this.p.Ref = newRefs[0];
+      if (this.p.Ref <= 0) throw new Error("Cannot assign Id. Please try again");
     }
   }
 
@@ -186,16 +186,18 @@ export class StockInward implements IPersistable<StockInward> {
   }
 
   public static async FetchEntireListByCompanyRef(CompanyRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-    let req = new MaterialInwardAgainstPOStatusFetchRequest();
+    let req = new StockInwardFetchRequest();
     req.CompanyRef = CompanyRef;
     let tdResponse = await StockInward.FetchTransportData(req, errorHandler) as TransportData;
     return StockInward.ListFromTransportData(tdResponse);
   }
 
-  public static async FetchEntireListByCompanyRefAndSiteRef(CompanyRef: number, SiteRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+  public static async FetchEntireListByCompanyRefSiteAndVendorRef(CompanyRef: number, SiteRef: number, VendorRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let req = new StockInwardFetchRequest();
-    req.SiteRefs.push(SiteRef)
+
     req.CompanyRefs.push(CompanyRef)
+    SiteRef && req.SiteRefs.push(SiteRef)
+    VendorRef && req.VendorRefs.push(VendorRef)
     let tdResponse = await StockInward.FetchTransportData(req, errorHandler) as TransportData;
     return StockInward.ListFromTransportData(tdResponse);
   }

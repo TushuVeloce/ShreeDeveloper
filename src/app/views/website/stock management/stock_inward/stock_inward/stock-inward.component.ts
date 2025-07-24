@@ -19,14 +19,14 @@ import { UIUtils } from 'src/app/services/uiutils.service';
 })
 export class StockInwardComponent implements OnInit {
 
-  Entity: MaterialInwardAgainstPOStatus = MaterialInwardAgainstPOStatus.CreateNewInstance();
-  MasterList: MaterialInwardAgainstPOStatus[] = [];
-  DisplayMasterList: MaterialInwardAgainstPOStatus[] = [];
+  Entity: StockInward = StockInward.CreateNewInstance();
+  MasterList: StockInward[] = [];
+  DisplayMasterList: StockInward[] = [];
   list: [] = []
   SiteList: Site[] = [];
   VendorList: Vendor[] = [];
   SearchString: string = '';
-  SelectedStockInward: MaterialInwardAgainstPOStatus = MaterialInwardAgainstPOStatus.CreateNewInstance();
+  SelectedStockInward: StockInward = StockInward.CreateNewInstance();
   CustomerRef: number = 0;
   pageSize = 10;
   currentPage = 1;
@@ -70,7 +70,6 @@ export class StockInwardComponent implements OnInit {
     }
     this.Entity.p.VendorRef = 0
     let lst = await Vendor.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-    console.log('lst :', lst);
     this.VendorList = lst;
     if (this.VendorList.length > 0) {
       this.Entity.p.VendorRef = 0
@@ -86,9 +85,10 @@ export class StockInwardComponent implements OnInit {
     this.MasterList = [];
     this.DisplayMasterList = [];
 
-    let lst = await MaterialInwardAgainstPOStatus.FetchEntireListByCompanyRefSiteAndVendorRef(this.companyRef(), this.Entity.p.SiteRef, this.Entity.p.VendorRef,
-      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
-    );
+    let lst = await StockInward.FetchEntireListByCompanyRefSiteAndVendorRef(this.companyRef(), this.Entity.p.SiteRef, this.Entity.p.VendorRef,
+    async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+  );
+  console.log('lst :', lst);
     this.MasterList = lst;
     this.DisplayMasterList = this.MasterList;
     this.loadPaginationData();

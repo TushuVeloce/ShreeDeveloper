@@ -10,6 +10,7 @@ export class StockInwardFetchRequest {
   StockInwardManagementRefs: number[] = [];
   CompanyRef: number = 0;
   CompanyRefs: number[] = [];
+  VendorRefs: number[] = [];
   StockInwardStatus: number[] = [];
   SiteRefs: number[] = [];
 
