@@ -365,6 +365,67 @@ export class SidebarlayoutComponent implements OnInit {
     ]
 
     let MasterSubModuleList = [
+
+        {
+        Name: 'Company Master',
+        RouterLink: '/homepage/Website/Company_Master',
+        LogoPath: '/assets/icons/Company Master.png',
+      },
+       {
+        Name: 'Owner Master',
+        RouterLink: '/homepage/Website/Owner_Master',
+        LogoPath: '/assets/icons/owner_master.png',
+      },
+        {
+        Name: 'Department Master',
+        RouterLink: '/homepage/Website/Department_Master',
+        LogoPath: '/assets/icons/Department Master.png',
+      },
+      {
+        Name: 'Designation Master',
+        RouterLink: '/homepage/Website/Designation_Master',
+        LogoPath: '/assets/icons/Designation Master.png',
+      },
+      {
+        Name: 'User Role Right',
+        RouterLink: '/homepage/Website/User_Role_Rights',
+        LogoPath: '/assets/icons/User Role Right Master.png',
+      },
+      {
+        Name: 'Employee Master',
+        RouterLink: '/homepage/Website/Employee_Master',
+        LogoPath: '/assets/icons/Employee Master.png',
+      },
+       {
+        Name: 'Bank Account Master',
+        RouterLink: '/homepage/Website/Bank_Account_Master',
+        LogoPath: '/assets/icons/Bank Account Master.png',
+      },
+         {
+        Name: 'Opening Balance Master',
+        RouterLink: '/homepage/Website/Opening_Balance_Master',
+        LogoPath: '/assets/icons/Bank Account Master.png',
+      },
+      {
+        Name: 'Financial Year Master',
+        RouterLink: '/homepage/Website/Financial_Year_Master',
+        LogoPath: '/assets/icons/Financial Year Master.png',
+      },
+        {
+        Name: 'Account Main Ledger',
+        RouterLink: '/homepage/Website/Account_Main_Ledger',
+        LogoPath: '/assets/icons/Account Main Ledger.png',
+      },
+      {
+        Name: 'Account Sub Ledger',
+        RouterLink: '/homepage/Website/Account_Sub_Ledger',
+        LogoPath: '/assets/icons/Account Sub Ledger.png',
+      },
+      {
+        Name: 'Stage Master',
+        RouterLink: '/homepage/Website/Stage_Master',
+        LogoPath: '/assets/icons/Stage Master.png',
+      },
       {
         Name: 'Unit Master',
         RouterLink: '/homepage/Website/Unit_Master',
@@ -376,10 +437,16 @@ export class SidebarlayoutComponent implements OnInit {
         LogoPath: '/assets/icons/Material Master.png',
       },
       {
-        Name: 'Stage Master',
-        RouterLink: '/homepage/Website/Stage_Master',
-        LogoPath: '/assets/icons/Stage Master.png',
+        Name: 'Vendor Service Master',
+        RouterLink: '/homepage/Website/Vendor_Services_Master',
+        LogoPath: '/assets/icons/Vendor Service Master.png',
       },
+       {
+        Name: 'Vendor Master',
+        RouterLink: '/homepage/Website/Vendor_Master',
+        LogoPath: '/assets/icons/Vendor Master.png',
+      },
+      
       // {
       //   Name: 'Sub Stage Master',
       //   RouterLink: '/homepage/Website/Sub_Stage_Master',
@@ -390,46 +457,22 @@ export class SidebarlayoutComponent implements OnInit {
       //   RouterLink: '/homepage/Website/Expense_Type_Master',
       //   LogoPath: '/assets/icons/Expense Type.png',
       // },
-      {
-        Name: 'Account Main Ledger',
-        RouterLink: '/homepage/Website/Account_Main_Ledger',
-        LogoPath: '/assets/icons/Account Main Ledger.png',
-      },
-      {
-        Name: 'Account Sub Ledger',
-        RouterLink: '/homepage/Website/Account_Sub_Ledger',
-        LogoPath: '/assets/icons/Account Sub Ledger.png',
-      },
+    
+      
       // {
       //   Name: 'Marketing Type Master',
       //   RouterLink: '/homepage/Website/Marketing_Type_Master',
       //   LogoPath: '/assets/icons/Marketing Type Master.png',
       // },
-      {
-        Name: 'Vendor Service Master',
-        RouterLink: '/homepage/Website/Vendor_Services_Master',
-        LogoPath: '/assets/icons/Vendor Service Master.png',
-      },
-      {
-        Name: 'Vendor Master',
-        RouterLink: '/homepage/Website/Vendor_Master',
-        LogoPath: '/assets/icons/Vendor Master.png',
-      },
+      
+     
       // {
       //   Name: 'Vehicle Master',
       //   RouterLink: '/homepage/Website/Vehicle_Master',
       //  LogoPath:'/assets/icons/Material Master.png',
       // },
-      {
-        Name: 'Bank Account Master',
-        RouterLink: '/homepage/Website/Bank_Account_Master',
-        LogoPath: '/assets/icons/Bank Account Master.png',
-      },
-      {
-        Name: 'Opening Balance Master',
-        RouterLink: '/homepage/Website/Opening_Balance_Master',
-        LogoPath: '/assets/icons/Bank Account Master.png',
-      },
+     
+   
       // {
       //   Name: 'Country Master',
       //   RouterLink: '/homepage/Website/Country',
@@ -445,56 +488,27 @@ export class SidebarlayoutComponent implements OnInit {
       //   RouterLink: '/homepage/Website/City',
       //   LogoPath: '/assets/icons/Material Master.png',
       // },
-      {
-        Name: 'Department Master',
-        RouterLink: '/homepage/Website/Department_Master',
-        LogoPath: '/assets/icons/Department Master.png',
-      },
-      {
-        Name: 'Designation Master',
-        RouterLink: '/homepage/Website/Designation_Master',
-        LogoPath: '/assets/icons/Designation Master.png',
-      },
+    
       // {
       //   Name: 'User Role Master',
       //   RouterLink: '/homepage/Website/User_Role_Master',
       //  LogoPath:'/assets/icons/Material Master.png',
       // },
-      {
-        Name: 'User Role Right',
-        RouterLink: '/homepage/Website/User_Role_Rights',
-        LogoPath: '/assets/icons/User Role Right Master.png',
-      },
+      
       // {
       //   Name: 'External Users',
       //   RouterLink: '/homepage/Website/External_Users',
       //  LogoPath:'/assets/icons/Material Master.png',
       // },
-      {
-        Name: 'Company Master',
-        RouterLink: '/homepage/Website/Company_Master',
-        LogoPath: '/assets/icons/Company Master.png',
-      },
-      {
-        Name: 'Financial Year Master',
-        RouterLink: '/homepage/Website/Financial_Year_Master',
-        LogoPath: '/assets/icons/Financial Year Master.png',
-      },
-      {
-        Name: 'Employee Master',
-        RouterLink: '/homepage/Website/Employee_Master',
-        LogoPath: '/assets/icons/Employee Master.png',
-      },
+    
+      
+      
       {
         Name: 'Recipient Master',
         RouterLink: '/homepage/Website/Recipient_Master',
         LogoPath: '/assets/icons/Employee Master.png',
       },
-      {
-        Name: 'Owner Master',
-        RouterLink: '/homepage/Website/Owner_Master',
-        LogoPath: '/assets/icons/owner_master.png',
-      },
+     
       {
         Name: 'Payer Master',
         RouterLink: '/homepage/Website/Payer_Master',
@@ -774,10 +788,10 @@ export class SidebarlayoutComponent implements OnInit {
         SubModuleList: SiteManagementSubModuleList,
       },
       {
-        Name: 'Customer Management',
+        Name: 'Stock Management',
         RouterLink: '',
-        WhiteLogo: '/assets/icons/Customer-Management.png',
-        SubModuleList: CustomerManagementSubModuleList,
+        WhiteLogo: '/assets/icons/stock_management.png',
+        SubModuleList: StockManagementSubModuleList,
       },
       {
         Name: 'Government Office',
@@ -786,41 +800,48 @@ export class SidebarlayoutComponent implements OnInit {
         SubModuleList: GovernmentOfficeSubModuleList,
       },
       {
+        Name: 'Customer Management',
+        RouterLink: '',
+        WhiteLogo: '/assets/icons/Customer-Management.png',
+        SubModuleList: CustomerManagementSubModuleList,
+      },
+      {
         Name: 'Registrar Office',
         RouterLink: '/homepage/Website/Registrar_Office',
         WhiteLogo: '/assets/icons/Registrar Office.png',
         // SubModuleList: RegistrarOfficeSubModuleList,
       },
-      // {
-      //   Name: 'Marketing Management',
-      //   RouterLink: '/homepage/Website/Marketing_Management',
-      //   WhiteLogo: '/assets/icons/Marketing Management.png',
-      //   // SubModuleList: MarketingManagementSubModuleList,
-      // },
-      {
-        Name: 'Stock Management',
-        RouterLink: '',
-        WhiteLogo: '/assets/icons/stock_management.png',
-        SubModuleList: StockManagementSubModuleList,
-      },
-      {
-        Name: 'Hr-Payroll Management',
-        RouterLink: '',
-        WhiteLogo: '/assets/icons/Hr-Payroll Management.png',
-        SubModuleList: HrPayrollManagement,
-      },
-      {
+       {
         Name: 'Employee Request',
         RouterLink: '',
         WhiteLogo: '/assets/icons/Request.png',
         SubModuleList: RequestSubModulelist,
       },
+       {
+        Name: 'Hr-Payroll Management',
+        RouterLink: '',
+        WhiteLogo: '/assets/icons/Hr-Payroll Management.png',
+        SubModuleList: HrPayrollManagement,
+      },
+     
       {
         Name: 'Accounting',
         RouterLink: '',
         WhiteLogo: '/assets/icons/Expense Type.png',
         SubModuleList: AccountingSubModuleList,
       },
+      
+      
+      // {
+      //   Name: 'Marketing Management',
+      //   RouterLink: '/homepage/Website/Marketing_Management',
+      //   WhiteLogo: '/assets/icons/Marketing Management.png',
+      //   // SubModuleList: MarketingManagementSubModuleList,
+      // },
+      
+     
+      
+      
       // {
       //   Name: 'RazorPay',
       //   RouterLink: '/homepage/Website/Razorpay',
