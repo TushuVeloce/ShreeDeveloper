@@ -221,16 +221,16 @@
                 [nzValue]="material.p.Ref"></nz-option>
             </nz-select>
             <input *ngIf="ModalEditable" type="text" name="MaterialName" class="form-control"
-              [(ngModel)]="newQuotedMaterial.MaterialName" readonly />
+              [(ngModel)]="newQuotedMaterial.MaterialName" disabled />
           </div>
           <div class="col-6 mb-1">
             <label>Unit</label>
-            <input type="text" name="Unit" class="form-control" [(ngModel)]="newQuotedMaterial.UnitName" readonly />
+            <input type="text" name="Unit" class="form-control" [(ngModel)]="newQuotedMaterial.UnitName" disabled />
           </div>
           <div class="col-6 mb-1">
             <label>Required Quantity</label>
             <input type="number" name="RequisitionQty" class=" form-control" [(ngModel)]="newQuotedMaterial.RequisitionQty"
-              readonly />
+              disabled />
           </div>
           <div class="col-6 mb-1">
             <label>Quotation Quantity</label>
@@ -245,7 +245,7 @@
           <div class="col-6 mb-1">
             <label>Required Remaining Quantity</label>
             <input type="number" name="RequisitionRemainingQty" class=" form-control"
-              [(ngModel)]="newQuotedMaterial.RequisitionRemainingQty" readonly />
+              [(ngModel)]="newQuotedMaterial.RequisitionRemainingQty" disabled />
           </div>
           <div class="col-6 mb-1">
             <label>Rate</label>
@@ -269,7 +269,7 @@
           <div class="col-6 mb-1">
             <label>Net Amount</label>
             <input type="number" name="NetAmount" class="form-control" [(ngModel)]="newQuotedMaterial.NetAmount"
-              readonly />
+              disabled />
           </div>
           <div class="col-6 mb-1">
             <div>
@@ -303,7 +303,7 @@
           <div class="col-6 mb-1">
             <label>Total Amount</label>
             <input type="number" name="TotalAmount" class=" form-control" [(ngModel)]="newQuotedMaterial.TotalAmount"
-              readonly />
+              disabled />
           </div>
         </div>
       </form>

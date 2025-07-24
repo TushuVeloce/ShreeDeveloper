@@ -35,19 +35,19 @@
         <div class="col-md-6">
           <label>Date</label>
           <input type="date" name="QuotationDate" class="form-control date-input" id="QuotationDate"
-            [(ngModel)]="QuotationDate" placeholder="Select Date" readonly [min]="CurrentDate" />
+            [(ngModel)]="QuotationDate" placeholder="Select Date" disabled [min]="CurrentDate" />
         </div>
         <div class="col-md-6">
           <label><b>Site Name</b></label>
           <input type="text" name="SiteRef" class="form-control date-input" id="SiteRef" [(ngModel)]="Entity.p.SiteName"
-            placeholder="Enter Site" readonly />
+            placeholder="Enter Site" disabled />
         </div>
       </div>
       <div class="row" style="margin-top: 1rem">
         <div class="col-md-4">
           <label><b>Vendor Name</b></label>
           <input type="text" name="VendorName" class="form-control date-input" id="VendorName"
-            [(ngModel)]="Entity.p.VendorName" placeholder="Enter Vendor" readonly />
+            [(ngModel)]="Entity.p.VendorName" placeholder="Enter Vendor" disabled />
         </div>
         <div class="col-md-4">
           <label>Vendor Trade Name</label>

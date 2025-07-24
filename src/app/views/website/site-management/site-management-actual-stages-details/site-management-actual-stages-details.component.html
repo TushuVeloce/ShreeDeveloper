@@ -286,7 +286,7 @@
         <div class="col-md-4" style="margin-top: 1rem">
           <label><b>Amount</b></label>
           <input type="number" name="Amount" id="Amount" class="form-control" placeholder="Amount"
-            [(ngModel)]="Entity.p.Amount" readonly />
+            [(ngModel)]="Entity.p.Amount" disabled />
           <!-- <div *ngIf="
               AmountCtrl.invalid && (AmountCtrl.touched || AmountCtrl.dirty)
             ">
@@ -329,11 +329,11 @@
           </div>
         </div>
         <div class="col-md-4 mb-2" *ngIf="isDiselPaid">
-          <!-- Diesel Amount (Readonly) -->
+          <!-- Diesel Amount (disabled) -->
           <label><b>Diesel Amount</b></label>
           <input type="number" [(ngModel)]="Entity.p.DieselTotalAmount" name="DieselTotalAmount" class="form-control"
             id="DieselTotalAmount" placeholder="Enter Amount" #DieselTotalCtrl="ngModel"
-            (blur)="DieselTotalCtrl.control.markAsTouched()" readonly />
+            (blur)="DieselTotalCtrl.control.markAsTouched()" disabled />
         </div>
       </div>
 
@@ -368,7 +368,7 @@
         </div>
         <div class="col-lg-4 col-md-6 col-sm-12 mb-3" style="margin-top: 1rem">
           <label><b>Skill Labour Amount</b></label>
-          <input type="number" readonly [(ngModel)]="Entity.p.SkillAmount" name="SkillAmount" class="form-control"
+          <input type="number" disabled [(ngModel)]="Entity.p.SkillAmount" name="SkillAmount" class="form-control"
             id="SkillAmount" placeholder="Enter Skill Amount" #SkillAmountCtrl="ngModel"
             (blur)="SkillAmountCtrl.control.markAsTouched()" />
           <div *ngIf="
@@ -408,7 +408,7 @@
         </div>
         <div class="col-lg-4 col-md-6 col-sm-12 mb-3">
           <label><b>UnSkill Labour Amount</b></label>
-          <input type="number" readonly [(ngModel)]="Entity.p.UnskillAmount" name="UnSkillAmount" class="form-control"
+          <input type="number" disabled [(ngModel)]="Entity.p.UnskillAmount" name="UnSkillAmount" class="form-control"
             id="UnSkillAmount" placeholder="Enter UnSkill Amount" #UnSkillAmountCtrl="ngModel"
             (blur)="UnSkillAmountCtrl.control.markAsTouched()" (click)="selectAllValue($event)" />
           <div *ngIf="UnSkillAmountCtrl.invalid && (UnSkillAmountCtrl.touched || UnSkillAmountCtrl.dirty)">
@@ -444,7 +444,7 @@
         </div>
         <div class="col-lg-4 col-md-6 col-sm-12 mb-3">
           <label><b>Women Labour Amount</b></label>
-          <input type="number" readonly [(ngModel)]="Entity.p.LadiesAmount" name="LadiesAmount" class="form-control"
+          <input type="number" disabled [(ngModel)]="Entity.p.LadiesAmount" name="LadiesAmount" class="form-control"
             id="LadiesAmount" placeholder="Enter Ladies Amount" #LadiesAmountCtrl="ngModel"
             (blur)="LadiesAmountCtrl.control.markAsTouched()" (click)="selectAllValue($event)" />
           <div *ngIf="
@@ -465,7 +465,7 @@
         <div class="col-lg-4 col-md-6 col-sm-12 mb-3" style="margin-top: 1rem">
           <label><b>Grand Total</b></label>
           <input type="number" [(ngModel)]="Entity.p.GrandTotal" name="GrandTotal" class="form-control" id="GrandTotal"
-            placeholder="GrandTotal" readonly />
+            placeholder="GrandTotal" disabled />
         </div>
         <div class="col-lg-4 col-md-6 col-sm-12 mb-3" style="margin-top: 1rem">
           <label><b>Description</b></label>
@@ -480,7 +480,7 @@
         <div class="col-lg-4 col-md-6 col-sm-12 mb-3" style="margin-top: 1rem">
           <label><b>Sign</b></label>
           <input type="text" [(ngModel)]="Entity.p.CreatedByName" name="CreatedByName" class="form-control"
-            id="CreatedByName" placeholder="Enter Sign" readonly [pattern]="NameWithNosAndSpace"
+            id="CreatedByName" placeholder="Enter Sign" disabled [pattern]="NameWithNosAndSpace"
             #CreatedByNameCtrl="ngModel" (blur)="CreatedByNameCtrl.control.markAsTouched()" />
         </div>
       </div>
@@ -534,7 +534,7 @@
             <div>
               <label for="WorkedHours">Total Working Hours</label>
               <input type="number" name="WorkedHours" class="form-control" id="WorkedHours"
-                [(ngModel)]="TimeEntity.WorkedHours" placeholder="Total Working Hours" readonly />
+                [(ngModel)]="TimeEntity.WorkedHours" placeholder="Total Working Hours" disabled />
             </div>
           </div>
         </div>

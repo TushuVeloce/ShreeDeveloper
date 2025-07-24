@@ -144,7 +144,7 @@
           <div>
             <label>Total Advance</label>
             <input type="text" [(ngModel)]="Entity.p.RemainingAdvance" name="RemainingAdvance" class="form-control"
-              id="RemainingAdvance" readonly placeholder="Enter Remaining Advance" />
+              id="RemainingAdvance" disabled placeholder="Enter Remaining Advance" />
           </div>
         </div>
         <div class="col-md-4" style="margin-top: 1rem;" *ngIf="!Entity.p.IsAdvancePayment">
@@ -153,7 +153,7 @@
             <label *ngIf="Entity.p.RecipientType == EmployeeType &&  Entity.p.IsSalaryExpense">Net Salary</label>
             <label *ngIf="Entity.p.RecipientType != EmployeeType">Bill Amount</label>
             <input type="number" [(ngModel)]="Entity.p.InvoiceAmount" name="InvoiceAmount" class="form-control"
-              id="InvoiceAmount" required placeholder="Enter InvoiceAmount" readonly #InvoiceAmountCtrl="ngModel"
+              id="InvoiceAmount" required placeholder="Enter InvoiceAmount" disabled #InvoiceAmountCtrl="ngModel"
               (blur)="InvoiceAmountCtrl.control.markAsTouched()" (click)="selectAllValue($event)" />
             <div *ngIf="(InvoiceAmountCtrl.invalid && (InvoiceAmountCtrl.touched || InvoiceAmountCtrl.dirty))">
               <span class="validation-text" *ngIf="InvoiceAmountCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
@@ -175,7 +175,7 @@
         <div class="col-md-4" style="margin-top: 1rem;" *ngIf="!Entity.p.IsAdvancePayment">
           <div>
             <label>Remaining Amount</label>
-            <input type="number" [(ngModel)]="Entity.p.RemainingAmount" readonly name="RemainingAmount"
+            <input type="number" [(ngModel)]="Entity.p.RemainingAmount" disabled name="RemainingAmount"
               class="form-control" id="RemainingAmount" required placeholder="Enter RemainingAmount"
               #RemainingAmountCtrl="ngModel" (blur)="RemainingAmountCtrl.control.markAsTouched()"
               (click)="selectAllValue($event)" />

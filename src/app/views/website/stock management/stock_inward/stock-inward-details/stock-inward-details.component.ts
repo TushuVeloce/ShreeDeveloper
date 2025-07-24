@@ -342,6 +342,18 @@ export class StockInwardDetailsComponent implements OnInit {
   }
 
   openModal = async (type: string) => {
+    if (this.Entity.p.SiteRef <= 0) {
+      await this.uiUtils.showErrorToster('Site not Selected');
+      return;
+    }
+    if (this.Entity.p.VendorRef <= 0) {
+      await this.uiUtils.showErrorToster('Vendor not Selected');
+      return;
+    }
+    if (this.Entity.p.MaterialPurchaseOrderRef <= 0) {
+      await this.uiUtils.showErrorToster('Purchase Id not Selected');
+      return;
+    }
     if (type === 'material') this.ismaterialModalOpen = true;
     this.strCDT = await CurrentDateTimeRequest.GetCurrentDateTime();
     let parts = this.strCDT.substring(0, 16).split('-');

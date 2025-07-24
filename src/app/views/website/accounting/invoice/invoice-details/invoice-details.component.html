@@ -31,7 +31,7 @@
         <div class="col-md-4" style="margin-top: 1rem">
           <label><b>Bill No</b></label>
           <input type="number" [(ngModel)]="Entity.p.InvoiceNo" name="InvoiceNo" class="form-control" id="InvoiceNo"
-            placeholder="Bill No" readonly />
+            placeholder="Bill No" disabled />
         </div>
         <div class="col-md-4" style="margin-top: 1rem">
           <label>Site Name</label>
@@ -361,7 +361,7 @@
           <div>
             <label>Billing Amount</label>
             <input type="number" [(ngModel)]="Entity.p.InvoiceAmount" name="InvoiceAmount" class="form-control"
-              id="InvoiceAmount" required placeholder="Enter InvoiceAmount" readonly />
+              id="InvoiceAmount" required placeholder="Enter InvoiceAmount" disabled />
           </div>
         </div>
         <div class="col-md-4" style="margin-top: 1rem; ">
@@ -441,7 +441,7 @@
             <div>
               <label for="DisplayWorkedHours">Total Working Hours</label>
               <input type="text" name="DisplayWorkedHours" class="form-control" id="DisplayWorkedHours"
-                [(ngModel)]="MachineTimeEntity.DisplayWorkedHours" placeholder="Total Working Hours" readonly />
+                [(ngModel)]="MachineTimeEntity.DisplayWorkedHours" placeholder="Total Working Hours" disabled />
             </div>
           </div>
         </div>
@@ -541,7 +541,7 @@
             <div>
               <label for="LabourAmount">Labour Amount</label>
               <input type="number" name="LabourAmount" class="form-control" id="LabourAmount"
-                [(ngModel)]="LabourTimeEntity.LabourAmount" placeholder="Amount" readonly />
+                [(ngModel)]="LabourTimeEntity.LabourAmount" placeholder="Amount" disabled />
             </div>
           </div>
         </div>

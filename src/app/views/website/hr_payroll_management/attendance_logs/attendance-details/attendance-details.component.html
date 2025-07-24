@@ -35,20 +35,20 @@
           <div>
             <label>First Check In Time</label>
             <input type="time" [(ngModel)]="Entity.p.FirstCheckInTime" name="FirstCheckInTime" class="form-control"
-              id="FirstCheckInTime" readonly />
+              id="FirstCheckInTime" disabled />
           </div>
         </div>
         <div class="col-md-4 col-6">
           <div>
             <label>Last Check Out Time</label>
             <input type="time" [(ngModel)]="Entity.p.LastCheckOutTime" name="LastCheckOutTime" class="form-control"
-              id="LastCheckOutTime" readonly />
+              id="LastCheckOutTime" disabled />
           </div>
         </div>
         <div class="col-md-4 col-6">
           <div>
             <label>Total Working Hrs</label>
-            <input type="text" readonly [(ngModel)]="Entity.p.DisplayTotalWorkingHrs" name="DisplayTotalWorkingHrs"
+            <input type="text" disabled [(ngModel)]="Entity.p.DisplayTotalWorkingHrs" name="DisplayTotalWorkingHrs"
               class="form-control" id="DisplayTotalWorkingHrs" />
           </div>
         </div>
@@ -63,7 +63,7 @@
         <div class="col-md-4 col-6">
           <div>
             <label>Total Late Mark Hrs</label>
-            <input type="text" readonly [(ngModel)]="Entity.p.DisplayTotalLateMarkHrs" name="DisplayTotalLateMarkHrs"
+            <input type="text" disabled [(ngModel)]="Entity.p.DisplayTotalLateMarkHrs" name="DisplayTotalLateMarkHrs"
               class="form-control" id="DisplayTotalLateMarkHrs" (click)="selectAllValue($event)" />
           </div>
         </div>
@@ -186,7 +186,7 @@
           </div>
           <div class="col-6 mb-1">
             <label>Working Hrs</label>
-            <input type="text" name="WorkingHrs" readonly class="form-control"
+            <input type="text" name="WorkingHrs" disabled class="form-control"
               [(ngModel)]="newAttendance.DisplayWorkingHrs" />
           </div>
         </div>

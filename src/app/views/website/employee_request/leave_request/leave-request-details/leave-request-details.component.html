@@ -19,7 +19,7 @@
       <div class="row" style="margin-top: 1rem; ">
         <div class="col-lg-4 col-md-4 col-sm-12">
           <label>Name</label>
-          <input type="text" [(ngModel)]="Entity.p.EmployeeName" readonly name="EmployeeName" class="form-control"
+          <input type="text" [(ngModel)]="Entity.p.EmployeeName" disabled name="EmployeeName" class="form-control"
             id="EmployeeName" required #EmployeeNameCtrl="ngModel" (blur)="EmployeeNameCtrl.control.markAsTouched()" />
           <div style="height: 25px;"
             *ngIf="(EmployeeNameCtrl.invalid && (EmployeeNameCtrl.touched || EmployeeNameCtrl.dirty))">
@@ -73,7 +73,7 @@
         </div>
         <div class="col-lg-4 col-md-4 col-sm-12">
           <label>Leave Hours</label>
-          <input type="number" [(ngModel)]="Entity.p.LeaveHours" readonly name="LeaveHours" class="form-control"
+          <input type="number" [(ngModel)]="Entity.p.LeaveHours" disabled name="LeaveHours" class="form-control"
             id="LeaveHours" required placeholder="Enter Leave Hours" #LeaveHoursCtrl="ngModel"
             (blur)="LeaveHoursCtrl.control.markAsTouched()" (click)="selectAllValue($event);" />
           <div style="height: 25px;"

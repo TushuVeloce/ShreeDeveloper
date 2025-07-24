@@ -30,8 +30,8 @@
       <div class="row" style="margin-top: 1rem">
         <div class="col-md-4">
           <label>Inward Date</label>
-          <input type="date" name="InwardDate" [disabled]="!this.IsNewEntity" class="form-control" id="InwardDate"
-            [(ngModel)]="InwardDate" #InwardDateCtrl="ngModel" readonly required
+          <input type="date" name="InwardDate" class="form-control" id="InwardDate"
+            [(ngModel)]="InwardDate" #InwardDateCtrl="ngModel" disabled
             (blur)="InwardDateCtrl.control.markAsTouched()" placeholder="Enter Site Name"
             [min]="Entity.p.PurchaseOrderDate" />
           <div *ngIf="InwardDateCtrl.invalid && (InwardDateCtrl.touched || InwardDateCtrl.dirty)">
@@ -40,8 +40,8 @@
         </div>
         <div class="col-md-4">
           <label><b>Chalan No</b></label>
-          <input type="number" [(ngModel)]="Entity.p.ChalanNo" [disabled]="!this.IsNewEntity" name="ChalanNo"
-            class="form-control" id="ChalanNo" placeholder="Chalan No" readonly />
+          <input type="number" [(ngModel)]="Entity.p.ChalanNo" name="ChalanNo"
+            class="form-control" id="ChalanNo" placeholder="Chalan No" disabled />
         </div>
         <div class="col-md-4">
 
@@ -63,13 +63,13 @@
         </div>
         <div class="col-md-4">
           <label><b>Vendor Trade Name</b></label>
-          <input type="text" [(ngModel)]="Entity.p.VendorTradeName" [disabled]="!this.IsNewEntity"
-            name="VendorTradeName" class="form-control" id="VendorTradeName" placeholder="Vendor Trade Name" readonly />
+          <input type="text" [(ngModel)]="Entity.p.VendorTradeName"
+            name="VendorTradeName" class="form-control" id="VendorTradeName" placeholder="Vendor Trade Name" disabled />
         </div>
         <div class="col-md-4">
           <label><b>Vendor Mobile No</b></label>
-          <input type="text" [(ngModel)]="Entity.p.VendorPhoneNo" [disabled]="!this.IsNewEntity" name="VendorPhoneNo"
-            class="form-control" id="VendorPhoneNo" placeholder="Vendor Mob No" readonly />
+          <input type="text" [(ngModel)]="Entity.p.VendorPhoneNo" name="VendorPhoneNo"
+            class="form-control" id="VendorPhoneNo" placeholder="Vendor Mob No" disabled />
         </div>
 
         <div class="col-md-4">
@@ -79,7 +79,7 @@
         </div>
         <div class="col-md-4">
           <label for="MaterialPurchaseOrderRef"><b>Purchase ID</b></label>
-          <nz-select class="nzSelect-light" [disabled]="!this.IsNewEntity" [nzNotFoundContent]="noDataTpl" nzShowSearch
+          <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" [disabled]="!this.IsNewEntity" nzShowSearch
             nzAllowClear nzPlaceHolder="Select" [nzSize]="'large'" name="MaterialPurchaseOrderRef"
             id="MaterialPurchaseOrderRef" [(ngModel)]="Entity.p.MaterialPurchaseOrderRef"
             (ngModelChange)="getMaterialListByCompanySiteVendorRefAndPurchaseOrderID();">
@@ -226,7 +226,7 @@
           <div class="col-6" style="margin-top: 1rem">
             <label>Date</label>
             <input type="date" name="Date" class="form-control" id="Date" [(ngModel)]="newInward.Date"
-              placeholder="Ordered Date" readonly />
+              placeholder="Ordered Date" disabled />
           </div>
           <div class="col-6" style="margin-top: 1rem">
             <label>Material Name</label>
@@ -239,12 +239,12 @@
                 [nzLabel]="material.p.MaterialName + ' - Qty: ' + material.p.OrderQty">
               </nz-option>
             </nz-select>
-            <input *ngIf="ModalEditable" type="text" name="MaterialName" class="form-control" readonly
+            <input *ngIf="ModalEditable" type="text" name="MaterialName" class="form-control" disabled
               [(ngModel)]="newInward.MaterialName" />
           </div>
           <div class="col-6" style="margin-top: 1rem">
             <label>Unit</label>
-            <input type="text" name="UnitRef" class="form-control" [(ngModel)]="newInward.UnitName" readonly />
+            <input type="text" name="UnitRef" class="form-control" [(ngModel)]="newInward.UnitName" disabled />
           </div>
           <div class="col-6" style="margin-top: 1rem">
             <label>Ordered Quantity</label>
@@ -264,7 +264,7 @@
           <div class="col-6" style="margin-top: 1rem">
             <label>Remaining Quantity</label>
             <input type="number" name="RemainingQty" class="form-control" [(ngModel)]="NewRemainingQty" required
-              placeholder="Remaining Quantity" (click)="selectAllValue($event)" readonly />
+              placeholder="Remaining Quantity" (click)="selectAllValue($event)" disabled />
           </div>
         </div>
       </form>

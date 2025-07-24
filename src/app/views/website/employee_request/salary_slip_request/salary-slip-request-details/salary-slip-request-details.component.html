@@ -19,7 +19,7 @@
       <div class="row" style="margin-top: 1rem; ">
         <div class="col-lg-6 col-md-4 col-sm-12">
           <label>Name</label>
-          <input type="text" [(ngModel)]="Entity.p.EmployeeName" readonly name="EmployeeName" class="form-control"
+          <input type="text" [(ngModel)]="Entity.p.EmployeeName" disabled name="EmployeeName" class="form-control"
             id="EmployeeName" required #EmployeeNameCtrl="ngModel" (blur)="EmployeeNameCtrl.control.markAsTouched()" />
         </div>
         <div class="col-lg-6 col-md-4 col-sm-12">
