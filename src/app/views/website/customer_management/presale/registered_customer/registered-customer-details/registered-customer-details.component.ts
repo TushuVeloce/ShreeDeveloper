@@ -103,7 +103,7 @@ export class RegisteredCustomerDetailsComponent implements OnInit {
   calculateStampDuties = () => {
     const ValueOfAgreement = Number(this.Entity.p.ValueOfAgreement);
     const TaxValueInPercentage = Number(this.Entity.p.TaxValueInPercentage);
-    this.Entity.p.StampDuties = Math.ceil(ValueOfAgreement * (TaxValueInPercentage / 100));
+   this.Entity.p.StampDuties = Math.floor(ValueOfAgreement * (TaxValueInPercentage / 100) * 100) / 100;
     this.calculateRegistrationFees()
   }
 
