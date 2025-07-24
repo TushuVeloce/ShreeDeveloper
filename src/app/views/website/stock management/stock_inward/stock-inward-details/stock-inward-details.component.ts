@@ -137,9 +137,8 @@ export class StockInwardDetailsComponent implements OnInit {
 
     if (Array.isArray(collections)) {
       for (const item of collections) {
-        console.log('item.Name :', item.Name);
         if (
-          item.Name === 'ActualStage' &&
+          item.Name === 'MaterialInward' &&
           Array.isArray(item.Entries) &&
           item.Entries.length > 0
         ) {
@@ -460,11 +459,14 @@ export class StockInwardDetailsComponent implements OnInit {
   }
 
   SaveStockInward = async () => {
+
     let lstFTO: FileTransferObject[] = [];
     this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef()
     this.Entity.p.UpdatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
     this.Entity.p.CreatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
     this.Entity.p.InwardDate = this.dtu.ConvertStringDateToFullFormat(this.InwardDate);
+
+    debugger
     let entityToSave = this.Entity.GetEditableVersion();
 
     let entitiesToSave = [entityToSave];
