@@ -54,7 +54,7 @@ export class PlotMasterDetailsComponent implements OnInit {
 
   async ngOnInit() {
     this.CompanyList = await Company.FetchEntireList();
-     this.getSiteListByCompanyRef()
+    this.getSiteListByCompanyRef()
     const siteref = this.appStateManage.StorageKey.getItem('siteRef')
     const siteName = this.appStateManage.StorageKey.getItem('siteName')
     this.SiteRf = siteref ? Number(siteref) : 0;
@@ -101,7 +101,7 @@ export class PlotMasterDetailsComponent implements OnInit {
     }
   }
 
-    getSiteListByCompanyRef = async () => {
+  getSiteListByCompanyRef = async () => {
     if (this.CompanyRef() <= 0) {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
@@ -176,6 +176,33 @@ export class PlotMasterDetailsComponent implements OnInit {
     } else {
       this.Entity.p.AreaInSqm = 0;
     }
+  }
+
+  restrictToTwoDecimalsForSqFt(event: any): void {
+    const input = event.target.value;
+
+    // Allow only valid number with up to 2 decimal places
+    const regex = /^\d*\.?\d{0,2}$/;
+
+    if (!regex.test(input)) {
+      // Remove last character if it makes the value invalid
+      event.target.value = input.slice(0, -1);
+    }
+
+    // Update model manually
+    this.Entity.p.AreaInSqft = parseFloat(event.target.value) || 0;
+  }
+
+  restrictToTwoDecimalsForSqm(event: any): void {
+    const input = event.target.value;
+
+    const regex = /^\d*\.?\d{0,2}$/;
+
+    if (!regex.test(input)) {
+      event.target.value = input.slice(0, -1);
+    }
+
+    this.Entity.p.AreaInSqm = parseFloat(event.target.value) || 0;
   }
 
   selectAllValue(event: MouseEvent): void {

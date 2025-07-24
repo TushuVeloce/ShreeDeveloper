@@ -322,6 +322,55 @@ export class SiteManagementDetailsComponent implements OnInit {
     );
   }
 
+  convertSqmToSqft() {
+    if (this.Entity.p.TotalLandAreaInSqm) {
+      this.Entity.p.TotalLandAreaInSqft = parseFloat((this.Entity.p.TotalLandAreaInSqm * 10.7639).toFixed(2));
+    } else {
+      this.Entity.p.TotalLandAreaInSqft = 0;
+    }
+  }
+
+  convertSqftToSqm() {
+    if (this.Entity.p.TotalLandAreaInSqft) {
+      this.Entity.p.TotalLandAreaInSqm = parseFloat((this.Entity.p.TotalLandAreaInSqft / 10.7639).toFixed(2));
+    } else {
+      this.Entity.p.TotalLandAreaInSqm = 0;
+    }
+  }
+
+  restrictToTwoDecimalsForSqFt(event: any): void {
+  const input = event.target.value;
+
+  // Allow only valid number with up to 2 decimal places
+  const regex = /^\d*\.?\d{0,2}$/;
+
+  if (!regex.test(input)) {
+    // Remove last character if it makes the value invalid
+    event.target.value = input.slice(0, -1);
+  }
+
+  // Update model manually
+  this.Entity.p.TotalLandAreaInSqft = parseFloat(event.target.value) || 0;
+}
+
+restrictToTwoDecimalsForSqm(event: any): void {
+  const input = event.target.value;
+
+  const regex = /^\d*\.?\d{0,2}$/;
+
+  if (!regex.test(input)) {
+    event.target.value = input.slice(0, -1);
+  }
+
+  this.Entity.p.TotalLandAreaInSqm = parseFloat(event.target.value) || 0;
+}
+
+
+  selectAllValue(event: MouseEvent): void {
+    const input = event.target as HTMLInputElement;
+    input.select();
+  }
+
   SaveSite = async () => {
     this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef()
     this.Entity.p.LoginEmployeeRef = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
@@ -354,27 +403,6 @@ export class SiteManagementDetailsComponent implements OnInit {
       }
     }
   };
-
-  convertSqmToSqft() {
-    if (this.Entity.p.TotalLandAreaInSqm) {
-      this.Entity.p.TotalLandAreaInSqft = parseFloat((this.Entity.p.TotalLandAreaInSqm * 10.7639).toFixed(2));
-    } else {
-      this.Entity.p.TotalLandAreaInSqft = 0;
-    }
-  }
-
-  convertSqftToSqm() {
-    if (this.Entity.p.TotalLandAreaInSqft) {
-      this.Entity.p.TotalLandAreaInSqm = parseFloat((this.Entity.p.TotalLandAreaInSqft / 10.7639).toFixed(2));
-    } else {
-      this.Entity.p.TotalLandAreaInSqm = 0;
-    }
-  }
-
-  selectAllValue(event: MouseEvent): void {
-    const input = event.target as HTMLInputElement;
-    input.select();
-  }
 
   BackSiteManagement = async () => {
     if (!this.utils.AreEqual(this.InitialEntity, this.Entity)) {
