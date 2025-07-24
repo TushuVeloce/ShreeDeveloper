@@ -26,7 +26,7 @@ export class StockSummaryComponent implements OnInit {
   total = 0;
   companyRef = this.companystatemanagement.SelectedCompanyRef;
 
-  headers: string[] = ['Sr.No.', 'Site Name', 'Material', 'Total Order Qty Per Material', 'Total Extra Order Qty', 'Total Order Qty', 'Total Inward Qty ', 'Inward Remaining Qty', 'Total Consumed Qty ', 'Total Transferred In Qty ', 'Current Stock '];
+  headers: string[] = ['Sr.No.', 'Site Name', 'Material', 'Ordered Qty', 'Extra Ordered Qty', 'Total Ordered Qty', 'Total Inward Qty ', 'Total Consumed Qty ', 'Transferred Qty ', 'Current Stock ','Remaining Qty'];
 
 
   constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private DateconversionService: DateconversionService, private screenSizeService: ScreenSizeService,
@@ -51,6 +51,7 @@ export class StockSummaryComponent implements OnInit {
       return;
     }
     let lst = await StockSummary.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    console.log('lst :', lst);
     this.MasterList = lst;
     this.DisplayMasterList = this.MasterList;
     this.loadPaginationData();
