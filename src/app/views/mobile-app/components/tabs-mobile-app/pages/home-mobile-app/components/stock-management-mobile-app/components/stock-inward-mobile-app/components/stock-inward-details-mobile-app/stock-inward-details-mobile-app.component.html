@@ -3,7 +3,7 @@
 <ion-content class="form-container">
   <ion-list lines="none" class="ion-padding">
     <!--  Inward Date -->
-    <ion-item (click)="showInwardDatePicker = true" class="input-item" button detail>
+    <ion-item (click)="showInwardDatePicker = true" class="input-item" button detail [disabled]="!this.IsNewEntity">
       <ion-label>Inward Date</ion-label>
       <ion-label slot="end">{{ DisplayInwardDate || 'Select Date' }}</ion-label>
     </ion-item>
@@ -15,21 +15,25 @@
     <!-- Chalan No input-->
     <ion-item class="input-item">
       <ion-input label="Chalan No." labelPlacement="floating" placeholder="Enter Chalan No."
-        [(ngModel)]="Entity.p.ChalanNo" [disabled]="'true'"></ion-input>
+        [(ngModel)]="Entity.p.ChalanNo" [disabled]="!this.IsNewEntity"></ion-input>
     </ion-item>
 
     <!-- Select site Dropdown -->
-    <ion-item class="input-item" button detail (click)="selectSiteBottomsheet()">
+    <ion-item class="input-item" button detail (click)="selectSiteBottomsheet()" *ngIf="this.IsNewEntity">
       <ion-label>Site</ion-label>
-
       <!-- Text showing the selected status -->
       <ion-text slot="end" class="status-text">
         {{ SiteName|| 'Select' }}
       </ion-text>
     </ion-item>
+    <!-- Site input-->
+    <ion-item class="input-item" *ngIf="!this.IsNewEntity">
+      <ion-input label="Site" labelPlacement="floating" placeholder="Enter Site" [(ngModel)]="Entity.p.SiteName"
+        [disabled]="!this.IsNewEntity"></ion-input>
+    </ion-item>
 
     <!-- Select vendor Dropdown -->
-    <ion-item class="input-item" button detail (click)="selectVendorBottomsheet()">
+    <ion-item class="input-item" button detail (click)="selectVendorBottomsheet()" *ngIf="this.IsNewEntity">
       <ion-label>Vendor</ion-label>
 
       <!-- Text showing the selected status -->
@@ -37,29 +41,39 @@
         {{ VendorName|| 'Select' }}
       </ion-text>
     </ion-item>
+    <!-- vendor input-->
+    <ion-item class="input-item" *ngIf="!this.IsNewEntity">
+      <ion-input label="Vendor" labelPlacement="floating" placeholder="Enter Vendor" [(ngModel)]="Entity.p.VendorName"
+        [disabled]="!this.IsNewEntity"></ion-input>
+    </ion-item>
 
     <!-- Vendor Trade Name input-->
     <ion-item class="input-item">
       <ion-input label="Vendor Trade" labelPlacement="floating" placeholder="Enter Vendor Trade"
-        [(ngModel)]="Entity.p.VendorTradeName" readonly></ion-input>
+        [(ngModel)]="Entity.p.VendorTradeName" [disabled]="'true'"></ion-input>
     </ion-item>
     <ion-item class="input-item">
       <ion-input label="Vendor Mobile No." labelPlacement="floating" placeholder="Enter Mobile No."
-        [(ngModel)]="Entity.p.VendorPhoneNo" readonly></ion-input>
+        [(ngModel)]="Entity.p.VendorPhoneNo" [disabled]="'true'"></ion-input>
     </ion-item>
     <ion-item class="input-item">
       <ion-input label="Vehicle No." labelPlacement="floating" placeholder="Enter Vehicle No."
         [(ngModel)]="Entity.p.VehicleNo"></ion-input>
     </ion-item>
 
-    <!-- Select vendor Dropdown -->
-    <ion-item class="input-item" button detail (click)="selectPurchaseIDBottomsheet()">
+    <!-- Select Purchase ID Dropdown -->
+    <ion-item class="input-item" button detail (click)="selectPurchaseIDBottomsheet()" *ngIf="this.IsNewEntity">
       <ion-label>Purchase ID</ion-label>
 
       <!-- Text showing the selected status -->
       <ion-text slot="end" class="status-text">
         {{ PurchaseIDName|| 'Select' }}
       </ion-text>
+    </ion-item>
+    <!-- Purchase ID input-->
+    <ion-item class="input-item" *ngIf="!this.IsNewEntity">
+      <ion-input label="Purchase ID" labelPlacement="floating" placeholder="Enter Purchase ID"
+        [(ngModel)]="PurchaseIDName" [disabled]="'true'"></ion-input>
     </ion-item>
 
     <!-- Material List Header -->
@@ -93,6 +107,9 @@
               <tr *ngFor="let item of Entity.p.MaterialInwardDetailsArray; let i = index">
                 <td class="sticky-col">{{i + 1 }}</td>
                 <td>
+                  {{ formatDate(item.InwardDate) }}
+                </td>
+                <td>
                   {{ item.MaterialName }}
                 </td>
                 <td>
@@ -114,11 +131,6 @@
                     (click)="removeMaterial(i)"></ion-icon>
                 </td>
               </tr>
-              <!-- <tr>
-                <td class="sticky-col" colspan="2"><b>Grand Total</b></td>
-                <td colspan="11"></td>
-                <td><b>₹ {{ getGrandTotal() }}</b></td>
-              </tr> -->
             </tbody>
           </table>
         </div>
@@ -231,6 +243,17 @@
 
         <ion-content scroll-y="true" class="ion-padding modal-content-mobile-app">
           <ion-list lines="none">
+            <!--  Date -->
+            <ion-item (click)="showChildInwardDatePicker = true" class="input-item" button detail
+              [disabled]="!this.IsNewEntity">
+              <ion-label>Inward Date</ion-label>
+              <ion-label slot="end">{{ DisplayChildInwardDate || 'Select Date' }}</ion-label>
+            </ion-item>
+            <app-date-picker [show]="showChildInwardDatePicker" [selectedDate]="ChildInwardDate" [defaultToday]="true"
+              (dateChanged)="onChildInwardDateChange($event)"
+              (dateSelected)="DisplayChildInwardDate = $event; showChildInwardDatePicker = false"
+              (modalDismissed)="showChildInwardDatePicker = false" />
+
             <!-- Material Dropdown -->
             <ion-item class="input-item" button detail (click)="selectMaterialBottomsheet()" *ngIf="!ModalEditable">
               <ion-label>Material Name</ion-label>
@@ -239,27 +262,25 @@
               <ion-text slot="end" class="status-text">
                 {{ MaterialName|| 'Select' }}
               </ion-text>
-
-              <!-- Dropdown icon (chevron) on the right -->
-              <!-- <ion-icon name="chevron-down-outline" slot="end" class="dropdown-icon"></ion-icon> -->
             </ion-item>
 
             <!-- Material input-->
             <ion-item class="input-item" *ngIf="ModalEditable">
               <ion-input label="Material Name" labelPlacement="floating" placeholder="Enter Material Name"
-                [(ngModel)]="newInward.MaterialName" readonly></ion-input>
+                [(ngModel)]="newInward.MaterialName" [disabled]="'true'"></ion-input>
             </ion-item>
 
             <!-- Unit -->
             <ion-item class="input-item">
               <ion-input label="Unit" labelPlacement="floating" placeholder="Enter Unit"
-                [(ngModel)]="newInward.UnitName" readonly></ion-input>
+                [(ngModel)]="newInward.UnitName" [disabled]="'true'"></ion-input>
             </ion-item>
 
-            <!--Requisition Quantity -->
+            <!--Ordered Quantity -->
             <ion-item class="input-item">
-              <ion-input label="Requisition Qty" labelPlacement="floating" type="number" placeholder="Enter Quantity"
-                [(ngModel)]="newInward.PurchaseOrderQty" clearInput="true" clearOnEdit="true" readonly></ion-input>
+              <ion-input label="Ordered Qty" labelPlacement="floating" type="number"
+                placeholder="Enter Ordered Quantity" [(ngModel)]="newInward.PurchaseOrderQty" clearInput="true"
+                clearOnEdit="true" [disabled]="'true'"></ion-input>
             </ion-item>
 
             <!--Inward Quantity -->
@@ -271,11 +292,11 @@
                     newInward.PurchaseOrderRemainingQty
                   )"></ion-input> </ion-item>
 
-            <!--NewRemaining Quantity -->
+            <!--Remaining Quantity -->
             <ion-item class="input-item">
               <ion-input label="Remaining Qty" labelPlacement="floating" type="number"
                 placeholder="Enter Remaining Quantity" [(ngModel)]="NewRemainingQty" clearInput="true"
-                clearOnEdit="true" readonly></ion-input> </ion-item>
+                clearOnEdit="true" [disabled]="'true'"></ion-input> </ion-item>
           </ion-list>
         </ion-content>
 

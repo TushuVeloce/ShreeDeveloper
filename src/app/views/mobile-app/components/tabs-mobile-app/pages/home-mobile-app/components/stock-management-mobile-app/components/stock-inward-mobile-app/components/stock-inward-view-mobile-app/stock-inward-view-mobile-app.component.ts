@@ -247,12 +247,12 @@ export class StockInwardViewMobileAppComponent implements OnInit {
     await this.router.navigate(['mobile-app/tabs/dashboard/stock-management/stock-inward/add']);
   }
 
-  onEditClicked = async (item: StockInward) => {
-    this.router.navigate(['mobile-app/tabs/dashboard/stock-management/stock-inward/edit'], {
-      state: { inwardref: item.p.Ref }
-    });
-
-  };
+    onEditClicked = async (item: StockInward) => {
+      this.SelectedStockInward = item.GetEditableVersion();
+      StockInward.SetCurrentInstance(this.SelectedStockInward);
+      this.appStateManage.StorageKey.setItem('Editable', 'Edit');
+      await this.router.navigate(['mobile-app/tabs/dashboard/stock-management/stock-inward/edit']);
+    };
 
   navigateToPrint = async (item: StockInward) => {
     this.router.navigate(['mobile-app/tabs/dashboard/stock-management/stock-inward/print'], {

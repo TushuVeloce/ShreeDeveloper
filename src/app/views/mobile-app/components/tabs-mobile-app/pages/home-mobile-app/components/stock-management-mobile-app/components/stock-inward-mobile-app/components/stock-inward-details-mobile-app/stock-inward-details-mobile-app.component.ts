@@ -4,16 +4,21 @@ import { Router } from '@angular/router';
 import { MaterialFromOrder } from 'src/app/classes/domain/entities/website/masters/material/orderedmaterial/materialfromorder';
 import { Site } from 'src/app/classes/domain/entities/website/masters/site/site';
 import { Vendor } from 'src/app/classes/domain/entities/website/masters/vendor/vendor';
+import { PurchaseOrderChalanFetchRequest } from 'src/app/classes/domain/entities/website/stock_management/stock_inward/actualstagechalan/purchaseorderfetchrequest';
 import { InwardMaterialDetailProps } from 'src/app/classes/domain/entities/website/stock_management/stock_inward/inwardmaterial/inwardmaterial';
 import { StockInward } from 'src/app/classes/domain/entities/website/stock_management/stock_inward/stockinward';
 import { Order } from 'src/app/classes/domain/entities/website/stock_management/stock_order/order';
 import { FileTransferObject } from 'src/app/classes/infrastructure/filetransferobject';
+import { PayloadPacketFacade } from 'src/app/classes/infrastructure/payloadpacket/payloadpacketfacade';
+import { CurrentDateTimeRequest } from 'src/app/classes/infrastructure/request_response/currentdatetimerequest';
+import { TransportData } from 'src/app/classes/infrastructure/transportdata';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { BaseUrlService } from 'src/app/services/baseurl.service';
 import { BottomsheetMobileAppService } from 'src/app/services/bottomsheet-mobile-app.service';
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
 import { DateconversionService } from 'src/app/services/dateconversion.service';
 import { DTU } from 'src/app/services/dtu.service';
+import { ServerCommunicatorService } from 'src/app/services/server-communicator.service';
 import { Utils } from 'src/app/services/utils.service';
 import { AlertService } from 'src/app/views/mobile-app/components/core/alert.service';
 import { HapticService } from 'src/app/views/mobile-app/components/core/haptic.service';
@@ -29,7 +34,7 @@ import { ToastService } from 'src/app/views/mobile-app/components/core/toast.ser
 export class StockInwardDetailsMobileAppComponent implements OnInit {
 
   Entity: StockInward = StockInward.CreateNewInstance();
-  private IsNewEntity: boolean = true;
+  IsNewEntity: boolean = true;
   isSaveDisabled: boolean = false;
   DetailsFormTitle: 'New Stock Inward' | 'Edit Stock Inward' = 'New Stock Inward';
   IsDropdownDisabled: boolean = false;
@@ -42,15 +47,19 @@ export class StockInwardDetailsMobileAppComponent implements OnInit {
   localEstimatedStartingDate: string = '';
   localEstimatedEndDate: string = '';
   ModalEditable: boolean = false;
-  materialheaders: string[] = ['Material Name ', 'Unit', 'Ordered Qty.', 'Inward Qty.', 'Remaining Qty.'];
+  materialheaders: string[] = ['Date', 'Material Name ', 'Unit', 'Ordered Qty.', 'Inward Qty.', 'Remaining Qty.'];
   ismaterialModalOpen: boolean = false;
   newInward: InwardMaterialDetailProps = InwardMaterialDetailProps.Blank();
   editingIndex: null | undefined | number
   InitialTableRefs: number[] = [];
   shouldFilterDropdown = false; // 🔁 Used to toggle filtering after add
   SessionAddedRefs: number[] = [];
+  PurchaseOrderDate: string = ''
+  // InwardDate: string = ''
+
   today: string = new Date().toISOString().split('T')[0];
   NewRemainingQty: number = 0;
+
 
   companyRef: number = 0;
   strCDT: string = '';
@@ -75,13 +84,14 @@ export class StockInwardDetailsMobileAppComponent implements OnInit {
   imagePostViewUrl: string = '';
   selectedFileName: string = '';
 
-  showPurchaseOrderDatePicker = false;
-  PurchaseOrderDate = '';
-  DisplayPurchaseOrderDate = '';
+  showChildInwardDatePicker = false;
+  ChildInwardDate = '';
+  DisplayChildInwardDate = '';
 
   showInwardDatePicker = false;
   InwardDate = '';
   DisplayInwardDate = '';
+
   DisplayOrderDate: string = ''
   filesToUpload: FileTransferObject[] = [];
 
@@ -99,82 +109,20 @@ export class StockInwardDetailsMobileAppComponent implements OnInit {
     private utils: Utils,
     private datePipe: DatePipe,
     private baseUrl: BaseUrlService,
+    private payloadPacketFacade: PayloadPacketFacade,
+    private serverCommunicator: ServerCommunicatorService,
   ) { }
 
   ngOnInit = async () => {
-    await this.loadMaterialRequisitionDetailsIfCompanyExists();
+    // await this.loadStockInwardDetailsIfCompanyExists();
 
   }
   ionViewWillEnter = async () => {
-    await this.loadMaterialRequisitionDetailsIfCompanyExists();
+    await this.loadStockInwardDetailsIfCompanyExists();
   }
   ngOnDestroy() {
     // Cleanup if needed
   }
-
-  private async loadMaterialRequisitionDetailsIfCompanyExists() {
-    try {
-      await this.loadingService.show(); // Awaiting this is critical
-      this.companyRef = Number(this.appStateManage.localStorage.getItem('SelectedCompanyRef'));
-
-      if (this.companyRef > 0) {
-        this.appStateManage.setDropdownDisabled(true);
-        this.getSiteListByCompanyRef()
-        if (this.appStateManage.StorageKey.getItem('Editable') == 'Edit') {
-          this.IsNewEntity = false;
-          this.DetailsFormTitle = this.IsNewEntity ? 'New Stock Inward' : 'Edit Stock Inward';
-          this.Entity = StockInward.GetCurrentInstance();
-          this.PurchaseOrderDate = this.Entity.p.PurchaseOrderDate
-          this.InwardDate = this.Entity.p.PurchaseOrderDate
-          this.appStateManage.StorageKey.removeItem('Editable');
-          this.SessionAddedRefs = []; // ✅ Reset session-added materials
-          this.shouldFilterDropdown = false;
-          if (this.Entity.p.PurchaseOrderDate != '') {
-            this.DisplayOrderDate = this.Entity.p.PurchaseOrderDate
-            this.Entity.p.PurchaseOrderDate = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.PurchaseOrderDate)
-            this.PurchaseOrderDate = this.Entity.p.PurchaseOrderDate
-            this.DisplayPurchaseOrderDate = this.Entity.p.PurchaseOrderDate
-          }
-          if (this.Entity.p.InwardDate != '') {
-            this.Entity.p.InwardDate = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.InwardDate)
-            this.InwardDate = this.Entity.p.InwardDate
-            this.DisplayInwardDate = this.Entity.p.InwardDate
-          }
-          // this.getMaterialListByCompanyRef(this.Entity.p.SiteRef, this.Entity.p.VendorRef)
-          this.getVendorDataByVendorRef(this.Entity.p.VendorRef)
-        } else {
-          this.Entity = StockInward.CreateNewInstance();
-          StockInward.SetCurrentInstance(this.Entity);
-        }
-        this.InitialEntity = Object.assign(
-          StockInward.CreateNewInstance(),
-          this.utils.DeepCopy(this.Entity)
-        ) as StockInward;
-
-      } else {
-        await this.toastService.present('company not selected', 1000, 'danger');
-        await this.haptic.error();
-      }
-    } catch (error) {
-      console.error('Error loading Stock Inward details:', error);
-      await this.toastService.present('Failed to load Stock Inward details', 1000, 'danger');
-      await this.haptic.error();
-    } finally {
-      await this.loadingService.hide(); // Also ensure this is awaited
-    }
-  }
-
-  public async onPurchaseOrderDateChange(date: any): Promise<void> {
-    this.PurchaseOrderDate = this.datePipe.transform(date, 'yyyy-MM-dd') ?? '';
-    this.Entity.p.PurchaseOrderDate = this.PurchaseOrderDate;
-    this.DisplayPurchaseOrderDate = this.PurchaseOrderDate;
-  }
-  public async onInwardDateChange(date: any): Promise<void> {
-    this.InwardDate = this.datePipe.transform(date, 'yyyy-MM-dd') ?? '';
-    this.Entity.p.InwardDate = this.InwardDate;
-    this.DisplayInwardDate = this.InwardDate;
-  }
-
 
   @ViewChild('fileInput', { static: false }) fileInput!: ElementRef<HTMLInputElement>;
 
@@ -234,7 +182,7 @@ export class StockInwardDetailsMobileAppComponent implements OnInit {
         const preview = await this.readFileAsDataURL(compressedFile);
         this.selectedFiles.push({ file: compressedFile, type: 'image', preview });
 
-        this.filesToUpload.push(FileTransferObject.FromFile("MaterialInwardInvoicePath", compressedFile, compressedFile.name));
+        this.filesToUpload.push(FileTransferObject.FromFile("MaterialInwardInvoiceFile", compressedFile, compressedFile.name));
       } else if (fileType === 'application/pdf') {
         if (file.size / 1024 / 1024 > 2) {
           this.toastService.present('PDF size should not exceed 2 MB.', 1000, 'warning');
@@ -243,7 +191,7 @@ export class StockInwardDetailsMobileAppComponent implements OnInit {
         }
 
         this.selectedFiles.push({ file, type: 'pdf', preview: 'assets/icons/doc-placeholder.png' });
-        this.filesToUpload.push(FileTransferObject.FromFile("MaterialInwardInvoicePath", file, file.name));
+        this.filesToUpload.push(FileTransferObject.FromFile("MaterialInwardInvoiceFile", file, file.name));
       } else {
         this.toastService.present('Unsupported file type.', 1000, 'warning');
       }
@@ -330,111 +278,260 @@ export class StockInwardDetailsMobileAppComponent implements OnInit {
     window.open(fullPath, '_blank');
   }
 
+
+  private async loadStockInwardDetailsIfCompanyExists() {
+    try {
+      await this.loadingService.show(); // Awaiting this is critical
+      this.companyRef = Number(this.appStateManage.localStorage.getItem('SelectedCompanyRef'));
+
+      if (this.companyRef > 0) {
+           this.ImageBaseUrl = this.baseUrl.GenerateImageBaseUrl();
+        this.LoginToken = this.appStateManage.getLoginTokenForMobile();
+        this.appStateManage.setDropdownDisabled(true);
+        await this.getSiteListByCompanyRef();
+        await this.getVendorListByCompanyRef();
+
+        if (this.appStateManage.StorageKey.getItem('Editable') == 'Edit') {
+          this.IsNewEntity = false;
+          this.DetailsFormTitle = this.IsNewEntity ? 'New Stock Inward' : 'Edit Stock Inward';
+          this.Entity = StockInward.GetCurrentInstance();
+          this.imagePostView = `${this.ImageBaseUrl}${this.Entity.p.MaterialInwardInvoicePath}/${this.LoginToken}?${this.TimeStamp}`;
+          this.selectedFileName = this.Entity.p.MaterialInwardInvoicePath;
+          // this.InwardDate = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.InwardDate);
+
+          this.getOrderIdListByCompanySiteAndVendorRef();
+          this.appStateManage.StorageKey.removeItem('Editable');
+          console.log('this.Entity :', this.Entity);
+          if (this.Entity.p.InwardDate != '') {
+            this.InwardDate = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.InwardDate);
+            this.DisplayInwardDate = this.datePipe.transform(this.InwardDate, 'yyyy-MM-dd') ?? '';
+          }
+          this.selectedSite = [{
+            p: {
+              Ref: this.Entity.p.SiteRef,
+              Name: this.Entity.p.SiteName
+            }
+          }];
+          this.SiteName = this.selectedSite[0].p.Name;
+          this.selectedVendor = [{
+            p: {
+              Ref: this.Entity.p.VendorRef,
+              Name: this.Entity.p.VendorName
+            }
+          }];
+          this.VendorName = this.selectedVendor[0].p.Name;
+          this.selectedPurchaseID = [{
+            p: {
+              Ref: this.Entity.p.Ref,
+              Name: this.Entity.p.DisplayPurchaseOrderId
+            }
+          }];
+          this.PurchaseIDName = this.selectedPurchaseID[0].p.Name;
+        } else {
+          this.Entity = StockInward.CreateNewInstance();
+          StockInward.SetCurrentInstance(this.Entity);
+          this.strCDT = await CurrentDateTimeRequest.GetCurrentDateTime();
+          console.log('this.Entity :', this.Entity);
+          let parts = this.strCDT.substring(0, 16).split('-');
+          // Construct the new date format
+          this.InwardDate = `${parts[0]}-${parts[1]}-${parts[2]}`;
+          await this.ChalanNo()
+        }
+      } else {
+        await this.toastService.present('company not selected', 1000, 'danger');
+        await this.haptic.error();
+      }
+    } catch (error) {
+      console.error('Error loading Stock Inward details:', error);
+      await this.toastService.present('Failed to load Stock Inward details', 1000, 'danger');
+      await this.haptic.error();
+    } finally {
+      await this.loadingService.hide(); // Also ensure this is awaited
+    }
+  }
+
+  public async onInwardDateChange(date: any): Promise<void> {
+    this.InwardDate = this.datePipe.transform(date, 'yyyy-MM-dd') ?? '';
+    this.Entity.p.InwardDate = this.InwardDate;
+    this.DisplayInwardDate = this.InwardDate;
+  }
+  public async onChildInwardDateChange(date: any): Promise<void> {
+    this.ChildInwardDate = this.datePipe.transform(date, 'yyyy-MM-dd') ?? '';
+    this.newInward.Date = this.ChildInwardDate;
+    this.DisplayChildInwardDate = this.ChildInwardDate;
+  }
+
+  ChalanNo = async () => {
+    let req = new PurchaseOrderChalanFetchRequest();
+    let td = req.FormulateTransportData();
+    let pkt = this.payloadPacketFacade.CreateNewPayloadPacket2(td);
+    let tr = await this.serverCommunicator.sendHttpRequest(pkt);
+
+    if (!tr.Successful) {
+      await this.toastService.present('Error ' + tr.Message, 1000, 'danger');
+      return;
+    }
+
+    let tdResult = JSON.parse(tr.Tag) as TransportData;
+    let collections = tdResult?.MainData?.Collections;
+
+    if (Array.isArray(collections)) {
+      for (const item of collections) {
+        if (
+          item.Name === 'MaterialInward' &&
+          Array.isArray(item.Entries) &&
+          item.Entries.length > 0
+        ) {
+          const entry = item.Entries[0] as { NextChalanNo: number };
+          const nextChalanNo = entry.NextChalanNo;
+          this.Entity.p.ChalanNo = nextChalanNo
+          return;
+        }
+      }
+    }
+    await this.toastService.present('Error' + ' Chalan number could not be retrieved.', 1000, 'danger');
+    await this.haptic.error();
+  };
+
   getSiteListByCompanyRef = async () => {
     if (this.companyRef <= 0) {
-      // await this.uiUtils.showErrorToster('Company not Selected');
-      await this.toastService.present('Company not Selected', 1000, 'warning');
-      await this.haptic.warning();
+      await this.toastService.present('company not selected', 1000, 'danger');
+      await this.haptic.error();
       return;
     }
     let lst = await Site.FetchEntireListByCompanyRef(this.companyRef, async errMsg => {
       // await this.uiUtils.showErrorMessage('Error', errMsg)
-      await this.toastService.present('Error ' + errMsg, 1000, 'danger');
+      await this.toastService.present(errMsg, 1000, 'danger');
       await this.haptic.error();
     });
     this.SiteList = lst;
   }
 
-  // getMaterialListByCompanyRef = async (SiteRef: number, VendorRef: number) => {
-  //   if (this.companyRef <= 0) {
-  //     await this.toastService.present('Company not Selected', 1000, 'warning');
-  //     await this.haptic.warning();
-  //     return;
-  //   }
-  //   const lst = await MaterialFromOrder.FetchOrderedMaterials(SiteRef, VendorRef, this.companyRef, this.Entity.p.MaterialPurchaseOrderRef, this.Entity.p.MaterialInwardRef, async errMsg => {
-  //     await this.toastService.present('Error ' + errMsg, 1000, 'danger');
-  //     await this.haptic.error();
-  //   });
-  //   console.log('lst :', lst);
-  //   this.MaterialListOriginal = lst?.filter(item => item.p.IsMaterialExist == 1);
-  //   this.MaterialListOriginal?.forEach((item, index) => {
-  //     item.p.InternalRef = index + 1;
-  //   });
-  //   const allMatched = lst.every(item => item.p.RemainingQty == 0);
-  //   this.isSaveDisabled = allMatched;
-  //   if (!this.shouldFilterDropdown) {
-  //     this.MaterialList = [...this.MaterialListOriginal];
-  //   } else {
-  //     this.filterMaterialList();
-  //   }
-  // };
+  getVendorListByCompanyRef = async () => {
+    if (this.companyRef <= 0) {
+      await this.toastService.present('company not selected', 1000, 'danger');
+      await this.haptic.error();
+      return;
+    }
+    let lst = await Vendor.FetchEntireListByCompanyRef(this.companyRef, async errMsg => {
+      // await this.uiUtils.showErrorMessage('Error', errMsg)
+      await this.toastService.present(errMsg, 1000, 'danger');
+      await this.haptic.error();
+    });
+    this.VendorList = lst;
+  }
+
+  onVendorSelection = (VendorRef: number) => {
+    const SingleRecord = this.VendorList.filter(data => data.p.Ref == VendorRef);
+    this.Entity.p.VendorTradeName = SingleRecord[0].p.TradeName;
+    this.Entity.p.VendorPhoneNo = SingleRecord[0].p.MobileNo;
+  }
+
+  getOrderIdListByCompanySiteAndVendorRef = async () => {
+    if (this.companyRef <= 0) {
+      // await this.toastService.present('company not selected', 1000, 'danger');
+      // await this.haptic.error();
+      return;
+    }
+    if (this.Entity.p.SiteRef <= 0) {
+      // await this.toastService.present('Site not selected', 1000, 'danger');
+      // await this.haptic.error();
+      return;
+    }
+    if (this.Entity.p.VendorRef <= 0) {
+      // await this.toastService.present('Vendor not selected', 1000, 'danger');
+      // await this.haptic.error();
+      return;
+    }
+    let lst = await Order.FetchEntireListByCompanySiteAndVendorRef(this.companyRef, this.Entity.p.SiteRef, this.Entity.p.VendorRef,
+      async (errMsg) => {
+        // await this.uiUtils.showErrorMessage('Error', errMsg)
+        await this.toastService.present(errMsg, 1000, 'danger');
+        await this.haptic.error();
+      }
+    );
+
+    this.PurchaseOrderIdList = lst;
+    console.log('lst :', lst);
+
+  };
+
+  // Extracted from services date conversion //
+  formatDate = (date: string | Date): string => {
+    return this.DateconversionService.formatDate(date);
+  }
+
+  getMaterialListByCompanySiteVendorRefAndPurchaseOrderID = async () => {
+    if (this.Entity.p.MaterialPurchaseOrderRef <= 0) {
+      await this.toastService.present('Purchase Id not Selected', 1000, 'danger');
+      await this.haptic.error();
+      return;
+    }
+    const lst = await MaterialFromOrder.FetchOrderedMaterials(this.Entity.p.MaterialPurchaseOrderRef, async errMsg => {
+      // await this.uiUtils.showErrorMessage('Error', errMsg)
+      await this.toastService.present(errMsg, 1000, 'danger');
+      await this.haptic.error();
+    });
+    this.MaterialListOriginal = lst?.filter(item => item.p.IsMaterialExist == 1);
+    this.MaterialListOriginal?.forEach((item, index) => {
+      item.p.InternalRef = index + 1;
+    });
+    const allMatched = lst.every(item => item.p.RemainingQty == 0);
+    this.isSaveDisabled = allMatched;
+    if (!this.shouldFilterDropdown) {
+      this.MaterialList = [...this.MaterialListOriginal];
+    } else {
+      this.filterMaterialList();
+    }
+  };
 
   filterMaterialList() {
     this.MaterialList = this.MaterialListOriginal.filter(item =>
-      !this.SessionAddedRefs.includes(item.p.MaterialRef)
+      !this.SessionAddedRefs.includes(item.p.InternalRef)
     );
   }
 
-  getUnitByMaterialRef = async (materialref: number) => {
-    this.newInward.UnitRef = 0;
-    this.newInward.UnitName = '';
-    this.newInward.MaterialName = ''
-    this.newInward.PurchaseOrderQty = 0
-    this.newInward.PurchaseOrderRemainingQty = 0
-    this.newInward.MaterialStockOrderDetailsRef = 0
-    if (materialref <= 0) {
-      // await this.uiUtils.showErrorToster('Material not Selected');
-      await this.toastService.present('Material not Selected', 1000, 'warning');
-      await this.haptic.warning();
-      return;
-    }
-    // let lst = await MaterialFromOrder.FetchInstance(materialref, this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-    const UnitData = this.MaterialList.find((data) => data.p.MaterialRef == materialref)
+  OnMaterialSelection = async (internalRef: number) => {
+    let Date = this.newInward.Date;
+    this.newInward = InwardMaterialDetailProps.Blank();
+    this.NewRemainingQty = 0;
+
+    const UnitData = this.MaterialList.find((data) => data.p.InternalRef === internalRef);
+    this.newInward.Date = Date;
+
     if (UnitData) {
       this.newInward.UnitRef = UnitData.p.UnitRef;
       this.newInward.UnitName = UnitData.p.UnitName;
-      this.newInward.MaterialRef = UnitData.p.MaterialRef
-      this.newInward.MaterialName = UnitData.p.MaterialName
-      this.newInward.PurchaseOrderQty = UnitData.p.OrderQty
-      this.newInward.MaterialStockOrderDetailsRef = UnitData.p.Ref
-      this.newInward.PurchaseOrderRemainingQty = UnitData.p.RemainingQty
-      this.NewRemainingQty = UnitData.p.RemainingQty
-      // if (UnitData.p.TotalInwardQty == 0) {
-      //   this.newInward.RemainingQty = this.newInward.OrderedQty - this.newInward.InwardQty
-      //   this.NewRemainingQty = this.newInward.OrderedQty
-      // } else {
-      //   this.newInward.RemainingQty = Number(UnitData.p.OrderedQty) - Number(UnitData.p.TotalInwardQty)
-      //   this.NewRemainingQty = Number(UnitData.p.OrderedQty) - Number(UnitData.p.TotalInwardQty)
-      // }
-    }
-  }
+      this.newInward.MaterialRef = UnitData.p.MaterialRef;
+      this.newInward.MaterialName = UnitData.p.MaterialName;
+      this.newInward.PurchaseOrderQty = UnitData.p.OrderQty;
+      this.newInward.PurchaseOrderRemainingQty = UnitData.p.RemainingQty;
+      this.newInward.MaterialStockOrderDetailsRef = UnitData.p.Ref;
 
-  getVendorDataByVendorRef = async (vendorref: number) => {
-    this.Entity.p.VendorTradeName = '';
-    this.Entity.p.VendorPhoneNo = '';
-    if (vendorref <= 0 || vendorref <= 0) {
-      // await this.uiUtils.showErrorToster('Material not Selected');
-      await this.toastService.present('Material not Selected', 1000, 'warning');
-      await this.haptic.warning();
-      return;
+      this.newInward.InternalRef = UnitData.p.InternalRef;
+      this.NewRemainingQty = UnitData.p.RemainingQty;
+    } else {
+      // await this.uiUtils.showErrorToster('Material not found');
+      await this.toastService.present('Material not found', 1000, 'danger');
+      await this.haptic.error()
     }
-    let lst = await Vendor.FetchInstance(vendorref, this.companyRef, async errMsg => {
-      // await this.uiUtils.showErrorMessage('Error', errMsg)
-      await this.toastService.present('Error ' + errMsg, 1000, 'danger');
-      await this.haptic.error();
-    }
-    );
-    this.Entity.p.VendorTradeName = lst.p.TradeName;
-    this.Entity.p.VendorPhoneNo = lst.p.MobileNo;
-  }
+  };
 
   CalculateRemainingQty = (InwardQty: number, RemainingQty: number) => {
     InwardQty = Number(InwardQty) || 0;
-    this.NewRemainingQty = RemainingQty - InwardQty;
+    if (RemainingQty - InwardQty > 0) {
+      this.NewRemainingQty = RemainingQty - InwardQty;
+    } else {
+      this.NewRemainingQty = 0;
+    }
   }
-
-  openModal(type: number) {
+  openModal = async (type: number) => {
     if (type === 100) this.ismaterialModalOpen = true;
+    this.strCDT = await CurrentDateTimeRequest.GetCurrentDateTime();
+    let parts = this.strCDT.substring(0, 16).split('-');
+
+    // Construct the new date format
+    this.newInward.Date = `${parts[0]}-${parts[1]}-${parts[2]}`;
     this.ModalEditable = false;
   }
 
@@ -448,12 +545,23 @@ export class StockInwardDetailsMobileAppComponent implements OnInit {
         } else if (typeof value === 'number') {
           return !isNaN(value) && value !== 0;
         } else {
-          return value != null; // for cases like object refs or non-primitive types
+          return value != null;
         }
       });
       if (hasData) {
-        await this.alertService.presentDynamicAlert({
-          header: 'Close',
+        // await this.uiUtils.showConfirmationMessage(
+        //   'Close',
+        //   `This process is <strong>IRREVERSIBLE!</strong><br/>
+        //    Are you sure you want to close this modal?`,
+        //   async () => {
+        //     this.ismaterialModalOpen = false;
+        //     this.ModalEditable = false;
+        //     this.newInward = InwardMaterialDetailProps.Blank();
+        //     this.NewRemainingQty = 0
+        //   }
+        // );
+        this.alertService.presentDynamicAlert({
+          header: 'Warning',
           subHeader: 'Confirmation needed',
           message: 'Are you sure you want to close this modal?',
           buttons: [
@@ -473,8 +581,6 @@ export class StockInwardDetailsMobileAppComponent implements OnInit {
                 this.ModalEditable = false;
                 this.newInward = InwardMaterialDetailProps.Blank();
                 this.NewRemainingQty = 0
-                this.haptic.success();
-                console.log('User confirmed.');
               }
             }
           ]
@@ -490,49 +596,58 @@ export class StockInwardDetailsMobileAppComponent implements OnInit {
 
   async addMaterial() {
     if (
-      this.newInward.MaterialRef <= 0 ||
-      this.newInward.InwardQty < 0
+      this.newInward.InternalRef <= 0 ||
+      this.newInward.InwardQty <= 0
     ) {
-      // await this.uiUtils.showErrorMessage('Error', 'Inward Quantity cannot be less than 0');
-      await this.toastService.present('Inward Quantity cannot be less than 0', 1000, 'warning');
-      await this.haptic.warning();
+      // await this.uiUtils.showErrorMessage('Error', 'Inward Quantity must be greater than 0 and material must be selected');
+      await this.toastService.present('Error ' + 'Inward Quantity must be greater than 0 and material must be selected', 1000, 'danger');
+      await this.haptic.error();
       return;
     }
 
-    if (this.newInward.InwardQty > this.newInward.PurchaseOrderRemainingQty) {
-      // await this.uiUtils.showErrorMessage('Error', 'Inward Quantity cannot be more than Remaining Quantity');
-      await this.toastService.present('Inward Quantity cannot be more than Remaining Quantity', 1000, 'warning');
-      await this.haptic.warning();
-      return;
-    }
+    // if (this.newInward.InwardQty > this.newInward.PurchaseOrderRemainingQty) {
+    //   await this.uiUtils.showErrorMessage('Error', 'Inward Quantity cannot be more than Remaining Quantity');
+    //   return;
+    // }
 
-    const newRef = this.newInward.MaterialRef;
+    const newInternalRef = this.newInward.InternalRef;
 
     if (typeof this.editingIndex === 'number' && this.editingIndex >= 0) {
+      this.newInward.Date = this.dtu.ConvertStringDateToFullFormat(this.newInward.Date);
       this.Entity.p.MaterialInwardDetailsArray[this.editingIndex] = { ...this.newInward };
-      // await this.uiUtils.showSuccessToster('Material details updated successfully');
+      // this.selectedMaterial = [{
+      //   p: {
+      //     Ref: this.Entity.p.MaterialInwardDetailsArray[this.editingIndex].MaterialRef,
+      //     Name: this.Entity.p.MaterialInwardDetailsArray[this.editingIndex].MaterialName
+      //   }
+      // }];
+      // this.MaterialName = this.selectedMaterial[0].p.Name;
+      this.ismaterialModalOpen = false;
       await this.toastService.present('Material details updated successfully', 1000, 'success');
       await this.haptic.success();
-      this.ismaterialModalOpen = false;
     } else {
-      // this.newInward.MaterialInwardRef = this.Entity.p.MaterialInwardRef;
+      this.newInward.Date = this.dtu.ConvertStringDateToFullFormat(this.newInward.Date);
+      this.newInward.MaterialInwardRef = this.Entity.p.Ref;
       this.newInward.PurchaseOrderRemainingQty = this.NewRemainingQty;
       this.Entity.p.MaterialInwardDetailsArray.push({ ...this.newInward });
 
-      // ✅ Track fresh additions only
-      if (!this.SessionAddedRefs.includes(newRef)) {
-        this.SessionAddedRefs.push(newRef);
+
+      // ✅ Track InternalRef instead of MaterialRef
+      if (!this.SessionAddedRefs.includes(newInternalRef)) {
+        this.SessionAddedRefs.push(newInternalRef);
       }
 
       this.shouldFilterDropdown = true;
       this.filterMaterialList();
-      // await this.uiUtils.showSuccessToster('Material added successfully');
+      this.MaterialName = '';
+      this.selectedMaterial = [];
+      this.ismaterialModalOpen = false;
       await this.toastService.present('Material added successfully', 1000, 'success');
       await this.haptic.success();
-      this.ismaterialModalOpen = false;
     }
 
     this.newInward = InwardMaterialDetailProps.Blank();
+    this.newInward.Date = this.InwardDate;
     this.NewRemainingQty = 0;
     this.editingIndex = null;
   }
@@ -547,15 +662,16 @@ export class StockInwardDetailsMobileAppComponent implements OnInit {
 
   async removeMaterial(index: number) {
     const removedItem = this.Entity.p.MaterialInwardDetailsArray[index];
-    const removedRef = removedItem.MaterialRef;
-    const Ref = removedItem.Ref
-    if (Ref !== 0) {
-      // this.uiUtils.showWarningToster('This record can not be Delete');
-      await this.toastService.present('This record can not be Delete', 1000, 'warning');
+    const removedInternalRef = removedItem.InternalRef;
+    const dbRef = removedItem.Ref;
+
+    if (dbRef !== 0) {
+      // this.uiUtils.showWarningToster('This record cannot be deleted');
+      await this.toastService.present('This record cannot be deleted', 1000, 'warning');
       await this.haptic.warning();
-      return
+      return;
     }
-    await this.alertService.presentDynamicAlert({
+    this.alertService.presentDynamicAlert({
       header: 'Delete',
       subHeader: 'Confirmation needed',
       message: 'Are you sure you want to DELETE this material?',
@@ -569,42 +685,42 @@ export class StockInwardDetailsMobileAppComponent implements OnInit {
           }
         },
         {
-          text: 'Yes, Delete',
+          text: 'Yes, Close',
           cssClass: 'custom-confirm',
           handler: () => {
             this.Entity.p.MaterialInwardDetailsArray.splice(index, 1);
-            this.SessionAddedRefs = this.SessionAddedRefs.filter(ref => ref !== removedRef);
+            this.SessionAddedRefs = this.SessionAddedRefs.filter(ref => ref !== removedInternalRef);
             this.filterMaterialList();
-            this.haptic.success();
-            console.log('User confirmed.');
           }
         }
       ]
     });
   }
 
-
   SaveStockInward = async () => {
+
     let lstFTO: FileTransferObject[] = [];
     this.Entity.p.CompanyRef = this.companyRef;
-    this.Entity.p.UpdatedBy = Number(this.appStateManage.localStorage.getItem('LoginEmployeeRef'));
-    this.Entity.p.CreatedBy = Number(this.appStateManage.localStorage.getItem('LoginEmployeeRef'));
-    this.Entity.p.PurchaseOrderDate = this.PurchaseOrderDate
-    this.Entity.p.InwardDate = this.dtu.ConvertStringDateToFullFormat(this.Entity.p.InwardDate)
+    this.Entity.p.UpdatedBy = Number(this.appStateManage.localStorage.getItem('LoginEmployeeRef'))
+    this.Entity.p.CreatedBy = Number(this.appStateManage.localStorage.getItem('LoginEmployeeRef'))
+    this.Entity.p.InwardDate = this.dtu.ConvertStringDateToFullFormat(this.InwardDate);
+
     let entityToSave = this.Entity.GetEditableVersion();
+
     let entitiesToSave = [entityToSave];
-    // return
+    console.log('entitiesToSave :', entitiesToSave);
+
     // if (this.InvoiceFile) {
     //   lstFTO.push(
     //     FileTransferObject.FromFile(
-    //       "MaterialInwardInvoicePath",
+    //       "MaterialInwardInvoiceFile",
     //       this.InvoiceFile,
     //       this.InvoiceFile.name
     //     )
     //   );
     // }
     let tr = await this.utils.SavePersistableEntities(entitiesToSave, this.filesToUpload);
-    console.log('entitiesToSave, this.filesToUpload :', entitiesToSave, this.filesToUpload);
+
     if (!tr.Successful) {
       this.isSaveDisabled = false;
       // this.uiUtils.showErrorMessage('Error', tr.Message)
@@ -615,18 +731,21 @@ export class StockInwardDetailsMobileAppComponent implements OnInit {
       this.isSaveDisabled = false;
       if (this.IsNewEntity) {
         // await this.uiUtils.showSuccessToster('Stock Inward saved successfully');
-        await this.toastService.present('Stock Inward saved Successfully', 1000, 'success');
+        await this.toastService.present('Stock Inward saved successfully', 1000, 'success');
         await this.haptic.success();
+
         this.Entity = StockInward.CreateNewInstance();
         this.SessionAddedRefs = [];
         this.filterMaterialList();
       } else {
         // await this.uiUtils.showSuccessToster('Stock Inward Updated successfully');
         await this.toastService.present('Stock Inward Updated successfully', 1000, 'success');
-        await this.router.navigate(['/mobile-app/tabs/dashboard/stock-management/stock-inward']);
-        await this.haptic.success();
+        this.haptic.success();
       }
     }
+    // await this.router.navigate(['/homepage/Website/Stock_Inward']);
+    this.router.navigate(['/mobile-app/tabs/dashboard/stock-management/stock-inward'], { replaceUrl: true });
+    this.haptic.success();
   };
 
 
@@ -637,17 +756,10 @@ export class StockInwardDetailsMobileAppComponent implements OnInit {
 
   BackStockInward = async () => {
     if (!this.utils.AreEqual(this.InitialEntity, this.Entity)) {
-      // await this.uiUtils.showConfirmationMessage('Cancel',
-      //   `This process is IRREVERSIBLE!
-      //   <br/>
-      //   Are you sure that you want to Cancel this Stock Inward Form?`,
-      //   async () => {
-      //     await this.router.navigate(['/mobileapp/tabs/dashboard/stock-management/stock-inward']);
-      //   });
-      await this.alertService.presentDynamicAlert({
-        header: 'Delete',
+      this.alertService.presentDynamicAlert({
+        header: 'Warning',
         subHeader: 'Confirmation needed',
-        message: ' Are you sure that you want to Cancel this Stock Inward Form ?',
+        message: 'You have unsaved data. Are you sure you want to go back? All data will be lost.',
         buttons: [
           {
             text: 'Cancel',
@@ -658,10 +770,10 @@ export class StockInwardDetailsMobileAppComponent implements OnInit {
             }
           },
           {
-            text: 'Yes, Delete',
+            text: 'Yes, Close',
             cssClass: 'custom-confirm',
             handler: () => {
-              this.router.navigate(['/mobile-app/tabs/dashboard/stock-management/stock-inward']);
+              this.router.navigate(['/mobile-app/tabs/dashboard/stock-management/stock-inward'], { replaceUrl: true });
               this.haptic.success();
               console.log('User confirmed.');
             }
@@ -669,25 +781,9 @@ export class StockInwardDetailsMobileAppComponent implements OnInit {
         ]
       });
     } else {
-      await this.router.navigate(['/mobile-app/tabs/dashboard/stock-management/stock-inward']);
+      await this.router.navigate(['/mobile-app/tabs/dashboard/stock-management/stock-inward'], { replaceUrl: true });
     }
   }
-
-  // public async selectGSTBottomsheet(): Promise<void> {
-  //   try {
-  //     const options = this.GSTList.map((item) => ({ p: item }));
-  //     console.log('gst options :', options);
-  //     // const options = this.GSTList;
-  //     this.openSelectModal(options, this.selectedGST, false, 'Select GST', 1, (selected) => {
-  //       this.selectedGST = selected;
-  //       this.newOrderMaterial.Gst = selected[0].p.Ref;
-  //       this.gstName = selected[0].p.Name;
-  //       this.CalculateNetAmountAndTotalAmount()
-  //     });
-  //   } catch (error) {
-
-  //   }
-  // }
 
   public async selectMaterialBottomsheet(): Promise<void> {
     try {
@@ -696,7 +792,7 @@ export class StockInwardDetailsMobileAppComponent implements OnInit {
         ...item,
         p: {
           ...item.p,
-          Name: item.p.MaterialName + "-QTY-" + item.p.OrderQty, // Add 'Name'
+          Name: item.p.MaterialName + "-QTY:" + item.p.OrderQty, // Add 'Name'
           Ref: item.p.InternalRef   // Add 'Ref'
         }
       }));
@@ -709,8 +805,9 @@ export class StockInwardDetailsMobileAppComponent implements OnInit {
         // Use standardized keys now
         this.MaterialName = selected[0].p.Name;
         this.newInward.MaterialName = selected[0].p.Name;
-        this.newInward.MaterialRef = selected[0].p.MaterialRef;
-        this.getUnitByMaterialRef(this.newInward.MaterialRef);
+        this.newInward.InternalRef = selected[0].p.Ref;
+        // this.getUnitByMaterialRef(this.newInward.MaterialRef);
+        this.OnMaterialSelection(this.newInward.InternalRef)
       });
     } catch (error) {
       console.error('Error in selectMaterialBottomsheet:', error);
@@ -737,7 +834,7 @@ export class StockInwardDetailsMobileAppComponent implements OnInit {
             this.selectedPurchaseID = selected;
             this.Entity.p.MaterialPurchaseOrderRef = selected[0].p.Ref;
             this.PurchaseIDName = selected[0].p.Name;
-            // this.getMaterialListByCompanySiteVendorRefAndPurchaseOrderID()
+            this.getMaterialListByCompanySiteVendorRefAndPurchaseOrderID();
           }
         }
       );
@@ -754,6 +851,8 @@ export class StockInwardDetailsMobileAppComponent implements OnInit {
         this.selectedVendor = selected;
         this.Entity.p.VendorRef = selected[0].p.Ref;
         this.VendorName = selected[0].p.Name;
+        this.getOrderIdListByCompanySiteAndVendorRef();
+        this.onVendorSelection(this.Entity.p.VendorRef);
       });
     } catch (error) {
 
@@ -766,6 +865,7 @@ export class StockInwardDetailsMobileAppComponent implements OnInit {
         this.selectedSite = selected;
         this.Entity.p.SiteRef = selected[0].p.Ref;
         this.SiteName = selected[0].p.Name;
+        this.getOrderIdListByCompanySiteAndVendorRef();
       });
     } catch (error) {
 
