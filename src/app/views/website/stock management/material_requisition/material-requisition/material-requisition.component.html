@@ -125,44 +125,32 @@
               <td class="tbldata">{{ detail.UnitName }}</td>
               <td class="tbldata">{{ detail.RequisitionQty }}</td>
               <!-- Optional: Requisition status -->
-              <td class="tbldata">
-                <!-- PENDING -->
+              <!-- <td class="tbldata">
                 <span class="status" style="cursor: pointer;"
                   *ngIf="detail.MaterialStatus == MaterialRequisitionStatuses.Pending" ngClass="pending">
                   Pending
                 </span>
-
-                <!-- APPROVED -->
                 <span class="status" *ngIf="detail.MaterialStatus == MaterialRequisitionStatuses.Approved"
                   ngClass="approved">
                   Approved
                 </span>
-
-                <!-- REJECTED -->
                 <span class="status" *ngIf="detail.MaterialStatus == MaterialRequisitionStatuses.Rejected"
                   ngClass="rejected">
                   Rejected
                 </span>
-
-                <!-- Completed -->
                 <span class="status" *ngIf="detail.MaterialStatus == MaterialRequisitionStatuses.Completed"
                   ngClass="completed">
                   Completed
                 </span>
-
-                <!-- Incomplete -->
                 <span class="status" *ngIf="detail.MaterialStatus == MaterialRequisitionStatuses.Incomplete"
                   ngClass="incomplete">
                   Incomplete
                 </span>
-
-                <!-- Ordered -->
                 <span class="status" *ngIf="detail.MaterialStatus == MaterialRequisitionStatuses.Ordered"
                   ngClass="ordered">
                   Ordered
                 </span>
-
-              </td>
+              </td> -->
               <!-- Actions -->
               <td class="tbldata">
                 <span style="margin-left: 9px;" (click)="onEditClicked(requisition)">

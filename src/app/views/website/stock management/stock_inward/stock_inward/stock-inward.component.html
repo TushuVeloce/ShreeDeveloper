@@ -61,6 +61,9 @@
                 [attr.rowspan]="Inward.p.MaterialInwardDetailsArray.length">
                 {{ Inward.p.ChalanNo }}
               </td>
+                <td class="tbldata" *ngIf="j === 0" [attr.rowspan]="Inward.p.MaterialInwardDetailsArray.length">
+                {{ Inward.p.DisplayPurchaseOrderId }}
+              </td>
               <td class="tbldata" *ngIf="j === 0 && !Entity.p.SiteRef"
                 [attr.rowspan]="Inward.p.MaterialInwardDetailsArray.length">
                 {{ Inward.p.SiteName }}
@@ -121,9 +124,9 @@
                 <span style="margin-left: 5px;" (click)="onEditClicked(Inward)">
                   <img src="/assets/icons/edit.png" alt="Edit" title="Edit" width="20px" height="20px" />
                 </span>
-                <span style="margin-left: 5px;" (click)="onDeleteClicked(Inward)">
+                <!-- <span style="margin-left: 5px;" (click)="onDeleteClicked(Inward)">
                   <img src="/assets/icons/delete.png" alt="Delete" title="Delete" width="20px" height="20px" />
-                </span>
+                </span> -->
                 <!-- <span style="margin-left: 5px;"
                   *ngIf="!checkIsEnable(Inward.p.MaterialInwardDetailsArray) || Inward.p.MaterialInwardStatus == MaterialInwardStatus.Approved"
                   (click)="onEditClicked(Order)">
