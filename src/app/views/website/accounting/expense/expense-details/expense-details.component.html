@@ -66,7 +66,7 @@
           <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
             nzPlaceHolder="Select" id="IncomeLedgerRef" name="IncomeLedgerRef" [nzSize]="'large'"
             [(ngModel)]="Entity.p.IncomeLedgerRef"
-            (ngModelChange)="getSubIncomeLedgerListByIncomeLedgerRef(Entity.p.IncomeLedgerRef); onChangeIncomeLedger()">
+            (ngModelChange)="getSubIncomeLedgerListByIncomeLedgerRef(Entity.p.IncomeLedgerRef); onChangeIncomeLedger(); Entity.p.IncomeSubLedgerRef = 0;">
             <nz-option *ngFor="let ledger of LedgerList" [nzValue]="ledger.p.Ref" [nzLabel]="ledger.p.Name"></nz-option>
           </nz-select>
         </div>
@@ -78,25 +78,14 @@
             <nz-option *ngFor="let sub of IncomeSubLedgerList" [nzValue]="sub.p.Ref" [nzLabel]="sub.p.Name"></nz-option>
           </nz-select>
         </div>
-        <!-- <div class="col-md-4" style="margin-top: 1rem;" *ngIf="this.Entity.p.RecipientType == Employee">
-          <div style="margin-top: 1rem">
-            <div class="d-flex align-items-center mb-2">
-              <label for="IsAdvancePayment"><b>Is Advance Payment</b></label>
-              <input type="checkbox" id="IsAdvancePayment" [(ngModel)]="Entity.p.IsAdvancePayment"
-                name="IsAdvancePayment" class="form-check-input me-4 mb-2 large-dark-checkbox"
-                style="width: 20px; height: 20px; margin-left: 1rem" (ngModelChange)="IsAdvancePayment()"/>
-            </div>
-          </div>
-        </div> -->
         <div class="col-md-4" style="margin-top: 1rem; " *ngIf="this.Entity.p.RecipientType == Employee ">
           <label>Payment Type</label>
           <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
             nzPlaceHolder="Select" id="PaymentType" name="PaymentType" [nzSize]="'large'" [(ngModel)]="PaymentType"
             (ngModelChange)="onPaymentTypeSelection(); getTotalInvoiceAmountFromSiteAndRecipientRef();
-            onRecipientChange();">
+            onRecipientChange(); Entity.p.RecipientRef = 0;">
             <nz-option *ngFor="let type of TypeofEmployeePaymentList" [nzValue]="type.Ref"
               [nzLabel]="type.Name"></nz-option>
-
           </nz-select>
         </div>
         <div class="col-md-4" style="margin-top: 1rem">

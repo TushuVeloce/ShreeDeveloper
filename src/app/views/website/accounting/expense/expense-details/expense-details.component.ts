@@ -208,12 +208,22 @@ export class ExpenseDetailsComponent implements OnInit {
 
   onTypeChange = async () => {
     this.Entity.p.IncomeLedgerRef = 0;
+    this.Entity.p.IncomeSubLedgerRef = 0;
+    this.PaymentType = 0;
     this.Entity.p.RecipientRef = 0;
+    this.Entity.p.Reason = '';
     this.Entity.p.IsAdvancePayment = 0;
-    this.RecipientNameInput = false
+    this.Entity.p.IsSalaryExpense = false;
+    this.Entity.p.TotalAdvance = 0;
+    this.Entity.p.RemainingAdvance = 0;
+    this.Entity.p.InvoiceAmount = 0;
+    this.Entity.p.RemainingAmount = 0;
     this.Entity.p.GivenAmount = 0
-    this.PaymentType = 0
-    await this.CalculateRemainingAmountandBalance()
+    this.Entity.p.BankAccountRef = 0
+    this.Entity.p.Narration = '';
+    this.Entity.p.ExpenseModeOfPayment = 0;
+    this.Entity.p.IsAutoInvoiceEnabled = 0;
+    this.RecipientNameInput = false
   }
 
   onChangeIncomeLedger = () => {
@@ -269,6 +279,20 @@ export class ExpenseDetailsComponent implements OnInit {
   }
 
   onRecipientChange = () => {
+    this.PaymentType = 0;
+    this.Entity.p.Reason = '';
+    this.Entity.p.IsAdvancePayment = 0;
+    this.Entity.p.IsSalaryExpense = false;
+    this.Entity.p.TotalAdvance = 0;
+    this.Entity.p.RemainingAdvance = 0;
+    this.Entity.p.InvoiceAmount = 0;
+    this.Entity.p.RemainingAmount = 0;
+    this.Entity.p.GivenAmount = 0
+    this.Entity.p.BankAccountRef = 0
+    this.Entity.p.Narration = '';
+    this.Entity.p.ExpenseModeOfPayment = 0;
+    this.Entity.p.IsAutoInvoiceEnabled = 0;
+    this.RecipientNameInput = false
     try {
       let SingleRecord = this.RecipientList.find((data) => data.p.Ref == this.Entity.p.RecipientRef);;
       if (SingleRecord?.p) {
@@ -389,17 +413,7 @@ export class ExpenseDetailsComponent implements OnInit {
   }
 
   BackExpense = async () => {
-    if (!this.utils.AreEqual(this.InitialEntity, this.Entity)) {
-      await this.uiUtils.showConfirmationMessage('Cancel',
-        `This process is IRREVERSIBLE!
-      <br/>
-      Are you sure that you want to Cancel this Expense Form?`,
-        async () => {
-          await this.router.navigate(['/homepage/Website/Expense']);
-        });
-    } else {
-      await this.router.navigate(['/homepage/Website/Expense']);
-    }
+    await this.router.navigate(['/homepage/Website/Expense']);
   }
 }
 

@@ -338,10 +338,42 @@ export class ExpensesDetailsMobileAppComponent implements OnInit {
     this.RecipientList = lst;
   }
 
-  onTypeChange = () => {
+  // onTypeChange = () => {
+  //   this.Entity.p.IncomeLedgerRef = 0;
+  //   this.Entity.p.RecipientRef = 0;
+  //   this.Entity.p.IsAdvancePayment = 0
+  // }
+
+    onTypeChange = async () => {
     this.Entity.p.IncomeLedgerRef = 0;
+    this.IncomeLedgerName='';
+    this.selectedIncomeLedger=[];
+    this.Entity.p.IncomeSubLedgerRef = 0;
+    this.IncomeSubLedgerName='';
+    this.selectedIncomeSubLedger=[];
+    this.PaymentType = 0;
+    this.PaymentTypeName='';
+    this.selectedPaymentType=[];
     this.Entity.p.RecipientRef = 0;
-    this.Entity.p.IsAdvancePayment = 0
+    this.RecipientName='';
+    this.selectedRecipientName=[];
+    this.Entity.p.Reason = '';
+    this.Entity.p.IsAdvancePayment = 0;
+    this.Entity.p.IsSalaryExpense = false;
+    this.Entity.p.TotalAdvance = 0;
+    this.Entity.p.RemainingAdvance = 0;
+    this.Entity.p.InvoiceAmount = 0;
+    this.Entity.p.RemainingAmount = 0;
+    this.Entity.p.GivenAmount = 0
+    this.Entity.p.BankAccountRef = 0
+    this.BankName='';
+    this.selectedBank=[];
+    this.Entity.p.Narration = '';
+    this.Entity.p.ExpenseModeOfPayment = 0;
+    this.ModeOfPaymentName='';
+    this.selectedModeOfPayment=[];
+    this.Entity.p.IsAutoInvoiceEnabled = 0;
+    this.RecipientNameInput = false
   }
 
   onChangeIncomeLedger = () => {
