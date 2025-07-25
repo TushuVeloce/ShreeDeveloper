@@ -17,12 +17,12 @@ import { ToastService } from 'src/app/views/mobile-app/components/core/toast.ser
 import { FilterItem } from 'src/app/views/mobile-app/components/shared/chip-filter-mobile-app/chip-filter-mobile-app.component';
 
 @Component({
-  selector: 'app-customer-visit-report-mobile-app', 
+  selector: 'app-customer-visit-report-mobile-app',
   templateUrl: './customer-visit-report-mobile-app.component.html',
   styleUrls: ['./customer-visit-report-mobile-app.component.scss'],
-  standalone:false
+  standalone: false
 })
-export class CustomerVisitReportMobileAppComponent  implements OnInit {
+export class CustomerVisitReportMobileAppComponent implements OnInit {
   Entity: CustomerSiteVisit = CustomerSiteVisit.CreateNewInstance();
   MasterList: CustomerSiteVisit[] = [];
   DisplayMasterList: CustomerSiteVisit[] = [];
@@ -31,7 +31,7 @@ export class CustomerVisitReportMobileAppComponent  implements OnInit {
   SearchString: string = '';
   SelectedCustomerSiteVisit: CustomerSiteVisit = CustomerSiteVisit.CreateNewInstance();
   CustomerRef: number = 0;
-  companyRef :number = 0;
+  companyRef: number = 0;
 
   Printheaders: string[] = ['Site Name', 'Plot No', 'Customer Name', 'Address', 'Contact No', 'Customer Requirement'];
 
@@ -107,18 +107,18 @@ export class CustomerVisitReportMobileAppComponent  implements OnInit {
     this.loadFilters(); // Reload filters with updated options & preserve selections
   }
 
-    @ViewChild('PrintContainer')
-    PrintContainer!: ElementRef;
-  
-    async handlePrintOrShare() {
-      if (this.DisplayMasterList.length == 0) {
-        await this.toastService.present('No Customer visit Records Found', 1000, 'warning');
-        await this.haptic.warning();
-        return;
-      }
-      if (!this.PrintContainer) return;
-      await this.pdfService.generatePdfAndHandleAction(this.PrintContainer.nativeElement, `Receipt_${this.Entity.p.Ref}.pdf`);
+  @ViewChild('PrintContainer')
+  PrintContainer!: ElementRef;
+
+  async handlePrintOrShare() {
+    if (this.DisplayMasterList.length == 0) {
+      await this.toastService.present('No Customer visit Records Found', 1000, 'warning');
+      await this.haptic.warning();
+      return;
     }
+    if (!this.PrintContainer) return;
+    await this.pdfService.generatePdfAndHandleAction(this.PrintContainer.nativeElement, `Receipt_${this.Entity.p.Ref}.pdf`);
+  }
 
   private async loadCustomerVisitReportIfEmployeeExists() {
     debugger
@@ -173,7 +173,7 @@ export class CustomerVisitReportMobileAppComponent  implements OnInit {
       await this.haptic.warning();
       return;
     }
-    let lst = await CustomerSiteVisit.FetchEntireListBySiteRef(this.companyRef,
+    let lst = await CustomerSiteVisit.FetchEntireListBySiteRef(this.Entity.p.SiteRef, this.companyRef,
       async (errMsg) => {
         // await this.uiUtils.showErrorMessage('Error', errMsg)
         await this.toastService.present(errMsg, 1000, 'danger');
@@ -193,7 +193,7 @@ export class CustomerVisitReportMobileAppComponent  implements OnInit {
       this.getInwardListByComapnyRef();
       return;
     }
-    let lst = await CustomerSiteVisit.FetchEntireListBySiteRef(this.Entity.p.SiteRef,
+    let lst = await CustomerSiteVisit.FetchEntireListBySiteRef(this.Entity.p.SiteRef, this.companyRef,
       async (errMsg) => {
         // await this.uiUtils.showErrorMessage('Error', errMsg)
         await this.toastService.present(errMsg, 1000, 'danger');
