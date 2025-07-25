@@ -193,7 +193,6 @@ export class StockInwardDetailsComponent implements OnInit {
     let lst = await Order.FetchEntireListByCompanySiteAndVendorRef(this.companyRef(), this.Entity.p.SiteRef, this.Entity.p.VendorRef,
       async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
     );
-    console.log('lst :', lst);
 
     this.PurchaseOrderIdList = lst;
 

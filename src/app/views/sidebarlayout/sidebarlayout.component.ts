@@ -622,7 +622,7 @@ export class SidebarlayoutComponent implements OnInit {
       {
         Name: 'Customer Visit Report',
         RouterLink: '/homepage/Website/Customer_Visit_Report',
-        LogoPath: '/assets/icons/customer_info_report.png',
+        LogoPath: '/assets/icons/customer_visit_report.png',
       }
     ]
 
