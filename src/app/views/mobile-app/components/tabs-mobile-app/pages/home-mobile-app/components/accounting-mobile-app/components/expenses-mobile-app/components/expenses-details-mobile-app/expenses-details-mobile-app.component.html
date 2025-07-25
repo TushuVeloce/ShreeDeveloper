@@ -107,7 +107,7 @@
     <!-- Remaining Advance Amount -->
     <!-- <ion-item class="input-item" *ngIf="this.Entity.p.RecipientType == Employee">
       <ion-input label="Remaining Advance Amount" labelPlacement="floating" placeholder="Enter Remaining Advance Amount"
-        [(ngModel)]="Entity.p.RemainingAdvance" readonly></ion-input>
+        [(ngModel)]="Entity.p.RemainingAdvance" [disabled]="'true'"></ion-input>
     </ion-item> -->
 
     <!-- Payment Type -->
@@ -194,26 +194,26 @@
       <ion-input
         [label]="(Entity.p.RecipientType == EmployeeType && !Entity.p.IsSalaryExpense)?'Bill Amount':(Entity.p.RecipientType == EmployeeType &&  Entity.p.IsSalaryExpense)?'Net Salary':(Entity.p.RecipientType != EmployeeType)?'Bill Amount':'expenese Amount'"
         labelPlacement="floating" placeholder="Enter Expense Amount" [(ngModel)]="Entity.p.InvoiceAmount"
-        readonly></ion-input>
+        [disabled]="'true'"></ion-input>
     </ion-item>
 
     <!-- Given Amount -->
     <ion-item class="input-item">
       <ion-input label="Given Amount" labelPlacement="floating" placeholder="Enter Given Amount"
         [(ngModel)]="Entity.p.GivenAmount" (ngModelChange)="CalculateRemainingAmountandBalance()"
-        type="number"></ion-input>
+        type="number" clearOnEdit="true" clearInput="true"></ion-input>
     </ion-item>
 
     <!-- Remaining Amount -->
     <ion-item class="input-item">
       <ion-input label="Remaining Amount" labelPlacement="floating" placeholder="Enter Remaining Amount"
-        [(ngModel)]="Entity.p.RemainingAmount" readonly></ion-input>
+        [(ngModel)]="Entity.p.RemainingAmount" [disabled]="'true'"></ion-input>
     </ion-item>
 
     <!-- Shree Balance -->
     <ion-item class="input-item">
       <ion-input label="Shree Balance" labelPlacement="floating" placeholder="Enter Shree Balance"
-        [(ngModel)]="Entity.p.ShreesBalance" readonly></ion-input>
+        [(ngModel)]="Entity.p.ShreesBalance" [disabled]="'true'"></ion-input>
     </ion-item>
 
     <!-- mode of payment -->

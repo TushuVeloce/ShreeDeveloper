@@ -126,6 +126,8 @@ export class CustomerSummaryReportMobileAppComponent implements OnInit {
 
       this.CustomerList = lst;
       this.DropdownCustomerList=lst
+      this.DropdownCustomerList = lst.filter(item => item.p && item.p.CustID);
+      this.CustomerList = lst.filter(item => item.p && item.p.CustID);
       console.log('this.CustomerList :', this.CustomerList);
     } catch (error) {
       console.error('Error in getCustomerReportByCompanyAndSiteRef:', error);
