@@ -77,7 +77,7 @@ export class CustomerPendingFollowupComponent implements OnInit {
     }
 
     this.loadPaginationData();
-    this.pageSize = this.screenSizeService.getPageSize('withoutDropdown');
+    this.pageSize = this.screenSizeService.getPageSize('withDropdown');
   }
 
   // Extracted from services date conversion //

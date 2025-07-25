@@ -36,6 +36,7 @@ export class SiteManagementMasterComponent implements OnInit {
   }
   ngOnInit() {
     this.appStateManage.setDropdownDisabled();
+    this.pageSize = this.screenSizeService.getPageSize('withoutDropdown');
   }
 
   // Extracted from services date conversion //

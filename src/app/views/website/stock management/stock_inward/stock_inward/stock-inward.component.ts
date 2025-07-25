@@ -50,6 +50,7 @@ export class StockInwardComponent implements OnInit {
 
   ngOnInit() {
     this.appStateManage.setDropdownDisabled();
+    this.pageSize = this.screenSizeService.getPageSize('withDropdown');
   }
 
   getSiteListByCompanyRef = async () => {

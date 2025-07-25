@@ -48,7 +48,7 @@ export class SalarySlipApprovalComponent implements OnInit {
     this.appStateManage.setDropdownDisabled();
     this.loadPaginationData();
     this.getSalarySlipApprovalListByCompanyRef();
-    this.pageSize = this.screenSizeService.getPageSize('withoutDropdown');
+    this.pageSize = this.screenSizeService.getPageSize('withDropdown');
   }
 
   getEmployeeListByCompanyRef = async () => {
