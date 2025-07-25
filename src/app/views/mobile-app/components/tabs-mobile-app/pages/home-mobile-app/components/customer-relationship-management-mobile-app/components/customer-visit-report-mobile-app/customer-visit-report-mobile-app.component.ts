@@ -33,7 +33,7 @@ export class CustomerVisitReportMobileAppComponent implements OnInit {
   CustomerRef: number = 0;
   companyRef: number = 0;
 
-  Printheaders: string[] = ['Site Name', 'Plot No', 'Customer Name', 'Address', 'Contact No', 'Customer Requirement'];
+  Printheaders: string[] = ['Sr. No.','Site Name', 'Plot No', 'Customer Name', 'Address', 'Contact No', 'Customer Requirement'];
 
   modalOpen = false;
 
@@ -121,7 +121,6 @@ export class CustomerVisitReportMobileAppComponent implements OnInit {
   }
 
   private async loadCustomerVisitReportIfEmployeeExists() {
-    debugger
     try {
       await this.loadingService.show();
 
@@ -145,7 +144,6 @@ export class CustomerVisitReportMobileAppComponent implements OnInit {
   }
 
   getSiteListByCompanyRef = async () => {
-    debugger
     if (this.companyRef <= 0) {
       await this.toastService.present('Company not selected', 1000, 'warning');
       await this.haptic.warning();
@@ -165,7 +163,6 @@ export class CustomerVisitReportMobileAppComponent implements OnInit {
   }
 
   getInwardListByComapnyRef = async () => {
-    debugger
     this.MasterList = [];
     this.DisplayMasterList = [];
     if (this.companyRef <= 0) {
@@ -186,7 +183,6 @@ export class CustomerVisitReportMobileAppComponent implements OnInit {
   };
 
   getInwardListBySiteRef = async () => {
-    debugger
     this.MasterList = [];
     this.DisplayMasterList = [];
     if (this.Entity.p.SiteRef <= 0) {

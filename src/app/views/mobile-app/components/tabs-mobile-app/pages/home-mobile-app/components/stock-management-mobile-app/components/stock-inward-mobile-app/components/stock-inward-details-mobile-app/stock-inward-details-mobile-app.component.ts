@@ -334,11 +334,20 @@ export class StockInwardDetailsMobileAppComponent implements OnInit {
         } else {
           this.Entity = StockInward.CreateNewInstance();
           StockInward.SetCurrentInstance(this.Entity);
+          // this.strCDT = await CurrentDateTimeRequest.GetCurrentDateTime();
+          // console.log('this.Entity :', this.Entity);
+          // let parts = this.strCDT.substring(0, 16).split('-');
+          // // Construct the new date format
+          // this.InwardDate = `${parts[0]}-${parts[1]}-${parts[2]}`;
           this.strCDT = await CurrentDateTimeRequest.GetCurrentDateTime();
-          console.log('this.Entity :', this.Entity);
           let parts = this.strCDT.substring(0, 16).split('-');
           // Construct the new date format
           this.InwardDate = `${parts[0]}-${parts[1]}-${parts[2]}`;
+          this.InwardDate = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.InwardDate);
+          this.DisplayInwardDate = this.datePipe.transform(this.InwardDate, 'yyyy-MM-dd') ?? '';
+          this.ChildInwardDate = `${parts[0]}-${parts[1]}-${parts[2]}`;
+          this.ChildInwardDate = this.dtu.ConvertStringDateToShortFormat(this.ChildInwardDate);
+          this.DisplayChildInwardDate = this.datePipe.transform(this.ChildInwardDate, 'yyyy-MM-dd') ?? '';
           await this.ChalanNo()
         }
       } else {
@@ -626,11 +635,17 @@ export class StockInwardDetailsMobileAppComponent implements OnInit {
       //   }
       // }];
       // this.MaterialName = this.selectedMaterial[0].p.Name;
+      this.ChildInwardDate = this.newInward.Date;
+      this.ChildInwardDate = this.dtu.ConvertStringDateToShortFormat(this.ChildInwardDate);
+      this.DisplayChildInwardDate = this.datePipe.transform(this.ChildInwardDate, 'yyyy-MM-dd') ?? '';
       this.ismaterialModalOpen = false;
       await this.toastService.present('Material details updated successfully', 1000, 'success');
       await this.haptic.success();
     } else {
       this.newInward.Date = this.dtu.ConvertStringDateToFullFormat(this.newInward.Date);
+      this.ChildInwardDate = this.newInward.Date;
+      this.ChildInwardDate = this.dtu.ConvertStringDateToShortFormat(this.ChildInwardDate);
+      this.DisplayChildInwardDate = this.datePipe.transform(this.ChildInwardDate, 'yyyy-MM-dd') ?? '';
       this.newInward.MaterialInwardRef = this.Entity.p.Ref;
       this.newInward.PurchaseOrderRemainingQty = this.NewRemainingQty;
       this.Entity.p.MaterialInwardDetailsArray.push({ ...this.newInward });

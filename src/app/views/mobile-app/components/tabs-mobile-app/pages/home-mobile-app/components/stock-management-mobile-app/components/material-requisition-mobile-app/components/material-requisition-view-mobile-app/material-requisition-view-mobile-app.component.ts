@@ -124,16 +124,16 @@ export class MaterialRequisitionViewMobileAppComponent implements OnInit, OnDest
         options: this.SiteList.map(site => ({ Ref: site.p.Ref, Name: site.p.Name })),
         selected: this.selectedFilterValues['site'] || null
       },
-      {
-        key: 'status',
-        label: 'Status',
-        multi: false,
-        options: this.StatusList.map(status => ({
-          Ref: status.Ref,
-          Name: status.Name
-        })),
-        selected: this.selectedFilterValues['status'] || null
-      }
+      // {
+      //   key: 'status',
+      //   label: 'Status',
+      //   multi: false,
+      //   options: this.StatusList.map(status => ({
+      //     Ref: status.Ref,
+      //     Name: status.Name
+      //   })),
+      //   selected: this.selectedFilterValues['status'] || null
+      // }
     ];
   }
 
