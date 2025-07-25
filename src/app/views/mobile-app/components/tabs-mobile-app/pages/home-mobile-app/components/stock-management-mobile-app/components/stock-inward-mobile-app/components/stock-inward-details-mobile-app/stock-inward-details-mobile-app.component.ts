@@ -299,7 +299,7 @@ export class StockInwardDetailsMobileAppComponent implements OnInit {
           this.selectedFileName = this.Entity.p.MaterialInwardInvoicePath;
           // this.InwardDate = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.InwardDate);
 
-          this.getOrderIdListByCompanySiteAndVendorRef();
+          await this.getOrderIdListByCompanySiteAndVendorRef();
           this.appStateManage.StorageKey.removeItem('Editable');
           console.log('this.Entity :', this.Entity);
           if (this.Entity.p.InwardDate != '') {
@@ -320,13 +320,17 @@ export class StockInwardDetailsMobileAppComponent implements OnInit {
             }
           }];
           this.VendorName = this.selectedVendor[0].p.Name;
+
+          this.PurchaseIDName = this.PurchaseOrderIdList.find(item => item.p.Ref == this.Entity.p.MaterialPurchaseOrderRef)?.p.DisplayPurchaseOrderId ?? '';
+          console.log('this.PurchaseOrderIdList :', this.PurchaseOrderIdList);
+          console.log('this.PurchaseIDName :', this.PurchaseIDName);
           this.selectedPurchaseID = [{
             p: {
-              Ref: this.Entity.p.Ref,
-              Name: this.Entity.p.DisplayPurchaseOrderId
+              Ref: this.Entity.p.MaterialPurchaseOrderRef,
+              Name: this.PurchaseIDName
             }
           }];
-          this.PurchaseIDName = this.selectedPurchaseID[0].p.Name;
+
         } else {
           this.Entity = StockInward.CreateNewInstance();
           StockInward.SetCurrentInstance(this.Entity);

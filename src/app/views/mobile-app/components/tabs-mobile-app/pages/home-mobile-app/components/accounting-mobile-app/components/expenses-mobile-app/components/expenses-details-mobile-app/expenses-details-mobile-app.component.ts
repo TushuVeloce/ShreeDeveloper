@@ -432,9 +432,9 @@ export class ExpensesDetailsMobileAppComponent implements OnInit {
     }
 
     if (this.Entity.p.GivenAmount <= this.Entity.p.ShreesBalance) {
-      this.Entity.p.ShreesBalance = this.ShreeBalance - this.Entity.p.GivenAmount;
+      this.Entity.p.ShreesBalance = (Number(((this.ShreeBalance - this.Entity.p.GivenAmount)).toFixed(2)));
     } else {
-      this.Entity.p.ShreesBalance = -(this.Entity.p.GivenAmount - this.ShreeBalance);
+      this.Entity.p.ShreesBalance = - (Number((this.Entity.p.GivenAmount - this.ShreeBalance).toFixed(2)));
     }
   }
 
@@ -574,7 +574,7 @@ export class ExpensesDetailsMobileAppComponent implements OnInit {
         this.selectedPaymentType = selected;
         this.PaymentType = selected[0].p.Ref;
         this.PaymentTypeName = selected[0].p.Name;
-        this.onPaymentTypeSelection(); 
+        this.onPaymentTypeSelection();
         this.getTotalInvoiceAmountFromSiteAndRecipientRef();
         this.onRecipientChange();
       });
