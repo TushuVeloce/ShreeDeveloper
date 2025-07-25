@@ -348,7 +348,7 @@ const routes: Routes = [
       { path: 'Office_Duty_Time_Details', component: OfficeDutyTimeDetailsComponent },
 
       { path: 'Attendance_Logs', component: AttendanceLogsComponent },
-      { path: 'Attendance_Details', component: AttendanceDetailsComponent },
+      { path: 'Attendance_Logs_Details', component: AttendanceDetailsComponent },
 
       { path: 'Salary_Generation', component: SalaryGenerationComponent },
       { path: 'Salary_Generation_Details', component: SalaryGenerationDetailsComponent },

@@ -269,7 +269,7 @@ onPageChange = (pageIndex: number): void => {
     this.SelectedAttendance = item.GetEditableVersion();
     WebAttendaneLog.SetCurrentInstance(this.SelectedAttendance);
     this.appStateManage.StorageKey.setItem('Editable', 'Edit');
-    this.router.navigate(['/homepage/Website/Attendance_Details']);
+    this.router.navigate(['/homepage/Website/Attendance_Logs_Details']);
   };
 
   get headers(): string[] {
@@ -340,7 +340,7 @@ onPageChange = (pageIndex: number): void => {
       this.uiUtils.showWarningToster('Please select company');
       return;
     }
-    this.router.navigate(['/homepage/Website/Attendance_Details']);
+    this.router.navigate(['/homepage/Website/Attendance_Logs_Details']);
   }
 
   resetSummaryStats() {

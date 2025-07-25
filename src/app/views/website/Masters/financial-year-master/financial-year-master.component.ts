@@ -10,6 +10,7 @@ import { TransportData } from 'src/app/classes/infrastructure/transportdata';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
 import { DTU } from 'src/app/services/dtu.service';
+import { ScreenSizeService } from 'src/app/services/screensize.service';
 import { ServerCommunicatorService } from 'src/app/services/server-communicator.service';
 import { UIUtils } from 'src/app/services/uiutils.service';
 import { Utils } from 'src/app/services/utils.service';
@@ -50,7 +51,7 @@ export class FinancialYearMasterComponent implements OnInit {
   headers: string[] = ['Sr.No.', 'From Date', 'To Date', 'Status'];
   constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private utils: Utils,
     private dtu: DTU, private datePipe: DatePipe, private companystatemanagement: CompanyStateManagement, private payloadPacketFacade: PayloadPacketFacade,
-    private serverCommunicator: ServerCommunicatorService
+    private serverCommunicator: ServerCommunicatorService,private screenSizeService: ScreenSizeService
   ) {
     effect(() => {
       this.getFinancialYearListByCompanyRef()
@@ -59,6 +60,7 @@ export class FinancialYearMasterComponent implements OnInit {
 
   async ngOnInit() {
     this.appStateManage.setDropdownDisabled(false);
+    this.pageSize = this.screenSizeService.getPageSize('withoutDropdown');
     // await this.FormulateMasterList();
   }
 

@@ -6,6 +6,7 @@ import { AppStateManageService } from 'src/app/services/app-state-manage.service
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
 import { DateconversionService } from 'src/app/services/dateconversion.service';
 import { DTU } from 'src/app/services/dtu.service';
+import { ScreenSizeService } from 'src/app/services/screensize.service';
 import { UIUtils } from 'src/app/services/uiutils.service';
 
 @Component({
@@ -29,8 +30,8 @@ export class BankAccountMasterComponent implements OnInit {
 
   headers: string[] = ['Sr.No.', 'Bank Name', 'Branch Name', 'Account No', 'IFSC Code', 'Date of Opening', 'Action'];
 
-  constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private companystatemanagement: CompanyStateManagement,    private dtu: DTU,
-      private datePipe: DatePipe, private DateconversionService:DateconversionService) {
+  constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private companystatemanagement: CompanyStateManagement, private dtu: DTU,
+      private datePipe: DatePipe, private DateconversionService:DateconversionService,private screenSizeService: ScreenSizeService) {
     effect(() => {
       this.getBankListByCompanyRef()
     });
@@ -40,7 +41,7 @@ export class BankAccountMasterComponent implements OnInit {
     this.appStateManage.setDropdownDisabled();
     await this.getBankListByCompanyRef();
     this.loadPaginationData();
-
+    this.pageSize = this.screenSizeService.getPageSize('withoutDropdown');
   }
 
   getBankListByCompanyRef = async () => {
