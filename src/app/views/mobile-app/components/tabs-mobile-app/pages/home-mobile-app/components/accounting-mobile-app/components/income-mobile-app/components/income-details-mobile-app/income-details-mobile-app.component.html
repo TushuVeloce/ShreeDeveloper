@@ -130,7 +130,7 @@
     <!-- Plot Name -->
     <ion-item class="input-item" *ngIf="Entity.p.PayerType == DealDoneCustomer && Entity.p.PayerRef != 0">
       <ion-input label="Plot Name" labelPlacement="floating" placeholder="Enter Plot Name" [(ngModel)]="Entity.p.PlotName"
-        clearInput="true" readonly></ion-input>
+        clearInput="true" [disabled]="'true'"></ion-input>
     </ion-item>
 
     <!-- Reason -->
@@ -148,7 +148,7 @@
     <!-- Shree Balance -->
     <ion-item class="input-item">
       <ion-input label="Shree Balance" labelPlacement="floating" placeholder="Enter Shree Balance"
-        [(ngModel)]="Entity.p.ShreesBalance" readonly></ion-input>
+        [(ngModel)]="Entity.p.ShreesBalance" [disabled]="'true'"></ion-input>
     </ion-item>
 
     <!-- mode of payment -->

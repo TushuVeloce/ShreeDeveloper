@@ -54,13 +54,13 @@
     <!-- Unit input-->
     <ion-item class="input-item">
       <ion-input label="Unit" labelPlacement="floating" placeholder="Enter Unit" [(ngModel)]="Entity.p.UnitName"
-        readonly></ion-input>
+        [disabled]="'true'"></ion-input>
     </ion-item>
 
     <!-- Current Quantity input-->
     <ion-item class="input-item">
       <ion-input label="Current Quantity" labelPlacement="floating" placeholder="Enter Current Quantity"
-        [(ngModel)]="Entity.p.CurrentQuantity" readonly></ion-input>
+        [(ngModel)]="Entity.p.CurrentQuantity" [disabled]="'true'"></ion-input>
     </ion-item>
 
     <!-- Consumed Quantity input-->
@@ -73,7 +73,7 @@
     <!-- Remaining Quantity input-->
     <ion-item class="input-item">
       <ion-input label="Remaining Quantity" labelPlacement="floating" placeholder="Enter Remaining Quantity"
-        [(ngModel)]="Entity.p.RemainingQuantity" readonly></ion-input>
+        [(ngModel)]="Entity.p.RemainingQuantity" [disabled]="'true'"></ion-input>
     </ion-item>
 
     <!-- Main Buttons -->

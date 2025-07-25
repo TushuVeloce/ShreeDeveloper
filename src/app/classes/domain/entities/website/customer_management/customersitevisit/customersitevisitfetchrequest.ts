@@ -10,6 +10,7 @@ export class CustomerSiteVisitFetchRequest
 
     CustomerSiteVisitRefs: number[] = [];
     CompanyRefs: number[] = [];
+    CompanyRef: number= 0;
     SiteRef: number= 0;
 
     public MergeIntoTransportData = (td: TransportData) =>
