@@ -142,7 +142,7 @@
         <div class="col-md-4" style="margin-top: 1rem;"
           *ngIf="this.Entity.p.RecipientType == Employee && this.Entity.p.IsSalaryExpense">
           <div>
-            <label>Total Advance</label>
+            <label>Balance Advance Amount</label>
             <input type="text" [(ngModel)]="Entity.p.RemainingAdvance" name="RemainingAdvance" class="form-control"
               id="RemainingAdvance" disabled placeholder="Enter Remaining Advance" />
           </div>
