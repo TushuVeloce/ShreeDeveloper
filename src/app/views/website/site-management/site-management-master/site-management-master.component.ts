@@ -25,7 +25,7 @@ export class SiteManagementMasterComponent implements OnInit {
   currentPage = 1;
   total = 0;
   companyRef = this.companystatemanagement.SelectedCompanyRef;
-  headers: string[] = ['Sr.No.', 'Site Name', 'No of Plots','Area in Sq/ft','Area in Sq/m', 'Starting Date', 'Estimated End Date', 'Site Location', 'Action'];
+  headers: string[] = ['Sr.No.', 'Site Name', 'No of Plots','Area in Sq/m', 'Area in Sq/ft','Starting Date', 'Estimated End Date', 'Site Location', 'Action'];
   constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private screenSizeService: ScreenSizeService,
     private companystatemanagement: CompanyStateManagement, private DateconversionService: DateconversionService,
   ) {

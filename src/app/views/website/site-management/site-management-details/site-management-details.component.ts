@@ -331,7 +331,7 @@ export class SiteManagementDetailsComponent implements OnInit {
 
   convertSqmToSqft() {
     if (this.Entity.p.TotalLandAreaInSqm) {
-      this.Entity.p.TotalLandAreaInSqft = parseFloat((this.Entity.p.TotalLandAreaInSqm * 10.7639).toFixed(2));
+      this.Entity.p.TotalLandAreaInSqft = parseFloat((this.Entity.p.TotalLandAreaInSqm * 10.76).toFixed(2));
     } else {
       this.Entity.p.TotalLandAreaInSqft = 0;
     }
@@ -339,7 +339,7 @@ export class SiteManagementDetailsComponent implements OnInit {
 
   convertSqftToSqm() {
     if (this.Entity.p.TotalLandAreaInSqft) {
-      this.Entity.p.TotalLandAreaInSqm = parseFloat((this.Entity.p.TotalLandAreaInSqft / 10.7639).toFixed(2));
+      this.Entity.p.TotalLandAreaInSqm = parseFloat((this.Entity.p.TotalLandAreaInSqft / 10.76).toFixed(2));
     } else {
       this.Entity.p.TotalLandAreaInSqm = 0;
     }

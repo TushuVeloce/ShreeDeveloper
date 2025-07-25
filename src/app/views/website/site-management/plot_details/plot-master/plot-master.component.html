@@ -56,8 +56,8 @@
         <tr *ngFor="let plot of paginatedList; index as i">
           <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
           <td Class="tbldata">{{plot.p.PlotNo}}</td>
-          <td Class="tbldata">{{formatToFixed(plot.p.AreaInSqft)}}</td>
           <td Class="tbldata">{{formatToFixed(plot.p.AreaInSqm)}}</td>
+          <td Class="tbldata">{{formatToFixed(plot.p.AreaInSqft)}}</td>
           <td Class="tbldata">{{plot.p.GovermentRatePerSqm | currency : "INR"}}</td>
           <!-- <td Class="tbldata">{{plot.p.GovermentRatePerSqft}}</td> -->
           <!-- <td Class="tbldata">{{plot.p.BasicRatePerSqm}}</td> -->

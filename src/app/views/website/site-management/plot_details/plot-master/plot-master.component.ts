@@ -24,7 +24,7 @@ export class PlotMasterComponent implements OnInit {
   pageSize = 8; // Items per page
   currentPage = 1; // Initialize current page
   total = 0;
-  headers: string[] = ['Sr.No.', 'Plot No','Area /sqft',  'Area /sqm', 'Gov Rate/Sqm', 'Basic Rate/Sqft', 'Booking Remark', 'Action',];
+  headers: string[] = ['Sr.No.', 'Plot No','Area /sqm','Area /sqft', 'Gov Rate/Sqm', 'Basic Rate/Sqft', 'Booking Remark', 'Action',];
   companyRef = this.companystatemanagement.SelectedCompanyRef;
   siteref: number = 0
   bookingremark: number = 0

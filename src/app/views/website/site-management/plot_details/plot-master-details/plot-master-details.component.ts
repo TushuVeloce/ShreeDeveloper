@@ -174,7 +174,7 @@ export class PlotMasterDetailsComponent implements OnInit {
 
   convertSqmToSqft = () => {
     if (this.Entity.p.AreaInSqm) {
-      this.Entity.p.AreaInSqft = parseFloat((this.Entity.p.AreaInSqm * 10.7639).toFixed(2));
+      this.Entity.p.AreaInSqft = parseFloat((this.Entity.p.AreaInSqm * 10.76).toFixed(2));
     } else {
       this.Entity.p.AreaInSqft = 0;
     }
@@ -182,7 +182,7 @@ export class PlotMasterDetailsComponent implements OnInit {
 
   convertSqftToSqm = () => {
     if (this.Entity.p.AreaInSqft) {
-      this.Entity.p.AreaInSqm = parseFloat((this.Entity.p.AreaInSqft / 10.7639).toFixed(2));
+      this.Entity.p.AreaInSqm = parseFloat((this.Entity.p.AreaInSqft / 10.76).toFixed(2));
     } else {
       this.Entity.p.AreaInSqm = 0;
     }

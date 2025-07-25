@@ -139,18 +139,6 @@
           </div> -->
         </div>
          <div class="col-md-4 col-6">
-          <label for="TotalLandAreaInSqft">Total Land Area in Sqft</label>
-          <input type="number" class="form-control" name="TotalLandAreaInSqft" id="TotalLandAreaInSqft" 
-            [(ngModel)]="Entity.p.TotalLandAreaInSqft" (input)="restrictToTwoDecimalsForSqFt($event)"
-            #TotalLandAreaInSqftCtrl="ngModel" required (blur)="TotalLandAreaInSqftCtrl.control.markAsTouched()"
-            placeholder="Enter Total Land Area in Sqft" (click)="selectAllValue($event)" />
-          <!-- <div
-            *ngIf="(TotalLandAreaInSqftCtrl.invalid && (TotalLandAreaInSqftCtrl.touched || TotalLandAreaInSqftCtrl.dirty))">
-            <span class="validation-text"
-              *ngIf="TotalLandAreaInSqftCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
-          </div> -->
-        </div>
-        <div class="col-md-4 col-6">
           <label for="TotalLandAreaInSqm">Total Land Area in Sqm</label>
           <input type="number" class="form-control" name="TotalLandAreaInSqm" id="TotalLandAreaInSqm" 
             [(ngModel)]="Entity.p.TotalLandAreaInSqm" (input)="restrictToTwoDecimalsForSqm($event)" 
@@ -160,6 +148,18 @@
             *ngIf="(TotalLandAreaInSqmCtrl.invalid && (TotalLandAreaInSqmCtrl.touched || TotalLandAreaInSqmCtrl.dirty))">
             <span class="validation-text"
               *ngIf="TotalLandAreaInSqmCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
+          </div> -->
+        </div>
+         <div class="col-md-4 col-6">
+          <label for="TotalLandAreaInSqft">Total Land Area in Sqft</label>
+          <input type="number" class="form-control" name="TotalLandAreaInSqft" id="TotalLandAreaInSqft" 
+            [(ngModel)]="Entity.p.TotalLandAreaInSqft" (input)="restrictToTwoDecimalsForSqFt($event)"
+            #TotalLandAreaInSqftCtrl="ngModel" required (blur)="TotalLandAreaInSqftCtrl.control.markAsTouched()"
+            placeholder="Enter Total Land Area in Sqft" (click)="selectAllValue($event)" />
+          <!-- <div
+            *ngIf="(TotalLandAreaInSqftCtrl.invalid && (TotalLandAreaInSqftCtrl.touched || TotalLandAreaInSqftCtrl.dirty))">
+            <span class="validation-text"
+              *ngIf="TotalLandAreaInSqftCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
           </div> -->
         </div>
         <div class="col-md-4 col-6">
