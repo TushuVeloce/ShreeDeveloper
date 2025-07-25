@@ -13,6 +13,7 @@ import { LoaderComponent } from "src/app/views/mobile-app/components/shared/load
 import { SharedModule } from "src/app/views/mobile-app/components/shared/shared.module";
 import { CustomerInfoReportMobileAppComponent } from './components/customer-info-report-mobile-app/customer-info-report-mobile-app.component';
 import { CustomerSummaryReportMobileAppComponent } from './components/customer-summary-report-mobile-app/customer-summary-report-mobile-app.component';
+import { CustomerVisitReportMobileAppComponent } from './components/customer-visit-report-mobile-app/customer-visit-report-mobile-app.component';
 
 @NgModule({
   imports: [
@@ -23,6 +24,6 @@ import { CustomerSummaryReportMobileAppComponent } from './components/customer-s
     LoaderComponent,
     SharedModule
 ],
-  declarations: [CustomerRelationshipManagementMobileAppPage,CustomerRelationshipManagementViewMobileAppComponent,PendingCustomerFollowupMobileAppComponent,CustomerInfoReportMobileAppComponent,CustomerSummaryReportMobileAppComponent]
+  declarations: [CustomerRelationshipManagementMobileAppPage,CustomerRelationshipManagementViewMobileAppComponent,PendingCustomerFollowupMobileAppComponent,CustomerInfoReportMobileAppComponent,CustomerSummaryReportMobileAppComponent,CustomerVisitReportMobileAppComponent]
 })
 export class CustomerRelationshipManagementMobileAppPageModule {}

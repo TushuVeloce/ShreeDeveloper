@@ -53,6 +53,11 @@ export class CustomerRelationshipManagementViewMobileAppComponent  implements On
       icon: 'assets/icons/customer_summary_report_mobile_app.png',
       label: 'Customer Summary Report',
       routerPath: '/mobile-app/tabs/dashboard/customer-relationship-management/customer-summary-report'
+    },
+    {
+      icon: 'assets/icons/customer_summary_report_mobile_app.png',
+      label: 'Customer Visit Report',
+      routerPath: '/mobile-app/tabs/dashboard/customer-relationship-management/customer-visit-report'
     }
   ];
 
