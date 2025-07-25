@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { Department } from 'src/app/classes/domain/entities/website/masters/department/department';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
+import { ScreenSizeService } from 'src/app/services/screensize.service';
 import { UIUtils } from 'src/app/services/uiutils.service';
 
 
@@ -26,7 +27,7 @@ export class DepartmentMasterComponent implements OnInit {
 
   headers: string[] = ['Sr.No.', 'Name', 'Action'];
 
-  constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private companystatemanagement: CompanyStateManagement) {
+  constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private companystatemanagement: CompanyStateManagement,private screenSizeService: ScreenSizeService) {
     effect(() => {
       this.getDepartmentListByCompanyRef()
     });
@@ -35,6 +36,7 @@ export class DepartmentMasterComponent implements OnInit {
   async ngOnInit() {
     this.appStateManage.setDropdownDisabled();
     this.loadPaginationData();
+    this.pageSize = this.screenSizeService.getPageSize('withoutDropdown');
   }
 
   getDepartmentListByCompanyRef = async () => {

@@ -7,6 +7,7 @@ import { Site } from 'src/app/classes/domain/entities/website/masters/site/site'
 import { RegistrarOffice } from 'src/app/classes/domain/entities/website/registraroffice/registraroffice';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
+import { ScreenSizeService } from 'src/app/services/screensize.service';
 import { UIUtils } from 'src/app/services/uiutils.service';
 
 @Component({
@@ -31,7 +32,7 @@ export class RegistrarOfficeComponent implements OnInit {
   companyRef = this.companystatemanagement.SelectedCompanyRef;
   headers: string[] = ['Sr.No.', 'Customer', 'Cheque', 'Witness 1', 'Agreement to Sale', 'Sale Deed', 'Talathi', '7/12	', 'Spiral', 'Client Submit	', 'Action'];
 
-  constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private companystatemanagement: CompanyStateManagement) {
+  constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private companystatemanagement: CompanyStateManagement,private screenSizeService: ScreenSizeService) {
     effect(() => {
       this.getSiteListByCompanyRef();
     });
@@ -40,6 +41,7 @@ export class RegistrarOfficeComponent implements OnInit {
   async ngOnInit() {
     this.appStateManage.setDropdownDisabled();
     this.loadPaginationData();
+    this.pageSize = this.screenSizeService.getPageSize('withDropdown');
     this.Entity.p.SiteRef =   Number(this.appStateManage.StorageKey.getItem('registartsiteRef'));
     this.Entity.p.PlotRef = Number(this.appStateManage.StorageKey.getItem('registartplotRef'));
     if(this.Entity.p.SiteRef){

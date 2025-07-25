@@ -6,6 +6,7 @@ import { PayloadPacketFacade } from 'src/app/classes/infrastructure/payloadpacke
 import { TransportData } from 'src/app/classes/infrastructure/transportdata';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
+import { ScreenSizeService } from 'src/app/services/screensize.service';
 import { ServerCommunicatorService } from 'src/app/services/server-communicator.service';
 import { UIUtils } from 'src/app/services/uiutils.service';
 
@@ -34,6 +35,7 @@ export class VendorMasterComponent implements OnInit {
     private router: Router,
     private appStateManage: AppStateManageService,
     private companystatemanagement: CompanyStateManagement,
+    private screenSizeService: ScreenSizeService
   ) {
     effect(() => {
       this.getVendorListByCompanyRef()
@@ -43,6 +45,7 @@ export class VendorMasterComponent implements OnInit {
   async ngOnInit() {
     this.appStateManage.setDropdownDisabled();
     this.loadPaginationData();
+    this.pageSize = this.screenSizeService.getPageSize('withoutDropdown');
   }
 
   getVendorListByCompanyRef = async () => {

@@ -27,7 +27,7 @@ export class SalaryGenerationComponent implements OnInit {
   pageSize = 10; // Items per page
   currentPage = 1; // Initialize current page
   total = 0;
-  CompnyList: Company[] = [];
+  CompanyList: Company[] = [];
   EmployeeList: Employee[] = [];
   CompanyAddress: string = ''
   CompanyEmail: string = ''
@@ -38,9 +38,11 @@ export class SalaryGenerationComponent implements OnInit {
   EmployeeBankIFSCCode: string = ''
   companyRef = this.companystatemanagement.SelectedCompanyRef;
   isModalVisible = false;
+  UserDisplayName = this.appStateManage.StorageKey.getItem('UserDisplayName');
 
 
   headers: string[] = ['Sr.No.', 'Employee Name', 'Month', 'Total Working Days', 'Basic Salary', 'Gross Total', 'Total Deduction', 'Net Salary', 'Action'];
+
   constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private screenSizeService: ScreenSizeService,
     private companystatemanagement: CompanyStateManagement
   ) {
@@ -58,26 +60,26 @@ export class SalaryGenerationComponent implements OnInit {
 
   getCompanyList = async () => {
     let lst = await Company.FetchEntireList(async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-    this.CompnyList = lst;
+    this.CompanyList = lst;
   }
 
-  openSalarySlipModal = async(SalaryGeneration: SalaryGeneration) => {
+  openSalarySlipModal = async (SalaryGeneration: SalaryGeneration) => {
     this.isModalVisible = true;
     this.Entity = SalaryGeneration
     if (this.Entity.p.CompanyRef != 0) {
-      const companydetails = this.CompnyList.find(item => item.p.Ref == this.Entity.p.CompanyRef); {
+      const companydetails = this.CompanyList.find(item => item.p.Ref == this.Entity.p.CompanyRef); {
         this.CompanyAddress = companydetails?.p?.AddressLine1 || '';
         this.CompanyEmail = companydetails?.p?.EmailId || '';
       }
     }
     if (this.Entity.p.EmployeeRef != 0) {
       let lst = await Employee.FetchInstance(this.Entity.p.EmployeeRef, this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-      // const employeedetails = this.EmployeeList.find(item => item.p.Ref == this.Entity.p.EmployeeRef); 
-        this.EmployeeDesignation = lst?.p?.DesignationName || '';
-        this.EmployeeBankName = lst?.p?.BankName || '';
-        this.EmployeeBankBranch = lst?.p?.BranchName || '';
-        this.EmployeeBankAccountNo = lst?.p?.BanckAccountNo || '';
-        this.EmployeeBankIFSCCode = lst?.p?.IFSC || '';
+      // const employeedetails = this.EmployeeList.find(item => item.p.Ref == this.Entity.p.EmployeeRef);
+      this.EmployeeDesignation = lst?.p?.DesignationName || '';
+      this.EmployeeBankName = lst?.p?.BankName || '';
+      this.EmployeeBankBranch = lst?.p?.BranchName || '';
+      this.EmployeeBankAccountNo = lst?.p?.BanckAccountNo || '';
+      this.EmployeeBankIFSCCode = lst?.p?.IFSC || '';
     }
   }
 
@@ -100,7 +102,6 @@ export class SalaryGenerationComponent implements OnInit {
       return;
     }
     let lst = await SalaryGeneration.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-    console.log('lst :', lst);
     this.MasterList = lst;
     this.DisplayMasterList = this.MasterList;
     this.loadPaginationData();

@@ -10,6 +10,7 @@ import { ServerCommunicatorService } from 'src/app/services/server-communicator.
 import { Utils } from 'src/app/services/utils.service';
 import { BaseUrlService } from 'src/app/services/baseurl.service';
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
+import { ScreenSizeService } from 'src/app/services/screensize.service';
 
 
 
@@ -43,7 +44,7 @@ export class CompanyMasterComponent implements OnInit {
     private baseUrl: BaseUrlService,
     public appStateManagement: AppStateManageService,
     private companystatemanagement: CompanyStateManagement,
-
+    private screenSizeService: ScreenSizeService
   ) { }
 
   ngOnInit() {
@@ -51,8 +52,8 @@ export class CompanyMasterComponent implements OnInit {
     this.FormulateCompanyMasterList();
     this.loadPaginationData();
     this.ImageBaseUrl = this.baseUrl.GenerateImageBaseUrl();
-
     this.LoginToken = this.appStateManage.getLoginToken();
+    this.pageSize = this.screenSizeService.getPageSize('withoutDropdown');
   }
 
   private FormulateCompanyMasterList = async () => {

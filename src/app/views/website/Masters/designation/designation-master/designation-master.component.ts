@@ -41,9 +41,8 @@ export class DesignationMasterComponent implements OnInit {
   async ngOnInit() {
     this.appStateManage.setDropdownDisabled();
     this.loadPaginationData();
-    this.pageSize = this.screenSizeService.getPageSize('withoutDropdown');
+    this.pageSize = this.screenSizeService.getPageSize('withDropdown');
   }
-
   public getDepartmentListByCompanyRef = async () => {
     this.Entity.p.DepartmentRef = 0;
     if (this.companyRef() <= 0) {

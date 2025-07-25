@@ -46,6 +46,7 @@ export class MaterialRequisitionComponent implements OnInit {
 
   ngOnInit() {
     this.appStateManage.setDropdownDisabled();
+    this.pageSize = this.screenSizeService.getPageSize('withDropdown');
   }
 
   getSiteListByCompanyRef = async () => {

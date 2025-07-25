@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { Employee } from 'src/app/classes/domain/entities/website/masters/employee/employee';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
+import { ScreenSizeService } from 'src/app/services/screensize.service';
 import { UIUtils } from 'src/app/services/uiutils.service';
 
 @Component({
@@ -36,7 +37,8 @@ export class EmployeeMasterComponent implements OnInit {
     private uiUtils: UIUtils,
     private router: Router,
     private appStateManage: AppStateManageService,
-    private companystatemanagement: CompanyStateManagement
+    private companystatemanagement: CompanyStateManagement,
+    private screenSizeService: ScreenSizeService
   ) {
     effect(() => {
       this.getEmployeeListByCompanyRef();
@@ -45,6 +47,7 @@ export class EmployeeMasterComponent implements OnInit {
 
   ngOnInit() {
     this.appStateManage.setDropdownDisabled();
+    this.pageSize = this.screenSizeService.getPageSize('withoutDropdown');
   }
 
 
