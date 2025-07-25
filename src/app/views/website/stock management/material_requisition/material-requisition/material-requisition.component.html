@@ -28,14 +28,14 @@
       </nz-select>
     </div>
   </div>
-  <div class="col-md-4">
+  <!-- <div class="col-md-4">
     <label><b>Status</b></label>
     <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear nzPlaceHolder="Select"
       id="Status" name="Status" [nzSize]="'large'" [(ngModel)]="Entity.p.Status"
       (ngModelChange)="getRequisitionListByAllFilters()">
       <nz-option *ngFor="let status of StatusList" [nzValue]="status.Ref" [nzLabel]="status.Name"></nz-option>
     </nz-select>
-  </div>
+  </div> -->
 </div>
 <ng-template #noDataTpl>
   <div class="no-data-text">Data Not Found</div>
