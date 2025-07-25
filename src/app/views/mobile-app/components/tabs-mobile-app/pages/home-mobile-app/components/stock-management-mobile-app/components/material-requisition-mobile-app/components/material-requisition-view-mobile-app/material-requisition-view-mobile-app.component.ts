@@ -32,7 +32,7 @@ export class MaterialRequisitionViewMobileAppComponent implements OnInit, OnDest
   companyRef = 0;
   modalOpen = false;
   SearchString = '';
-  tableHeaderData = ['Material', 'Unit', 'Required Qty', 'Status'];
+  tableHeaderData = ['Material', 'Unit', 'Required Qty'];
   StatusList = DomainEnums.MaterialRequisitionStatusesList();
 
   filters: FilterItem[] = [];
