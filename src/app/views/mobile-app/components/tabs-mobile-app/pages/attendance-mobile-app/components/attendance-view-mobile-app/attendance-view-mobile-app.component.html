@@ -124,7 +124,7 @@
         <ion-content class="ion-padding modal-content">
           <ion-list lines="none">
             <!-- Select Location Type -->
-            <ion-item class="input-item" button (click)="selectAttendanceLocationBottomsheet()">
+            <ion-item class="input-item" button (click)="selectAttendanceLocationBottomsheet()" detail>
               <ion-label>Location Type</ion-label>
 
               <!-- Text showing the selected status -->
@@ -133,12 +133,12 @@
               </ion-text>
 
               <!-- Dropdown icon (chevron) on the right -->
-              <ion-icon name="chevron-down-outline" slot="end" class="dropdown-icon"></ion-icon>
+              <!-- <ion-icon name="chevron-down-outline" slot="end" class="dropdown-icon"></ion-icon> -->
             </ion-item>
 
             <!-- Site Selection -->
             <ion-item class="input-item" button (click)="selectSiteBottomsheet()"
-              *ngIf="this.AttendanceLocationTypeRef === AttendanceLocationTypes.Site">
+              *ngIf="this.AttendanceLocationTypeRef === AttendanceLocationTypes.Site" detail>
               <ion-label>Select Site</ion-label>
 
               <!-- Text showing the selected status -->
@@ -147,7 +147,7 @@
               </ion-text>
 
               <!-- Dropdown icon (chevron) on the right -->
-              <ion-icon name="chevron-down-outline" slot="end" class="dropdown-icon"></ion-icon>
+              <!-- <ion-icon name="chevron-down-outline" slot="end" class="dropdown-icon"></ion-icon> -->
             </ion-item>
 
             <!-- Photo Upload Section -->
