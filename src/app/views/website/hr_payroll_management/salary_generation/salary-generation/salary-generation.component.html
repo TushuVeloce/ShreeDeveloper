@@ -179,15 +179,14 @@
           <!-- Signatures -->
           <div class="row mt-8">
             <div class="col-md-6 text-start d-flex flex-column align-items-left justify-content-center">
-              <!-- <hr class="my-2 w-100" style="max-width: 200px; border: 1px solid #0d6efd;"> -->
-              <h6 class="mb-0"> Signature :</h6>
+              <h6 class="mb-0">Stamp : {{Entity.p.CompanyName}}</h6>
             </div>
-            <!-- <div class="col-md-6 text-center d-flex flex-column align-items-center">
-          <hr class="my-2 w-100" style="max-width: 200px; border: 1px solid #0d6efd;">
-          <h6 class="mb-0">Employee Signature</h6>
-        </div> -->
+            <div class="col-md-6 text-center d-flex flex-column align-items-center">
+              <h6 class="mb-0">Signature : {{UserDisplayName}}</h6>
+            </div>
             <div class=" col-md-6 text-end mt-1">
-              <button nz-button nzType="primary" (click)="printPage()">Print</button>
+              <img src="/assets/icons/printer.png" alt="Print" style="cursor: pointer;" width="34px" height="34px"
+                (click)="printPage()" />
             </div>
           </div>
           <!-- Close Button -->
