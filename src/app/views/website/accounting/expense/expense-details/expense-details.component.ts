@@ -212,6 +212,7 @@ export class ExpenseDetailsComponent implements OnInit {
     this.Entity.p.IsAdvancePayment = 0;
     this.RecipientNameInput = false
     this.Entity.p.GivenAmount = 0
+    this.PaymentType = 0  
     await this.CalculateRemainingAmountandBalance()
   }
 
@@ -362,6 +363,7 @@ export class ExpenseDetailsComponent implements OnInit {
       if (this.IsNewEntity) {
         await this.uiUtils.showSuccessToster('Expense saved successfully');
         this.Entity = Expense.CreateNewInstance();
+        this.PaymentType = 0
         await this.getCurrentBalanceByCompanyRef()
       } else {
         await this.uiUtils.showSuccessToster('Expense Updated successfully');

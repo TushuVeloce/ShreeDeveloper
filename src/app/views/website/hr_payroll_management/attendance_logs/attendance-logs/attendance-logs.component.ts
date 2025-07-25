@@ -32,8 +32,8 @@ export class AttendanceLogsComponent implements OnInit {
   // headers as per required
   baseHeaders: string[] = ['Sr. no', 'Employee Name', 'Date', 'First Check In Time', 'Last Check Out Time', 'Total Time'];
 
-  pageSize: number = 10; // Items per page
-  currentPage: number = 1; // Initialize current page
+  pageSize = 10; // Items per page
+  currentPage = 1; // Initialize current page
   total = 0;
   SearchString: string = '';
 
@@ -79,7 +79,7 @@ export class AttendanceLogsComponent implements OnInit {
   ngOnInit() {
     this.loadPaginationData();
     this.appStateManage.setDropdownDisabled();
-    this.pageSize = this.screenSizeService.getPageSize('withoutDropdown');
+    // this.pageSize = this.screenSizeService.getPageSize('withoutDropdown') - 5;
     // this.isTodayAttendanceView = true;
     this.getViewStatus();
   }
@@ -241,18 +241,18 @@ export class AttendanceLogsComponent implements OnInit {
   }
 
   // For Pagination  start ----
-  loadPaginationData = () => {
+   loadPaginationData = () => {
     this.total = this.DisplayMasterList.length; // Update total based on loaded data
-  }
+  };
 
-  get paginatedList() {
+paginatedList = () => {
     const start = (this.currentPage - 1) * this.pageSize;
     return this.DisplayMasterList.slice(start, start + this.pageSize);
   }
 
-  onPageChange = (pageIndex: number): void => {
+onPageChange = (pageIndex: number): void => {
     this.currentPage = pageIndex; // Update the current page
-  }
+  };
 
   filterTable = () => {
     if (this.SearchString != '') {

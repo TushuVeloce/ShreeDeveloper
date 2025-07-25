@@ -71,7 +71,7 @@
             [(ngModel)]="Entity.p.FullDayWorked" placeholder="Full Day Worked" disabled />
         </div>
         <div class="col-md-4">
-          <label>Per Day Salary</label>
+          <label>Full Days Worked Salary</label>
           <input type="number" name="TotalFullDaysSalary" class="form-control" id="TotalFullDaysSalary"
             [(ngModel)]="Entity.p.TotalFullDaysSalary" placeholder="Per Day Salary" disabled />
         </div>
@@ -158,6 +158,11 @@
           <input type="number" name="AdvanceDeduction" class="form-control" id="AdvanceDeduction"
             [(ngModel)]="Entity.p.AdvanceDeduction" placeholder="Enter Advance Deduction" required
             (click)="selectAllValue($event)" (ngModelChange)="calculatetotaldeduction()" />
+        </div>
+        <div class="col-md-4" style="margin-top: 1rem">
+          <label>Remaining Advance</label>
+          <input type="number" name="RemainingAdvance" class="form-control" id="RemainingAdvance"
+            [(ngModel)]="Entity.p.RemainingAdvance" placeholder="Remaining Advance" disabled/>
         </div>
         <div class="col-md-4" style="margin-top: 1rem">
           <label>Total Deduction</label>

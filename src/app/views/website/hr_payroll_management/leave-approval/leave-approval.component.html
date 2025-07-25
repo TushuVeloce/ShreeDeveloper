@@ -1,4 +1,3 @@
-<div>
   <div class="row">
      <div class="col-4 mb-2">
       <h5 style="padding-top: 3px;" class="title title_light">Leave Approval</h5>
@@ -7,7 +6,7 @@
       <app-shared-filter [masterList]="MasterList" [filterFields]="['LeaveRequestName', 'Description', 'HalfDayDate', 'ToDate', 'HalfDayDate', 'Days']"
         (filteredList)="DisplayMasterList = $event"></app-shared-filter>
     </div>
-    <div class="col-4 mb-2" routerLinkActive="active">
+    <div class="col-4 mb-2">
     </div>
     <ng-template #noDataTpl>
       <div style="text-align: center; color: rgba(0, 0, 0, 0.25);">
@@ -31,7 +30,7 @@
       </form>
     </div>
   </div>
-  <div class="table-wrapper" class="tblcard_light" style="margin-top: 2rem" *ngIf="DisplayMasterList.length > 0">
+  <div class="table-wrapper tblcard_light" style="margin-top: 2rem" *ngIf="DisplayMasterList.length > 0">
     <div class="table-container">
       <nz-table #basicTable nzSize="small" class="no-hover-table bgtable_light" [nzData]="paginatedList()"
         [nzScroll]="{x:'auto' }" nzFrontPagination="false" [nzShowSizeChanger]="false">
@@ -52,7 +51,7 @@
 
             <td class="tbldata" *ngIf="leaverequest.p.LeaveRequestType == LeaveRequesttype.HalfDay">
               {{formatDate(leaverequest.p.HalfDayDate)}}</td>
-            <td Class="tbldata">{{leaverequest.p.Days}}</td>
+            <td Class="tbldata">{{leaverequest.p.LeaveRequestType == LeaveRequesttype.HalfDay? '0.5' : leaverequest.p.Days}}</td>
             <td class="tbldata">
               <!-- PENDING -->
               <button class="status" *ngIf="!leaverequest.p.IsApproved && !leaverequest.p.IsCancelled"
