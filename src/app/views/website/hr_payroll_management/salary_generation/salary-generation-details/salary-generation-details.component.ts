@@ -81,9 +81,12 @@ export class SalaryGenerationDetailsComponent implements OnInit {
     const tds = Number(this.Entity.p.TDS) || 0;
     const pf = Number(this.Entity.p.PF) || 0;
     const advance = Number(this.Entity.p.AdvanceDeduction) || 0;
+    const advancepayment =  Number(this.Entity.p.AdvancePayment) || 0;
 
     const TotalDeduction = tds + pf + advance;
+    const RemainingAdvance = advancepayment - advance
 
+    this.Entity.p.RemainingAdvance = parseFloat(RemainingAdvance.toFixed(2));
     this.Entity.p.TotalDeduction = parseFloat(TotalDeduction.toFixed(2));
     this.calculatenetsalary();
   }

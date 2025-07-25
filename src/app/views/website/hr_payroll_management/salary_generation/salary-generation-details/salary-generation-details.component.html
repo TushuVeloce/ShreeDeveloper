@@ -160,6 +160,11 @@
             (click)="selectAllValue($event)" (ngModelChange)="calculatetotaldeduction()" />
         </div>
         <div class="col-md-4" style="margin-top: 1rem">
+          <label>Remaining Advance</label>
+          <input type="number" name="RemainingAdvance" class="form-control" id="RemainingAdvance"
+            [(ngModel)]="Entity.p.RemainingAdvance" placeholder="Remaining Advance" disabled/>
+        </div>
+        <div class="col-md-4" style="margin-top: 1rem">
           <label>Total Deduction</label>
           <input type="number" name="TotalDeduction" class="form-control" id="TotalDeduction"
             [(ngModel)]="Entity.p.TotalDeduction" placeholder="Enter Total Deduction" disabled />
