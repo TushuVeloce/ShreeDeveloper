@@ -36,7 +36,7 @@ export class CustomerVisitReportComponent implements OnInit {
   ) {
     effect(async () => {
       await this.getSiteListByCompanyRef();
-      await this.getInwardListByComapnyRef();
+      await this.getCustomerVisitListBySiteRef();
     });
   }
 
@@ -54,10 +54,10 @@ export class CustomerVisitReportComponent implements OnInit {
     this.Entity.p.SiteRef = 0
     let lst = await Site.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.SiteList = lst;
-    if (this.SiteList.length > 0) {
-      this.Entity.p.SiteRef = this.SiteList[0].p.Ref
-      this.getInwardListBySiteRef()
-    }
+    // if (this.SiteList.length > 0) {
+    //   this.Entity.p.SiteRef = this.SiteList[0].p.Ref
+    //   this.getCustomerVisitListBySiteRef()
+    // }
   }
 
   // Extracted from services date conversion //
@@ -65,14 +65,14 @@ export class CustomerVisitReportComponent implements OnInit {
     return this.DateconversionService.formatDate(date);
   }
 
-  getInwardListByComapnyRef = async () => {
+  getCustomerVisitListByCompanyRef = async () => {
     this.MasterList = [];
     this.DisplayMasterList = [];
     if (this.companyRef() <= 0) {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
-    let lst = await CustomerSiteVisit.FetchEntireListBySiteRef(this.companyRef(),
+    let lst = await CustomerSiteVisit.FetchEntireListByCompanyRef(this.companyRef(),
       async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
     );
     this.MasterList = lst;
@@ -80,14 +80,14 @@ export class CustomerVisitReportComponent implements OnInit {
     this.loadPaginationData();
   };
 
-  getInwardListBySiteRef = async () => {
+  getCustomerVisitListBySiteRef = async () => {
     this.MasterList = [];
     this.DisplayMasterList = [];
-    if (this.Entity.p.SiteRef <= 0) {
-      this.getInwardListByComapnyRef();
-      return;
-    }
-    let lst = await CustomerSiteVisit.FetchEntireListBySiteRef(this.Entity.p.SiteRef,
+    // if (this.Entity.p.SiteRef <= 0) {
+    //   this.getCustomerVisitListByCompanyRef();
+    //   return;
+    // }
+    let lst = await CustomerSiteVisit.FetchEntireListBySiteRef(this.Entity.p.SiteRef,this.companyRef(),
       async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
     );
     this.MasterList = lst;

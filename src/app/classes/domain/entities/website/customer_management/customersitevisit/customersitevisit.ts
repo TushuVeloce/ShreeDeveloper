@@ -229,8 +229,9 @@ export class CustomerSiteVisit implements IPersistable<CustomerSiteVisit> {
     return CustomerSiteVisit.ListFromTransportData(tdResponse);
   }
 
-  public static async FetchEntireListBySiteRef(SiteRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+  public static async FetchEntireListBySiteRef(SiteRef: number,CompanyRef:number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let req = new CustomerSiteVisitFetchRequest();
+    req.CompanyRef = CompanyRef
     req.SiteRef = SiteRef
     let tdResponse = await CustomerSiteVisit.FetchTransportData(req, errorHandler) as TransportData;
     return CustomerSiteVisit.ListFromTransportData(tdResponse);
