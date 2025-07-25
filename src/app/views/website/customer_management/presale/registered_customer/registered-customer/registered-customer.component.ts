@@ -53,7 +53,7 @@ export class RegisteredCustomerComponent  implements OnInit {
   async ngOnInit() {
     this.appStateManage.setDropdownDisabled();
     this.loadPaginationData();
-    this.pageSize = this.screenSizeService.getPageSize('withoutDropdown');
+    this.pageSize = this.screenSizeService.getPageSize('withDropdown');
   }
 
   getSiteListByCompanyRef = async () => {
