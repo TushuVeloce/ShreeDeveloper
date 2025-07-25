@@ -40,7 +40,7 @@
           <label>Ledger</label>
           <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
             nzPlaceHolder="Select" id="LedgerRef" name="LedgerRef" [nzSize]="'large'" [(ngModel)]="Entity.p.LedgerRef"
-            (ngModelChange)="getSubLedgerListByLedgerRef(Entity.p.LedgerRef)">
+            (ngModelChange)="getSubLedgerListByLedgerRef(Entity.p.LedgerRef); this.Entity.p.SubLedgerRef = 0;">
             <nz-option *ngFor="let ledger of LedgerList" [nzValue]="ledger.p.Ref" [nzLabel]="ledger.p.Name"></nz-option>
           </nz-select>
         </div>

@@ -212,7 +212,7 @@ export class ExpenseDetailsComponent implements OnInit {
     this.Entity.p.IsAdvancePayment = 0;
     this.RecipientNameInput = false
     this.Entity.p.GivenAmount = 0
-    this.PaymentType = 0  
+    this.PaymentType = 0
     await this.CalculateRemainingAmountandBalance()
   }
 
