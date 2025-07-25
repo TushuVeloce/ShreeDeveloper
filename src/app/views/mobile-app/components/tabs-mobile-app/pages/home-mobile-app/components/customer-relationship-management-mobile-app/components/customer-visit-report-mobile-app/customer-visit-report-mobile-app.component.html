@@ -1,0 +1,108 @@
+<app-header-with-back-handler title="Customer Visit Report"
+  backRoute="mobile-app/tabs/dashboard/customer-relationship-management">
+</app-header-with-back-handler>
+
+<app-chip-filter-mobile-app [filters]="filters" (filtersChanged)="onFiltersChanged($event)">
+</app-chip-filter-mobile-app>
+
+<ion-content class="ion-padding">
+  <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+  <!-- List Section -->
+  <ion-list class="requisition-list" [lines]="'none'">
+    <ion-item *ngFor="let customer of DisplayMasterList" class="requisition-item" button detail
+      (click)="openModal(customer)">
+      <ion-label>
+        <h2>Site: {{ customer.p.SiteName || '-' }}</h2>
+        <p class="date-label">Plot No: {{ customer.p.PlotNo || '-' }}</p>
+        <p class="date-label">Customer Name: {{ customer.p.CustomerName || '-' }}</p>
+        <p class="date-label">Phone No: {{ customer.p.CustomerPhoneNo || '-' }}</p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+
+  <!-- No Data -->
+  <div *ngIf="DisplayMasterList.length === 0 && !loadingService.isLoaderActive()" class="no-data-mobile-app">
+    <ion-icon name="alert-circle-outline" size="large" color="medium"></ion-icon>
+    <p>No Customer Visit Records Found.</p>
+  </div>
+
+  <!-- Modal -->
+  <ion-modal [isOpen]="modalOpen" (didDismiss)="closeModal()" class="custom-modal-mobile-app">
+    <ng-template>
+      <ion-header class="modal-toolbar-mobile-app">
+        <ion-toolbar color="primary">
+          <ion-title>Customer Visit Details</ion-title>
+          <ion-buttons slot="end">
+            <ion-button fill="clear" (click)="closeModal()">
+              <ion-icon name="close-outline"></ion-icon>
+            </ion-button>
+          </ion-buttons>
+        </ion-toolbar>
+      </ion-header>
+
+      <ion-content scroll-y="true" class="ion-padding modal-content-mobile-app">
+        <div class="info-row-of-model-mobile-app">
+          <span class="label-mobile-app">Site Name:</span>
+          <span class="value-mobile-app">{{ SelectedCustomerSiteVisit.p.SiteName || '-' }}</span>
+        </div>
+        <div class="info-row-of-model-mobile-app">
+          <span class="label-mobile-app">Plot No:</span>
+          <span class="value-mobile-app">{{ SelectedCustomerSiteVisit.p.PlotNo || '-' }}</span>
+        </div>
+        <div class="info-row-of-model-mobile-app">
+          <span class="label-mobile-app">Customer Name:</span>
+          <span class="value-mobile-app">{{ SelectedCustomerSiteVisit.p.CustomerName || '-' }}</span>
+        </div>
+        <div class="info-row-of-model-mobile-app">
+          <span class="label-mobile-app">Customer Address:</span>
+          <span class="value-mobile-app">{{ SelectedCustomerSiteVisit.p.CustomerAddress || '-' }}</span>
+        </div>
+        <div class="info-row-of-model-mobile-app">
+          <span class="label-mobile-app">Customer Phone No:</span>
+          <span class="value-mobile-app">{{ SelectedCustomerSiteVisit.p.CustomerPhoneNo || '-' }}</span>
+        </div>
+        <div class="info-row-of-model-mobile-app">
+          <span class="label-mobile-app">Customer Requirement:</span>
+          <span class="value-mobile-app">{{ SelectedCustomerSiteVisit.p.CustomerRequirement || '-' }}</span>
+        </div>
+      </ion-content>
+
+      <ion-footer class="modal-footer-mobile-app">
+        <ion-button expand="block" color="primary" shape="round" (click)="closeModal()">Close</ion-button>
+      </ion-footer>
+    </ng-template>
+  </ion-modal>
+
+  <!-- Print FAB -->
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button color="primary" (click)="handlePrintOrShare()">
+      <ion-icon name="print-outline"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+
+  <!-- Print Section -->
+  <div id="print-section" style="display: none;">
+    <h2>Customer Visit Report</h2>
+    <table class="table table-bordered print-table">
+      <thead>
+        <tr>
+          <th *ngFor="let header of Printheaders" style="background-color: maroon; color: white;">{{ header }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let report of DisplayMasterList; index as i">
+          <td class="tbldata">{{ i + 1 }}</td>
+          <td class="tbldata">{{ report.p.SiteName }}</td>
+          <td class="tbldata">{{ report.p.PlotNo }}</td>
+          <td class="tbldata">{{ report.p.CustomerName }}</td>
+          <td class="tbldata">{{ report.p.CustomerAddress }}</td>
+          <td class="tbldata">{{ report.p.CustomerPhoneNo }}</td>
+          <td class="tbldata">{{ report.p.CustomerRequirement }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</ion-content>
