@@ -83,6 +83,7 @@ export class IncomeDetailsMobileAppComponent implements OnInit {
 
   BankName: string = '';
   selectedBank: any[] = [];
+  PayerPlotNo: string = '';
 
 
 
@@ -258,7 +259,7 @@ export class IncomeDetailsMobileAppComponent implements OnInit {
       // await this.uiUtils.showErrorToster('Payer Type not Selected');
       return;
     }
-    let lst = await Income.FetchPayerNameByPayerTypeRef(this.Entity.p.SiteRef,this.companyRef, this.Entity.p.PayerType, async errMsg => {
+    let lst = await Income.FetchPayerNameByPayerTypeRef(this.Entity.p.SiteRef, this.companyRef, this.Entity.p.PayerType, async errMsg => {
       await this.toastService.present('Error ' + errMsg, 1000, 'danger');
       await this.haptic.error();
     });
@@ -278,6 +279,22 @@ export class IncomeDetailsMobileAppComponent implements OnInit {
 
     }
   }
+  // onPayerChange = () => {
+  //   console.log('this.PayerPlotNo :', this.PayerPlotNo);
+  //   try {
+  //     let SingleRecord = this.PayerList.find((data) => data.p.PlotName == this.PayerPlotNo);
+  //     console.log('SingleRecord :', SingleRecord);
+  //     if (SingleRecord?.p) {
+  //       this.Entity.p.IsRegisterCustomerRef = SingleRecord.p.IsRegisterCustomerRef;
+  //       this.Entity.p.PayerRef = SingleRecord.p.Ref;
+  //       if (this.Entity.p.PayerType == this.DealDoneCustomer) {
+  //         this.Entity.p.PlotName = SingleRecord.p.PlotName;
+  //       }
+  //     }
+  //   } catch (error) {
+  //   }
+  //   console.log('this.Entity.p.PayerRef :', this.Entity.p.PayerRef);
+  // }
 
   AddPayerName = () => {
     this.Entity.p.PayerRef = 0
@@ -447,12 +464,14 @@ export class IncomeDetailsMobileAppComponent implements OnInit {
   public async selectPayerNameBottomsheet(): Promise<void> {
     try {
       // const options = this.PayerList;
+      console.log('this.PayerList :', this.PayerList);
       let options: any[] = [];
       if (options) {
         options = this.PayerList.map(item => ({
           p: {
             Ref: item.p.Ref,
-            Name: item.p.PayerName
+            PlotName: item.p.PlotName||'',
+            Name: item.p.PayerType == this.DealDoneCustomer ? item.p.PayerName : item.p.PayerName + " " + item.p.PlotName
           }
         }));
 
@@ -461,6 +480,11 @@ export class IncomeDetailsMobileAppComponent implements OnInit {
         this.selectedPayer = selected;
         this.Entity.p.PayerRef = selected[0].p.Ref;
         this.PayerName = selected[0].p.Name;
+        console.log('selected[0].p.PayerType == this.DealDoneCustomer :', selected[0].p.Ref, selected[0].p.PlotName, this.DealDoneCustomer);
+        if (selected[0].p.Ref != this.DealDoneCustomer) {
+        this.PayerPlotNo = selected[0].p.PlotName;
+        this.Entity.p.PlotName = selected[0].p.PlotName;
+      }
         this.onPayerChange()
       });
     } catch (error) {
@@ -476,7 +500,10 @@ export class IncomeDetailsMobileAppComponent implements OnInit {
         this.selectedPayerType = selected;
         this.Entity.p.PayerType = selected[0].p.Ref;
         this.PayerTypeName = selected[0].p.Name;
-        this.getPayerListByPayerType()
+        this.getPayerListByPayerType();
+        this.selectedPayer = [];
+        this.PayerName = '';
+
       });
     } catch (error) {
 
@@ -518,6 +545,13 @@ export class IncomeDetailsMobileAppComponent implements OnInit {
         this.Entity.p.SiteRef = selected[0].p.Ref;
         this.SiteName = selected[0].p.Name;
         this.getPayerListByPayerType();
+        this.Entity.p.PayerRef = 0; 
+        // this.PayerPlotNo = ''; 
+        this.Entity.p.LedgerRef = 0; 
+        this.Entity.p.SubLedgerRef = 0; 
+        this.Entity.p.PayerType = 0; 
+        this.Entity.p.PlotName = ''; 
+        this.PayerList = []
       });
     } catch (error) {
 
