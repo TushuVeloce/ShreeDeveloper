@@ -36,7 +36,7 @@
     <label for="SiteRef"><b>Site</b></label>
     <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear nzPlaceHolder="Select"
       [nzSize]="'large'" name="SiteRef" [(ngModel)]="Entity.p.SiteRef" required id="SiteRef"
-      (ngModelChange)="getEntireListByFilters()">
+      (ngModelChange)="getEntireListByFilters(); PayerPlotNo = ''; Entity.p.PayerType = 0; Entity.p.PayerRef = 0; Entity.p.RecipientType = 0; Entity.p.RecipientRef = 0;">
       <nz-option nzLabel="All" [nzValue]="0"></nz-option>
       <nz-option *ngFor="let Site of SiteList" [nzValue]="Site.p.Ref" [nzLabel]="Site.p.Name"></nz-option>
     </nz-select>
@@ -107,10 +107,25 @@
   <div class="col-lg-2 col-md-3 col-2 g-1" style="margin-top: 1rem">
     <label><b>Received By</b></label>
     <div class="d-flex align-items-center">
-      <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear nzPlaceHolder="Select"
-        id="PayerRef" name="PayerRef" [nzSize]="'large'" [(ngModel)]="PayerPlotNo"
-        (ngModelChange)="getEntireListByFilters(); onPayerChange();">
+      <nz-select *ngIf="Entity.p.PayerType == DealDoneCustomer" class="nzSelect-light" [nzNotFoundContent]="noDataTpl"
+        nzShowSearch nzAllowClear nzPlaceHolder="Select" id="PayerRef" name="PayerRef" [nzSize]="'large'"
+        [(ngModel)]="PayerPlotNo" (ngModelChange)="onPayerChange()">
         <nz-option *ngFor="let payer of PayerList" [nzValue]="payer.p.PlotName"
+          [nzLabel]="payer.p.PayerName + ' - ' + payer.p.PlotName | titleCase">
+          <span *ngIf="Entity.p.PayerType == DealDoneCustomer"
+            [ngClass]="payer.p.IsRegisterCustomerRef == 1 ? 'sitecus' : 'nonsitecus'">
+            {{ payer.p.PayerName + ' - ' + payer.p.PlotName| titleCase }}
+          </span>
+          <span *ngIf="Entity.p.PayerType != DealDoneCustomer"
+            [ngClass]="payer.p.IsRegisterCustomerRef == 1 ? 'sitecus' : 'nonsitecus'">
+            {{ payer.p.PayerName| titleCase }}
+          </span>
+        </nz-option>
+      </nz-select>
+      <nz-select *ngIf="Entity.p.PayerType != DealDoneCustomer" class="nzSelect-light" [nzNotFoundContent]="noDataTpl"
+        nzShowSearch nzAllowClear nzPlaceHolder="Select" id="PayerRef" name="PayerRef" [nzSize]="'large'"
+        [(ngModel)]="Entity.p.PayerRef" (ngModelChange)="onPayerChange()">
+        <nz-option *ngFor="let payer of PayerList" [nzValue]="payer.p.Ref"
           [nzLabel]="payer.p.PayerName + ' - ' + payer.p.PlotName | titleCase">
           <span *ngIf="Entity.p.PayerType == DealDoneCustomer"
             [ngClass]="payer.p.IsRegisterCustomerRef == 1 ? 'sitecus' : 'nonsitecus'">
@@ -152,7 +167,7 @@
           <td class="tbldata">{{ report.p.ModeOfPaymentName }}</td>
           <td class="tbldata">{{ report.p.Narration }}</td>
         </tr>
-        <tr *ngIf="paginatedList().length > 0">
+        <tr *ngIf="DisplayMasterList.length > 0">
           <td class="tbldata" colspan="5"></td>
           <td class="tbldata"><b>Total</b></td>
           <td class="tbldata"><b>{{ totalTotalIncome | currency: 'INR' }}</b></td>

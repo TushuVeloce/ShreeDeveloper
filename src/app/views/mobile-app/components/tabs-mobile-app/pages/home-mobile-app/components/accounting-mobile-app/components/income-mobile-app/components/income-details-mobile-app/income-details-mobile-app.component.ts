@@ -545,12 +545,12 @@ export class IncomeDetailsMobileAppComponent implements OnInit {
         this.Entity.p.SiteRef = selected[0].p.Ref;
         this.SiteName = selected[0].p.Name;
         this.getPayerListByPayerType();
-        this.Entity.p.PayerRef = 0; 
-        // this.PayerPlotNo = ''; 
-        this.Entity.p.LedgerRef = 0; 
-        this.Entity.p.SubLedgerRef = 0; 
-        this.Entity.p.PayerType = 0; 
-        this.Entity.p.PlotName = ''; 
+        this.Entity.p.PayerRef = 0;
+        // this.PayerPlotNo = '';
+        this.Entity.p.LedgerRef = 0;
+        this.Entity.p.SubLedgerRef = 0;
+        this.Entity.p.PayerType = 0;
+        this.Entity.p.PlotName = '';
         this.PayerList = []
       });
     } catch (error) {

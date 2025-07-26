@@ -643,7 +643,7 @@ export class OfficeViewMobileAppComponent implements OnInit {
       } catch (error) {
       }
     }
-  
+
     getPayerListBySiteAndPayerType = async () => {
       if (this.companyRef <= 0) {
         // await this.uiUtils.showErrorToster('Company not Selected');

@@ -76,18 +76,18 @@ export class AccountingReportComponent implements OnInit {
     this.pageSize = pageSize - 6
   }
 
-  getAccountingReportListByCompanyRef = async () => {
-    this.MasterList = [];
-    this.DisplayMasterList = [];
-    if (this.companyRef() <= 0) {
-      await this.uiUtils.showErrorToster('Company not Selected');
-      return;
-    }
-    let lst = await AccountingReport.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-    this.MasterList = lst;
-    this.DisplayMasterList = this.MasterList;
-    this.loadPaginationData();
-  }
+  // getAccountingReportListByCompanyRef = async () => {
+  //   this.MasterList = [];
+  //   this.DisplayMasterList = [];
+  //   if (this.companyRef() <= 0) {
+  //     await this.uiUtils.showErrorToster('Company not Selected');
+  //     return;
+  //   }
+  //   let lst = await AccountingReport.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+  //   this.MasterList = lst;
+  //   this.DisplayMasterList = this.MasterList;
+  //   this.loadPaginationData();
+  // }
 
   getSiteListByCompanyRef = async () => {
     this.Entity.p.SiteRef = 0
@@ -123,8 +123,13 @@ export class AccountingReportComponent implements OnInit {
   }
 
   onPayerChange = () => {
+    let SingleRecord;
     try {
-      let SingleRecord = this.PayerList.find((data) => data.p.PlotName == this.PayerPlotNo);
+      if (this.Entity.p.PayerType == this.DealDoneCustomer) {
+        SingleRecord = this.PayerList.find((data) => data.p.PlotName == this.PayerPlotNo);
+      } else {
+        SingleRecord = this.PayerList.find((data) => data.p.Ref == this.Entity.p.PayerRef);
+      }
       if (SingleRecord?.p) {
         this.Entity.p.IsRegisterCustomerRef = SingleRecord.p.IsRegisterCustomerRef;
         this.Entity.p.PayerRef = SingleRecord.p.Ref;
@@ -132,6 +137,7 @@ export class AccountingReportComponent implements OnInit {
           this.Entity.p.PlotName = SingleRecord.p.PlotName;
         }
       }
+      this.getEntireListByFilters();
     } catch (error) {
     }
   }

@@ -142,12 +142,16 @@ export class IncomeDetailsComponent implements OnInit {
     }
     let lst = await Income.FetchPayerNameByPayerTypeRef(this.Entity.p.SiteRef, this.companyRef(), this.Entity.p.PayerType, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.PayerList = lst;
-    console.log('this.PayerList :', this.PayerList);
   }
 
   onPayerChange = () => {
+    let SingleRecord;
     try {
-      let SingleRecord = this.PayerList.find((data) => data.p.PlotName == this.PayerPlotNo);
+      if (this.Entity.p.PayerType == this.DealDoneCustomer) {
+        SingleRecord = this.PayerList.find((data) => data.p.PlotName == this.PayerPlotNo);
+      } else {
+        SingleRecord = this.PayerList.find((data) => data.p.Ref == this.Entity.p.PayerRef);
+      }
       if (SingleRecord?.p) {
         this.Entity.p.IsRegisterCustomerRef = SingleRecord.p.IsRegisterCustomerRef;
         this.Entity.p.PayerRef = SingleRecord.p.Ref;
