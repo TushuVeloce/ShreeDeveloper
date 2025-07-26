@@ -110,6 +110,8 @@ export class InvoiceDetailsComponent implements OnInit {
       this.IsNewEntity = false;
       this.DetailsFormTitle = this.IsNewEntity ? 'New Bill' : 'Edit Bill';
       this.Entity = Invoice.GetCurrentInstance();
+      console.log('this.Entity :', this.Entity);
+      this.Entity.p.RecipientType =   this.Entity.p.InvoiceRecipientType;
       this.appStateManage.StorageKey.removeItem('Editable');
       this.Entity.p.UpdatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
       if (this.Entity.p.LedgerRef) {
@@ -178,6 +180,9 @@ export class InvoiceDetailsComponent implements OnInit {
     this.VendorServiceList = []
     if (this.companyRef() <= 0) {
       await this.uiUtils.showErrorToster('Company not Selected');
+      return;
+    }
+    if (VendorRef <= 0) {
       return;
     }
     let lst = await Vendor.FetchInstance(VendorRef, this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));

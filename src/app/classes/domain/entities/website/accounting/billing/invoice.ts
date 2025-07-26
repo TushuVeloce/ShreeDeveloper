@@ -46,6 +46,7 @@ export class InvoiceProps {
   public VehicleNo: string = ''
   public Description: string = ''
   public RecipientType: number = 0
+  public InvoiceRecipientType: number = 0
   public RecipientMasterRef: number = 0
   public RecipientName: string = ''
   public IsSiteRef: number = 0
