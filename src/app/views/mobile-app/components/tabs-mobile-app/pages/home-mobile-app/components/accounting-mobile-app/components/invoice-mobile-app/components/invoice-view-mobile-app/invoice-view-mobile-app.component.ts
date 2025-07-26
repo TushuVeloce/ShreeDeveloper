@@ -39,6 +39,8 @@ export class InvoiceViewMobileAppComponent implements OnInit {
   ReasonList: Invoice[] = [];
   LedgerList: Ledger[] = [];
   SubLedgerList: SubLedger[] = [];
+  MachineTableHeaderData = ['Machine Start Time', 'Machine End Time', 'Machine Worked Hours'];
+  LabourTableHeaderData = ['Labour Type','Labour Start Time', 'Labour End Time', 'Labour Worked Hours', 'Labour Rate', 'Labour Amount'];
 
   // Store current selected values here to preserve selections on filter reload
   selectedFilterValues: Record<string, any> = {};
@@ -163,6 +165,18 @@ export class InvoiceViewMobileAppComponent implements OnInit {
   async handleRefresh(event: CustomEvent) {
     await this.loadInvoiceIfEmployeeExists();
     (event.target as HTMLIonRefresherElement).complete();
+  }
+
+  convertTo12HourFormat(time: string): string {
+    const [hourStr, minuteStr] = time.split(':');
+    let hour = parseInt(hourStr, 10);
+    const minute = parseInt(minuteStr, 10);
+
+    const ampm = hour >= 12 ? 'PM' : 'AM';
+    hour = hour % 12;
+    hour = hour === 0 ? 12 : hour;
+
+    return `${hour}:${minute.toString().padStart(2, '0')} ${ampm}`;
   }
 
   private async loadInvoiceIfEmployeeExists() {

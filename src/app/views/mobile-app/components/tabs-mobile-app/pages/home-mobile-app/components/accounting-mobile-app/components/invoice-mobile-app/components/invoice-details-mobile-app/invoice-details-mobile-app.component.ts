@@ -198,8 +198,6 @@ export class InvoiceDetailsMobileAppComponent implements OnInit {
 
           this.selectedVendor = [{ p: { Ref: this.Entity.p.VendorRef, Name: this.Entity.p.VendorName } }];
           this.VendorName = this.Entity.p.VendorName;
-          this.selectedVendorService = [{ p: { Ref: this.Entity.p.VendorServiceRef, Name: this.Entity.p.VendorServiceName } }];
-          this.VendorServiceName = this.Entity.p.VendorServiceName;
 
           this.selectedLedger = [{ p: { Ref: this.Entity.p.LedgerRef, Name: this.Entity.p.LedgerName } }];
           this.LedgerName = this.Entity.p.LedgerName;
@@ -232,8 +230,11 @@ export class InvoiceDetailsMobileAppComponent implements OnInit {
           if (this.Entity.p.IsDieselPaid == 1) {
             this.isDieselPaid = true
           }
-          this.getVendorServiceListByVendorRef(this.Entity.p.VendorRef);
-          this.getTotalWorkedHours()
+          this.Entity.p.RecipientType = this.Entity.p.InvoiceRecipientType;
+          await this.getVendorServiceListByVendorRef(this.Entity.p.VendorRef);
+          await this.getTotalWorkedHours()
+          this.selectedVendorService = [{ p: { Ref: this.Entity.p.VendorServiceRef, Name: this.Entity.p.VendorServiceName } }];
+          this.VendorServiceName = this.Entity.p.VendorServiceName;
           // this.RecipientNameReadOnly = true
         } else {
           this.Entity = Invoice.CreateNewInstance();
@@ -448,18 +449,33 @@ export class InvoiceDetailsMobileAppComponent implements OnInit {
     this.CalculateAmount()
   }
 
-  CalculateAmount = () => {
+  // CalculateAmount = () => {
+  //   const TotalWorkedHours = this.getTotalWorkedHours()
+  //   const TotalLabourAmount = this.getTotalLabourAmount()
+  //   const Qty = Number(this.Entity.p.Qty)
+  //   const Rate = Number(this.Entity.p.Rate)
+  //   const DieselAmount = Number(this.Entity.p.DieselAmount) || 0
+  //   if (TotalWorkedHours > 0) {
+  //     this.Entity.p.InvoiceAmount = Math.round(((TotalWorkedHours * Rate) - DieselAmount) * 100) / 100;
+  //   } else if (TotalLabourAmount > 0) {
+  //     this.Entity.p.InvoiceAmount = Math.round((TotalLabourAmount) * 100) / 100;
+  //   } else {
+  //     this.Entity.p.InvoiceAmount = Math.round(((Qty * Rate) - DieselAmount) * 100) / 100;
+  //   }
+  // }
+    CalculateAmount = () => {
     const TotalWorkedHours = this.getTotalWorkedHours()
     const TotalLabourAmount = this.getTotalLabourAmount()
     const Qty = Number(this.Entity.p.Qty)
-    const Rate = Number(this.Entity.p.Rate)
     const DieselAmount = Number(this.Entity.p.DieselAmount) || 0
+    // debugger
     if (TotalWorkedHours > 0) {
+      const Rate = Number(this.Entity.p.Rate / 60);
       this.Entity.p.InvoiceAmount = Math.round(((TotalWorkedHours * Rate) - DieselAmount) * 100) / 100;
     } else if (TotalLabourAmount > 0) {
       this.Entity.p.InvoiceAmount = Math.round((TotalLabourAmount) * 100) / 100;
     } else {
-      this.Entity.p.InvoiceAmount = Math.round(((Qty * Rate) - DieselAmount) * 100) / 100;
+      this.Entity.p.InvoiceAmount = Math.round(((Qty * this.Entity.p.Rate) - DieselAmount) * 100) / 100;
     }
   }
 

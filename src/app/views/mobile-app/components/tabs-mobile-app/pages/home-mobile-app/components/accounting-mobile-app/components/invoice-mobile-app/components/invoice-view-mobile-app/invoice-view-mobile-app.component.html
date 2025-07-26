@@ -88,6 +88,76 @@
           <span class="value-mobile-app">{{SelectedInvoice.p.RecipientName? SelectedInvoice.p.RecipientName :
             SelectedInvoice.p.VendorName || '-' }}</span>
         </div>
+        <div class="info-row-of-model-mobile-app" *ngIf="SelectedInvoice.p.MachineUsageDetailsArray.length > 0">
+          <span class="label-mobile-app">Machine Time Details :</span>
+        </div>
+        <div class="table-container" *ngIf="SelectedInvoice.p.MachineUsageDetailsArray.length > 0">
+          <div class="table-scroll">
+            <table class="custom-table ion-text-center">
+              <thead>
+                <tr>
+                  <th class="sticky-col sticky-header">#</th>
+                  <th *ngFor="let item of MachineTableHeaderData" class="sticky-header">{{ item }}</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let item of SelectedInvoice.p.MachineUsageDetailsArray; let i = index">
+                  <td class="sticky-col">{{i + 1 }}</td>
+                  <td>
+                    {{ convertTo12HourFormat(item.StartTime) }}
+                  </td>
+                  <td>
+                    {{ convertTo12HourFormat(item.EndTime) || '-' }}
+                  </td>
+                  <td>
+                    {{ item.DisplayWorkedHours }}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="info-row-of-model-mobile-app" *ngIf="SelectedInvoice.p.LabourExpenseDetailsArray.length > 0">
+          <span class="label-mobile-app">Labour Time Details :</span>
+        </div>
+        <div class="table-container" *ngIf="SelectedInvoice.p.LabourExpenseDetailsArray.length > 0">
+          <div class="table-scroll">
+            <table class="custom-table">
+              <thead>
+                <tr>
+                  <th class="sticky-col sticky-header">#</th>
+                  <th *ngFor="let item of LabourTableHeaderData" class="sticky-header">{{ item }}</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let item of SelectedInvoice.p.LabourExpenseDetailsArray; let i = index">
+                  <td class="sticky-col">{{i + 1 }}</td>
+                  <td>
+                    {{ item.LabourTypeName || '-' }}
+                  </td>
+                  <td>
+                    {{ convertTo12HourFormat(item.LabourFromTime) || '-' }}
+                  </td>
+                  <td>
+                    {{ convertTo12HourFormat(item.LabourToTime) || '-' }}
+                  </td>
+                  <td>
+                    {{ item.LabourWorkedHours || '-' }}
+                  </td>
+                  <td>
+                    {{ item.LabourQty || '-' }}
+                  </td>
+                  <td>
+                    {{ item.LabourRate || '-' }}
+                  </td>
+                  <td>
+                    {{ item.LabourAmount || '-' }}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
         <div class="info-row-of-model-mobile-app">
           <span class="label-mobile-app">Billing Amount :</span>
           <span class="value-mobile-app">{{ (SelectedInvoice.p.InvoiceAmount | currency : "INR") || '-' }}</span>

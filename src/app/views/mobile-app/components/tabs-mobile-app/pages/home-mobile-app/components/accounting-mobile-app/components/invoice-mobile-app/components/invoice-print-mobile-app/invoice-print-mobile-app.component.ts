@@ -51,7 +51,7 @@ export class InvoicePrintMobileAppComponent  implements OnInit {
     this.Entity = history.state.printData;
     console.log('this.Entity :', this.Entity);
     this.Entity.p.Date = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.CreatedDate);
-
+    this.getTotalWorkedHours();
     this.InitialEntity = Object.assign(Invoice.CreateNewInstance(), this.utils.DeepCopy(this.Entity)) as Invoice;
   }
 
@@ -59,6 +59,26 @@ export class InvoicePrintMobileAppComponent  implements OnInit {
 
   totalAmountInWords(number: number): string {
     return this.utils.convertNumberToWords(number);
+  }
+
+  getTotalWorkedHours(): number {
+    let totalMinutes = this.Entity.p.MachineUsageDetailsArray.reduce((sum: number, item: any) => {
+      return sum + parseFloat(item.WorkedHours || 0);
+    }, 0);
+
+    // Set display value in HH:mm format
+    this.DisplayTotalWorkingHrs = this.formatMinutesToHourMin(totalMinutes);
+
+    // Return hours as decimal (rounded to 2 decimals)
+    let totalHours = totalMinutes / 60;
+    return Math.round(totalHours * 100) / 100;
+  }
+
+  formatMinutesToHourMin = (totalMinutes: number): string => {
+    const hours = Math.floor(totalMinutes / 60);
+    const minutes = totalMinutes % 60;
+    const formattedMinutes = minutes < 10 ? '0' + minutes : minutes;
+    return `${hours}h ${formattedMinutes}m`;
   }
   // Extracted from services date conversion //
   formatDate = (date: string | Date): string => {
