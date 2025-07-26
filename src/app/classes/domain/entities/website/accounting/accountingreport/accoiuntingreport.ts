@@ -35,6 +35,8 @@ export class AccountingReportProps {
   public StartDate: string = ''
   public EndDate: string = ''
   public AccountingReport: number = 0
+  public LedgerRef: number = 0
+  public SubLedgerRef: number = 0
 
 
   public readonly IsNewlyCreated: boolean = false;

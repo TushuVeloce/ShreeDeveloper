@@ -109,6 +109,66 @@ export class OfficeViewMobileAppComponent implements OnInit {
         selected: this.selectedFilterValues['modeOfPayment'] > 0 ? this.selectedFilterValues['modeOfPayment'] : null,
       },
       {
+        key: 'ledger',
+        label: 'Ledger',
+        multi: false,
+        options: this.LedgerList.map(item => ({
+          Ref: item.p.Ref,
+          Name: item.p.Name,
+        })),
+        selected: this.selectedFilterValues['ledger'] > 0 ? this.selectedFilterValues['ledger'] : null,
+      },
+      {
+        key: 'subledger',
+        label: 'Sub Ledger',
+        multi: false,
+        options: this.SubLedgerList.map(item => ({
+          Ref: item.p.Ref,
+          Name: item.p.Name,
+        })),
+        selected: this.selectedFilterValues['subledger'] > 0 ? this.selectedFilterValues['subledger'] : null,
+      },
+      {
+        key: 'payertype',
+        label: 'Payer Type',
+        multi: false,
+        options: this.LedgerList.map(item => ({
+          Ref: item.p.Ref,
+          Name: item.p.Name,
+        })),
+        selected: this.selectedFilterValues['payertype'] > 0 ? this.selectedFilterValues['payertype'] : null,
+      },
+      {
+        key: 'payertypelist',
+        label: 'Payer',
+        multi: false,
+        options: this.SubLedgerList.map(item => ({
+          Ref: item.p.Ref,
+          Name: item.p.Name,
+        })),
+        selected: this.selectedFilterValues['payertypelist'] > 0 ? this.selectedFilterValues['payertypelist'] : null,
+      },
+      {
+        key: 'recipienttype',
+        label: 'Recipient Type',
+        multi: false,
+        options: this.LedgerList.map(item => ({
+          Ref: item.p.Ref,
+          Name: item.p.Name,
+        })),
+        selected: this.selectedFilterValues['recipienttype'] > 0 ? this.selectedFilterValues['recipienttype'] : null,
+      },
+      {
+        key: 'recipienttypelist',
+        label: 'Recipient',
+        multi: false,
+        options: this.SubLedgerList.map(item => ({
+          Ref: item.p.Ref,
+          Name: item.p.Name,
+        })),
+        selected: this.selectedFilterValues['recipienttypelist'] > 0 ? this.selectedFilterValues['recipienttypelist'] : null,
+      },
+      {
         key: 'accountingReport',
         label: 'Accounting Report',
         multi: false,
@@ -140,7 +200,33 @@ export class OfficeViewMobileAppComponent implements OnInit {
         case 'reason':
           this.Entity.p.Reason = selectedValue ?? 0;
           break;
+          
+        case 'subledger':
+          this.Entity.p.SubLedgerRef = selectedValue ?? 0;
+          break;
 
+        case 'ledger':
+          this.Entity.p.LedgerRef = selectedValue ?? 0;
+          if (selectedValue != null) {await this.getSubLedgerListByLedgerRef(selectedValue);}else {this.SubLedgerList = []};  // Updates SubLedgerList
+          break;
+        
+        case 'payertype':
+          this.Entity.p.SubLedgerRef = selectedValue ?? 0;
+          break;
+
+        case 'payertypelist':
+          this.Entity.p.LedgerRef = selectedValue ?? 0;
+          if (selectedValue != null) {await this.getSubLedgerListByLedgerRef(selectedValue);} else {this.SubLedgerList = []};   // Updates SubLedgerList
+          break;
+
+        case 'recipienttype':
+          this.Entity.p.SubLedgerRef = selectedValue ?? 0;
+          break;
+
+        case 'recipienttypelist':
+          this.Entity.p.LedgerRef = selectedValue ?? 0;
+          if (selectedValue != null) {await this.getSubLedgerListByLedgerRef(selectedValue);} else {this.SubLedgerList = []};   // Updates SubLedgerList
+          break;
         case 'accountingReport':
           this.Entity.p.AccountingReport = selectedValue ?? 0;
           break;
@@ -188,6 +274,7 @@ export class OfficeViewMobileAppComponent implements OnInit {
       await this.getCurrentBalanceByCompanyRef();
       await this.getSiteListByCompanyRef();
       await this.FetchEntireListByFilters();
+      await this.getLedgerListByCompanyRef();
       this.Entity.p.StartDate = ''
       this.Entity.p.EndDate = ''
     } catch (error) {
@@ -268,18 +355,47 @@ export class OfficeViewMobileAppComponent implements OnInit {
   }
 
   getSiteListByCompanyRef = async () => {
-    this.Entity.p.SiteRef = 0
-    this.Entity.p.SiteName = ''
     if (this.companyRef <= 0) {
-      await this.toastService.present('Company not selected', 1000, 'warning');
-      await this.haptic.warning();
+      await this.toastService.present('Company not selected', 1000, 'danger');
+      await this.haptic.error();
       return;
     }
-    let lst = await Site.FetchEntireListByCompanyRef(this.companyRef, async errMsg => {
+    const lst = await Site.FetchEntireListByCompanyRef(this.companyRef, async errMsg => {
       await this.toastService.present('Error ' + errMsg, 1000, 'danger');
       await this.haptic.error();
     });
     this.SiteList = lst;
+    this.loadFilters();
+  }
+
+  getLedgerListByCompanyRef = async () => {
+    if (this.companyRef <= 0) {
+      await this.toastService.present('Company not selected', 1000, 'danger');
+      await this.haptic.error();
+      return;
+    }
+    const lst = await Ledger.FetchEntireListByCompanyRef(this.companyRef, async errMsg => {
+      await this.toastService.present('Error ' + errMsg, 1000, 'danger');
+      await this.haptic.error();
+    });
+    this.LedgerList = lst;
+    this.loadFilters();
+  };
+
+  getSubLedgerListByLedgerRef = async (ledgerref: number) => {
+    console.log('ledgerref :', ledgerref);
+
+    if (ledgerref <= 0) {
+      await this.toastService.present('Ledger not selected', 1000, 'danger');
+      await this.haptic.error();
+      return;
+    }
+    const lst = await SubLedger.FetchEntireListByLedgerRef(ledgerref, async errMsg => {
+      await this.toastService.present('Error ' + errMsg, 1000, 'danger');
+      await this.haptic.error();
+    });
+    this.SubLedgerList = lst;
+    this.loadFilters();
   }
 
   getBalanceByBank = () => {
