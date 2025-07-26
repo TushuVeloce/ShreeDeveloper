@@ -21,6 +21,10 @@ import { DomainEnums } from 'src/app/classes/domain/domainenums/domainenums';
 import { NzSelectModule } from 'ng-zorro-antd/select';
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
 import { Company } from 'src/app/classes/domain/entities/website/masters/company/company';
+import { Employee } from 'src/app/classes/domain/entities/website/masters/employee/employee';
+import { AdminProfile } from 'src/app/classes/domain/entities/website/profile/adminprofile/adminprofile';
+import { DTU } from 'src/app/services/dtu.service';
+import { BaseUrlService } from 'src/app/services/baseurl.service';
 
 
 interface SubModule {
@@ -59,6 +63,22 @@ export class SidebarlayoutComponent implements OnInit {
   isDropdownDisabled: boolean = false;
   isShow = true;
   isModalOpen: boolean = false;
+  companyRef = this.companystatemanagement.SelectedCompanyRef;
+  currentemployee: number = 0
+  imagePreviewUrl: string | null = null;
+  selectedFileName: string | null = null;
+  TimeStamp = Date.now()
+  ImageBaseUrl: string = "";
+  LoginToken = '';
+  file: File | null = null;
+  imageUrl: string | null = null;  // Add imageUrl to bind to src
+  errors = { profile_image: '' };
+  ProfilePicFile: File = null as any
+  allowedImageTypes = ['image/jpeg', 'image/png', 'image/gif'];
+  IsEmployee: boolean = false
+  IsAdmin: boolean = false
+  Entity: Employee = Employee.CreateNewInstance();
+  AdminEntity: AdminProfile = AdminProfile.CreateNewInstance();
 
   // Name: string = 'Veloce Tech';
 
@@ -77,8 +97,12 @@ export class SidebarlayoutComponent implements OnInit {
     private sessionValues: SessionValues,
     private cdr: ChangeDetectorRef,
     private uiUtils: UIUtils,
+    private baseUrl: BaseUrlService,
     private companystatemanagement: CompanyStateManagement,
-    private servercommunicator: ServerCommunicatorService) {
+    private servercommunicator: ServerCommunicatorService,
+    private dtu: DTU,
+    private appStateManage: AppStateManageService,
+  ) {
 
 
     this.routerChangedSubscription = this.router.events.subscribe(event => {
@@ -89,6 +113,9 @@ export class SidebarlayoutComponent implements OnInit {
       }
     });
   }
+
+
+
 
   // navigateTo(route: string, disableDropdown: boolean = false) {
   //   this.appStateManagement.setDropdownDisabled(disableDropdown);
@@ -138,7 +165,50 @@ export class SidebarlayoutComponent implements OnInit {
     //     this.resetSelectedMenu();
     //   }
     // });
+    this.currentemployee = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'));
+    this.LoginToken = this.appStateManage.getLoginToken();
+    this.ImageBaseUrl = this.baseUrl.GenerateImageBaseUrl();
+    if (this.currentemployee != 0) {
+      this.getEmployeeDetails()
+    }
 
+  }
+
+  getEmployeeDetails = async () => {
+    if (this.currentemployee && this.companyRef()) {
+      let EmployeeData = await Employee.FetchInstance(this.currentemployee, this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+      console.log('EmployeeData :', EmployeeData);
+      if (EmployeeData == null) {
+        let AdminData = await AdminProfile.FetchAdminData(async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+        this.IsAdmin = true
+        this.IsEmployee = false
+        this.AdminEntity = AdminData[0]
+        if (this.AdminEntity.p.DOB != '') {
+          this.AdminEntity.p.DOB = this.dtu.ConvertStringDateToShortFormat(this.AdminEntity.p.DOB)
+        }
+        this.imageUrl = this.AdminEntity.p.ProfilePicPath;
+        this.loadImageFromBackend(this.AdminEntity.p.ProfilePicPath)
+      } else {
+        this.IsAdmin = false
+        this.IsEmployee = true
+        this.Entity = EmployeeData
+        if (this.Entity.p.DOB != '') {
+          this.Entity.p.DOB = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.DOB)
+        }
+        this.imageUrl = this.Entity.p.ProfilePicPath;
+        this.loadImageFromBackend(this.Entity.p.ProfilePicPath)
+        this.AdminEntity = [] as any;
+      }
+    }
+  }
+
+  loadImageFromBackend(imageUrl: string): void {
+    if (imageUrl) {
+      this.imagePreviewUrl = `${this.ImageBaseUrl}${imageUrl}/${this.LoginToken}?${this.TimeStamp}`;
+      this.selectedFileName = imageUrl;
+    } else {
+      this.imagePreviewUrl = null;
+    }
   }
 
 
@@ -366,17 +436,17 @@ export class SidebarlayoutComponent implements OnInit {
 
     let MasterSubModuleList = [
 
-        {
+      {
         Name: 'Company Master',
         RouterLink: '/homepage/Website/Company_Master',
         LogoPath: '/assets/icons/Company Master.png',
       },
-       {
+      {
         Name: 'Owner Master',
         RouterLink: '/homepage/Website/Owner_Master',
         LogoPath: '/assets/icons/owner_master.png',
       },
-        {
+      {
         Name: 'Department Master',
         RouterLink: '/homepage/Website/Department_Master',
         LogoPath: '/assets/icons/Department Master.png',
@@ -396,12 +466,12 @@ export class SidebarlayoutComponent implements OnInit {
         RouterLink: '/homepage/Website/Employee_Master',
         LogoPath: '/assets/icons/Employee Master.png',
       },
-       {
+      {
         Name: 'Bank Account Master',
         RouterLink: '/homepage/Website/Bank_Account_Master',
         LogoPath: '/assets/icons/Bank Account Master.png',
       },
-         {
+      {
         Name: 'Opening Balance Master',
         RouterLink: '/homepage/Website/Opening_Balance_Master',
         LogoPath: '/assets/icons/Bank Account Master.png',
@@ -411,7 +481,7 @@ export class SidebarlayoutComponent implements OnInit {
         RouterLink: '/homepage/Website/Financial_Year_Master',
         LogoPath: '/assets/icons/Financial Year Master.png',
       },
-        {
+      {
         Name: 'Account Main Ledger',
         RouterLink: '/homepage/Website/Account_Main_Ledger',
         LogoPath: '/assets/icons/Account Main Ledger.png',
@@ -441,7 +511,7 @@ export class SidebarlayoutComponent implements OnInit {
         RouterLink: '/homepage/Website/Vendor_Services_Master',
         LogoPath: '/assets/icons/Vendor Service Master.png',
       },
-       {
+      {
         Name: 'Vendor Master',
         RouterLink: '/homepage/Website/Vendor_Master',
         LogoPath: '/assets/icons/Vendor Master.png',
@@ -811,13 +881,13 @@ export class SidebarlayoutComponent implements OnInit {
         WhiteLogo: '/assets/icons/Registrar Office.png',
         // SubModuleList: RegistrarOfficeSubModuleList,
       },
-       {
+      {
         Name: 'Employee Request',
         RouterLink: '',
         WhiteLogo: '/assets/icons/Request.png',
         SubModuleList: RequestSubModulelist,
       },
-       {
+      {
         Name: 'HR Management',
         RouterLink: '',
         WhiteLogo: '/assets/icons/Hr-Payroll Management.png',
@@ -898,10 +968,11 @@ export class SidebarlayoutComponent implements OnInit {
     } else if (this.CompanyList && this.CompanyList.length > 0) {
       // Select first company if no stored value is found
       const firstCompany = this.CompanyList[0];
-      if(this.CompanyList.length == 1)
-      await this.changecompany(firstCompany.p.Ref); // Assuming changecompany is also async
+      if (this.CompanyList.length == 1)
+        await this.changecompany(firstCompany.p.Ref); // Assuming changecompany is also async
     }
   }
+
 
   changecompany(ref: number) {
     const selectedCompany = this.CompanyList.find(company => company.p.Ref === ref);
