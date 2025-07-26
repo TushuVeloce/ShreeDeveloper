@@ -28,7 +28,6 @@ import { Utils } from 'src/app/services/utils.service';
 export class IncomeDetailsComponent implements OnInit {
   Entity: Income = Income.CreateNewInstance();
   PayerEntity: Payer = Payer.CreateNewInstance();
-
   private IsNewEntity: boolean = true;
   SiteList: Site[] = [];
   SubLedgerList: SubLedger[] = [];
