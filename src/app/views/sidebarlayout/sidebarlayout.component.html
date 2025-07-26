@@ -76,8 +76,8 @@
   <nz-layout Class="layout_light">
 
     <!-- Navbar for xl, lg, md -->
-    <nav
-      class="navbar navbar-expand-lg bg-light px-3 d-none d-md-flex justify-content-between align-items-center" style="background-color: white !important;">
+    <nav class="navbar navbar-expand-lg bg-light px-3 d-none d-md-flex justify-content-between align-items-center"
+      style="background-color: white !important;">
       <!-- Left: Toggle + Date -->
       <div class="d-flex align-items-center gap-3">
         <img src="/assets/icons/menu.png" alt="logo" (click)="toggleCollapsed()"
@@ -101,8 +101,27 @@
             [nzValue]="company.p.Ref"></nz-option>
         </nz-select>
         <a nz-dropdown nzTrigger="click" [nzDropdownMenu]="menu">
-          <img width="50px" class="img-thumbnail rounded-circle" height="40px" src="/assets/logos/ShreeIcon.png"
-            alt="logo" />
+          <!-- <img width="50px" class="img-thumbnail rounded-circle" height="40px" src="/assets/logos/ShreeIcon.png"
+            alt="logo" /> -->
+
+          <!-- Profile Image Upload -->
+          <div class="d-flex flex-column align-items-center">
+            <ng-container
+              *ngIf="(IsEmployee && Entity.p.ProfilePicPath) || (IsAdmin && AdminEntity.p.ProfilePicPath); else AddPreviewImage">
+              <img [src]="imagePreviewUrl" alt="Profile Image" class="img-thumbnail rounded-circle"
+                style="width: 50px; height: 50px; object-fit: cover" />
+            </ng-container>
+            <ng-template #AddPreviewImage>
+              <ng-container *ngIf="imagePreviewUrl ; else defaultImage">
+                <img [src]="imagePreviewUrl" alt="Profile Image" class="img-thumbnail rounded-circle"
+                  style="width: 50px; height: 50px; object-fit: cover" />
+              </ng-container>
+            </ng-template>
+            <ng-template #defaultImage>
+              <img src="/assets/logos/dp.png" alt="No Image" class="img-thumbnail rounded-circle"
+                style="width: 50px; height: 50px; object-fit: cover" />
+            </ng-template>
+          </div>
         </a>
         <nz-dropdown-menu #menu="nzDropdownMenu" Class="profile_dropdwon_light">
           <ul class="dropdown-list" nz-menu Class="profile_dropdwon_light">
