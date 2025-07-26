@@ -1,9 +1,11 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Router } from '@angular/router';
-import { AccountingReports, DomainEnums, OpeningBalanceModeOfPayments } from 'src/app/classes/domain/domainenums/domainenums';
+import { AccountingReports, DomainEnums, OpeningBalanceModeOfPayments, PayerTypes } from 'src/app/classes/domain/domainenums/domainenums';
 import { AccountingReport } from 'src/app/classes/domain/entities/website/accounting/accountingreport/accoiuntingreport';
+import { Invoice } from 'src/app/classes/domain/entities/website/accounting/billing/invoice';
 import { Expense } from 'src/app/classes/domain/entities/website/accounting/expense/expense';
+import { Income } from 'src/app/classes/domain/entities/website/accounting/income/income';
 import { Ledger } from 'src/app/classes/domain/entities/website/masters/ledgermaster/ledger';
 import { OpeningBalance } from 'src/app/classes/domain/entities/website/masters/openingbalance/openingbalance';
 import { Site } from 'src/app/classes/domain/entities/website/masters/site/site';
@@ -50,7 +52,13 @@ export class OfficeViewMobileAppComponent implements OnInit {
   LedgerList: Ledger[] = [];
   SubLedgerList: SubLedger[] = [];
   Printheaders: string[] = ['Sr.No.', 'Date', 'Payer Name', 'Recipient Name', 'Site Name', 'Reason', 'Income', 'Expense', 'Shree Bal.', 'Mode of Payment', 'Narration',];
+  RecipientList: Invoice[] = [];
+  RecipientTypesList = DomainEnums.RecipientTypesList();
 
+  PayerList: Income[] = [];
+  PayerTypesList = DomainEnums.PayerTypesList();
+  DealDoneCustomer = PayerTypes.DealDoneCustomer;
+  PayerPlotNo: string = '';
 
   // Store current selected values here to preserve selections on filter reload
   selectedFilterValues: Record<string, any> = {};
@@ -132,9 +140,9 @@ export class OfficeViewMobileAppComponent implements OnInit {
         key: 'payertype',
         label: 'Payer Type',
         multi: false,
-        options: this.LedgerList.map(item => ({
-          Ref: item.p.Ref,
-          Name: item.p.Name,
+        options: this.PayerTypesList.map(item => ({
+          Ref: item.Ref,
+          Name: item.Name,
         })),
         selected: this.selectedFilterValues['payertype'] > 0 ? this.selectedFilterValues['payertype'] : null,
       },
@@ -142,9 +150,9 @@ export class OfficeViewMobileAppComponent implements OnInit {
         key: 'payertypelist',
         label: 'Payer',
         multi: false,
-        options: this.SubLedgerList.map(item => ({
+        options: this.PayerList.map(item => ({
           Ref: item.p.Ref,
-          Name: item.p.Name,
+          Name: item.p.PayerName,
         })),
         selected: this.selectedFilterValues['payertypelist'] > 0 ? this.selectedFilterValues['payertypelist'] : null,
       },
@@ -152,9 +160,9 @@ export class OfficeViewMobileAppComponent implements OnInit {
         key: 'recipienttype',
         label: 'Recipient Type',
         multi: false,
-        options: this.LedgerList.map(item => ({
-          Ref: item.p.Ref,
-          Name: item.p.Name,
+        options: this.RecipientTypesList.map(item => ({
+          Ref: item.Ref,
+          Name: item.Name,
         })),
         selected: this.selectedFilterValues['recipienttype'] > 0 ? this.selectedFilterValues['recipienttype'] : null,
       },
@@ -162,9 +170,9 @@ export class OfficeViewMobileAppComponent implements OnInit {
         key: 'recipienttypelist',
         label: 'Recipient',
         multi: false,
-        options: this.SubLedgerList.map(item => ({
+        options: this.RecipientList.map(item => ({
           Ref: item.p.Ref,
-          Name: item.p.Name,
+          Name: item.p.RecipientName,
         })),
         selected: this.selectedFilterValues['recipienttypelist'] > 0 ? this.selectedFilterValues['recipienttypelist'] : null,
       },
@@ -211,21 +219,21 @@ export class OfficeViewMobileAppComponent implements OnInit {
           break;
 
         case 'payertype':
-          this.Entity.p.SubLedgerRef = selectedValue ?? 0;
+          this.Entity.p.PayerType = selectedValue ?? 0;
+          if (selectedValue != null) { await this.getPayerListBySiteAndPayerType(); } else { this.PayerList = [] };   // Updates SubLedgerList
           break;
 
         case 'payertypelist':
-          this.Entity.p.LedgerRef = selectedValue ?? 0;
-          if (selectedValue != null) {await this.getSubLedgerListByLedgerRef(selectedValue);} else {this.SubLedgerList = []};   // Updates SubLedgerList
+          this.Entity.p.PayerRef = selectedValue ?? 0;
           break;
 
         case 'recipienttype':
-          this.Entity.p.SubLedgerRef = selectedValue ?? 0;
+          this.Entity.p.RecipientType = selectedValue ?? 0;
+          if (selectedValue != null) { await this.getRecipientListByRecipientTypeRef(); } else { this.RecipientList = [] };   // Updates SubLedgerList
           break;
 
         case 'recipienttypelist':
-          this.Entity.p.LedgerRef = selectedValue ?? 0;
-          if (selectedValue != null) {await this.getSubLedgerListByLedgerRef(selectedValue);} else {this.SubLedgerList = []};   // Updates SubLedgerList
+          this.Entity.p.RecipientRef = selectedValue ?? 0;
           break;
         case 'accountingReport':
           this.Entity.p.AccountingReport = selectedValue ?? 0;
@@ -417,6 +425,65 @@ export class OfficeViewMobileAppComponent implements OnInit {
     this.SubLedgerList = lst;
     this.loadFilters();
   }
+
+    onPayerChange = () => {
+      try {
+        let SingleRecord = this.PayerList.find((data) => data.p.PlotName == this.PayerPlotNo);
+        if (SingleRecord?.p) {
+          this.Entity.p.IsRegisterCustomerRef = SingleRecord.p.IsRegisterCustomerRef;
+          this.Entity.p.PayerRef = SingleRecord.p.Ref;
+          if (this.Entity.p.PayerType == this.DealDoneCustomer) {
+            this.Entity.p.PlotName = SingleRecord.p.PlotName;
+          }
+        }
+      } catch (error) {
+      }
+    }
+  
+    getPayerListBySiteAndPayerType = async () => {
+      if (this.companyRef <= 0) {
+        // await this.uiUtils.showErrorToster('Company not Selected');
+        await this.toastService.present('Company not selected', 1000, 'warning');
+        await this.haptic.warning();
+        return;
+      }
+      if (this.Entity.p.PayerType <= 0) {
+        return;
+      }
+      let lst = await Income.FetchPayerNameByPayerTypeRef(this.Entity.p.SiteRef, this.companyRef, this.Entity.p.PayerType, async errMsg => {
+        // await this.uiUtils.showErrorMessage('Error', errMsg)
+        await this.toastService.present('Error ' + errMsg, 1000, 'danger');
+        await this.haptic.error();
+      });
+      this.PayerList = lst;
+      console.log('lPayerListst :', lst);
+      this.loadFilters(); // Reload filters with updated options & preserve selections
+    }
+
+  getRecipientListByRecipientTypeRef = async () => {
+    if (this.companyRef <= 0) {
+      // await this.uiUtils.showErrorToster('Company not Selected');
+      await this.toastService.present('Company not selected', 1000, 'warning');
+      await this.haptic.warning();
+      return;
+    }
+    if (this.Entity.p.RecipientType <= 0) {
+      // await this.uiUtils.showErrorToster('To Whom not Selected');
+      await this.toastService.present('To Whom not selected', 1000, 'warning');
+      await this.haptic.warning();
+      return;
+    }
+
+    this.RecipientList = [];
+    let lst = await Invoice.FetchRecipientByRecipientTypeRef(this.companyRef, this.Entity.p.RecipientType, async errMsg => {
+      // await this.uiUtils.showErrorMessage('Error', errMsg)
+      await this.toastService.present('Error ' + errMsg, 1000, 'danger');
+      await this.haptic.error();
+    });
+    this.RecipientList = lst;
+    this.loadFilters(); // Reload filters with updated options & preserve selections
+  }
+
 
   getBalanceByBank = () => {
     let SingleRecord = this.OpeningBalanceList.find((data) => data.p.Ref == this.BankRef);
