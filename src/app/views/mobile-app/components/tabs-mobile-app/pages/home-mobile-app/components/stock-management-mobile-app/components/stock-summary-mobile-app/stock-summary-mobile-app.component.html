@@ -32,7 +32,7 @@
               <td>{{ item.p.TotalExtraOrderQty || '-' }}</td>
               <td>{{ item.p.TotalOrderQty || '-' }}</td>
               <td>{{ item.p.TotalInwardQty || '-' }}</td>
-              <td>{{ item.p.RemainingQty || '-' }}</td>
+              <td>{{ item.p.InwardRemainingQty || '-' }}</td>
               <td>{{ item.p.TotalConsumedQty || '-' }}</td>
               <td>{{ item.p.TotalTransferredInQty || '-' }}</td>
               <td>{{ item.p.CurrentStock || '-' }}</td>
@@ -76,7 +76,7 @@
     { label: 'Total Extra Order Qty', value: SelectedStockSummary.p.TotalExtraOrderQty },
     { label: 'Total Order Qty', value: SelectedStockSummary.p.TotalOrderQty },
     { label: 'Total Inward Qty', value: SelectedStockSummary.p.TotalInwardQty },
-    { label: 'Remaining Qty', value: SelectedStockSummary.p.RemainingQty },
+    { label: 'Remaining Qty', value: SelectedStockSummary.p.InwardRemainingQty },
     { label: 'Total Consumed Qty', value: SelectedStockSummary.p.TotalConsumedQty },
     { label: 'Total Transferred In Qty', value: SelectedStockSummary.p.TotalTransferredInQty },
     { label: 'Current Stock', value: SelectedStockSummary.p.CurrentStock }
@@ -122,7 +122,7 @@
               <td>{{ item.p.TotalExtraOrderQty || '-' }}</td>
               <td>{{ item.p.TotalOrderQty || '-' }}</td>
               <td>{{ item.p.TotalInwardQty || '-' }}</td>
-              <td>{{ item.p.RemainingQty || '-' }}</td>
+              <td>{{ item.p.InwardRemainingQty || '-' }}</td>
               <td>{{ item.p.TotalConsumedQty || '-' }}</td>
               <td>{{ item.p.TotalTransferredInQty || '-' }}</td>
               <td>{{ item.p.CurrentStock || '-' }}</td>

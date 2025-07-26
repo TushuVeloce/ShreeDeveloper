@@ -34,7 +34,9 @@ export class StockSummaryProps {
   public EffectiveInwardQty: number = 0;
   public TotalConsumedQty: number = 0;
   public CurrentStock: number = 0;
-  public RemainingQty: number = 0;
+  public InwardRemainingQty: number = 0;
+  public OrderedRemainingQty: number = 0;
+  public TotalRequisitionQty: number = 0;
   public UnitRef: number = 0;
   public UnitName: string = '';
   public GST: number = 0;
