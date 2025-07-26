@@ -1,10 +1,14 @@
 import { Component, effect, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { AccountingReports, DomainEnums, OpeningBalanceModeOfPayments } from 'src/app/classes/domain/domainenums/domainenums';
+import { AccountingReports, DomainEnums, OpeningBalanceModeOfPayments, PayerTypes } from 'src/app/classes/domain/domainenums/domainenums';
 import { AccountingReport } from 'src/app/classes/domain/entities/website/accounting/accountingreport/accoiuntingreport';
+import { Invoice } from 'src/app/classes/domain/entities/website/accounting/billing/invoice';
 import { Expense } from 'src/app/classes/domain/entities/website/accounting/expense/expense';
+import { Income } from 'src/app/classes/domain/entities/website/accounting/income/income';
+import { Ledger } from 'src/app/classes/domain/entities/website/masters/ledgermaster/ledger';
 import { OpeningBalance } from 'src/app/classes/domain/entities/website/masters/openingbalance/openingbalance';
 import { Site } from 'src/app/classes/domain/entities/website/masters/site/site';
+import { SubLedger } from 'src/app/classes/domain/entities/website/masters/subledgermaster/subledger';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
 import { DateconversionService } from 'src/app/services/dateconversion.service';
@@ -34,7 +38,17 @@ export class AccountingReportComponent implements OnInit {
   currentPage = 1; // Initialize current page
   total = 0;
   Cash = OpeningBalanceModeOfPayments.Cash
+  LedgerList: Ledger[] = [];
+  SubLedgerList: SubLedger[] = [];
+  RecipientList: Invoice[] = [];
   ModeofPaymentList = DomainEnums.ModeOfPaymentsList();
+  RecipientTypesList = DomainEnums.RecipientTypesList();
+
+  PayerList: Income[] = [];
+  PayerTypesList = DomainEnums.PayerTypesList();
+  DealDoneCustomer = PayerTypes.DealDoneCustomer;
+  PayerPlotNo: string = '';
+
 
 
   companyRef = this.companystatemanagement.SelectedCompanyRef;
@@ -50,6 +64,8 @@ export class AccountingReportComponent implements OnInit {
       await this.getOpeningBalanceListByCompanyRef();
       await this.getCurrentBalanceByCompanyRef();
       await this.getSiteListByCompanyRef();
+      await this.getEntireListByFilters();
+      await this.getLedgerListByCompanyRef();
     });
   }
 
@@ -84,14 +100,73 @@ export class AccountingReportComponent implements OnInit {
     this.SiteList = lst;
   }
 
-  FetchEntireListByFilters = async () => {
+  getLedgerListByCompanyRef = async () => {
+    if (this.companyRef() <= 0) {
+      await this.uiUtils.showErrorToster('Company not Selected');
+      return;
+    }
+    this.Entity.p.SubLedgerRef = 0
+    let lst = await Ledger.FetchEntireListByCompanyRef(this.companyRef(),
+      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+    );
+    this.LedgerList = lst
+  };
+
+  getSubLedgerListByLedgerRef = async (ledgerref: number) => {
+    if (ledgerref <= 0) {
+      await this.uiUtils.showErrorToster('Ledger not Selected');
+      return;
+    }
+    let lst = await SubLedger.FetchEntireListByLedgerRef(ledgerref, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    this.SubLedgerList = lst;
+    console.log('this.SubLedgerList :', this.SubLedgerList);
+  }
+
+  onPayerChange = () => {
+    try {
+      let SingleRecord = this.PayerList.find((data) => data.p.PlotName == this.PayerPlotNo);
+      if (SingleRecord?.p) {
+        this.Entity.p.IsRegisterCustomerRef = SingleRecord.p.IsRegisterCustomerRef;
+        this.Entity.p.PayerRef = SingleRecord.p.Ref;
+        if (this.Entity.p.PayerType == this.DealDoneCustomer) {
+          this.Entity.p.PlotName = SingleRecord.p.PlotName;
+        }
+      }
+    } catch (error) {
+    }
+  }
+
+  getPayerListBySiteAndPayerType = async () => {
+    if (this.companyRef() <= 0) {
+      await this.uiUtils.showErrorToster('Company not Selected');
+      return;
+    }
+    if (this.Entity.p.PayerType <= 0) {
+      return;
+    }
+    let lst = await Income.FetchPayerNameByPayerTypeRef(this.Entity.p.SiteRef, this.companyRef(), this.Entity.p.PayerType, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    this.PayerList = lst;
+  }
+
+  getEntireListByFilters = async () => {
     this.MasterList = [];
     this.DisplayMasterList = [];
     if (this.companyRef() <= 0) {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
-    let lst = await AccountingReport.FetchEntireListByFilters(this.Entity.p.StartDate, this.Entity.p.EndDate, this.Entity.p.AccountingReport, this.Entity.p.SiteRef, this.Entity.p.ModeOfPayment, this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    let lst = await AccountingReport.FetchEntireListByFilters(
+      this.Entity.p.StartDate,
+      this.Entity.p.EndDate,
+      this.Entity.p.AccountingReport,
+      this.Entity.p.SiteRef,
+      this.Entity.p.ModeOfPayment,
+      this.companyRef(),
+      this.Entity.p.LedgerRef,
+      this.Entity.p.SubLedgerRef,
+      this.Entity.p.RecipientRef,
+      this.Entity.p.PayerRef,
+      async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.MasterList = lst;
     this.DisplayMasterList = this.MasterList;
     this.loadPaginationData();
@@ -110,6 +185,21 @@ export class AccountingReportComponent implements OnInit {
       this.BankRef = this.OpeningBalanceList[0].p.Ref;
       this.getBalanceByBank();
     }
+  }
+
+  getRecipientListByRecipientTypeRef = async () => {
+    if (this.companyRef() <= 0) {
+      await this.uiUtils.showErrorToster('Company not Selected');
+      return;
+    }
+    if (this.Entity.p.RecipientType <= 0) {
+      await this.uiUtils.showErrorToster('To Whom not Selected');
+      return;
+    }
+
+    this.RecipientList = [];
+    let lst = await Invoice.FetchRecipientByRecipientTypeRef(this.companyRef(), this.Entity.p.RecipientType, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    this.RecipientList = lst;
   }
 
   getBalanceByBank = () => {

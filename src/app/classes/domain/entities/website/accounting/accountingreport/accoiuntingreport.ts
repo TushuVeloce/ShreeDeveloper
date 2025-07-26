@@ -21,8 +21,6 @@ export class AccountingReportProps {
   public CompanyRef: number = 0
   public CompanyName: string = ''
   public TransDateTime: string = ''
-  public PayerName: string = ''
-  public RecipientName: string = ''
   public SiteRef: number = 0
   public SiteName: string = ''
   public Reason: string = ''
@@ -35,8 +33,20 @@ export class AccountingReportProps {
   public StartDate: string = ''
   public EndDate: string = ''
   public AccountingReport: number = 0
+  public RecipientType: number = 0
   public LedgerRef: number = 0
+  public readonly LedgerName: string = ''
   public SubLedgerRef: number = 0
+  public readonly SubLedgerName: string = ''
+  public RecipientRef: number = 0
+  public RecipientName: string = '';
+  public IsRegisterCustomerRef: number = 0;
+
+  public PayerName: string = ''
+  public PayerRef: number = 0
+  public PayerTypeName: string = ''
+  public PlotName: string = ''
+  public PayerType: number = 0
 
 
   public readonly IsNewlyCreated: boolean = false;
@@ -183,24 +193,37 @@ export class AccountingReport implements IPersistable<AccountingReport> {
     return AccountingReport.ListFromTransportData(tdResponse);
   }
 
-  public static async FetchEntireListByFilters(StartDate: string, EndDate: string, accountingreport: number, SiteRef: number, ModeOfPayment: number, CompanyRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+  public static async FetchEntireListByFilters(StartDate: string, EndDate: string, accountingreport: number, SiteRef: number, ModeOfPayment: number, CompanyRef: number, LedgerRef: number, SubLedgerRef: number, RecipientRef: number, PayerRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let req = new AccountingReportFetchRequest();
-    req.CompanyRef = CompanyRef
+    req.CompanyRef = CompanyRef;
     if (StartDate) {
-      req.StartDate = StartDate
+      req.StartDate = StartDate;
     }
     if (EndDate) {
-      req.EndDate = EndDate
+      req.EndDate = EndDate;
     }
     if (SiteRef) {
-      req.SiteRef = SiteRef
+      req.SiteRef = SiteRef;
     }
     if (ModeOfPayment) {
-      req.ModeOfPayments = ModeOfPayment
+      req.ModeOfPayments = ModeOfPayment;
     }
     if (accountingreport) {
-      req.AccountingReport = accountingreport
+      req.AccountingReport = accountingreport;
     }
+    if (LedgerRef) {
+      req.LedgerRef = LedgerRef;
+    }
+    if (SubLedgerRef) {
+      req.SubLedgerRef = SubLedgerRef;
+    }
+    if (RecipientRef) {
+      req.RecipientRef = RecipientRef;
+    }
+    if (PayerRef) {
+      req.PayerRef = PayerRef;
+    }
+
     let tdResponse = await AccountingReport.FetchTransportData(req, errorHandler) as TransportData;
     return AccountingReport.ListFromTransportData(tdResponse);
   }

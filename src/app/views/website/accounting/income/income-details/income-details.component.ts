@@ -147,10 +147,8 @@ export class IncomeDetailsComponent implements OnInit {
   }
 
   onPayerChange = () => {
-    console.log('this.PayerPlotNo :', this.PayerPlotNo);
     try {
       let SingleRecord = this.PayerList.find((data) => data.p.PlotName == this.PayerPlotNo);
-      console.log('SingleRecord :', SingleRecord);
       if (SingleRecord?.p) {
         this.Entity.p.IsRegisterCustomerRef = SingleRecord.p.IsRegisterCustomerRef;
         this.Entity.p.PayerRef = SingleRecord.p.Ref;
@@ -160,7 +158,6 @@ export class IncomeDetailsComponent implements OnInit {
       }
     } catch (error) {
     }
-    console.log('this.Entity.p.PayerRef :', this.Entity.p.PayerRef);
   }
 
   AddPayerName = () => {

@@ -200,7 +200,7 @@ export class OfficeViewMobileAppComponent implements OnInit {
         case 'reason':
           this.Entity.p.Reason = selectedValue ?? 0;
           break;
-          
+
         case 'subledger':
           this.Entity.p.SubLedgerRef = selectedValue ?? 0;
           break;
@@ -209,7 +209,7 @@ export class OfficeViewMobileAppComponent implements OnInit {
           this.Entity.p.LedgerRef = selectedValue ?? 0;
           if (selectedValue != null) {await this.getSubLedgerListByLedgerRef(selectedValue);}else {this.SubLedgerList = []};  // Updates SubLedgerList
           break;
-        
+
         case 'payertype':
           this.Entity.p.SubLedgerRef = selectedValue ?? 0;
           break;
@@ -245,7 +245,7 @@ export class OfficeViewMobileAppComponent implements OnInit {
 
     @ViewChild('PrintContainer')
     PrintContainer!: ElementRef;
-  
+
     async handlePrintOrShare() {
       if (this.DisplayMasterList.length == 0) {
         await this.toastService.present('No Income Records Found', 1000, 'warning');
@@ -294,7 +294,17 @@ export class OfficeViewMobileAppComponent implements OnInit {
       await this.haptic.warning();
       return;
     }
-    let lst = await AccountingReport.FetchEntireListByFilters(this.Entity.p.StartDate, this.Entity.p.EndDate, this.Entity.p.AccountingReport, this.Entity.p.SiteRef, this.Entity.p.ModeOfPayment, this.companyRef, async errMsg => {
+    let lst = await AccountingReport.FetchEntireListByFilters(
+          this.Entity.p.StartDate,
+      this.Entity.p.EndDate,
+      this.Entity.p.AccountingReport,
+      this.Entity.p.SiteRef,
+      this.Entity.p.ModeOfPayment,
+      this.companyRef,
+      this.Entity.p.LedgerRef,
+      this.Entity.p.SubLedgerRef,
+      this.Entity.p.RecipientRef,
+      this.Entity.p.PayerRef,      async errMsg => {
       // await this.uiUtils.showErrorMessage('Error', errMsg)
       await this.toastService.present('Error' + errMsg, 1000, 'danger');
       await this.haptic.error();
@@ -327,7 +337,17 @@ export class OfficeViewMobileAppComponent implements OnInit {
       await this.haptic.warning();
       return;
     }
-    let lst = await AccountingReport.FetchEntireListByFilters(this.Entity.p.StartDate, this.Entity.p.EndDate, this.Entity.p.AccountingReport, this.Entity.p.SiteRef, this.Entity.p.ModeOfPayment, this.companyRef, async errMsg => {
+    let lst = await AccountingReport.FetchEntireListByFilters(
+           this.Entity.p.StartDate,
+      this.Entity.p.EndDate,
+      this.Entity.p.AccountingReport,
+      this.Entity.p.SiteRef,
+      this.Entity.p.ModeOfPayment,
+      this.companyRef,
+      this.Entity.p.LedgerRef,
+      this.Entity.p.SubLedgerRef,
+      this.Entity.p.RecipientRef,
+      this.Entity.p.PayerRef,      async errMsg => {
       await this.toastService.present('Error' + errMsg, 1000, 'danger');
       await this.haptic.error();
     });

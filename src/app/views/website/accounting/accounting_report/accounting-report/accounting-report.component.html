@@ -1,78 +1,129 @@
 <div class="row">
-  <div class="col-4 mb-2">
+  <div class="col-3 mb-1">
     <h1 style="padding-top: 3px;" class="title title_light">Office Report</h1>
   </div>
-   <div class="col-4 mb-2 search-container_light">
-    <app-shared-filter [masterList]="MasterList" [filterFields]="['TransDateTime', 'PayerName', 'RecipientName','SiteName','RecipientName','Reason','IncomeAmount','GivenAmount','ShreesBalance','ModeOfPaymentName','Narration']"
+  <div class="col-3 mb-1 search-container_light">
+    <app-shared-filter [masterList]="MasterList"
+      [filterFields]="['TransDateTime', 'PayerName', 'RecipientName','SiteName','RecipientName','Reason','IncomeAmount','GivenAmount','ShreesBalance','ModeOfPaymentName','Narration']"
       (filteredList)="DisplayMasterList = $event"></app-shared-filter>
   </div>
-  <div class="col-4 mb-2 text-end" *ngIf="DisplayMasterList.length > 0">
+  <div class="col-3 mb-1 search-container_light text-end">
+    <p class="balance_title"><b>Shree Balance : {{Entity.p.ShreesBalance | currency : 'INR'}}</b></p>
+  </div>
+  <div class="col-3 mb-1 text-end" *ngIf="DisplayMasterList.length > 0">
     <img class="no-print" src="/assets/icons/printer.png" alt="Print" title="Print" width="30px" height="30px"
       style="cursor: pointer; padding-top: 4px;" (click)="printReport()" />
   </div>
 </div>
-<div class="text-end">
-  <p class="balance_title"><b>Shree Balance : {{Entity.p.ShreesBalance | currency : 'INR'}}</b></p>
-</div>
+
 <ng-template #noDataTpl>
   <div style="text-align: center; color: rgba(0, 0, 0, 0.25);">
     No Data
   </div>
 </ng-template>
 <div class="row" style="margin-top: 1rem;">
-  <div class="col-md-4">
+  <div class="col-md-3">
     <label for="StartDate"><b>From Date</b></label>
     <input type="date" [(ngModel)]="Entity.p.StartDate" name="StartDate" class="form-control" id="StartDate"
-      placeholder="Enter Start Date" (ngModelChange)="FetchEntireListByFilters()" />
+      placeholder="Enter Start Date" (ngModelChange)="getEntireListByFilters()" />
   </div>
-  <div class="col-md-4">
+  <div class="col-md-3">
     <label for="EndDate"><b>To Date</b></label>
     <input type="date" [(ngModel)]="Entity.p.EndDate" name="EndDate" class="form-control" id="EndDate"
-      placeholder="Enter End Date" (ngModelChange)="FetchEntireListByFilters()" />
+      placeholder="Enter End Date" (ngModelChange)="getEntireListByFilters()" />
   </div>
-  <div class="col-md-4">
+  <div class="col-md-3">
     <label for="SiteRef"><b>Site</b></label>
     <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear nzPlaceHolder="Select"
       [nzSize]="'large'" name="SiteRef" [(ngModel)]="Entity.p.SiteRef" required id="SiteRef"
-      (ngModelChange)="FetchEntireListByFilters()">
+      (ngModelChange)="getEntireListByFilters()">
       <nz-option nzLabel="All" [nzValue]="0"></nz-option>
       <nz-option *ngFor="let Site of SiteList" [nzValue]="Site.p.Ref" [nzLabel]="Site.p.Name"></nz-option>
     </nz-select>
   </div>
-  <div class="col-md-4">
+  <div class="col-md-3">
     <label><b>Mode of Payment</b></label>
     <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear nzPlaceHolder="Select"
       id="ModeOfPayment" name="ModeOfPayment" [nzSize]="'large'" [(ngModel)]="Entity.p.ModeOfPayment"
-      (ngModelChange)="FetchEntireListByFilters()">
+      (ngModelChange)="getEntireListByFilters()">
       <nz-option *ngFor="let mode of ModeofPaymentList" [nzValue]="mode.Ref" [nzLabel]="mode.Name"></nz-option>
     </nz-select>
   </div>
-  <div class="col-md-4">
+  <div class="col-md-3" style="margin-top: 1rem;">
     <label><b>Accounting Report</b></label>
-    <nz-select class="nzSelect-light"  nzShowSearch nzAllowClear nzPlaceHolder="Select"
-      id="AccountingReport" name="AccountingReport" [nzSize]="'large'" [(ngModel)]="Entity.p.AccountingReport"
-      (ngModelChange)="FetchEntireListByFilters()">
+    <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="AccountingReport"
+      name="AccountingReport" [nzSize]="'large'" [(ngModel)]="Entity.p.AccountingReport"
+      (ngModelChange)="getEntireListByFilters()">
       <nz-option *ngFor="let mode of AccountingReportList" [nzValue]="mode.Ref" [nzLabel]="mode.Name"></nz-option>
     </nz-select>
   </div>
-  <!-- <div class="col-md-4">
-    <label><b>Bank</b></label>
+  <div class="col-md-3" style="margin-top: 1rem;">
+    <label><b>Ledger</b></label>
     <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear nzPlaceHolder="Select"
-      id="BankRef" name="BankRef" [nzSize]="'large'" [(ngModel)]="BankRef" (ngModelChange)="getBalanceByBank()">
-      <nz-option *ngFor="let Bank of OpeningBalanceList" [nzValue]="Bank.p.Ref"
-        [nzLabel]="Bank.p.ModeOfPayment == Cash ? 'Cash' : Bank.p.BankName"></nz-option>
+      id="LedgerRef" name="LedgerRef" [nzSize]="'large'" [(ngModel)]="Entity.p.LedgerRef"
+      (ngModelChange)="getEntireListByFilters(); getSubLedgerListByLedgerRef(Entity.p.LedgerRef); this.Entity.p.SubLedgerRef = 0;">
+      <nz-option *ngFor="let ledger of LedgerList" [nzValue]="ledger.p.Ref" [nzLabel]="ledger.p.Name"></nz-option>
     </nz-select>
   </div>
-  <div class="col-md-4">
-    <label for="NetBalance"><b>Net Amount</b></label>
-    <input type="number" [(ngModel)]="NetBalance" name="NetBalance" class="form-control" id="NetBalance"
-      placeholder="Net Amount" disabled />
-  </div> -->
-  <!-- <div class="col-md-4">
-    <label for="ShreeBalance"><b>Shree Balance</b></label>
-    <input type="text" [(ngModel)]="Entity.p.ShreesBalance" name="ShreeBalance" class="form-control" id="ShreeBalance"
-      placeholder="ShreeBalance" disabled />
-  </div> -->
+  <div class="col-md-3" style="margin-top: 1rem;">
+    <label><b>Sub Ledger</b></label>
+    <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear nzPlaceHolder="Select"
+      id="SubLedgerRef" name="SubLedgerRef" [nzSize]="'large'" [(ngModel)]="Entity.p.SubLedgerRef"
+      (ngModelChange)="getEntireListByFilters();">
+      <nz-option *ngFor=" let sub of SubLedgerList" [nzValue]="sub.p.Ref" [nzLabel]="sub.p.Name"></nz-option>
+    </nz-select>
+  </div>
+  <div class="col-md-3" style="margin-top: 1rem;">
+    <label><b>To Whom Type</b></label>
+    <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear nzPlaceHolder="Select"
+      id="RecipientType" name="RecipientType" [nzSize]="'large'" [(ngModel)]="Entity.p.RecipientType"
+      (ngModelChange)="getRecipientListByRecipientTypeRef(); Entity.p.RecipientRef = 0">
+      <nz-option *ngFor=" let type of RecipientTypesList" [nzValue]="type.Ref" [nzLabel]="type.Name"></nz-option>
+    </nz-select>
+  </div>
+  <div class="col-md-3" style="margin-top: 1rem">
+    <label><b>To Whom</b></label>
+    <div class="d-flex align-items-center">
+      <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear nzPlaceHolder="Select"
+        id="RecipientRef" name="RecipientRef" [nzSize]="'large'" [(ngModel)]="Entity.p.RecipientRef"
+        (ngModelChange)="getEntireListByFilters(); ">
+        <nz-option *ngFor="let recipient of RecipientList" [nzValue]="recipient.p.Ref"
+          [nzLabel]="recipient.p.RecipientName | titleCase" nzCustomContent>
+          <span [ngClass]="recipient.p.IsSiteRef == 1 ? 'site' : 'nonsite'">
+            {{ recipient.p.RecipientName | titleCase }}
+          </span>
+        </nz-option>
+      </nz-select>
+    </div>
+  </div>
+  <div class="col-md-3" style="margin-top: 1rem; ">
+    <label><b>From Whom Type</b> </label>
+    <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear nzPlaceHolder="Select"
+      id="PayerType" name="PayerType" [nzSize]="'large'" [(ngModel)]="Entity.p.PayerType"
+      (ngModelChange)="getPayerListBySiteAndPayerType(); this.Entity.p.PayerRef = 0; this.PayerPlotNo = '';">
+      <nz-option *ngFor="let type of PayerTypesList" [nzValue]="type.Ref" [nzLabel]="type.Name"></nz-option>
+    </nz-select>
+  </div>
+  <div class="col-md-3" style="margin-top: 1rem">
+    <label><b>Received By</b></label>
+    <div class="d-flex align-items-center">
+      <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear nzPlaceHolder="Select"
+        id="PayerRef" name="PayerRef" [nzSize]="'large'" [(ngModel)]="PayerPlotNo"
+        (ngModelChange)="getEntireListByFilters(); onPayerChange();">
+        <nz-option *ngFor="let payer of PayerList" [nzValue]="payer.p.PlotName"
+          [nzLabel]="payer.p.PayerName + ' - ' + payer.p.PlotName | titleCase">
+          <span *ngIf="Entity.p.PayerType == DealDoneCustomer"
+            [ngClass]="payer.p.IsRegisterCustomerRef == 1 ? 'sitecus' : 'nonsitecus'">
+            {{ payer.p.PayerName + ' - ' + payer.p.PlotName| titleCase }}
+          </span>
+          <span *ngIf="Entity.p.PayerType != DealDoneCustomer"
+            [ngClass]="payer.p.IsRegisterCustomerRef == 1 ? 'sitecus' : 'nonsitecus'">
+            {{ payer.p.PayerName| titleCase }}
+          </span>
+        </nz-option>
+      </nz-select>
+    </div>
+  </div>
 </div>
 
 <!-- Live Table -->
@@ -141,7 +192,8 @@
         <td class="tbldata">{{ report.p.RecipientName? (report.p.RecipientName | titleCase) : '--' }}</td>
         <td class="tbldata">{{ report.p.SiteName }}</td>
         <td class="tbldata">{{ report.p.Reason }}</td>
-        <td class="tbldata">{{ report.p.IncomeAmount && report.p.IncomeAmount != 0 ? (report.p.IncomeAmount | currency:
+        <td class="tbldata">{{ report.p.IncomeAmount && report.p.IncomeAmount != 0 ? (report.p.IncomeAmount |
+          currency:
           'INR'): '--'}}</td>
         <td class="tbldata">{{ report.p.GivenAmount && report.p.GivenAmount != 0 ? (report.p.GivenAmount | currency:
           'INR'): '--'}}</td>
@@ -149,13 +201,13 @@
         <td class="tbldata">{{ report.p.ModeOfPaymentName }}</td>
         <td class="tbldata">{{ report.p.Narration }}</td>
       </tr>
-       <tr *ngIf="DisplayMasterList.length > 0">
-          <td class="tbldata" colspan="5"></td>
-          <td class="tbldata"><b>Total</b></td>
-          <td class="tbldata"><b>{{ totalTotalIncome | currency: 'INR' }}</b></td>
-          <td class="tbldata"><b>{{ totalTotalExpense | currency: 'INR' }}</b></td>
-          <td class="tbldata" colspan="3"></td>
-        </tr>
+      <tr *ngIf="DisplayMasterList.length > 0">
+        <td class="tbldata" colspan="5"></td>
+        <td class="tbldata"><b>Total</b></td>
+        <td class="tbldata"><b>{{ totalTotalIncome | currency: 'INR' }}</b></td>
+        <td class="tbldata"><b>{{ totalTotalExpense | currency: 'INR' }}</b></td>
+        <td class="tbldata" colspan="3"></td>
+      </tr>
     </tbody>
   </table>
 </div>

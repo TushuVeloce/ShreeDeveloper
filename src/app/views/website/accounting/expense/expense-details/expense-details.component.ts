@@ -33,6 +33,7 @@ export class ExpenseDetailsComponent implements OnInit {
   RecipientList: Invoice[] = [];
   private IsNewEntity: boolean = true;
   SiteList: Site[] = [];
+  LedgerList: Ledger[] = [];
   SubLedgerList: SubLedger[] = [];
   IncomeSubLedgerList: SubLedger[] = [];
   UnitList: Unit[] = [];
@@ -43,7 +44,6 @@ export class ExpenseDetailsComponent implements OnInit {
   DetailsFormTitle: 'New Expense' | 'Edit Expense' = 'New Expense';
   IsDropdownDisabled: boolean = false;
   InitialEntity: Expense = null as any;
-  LedgerList: Ledger[] = [];
   companyRef = this.companystatemanagement.SelectedCompanyRef;
   BankList: OpeningBalance[] = [];
   Cash = ModeOfPayments.Cash
