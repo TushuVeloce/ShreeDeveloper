@@ -50,6 +50,7 @@ export class IncomeDetailsComponent implements OnInit {
   ModeofPaymentList = DomainEnums.ModeOfPaymentsList().filter(item => item.Ref !== this.Bill);
   PayerTypesList = DomainEnums.PayerTypesList();
   DealDoneCustomer = PayerTypes.DealDoneCustomer;
+  PayerPlotNo: string = '';
 
   Date: string = '';
 
@@ -140,22 +141,26 @@ export class IncomeDetailsComponent implements OnInit {
       // await this.uiUtils.showErrorToster('Payer Type not Selected');
       return;
     }
-    let lst = await Income.FetchPayerNameByPayerTypeRef(this.Entity.p.SiteRef,this.companyRef(), this.Entity.p.PayerType, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    let lst = await Income.FetchPayerNameByPayerTypeRef(this.Entity.p.SiteRef, this.companyRef(), this.Entity.p.PayerType, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.PayerList = lst;
+    console.log('this.PayerList :', this.PayerList);
   }
 
   onPayerChange = () => {
+    console.log('this.PayerPlotNo :', this.PayerPlotNo);
     try {
-      let SingleRecord = this.PayerList.find((data) => data.p.Ref == this.Entity.p.PayerRef);
+      let SingleRecord = this.PayerList.find((data) => data.p.PlotName == this.PayerPlotNo);
+      console.log('SingleRecord :', SingleRecord);
       if (SingleRecord?.p) {
         this.Entity.p.IsRegisterCustomerRef = SingleRecord.p.IsRegisterCustomerRef;
+        this.Entity.p.PayerRef = SingleRecord.p.Ref;
         if (this.Entity.p.PayerType == this.DealDoneCustomer) {
           this.Entity.p.PlotName = SingleRecord.p.PlotName;
         }
       }
     } catch (error) {
-
     }
+    console.log('this.Entity.p.PayerRef :', this.Entity.p.PayerRef);
   }
 
   AddPayerName = () => {
@@ -229,8 +234,9 @@ export class IncomeDetailsComponent implements OnInit {
     this.SubLedgerList = lst;
   }
 
-   onTypeChange = () =>{
+  onTypeChange = () => {
     this.Entity.p.PayerRef = 0;
+    this.PayerPlotNo = '';
     this.PayerNameInput = false
   }
 
