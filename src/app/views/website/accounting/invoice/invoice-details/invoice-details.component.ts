@@ -33,7 +33,7 @@ import { LabourTimeProps } from 'src/app/classes/domain/entities/website/site_ma
 export class InvoiceDetailsComponent implements OnInit {
   Entity: Invoice = Invoice.CreateNewInstance();
   RecipientEntity: Recipient = Recipient.CreateNewInstance();
-  private IsNewEntity: boolean = true;
+  IsNewEntity: boolean = true;
   SiteList: Site[] = [];
   // RecipientList: Recipient[] = [];
   RecipientList: Invoice[] = [];
