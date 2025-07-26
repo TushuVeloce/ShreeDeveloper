@@ -94,6 +94,101 @@ export class OfficeViewMobileAppComponent implements OnInit {
     (event.target as HTMLIonRefresherElement).complete();
   }
 
+  // loadFilters() {
+  //   this.filters = [
+  //     {
+  //       key: 'site',
+  //       label: 'Site',
+  //       multi: false,
+  //       options: this.SiteList.map(item => ({
+  //         Ref: item.p.Ref,
+  //         Name: item.p.Name,
+  //       })),
+  //       selected: this.selectedFilterValues['site'] > 0 ? this.selectedFilterValues['site'] : null,
+  //     },
+  //     {
+  //       key: 'modeOfPayment',
+  //       label: 'Mode of Payment',
+  //       multi: false,
+  //       options: this.ModeofPaymentList.map(item => ({
+  //         Ref: item.Ref,
+  //         Name: item.Name,
+  //       })),
+  //       selected: this.selectedFilterValues['modeOfPayment'] > 0 ? this.selectedFilterValues['modeOfPayment'] : null,
+  //     },
+  //     {
+  //       key: 'ledger',
+  //       label: 'Ledger',
+  //       multi: false,
+  //       options: this.LedgerList.map(item => ({
+  //         Ref: item.p.Ref,
+  //         Name: item.p.Name,
+  //       })),
+  //       selected: this.selectedFilterValues['ledger'] > 0 ? this.selectedFilterValues['ledger'] : null,
+  //     },
+  //     {
+  //       key: 'subledger',
+  //       label: 'Sub Ledger',
+  //       multi: false,
+  //       options: this.SubLedgerList.map(item => ({
+  //         Ref: item.p.Ref,
+  //         Name: item.p.Name,
+  //       })),
+  //       selected: this.selectedFilterValues['subledger'] > 0 ? this.selectedFilterValues['subledger'] : null,
+  //     },
+  //     {
+  //       key: 'payertype',
+  //       label: 'Payer Type',
+  //       multi: false,
+  //       options: this.PayerTypesList.map(item => ({
+  //         Ref: item.Ref,
+  //         Name: item.Name,
+  //       })),
+  //       selected: this.selectedFilterValues['payertype'] > 0 ? this.selectedFilterValues['payertype'] : null,
+  //     },
+  //     {
+  //       key: 'payertypelist',
+  //       label: 'Payer',
+  //       multi: false,
+  //       options: this.PayerList.map(item => ({
+  //         Ref: item.p.Ref,
+  //         Name: item.p.PayerName,
+  //       })),
+  //       selected: this.selectedFilterValues['payertypelist'] > 0 ? this.selectedFilterValues['payertypelist'] : null,
+  //     },
+  //     {
+  //       key: 'recipienttype',
+  //       label: 'Recipient Type',
+  //       multi: false,
+  //       options: this.RecipientTypesList.map(item => ({
+  //         Ref: item.Ref,
+  //         Name: item.Name,
+  //       })),
+  //       selected: this.selectedFilterValues['recipienttype'] > 0 ? this.selectedFilterValues['recipienttype'] : null,
+  //     },
+  //     {
+  //       key: 'recipienttypelist',
+  //       label: 'Recipient',
+  //       multi: false,
+  //       options: this.RecipientList.map(item => ({
+  //         Ref: item.p.Ref,
+  //         Name: item.p.RecipientName,
+  //       })),
+  //       selected: this.selectedFilterValues['recipienttypelist'] > 0 ? this.selectedFilterValues['recipienttypelist'] : null,
+  //     },
+  //     {
+  //       key: 'accountingReport',
+  //       label: 'Accounting Report',
+  //       multi: false,
+  //       options: this.AccountingReportList.map(item => ({
+  //         Ref: item.Ref,
+  //         Name: item.Name,
+  //       })),
+  //       selected: this.selectedFilterValues['accountingReport'] > 0 ? this.selectedFilterValues['accountingReport'] : 200,
+  //     }
+  //   ];
+  // }
+
   loadFilters() {
     this.filters = [
       {
@@ -104,7 +199,9 @@ export class OfficeViewMobileAppComponent implements OnInit {
           Ref: item.p.Ref,
           Name: item.p.Name,
         })),
-        selected: this.selectedFilterValues['site'] > 0 ? this.selectedFilterValues['site'] : null,
+        selected: this.SiteList.find(item => item.p.Ref === this.selectedFilterValues['site'])
+          ? this.selectedFilterValues['site']
+          : null,
       },
       {
         key: 'modeOfPayment',
@@ -114,7 +211,9 @@ export class OfficeViewMobileAppComponent implements OnInit {
           Ref: item.Ref,
           Name: item.Name,
         })),
-        selected: this.selectedFilterValues['modeOfPayment'] > 0 ? this.selectedFilterValues['modeOfPayment'] : null,
+        selected: this.ModeofPaymentList.find(item => item.Ref === this.selectedFilterValues['modeOfPayment'])
+          ? this.selectedFilterValues['modeOfPayment']
+          : null,
       },
       {
         key: 'ledger',
@@ -124,7 +223,9 @@ export class OfficeViewMobileAppComponent implements OnInit {
           Ref: item.p.Ref,
           Name: item.p.Name,
         })),
-        selected: this.selectedFilterValues['ledger'] > 0 ? this.selectedFilterValues['ledger'] : null,
+        selected: this.LedgerList.find(item => item.p.Ref === this.selectedFilterValues['ledger'])
+          ? this.selectedFilterValues['ledger']
+          : null,
       },
       {
         key: 'subledger',
@@ -134,7 +235,9 @@ export class OfficeViewMobileAppComponent implements OnInit {
           Ref: item.p.Ref,
           Name: item.p.Name,
         })),
-        selected: this.selectedFilterValues['subledger'] > 0 ? this.selectedFilterValues['subledger'] : null,
+        selected: this.SubLedgerList.find(item => item.p.Ref === this.selectedFilterValues['subledger'])
+          ? this.selectedFilterValues['subledger']
+          : null,
       },
       {
         key: 'payertype',
@@ -144,7 +247,9 @@ export class OfficeViewMobileAppComponent implements OnInit {
           Ref: item.Ref,
           Name: item.Name,
         })),
-        selected: this.selectedFilterValues['payertype'] > 0 ? this.selectedFilterValues['payertype'] : null,
+        selected: this.PayerTypesList.find(item => item.Ref === this.selectedFilterValues['payertype'])
+          ? this.selectedFilterValues['payertype']
+          : null,
       },
       {
         key: 'payertypelist',
@@ -154,7 +259,9 @@ export class OfficeViewMobileAppComponent implements OnInit {
           Ref: item.p.Ref,
           Name: item.p.PayerName,
         })),
-        selected: this.selectedFilterValues['payertypelist'] > 0 ? this.selectedFilterValues['payertypelist'] : null,
+        selected: this.PayerList.find(item => item.p.Ref === this.selectedFilterValues['payertypelist'])
+          ? this.selectedFilterValues['payertypelist']
+          : null,
       },
       {
         key: 'recipienttype',
@@ -164,7 +271,9 @@ export class OfficeViewMobileAppComponent implements OnInit {
           Ref: item.Ref,
           Name: item.Name,
         })),
-        selected: this.selectedFilterValues['recipienttype'] > 0 ? this.selectedFilterValues['recipienttype'] : null,
+        selected: this.RecipientTypesList.find(item => item.Ref === this.selectedFilterValues['recipienttype'])
+          ? this.selectedFilterValues['recipienttype']
+          : null,
       },
       {
         key: 'recipienttypelist',
@@ -174,7 +283,9 @@ export class OfficeViewMobileAppComponent implements OnInit {
           Ref: item.p.Ref,
           Name: item.p.RecipientName,
         })),
-        selected: this.selectedFilterValues['recipienttypelist'] > 0 ? this.selectedFilterValues['recipienttypelist'] : null,
+        selected: this.RecipientList.find(item => item.p.Ref === this.selectedFilterValues['recipienttypelist'])
+          ? this.selectedFilterValues['recipienttypelist']
+          : null,
       },
       {
         key: 'accountingReport',
@@ -184,13 +295,76 @@ export class OfficeViewMobileAppComponent implements OnInit {
           Ref: item.Ref,
           Name: item.Name,
         })),
-        selected: this.selectedFilterValues['accountingReport'] > 0 ? this.selectedFilterValues['accountingReport'] : 200,
+        selected: this.AccountingReportList.find(item => item.Ref === this.selectedFilterValues['accountingReport'])
+          ? this.selectedFilterValues['accountingReport']
+          : AccountingReports.CurrentFinancialYear,
       }
     ];
   }
 
+
+  // async onFiltersChanged(updatedFilters: any[]) {
+  //   // debugger
+  //   console.log('Updated Filters:', updatedFilters);
+
+  //   for (const filter of updatedFilters) {
+  //     const selected = filter.selected;
+  //     const selectedValue = (selected === null || selected === undefined) ? null : selected;
+
+  //     // Save selected value to preserve after reload
+  //     this.selectedFilterValues[filter.key] = selectedValue ?? null;
+
+  //     switch (filter.key) {
+  //       case 'site':
+  //         this.Entity.p.SiteRef = selectedValue ?? 0;
+  //         break;
+
+  //       case 'reason':
+  //         this.Entity.p.Reason = selectedValue ?? 0;
+  //         break;
+
+  //       case 'subledger':
+  //         this.Entity.p.SubLedgerRef = selectedValue ?? 0;
+  //         break;
+
+  //       case 'ledger':
+  //         this.Entity.p.LedgerRef = selectedValue ?? 0;
+  //         if (selectedValue != null) { this.SubLedgerList = [];await this.getSubLedgerListByLedgerRef(selectedValue);}else {this.SubLedgerList = []};  // Updates SubLedgerList
+  //         break;
+
+  //       case 'payertype':
+  //         this.Entity.p.PayerType = selectedValue ?? 0;
+  //         if (selectedValue != null) { this.PayerList = []; await this.getPayerListBySiteAndPayerType(); } else { this.PayerList = [] };   // Updates SubLedgerList
+  //         break;
+
+  //       case 'payertypelist':
+  //         this.Entity.p.PayerRef = selectedValue ?? 0;
+  //         break;
+
+  //       case 'recipienttype':
+  //         this.Entity.p.RecipientType = selectedValue ?? 0;
+  //         if (selectedValue != null) { this.RecipientList = []; await this.getRecipientListByRecipientTypeRef(); } else { this.RecipientList = [] };   // Updates SubLedgerList
+  //         break;
+
+  //       case 'recipienttypelist':
+  //         this.Entity.p.RecipientRef = selectedValue ?? 0;
+  //         break;
+  //       case 'accountingReport':
+  //         this.Entity.p.AccountingReport = selectedValue ?? 0;
+  //         break;
+
+  //       case 'modeOfPayment':
+  //         this.Entity.p.ModeOfPayment = selectedValue ?? 0;
+  //         break;
+  //     }
+  //   }
+  //   if (this.Entity.p.AccountingReport===0){
+  //     this.Entity.p.AccountingReport = AccountingReports.CurrentFinancialYear;
+  //   }
+  //   await this.FetchEntireListByFilters();
+  //   this.loadFilters(); // Reload filters with updated options & preserve selections
+  // }
   async onFiltersChanged(updatedFilters: any[]) {
-    // debugger
     console.log('Updated Filters:', updatedFilters);
 
     for (const filter of updatedFilters) {
@@ -209,18 +383,34 @@ export class OfficeViewMobileAppComponent implements OnInit {
           this.Entity.p.Reason = selectedValue ?? 0;
           break;
 
+        case 'ledger':
+          this.Entity.p.LedgerRef = selectedValue ?? 0;
+
+          // Reset sub-ledger when ledger changes
+          this.SubLedgerList = [];
+          this.selectedFilterValues['subledger'] = null;
+          this.Entity.p.SubLedgerRef = 0;
+
+          if (selectedValue != null) {
+            await this.getSubLedgerListByLedgerRef(selectedValue);
+          }
+          break;
+
         case 'subledger':
           this.Entity.p.SubLedgerRef = selectedValue ?? 0;
           break;
 
-        case 'ledger':
-          this.Entity.p.LedgerRef = selectedValue ?? 0;
-          if (selectedValue != null) {await this.getSubLedgerListByLedgerRef(selectedValue);}else {this.SubLedgerList = []};  // Updates SubLedgerList
-          break;
-
         case 'payertype':
           this.Entity.p.PayerType = selectedValue ?? 0;
-          if (selectedValue != null) { await this.getPayerListBySiteAndPayerType(); } else { this.PayerList = [] };   // Updates SubLedgerList
+
+          // Reset payer list when payer type changes
+          this.PayerList = [];
+          this.selectedFilterValues['payertypelist'] = null;
+          this.Entity.p.PayerRef = 0;
+
+          if (selectedValue != null) {
+            await this.getPayerListBySiteAndPayerType();
+          }
           break;
 
         case 'payertypelist':
@@ -229,12 +419,21 @@ export class OfficeViewMobileAppComponent implements OnInit {
 
         case 'recipienttype':
           this.Entity.p.RecipientType = selectedValue ?? 0;
-          if (selectedValue != null) { await this.getRecipientListByRecipientTypeRef(); } else { this.RecipientList = [] };   // Updates SubLedgerList
+
+          // Reset recipient list when recipient type changes
+          this.RecipientList = [];
+          this.selectedFilterValues['recipienttypelist'] = null;
+          this.Entity.p.RecipientRef = 0;
+
+          if (selectedValue != null) {
+            await this.getRecipientListByRecipientTypeRef();
+          }
           break;
 
         case 'recipienttypelist':
           this.Entity.p.RecipientRef = selectedValue ?? 0;
           break;
+
         case 'accountingReport':
           this.Entity.p.AccountingReport = selectedValue ?? 0;
           break;
@@ -244,12 +443,17 @@ export class OfficeViewMobileAppComponent implements OnInit {
           break;
       }
     }
-    if (this.Entity.p.AccountingReport===0){
+
+    if (this.Entity.p.AccountingReport === 0) {
       this.Entity.p.AccountingReport = AccountingReports.CurrentFinancialYear;
     }
+
     await this.FetchEntireListByFilters();
     this.loadFilters(); // Reload filters with updated options & preserve selections
   }
+
+
+
 
     @ViewChild('PrintContainer')
     PrintContainer!: ElementRef;
