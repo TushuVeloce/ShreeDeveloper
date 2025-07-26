@@ -143,6 +143,8 @@ export class InvoiceDetailsMobileAppComponent implements OnInit {
   BillingDate = '';
   DisplayBillingDate = '';
 
+  DisplayTotalWorkingHrs: string = ''
+
   constructor(
     private router: Router,
     private appStateManage: AppStateManageService,
@@ -231,6 +233,7 @@ export class InvoiceDetailsMobileAppComponent implements OnInit {
             this.isDieselPaid = true
           }
           this.getVendorServiceListByVendorRef(this.Entity.p.VendorRef);
+          this.getTotalWorkedHours()
           // this.RecipientNameReadOnly = true
         } else {
           this.Entity = Invoice.CreateNewInstance();
@@ -508,9 +511,20 @@ export class InvoiceDetailsMobileAppComponent implements OnInit {
 
 
   getTotalWorkedHours(): number {
-    return this.Entity.p.MachineUsageDetailsArray.reduce((total: number, item: any) => {
+    // return this.Entity.p.MachineUsageDetailsArray.reduce((total: number, item: any) => {
+    //   return total + Number(item.WorkedHours || 0);
+    // }, 0);
+    let total = this.Entity.p.MachineUsageDetailsArray.reduce((total: number, item: any) => {
       return total + Number(item.WorkedHours || 0);
     }, 0);
+    this.DisplayTotalWorkingHrs = this.formatMinutesToHourMin(total);
+    return total;
+  }
+  formatMinutesToHourMin = (totalMinutes: number): string => {
+    const hours = Math.floor(totalMinutes / 60);
+    const minutes = totalMinutes % 60;
+    const formattedMinutes = minutes < 10 ? '0' + minutes : minutes;
+    return `${hours}h ${formattedMinutes}m`;
   }
 
   getTotalLabourWorkedHours(): number {
@@ -528,6 +542,19 @@ export class InvoiceDetailsMobileAppComponent implements OnInit {
       return total + Number(item.LabourAmount || 0);
     }, 0);
   }
+
+  convertTo12HourFormat(time: string): string {
+    const [hourStr, minuteStr] = time.split(':');
+    let hour = parseInt(hourStr, 10);
+    const minute = parseInt(minuteStr, 10);
+
+    const ampm = hour >= 12 ? 'PM' : 'AM';
+    hour = hour % 12;
+    hour = hour === 0 ? 12 : hour;
+
+    return `${hour}:${minute.toString().padStart(2, '0')} ${ampm}`;
+  }
+
 
   calculateWorkedHours() {
     const start = this.MachineTimeEntity.StartTime;
@@ -551,10 +578,16 @@ export class InvoiceDetailsMobileAppComponent implements OnInit {
         diffMs = endDate.getTime() - startDate.getTime();
       }
 
-      const diffHrs = diffMs / (1000 * 60 * 60); // convert ms to hours
-      this.MachineTimeEntity.WorkedHours = +diffHrs.toFixed(2); // round to 2 decimal places
+      const diffMinutes = diffMs / (1000 * 60); // convert ms to hours
+      // HH:mm format
+      const hours = Math.floor(diffMinutes / 60);
+      const minutes = diffMinutes % 60;
+
+      this.MachineTimeEntity.WorkedHours = +diffMinutes; 
+      this.MachineTimeEntity.DisplayWorkedHours = `${hours}h ${minutes.toString().padStart(2, '0')}m`;
     } else {
       this.MachineTimeEntity.WorkedHours = 0;
+      this.MachineTimeEntity.DisplayWorkedHours = `0h 0m`;
     }
   }
 

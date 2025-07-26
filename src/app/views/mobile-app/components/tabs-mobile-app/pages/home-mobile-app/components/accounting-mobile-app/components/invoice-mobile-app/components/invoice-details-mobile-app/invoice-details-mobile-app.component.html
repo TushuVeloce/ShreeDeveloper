@@ -117,7 +117,7 @@
       <!-- Inline Add Button -->
       <ion-button slot="end" fill="solid" size="small" (click)="AddRecipientName()"
         style="--background: var(--ion-color-primary); --border-radius: 8px; --padding-start: 6px; --padding-end: 6px; margin-left: 6px;"
-         *ngIf="Entity.p.RecipientType == TypeRecipient">
+        *ngIf="Entity.p.RecipientType == TypeRecipient">
         <ion-icon slot="icon-only" name="add-outline" color="light"></ion-icon>
       </ion-button>
     </ion-item>
@@ -242,13 +242,13 @@
               <tr *ngFor="let item of Entity.p.MachineUsageDetailsArray; let i = index">
                 <td class="sticky-col">{{i + 1 }}</td>
                 <td>
-                  {{ item.StartTime || '-' }}
+                  {{ convertTo12HourFormat(item.StartTime) || '-' }}
                 </td>
                 <td>
-                  {{ item.EndTime || '-' }}
+                  {{ convertTo12HourFormat(item.EndTime) || '-' }}
                 </td>
                 <td>
-                  {{ convertHoursToReadableTime(item.WorkedHours) || '-' }}
+                  {{ item.DisplayWorkedHours|| '-' }}
                 </td>
 
                 <td>
@@ -259,9 +259,9 @@
                 </td>
               </tr>
               <tr>
-                <td class="sticky-col" colspan="2"><b>Grand Total</b></td>
-                <td colspan="2"><b>Total Hours</b></td>
-                <td><b>{{ convertHoursToReadableTime(getTotalWorkedHours()) }}</b></td>
+                <td class="sticky-col" colspan="3"><b>Total Hours</b></td>
+                <!-- <td colspan="2"><b>Total Hours</b></td> -->
+                <td><b>{{ DisplayTotalWorkingHrs }}</b></td>
               </tr>
             </tbody>
           </table>
@@ -313,10 +313,10 @@
                   {{ item.LabourTypeName || '-' }}
                 </td>
                 <td>
-                  {{ item.LabourFromTime || '-' }}
+                  {{ convertTo12HourFormat(item.LabourFromTime) || '-' }}
                 </td>
                 <td>
-                  {{ item.LabourToTime || '-' }}
+                  {{ convertTo12HourFormat(item.LabourToTime) || '-' }}
                 </td>
                 <td>
                   {{ convertHoursToReadableTime(item.LabourWorkedHours) || '-' }}
@@ -342,6 +342,8 @@
                 <td colspan="2"></td>
                 <td><b>{{ convertHoursToReadableTime(getTotalLabourWorkedHours()) }}</b></td>
                 <td><b>{{ getTotalLabourQuantity() }}</b></td>
+                <td></td>
+                <td><b>{{ getTotalLabourAmount() }}</b></td>
               </tr>
             </tbody>
           </table>
@@ -396,8 +398,8 @@
         <ion-col size="4">
           <!-- Diesel Amount -->
           <ion-item class="input-item">
-            <ion-input type="number" [disabled]="'true'" label="Amount" labelPlacement="floating" placeholder="Enter Diesel Amount"
-              [(ngModel)]="Entity.p.DieselAmount"></ion-input>
+            <ion-input type="number" [disabled]="'true'" label="Amount" labelPlacement="floating"
+              placeholder="Enter Diesel Amount" [(ngModel)]="Entity.p.DieselAmount"></ion-input>
           </ion-item>
         </ion-col>
       </ion-row>
@@ -431,181 +433,182 @@
     <!-- add time Machine Details Modal -->
     <ion-modal [isOpen]="isTimeModalOpen" (didDismiss)="CloseTimeModal(100)" class="custom-modal-mobile-app">
       <ng-template>
-          <ion-header class="modal-toolbar-mobile-app">
-            <ion-toolbar color="primary">
-              <ion-title>Add Machine Time Details</ion-title>
-              <ion-buttons slot="end">
-                <ion-button fill="clear" (click)="CloseTimeModal(100)">
-                  <ion-icon name="close-outline"></ion-icon>
-                </ion-button>
-              </ion-buttons>
-            </ion-toolbar>
-          </ion-header>
+        <ion-header class="modal-toolbar-mobile-app">
+          <ion-toolbar color="primary">
+            <ion-title>Add Machine Time Details</ion-title>
+            <ion-buttons slot="end">
+              <ion-button fill="clear" (click)="CloseTimeModal(100)">
+                <ion-icon name="close-outline"></ion-icon>
+              </ion-button>
+            </ion-buttons>
+          </ion-toolbar>
+        </ion-header>
 
-          <ion-content scroll-y="true" class="ion-padding modal-content-mobile-app">
-            <ion-list lines="none">
-              <ion-item class="input-item">
-                <ion-label>From Time</ion-label>
-                <ion-datetime-button datetime="machinestartTime"></ion-datetime-button>
-              </ion-item>
-              <!-- <ion-datetime id="startTime" presentation="time" [(ngModel)]="StartTime"
+        <ion-content scroll-y="true" class="ion-padding modal-content-mobile-app">
+          <ion-list lines="none">
+            <ion-item class="input-item">
+              <ion-label>From Time</ion-label>
+              <ion-datetime-button datetime="machinestartTime"></ion-datetime-button>
+            </ion-item>
+            <!-- <ion-datetime id="startTime" presentation="time" [(ngModel)]="StartTime"
               (ngModelChange)="StartTimeChange($event)" show-default-buttons="true">
             </ion-datetime> -->
-              <ion-modal keepContentsMounted="true">
-                <ng-template>
-                  <ion-datetime id="machinestartTime" presentation="time" [(ngModel)]="MachineStartTime"
-                    (ngModelChange)="MachineStartTimeChange($event)" hour-cycle="h23" prefer-wheel="true"
-                    show-default-buttons="true">
-                  </ion-datetime>
-                </ng-template>
-              </ion-modal>
+            <ion-modal keepContentsMounted="true">
+              <ng-template>
+                <ion-datetime id="machinestartTime" presentation="time" [(ngModel)]="MachineStartTime"
+                  (ngModelChange)="MachineStartTimeChange($event)" hour-cycle="h11" prefer-wheel="true"
+                  show-default-buttons="true">
+                </ion-datetime>
+              </ng-template>
+            </ion-modal>
 
-              <ion-item class="input-item">
-                <ion-label>To Time</ion-label>
-                <ion-datetime-button datetime="machineendTime"></ion-datetime-button>
-              </ion-item>
-              <!-- <ion-datetime id="endTime" presentation="time" [(ngModel)]="EndTime" (ngModelChange)="EndTimeChange($event)"
+            <ion-item class="input-item">
+              <ion-label>To Time</ion-label>
+              <ion-datetime-button datetime="machineendTime"></ion-datetime-button>
+            </ion-item>
+            <!-- <ion-datetime id="endTime" presentation="time" [(ngModel)]="EndTime" (ngModelChange)="EndTimeChange($event)"
               show-default-buttons="true">
             </ion-datetime> -->
-              <ion-modal keepContentsMounted="true">
-                <ng-template>
-                  <ion-datetime id="machineendTime" presentation="time" [(ngModel)]="MachineEndTime"
-                    (ngModelChange)="MachineEndTimeChange($event)" hour-cycle="h23" prefer-wheel="true"
-                    show-default-buttons="true">
-                  </ion-datetime>
-                </ng-template>
-              </ion-modal>
+            <ion-modal keepContentsMounted="true">
+              <ng-template>
+                <ion-datetime id="machineendTime" presentation="time" [(ngModel)]="MachineEndTime"
+                  (ngModelChange)="MachineEndTimeChange($event)" hour-cycle="h11" prefer-wheel="true"
+                  show-default-buttons="true">
+                </ion-datetime>
+              </ng-template>
+            </ion-modal>
 
-              <ion-item class="input-item">
-                <ion-label color="primary">Total Working Hours</ion-label>
-                <ion-text color="dark"><strong>{{ convertHoursToReadableTime(MachineTimeEntity.WorkedHours) }}
-                  </strong></ion-text>
-              </ion-item>
+            <ion-item class="input-item">
+              <ion-label color="primary">Total Working Hours</ion-label>
+              <!-- <ion-text color="dark"><strong>{{ convertHoursToReadableTime(MachineTimeEntity.WorkedHours) }}
+                </strong></ion-text> -->
+              <ion-text color="dark"><strong>{{ MachineTimeEntity.DisplayWorkedHours }}
+                </strong></ion-text>
+            </ion-item>
+          </ion-list>
+        </ion-content>
 
-            </ion-list>
-          </ion-content>
-
-         <ion-footer class="modal-footer-mobile-app">
-            <ion-grid>
-              <ion-row>
-                <ion-col>
-                  <ion-button expand="block" color="medium" shape="round"
-                    (click)="CloseTimeModal(100)">Close</ion-button>
-                </ion-col>
-                <ion-col>
-                  <ion-button expand="block" color="primary" shape="round" (click)="SaveTime()">
-                    {{ 'Save' }}
-                  </ion-button>
-                </ion-col>
-              </ion-row>
-            </ion-grid>
-          </ion-footer>
+        <ion-footer class="modal-footer-mobile-app">
+          <ion-grid>
+            <ion-row>
+              <ion-col>
+                <ion-button expand="block" color="medium" shape="round" (click)="CloseTimeModal(100)">Close</ion-button>
+              </ion-col>
+              <ion-col>
+                <ion-button expand="block" color="primary" shape="round" (click)="SaveTime()">
+                  {{ 'Save' }}
+                </ion-button>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </ion-footer>
       </ng-template>
     </ion-modal>
 
     <!-- add time Labour Details Modal -->
-    <ion-modal [isOpen]="isLabourTimeModalOpen" (didDismiss)="CloseLabourTimeModal(200)" class="custom-modal-mobile-app">
+    <ion-modal [isOpen]="isLabourTimeModalOpen" (didDismiss)="CloseLabourTimeModal(200)"
+      class="custom-modal-mobile-app">
       <ng-template>
-          <ion-header class="modal-toolbar-mobile-app">
-            <ion-toolbar color="primary">
-              <ion-title>Add Labour Time Details</ion-title>
-              <ion-buttons slot="end">
-                <ion-button fill="clear" (click)="CloseLabourTimeModal(200)">
-                  <ion-icon name="close-outline"></ion-icon>
-                </ion-button>
-              </ion-buttons>
-            </ion-toolbar>
-          </ion-header>
+        <ion-header class="modal-toolbar-mobile-app">
+          <ion-toolbar color="primary">
+            <ion-title>Add Labour Time Details</ion-title>
+            <ion-buttons slot="end">
+              <ion-button fill="clear" (click)="CloseLabourTimeModal(200)">
+                <ion-icon name="close-outline"></ion-icon>
+              </ion-button>
+            </ion-buttons>
+          </ion-toolbar>
+        </ion-header>
 
-          <ion-content scroll-y="true" class="ion-padding modal-content-mobile-app">
-            <ion-list lines="none">
-              <!-- Labour Type -->
-              <ion-item class="input-item" button detail (click)="selectLabourTypeBottomsheet()">
-                <ion-label>Labour Type</ion-label>
-                <ion-text slot="end" class="status-text">
-                  {{ LabourTypeName || 'Select' }}
-                </ion-text>
-              </ion-item>
+        <ion-content scroll-y="true" class="ion-padding modal-content-mobile-app">
+          <ion-list lines="none">
+            <!-- Labour Type -->
+            <ion-item class="input-item" button detail (click)="selectLabourTypeBottomsheet()">
+              <ion-label>Labour Type</ion-label>
+              <ion-text slot="end" class="status-text">
+                {{ LabourTypeName || 'Select' }}
+              </ion-text>
+            </ion-item>
 
 
-              <ion-item class="input-item">
-                <ion-label>From Time</ion-label>
-                <ion-datetime-button datetime="LabourstartTime"></ion-datetime-button>
-              </ion-item>
-              <!-- <ion-datetime id="startTime" presentation="time" [(ngModel)]="StartTime"
+            <ion-item class="input-item">
+              <ion-label>From Time</ion-label>
+              <ion-datetime-button datetime="LabourstartTime"></ion-datetime-button>
+            </ion-item>
+            <!-- <ion-datetime id="startTime" presentation="time" [(ngModel)]="StartTime"
                   (ngModelChange)="StartTimeChange($event)" show-default-buttons="true">
                 </ion-datetime> -->
-              <ion-modal keepContentsMounted="true">
-                <ng-template>
-                  <ion-datetime id="LabourstartTime" presentation="time" [(ngModel)]="LabourStartTime"
-                    (ngModelChange)="LabourStartTimeChange($event)" hour-cycle="h23" prefer-wheel="true"
-                    show-default-buttons="true">
-                  </ion-datetime>
-                </ng-template>
-              </ion-modal>
+            <ion-modal keepContentsMounted="true">
+              <ng-template>
+                <ion-datetime id="LabourstartTime" presentation="time" [(ngModel)]="LabourStartTime"
+                  (ngModelChange)="LabourStartTimeChange($event)" hour-cycle="h11" prefer-wheel="true"
+                  show-default-buttons="true">
+                </ion-datetime>
+              </ng-template>
+            </ion-modal>
 
-              <ion-item class="input-item">
-                <ion-label>To Time</ion-label>
-                <ion-datetime-button datetime="LabourendTime"></ion-datetime-button>
-              </ion-item>
-              <!-- <ion-datetime id="endTime" presentation="time" [(ngModel)]="EndTime" (ngModelChange)="EndTimeChange($event)"
+            <ion-item class="input-item">
+              <ion-label>To Time</ion-label>
+              <ion-datetime-button datetime="LabourendTime"></ion-datetime-button>
+            </ion-item>
+            <!-- <ion-datetime id="endTime" presentation="time" [(ngModel)]="EndTime" (ngModelChange)="EndTimeChange($event)"
                   show-default-buttons="true">
                 </ion-datetime> -->
-              <ion-modal keepContentsMounted="true">
-                <ng-template>
-                  <ion-datetime id="LabourendTime" presentation="time" [(ngModel)]="LabourEndTime"
-                    (ngModelChange)="LabourEndTimeChange($event)" hour-cycle="h23" prefer-wheel="true"
-                    show-default-buttons="true">
-                  </ion-datetime>
-                </ng-template>
-              </ion-modal>
+            <ion-modal keepContentsMounted="true">
+              <ng-template>
+                <ion-datetime id="LabourendTime" presentation="time" [(ngModel)]="LabourEndTime"
+                  (ngModelChange)="LabourEndTimeChange($event)" hour-cycle="h11" prefer-wheel="true"
+                  show-default-buttons="true">
+                </ion-datetime>
+              </ng-template>
+            </ion-modal>
 
-              <ion-item class="input-item">
-                <ion-label color="primary">Total Working Hours</ion-label>
-                <ion-text color="dark"><strong>{{ convertHoursToReadableTime(LabourTimeEntity.LabourWorkedHours) }}
-                  </strong></ion-text>
-              </ion-item>
+            <ion-item class="input-item">
+              <ion-label color="primary">Total Working Hours</ion-label>
+              <ion-text color="dark"><strong>{{ convertHoursToReadableTime(LabourTimeEntity.LabourWorkedHours) }}
+                </strong></ion-text>
+            </ion-item>
 
-              <!-- Labour Quantity -->
-              <ion-item class="input-item">
-                <ion-input type="number" label="Labour Quantity" labelPlacement="floating"
-                  placeholder="Enter Labour Quantity" [(ngModel)]="LabourTimeEntity.LabourQty"
-                  (ngModelChange)="CalculateLabourAmount()" clearInput="true">
-                </ion-input>
-              </ion-item>
+            <!-- Labour Quantity -->
+            <ion-item class="input-item">
+              <ion-input type="number" label="Labour Quantity" labelPlacement="floating"
+                placeholder="Enter Labour Quantity" [(ngModel)]="LabourTimeEntity.LabourQty"
+                (ngModelChange)="CalculateLabourAmount()" clearInput="true">
+              </ion-input>
+            </ion-item>
 
-              <!-- Labour Rate -->
-              <ion-item class="input-item">
-                <ion-input type="number" label="Labour Rate" labelPlacement="floating" placeholder="Enter Labour Rate"
-                  [(ngModel)]="LabourTimeEntity.LabourRate" (ngModelChange)="CalculateLabourAmount()" clearInput="true">
-                </ion-input>
-              </ion-item>
+            <!-- Labour Rate -->
+            <ion-item class="input-item">
+              <ion-input type="number" label="Labour Rate" labelPlacement="floating" placeholder="Enter Labour Rate"
+                [(ngModel)]="LabourTimeEntity.LabourRate" (ngModelChange)="CalculateLabourAmount()" clearInput="true">
+              </ion-input>
+            </ion-item>
 
-              <!-- Labour Amount -->
-              <ion-item class="input-item">
-                <ion-input type="number" label="Labour Amount" labelPlacement="floating"
-                  placeholder="Enter Labour Amount" [(ngModel)]="LabourTimeEntity.LabourAmount" [disabled]="'true'">
-                </ion-input>
-              </ion-item>
+            <!-- Labour Amount -->
+            <ion-item class="input-item">
+              <ion-input type="number" label="Labour Amount" labelPlacement="floating" placeholder="Enter Labour Amount"
+                [(ngModel)]="LabourTimeEntity.LabourAmount" [disabled]="'true'">
+              </ion-input>
+            </ion-item>
 
-            </ion-list>
-          </ion-content>
+          </ion-list>
+        </ion-content>
 
-         <ion-footer class="modal-footer-mobile-app">
-            <ion-grid>
-              <ion-row>
-                <ion-col>
-                  <ion-button expand="block" color="medium" shape="round"
-                    (click)="CloseLabourTimeModal(200)">Close</ion-button>
-                </ion-col>
-                <ion-col>
-                  <ion-button expand="block" color="primary" shape="round" (click)="SaveLabourTime()">
-                    {{ 'Save' }}
-                  </ion-button>
-                </ion-col>
-              </ion-row>
-            </ion-grid>
-          </ion-footer>
+        <ion-footer class="modal-footer-mobile-app">
+          <ion-grid>
+            <ion-row>
+              <ion-col>
+                <ion-button expand="block" color="medium" shape="round"
+                  (click)="CloseLabourTimeModal(200)">Close</ion-button>
+              </ion-col>
+              <ion-col>
+                <ion-button expand="block" color="primary" shape="round" (click)="SaveLabourTime()">
+                  {{ 'Save' }}
+                </ion-button>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </ion-footer>
       </ng-template>
     </ion-modal>
 
