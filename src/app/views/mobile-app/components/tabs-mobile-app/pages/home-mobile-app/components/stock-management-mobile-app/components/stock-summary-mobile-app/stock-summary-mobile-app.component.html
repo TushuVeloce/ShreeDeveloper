@@ -30,12 +30,16 @@
               <td>{{ item.p.MaterialName || '-' }}</td>
               <td>{{ item.p.TotalOrderQtyPerMaterial || '-' }}</td>
               <td>{{ item.p.TotalExtraOrderQty || '-' }}</td>
-              <td>{{ item.p.TotalOrderQty || '-' }}</td>
               <td>{{ item.p.TotalInwardQty || '-' }}</td>
               <td>{{ item.p.InwardRemainingQty || '-' }}</td>
+              <td>{{ item.p.TotalRequisitionQty || '-' }}</td>
               <td>{{ item.p.TotalConsumedQty || '-' }}</td>
               <td>{{ item.p.TotalTransferredInQty || '-' }}</td>
               <td>{{ item.p.CurrentStock || '-' }}</td>
+              <td>{{ item.p.OrderedRemainingQty }}</td>
+
+              <!-- <td>{{ item.p.TotalInwardQty || '-' }}</td>
+              <td>{{ item.p.TotalConsumedQty || '-' }}</td> -->
               <td>
                 <ion-button size="small" fill="outline" (click)="onViewClicked(item)">
                   View

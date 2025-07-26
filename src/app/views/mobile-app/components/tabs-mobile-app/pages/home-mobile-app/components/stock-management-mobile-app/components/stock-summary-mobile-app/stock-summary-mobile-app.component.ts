@@ -27,7 +27,9 @@ export class StockSummaryMobileAppComponent implements OnInit {
   SelectedStockSummary: StockSummary = StockSummary.CreateNewInstance();
   CustomerRef: number = 0;
   SiteList: Site[] = [];
-  headers: string[] = ['Sr.No.', 'Site Name', 'Material', 'Total Order Qty Per Material', 'Total Extra Order Qty', 'Total Order Qty', 'Total Inward Qty ', 'Inward Remaining Qty', 'Total Consumed Qty ', 'Total Transferred In Qty ', 'Current Stock '];
+  // headers: string[] = ['Sr.No.', 'Site Name', 'Material', 'Total Order Qty Per Material', 'Total Extra Order Qty', 'Total Order Qty', 'Total Inward Qty ', 'Inward Remaining Qty', 'Total Consumed Qty ', 'Total Transferred In Qty ', 'Current Stock '];
+  // headers: string[] = ['Sr.No.', 'Site Name', 'Material', 'Ordered Qty', 'Extra Ordered Qty', 'Total Ordered Qty', 'Total Inward Qty ', 'Total Requisition Qty', 'Total Consumed Qty ', 'Transferred Qty ', 'Current Stock ', 'Inward Remaining Qty', 'Ordered Remaining Qty'];
+  headers: string[] = ['Sr.No.', 'Site Name', 'Material', 'Ordered Qty', 'Extra Ordered Qty', 'Total Inward Qty ', 'Inward Remaining Qty', 'Total Requisition Qty', 'Total Consumed Qty ', 'Transferred Qty ', 'Current Stock ', 'Ordered Remaining Qty'];
 
 
   ModalOpen: boolean = false;
