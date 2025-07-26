@@ -32,7 +32,7 @@
           <label>Site Name</label>
           <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
             nzPlaceHolder="Select" id="SiteRef" name="SiteRef" [nzSize]="'large'" [(ngModel)]="Entity.p.SiteRef"
-            (ngModelChange)="getPayerListBySiteAndPayerType(); Entity.p.PayerRef = 0; Entity.p.LedgerRef = 0; Entity.p.SubLedgerRef = 0; Entity.p.PayerType = 0; Entity.p.PlotName = '';">
+            (ngModelChange)="getPayerListBySiteAndPayerType(); Entity.p.PayerRef = 0; PayerPlotNo = ''; Entity.p.LedgerRef = 0; Entity.p.SubLedgerRef = 0; Entity.p.PayerType = 0; Entity.p.PlotName = ''; PayerList = []">
             <nz-option *ngFor="let site of SiteList" [nzValue]="site.p.Ref" [nzLabel]="site.p.Name"></nz-option>
           </nz-select>
         </div>
@@ -65,19 +65,26 @@
           <div class="d-flex align-items-center">
             <nz-select *ngIf="!PayerNameInput && !PayerNameReadOnly" class="nzSelect-light"
               [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="PayerRef"
-              name="PayerRef" [nzSize]="'large'" [(ngModel)]="Entity.p.PayerRef" (ngModelChange)="onPayerChange()">
-              <nz-option *ngFor="let payer of PayerList" [nzValue]="payer.p.Ref"
-                [nzLabel]="payer.p.PayerName + ' - ' + payer.p.PlotName | titleCase" nzCustomContent>
-                <span *ngIf="Entity.p.PayerType == DealDoneCustomer"
-                  [ngClass]="payer.p.IsRegisterCustomerRef == 1 ? 'sitecus' : 'nonsitecus'">
+              name="PayerRef" [nzSize]="'large'" [(ngModel)]="PayerPlotNo" (ngModelChange)="onPayerChange()">
+              <nz-option *ngFor="let payer of PayerList" [nzValue]="payer.p.PlotName" [nzLabel]="payer.p.PayerName + ' - ' + payer.p.PlotName | titleCase" >
+                <span *ngIf="Entity.p.PayerType == DealDoneCustomer" [ngClass]="payer.p.IsRegisterCustomerRef == 1 ? 'sitecus' : 'nonsitecus'">
                   {{ payer.p.PayerName + ' - ' + payer.p.PlotName| titleCase }}
                 </span>
-                <span *ngIf="Entity.p.PayerType != DealDoneCustomer"
-                  [ngClass]="payer.p.IsRegisterCustomerRef == 1 ? 'sitecus' : 'nonsitecus'">
+                <span *ngIf="Entity.p.PayerType != DealDoneCustomer" [ngClass]="payer.p.IsRegisterCustomerRef == 1 ? 'sitecus' : 'nonsitecus'">
                   {{ payer.p.PayerName| titleCase }}
                 </span>
               </nz-option>
             </nz-select>
+
+
+            <!-- <nz-select *ngIf="!PayerNameInput && !PayerNameReadOnly" class="nzSelect-light"
+              [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="PayerRef"
+              name="PayerRef" [nzSize]="'large'" [(ngModel)]="Entity.p.PayerRef" (ngModelChange)="onPayerChange()">
+              <nz-option *ngFor="let payer of PayerList" [nzValue]="payer.p.Ref"
+                [nzLabel]="payer.p.PayerName + ' - ' + payer.p.PlotName | titleCase"></nz-option>
+            </nz-select> -->
+
+
             <input *ngIf="PayerNameInput && !PayerNameReadOnly" type="text" [(ngModel)]="PayerEntity.p.Name" name="Name"
               class="form-control" id="Name" required placeholder="Enter Payer Name" />
             <span *ngIf="!PayerNameInput && !PayerNameReadOnly && Entity.p.PayerType == RecipientType"
