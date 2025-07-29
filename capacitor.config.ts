@@ -5,17 +5,11 @@ const config: CapacitorConfig = {
   appName: 'Shree Developer',
   webDir: 'www',
   plugins: {
-    SplashScreen: {
-      launchAutoHide: false,
-      backgroundColor: "#ffffff",
-      showSpinner: true,
-      spinnerColor: "#000000"
-    },
     PushNotifications: {
       presentationOptions: ['badge', 'sound', 'alert']
     },
-     Keyboard: {
-      resize: "body" 
+    Keyboard: {
+      resize: 'ionic' // Valid values: 'none', 'native', 'body', 'ionic'
     }
   }
 };

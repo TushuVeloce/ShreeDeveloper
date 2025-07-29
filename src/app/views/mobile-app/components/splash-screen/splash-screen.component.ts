@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { SplashScreen } from '@capacitor/splash-screen';
 
 @Component({
   selector: 'app-splash-screen',
@@ -13,7 +12,6 @@ export class SplashScreenComponent  implements OnInit {
   constructor(private router: Router) { }
 
   async ngOnInit() {
-    await SplashScreen.hide();
 
     // Simulate loading / auth check delay
     setTimeout(() => {
