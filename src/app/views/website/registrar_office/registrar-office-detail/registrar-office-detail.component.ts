@@ -74,13 +74,6 @@ export class RegistrarOfficeDetailComponent implements OnInit {
     }
   }
 
-  // 🔸 Confirm before unload (reload/close/tab exit)
-  // @HostListener('window:beforeunload', ['$event'])
-  // unloadNotification(event: BeforeUnloadEvent) {
-  //   event.preventDefault();
-  //   event.returnValue = ''; // Required for Chrome
-  // }
-
   @HostListener('window:contextmenu', ['$event'])
   disableRightClick(event: MouseEvent) {
     event.preventDefault();

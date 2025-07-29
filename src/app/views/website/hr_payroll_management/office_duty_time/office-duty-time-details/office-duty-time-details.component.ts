@@ -28,6 +28,8 @@ export class OfficeDutyTimeDetailsComponent implements OnInit {
   localToTime: string = '';
   RequiredFieldMsg: string = ValidationMessages.RequiredFieldMsg;
 
+  FromTime: Date | null = null;
+
   @ViewChild('officedutyandtimeForm') officedutyandtimeForm!: NgForm;
   @ViewChild('FromTimeCtrl') FromTimeInputControl!: NgModel;
   @ViewChild('ToTimeCtrl') ToTimeInputControl!: NgModel;
@@ -41,7 +43,7 @@ export class OfficeDutyTimeDetailsComponent implements OnInit {
     private uiUtils: UIUtils,
     private appStateManage: AppStateManageService,
     private utils: Utils,
-    private companystatemanagement: CompanyStateManagement
+    private companystatemanagement: CompanyStateManagement,
   ) { }
 
   ngOnInit() {
@@ -64,8 +66,20 @@ export class OfficeDutyTimeDetailsComponent implements OnInit {
       OfficeDutyandTime.CreateNewInstance(),
       this.utils.DeepCopy(this.Entity)
     ) as OfficeDutyandTime;
-    this.focusInput();
+    // this.focusInput();
   }
+
+
+  setTo24HoursFormat = (value: Date) => {
+    const hours = value.getHours().toString().padStart(2, '0');
+    const minutes = value.getMinutes().toString().padStart(2, '0');
+    this.Entity.p.FromTime = `${hours}:${minutes}`;
+
+    // const isPM = value.getHours() >= 12;
+    // const hours12 = (value.getHours() % 12 || 12).toString().padStart(2, '0');
+    // const time12 = `${hours12}:${minutes} ${isPM ? 'PM' : 'AM'}`;
+    // console.log('Time in 12-hour format:', time12);
+  };
 
   focusInput = () => {
     let txtName = document.getElementById('FromTime')!;

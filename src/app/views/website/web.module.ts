@@ -179,19 +179,27 @@ import { CustomerinfoReportComponent } from './customer_management/crmreports/cu
 import { StockSummaryComponent } from './stock management/stock-summary/stock-summary.component';
 import { CustomerVisitReportComponent } from './customer_management/customervisitreport/customer-visit-report/customer-visit-report.component';
 import { CommaFormatDirective } from 'src/app/services/comma-format.directive';
+import { NzTimePickerModule } from 'ng-zorro-antd/time-picker';
+
+// NG-ZORRO modules
+import { NZ_I18N, en_US } from 'ng-zorro-antd/i18n';
+import { registerLocaleData } from '@angular/common';
+import en from '@angular/common/locales/en';
+
+registerLocaleData(en);
 
 @NgModule({
   declarations: [MaterialMasterComponent, MaterialMasterDetailsComponent, StageMasterComponent, StageMasterDetailsComponent, AccountMainLedgerComponent, AccountMainLedgerDetailsComponent, AccountSubLedgerComponent, AccountSubLedgerDetailsComponent, MarketingTypeMasterComponent, MarketingTypeMasterDetailsComponent, VendorMasterComponent, VehicleMasterComponent, VendorMasterDetailsComponent, BankAccountMasterComponent, BankAccountMasterDetailsComponent, ExternalUsersComponent, ExternalUsersMasterDetailsComponent, CompanyMasterComponent, CompanyMasterDetailsComponent, DepartmentMasterComponent, DepartmentMasterDetailsComponent, DesignationMasterComponent, DesignationMasterDetailsComponent, UserRoleMasterComponent, UserRoleMasterDetailsComponent, EmployeeMasterComponent, EmployeeMasterDetailsComponent,
     SiteManagementMasterComponent, SiteManagementActualStagesComponent, SiteManagementActualStagesDetailsComponent, EstimateStagesDetailsComponent, EstimateStagesComponent, MaterialRequisitionComponent, MaterialRequisitionDetailsComponent, StockConsumeComponent, StockConsumeDetailsComponent, StockInwardComponent, StockInwardDetailsComponent, StockOrderComponent, StockTransferComponent, StockTransferDetailsComponent, StockSummaryComponent, CountryComponent, StateComponent, CityComponent, UnitMasterComponent, UnitMasterDetailsComponent, DeleteIconComponent, EditIconComponent, DataNotFoundComponent, VehicleMasterDetailsComponent, UserrolerightsComponent, FinancialYearMasterComponent, SiteWorkGroupMasterComponent, SiteWorkGroupMasterDetailsComponent, VendorServicesMasterComponent, VendorServicesMasterDetailsComponent, SiteManagementDetailsComponent, EmployeeAppraisalDetailsComponent, ProgressReportComponent, GovernmentOfficeComponent, EmployeeAppraisalMasterComponent, EmployeeExitDetailsComponent, EmployeeExitMasterComponent, PlotMasterComponent, DocumentListComponent, DocumentDetailsComponent, ActualStagePrintComponent, PlotMasterDetailsComponent, CustomerEnquiryComponent, CustomerEnquiryDetailsComponent, CustomerFollowupComponent, CustomerFollowupDetailsComponent, RegisteredCustomerComponent, RegisteredCustomerDetailsComponent, RegistrarOfficeComponent, RegistrarOfficeDetailComponent, SiteWorkMasterDetailComponent, SiteWorkMasterComponent,
     OfficeDutyTimeComponent, OfficeDutyTimeDetailsComponent, SiteWorkDoneMasterDetailsComponent, SiteWorkDoneMasterComponent, GovernmentTransactionDetailsComponent, GovernmentTransactionMasterComponent, TpOfficeDetailsComponent, NaLetterDetailsComponent, MojaniDetailsComponent, SalaryGenerationComponent, SalaryGenerationDetailsComponent, LeaveApprovalComponent, LeaveRequestComponent, LeaveRequestDetailsComponent, SalarySlipApprovalComponent, SalarySlipRequestComponent, SalarySlipRequestDetailsComponent, StockOrderPrintComponent, StockInwardPrintComponent, AddStockOrderComponent, RecipientMasterComponent, RecipientMasterDetailsComponent, PayerComponent, PayerDetailsComponent, InvoicePrintComponent, ProgressReportTableComponent, TpOfficeComponent,
-    KJaPaComponent, MojaniComponent, NaLetterComponent, UlcComponent, FinalLayoutComponent,CustomerVisitReportComponent, CommaFormatDirective, 
+    KJaPaComponent, MojaniComponent, NaLetterComponent, UlcComponent, FinalLayoutComponent, CustomerVisitReportComponent, CommaFormatDirective,
     UlcDetailsComponent, FinalLayoutDetailsComponent, KJaPaDetailsComponent, RespectedChildComponentComponent, AttendanceLogsComponent, EmployeeAttendanceLogsComponent, ValidationMessageComponent, PaginationComponent, SubStageMasterComponent, SubStageMasterDetailsComponent, ExpenseTypeMasterComponent, ExpenseTypeMasterDetailsComponent, MarketingManagementMasterComponent, MarketingManagementMasterDetailsComponent, CustomerPendingFollowupComponent, EmployeeOvertimeComponent, EmployeeOvertimeDetailsComponent, YourProfileComponent, CompanyHolidaysComponent, CompanyHolidaysDetailsComponent, AttendanceDetailsComponent, QuotationComponent, QuotationDetailsComponent, QuotationApprovalComponent, StockOrderDetailsComponent, OrderApprovalComponent, InvoiceComponent, InvoiceDetailsComponent, ExpenseComponent, ExpenseDetailsComponent, IncomeComponent, IncomeDetailsComponent, AccountingReportComponent, OpeningBalanceComponent, OpeningBalanceDetailsComponent, OwnerMasterComponent, OwnerMasterDetailsComponent, CustomersummarryReportComponent, CustomerinfoReportComponent],
   imports: [
     CommonModule, WebRoutingModule, FormsModule, NzDropDownModule, NzTableModule, IonicModule.forRoot(),
     NzPaginationModule, NzUploadModule, NzModalModule, NzCheckboxModule, NzCardModule, NzEmptyModule,
-    CommonModule, NzTableModule, NzIconModule, NzLayoutModule, NzMenuModule, ReactiveFormsModule, NzButtonModule, NzSelectModule, NzStepsModule, NzButtonModule, NzToolTipModule, SharedFilterComponent, TitleCasePipe, CommaNumberDirective
+    CommonModule, NzTableModule, NzIconModule, NzLayoutModule, NzMenuModule, ReactiveFormsModule, NzButtonModule, NzSelectModule, NzTimePickerModule, NzStepsModule, NzButtonModule, NzToolTipModule, SharedFilterComponent, TitleCasePipe, CommaNumberDirective
   ],
-  providers: [DatePipe],
+  providers: [DatePipe, { provide: NZ_I18N, useValue: en_US }],
   exports: [SharedFilterComponent, TitleCasePipe],
 })
 export class WebModule {
