@@ -61,7 +61,7 @@
             <nz-option *ngFor="let type of RecipientTypesList" [nzValue]="type.Ref" [nzLabel]="type.Name"></nz-option>
           </nz-select>
         </div>
-        <div class="col-md-4" style="margin-top: 1rem; " *ngIf="this.Entity.p.RecipientType == Sites">
+        <div class="col-md-4" style="margin-top: 1rem;" *ngIf="this.Entity.p.RecipientType == Sites">
           <label>Income Ledger</label>
           <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
             nzPlaceHolder="Select" id="IncomeLedgerRef" name="IncomeLedgerRef" [nzSize]="'large'"
@@ -70,7 +70,7 @@
             <nz-option *ngFor="let ledger of LedgerList" [nzValue]="ledger.p.Ref" [nzLabel]="ledger.p.Name"></nz-option>
           </nz-select>
         </div>
-        <div class="col-md-4" style="margin-top: 1rem; " *ngIf="this.Entity.p.RecipientType == Sites  ">
+        <div class="col-md-4" style="margin-top: 1rem;" *ngIf="this.Entity.p.RecipientType == Sites  ">
           <label>Income Sub Ledger</label>
           <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
             nzPlaceHolder="Select" id="IncomeSubLedgerRef" name="IncomeSubLedgerRef" [nzSize]="'large'"
@@ -78,7 +78,7 @@
             <nz-option *ngFor="let sub of IncomeSubLedgerList" [nzValue]="sub.p.Ref" [nzLabel]="sub.p.Name"></nz-option>
           </nz-select>
         </div>
-        <div class="col-md-4" style="margin-top: 1rem; " *ngIf="this.Entity.p.RecipientType == Employee ">
+        <div class="col-md-4" style="margin-top: 1rem;" *ngIf="this.Entity.p.RecipientType == Employee ">
           <label>Payment Type</label>
           <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
             nzPlaceHolder="Select" id="PaymentType" name="PaymentType" [nzSize]="'large'" [(ngModel)]="PaymentType"

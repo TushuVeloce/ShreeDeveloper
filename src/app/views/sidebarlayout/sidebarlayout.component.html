@@ -34,8 +34,7 @@
               <ul>
                 <div style="display: flex; align-items: center">
                   <!-- Collapse Sidebar View -->
-                  <a title="{{ submodule.Name }}" style="  display: flex;  align-items: center;  justify-content: center;  margin-left: 10px;  height: 40px;  width: 40px;
-                    " (click)="NavigationFromLogo(submodule.RouterLink)" *ngIf="isCollapsed">
+                  <a title="{{ submodule.Name }}" style="  display: flex;  align-items: center;  justify-content: center;  margin-left: 10px;  height: 40px;  width: 40px;" (click)="NavigationFromLogo(submodule.RouterLink)" *ngIf="isCollapsed">
                     <img [src]="submodule.LogoPath" [alt]="submodule.Name" [title]="submodule.Name"
                       style="width: 1.4vw; height: 1.4vw;" />
                   </a>

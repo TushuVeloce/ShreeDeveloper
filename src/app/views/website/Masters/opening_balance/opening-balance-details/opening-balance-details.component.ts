@@ -72,7 +72,6 @@ export class OpeningBalanceDetailsComponent implements OnInit {
     this.BankList = lst
   };
 
-
   // for value 0 selected while click on Input //
   selectAllValue = (event: MouseEvent): void => {
     const input = event.target as HTMLInputElement;

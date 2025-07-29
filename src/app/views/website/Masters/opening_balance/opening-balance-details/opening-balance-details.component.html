@@ -40,8 +40,8 @@
           <div class="col-md-4" style="margin-top: 1rem">
           <div>
             <label>Opening Balance Amount</label>
-            <input type="number" [(ngModel)]="Entity.p.OpeningBalanceAmount " name="OpeningBalanceAmount " class="form-control" id="OpeningBalanceAmount " required
-              placeholder="Enter Opening Balance" appNumberComma #OpeningBalanceAmountCtrl="ngModel"  (blur)="OpeningBalanceAmountCtrl.control.markAsTouched()"
+            <input type="text" [(ngModel)]="Entity.p.OpeningBalanceAmount" appCommaFormat name="OpeningBalanceAmount" class="form-control" id="OpeningBalanceAmount" required
+              placeholder="Enter Opening Balance" #OpeningBalanceAmountCtrl="ngModel"  (blur)="OpeningBalanceAmountCtrl.control.markAsTouched()"
               (click)="selectAllValue($event)"/>
             <div *ngIf="OpeningBalanceAmountCtrl.invalid && (OpeningBalanceAmountCtrl.touched || OpeningBalanceAmountCtrl.dirty)">
               <span class="validation-text" *ngIf="OpeningBalanceAmountCtrl.errors?.['required']">{{ RequiredFieldMsg }}</span>
