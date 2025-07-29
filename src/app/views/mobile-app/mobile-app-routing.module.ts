@@ -11,7 +11,7 @@ const routes: Routes = [
     path: '',
     component: MobileAppPage,
     children: [
-      // { path: '', redirectTo: 'splash-screen', pathMatch: 'full' }
+      // { path: '', redirectTo: 'auth', pathMatch: 'full' },
       { path: '', component: SplashScreenComponent },
       {
         canActivate: [loginMobileGuard],
