@@ -19,23 +19,22 @@
               [(ngModel)]="Entity.p.FromTime" placeholder="Enter From Time " #FromTimeCtrl="ngModel"
               (blur)="FromTimeCtrl.control.markAsTouched()" /> -->
 
-            <nz-time-picker [(ngModel)]="FromTime" name="fromTime" nzUse12Hours nzFormat="h:mm a"
-              #FromTimeCtrl="ngModel" (blur)="FromTimeCtrl.control.markAsTouched()"
-              (ngModelChange)="setTo24HoursFormat($event)" class="form-control">
+            <nz-time-picker [(ngModel)]="FromTime" name="FromTime" nzUse12Hours nzFormat="h:mm a"
+              (ngModelChange)="getFromTime()" class="form-control">
             </nz-time-picker>
-            <div *ngIf="(FromTimeCtrl.invalid && (FromTimeCtrl.touched || FromTimeCtrl.dirty))">
-              <span class="validation-text" *ngIf="FromTimeCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
-            </div>
           </div>
         </div>
         <div class="col-md-6" style="margin-top: 1rem; ">
           <div>
             <label for="ToTime">Working Time To:</label>
-            <input type="time" name="ToTime" required class="form-control" id="ToTime" [(ngModel)]="Entity.p.ToTime"
+            <!-- <input type="time" name="ToTime" required class="form-control" id="ToTime" [(ngModel)]="Entity.p.ToTime"
               placeholder="Enter To Time" #ToTimeCtrl="ngModel" (blur)="ToTimeCtrl.control.markAsTouched()" />
             <div *ngIf="(ToTimeCtrl.invalid && (ToTimeCtrl.touched || ToTimeCtrl.dirty))">
               <span class="validation-text" *ngIf="ToTimeCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
-            </div>
+            </div> -->
+            <nz-time-picker [(ngModel)]="ToTime" name="ToTime" nzUse12Hours nzFormat="h:mm a"
+              (ngModelChange)="getToTime()" class="form-control">
+            </nz-time-picker>
           </div>
         </div>
         <div class="col-md-6" style="margin-top: 1rem; ">

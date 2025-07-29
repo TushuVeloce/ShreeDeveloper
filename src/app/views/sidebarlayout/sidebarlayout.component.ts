@@ -177,7 +177,6 @@ export class SidebarlayoutComponent implements OnInit {
   getEmployeeDetails = async () => {
     if (this.currentemployee && this.companyRef()) {
       let EmployeeData = await Employee.FetchInstance(this.currentemployee, this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-      console.log('EmployeeData :', EmployeeData);
       if (EmployeeData == null) {
         let AdminData = await AdminProfile.FetchAdminData(async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
         this.IsAdmin = true
