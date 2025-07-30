@@ -157,9 +157,9 @@
                 <input type="text" name="{{plot.PlotName.trim() + '_' + i + 1000}}" class="form-control"
                   [(ngModel)]="plot.Reason" required placeholder="Enter Reason" />
               </td>
-              <td class="tbldata" style="width:100%" *ngIf="plot.CustomerStatus == CustomerStatusEnum.ConvertToDeal">
+              <td class="tbldata" *ngIf="plot.CustomerStatus == CustomerStatusEnum.ConvertToDeal">
                 <input type="text" name="{{plot.CustID.trim() + '_' + i + 1000}}" class="form-control"
-                  [(ngModel)]="plot.CustID" required placeholder="Enter Customer ID" />
+                  [(ngModel)]="plot.CustID" required placeholder=" Cust ID" />
               </td>
               <td Class="tbldata" *ngIf="plot.CustomerStatus !== CustomerStatusEnum.ConvertToDeal"> -- </td>
             </tr>
