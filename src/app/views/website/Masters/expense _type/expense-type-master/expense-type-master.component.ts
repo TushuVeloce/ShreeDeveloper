@@ -1,11 +1,9 @@
 import { Component, effect, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ExpenseTypeRefs } from 'src/app/classes/domain/constants';
-import { DeleteExpenseTypeCustomRequest } from 'src/app/classes/domain/entities/website/masters/expensetype/DeleteExpenseTypeCustomRequest';
 import { ExpenseType } from 'src/app/classes/domain/entities/website/masters/expensetype/expensetype';
 import { Stage } from 'src/app/classes/domain/entities/website/masters/stage/stage';
 import { PayloadPacketFacade } from 'src/app/classes/infrastructure/payloadpacket/payloadpacketfacade';
-import { TransportData } from 'src/app/classes/infrastructure/transportdata';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
 import { ScreenSizeService } from 'src/app/services/screensize.service';
@@ -115,27 +113,6 @@ export class ExpenseTypeMasterComponent implements OnInit {
     );
   };
 
-  //  DeleteExpenseType = async (ExpenseType: ExpenseType) => {
-  //     await this.uiUtils.showConfirmationMessage(
-  //       'Delete', `This process is <strong>IRREVERSIBLE!</strong> <br/>Are you sure that you want to DELETE this Expense Type?`,
-  //       async () => {
-  //         let req = new DeleteExpenseTypeCustomRequest();
-  //         req.ExpenseTypeRef = ExpenseType.p.Ref;
-  //         let td = req.FormulateTransportData();
-  //         let pkt = this.payloadPacketFacade.CreateNewPayloadPacket2(td);
-  //         let tr = await this.serverCommunicator.sendHttpRequest(pkt);
-  //         if (!tr.Successful) {
-  //           await this.uiUtils.showErrorMessage('Error', tr.Message);
-  //           return;
-  //         }
-  //         await this.uiUtils.showSuccessToster(`Expense Type ${ExpenseType.p.Name} has been deleted!`);
-  //         let tdResult = JSON.parse(tr.Tag) as TransportData;
-  //       }
-  //     );
-  //     this.getExpenseListByStageRef()
-  //     this.loadPaginationData()
-  //      this.SearchString = '';
-  //   };
 
   // For Pagination  start ----
   loadPaginationData = () => {
