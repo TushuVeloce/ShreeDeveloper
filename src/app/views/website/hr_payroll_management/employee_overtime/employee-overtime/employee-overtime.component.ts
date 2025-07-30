@@ -53,6 +53,17 @@ export class EmployeeOvertimeComponent implements OnInit {
     this.loadPaginationData();
   }
 
+  convertTo12Hour = (time24: string): string => {
+    const [hourStr, minute] = time24.split(":");
+    let hour = parseInt(hourStr, 10);
+    const ampm = hour >= 12 ? "PM" : "AM";
+
+    hour = hour % 12;
+    hour = hour === 0 ? 12 : hour; // Handle midnight (0 -> 12 AM) and noon (12 -> 12 PM)
+
+    return `${hour}:${minute} ${ampm}`;
+  }
+
   onEditClicked = async (item: EmployeeOvertime) => {
     this.SelectedTime = item.GetEditableVersion();
     EmployeeOvertime.SetCurrentInstance(this.SelectedTime);
