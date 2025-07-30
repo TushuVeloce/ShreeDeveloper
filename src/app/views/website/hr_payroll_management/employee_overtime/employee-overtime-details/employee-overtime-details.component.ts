@@ -31,6 +31,9 @@ export class EmployeeOvertimeDetailsComponent implements OnInit {
   companyRef = this.companystatemanagement.SelectedCompanyRef;
   RequiredFieldMsg: string = ValidationMessages.RequiredFieldMsg;
 
+  FromTime: Date | null = null;
+  ToTime: Date | null = null;
+
   @ViewChild('OvertimeForm') OvertimeForm!: NgForm;
   @ViewChild('DateCtrl') DateInputControl!: NgModel;
   @ViewChild('FromTimeCtrl') FromTimeInputControl!: NgModel;
@@ -58,7 +61,9 @@ export class EmployeeOvertimeDetailsComponent implements OnInit {
       this.Entity.p.UpdatedBy = Number(
         this.appStateManage.StorageKey.getItem('LoginEmployeeRef')
       );
-      this.Entity.p.Date = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.Date)
+      this.Date = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.Date);
+      this.FromTime = this.convertToFullTime(this.Entity.p.FromTime);
+      this.ToTime = this.convertToFullTime(this.Entity.p.ToTime);
       this.calculateOvertimeHours()
     } else {
       this.strCDT = await CurrentDateTimeRequest.GetCurrentDateTime();
@@ -80,6 +85,22 @@ export class EmployeeOvertimeDetailsComponent implements OnInit {
     txtName.focus();
   };
 
+  convertToFullTime(timeStr: string): Date {
+    const [hours, minutes] = timeStr.split(':').map(Number);
+    const now = new Date();
+    return new Date(now.getFullYear(), now.getMonth(), now.getDate(), hours, minutes, 0);
+  }
+
+  convertIOS12To24HoursFormat = (value: Date | null) => {
+    if (value) {
+      const hours = value.getHours().toString().padStart(2, '0');
+      const minutes = value.getMinutes().toString().padStart(2, '0');
+      return `${hours}:${minutes}`;
+    } else {
+      return '';
+    }
+  };
+
   // for value 0 selected while click on Input //
   selectAllValue = (event: MouseEvent): void => {
     const input = event.target as HTMLInputElement;
@@ -93,6 +114,10 @@ export class EmployeeOvertimeDetailsComponent implements OnInit {
 
 
   calculateOvertimeHours = () => {
+
+    this.Entity.p.FromTime = this.convertIOS12To24HoursFormat(this.FromTime);
+    this.Entity.p.ToTime = this.convertIOS12To24HoursFormat(this.ToTime);
+
     if (this.Entity.p.ToTime == '') {
       return
     }

@@ -30,8 +30,8 @@
             <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
             <td Class="tbldata" style="white-space: nowrap;">{{formatDate(overtime.p.Date)}}</td>
             <td Class="tbldata">{{overtime.p.EmployeeName}}</td>
-            <td Class="tbldata">{{overtime.p.FromTime}}</td>
-            <td Class="tbldata">{{overtime.p.ToTime}}</td>
+            <td Class="tbldata">{{convertTo12Hour(overtime.p.FromTime)}}</td>
+            <td Class="tbldata">{{convertTo12Hour(overtime.p.ToTime)}}</td>
             <td Class="tbldata">{{overtime.p.DisplayOverTime}}</td>
             <td Class="tbldata">
               <!-- PENDING -->
