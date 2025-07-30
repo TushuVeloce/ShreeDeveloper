@@ -1,6 +1,6 @@
 import { Component, effect, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { BookingRemark, DomainEnums } from 'src/app/classes/domain/domainenums/domainenums';
+import { BookingRemark, BookingRemarks, DomainEnums } from 'src/app/classes/domain/domainenums/domainenums';
 import { Plot } from 'src/app/classes/domain/entities/website/masters/plot/plot';
 import { Site } from 'src/app/classes/domain/entities/website/masters/site/site';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
@@ -28,8 +28,10 @@ export class PlotMasterComponent implements OnInit {
   companyRef = this.companystatemanagement.SelectedCompanyRef;
   siteref: number = 0
   bookingremark: number = 0
-  BookingRemarkList = DomainEnums.BookingRemarkList(true,);
-  BookingRemarkEnum = BookingRemark;
+  BookingRemarkEnum = BookingRemarks;
+  BookingRemarkList = DomainEnums.BookingRemarksList(true,) .filter(item =>
+      item.Ref != this.BookingRemarkEnum.Booked 
+    );
   shouldDestroy: boolean = true;
 
   constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private screenSizeService: ScreenSizeService,
@@ -93,7 +95,7 @@ export class PlotMasterComponent implements OnInit {
     if (this.siteref <= 0) {
       this.clearStorage();
       // this.getPlotList()
-      this.BookingRemarkList = DomainEnums.BookingRemarkList(true);
+      this.BookingRemarkList = DomainEnums.BookingRemarksList(true);
     }
     //  else {
     //   this.BookingRemarkList = DomainEnums.BookingRemarkList(true, '--select--');

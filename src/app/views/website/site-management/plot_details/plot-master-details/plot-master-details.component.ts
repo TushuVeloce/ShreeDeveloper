@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgModel } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ValidationMessages } from 'src/app/classes/domain/constants';
-import { BookingRemark, DomainEnums } from 'src/app/classes/domain/domainenums/domainenums';
+import { BookingRemark, BookingRemarks, DomainEnums } from 'src/app/classes/domain/domainenums/domainenums';
 import { Company } from 'src/app/classes/domain/entities/website/masters/company/company';
 import { Plot } from 'src/app/classes/domain/entities/website/masters/plot/plot';
 import { Owner } from 'src/app/classes/domain/entities/website/masters/site/owner/owner';
@@ -28,8 +28,11 @@ export class PlotMasterDetailsComponent implements OnInit {
   isSaveDisabled: boolean = false;
   IsDropdownDisabled: boolean = false;
   InitialEntity: Plot = null as any;
-  BookingRemarkList = DomainEnums.BookingRemarkList(true, '--- Select Booking Remark ---');
-  BookingRemark = BookingRemark
+  BookingRemark = BookingRemarks
+  BookingRemarkList = DomainEnums.BookingRemarksList(true, '--- Select Booking Remark ---')  .filter(item =>
+      item.Ref === this.BookingRemark.Plot_Of_Owner ||
+      item.Ref === this.BookingRemark.Plot_Of_Shree 
+    );
   SiteRf: number = 0
   SiteName: string = ''
   CustomerList: Owner[] = [];

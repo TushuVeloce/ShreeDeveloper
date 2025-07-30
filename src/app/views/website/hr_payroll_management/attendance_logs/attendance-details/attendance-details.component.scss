@@ -35,3 +35,16 @@
   margin-top: 15px;
   text-align: right;
 }
+
+::ng-deep nz-time-picker {
+  border: 1px solid maroon !important;
+  border-radius: 6px;
+  width: 100%; // Or your preferred width
+}
+
+::ng-deep nz-time-picker .ant-picker-suffix .anticon {
+  color: #333;
+  /* Darker icon color */
+  font-family: 'Poppins';
+}
+
