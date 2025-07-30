@@ -40,6 +40,7 @@ export class CustomerFollowupDetailsComponent implements OnInit {
     'Area in Sqft',
     'Customer Status',
     'Remark',
+    'Customer ID'
   ];
   private IsNewEntity: boolean = true;
   isSaveDisabled: boolean = false;
@@ -267,6 +268,12 @@ export class CustomerFollowupDetailsComponent implements OnInit {
 
   onPlotSelected(selectedvalue: any) {
     this.Entity.p.CustomerFollowUpPlotDetails = selectedvalue;
+  }
+
+  onCustomerStatusChange(plot: any): void {
+    if (plot.CustomerStatus !== this.CustomerStatusEnum.ConvertToDeal) {
+      plot.CustID = '';
+    }
   }
 
   addDataToCustomerFollowUpPlotDetail = () => {
