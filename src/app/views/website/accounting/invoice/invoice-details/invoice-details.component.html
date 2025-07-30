@@ -77,7 +77,8 @@
             <span class="validation-text" *ngIf="DescriptionCtrl.errors?.['required']">{{ RequiredFieldMsg }}</span>
           </div>
         </div>
-         <div class="col-md-4" style="margin-top: 1rem;" *ngIf="Entity.p.ExpenseType != MachinaryExpenseRef && Entity.p.ExpenseType != LabourExpenseRef">
+        <div class="col-md-4" style="margin-top: 1rem;"
+          *ngIf="Entity.p.ExpenseType != MachinaryExpenseRef && Entity.p.ExpenseType != LabourExpenseRef">
           <label>Recipient Type</label>
           <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
             nzPlaceHolder="Select" id="RecipientType" name="RecipientType" [nzSize]="'large'"
@@ -99,7 +100,8 @@
               class="form-control" id="RecipientName" required placeholder="Recipient Name" readonly/> -->
             <input *ngIf="RecipientNameInput && !RecipientNameReadOnly" type="text" [(ngModel)]="RecipientEntity.p.Name"
               name="Name" class="form-control" id="Name" required placeholder="Enter Recipient Name" />
-            <span *ngIf="!RecipientNameInput && !RecipientNameReadOnly && Entity.p.RecipientType == TypeRecipient" (click)="AddRecipientName()"
+            <span *ngIf="!RecipientNameInput && !RecipientNameReadOnly && Entity.p.RecipientType == TypeRecipient"
+              (click)="AddRecipientName()"
               class="ms-2 mb-0.5 d-flex justify-content-center align-items-center border rounded"
               style="width: 36px; height: 36px; cursor: pointer">
               <i class="fa-solid fa-plus" style="color: blue;"></i>
@@ -195,8 +197,8 @@
               <tbody>
                 <tr *ngFor="   let time of Entity.p.MachineUsageDetailsArray;   let i = index ">
                   <td Class="tbldata">{{ i + 1 }}</td>
-                  <td Class="tbldata">{{ time.StartTime}}</td>
-                  <td Class="tbldata">{{ time.EndTime }}</td>
+                  <td Class="tbldata">{{ convertTo12Hour(time.StartTime) }}</td>
+                  <td Class="tbldata">{{ convertTo12Hour(time.EndTime) }}</td>
                   <td Class="tbldata">{{ time.DisplayWorkedHours }}</td>
                   <td class="tbldata">
                     <span style="margin-left: 9px" (click)="EditTime(i)">
@@ -226,7 +228,7 @@
         <!-- time table Ends -->
 
         <!-- Labour time table start -->
-        <div class="row" style="margin-top: 2rem; padding: 1rem" *ngIf="Entity.p.ExpenseType == LabourExpenseRef">
+        <div class="row" style="margin-top: 1rem; padding: 1rem" *ngIf="Entity.p.ExpenseType == LabourExpenseRef">
           <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 col-12">
             <h5 style="padding-top: 3px; color: black">
               <b>Labour Time Details</b>
@@ -237,9 +239,9 @@
             <nz-button nz-button class="btn1" (click)="isLabourTimeModalOpen = true">Add Labour Time </nz-button>
           </div>
         </div>
-        <div class="table-wrapper" class="tblcard_light" style="margin-top: 2rem"
+        <div class="table-wrapper" class="tblcard_light" style="margin-top: 1rem"
           *ngIf="Entity.p.LabourExpenseDetailsArray.length > 0 && Entity.p.ExpenseType == LabourExpenseRef">
-          <div class="table-container" style="margin-top: 2rem">
+          <div class="table-container" style="margin-top: 1rem">
             <div class="row">
               <div class="col-12">
                 <h3 class="TableHeading"> Labour Time Details</h3>
@@ -258,8 +260,8 @@
                 <tr *ngFor="   let time of Entity.p.LabourExpenseDetailsArray;   let i = index ">
                   <td Class="tbldata">{{ i + 1 }}</td>
                   <td Class="tbldata">{{ time.LabourTypeName }}</td>
-                  <td Class="tbldata">{{ time.LabourFromTime }}</td>
-                  <td Class="tbldata">{{ time.LabourToTime }}</td>
+                  <td Class="tbldata">{{ convertTo12Hour(time.LabourFromTime) }}</td>
+                  <td Class="tbldata">{{ convertTo12Hour(time.LabourToTime) }}</td>
                   <td Class="tbldata">{{ time.LabourQty}}</td>
                   <td Class="tbldata">{{ time.LabourRate}}</td>
                   <td Class="tbldata">{{ time.LabourAmount}}</td>
@@ -271,12 +273,6 @@
                       <img src="\assets\icons\delete.png" alt="logo" title="Delete" width="20px" height="20px" /></span>
                   </td>
                 </tr>
-                <!-- <tr>
-                  <td class="tbldata" colspan="2"></td>
-                  <td class="tbldata"><b>Total Hours</b></td>
-                  <td class="tbldata"><b>{{ getTotalWorkedHours() }}</b></td>
-                  <td class="tbldata"><b></b></td>
-                </tr> -->
               </tbody>
             </nz-table>
           </div>
@@ -294,8 +290,8 @@
           *ngIf="Entity.p.ExpenseType != LabourExpenseRef && !(Entity.p.ExpenseType == MachinaryExpenseRef&& Entity.p.UnitRef == TimeUnitRef) ">
           <div>
             <label>Quantity</label>
-            <input type="text" appCommaFormat [(ngModel)]="Entity.p.Qty" name="Qty" class="form-control" id="Qty" required
-              placeholder="Enter Quantity" #QtyCtrl="ngModel" (blur)="QtyCtrl.control.markAsTouched()"
+            <input type="text" appCommaFormat [(ngModel)]="Entity.p.Qty" name="Qty" class="form-control" id="Qty"
+              required placeholder="Enter Quantity" #QtyCtrl="ngModel" (blur)="QtyCtrl.control.markAsTouched()"
               (click)="selectAllValue($event)" (ngModelChange)="CalculateAmount()" />
             <div *ngIf="QtyCtrl.invalid && (QtyCtrl.touched || QtyCtrl.dirty)">
               <span class="validation-text" *ngIf="QtyCtrl.errors?.['required']">{{ RequiredFieldMsg }}</span>
@@ -305,8 +301,8 @@
         <div class="col-md-4" style="margin-top: 1rem" *ngIf="Entity.p.ExpenseType != LabourExpenseRef">
           <div>
             <label>Rate</label>
-            <input type="text" appCommaFormat [(ngModel)]="Entity.p.Rate" name="Rate" class="form-control" id="Rate" required
-              placeholder="Enter Rate" #RateCtrl="ngModel" (blur)="RateCtrl.control.markAsTouched()"
+            <input type="text" appCommaFormat [(ngModel)]="Entity.p.Rate" name="Rate" class="form-control" id="Rate"
+              required placeholder="Enter Rate" #RateCtrl="ngModel" (blur)="RateCtrl.control.markAsTouched()"
               (click)="selectAllValue($event)" (ngModelChange)="CalculateAmount()" />
             <div *ngIf="RateCtrl.invalid && (RateCtrl.touched || RateCtrl.dirty)">
               <span class="validation-text" *ngIf="RateCtrl.errors?.['required']">{{ RequiredFieldMsg }}</span>
@@ -323,8 +319,8 @@
         </div>
         <div class="col-md-4" style="margin-top: 1rem" *ngIf="isDieselPaid">
           <label>Diesel Quantity</label>
-          <input type="text" appCommaFormat [(ngModel)]="Entity.p.DieselQty" name="DieselQty" class="form-control" id="DieselQty"
-            required placeholder="Enter Diesel Quantity" #DieselQtyCtrl="ngModel"
+          <input type="text" appCommaFormat [(ngModel)]="Entity.p.DieselQty" name="DieselQty" class="form-control"
+            id="DieselQty" required placeholder="Enter Diesel Quantity" #DieselQtyCtrl="ngModel"
             (blur)="DieselQtyCtrl.control.markAsTouched()" (click)="selectAllValue($event)"
             (ngModelChange)="CalculateDieselAmount()" />
           <div *ngIf="
@@ -336,8 +332,8 @@
         </div>
         <div class="col-md-4" style="margin-top: 1rem" *ngIf="isDieselPaid">
           <label>Diesel Rate</label>
-          <input type="text" appCommaFormat [(ngModel)]="Entity.p.DieselRate" name="DieselRate" class="form-control" id="DieselRate"
-            required placeholder="Enter Diesel Rate" #DieselRateCtrl="ngModel"
+          <input type="text" appCommaFormat [(ngModel)]="Entity.p.DieselRate" name="DieselRate" class="form-control"
+            id="DieselRate" required placeholder="Enter Diesel Rate" #DieselRateCtrl="ngModel"
             (blur)="DieselRateCtrl.control.markAsTouched()" (click)="selectAllValue($event)"
             (ngModelChange)="CalculateDieselAmount()" />
           <div *ngIf="
@@ -360,8 +356,8 @@
         <div class="col-md-4" style="margin-top: 1rem">
           <div>
             <label>Billing Amount</label>
-            <input type="text" appCommaFormat [(ngModel)]="Entity.p.InvoiceAmount" name="InvoiceAmount" class="form-control"
-              id="InvoiceAmount" required placeholder="Enter InvoiceAmount" disabled />
+            <input type="text" appCommaFormat [(ngModel)]="Entity.p.InvoiceAmount" name="InvoiceAmount"
+              class="form-control" id="InvoiceAmount" required placeholder="Enter InvoiceAmount" disabled />
           </div>
         </div>
         <div class="col-md-4" style="margin-top: 1rem; ">
@@ -413,28 +409,17 @@
           <div class="col-md-4">
             <div>
               <label for="StartTime">Start Time</label>
-              <input type="time" name="StartTime" class="form-control" id="StartTime"
-                [(ngModel)]="MachineTimeEntity.StartTime" (ngModelChange)="calculateWorkedHours()"
-                placeholder="Enter Start Time " #StartTimeCtrl="ngModel" required
-                (blur)="StartTimeCtrl.control.markAsTouched()" />
-              <!-- <i class="fa fa-clock"></i> -->
-              <div *ngIf="(StartTimeCtrl.invalid && (StartTimeCtrl.touched || StartTimeCtrl.dirty))">
-                <span class="validation-text" *ngIf="StartTimeCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
-              </div>
+              <nz-time-picker [(ngModel)]="StartTime" name="StartTime" nzUse12Hours nzFormat="h:mm a"
+                (ngModelChange)="calculateWorkedHours()" class="form-control">
+              </nz-time-picker>
             </div>
           </div>
           <div class="col-md-4">
             <div>
               <label for="EndTime">End Time </label>
-              <input type="time" name="EndTime" class="form-control" id="EndTime"
-                [(ngModel)]="MachineTimeEntity.EndTime" (ngModelChange)="calculateWorkedHours()"
-                placeholder="Enter To Time" #EndTimeCtrl="ngModel" required
-                (blur)="EndTimeCtrl.control.markAsTouched()" />
-              <!-- <i class="fa fa-clock"></i> -->
-
-              <div *ngIf="(EndTimeCtrl.invalid && (EndTimeCtrl.touched || EndTimeCtrl.dirty))">
-                <span class="validation-text" *ngIf="EndTimeCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
-              </div>
+              <nz-time-picker [(ngModel)]="EndTime" name="EndTime" nzUse12Hours nzFormat="h:mm a"
+                (ngModelChange)="calculateWorkedHours()" class="form-control">
+              </nz-time-picker>
             </div>
           </div>
           <div class="col-md-4">
@@ -489,26 +474,17 @@
           <div class="col-md-4" style="margin-top: 2rem">
             <div>
               <label for="LabourFromTime">From Time</label>
-              <input type="time" name="LabourFromTime" class="form-control" id="LabourFromTime"
-                [(ngModel)]="LabourTimeEntity.LabourFromTime" placeholder="From Time " #LabourFromTimeCtrl="ngModel"
-                required (blur)="LabourFromTimeCtrl.control.markAsTouched()" />
-              <!-- <i class="fa fa-clock"></i> -->
-              <div *ngIf="(LabourFromTimeCtrl.invalid && (LabourFromTimeCtrl.touched || LabourFromTimeCtrl.dirty))">
-                <span class="validation-text"
-                  *ngIf="LabourFromTimeCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
-              </div>
+              <nz-time-picker [(ngModel)]="LabourFromTime" name="FromTime" nzUse12Hours nzFormat="h:mm a"
+                (ngModelChange)="getLabourFromTime()" class="form-control">
+              </nz-time-picker>
             </div>
           </div>
           <div class="col-md-4" style="margin-top: 2rem">
             <div>
               <label for="LabourToTime">To Time </label>
-              <input type="time" name="LabourToTime" class="form-control" id="LabourToTime"
-                [(ngModel)]="LabourTimeEntity.LabourToTime" placeholder="To Time" #LabourToTimeCtrl="ngModel" required
-                (blur)="LabourToTimeCtrl.control.markAsTouched()" />
-              <!-- <i class="fa fa-clock"></i> -->
-              <div *ngIf="(LabourToTimeCtrl.invalid && (LabourToTimeCtrl.touched || LabourToTimeCtrl.dirty))">
-                <span class="validation-text" *ngIf="LabourToTimeCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
-              </div>
+              <nz-time-picker [(ngModel)]="LabourToTime" name="ToTime" nzUse12Hours nzFormat="h:mm a"
+                (ngModelChange)="getLabourToTime()" class="form-control">
+              </nz-time-picker>
             </div>
           </div>
           <div class="col-md-4" style="margin-top: 2rem">
@@ -518,7 +494,6 @@
                 [(ngModel)]="LabourTimeEntity.LabourQty" (ngModelChange)="calculateWorkedHours()"
                 placeholder="Enter Quantity " #LabourQtyCtrl="ngModel" (ngModelChange)="CalculateLabourAmount()"
                 required (blur)="LabourQtyCtrl.control.markAsTouched()" (click)="selectAllValue($event)" />
-              <!-- <i class="fa fa-clock"></i> -->
               <div *ngIf="(LabourQtyCtrl.invalid && (LabourQtyCtrl.touched || LabourQtyCtrl.dirty))">
                 <span class="validation-text" *ngIf="LabourQtyCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
               </div>
@@ -531,7 +506,6 @@
                 [(ngModel)]="LabourTimeEntity.LabourRate" (ngModelChange)="calculateWorkedHours()"
                 placeholder="Enter Rate " #LabourRateCtrl="ngModel" (ngModelChange)="CalculateLabourAmount()" required
                 (blur)="LabourRateCtrl.control.markAsTouched()" (click)="selectAllValue($event)" />
-              <!-- <i class="fa fa-clock"></i> -->
               <div *ngIf="(LabourRateCtrl.invalid && (LabourRateCtrl.touched || LabourRateCtrl.dirty))">
                 <span class="validation-text" *ngIf="LabourRateCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
               </div>

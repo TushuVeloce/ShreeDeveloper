@@ -72,6 +72,12 @@ export class InvoiceDetailsComponent implements OnInit {
   ModeofPaymentList = DomainEnums.ModeOfPaymentsList().filter(item => item.Ref == this.Bill);
   RecipientTypesList = DomainEnums.RecipientTypesList();
 
+  LabourFromTime: Date | null = null;
+  LabourToTime: Date | null = null;
+
+  StartTime: Date | null = null;
+  EndTime: Date | null = null;
+
   companyRef = this.companystatemanagement.SelectedCompanyRef;
   timeheaders: string[] = ['Sr.No.', 'Start Time ', 'End Time', 'Worked Hours', 'Action'];
   labourtimeheaders: string[] = ['Sr.No.', 'Labour Type', 'From Time', 'To Time', 'Quantity ', 'Rate', 'Amount', 'Action'];
@@ -86,8 +92,6 @@ export class InvoiceDetailsComponent implements OnInit {
   @ViewChild('RateCtrl') RateInputControl!: NgModel;
   @ViewChild('DieselQtyCtrl') DieselQtyInputControl!: NgModel;
   @ViewChild('DieselRateCtrl') DieselRateInputControl!: NgModel;
-  @ViewChild('StartTimeCtrl') StartTimeInputControl!: NgModel;
-  @ViewChild('EndTimeCtrl') EndTimeInputControl!: NgModel;
 
   constructor(
     private router: Router,
@@ -111,7 +115,7 @@ export class InvoiceDetailsComponent implements OnInit {
       this.DetailsFormTitle = this.IsNewEntity ? 'New Bill' : 'Edit Bill';
       this.Entity = Invoice.GetCurrentInstance();
       console.log('this.Entity :', this.Entity);
-      this.Entity.p.RecipientType =   this.Entity.p.InvoiceRecipientType;
+      this.Entity.p.RecipientType = this.Entity.p.InvoiceRecipientType;
       this.appStateManage.StorageKey.removeItem('Editable');
       this.Entity.p.UpdatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
       if (this.Entity.p.LedgerRef) {
@@ -149,6 +153,32 @@ export class InvoiceDetailsComponent implements OnInit {
   focusInput = () => {
     let txtName = document.getElementById('SiteRef')!;
     txtName.focus();
+  }
+
+
+  convertToFullTime(timeStr: string): Date {
+    const [hours, minutes] = timeStr.split(':').map(Number);
+    const now = new Date();
+    return new Date(now.getFullYear(), now.getMonth(), now.getDate(), hours, minutes, 0);
+  }
+
+
+  convertIOS12To24HoursFormat = (value: Date | null) => {
+    if (value) {
+      const hours = value.getHours().toString().padStart(2, '0');
+      const minutes = value.getMinutes().toString().padStart(2, '0');
+      return `${hours}:${minutes}`;
+    } else {
+      return '';
+    }
+  };
+
+  getLabourFromTime = () => {
+    this.LabourTimeEntity.LabourFromTime = this.convertIOS12To24HoursFormat(this.LabourFromTime);
+  }
+
+  getLabourToTime = () => {
+    this.LabourTimeEntity.LabourToTime = this.convertIOS12To24HoursFormat(this.LabourToTime);
   }
 
   getVendorListByCompanyRef = async () => {
@@ -368,6 +398,18 @@ export class InvoiceDetailsComponent implements OnInit {
     }, 0);
   }
 
+  convertTo12Hour = (time24: string): string => {
+    const [hourStr, minute] = time24.split(":");
+    let hour = parseInt(hourStr, 10);
+    const ampm = hour >= 12 ? "PM" : "AM";
+
+    hour = hour % 12;
+    hour = hour === 0 ? 12 : hour; // Handle midnight (0 -> 12 AM) and noon (12 -> 12 PM)
+
+    return `${hour}:${minute} ${ampm}`;
+  }
+
+
   convertFractionTimeToHM = (fractionTime: number) => {
     const hours = Math.floor(fractionTime);
     const fractionalMinutes = fractionTime - hours;
@@ -382,71 +424,11 @@ export class InvoiceDetailsComponent implements OnInit {
   }
 
   calculateWorkedHours() {
-    // const start = this.MachineTimeEntity.StartTime;
-    // const end = this.MachineTimeEntity.EndTime;
+    if (!this.StartTime) return;
+    if (!this.EndTime) return;
 
-    // if (start && end) {
-    //   const [startHour, startMin] = start.split(':').map(Number);
-    //   const [endHour, endMin] = end.split(':').map(Number);
-
-    //   const startDate = new Date();
-    //   startDate.setHours(startHour, startMin, 0);
-
-    //   const endDate = new Date();
-    //   endDate.setHours(endHour, endMin, 0);
-
-    //   let diffMs = endDate.getTime() - startDate.getTime();
-
-    //   // If end time is before start time, assume it's the next day
-    //   if (diffMs < 0) {
-    //     endDate.setDate(endDate.getDate() + 1);
-    //     diffMs = endDate.getTime() - startDate.getTime();
-    //   }
-
-    //   const diffHrs = diffMs / (1000 * 60 * 60); // convert ms to hours
-    //   this.MachineTimeEntity.WorkedHours = +diffHrs.toFixed(2); // round to 2 decimal places
-    // } else {
-    //   this.MachineTimeEntity.WorkedHours = 0;
-    // }
-
-    // if (this.MachineTimeEntity.StartTime == '') {
-    //   return
-    // }
-
-    // if (this.MachineTimeEntity.EndTime == '') {
-    //   return
-    // }
-
-    // // Fallback to "00:00" if either is missing or invalid
-    // if (!this.MachineTimeEntity.StartTime || !this.MachineTimeEntity.StartTime.includes(":")) return 0;
-
-    // const [inHour, inMin] = this.MachineTimeEntity.StartTime.split(':').map(Number);
-    // const [outHour, outMin] = (this.MachineTimeEntity.EndTime && this.MachineTimeEntity.EndTime.includes(":") ? this.MachineTimeEntity.EndTime : "00:00").split(':').map(Number);
-
-    // // Check for invalid numbers
-    // if (isNaN(inHour) || isNaN(inMin) || isNaN(outHour) || isNaN(outMin)) return 0;
-
-    // const inDate = new Date();
-    // inDate.setHours(inHour, inMin, 0, 0);
-
-    // const outDate = new Date();
-    // outDate.setHours(outHour, outMin, 0, 0);
-
-    // // Handle overnight shift
-    // if (outDate <= inDate) {
-    //   outDate.setDate(outDate.getDate() + 1);
-    // }
-
-    // const diffMs = outDate.getTime() - inDate.getTime();
-    // const diffMinutes = Math.floor(diffMs / 60000);
-
-    // const decimalHours = diffMinutes / 60;
-
-    // this.MachineTimeEntity.WorkedHours = parseFloat(decimalHours.toFixed(2));
-
-
-    if (this.MachineTimeEntity.StartTime == '') return;
-    if (this.MachineTimeEntity.EndTime == '') return;
+    this.MachineTimeEntity.StartTime = this.convertIOS12To24HoursFormat(this.StartTime);
+    this.MachineTimeEntity.EndTime = this.convertIOS12To24HoursFormat(this.EndTime);
 
     // Fallback to "00:00" if either is missing or invalid
     if (!this.MachineTimeEntity.StartTime || !this.MachineTimeEntity.StartTime.includes(":")) return 0;
@@ -500,18 +482,22 @@ export class InvoiceDetailsComponent implements OnInit {
       this.MachineTimeEntity.InvoiceRef = this.Entity.p.Ref;
       this.Entity.p.MachineUsageDetailsArray.push({ ...this.MachineTimeEntity });
       await this.uiUtils.showSuccessToster('Machinary Time added successfully');
-      this.resetTimeControls();
       this.isTimeModalOpen = false;
     }
 
     this.MachineTimeEntity = TimeDetailProps.Blank();
     this.MachineEditingIndex = null;
-    this.CalculateAmount()
+    this.StartTime = null
+    this.EndTime = null
+     this.getTotalWorkedHours();
+    this.CalculateAmount();
   }
 
   EditTime(index: number) {
     this.isTimeModalOpen = true
     this.MachineTimeEntity = { ...this.Entity.p.MachineUsageDetailsArray[index] }
+    this.StartTime = this.convertToFullTime(this.MachineTimeEntity.StartTime);
+    this.EndTime = this.convertToFullTime(this.MachineTimeEntity.EndTime);
     this.MachineEditingIndex = index;
   }
 
@@ -572,6 +558,8 @@ export class InvoiceDetailsComponent implements OnInit {
       this.isLabourTimeModalOpen = false;
     }
     this.LabourTimeEntity = LabourTimeProps.Blank();
+    this.LabourFromTime = null
+    this.LabourToTime = null
     this.LabourEditingIndex = null;
     this.CalculateAmount()
   }
@@ -579,6 +567,8 @@ export class InvoiceDetailsComponent implements OnInit {
   EditLabourTime(index: number) {
     this.isLabourTimeModalOpen = true
     this.LabourTimeEntity = { ...this.Entity.p.LabourExpenseDetailsArray[index] }
+    this.LabourFromTime = this.convertToFullTime(this.LabourTimeEntity.LabourFromTime);
+    this.LabourToTime = this.convertToFullTime(this.LabourTimeEntity.LabourToTime);
     this.LabourEditingIndex = index;
   }
 
@@ -588,28 +578,8 @@ export class InvoiceDetailsComponent implements OnInit {
   }
 
   CloseLabourTimeModal = async (type: string) => {
-    if (type === 'labourtime') {
-      const keysToCheck = ['LabourType', 'LabourFromTime', 'LabourToTime', 'LabourQty', 'LabourRate'] as const;
-
-      const hasData = keysToCheck.some(
-        key => (this.LabourTimeEntity as any)[key]?.toString().trim()
-      );
-
-      if (hasData) {
-        await this.uiUtils.showConfirmationMessage(
-          'Close',
-          `This process is <strong>IRREVERSIBLE!</strong><br/>
-               Are you sure you want to close this modal?`,
-          async () => {
-            this.isLabourTimeModalOpen = false;
-            this.LabourTimeEntity = LabourTimeProps.Blank();
-          }
-        );
-      } else {
-        this.isLabourTimeModalOpen = false;
-        this.LabourTimeEntity = LabourTimeProps.Blank();
-      }
-    }
+    this.isLabourTimeModalOpen = false;
+    this.LabourTimeEntity = LabourTimeProps.Blank();
   };
 
   ClearInputsOnExpenseChange = () => {
@@ -752,14 +722,6 @@ export class InvoiceDetailsComponent implements OnInit {
     this.RateInputControl.control.markAsPristine();
     this.DieselQtyInputControl.control.markAsPristine();
     this.DieselRateInputControl.control.markAsPristine();
-  }
-
-  resetTimeControls = () => {
-    this.StartTimeInputControl.control.markAsUntouched();
-    this.EndTimeInputControl.control.markAsUntouched();
-
-    this.StartTimeInputControl.control.markAsPristine();
-    this.EndTimeInputControl.control.markAsPristine();
   }
 }
 
