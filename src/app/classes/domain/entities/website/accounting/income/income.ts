@@ -30,6 +30,7 @@ export class IncomeProps {
   public PayerName: string = ''
   public PayerRef: number = 0
   public PayerTypeName: string = ''
+  public PlotRef: number = 0
   public PlotName: string = ''
   public PayerType: number = 0
   public IsRegisterCustomerRef: number = 0
