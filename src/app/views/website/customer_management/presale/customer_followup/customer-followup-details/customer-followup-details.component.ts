@@ -349,6 +349,7 @@ export class CustomerFollowupDetailsComponent implements OnInit {
 
 
   ConverttoDeal = (CustomerStatus: number): boolean => {
+    this.Entity.p.CustID = ''
     const hasDealRecord = this.Entity.p.CustomerFollowUpPlotDetails?.some(
       (item: any) => item.CustomerStatus === this.CustomerStatusEnum.ConvertToDeal
     );

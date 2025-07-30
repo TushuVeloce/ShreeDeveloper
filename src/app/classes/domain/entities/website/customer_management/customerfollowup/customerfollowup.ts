@@ -45,7 +45,7 @@ export class CustomerFollowUpProps {
   public CityName: string = '';
   public Address: string = '';
   public PinCode: string = '';
-
+  public CustID: string = '';
   public CompanyRef: number = 0;
   public LoginEmployeeRef: number = 0;
 
@@ -53,18 +53,20 @@ export class CustomerFollowUpProps {
 
   public IsNewlyCreated: boolean = false;
   // public readonly AccountTypeName: string = '';
-
+  
   private constructor(isNewlyCreated: boolean) {
     this.IsNewlyCreated = isNewlyCreated;
   }
-
+  
   public static Blank() {
     return new CustomerFollowUpProps(true);
   }
+
 }
 
 export class CustomerFollowUp implements IPersistable<CustomerFollowUp> {
   public static readonly Db_Table_Name: string = 'CustomerFollowUp';
+ CustomerStatusEnum = CustomerStatus
 
   private constructor(
     public readonly p: CustomerFollowUpProps,
@@ -125,6 +127,7 @@ export class CustomerFollowUp implements IPersistable<CustomerFollowUp> {
       vra.add('CustomerStatus', 'CustomerStatus cannot be blank.');
 
     if (this.p.Reason == '') vra.add('Reason', 'Reason cannot be blank.');
+    if (this.p.CustomerStatus ==  this.CustomerStatusEnum.ConvertToDeal && this.p.CustID == '' ) vra.add('CustID', 'Customer ID cannot be blank.');
 
     // if (this.p.Name == '') vra.add('Name', 'Name cannot be blank.');
     // if (!this.p.ReminderDate)
