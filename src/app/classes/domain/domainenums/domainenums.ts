@@ -28,6 +28,19 @@ export enum BookingRemark {
   Booked = 50,
 }
 
+export enum BookingRemarks {
+  None = 0,
+  Plot_Of_Owner = 10,
+  Plot_Of_Shree = 20,
+  Owner_Booked = 30,
+  Shree_Booked = 40,
+  Owner_Saledeed = 50,
+  Shree_Saledeed = 60,
+  Booked = 70
+}
+
+
+
 export enum MarketingModes {
   None = 0,
   Digital = 10,
@@ -486,6 +499,71 @@ export class DomainEnums {
     if (withAllOption) {
       let allEntry = {
         Ref: BookingRemark.None,
+        Name: allOptionName,
+      };
+      result.unshift(allEntry);
+    }
+    return result;
+  }
+
+    public static BookingRemarksName(itemType: BookingRemarks) {
+    switch (itemType) {
+      case BookingRemarks.Plot_Of_Owner:
+        return 'Plot of Owner ';
+      case BookingRemarks.Plot_Of_Shree:
+        return 'Plot of Shree';
+      case BookingRemarks.Owner_Booked:
+        return 'Owner Booked';
+      case BookingRemarks.Shree_Booked:
+        return 'Shree Booked ';
+      case BookingRemarks.Owner_Saledeed:
+        return 'Owner Saledeed ';
+      case BookingRemarks.Shree_Saledeed:
+        return 'Shree Saledeed ';
+      case BookingRemarks.Booked:
+        return 'Booked';
+      default:
+        return '';
+    }
+  }
+
+  public static BookingRemarksList(
+    withAllOption: boolean = false,
+    allOptionName: string = '<All>'
+  ) {
+    let result = [
+      {
+        Ref: BookingRemarks.Plot_Of_Owner,
+        Name: DomainEnums.BookingRemarksName(BookingRemarks.Plot_Of_Owner),
+      },
+      {
+        Ref: BookingRemarks.Plot_Of_Shree,
+        Name: DomainEnums.BookingRemarksName(BookingRemarks.Plot_Of_Shree),
+      },
+      {
+        Ref: BookingRemarks.Owner_Booked,
+        Name: DomainEnums.BookingRemarksName(BookingRemarks.Owner_Booked),
+      },
+      {
+        Ref: BookingRemarks.Shree_Booked,
+        Name: DomainEnums.BookingRemarksName(BookingRemarks.Shree_Booked),
+      },
+      {
+        Ref: BookingRemarks.Owner_Saledeed,
+        Name: DomainEnums.BookingRemarksName(BookingRemarks.Owner_Saledeed),
+      },
+      {
+        Ref: BookingRemarks.Shree_Saledeed,
+        Name: DomainEnums.BookingRemarksName(BookingRemarks.Shree_Saledeed),
+      },
+      {
+        Ref: BookingRemarks.Booked,
+        Name: DomainEnums.BookingRemarksName(BookingRemarks.Booked),
+      },
+    ];
+    if (withAllOption) {
+      let allEntry = {
+        Ref: BookingRemarks.None,
         Name: allOptionName,
       };
       result.unshift(allEntry);

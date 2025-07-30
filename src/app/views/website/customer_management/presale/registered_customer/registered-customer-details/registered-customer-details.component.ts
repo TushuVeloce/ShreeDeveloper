@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
-import { DomainEnums } from 'src/app/classes/domain/domainenums/domainenums';
+import { BookingRemarks, DomainEnums } from 'src/app/classes/domain/domainenums/domainenums';
 import { RegisteredCustomer } from 'src/app/classes/domain/entities/website/customer_management/registeredcustomer/registeredcustomer';
 import { FinancialYear } from 'src/app/classes/domain/entities/website/masters/financialyear/financialyear';
 import { Site } from 'src/app/classes/domain/entities/website/masters/site/site';
@@ -37,7 +37,15 @@ export class RegisteredCustomerDetailsComponent implements OnInit {
   SiteManagementRef: number = 0;
   GoodandServicesTaxList = DomainEnums.GoodsAndServicesTaxList(true, '--Select GST --');
   companyRef = this.companystatemanagement.SelectedCompanyRef;
-  BookingRemarkList = DomainEnums.BookingRemarkList(true, '--Select Booking Remark--');
+  BookingRemarkEnum = BookingRemarks;
+  BookingRemarkList = DomainEnums.BookingRemarksList(true, '--Select Booking Remark--')
+    .filter(item =>
+      item.Ref === this.BookingRemarkEnum.Shree_Booked ||
+      item.Ref === this.BookingRemarkEnum.Owner_Booked ||
+      item.Ref === this.BookingRemarkEnum.Owner_Saledeed ||
+      item.Ref === this.BookingRemarkEnum.Shree_Saledeed
+    );
+
 
   FinancialYearList: FinancialYear[] = []
 
