@@ -16,7 +16,6 @@ import {
   LeaveRequestType,
 } from 'src/app/classes/domain/domainenums/domainenums';
 import { DTU } from 'src/app/services/dtu.service';
-import { entries } from 'lodash';
 
 @Component({
   selector: 'app-leaverequest-master-details',

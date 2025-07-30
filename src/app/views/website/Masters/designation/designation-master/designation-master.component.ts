@@ -5,7 +5,6 @@ import { AppStateManageService } from 'src/app/services/app-state-manage.service
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
 import { ScreenSizeService } from 'src/app/services/screensize.service';
 import { UIUtils } from 'src/app/services/uiutils.service';
-import Swal from 'sweetalert2';
 import { Department } from 'src/app/classes/domain/entities/website/masters/department/department';
 
 @Component({
