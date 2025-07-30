@@ -84,6 +84,17 @@ export class AttendanceLogsComponent implements OnInit {
     this.getViewStatus();
   }
 
+  convertTo12Hour = (time24: string): string => {
+    const [hourStr, minute] = time24.split(":");
+    let hour = parseInt(hourStr, 10);
+    const ampm = hour >= 12 ? "PM" : "AM";
+
+    hour = hour % 12;
+    hour = hour === 0 ? 12 : hour; // Handle midnight (0 -> 12 AM) and noon (12 -> 12 PM)
+
+    return `${hour}:${minute} ${ampm}`;
+  }
+
   setTodayViewStatus = () => {
     this.appStateManage.StorageKey.setItem('todispaymonthlyrequirement', JSON.stringify(false));
     this.appStateManage.StorageKey.setItem('todisplayweeklyrequirement', JSON.stringify(false));
@@ -241,16 +252,16 @@ export class AttendanceLogsComponent implements OnInit {
   }
 
   // For Pagination  start ----
-   loadPaginationData = () => {
+  loadPaginationData = () => {
     this.total = this.DisplayMasterList.length; // Update total based on loaded data
   };
 
-paginatedList = () => {
+  paginatedList = () => {
     const start = (this.currentPage - 1) * this.pageSize;
     return this.DisplayMasterList.slice(start, start + this.pageSize);
   }
 
-onPageChange = (pageIndex: number): void => {
+  onPageChange = (pageIndex: number): void => {
     this.currentPage = pageIndex; // Update the current page
   };
 

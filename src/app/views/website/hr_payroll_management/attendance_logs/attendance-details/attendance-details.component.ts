@@ -51,6 +51,13 @@ export class AttendanceDetailsComponent implements OnInit {
   ToTime: string = '';
   OvertimeGraceTimeInMins: string = '';
 
+
+  CheckInTime: Date | null = null;
+  CheckOutTime: Date | null = null;
+
+  FirstCheckInTime: string = '';
+  LastCheckOutTime: string = '';
+
   baseHeaders: string[] = ['Sr. No', 'Site Name', 'Check In Time', 'Check Out Time', 'Working Hours', 'Action'];
 
   NameWithoutNos: string = ValidationPatterns.NameWithoutNos
@@ -73,6 +80,8 @@ export class AttendanceDetailsComponent implements OnInit {
       this.Entity = WebAttendaneLog.GetCurrentInstance();
       this.appStateManage.StorageKey.removeItem('Editable')
       this.Date = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.TransDateTime);
+      this.FirstCheckInTime = this.convertTo12Hour(this.Entity.p.FirstCheckInTime);
+      this.LastCheckOutTime = this.convertTo12Hour(this.Entity.p.LastCheckOutTime);
       this.getDefaultWorkingHrsByEmployeeRef();
     } else {
       this.Entity = WebAttendaneLog.CreateNewInstance();
@@ -149,9 +158,13 @@ export class AttendanceDetailsComponent implements OnInit {
   editAttendane(index: number) {
     this.isModalOpen = true
     this.newAttendance = { ...this.Entity.p.AttendanceLogDetailsArray[index] }
+
+    this.CheckInTime = this.convertToFullTime(this.newAttendance.CheckInTime);
+    this.CheckOutTime = this.convertToFullTime(this.newAttendance.CheckOutTime);
     this.ModalEditable = true;
     this.editingIndex = index;
   }
+
 
   removeAttendane = async (index: number) => {
     await this.uiUtils.showConfirmationMessage(
@@ -177,10 +190,40 @@ export class AttendanceDetailsComponent implements OnInit {
     return `${hours}h ${paddedMinutes}m`;
   }
 
+  convertIOS12To24HoursFormat = (value: Date | null) => {
+    if (value) {
+      const hours = value.getHours().toString().padStart(2, '0');
+      const minutes = value.getMinutes().toString().padStart(2, '0');
+      return `${hours}:${minutes}`;
+    } else {
+      return '';
+    }
+  }
+
+  convertTo12Hour = (time24: string): string => {
+    const [hourStr, minute] = time24.split(":");
+    let hour = parseInt(hourStr, 10);
+    const ampm = hour >= 12 ? "PM" : "AM";
+
+    hour = hour % 12;
+    hour = hour === 0 ? 12 : hour; // Handle midnight (0 -> 12 AM) and noon (12 -> 12 PM)
+
+    return `${hour}:${minute} ${ampm}`;
+  }
+
+  convertToFullTime(timeStr: string): Date {
+    const [hours, minutes] = timeStr.split(':').map(Number);
+    const now = new Date();
+    return new Date(now.getFullYear(), now.getMonth(), now.getDate(), hours, minutes, 0);
+  }
+
   calculateWorkingHours = () => {
-    if (this.newAttendance.CheckOutTime == '') {
+    if (!this.CheckOutTime) {
       return
     }
+
+    this.newAttendance.CheckInTime = this.convertIOS12To24HoursFormat(this.CheckInTime);
+    this.newAttendance.CheckOutTime = this.convertIOS12To24HoursFormat(this.CheckOutTime);
 
     // Fallback to "00:00" if either is missing or invalid
     if (!this.newAttendance.CheckInTime || !this.newAttendance.CheckInTime.includes(":")) return 0;
@@ -324,9 +367,15 @@ export class AttendanceDetailsComponent implements OnInit {
       await this.uiUtils.showSuccessToster('Attendance added successfully');
     }
     this.newAttendance = WebAttendaneLogDetailsLogProps.Blank();
+
+    this.CheckInTime = null
+    this.CheckOutTime = null
     this.editingIndex = null;
     this.Entity.p.FirstCheckInTime = this.Entity.p.AttendanceLogDetailsArray[0].CheckInTime;
     this.Entity.p.LastCheckOutTime = this.Entity.p.AttendanceLogDetailsArray[this.Entity.p.AttendanceLogDetailsArray.length - 1].CheckOutTime;
+
+    this.FirstCheckInTime = this.convertTo12Hour(this.Entity.p.FirstCheckInTime);
+    this.LastCheckOutTime = this.convertTo12Hour(this.Entity.p.LastCheckOutTime);
 
     this.IsLateMarkChange();
     if (!this.Entity.p.IsHalfDay) {
