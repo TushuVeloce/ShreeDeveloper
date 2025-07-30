@@ -39,14 +39,14 @@
         </div>
           <div class="col-md-6 col-6">
           <label for="AreaInSqm">Area in Sqm</label>
-          <input type="text" appCommaFormat class="form-control" name="AreaInSqm" id="AreaInSqm" [(ngModel)]="Entity.p.AreaInSqm"
+          <input type="number" class="form-control" name="AreaInSqm" id="AreaInSqm" [(ngModel)]="Entity.p.AreaInSqm"
             (input)="restrictToTwoDecimalsForSqm($event)"  #AreaInSqmCtrl="ngModel" required
             (blur)="AreaInSqmCtrl.control.markAsTouched()" placeholder="Enter Area in Sqm"
             (click)="selectAllValue($event)" />
         </div>
          <div class="col-md-6 col-6">
           <label for="AreaInSqft">Area in Sqft</label>
-          <input type="text" appCommaFormat class="form-control" disabled name="AreaInSqft" id="AreaInSqft" [(ngModel)]="Entity.p.AreaInSqft"
+          <input type="number" class="form-control" disabled name="AreaInSqft" id="AreaInSqft" [(ngModel)]="Entity.p.AreaInSqft"
            (input)="restrictToTwoDecimalsForSqFt($event)" #AreaInSqftCtrl="ngModel" required
             (blur)="AreaInSqftCtrl.control.markAsTouched()" placeholder="Enter Area in Sqft"
             (click)="selectAllValue($event)" />

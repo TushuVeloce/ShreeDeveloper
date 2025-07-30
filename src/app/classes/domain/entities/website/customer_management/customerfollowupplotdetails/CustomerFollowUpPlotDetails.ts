@@ -27,8 +27,7 @@ export class CustomerFollowUpPlotDetailsProps {
   public PlotAreaInSqft: number = 0;
   // public Remark: string = '';
   public Reason: string = '';
-  public CustID: string = '';
-
+ public CustID: string = '';
   public readonly IsNewlyCreated: boolean = false;
   public SiteName: string = '';
 
