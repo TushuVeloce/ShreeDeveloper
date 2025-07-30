@@ -156,6 +156,7 @@ export class IncomeDetailsComponent implements OnInit {
         this.Entity.p.IsRegisterCustomerRef = SingleRecord.p.IsRegisterCustomerRef;
         this.Entity.p.PayerRef = SingleRecord.p.Ref;
         if (this.Entity.p.PayerType == this.DealDoneCustomer) {
+          this.Entity.p.PlotRef = SingleRecord.p.PlotRef;
           this.Entity.p.PlotName = SingleRecord.p.PlotName;
         }
       }

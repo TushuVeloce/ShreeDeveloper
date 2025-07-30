@@ -113,13 +113,13 @@ export class RegisteredCustomerDetailsComponent implements OnInit {
     const ValueOfAgreement = Number(this.Entity.p.ValueOfAgreement);
     const TaxValueInPercentage = Number(this.Entity.p.TaxValueInPercentage);
 
-    if (ValueOfAgreement > GovernmentValue) {
-      this.uiUtils.showErrorToster("Value of Agreement cannot be greater than Government Value.");
-      this.Entity.p.ValueOfAgreement = 0;
-      this.Entity.p.StampDuties = 0;
-      this.calculateRegistrationFees()
-      return;
-    }
+    // if (ValueOfAgreement > GovernmentValue) {
+    //   this.uiUtils.showErrorToster("Value of Agreement cannot be greater than Government Value.");
+    //   this.Entity.p.ValueOfAgreement = 0;
+    //   this.Entity.p.StampDuties = 0;
+    //   this.calculateRegistrationFees()
+    //   return;
+    // }
     this.Entity.p.StampDuties = Math.floor(ValueOfAgreement * (TaxValueInPercentage / 100) * 100) / 100;
     this.calculateRegistrationFees()
   }
