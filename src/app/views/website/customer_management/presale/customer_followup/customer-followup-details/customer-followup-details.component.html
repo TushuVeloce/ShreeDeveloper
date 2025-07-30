@@ -227,11 +227,6 @@
             </nz-select>
           </div>
         </div>
-         <div class="col-md-4 col-6" style="margin-top: 1rem;" *ngIf="Entity.p.CustomerStatus == CustomerStatusEnum.ConvertToDeal">
-          <label>Customer Id</label>
-          <input type="text" [(ngModel)]="Entity.p.CustID" name="CustID" class="form-control" id="CustID"
-            placeholder="Enter Customer Id" required />
-        </div>
         <!-- Next site visit date  -->
         <div class="col-md-4" style="margin-top: 1rem;"
           *ngIf="Entity.p.CustomerStatus !== 30 && Entity.p.CustomerStatus !== CustomerStatusEnum.ConvertToDeal">

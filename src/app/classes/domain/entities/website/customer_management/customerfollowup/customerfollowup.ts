@@ -127,7 +127,6 @@ export class CustomerFollowUp implements IPersistable<CustomerFollowUp> {
       vra.add('CustomerStatus', 'CustomerStatus cannot be blank.');
 
     if (this.p.Reason == '') vra.add('Reason', 'Reason cannot be blank.');
-    if (this.p.CustomerStatus ==  this.CustomerStatusEnum.ConvertToDeal && this.p.CustID == '' ) vra.add('CustID', 'Customer ID cannot be blank.');
 
     // if (this.p.Name == '') vra.add('Name', 'Name cannot be blank.');
     // if (!this.p.ReminderDate)

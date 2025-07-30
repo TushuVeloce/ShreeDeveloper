@@ -183,11 +183,12 @@ import { NzTimePickerModule } from 'ng-zorro-antd/time-picker';
 
 // NG-ZORRO modules
 import { NZ_I18N, en_US } from 'ng-zorro-antd/i18n';
+import { LOCALE_ID } from '@angular/core';
 import { registerLocaleData } from '@angular/common';
-import en from '@angular/common/locales/en';
+import localeEnIN from '@angular/common/locales/en-IN';
 
 
-registerLocaleData(en);
+registerLocaleData(localeEnIN);
 
 @NgModule({
   declarations: [MaterialMasterComponent, MaterialMasterDetailsComponent, StageMasterComponent, StageMasterDetailsComponent, AccountMainLedgerComponent, AccountMainLedgerDetailsComponent, AccountSubLedgerComponent, AccountSubLedgerDetailsComponent, MarketingTypeMasterComponent, MarketingTypeMasterDetailsComponent, VendorMasterComponent, VehicleMasterComponent, VendorMasterDetailsComponent, BankAccountMasterComponent, BankAccountMasterDetailsComponent, ExternalUsersComponent, ExternalUsersMasterDetailsComponent, CompanyMasterComponent, CompanyMasterDetailsComponent, DepartmentMasterComponent, DepartmentMasterDetailsComponent, DesignationMasterComponent, DesignationMasterDetailsComponent, UserRoleMasterComponent, UserRoleMasterDetailsComponent, EmployeeMasterComponent, EmployeeMasterDetailsComponent,
@@ -200,7 +201,8 @@ registerLocaleData(en);
     NzPaginationModule, NzUploadModule, NzModalModule, NzCheckboxModule, NzCardModule, NzEmptyModule,
     CommonModule, NzTableModule, NzIconModule, NzLayoutModule, NzMenuModule, ReactiveFormsModule, NzButtonModule, NzSelectModule, NzTimePickerModule, NzStepsModule, NzButtonModule, NzToolTipModule, SharedFilterComponent, TitleCasePipe, CommaNumberDirective
   ],
-  providers: [DatePipe, { provide: NZ_I18N, useValue: en_US }],
+  providers: [DatePipe, { provide: LOCALE_ID, useValue: 'en-IN' },
+  { provide: NZ_I18N, useValue: en_US } ],
   exports: [SharedFilterComponent, TitleCasePipe],
 })
 export class WebModule {
