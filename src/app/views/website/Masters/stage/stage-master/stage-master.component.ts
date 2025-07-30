@@ -1,6 +1,5 @@
 import { Component, effect, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { DeleteStageCustomRequest } from 'src/app/classes/domain/entities/website/masters/stage/DeleteStageCustomRequest';
 import { Stage } from 'src/app/classes/domain/entities/website/masters/stage/stage';
 import { PayloadPacketFacade } from 'src/app/classes/infrastructure/payloadpacket/payloadpacketfacade';
 import { TransportData } from 'src/app/classes/infrastructure/transportdata';
@@ -76,28 +75,6 @@ export class StageMasterComponent implements OnInit {
         });
       });
   }
-
-  // onDeleteClicked = async (Stage: Stage) => {
-  //   await this.uiUtils.showConfirmationMessage(
-  //     'Delete', `This process is <strong>IRREVERSIBLE!</strong> <br/>Are you sure that you want to DELETE this Stage?`,
-  //     async () => {
-  //       let req = new DeleteStageCustomRequest();
-  //       req.StageRef = Stage.p.Ref;
-  //       let td = req.FormulateTransportData();
-  //       let pkt = this.payloadPacketFacade.CreateNewPayloadPacket2(td);
-  //       let tr = await this.serverCommunicator.sendHttpRequest(pkt);
-  //       if (!tr.Successful) {
-  //         await this.uiUtils.showErrorMessage('Error', tr.Message);
-  //         return;
-  //       }
-  //       await this.uiUtils.showSuccessToster(`Stage ${Stage.p.Name} has been deleted!`);
-  //       let tdResult = JSON.parse(tr.Tag) as TransportData;
-  //     }
-  //   );
-  //   this.getStageListByCompanyRef()
-  //   this.loadPaginationData()
-  //   this.SearchString = '';
-  // };
 
   // For Pagination  start ----
   loadPaginationData = () => {

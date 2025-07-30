@@ -1,6 +1,5 @@
 import { Component, effect, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
-import { DomainEnums } from 'src/app/classes/domain/domainenums/domainenums';
 import { Stage } from 'src/app/classes/domain/entities/website/masters/stage/stage';
 import { SubStage } from 'src/app/classes/domain/entities/website/masters/substage/subStage';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
@@ -9,8 +8,6 @@ import { ScreenSizeService } from 'src/app/services/screensize.service';
 import { UIUtils } from 'src/app/services/uiutils.service';
 import { ServerCommunicatorService } from 'src/app/services/server-communicator.service';
 import { PayloadPacketFacade } from 'src/app/classes/infrastructure/payloadpacket/payloadpacketfacade';
-import { TransportData } from 'src/app/classes/infrastructure/transportdata';
-import { DeleteSubStageCustomRequest } from 'src/app/classes/domain/entities/website/masters/substage/DeleteSubStageCustomRequest';
 
 @Component({
   selector: 'app-sub-stage-master',
@@ -100,28 +97,6 @@ export class SubStageMasterComponent implements OnInit {
       }
     );
   };
-
-  // DeleteSubStage = async (SubStage: SubStage) => {
-  //   await this.uiUtils.showConfirmationMessage(
-  //     'Delete', `This process is <strong>IRREVERSIBLE!</strong> <br/>Are you sure that you want to DELETE this SubStage?`,
-  //     async () => {
-  //       let req = new DeleteSubStageCustomRequest();
-  //       req.SubStageRef = SubStage.p.Ref;
-  //       let td = req.FormulateTransportData();
-  //       let pkt = this.payloadPacketFacade.CreateNewPayloadPacket2(td);
-  //       let tr = await this.serverCommunicator.sendHttpRequest(pkt);
-  //       if (!tr.Successful) {
-  //         await this.uiUtils.showErrorMessage('Error', tr.Message);
-  //         return;
-  //       }
-  //       await this.uiUtils.showSuccessToster(`Stage ${SubStage.p.Name} has been deleted!`);
-  //       let tdResult = JSON.parse(tr.Tag) as TransportData;
-  //     }
-  //   );
-  //   this.getSubStageListByCompanyRef()
-  //   this.loadPaginationData()
-  //    this.SearchString = '';
-  // };
 
   // For Pagination  start ----
   loadPaginationData = () => {

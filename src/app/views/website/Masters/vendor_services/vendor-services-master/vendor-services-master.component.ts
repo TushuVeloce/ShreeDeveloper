@@ -1,6 +1,5 @@
 import { Component, effect, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { DeleteVendorServiceCustomRequest } from 'src/app/classes/domain/entities/website/masters/vendorservices/DeleteVendorCustomRequest';
 import { VendorService } from 'src/app/classes/domain/entities/website/masters/vendorservices/vendorservices';
 import { PayloadPacketFacade } from 'src/app/classes/infrastructure/payloadpacket/payloadpacketfacade';
 import { TransportData } from 'src/app/classes/infrastructure/transportdata';
@@ -85,28 +84,6 @@ export class VendorServicesMasterComponent implements OnInit {
       }
     );
   };
-
-  // DeleteVendorService = async (VendorService: VendorService) => {
-  //   await this.uiUtils.showConfirmationMessage(
-  //     'Delete', `This process is <strong>IRREVERSIBLE!</strong> <br/>Are you sure that you want to DELETE this Service?`,
-  //     async () => {
-  //       let req = new DeleteVendorServiceCustomRequest();
-  //       req.VendorServiceRef = VendorService.p.Ref;
-  //       let td = req.FormulateTransportData();
-  //       let pkt = this.payloadPacketFacade.CreateNewPayloadPacket2(td);
-  //       let tr = await this.serverCommunicator.sendHttpRequest(pkt);
-  //       if (!tr.Successful) {
-  //         await this.uiUtils.showErrorMessage('Error', tr.Message);
-  //         return;
-  //       }
-  //       await this.uiUtils.showSuccessToster(`Vendor Service ${VendorService.p.Name} has been deleted!`);
-  //       let tdResult = JSON.parse(tr.Tag) as TransportData;
-  //     }
-  //   );
-  //   this.FormulateVendorServiceList()
-  //   this.loadPaginationData()
-  //    this.SearchString = '';
-  // };
 
   // For Pagination  start ----
   loadPaginationData = () => {

@@ -1,16 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { UnitRefs } from 'src/app/classes/domain/constants';
-import { ApplicationFeatures, DomainEnums } from 'src/app/classes/domain/domainenums/domainenums';
-import { DeleteUnitCustomRequest } from 'src/app/classes/domain/entities/website/masters/unit/DeleteUnitCustomRequest';
 import { Unit } from 'src/app/classes/domain/entities/website/masters/unit/unit';
 import { PayloadPacketFacade } from 'src/app/classes/infrastructure/payloadpacket/payloadpacketfacade';
-import { TransportData } from 'src/app/classes/infrastructure/transportdata';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { ScreenSizeService } from 'src/app/services/screensize.service';
 import { ServerCommunicatorService } from 'src/app/services/server-communicator.service';
 import { UIUtils } from 'src/app/services/uiutils.service';
-import { MenuItem, ValidMenuItemsStateManagement } from 'src/app/services/ValidMenuItems';
+import { ValidMenuItemsStateManagement } from 'src/app/services/ValidMenuItems';
 
 @Component({
   selector: 'app-unit-master',
@@ -65,29 +62,6 @@ export class UnitMasterComponent implements OnInit {
 
     await this.router.navigate(['/homepage/Website/Unit_Master_Details']);
   };
-
-
-  //  DeleteUnit = async (Unit: Unit) => {
-  //     await this.uiUtils.showConfirmationMessage(
-  //       'Delete', `This process is <strong>IRREVERSIBLE!</strong> <br/>Are you sure that you want to DELETE this Unit?`,
-  //       async () => {
-  //         let req = new DeleteUnitCustomRequest();
-  //         req.UnitRef = Unit.p.Ref;
-  //         let td = req.FormulateTransportData();
-  //         let pkt = this.payloadPacketFacade.CreateNewPayloadPacket2(td);
-  //         let tr = await this.serverCommunicator.sendHttpRequest(pkt);
-  //         if (!tr.Successful) {
-  //           await this.uiUtils.showErrorMessage('Error', tr.Message);
-  //           return;
-  //         }
-  //         await this.uiUtils.showSuccessToster(`Unit ${Unit.p.Name} has been deleted!`);
-  //         let tdResult = JSON.parse(tr.Tag) as TransportData;
-  //       }
-  //     );
-  //     this.FormulateUnitList()
-  //     this.loadPaginationData()
-  //     this.SearchString = '';
-  //   };
 
   onDeleteClicked = async (Unit: Unit) => {
     await this.uiUtils.showConfirmationMessage('Delete',
