@@ -148,7 +148,7 @@
               <td class="tbldata">
                 <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
                   nzPlaceHolder="Select" name="{{plot.PlotName.trim() + '_' + i + 100}}" [(ngModel)]="plot.CustomerStatus"
-                  [nzSize]="'large'">
+                  [nzSize]="'large'" (ngModelChange)="onCustomerStatusChange(plot)">
                   <nz-option *ngFor="let customerstatus of CustomerStatusList" [nzValue]="customerstatus.Ref"
                     [nzLabel]="customerstatus.Name"></nz-option>
                 </nz-select>
@@ -157,6 +157,11 @@
                 <input type="text" name="{{plot.PlotName.trim() + '_' + i + 1000}}" class="form-control"
                   [(ngModel)]="plot.Reason" required placeholder="Enter Reason" />
               </td>
+              <td class="tbldata" style="width:100%" *ngIf="plot.CustomerStatus == CustomerStatusEnum.ConvertToDeal">
+                <input type="text" name="{{plot.CustID.trim() + '_' + i + 1000}}" class="form-control"
+                  [(ngModel)]="plot.CustID" required placeholder="Enter Customer ID" />
+              </td>
+              <td Class="tbldata" *ngIf="plot.CustomerStatus !== CustomerStatusEnum.ConvertToDeal"> -- </td>
             </tr>
           </tbody>
         </nz-table>
@@ -221,11 +226,6 @@
                 [nzLabel]="status.Name"></nz-option>
             </nz-select>
           </div>
-        </div>
-         <div class="col-md-4 col-6" style="margin-top: 1rem;" *ngIf="Entity.p.CustomerStatus == CustomerStatusEnum.ConvertToDeal">
-          <label>Customer Id</label>
-          <input type="text" [(ngModel)]="Entity.p.CustID" name="CustID" class="form-control" id="CustID"
-            placeholder="Enter Customer Id" required />
         </div>
         <!-- Next site visit date  -->
         <div class="col-md-4" style="margin-top: 1rem;"

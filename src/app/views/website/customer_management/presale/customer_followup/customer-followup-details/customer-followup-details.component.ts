@@ -40,6 +40,7 @@ export class CustomerFollowupDetailsComponent implements OnInit {
     'Area in Sqft',
     'Customer Status',
     'Remark',
+    'Customer ID'
   ];
   private IsNewEntity: boolean = true;
   isSaveDisabled: boolean = false;
@@ -269,6 +270,12 @@ export class CustomerFollowupDetailsComponent implements OnInit {
     this.Entity.p.CustomerFollowUpPlotDetails = selectedvalue;
   }
 
+  onCustomerStatusChange(plot: any): void {
+  if (plot.CustomerStatus !== this.CustomerStatusEnum.ConvertToDeal) {
+    plot.CustID = '';
+  }
+}
+
   addDataToCustomerFollowUpPlotDetail = () => {
     if (this.SiteManagementRef <= 0) {
       this.uiUtils.showWarningToster(`Please Select a Site`);
@@ -349,7 +356,6 @@ export class CustomerFollowupDetailsComponent implements OnInit {
 
 
   ConverttoDeal = (CustomerStatus: number): boolean => {
-    this.Entity.p.CustID = ''
     const hasDealRecord = this.Entity.p.CustomerFollowUpPlotDetails?.some(
       (item: any) => item.CustomerStatus === this.CustomerStatusEnum.ConvertToDeal
     );

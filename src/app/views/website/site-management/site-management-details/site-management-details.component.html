@@ -140,7 +140,7 @@
         </div>
          <div class="col-md-4 col-6">
           <label for="TotalLandAreaInSqm">Total Land Area in Sqm</label>
-          <input type="number" class="form-control" name="TotalLandAreaInSqm" id="TotalLandAreaInSqm" 
+          <input type="text" appCommaFormat class="form-control" name="TotalLandAreaInSqm" id="TotalLandAreaInSqm" 
             [(ngModel)]="Entity.p.TotalLandAreaInSqm" (input)="restrictToTwoDecimalsForSqm($event)" 
             #TotalLandAreaInSqmCtrl="ngModel" required (blur)="TotalLandAreaInSqmCtrl.control.markAsTouched()"
             placeholder="Enter Total Land Area in Sqm" (click)="selectAllValue($event)" />
@@ -152,7 +152,7 @@
         </div>
          <div class="col-md-4 col-6">
           <label for="TotalLandAreaInSqft">Total Land Area in Sqft</label>
-          <input type="number" class="form-control" name="TotalLandAreaInSqft" id="TotalLandAreaInSqft" 
+          <input type="text" appCommaFormat class="form-control" name="TotalLandAreaInSqft" id="TotalLandAreaInSqft" 
             [(ngModel)]="Entity.p.TotalLandAreaInSqft" (input)="restrictToTwoDecimalsForSqFt($event)"
             #TotalLandAreaInSqftCtrl="ngModel" required (blur)="TotalLandAreaInSqftCtrl.control.markAsTouched()"
             placeholder="Enter Total Land Area in Sqft" (click)="selectAllValue($event)" />
