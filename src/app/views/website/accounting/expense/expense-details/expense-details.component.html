@@ -32,7 +32,7 @@
           <label>Site Name</label>
           <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
             nzPlaceHolder="Select" id="SiteRef" name="SiteRef" [nzSize]="'large'" [(ngModel)]="Entity.p.SiteRef"
-            (ngModelChange)="Entity.p.RecipientType = 0; Entity.p.RecipientRef = 0; RecipientList = []; Entity.p.InvoiceAmount = 0">
+            (ngModelChange)="getRecipientListByRecipientTypeRef(); Entity.p.RecipientType = 0; Entity.p.RecipientRef = 0; PayerPlotNo = ''; Entity.p.LedgerRef = 0; Entity.p.SubLedgerRef = 0; Entity.p.PlotName = ''; RecipientList = []; Entity.p.InvoiceAmount = 0">
             <nz-option *ngFor=" let site of SiteList" [nzValue]="site.p.Ref" [nzLabel]="site.p.Name"></nz-option>
           </nz-select>
         </div>
@@ -91,17 +91,39 @@
         <div class="col-md-4" style="margin-top: 1rem">
           <label>To Whom</label>
           <div class="d-flex align-items-center">
-            <nz-select *ngIf="!RecipientNameInput" class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch
+            <nz-select *ngIf="!RecipientNameInput && Entity.p.RecipientType == DealDoneCustomer"  class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch
               nzAllowClear nzPlaceHolder="Select" id="RecipientRef" name="RecipientRef" [nzSize]="'large'"
-              [(ngModel)]="Entity.p.RecipientRef"
+              [(ngModel)]="PayerPlotNo"
               (ngModelChange)="getTotalInvoiceAmountFromSiteAndRecipientRef(); onRecipientChange();">
-              <nz-option *ngFor="let recipient of RecipientList" [nzValue]="recipient.p.Ref"
-                [nzLabel]="recipient.p.RecipientName | titleCase" nzCustomContent>
-                <span [ngClass]="recipient.p.IsSiteRef == 1 ? 'site' : 'nonsite'">
-                  {{ recipient.p.RecipientName | titleCase }}
-                </span>
-              </nz-option>
+               <nz-option *ngFor="let recipient of RecipientList" [nzValue]="recipient.p.PlotName"
+                  [nzLabel]="recipient.p.RecipientName + ' - ' + recipient.p.PlotName | titleCase">
+                  <span *ngIf="Entity.p.RecipientType"
+                    [ngClass]="recipient.p.IsRegisterCustomerRef == 1 ? 'sitecus' : 'nonsitecus'">
+                    {{ recipient.p.RecipientName + ' - ' + recipient.p.PlotName| titleCase }}
+                  </span>
+                  <span *ngIf="Entity.p.RecipientType != DealDoneCustomer"
+                    [ngClass]="recipient.p.IsRegisterCustomerRef == 1 ? 'sitecus' : 'nonsitecus'">
+                    {{ recipient.p.RecipientName| titleCase }}
+                  </span>
+                </nz-option>
             </nz-select>
+             <nz-select *ngIf="!RecipientNameInput && Entity.p.RecipientType != DealDoneCustomer"
+                class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear nzPlaceHolder="Select"
+                id="PayerRef" name="PayerRef" [nzSize]="'large'" [(ngModel)]="Entity.p.RecipientRef"
+               (ngModelChange)="getTotalInvoiceAmountFromSiteAndRecipientRef(); onRecipientChange();">
+                <nz-option *ngFor="let recipient of RecipientList" [nzValue]="recipient.p.Ref"
+                  [nzLabel]="recipient.p.RecipientName + ' - ' + recipient.p.PlotName | titleCase">
+                  <span *ngIf="Entity.p.RecipientType == DealDoneCustomer"
+                    [ngClass]="recipient.p.IsRegisterCustomerRef == 1 ? 'sitecus' : 'nonsitecus'">
+                    {{ recipient.p.RecipientName + ' - ' + recipient.p.PlotName| titleCase }}
+                  </span>
+                  <span *ngIf="Entity.p.RecipientType != DealDoneCustomer"
+                    [ngClass]="recipient.p.IsRegisterCustomerRef == 1 ? 'sitecus' : 'nonsitecus'">
+                    {{ recipient.p.RecipientName| titleCase }}
+                  </span>
+                </nz-option>
+              </nz-select>
+
             <input *ngIf="RecipientNameInput" type="text" [(ngModel)]="RecipientEntity.p.Name" name="Name"
               class="form-control" id="Name" required placeholder="Enter Recipient Name" />
             <span *ngIf="!RecipientNameInput && Entity.p.RecipientType == RecipientType" (click)="AddRecipientName()"
@@ -121,6 +143,14 @@
             </span>
           </div>
         </div>
+         <div class="col-md-4" style="margin-top: 1rem;"
+            *ngIf="Entity.p.RecipientType == DealDoneCustomer && Entity.p.RecipientRef != 0">
+            <div>
+              <label>Plot Name</label>
+              <input type="text" [(ngModel)]="Entity.p.PlotName" name="PlotName" class="form-control" id="PlotName"
+                disabled placeholder="Enter PlotName" />
+            </div>
+          </div>
         <div class="col-md-4" style="margin-top: 1rem; ">
           <div>
             <label>Reason</label>

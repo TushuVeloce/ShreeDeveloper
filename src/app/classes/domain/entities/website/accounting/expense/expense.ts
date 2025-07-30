@@ -53,6 +53,8 @@ export class ExpenseProps {
   public IncomeSubLedgerName: string = ''
   public RemainingAdvance: number = 0;
   public IsSalaryExpense: boolean = false;
+  public PlotRef: number = 0
+  public PlotName: string = ''
 
   public GivenAmount: number = 0
   public TotalAdvance: number = 0
@@ -61,6 +63,7 @@ export class ExpenseProps {
   public ExpenseModeOfPayment: number = 0
   public ModeOfPaymentName: string = ''
   public BankAccountRef: number = 0
+  public IsRegisterCustomerRef: number = 0
 
 
   public readonly IsNewlyCreated: boolean = false;

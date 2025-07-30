@@ -36,7 +36,7 @@
     <label for="SiteRef"><b>Site</b></label>
     <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear nzPlaceHolder="Select"
       [nzSize]="'large'" name="SiteRef" [(ngModel)]="Entity.p.SiteRef" required id="SiteRef"
-      (ngModelChange)="getEntireListByFilters(); PayerPlotNo = ''; Entity.p.PayerType = 0; Entity.p.PayerRef = 0; Entity.p.RecipientType = 0; Entity.p.RecipientRef = 0;">
+      (ngModelChange)="getEntireListByFilters(); getRecipientListByRecipientTypeRef(); PayerPlotNo = ''; Entity.p.PayerType = 0; Entity.p.PayerRef = 0; Entity.p.RecipientType = 0; Entity.p.RecipientRef = 0;">
       <nz-option nzLabel="All" [nzValue]="0"></nz-option>
       <nz-option *ngFor="let Site of SiteList" [nzValue]="Site.p.Ref" [nzLabel]="Site.p.Name"></nz-option>
     </nz-select>

@@ -2,7 +2,7 @@ import { Component, effect, OnInit, ViewChild } from '@angular/core';
 import { NgModel } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ValidationMessages } from 'src/app/classes/domain/constants';
-import { DomainEnums, ModeOfPayments, OpeningBalanceModeOfPayments, RecipientTypes, TypeOfEmployeePayments, } from 'src/app/classes/domain/domainenums/domainenums';
+import { DomainEnums, ModeOfPayments, OpeningBalanceModeOfPayments, PayerTypes, RecipientTypes, TypeOfEmployeePayments, } from 'src/app/classes/domain/domainenums/domainenums';
 import { Invoice } from 'src/app/classes/domain/entities/website/accounting/billing/invoice';
 import { Expense } from 'src/app/classes/domain/entities/website/accounting/expense/expense';
 import { BankAccount } from 'src/app/classes/domain/entities/website/masters/bankaccount/banckaccount';
@@ -55,9 +55,11 @@ export class ExpenseDetailsComponent implements OnInit {
   TypeofEmployeePaymentList = DomainEnums.TypeOfEmployeePaymentsList();
   TypeofEmployeePayments = TypeOfEmployeePayments;
   RecipientTypesList = DomainEnums.RecipientTypesList();
+  DealDoneCustomer = PayerTypes.DealDoneCustomer;
   Employee = RecipientTypes.Employee;
   Sites = RecipientTypes.Sites;
   Date: string = '';
+  PayerPlotNo: string = '';
 
   RequiredFieldMsg: string = ValidationMessages.RequiredFieldMsg
 
@@ -202,7 +204,7 @@ export class ExpenseDetailsComponent implements OnInit {
     }
 
     this.RecipientList = [];
-    let lst = await Invoice.FetchRecipientByRecipientTypeRef(this.companyRef(), this.Entity.p.RecipientType, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    let lst = await Invoice.FetchRecipientByRecipientTypeRef(this.companyRef(), this.Entity.p.SiteRef, this.Entity.p.RecipientType, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.RecipientList = lst;
   }
 
@@ -293,13 +295,22 @@ export class ExpenseDetailsComponent implements OnInit {
     this.Entity.p.ExpenseModeOfPayment = 0;
     this.Entity.p.IsAutoInvoiceEnabled = 0;
     this.RecipientNameInput = false
+    let SingleRecord;
     try {
-      let SingleRecord = this.RecipientList.find((data) => data.p.Ref == this.Entity.p.RecipientRef);;
+      if (this.Entity.p.RecipientType == this.DealDoneCustomer) {
+        SingleRecord = this.RecipientList.find((data) => data.p.PlotName == this.PayerPlotNo);
+      } else {
+        SingleRecord = this.RecipientList.find((data) => data.p.Ref == this.Entity.p.RecipientRef);
+      }
       if (SingleRecord?.p) {
-        this.Entity.p.IsSiteRef = SingleRecord.p.IsSiteRef;
+        this.Entity.p.IsRegisterCustomerRef = SingleRecord.p.IsRegisterCustomerRef;
+        this.Entity.p.RecipientRef = SingleRecord.p.Ref;
+        if (this.Entity.p.RecipientType == this.DealDoneCustomer) {
+          this.Entity.p.PlotRef = SingleRecord.p.PlotRef;
+          this.Entity.p.PlotName = SingleRecord.p.PlotName;
+        }
       }
     } catch (error) {
-
     }
   }
 

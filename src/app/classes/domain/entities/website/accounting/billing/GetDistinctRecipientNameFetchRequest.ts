@@ -10,6 +10,7 @@ export class GetDistinctRecipientNameFetchRequest {
   InvoiceRefs: number[] = [];
   CompanyRefs: number[] = [];
   CompanyRef: number = 0;
+  SiteRef: number = 0;
   SiteRefs: number[] = [];
   RecipientType: number = 0;
   LedgerRefs: number[] = [];

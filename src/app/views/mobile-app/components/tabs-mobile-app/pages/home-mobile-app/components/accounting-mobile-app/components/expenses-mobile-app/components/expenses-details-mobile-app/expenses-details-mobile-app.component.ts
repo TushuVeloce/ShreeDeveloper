@@ -331,7 +331,7 @@ export class ExpensesDetailsMobileAppComponent implements OnInit {
     }
     this.Entity.p.RecipientRef = 0;
     this.RecipientList = [];
-    let lst = await Invoice.FetchRecipientByRecipientTypeRef(this.companyRef, this.Entity.p.RecipientType, async errMsg => {
+    let lst = await Invoice.FetchRecipientByRecipientTypeRef(this.companyRef,this.Entity.p.SiteRef, this.Entity.p.RecipientType, async errMsg => {
       await this.toastService.present('Error' + errMsg, 1000, 'danger');
       await this.haptic.error();
     });
