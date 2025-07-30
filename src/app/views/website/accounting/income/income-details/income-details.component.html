@@ -134,7 +134,7 @@
           <div class="col-md-4" style="margin-top: 1rem; ">
             <div>
               <label>Income Amount</label>
-              <input type="number" [(ngModel)]="Entity.p.IncomeAmount" name="IncomeAmount" class="form-control"
+              <input type="text" appCommaFormat [(ngModel)]="Entity.p.IncomeAmount" name="IncomeAmount" class="form-control"
                 id="IncomeAmount" required placeholder="Enter Income Amount" #IncomeAmountCtrl="ngModel"
                 (blur)="IncomeAmountCtrl.control.markAsTouched()" (click)="selectAllValue($event)"
                 (ngModelChange)="CalculateShreeBalance()" />
@@ -146,7 +146,7 @@
           <div class="col-md-4" style="margin-top: 1rem; ">
             <div>
               <label>Shree Balance</label>
-              <input type="number" [(ngModel)]="Entity.p.ShreesBalance" disabled name="ShreesBalance"
+              <input type="text" appCommaFormat [(ngModel)]="Entity.p.ShreesBalance" disabled name="ShreesBalance"
                 class="form-control" id="ShreesBalance" required placeholder="Enter Shrees Balance" />
             </div>
           </div>

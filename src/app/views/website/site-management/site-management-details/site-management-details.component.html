@@ -131,7 +131,7 @@
         </div>
         <div class="col-md-4 col-6">
           <label>Estimated Cost</label>
-          <input type="number" name="EstimatedCost" class="form-control" id="EstimatedCost"
+          <input type="text" appCommaFormat name="EstimatedCost" class="form-control" id="EstimatedCost"
             [(ngModel)]="Entity.p.EstimatedCost" placeholder="Enter Estimated Cost" (click)="selectAllValue($event)"
             #EstimatedCostCtrl="ngModel" required (blur)="EstimatedCostCtrl.control.markAsTouched()" />
           <!-- <div *ngIf="(EstimatedCostCtrl.invalid && (EstimatedCostCtrl.touched || EstimatedCostCtrl.dirty))">

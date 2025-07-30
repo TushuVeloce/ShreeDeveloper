@@ -36,7 +36,7 @@
         </div>
         <div class="col-md-4">
           <label>Basic Salary</label>
-          <input type="number" name="BasicSalary" class="form-control" id="BasicSalary"
+          <input type="text" appCommaFormat name="BasicSalary" class="form-control" id="BasicSalary"
             [(ngModel)]="Entity.p.BasicSalary" placeholder="Basic Salary" disabled />
         </div>
         <div class="col-md-4">
@@ -72,7 +72,7 @@
         </div>
         <div class="col-md-4">
           <label>Full Days Worked Salary</label>
-          <input type="number" name="TotalFullDaysSalary" class="form-control" id="TotalFullDaysSalary"
+          <input type="text" appCommaFormat name="TotalFullDaysSalary" class="form-control" id="TotalFullDaysSalary"
             [(ngModel)]="Entity.p.TotalFullDaysSalary" placeholder="Per Day Salary" disabled />
         </div>
         <div class="col-md-4">
@@ -82,7 +82,7 @@
         </div>
         <div class="col-md-4">
           <label>Total Half Days And Late Mark Days Salary</label>
-          <input type="number" name="TotalHalfDaysAndLateMarkDaysSalary" class="form-control"
+          <input type="text" appCommaFormat name="TotalHalfDaysAndLateMarkDaysSalary" class="form-control"
             id="TotalHalfDaysAndLateMarkDaysSalary" [(ngModel)]="Entity.p.TotalHalfDaysAndLateMarkDaysSalary"
             placeholder="Total Half Days And Late Mark Days Salary" disabled />
         </div>
@@ -93,37 +93,37 @@
         </div>
         <div class="col-md-4">
           <label>OverTime Hours Rate</label>
-          <input type="number" name="OverTimeHrsRate" disabled class="form-control" id="OverTimeHrsRate"
+          <input type="text" appCommaFormat name="OverTimeHrsRate" disabled class="form-control" id="OverTimeHrsRate"
             [(ngModel)]="Entity.p.OverTimeHrsRate" placeholder="OverTime Hours Rate"
             (ngModelChange)="calculategrosstotal()" (click)="selectAllValue($event)" />
         </div>
         <div class="col-md-4">
           <label>Over Time Salary</label>
-          <input type="number" name="TotalOverTimeSalary" disabled class="form-control" id="TotalOverTimeSalary"
+          <input type="text" appCommaFormat name="TotalOverTimeSalary" disabled class="form-control" id="TotalOverTimeSalary"
             [(ngModel)]="Entity.p.TotalOverTimeSalary" placeholder="Over Time Salary"
             (ngModelChange)="calculategrosstotal()" (click)="selectAllValue($event)" />
         </div>
         <div class="col-md-4">
           <label>Allowance</label>
-          <input type="number" name="TotalAllowance" class="form-control" id="TotalAllowance"
+          <input type="text" appCommaFormat name="TotalAllowance" class="form-control" id="TotalAllowance"
             [(ngModel)]="Entity.p.TotalAllowance" placeholder="Enter Total Allowance" (click)="selectAllValue($event)"
             (ngModelChange)="calculategrosstotal()" />
         </div>
         <div class="col-md-4">
           <label>Total Incentive</label>
-          <input type="number" name="TotalIncentive" class="form-control" id="TotalIncentive"
+          <input type="text" appCommaFormat name="TotalIncentive" class="form-control" id="TotalIncentive"
             [(ngModel)]="Entity.p.TotalIncentive" placeholder="Enter Total Incentive" (click)="selectAllValue($event)"
             (ngModelChange)="calculategrosstotal()" />
         </div>
         <div class="col-md-4">
           <label>Other</label>
-          <input type="number" name="Other" class="form-control" id="Other" [(ngModel)]="Entity.p.Other"
+          <input type="text" appCommaFormat name="Other" class="form-control" id="Other" [(ngModel)]="Entity.p.Other"
             placeholder="Enter Other" required (click)="selectAllValue($event)"
             (ngModelChange)="calculategrosstotal()" />
         </div>
         <div class="col-md-4">
           <label>Gross Total</label>
-          <input type="number" name="GrossTotal" class="form-control" id="GrossTotal" [(ngModel)]="Entity.p.GrossTotal"
+          <input type="text" appCommaFormat name="GrossTotal" class="form-control" id="GrossTotal" [(ngModel)]="Entity.p.GrossTotal"
             placeholder="Enter Gross Total" disabled />
         </div>
       </div>
@@ -133,45 +133,45 @@
       <div class="row">
         <div class="col-md-4" style="margin-top: 1rem">
           <label>TDS</label>
-          <input type="number" name="TDS" class="form-control" id="TDS" [(ngModel)]="Entity.p.TDS"
+          <input type="text" appCommaFormat name="TDS" class="form-control" id="TDS" [(ngModel)]="Entity.p.TDS"
             placeholder="Enter TDS" required (click)="selectAllValue($event)"
             (ngModelChange)="calculatetotaldeduction()" />
         </div>
         <div class="col-md-4" style="margin-top: 1rem">
           <label>PF</label>
-          <input type="number" name="PF" class="form-control" id="PF" [(ngModel)]="Entity.p.PF" placeholder="Enter PF"
+          <input type="text" appCommaFormat name="PF" class="form-control" id="PF" [(ngModel)]="Entity.p.PF" placeholder="Enter PF"
             required (click)="selectAllValue($event)" (ngModelChange)="calculatetotaldeduction()" />
         </div>
         <div class="col-md-4" style="margin-top: 1rem">
           <label>Total Leave Deduction</label>
-          <input type="number" name="TotalLeaveDeduction" class="form-control" id="TotalLeaveDeduction"
+          <input type="text" appCommaFormat name="TotalLeaveDeduction" class="form-control" id="TotalLeaveDeduction"
             [(ngModel)]="Entity.p.TotalLeaveDeduction" placeholder="Enter Total Leave Deduction" required disabled
             (click)="selectAllValue($event)" (ngModelChange)="calculatetotaldeduction()" />
         </div>
         <div class="col-md-4" style="margin-top: 1rem">
           <label>Advance Payment</label>
-          <input type="number" name="AdvancePayment" class="form-control" id="AdvancePayment"
+          <input type="text" appCommaFormat name="AdvancePayment" class="form-control" id="AdvancePayment"
             [(ngModel)]="Entity.p.AdvancePayment" placeholder=" Advance Payment" disabled />
         </div>
         <div class="col-md-4" style="margin-top: 1rem">
           <label>Advance Deduction</label>
-          <input type="number" name="AdvanceDeduction" class="form-control" id="AdvanceDeduction"
+          <input type="text" appCommaFormat name="AdvanceDeduction" class="form-control" id="AdvanceDeduction"
             [(ngModel)]="Entity.p.AdvanceDeduction" placeholder="Enter Advance Deduction" required
             (click)="selectAllValue($event)" (ngModelChange)="calculatetotaldeduction()" />
         </div>
         <div class="col-md-4" style="margin-top: 1rem">
           <label>Remaining Advance</label>
-          <input type="number" name="RemainingAdvance" class="form-control" id="RemainingAdvance"
+          <input type="text" appCommaFormat name="RemainingAdvance" class="form-control" id="RemainingAdvance"
             [(ngModel)]="Entity.p.RemainingAdvance" placeholder="Remaining Advance" disabled/>
         </div>
         <div class="col-md-4" style="margin-top: 1rem">
           <label>Total Deduction</label>
-          <input type="number" name="TotalDeduction" class="form-control" id="TotalDeduction"
+          <input type="text" appCommaFormat name="TotalDeduction" class="form-control" id="TotalDeduction"
             [(ngModel)]="Entity.p.TotalDeduction" placeholder="Enter Total Deduction" disabled />
         </div>
         <div class="col-md-4" style="margin-top: 1rem">
           <label>Net Salary</label>
-          <input type="number" name="NetSalary" class="form-control" id="NetSalary" [(ngModel)]="Entity.p.NetSalary"
+          <input type="text" appCommaFormat name="NetSalary" class="form-control" id="NetSalary" [(ngModel)]="Entity.p.NetSalary"
             placeholder="Enter Net Salary" disabled />
         </div>
       </div>

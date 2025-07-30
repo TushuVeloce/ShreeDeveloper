@@ -56,7 +56,7 @@
         </div>
         <!-- <div class="col-4" style="margin-top: 1rem">
           <label>Opening Balance</label>
-          <input type="number" [(ngModel)]="Entity.p.OpeningBalance" name="OpeningBalance" class="form-control"
+          <input type="text" appCommaFormat [(ngModel)]="Entity.p.OpeningBalance" name="OpeningBalance" class="form-control"
             id="OpeningBalance" pattern="{{LargeInputNumber}}" placeholder="Enter Opening Balance"
             (click)="selectAllValue($event)" #OpeningBalanceCtrl="ngModel" required
             (blur)="OpeningBalanceCtrl.control.markAsTouched()" />

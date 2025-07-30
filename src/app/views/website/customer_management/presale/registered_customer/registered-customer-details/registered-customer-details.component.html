@@ -149,7 +149,7 @@
         <div class="col-md-4">
           <div>
             <label>Discounted Rate On Area </label>
-            <input type="number" name="DiscountedRateOnArea " class="form-control" id="DiscountedRateOnArea "
+            <input type="text" appCommaFormat name="DiscountedRateOnArea " class="form-control" id="DiscountedRateOnArea "
               [(ngModel)]="Entity.p.DiscountedRateOnArea" (ngModelChange)="calculateTotalPlotAmount()"
               placeholder="Enter Discounted Rate" (click)="selectAllValue($event)" />
           </div>
@@ -157,7 +157,7 @@
         <div class="col-md-4">
           <div>
             <label>Discount On Total Plot Amount </label>
-            <input type="number" name="DiscountOnTotalPlotAmount " class="form-control" id="DiscountOnTotalPlotAmount "
+            <input type="text" appCommaFormat name="DiscountOnTotalPlotAmount " class="form-control" id="DiscountOnTotalPlotAmount "
               [(ngModel)]="Entity.p.DiscountOnTotalPlotAmount" (ngModelChange)="calculateTotalPlotAmount()" required
               placeholder="Enter Discount On Total Plot Amount" (click)="selectAllValue($event)" />
           </div>
@@ -167,7 +167,7 @@
         <div class="col-md-4">
           <div>
             <label>Total Plot Amount</label>
-            <input type="number" name="TotalPlotAmount" class="form-control" id="TotalPlotAmount"
+            <input type="text" appCommaFormat name="TotalPlotAmount" class="form-control" id="TotalPlotAmount"
               [(ngModel)]="Entity.p.TotalPlotAmount" disabled placeholder="Enter Total Plot Amount" />
           </div>
         </div>
@@ -195,7 +195,7 @@
         <div class="col-md-4">
           <div>
             <label>Government Recknor</label>
-            <input type="number" name="GovermentRatePerSqm" class="form-control" id="GovermentRatePerSqm"
+            <input type="text" appCommaFormat name="GovermentRatePerSqm" class="form-control" id="GovermentRatePerSqm"
               [(ngModel)]="Entity.p.GovermentRatePerSqm" disabled placeholder="Enter Government Recknor" />
           </div>
         </div>
@@ -204,14 +204,14 @@
         <div class="col-md-4">
           <div>
             <label>Government Value</label>
-            <input type="number" name="GovernmentValue" class="form-control" id="GovernmentValue"
+            <input type="text" appCommaFormat name="GovernmentValue" class="form-control" id="GovernmentValue"
               [(ngModel)]="Entity.p.GovernmentValue" disabled placeholder="Enter Government Value" />
           </div>
         </div>
         <div class="col-md-4">
           <div>
             <label>Value of Agreement</label>
-            <input type="number" name="ValueOfAgreement" class="form-control" id="ValueOfAgreement"
+            <input type="text" appCommaFormat name="ValueOfAgreement" class="form-control" id="ValueOfAgreement"
               [(ngModel)]="Entity.p.ValueOfAgreement" (ngModelChange)="calculateStampDuties()" required
               placeholder="Enter Value of Agreement" (click)="selectAllValue($event)" />
           </div>
@@ -219,7 +219,7 @@
         <div class="col-md-4">
           <div>
             <label>Tax Value In %</label>
-            <input type="number" name="TaxValueInPercentage" class="form-control" id="TaxValueInPercentage"
+            <input type="text" appCommaFormat name="TaxValueInPercentage" class="form-control" id="TaxValueInPercentage"
               [(ngModel)]="Entity.p.TaxValueInPercentage" disabled placeholder="Enter Tax Value In %" />
           </div>
         </div>
@@ -228,7 +228,7 @@
         <div class="col-md-4">
           <div>
             <label>Stamp Duties</label>
-            <input type="number" name="StampDuties" class="form-control" id="StampDuties"
+            <input type="text" appCommaFormat name="StampDuties" class="form-control" id="StampDuties"
               [(ngModel)]="Entity.p.StampDuties" disabled placeholder="Enter Stamp Duties" />
           </div>
         </div>
@@ -242,7 +242,7 @@
         <div class="col-md-4">
           <div>
             <label>Registration Fees</label>
-            <input type="number" name="RegistrationFees" class="form-control" id="RegistrationFees"
+            <input type="text" appCommaFormat name="RegistrationFees" class="form-control" id="RegistrationFees"
               [(ngModel)]="Entity.p.RegistrationFees" disabled placeholder="Enter Registration Fees" />
           </div>
         </div>
@@ -262,14 +262,14 @@
         <div class="col-md-4">
           <div>
             <label>Gst Total Amount </label>
-            <input type="number" name="GstToatalAmount " class="form-control" id="GstToatalAmount "
+            <input type="text" appCommaFormat name="GstToatalAmount " class="form-control" id="GstToatalAmount "
               [(ngModel)]="Entity.p.GstToatalAmount" required placeholder="Enter Gst Total Amount" disabled />
           </div>
         </div>
         <div class="col-md-4">
           <div>
             <label>Legal Charges</label>
-            <input type="number" name="LegalCharges" class="form-control" id="LegalCharges"
+            <input type="text" appCommaFormat name="LegalCharges" class="form-control" id="LegalCharges"
               [(ngModel)]="Entity.p.LegalCharges" (ngModelChange)="calculateExtraCharges()" required
               placeholder="Enter Legal Charges" (click)="selectAllValue($event)" />
           </div>
@@ -279,27 +279,27 @@
         <div class="col-md-4">
           <div>
             <label>Total Extra Charges</label>
-            <input type="number" name="TotalExtraCharges" class="form-control" id="TotalExtraCharges"
+            <input type="text" appCommaFormat name="TotalExtraCharges" class="form-control" id="TotalExtraCharges"
               [(ngModel)]="Entity.p.TotalExtraCharges" required placeholder="Enter Total Extra Charges" disabled />
           </div>
         </div>
         <div class="col-md-4">
           <div>
             <label>Grand Total</label>
-            <input type="number" name="GrandTotal" class="form-control" id="GrandTotal"
+            <input type="text" appCommaFormat name="GrandTotal" class="form-control" id="GrandTotal"
               [(ngModel)]="Entity.p.GrandTotal" disabled placeholder="Enter Grand Total" />
           </div>
         </div>
         <!-- <div class="col-md-4">
           <div>
             <label>Amount Paid</label>
-            <input type="number" name="AmountPaid" class="form-control" id="AmountPaid" [(ngModel)]="Entity.p.AmountPaid"  required placeholder="Enter Amount Paid" />
+            <input type="text" appCommaFormat name="AmountPaid" class="form-control" id="AmountPaid" [(ngModel)]="Entity.p.AmountPaid"  required placeholder="Enter Amount Paid" />
           </div>
         </div>
         <div class="col-md-4">
           <div>
             <label>Remaining Amount</label>
-            <input type="number" name="RemainingAmount" class="form-control" id="RemainingAmount" [(ngModel)]="Entity.p.RemainingAmount"  required placeholder="Enter Remaining Amount" />
+            <input type="text" appCommaFormat name="RemainingAmount" class="form-control" id="RemainingAmount" [(ngModel)]="Entity.p.RemainingAmount"  required placeholder="Enter Remaining Amount" />
           </div>
         </div> -->
       </div>

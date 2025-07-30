@@ -259,17 +259,17 @@
           </div>
           <div class="col-6 mb-1">
             <label>Requisition Quantity</label>
-            <input type="number" name="RequisitionQty" class="form-control"
+            <input type="text" appCommaFormat name="RequisitionQty" class="form-control"
               [(ngModel)]="newOrderMaterial.RequisitionQty" disabled />
           </div>
           <div class="col-6 mb-1">
             <label>Total Ordered Quantity</label>
-            <input type="number" name="TotalOrderedQty" class="form-control"
+            <input type="text" appCommaFormat name="TotalOrderedQty" class="form-control"
               [(ngModel)]="newOrderMaterial.TotalOrderedQty" disabled />
           </div>
           <div class="col-6 mb-1">
             <label>Ordered Quantity</label>
-            <input type="number" name="OrderedQty" class="form-control" [(ngModel)]="newOrderMaterial.OrderedQty"
+            <input type="text" appCommaFormat name="OrderedQty" class="form-control" [(ngModel)]="newOrderMaterial.OrderedQty"
               #OrderedQtyCtrl="ngModel" required (blur)="OrderedQtyCtrl.control.markAsTouched()"
               placeholder="Enter Ordered Quantity" (click)="selectAllValue($event)"
               (ngModelChange)="CalculateNetAmountAndTotalAmount()" />
@@ -282,17 +282,17 @@
           </div>
           <div class="col-6 mb-1">
             <label>Requisition Remaining Quantity</label>
-            <input type="number" name="QuotationRemainingQty" class="form-control"
+            <input type="text" appCommaFormat name="QuotationRemainingQty" class="form-control"
               [(ngModel)]="newOrderMaterial.RequisitionRemainingQty" disabled />
           </div>
           <div class="col-6 mb-1">
             <label>Extra Ordered Quantity</label>
-            <input type="number" name="ExtraOrderedQty" class="form-control"
+            <input type="text" appCommaFormat name="ExtraOrderedQty" class="form-control"
               [(ngModel)]="newOrderMaterial.ExtraOrderedQty" disabled />
           </div>
           <div class="col-6 mb-1">
             <label>Rate</label>
-            <input type="number" name="Rate" class="form-control" [(ngModel)]="newOrderMaterial.Rate"
+            <input type="text" appCommaFormat name="Rate" class="form-control" [(ngModel)]="newOrderMaterial.Rate"
               #RateCtrl="ngModel" required (blur)="RateCtrl.control.markAsTouched()" placeholder="Enter Rate"
               (click)="selectAllValue($event)" (ngModelChange)="CalculateNetAmountAndTotalAmount()" />
             <div *ngIf="RateCtrl.invalid && (RateCtrl.touched || RateCtrl.dirty)">
@@ -301,7 +301,7 @@
           </div>
           <div class="col-6 mb-1">
             <label>Discount Rate</label>
-            <input type="number" name="DiscountedRate" class="form-control"
+            <input type="text" appCommaFormat name="DiscountedRate" class="form-control"
               [(ngModel)]="newOrderMaterial.DiscountedRate" (ngModelChange)="CalculateNetAmountAndTotalAmount()"
               #DiscountedRateCtrl="ngModel" required (blur)="DiscountedRateCtrl.control.markAsTouched()"
               placeholder="Enter Discount Rate" (click)="selectAllValue($event)" />
@@ -315,7 +315,7 @@
           </div>
           <div class="col-6 mb-1">
             <label>Net Amount</label>
-            <input type="number" name="NetAmount" class="form-control" [(ngModel)]="newOrderMaterial.NetAmount"
+            <input type="text" appCommaFormat name="NetAmount" class="form-control" [(ngModel)]="newOrderMaterial.NetAmount"
              disabled />
           </div>
           <div class="col-6 mb-1">
@@ -334,7 +334,7 @@
           </div>
           <div class="col-6 mb-1">
             <label>Delivery Charges</label>
-            <input type="number" name="DeliveryCharges" class="form-control"
+            <input type="text" appCommaFormat name="DeliveryCharges" class="form-control"
               [(ngModel)]="newOrderMaterial.DeliveryCharges" #DeliveryCharges="ngModel" required
               (blur)="DeliveryCharges.control.markAsTouched()" placeholder="Enter DeliveryCharges"
               (click)="selectAllValue($event)" (ngModelChange)="CalculateNetAmountAndTotalAmount()" />
@@ -352,7 +352,7 @@
           </div>
           <div class="col-6 mb-1">
             <label>Total Amount</label>
-            <input type="number" name="TotalAmount" class="form-control" [(ngModel)]="newOrderMaterial.TotalAmount"
+            <input type="text" appCommaFormat name="TotalAmount" class="form-control" [(ngModel)]="newOrderMaterial.TotalAmount"
              disabled />
           </div>
         </div>

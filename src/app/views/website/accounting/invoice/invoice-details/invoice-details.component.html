@@ -294,7 +294,7 @@
           *ngIf="Entity.p.ExpenseType != LabourExpenseRef && !(Entity.p.ExpenseType == MachinaryExpenseRef&& Entity.p.UnitRef == TimeUnitRef) ">
           <div>
             <label>Quantity</label>
-            <input type="number" [(ngModel)]="Entity.p.Qty" name="Qty" class="form-control" id="Qty" required
+            <input type="text" appCommaFormat [(ngModel)]="Entity.p.Qty" name="Qty" class="form-control" id="Qty" required
               placeholder="Enter Quantity" #QtyCtrl="ngModel" (blur)="QtyCtrl.control.markAsTouched()"
               (click)="selectAllValue($event)" (ngModelChange)="CalculateAmount()" />
             <div *ngIf="QtyCtrl.invalid && (QtyCtrl.touched || QtyCtrl.dirty)">
@@ -305,7 +305,7 @@
         <div class="col-md-4" style="margin-top: 1rem" *ngIf="Entity.p.ExpenseType != LabourExpenseRef">
           <div>
             <label>Rate</label>
-            <input type="number" [(ngModel)]="Entity.p.Rate" name="Rate" class="form-control" id="Rate" required
+            <input type="text" appCommaFormat [(ngModel)]="Entity.p.Rate" name="Rate" class="form-control" id="Rate" required
               placeholder="Enter Rate" #RateCtrl="ngModel" (blur)="RateCtrl.control.markAsTouched()"
               (click)="selectAllValue($event)" (ngModelChange)="CalculateAmount()" />
             <div *ngIf="RateCtrl.invalid && (RateCtrl.touched || RateCtrl.dirty)">
@@ -323,7 +323,7 @@
         </div>
         <div class="col-md-4" style="margin-top: 1rem" *ngIf="isDieselPaid">
           <label>Diesel Quantity</label>
-          <input type="number" [(ngModel)]="Entity.p.DieselQty" name="DieselQty" class="form-control" id="DieselQty"
+          <input type="text" appCommaFormat [(ngModel)]="Entity.p.DieselQty" name="DieselQty" class="form-control" id="DieselQty"
             required placeholder="Enter Diesel Quantity" #DieselQtyCtrl="ngModel"
             (blur)="DieselQtyCtrl.control.markAsTouched()" (click)="selectAllValue($event)"
             (ngModelChange)="CalculateDieselAmount()" />
@@ -336,7 +336,7 @@
         </div>
         <div class="col-md-4" style="margin-top: 1rem" *ngIf="isDieselPaid">
           <label>Diesel Rate</label>
-          <input type="number" [(ngModel)]="Entity.p.DieselRate" name="DieselRate" class="form-control" id="DieselRate"
+          <input type="text" appCommaFormat [(ngModel)]="Entity.p.DieselRate" name="DieselRate" class="form-control" id="DieselRate"
             required placeholder="Enter Diesel Rate" #DieselRateCtrl="ngModel"
             (blur)="DieselRateCtrl.control.markAsTouched()" (click)="selectAllValue($event)"
             (ngModelChange)="CalculateDieselAmount()" />
@@ -349,7 +349,7 @@
         </div>
         <div class="col-md-4" style="margin-top: 1rem" *ngIf="isDieselPaid">
           <label>Diesel Amount</label>
-          <input type="number" [(ngModel)]="Entity.p.DieselAmount" name="DieselAmount" class="form-control"
+          <input type="text" appCommaFormat [(ngModel)]="Entity.p.DieselAmount" name="DieselAmount" class="form-control"
             id="DieselAmount" required placeholder="Diesel Amount" />
         </div>
       </div>
@@ -360,7 +360,7 @@
         <div class="col-md-4" style="margin-top: 1rem">
           <div>
             <label>Billing Amount</label>
-            <input type="number" [(ngModel)]="Entity.p.InvoiceAmount" name="InvoiceAmount" class="form-control"
+            <input type="text" appCommaFormat [(ngModel)]="Entity.p.InvoiceAmount" name="InvoiceAmount" class="form-control"
               id="InvoiceAmount" required placeholder="Enter InvoiceAmount" disabled />
           </div>
         </div>
@@ -514,7 +514,7 @@
           <div class="col-md-4" style="margin-top: 2rem">
             <div>
               <label for="LabourQty">Labour Quantity</label>
-              <input type="number" name="LabourQty" class="form-control" id="LabourQty"
+              <input type="text" appCommaFormat name="LabourQty" class="form-control" id="LabourQty"
                 [(ngModel)]="LabourTimeEntity.LabourQty" (ngModelChange)="calculateWorkedHours()"
                 placeholder="Enter Quantity " #LabourQtyCtrl="ngModel" (ngModelChange)="CalculateLabourAmount()"
                 required (blur)="LabourQtyCtrl.control.markAsTouched()" (click)="selectAllValue($event)" />
@@ -527,7 +527,7 @@
           <div class="col-md-4" style="margin-top: 2rem">
             <div>
               <label for="LabourRate">Labour Rate</label>
-              <input type="number" name="LabourRate" class="form-control" id="LabourRate"
+              <input type="text" appCommaFormat name="LabourRate" class="form-control" id="LabourRate"
                 [(ngModel)]="LabourTimeEntity.LabourRate" (ngModelChange)="calculateWorkedHours()"
                 placeholder="Enter Rate " #LabourRateCtrl="ngModel" (ngModelChange)="CalculateLabourAmount()" required
                 (blur)="LabourRateCtrl.control.markAsTouched()" (click)="selectAllValue($event)" />
@@ -540,7 +540,7 @@
           <div class="col-md-4" style="margin-top: 2rem">
             <div>
               <label for="LabourAmount">Labour Amount</label>
-              <input type="number" name="LabourAmount" class="form-control" id="LabourAmount"
+              <input type="text" appCommaFormat name="LabourAmount" class="form-control" id="LabourAmount"
                 [(ngModel)]="LabourTimeEntity.LabourAmount" placeholder="Amount" disabled />
             </div>
           </div>

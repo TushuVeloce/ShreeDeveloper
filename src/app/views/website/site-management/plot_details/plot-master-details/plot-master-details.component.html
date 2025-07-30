@@ -53,14 +53,14 @@
         </div>
         <div class="col-md-6 col-6">
           <label>Goverment Rate Per Sqm </label>
-          <input type="number" name="GovermentRatePerSqm" class="form-control date-input" id="GovermentRatePerSqm"
+          <input type="text" appCommaFormat name="GovermentRatePerSqm" class="form-control date-input" id="GovermentRatePerSqm"
             [(ngModel)]="Entity.p.GovermentRatePerSqm" #GovermentRatePerSqmCtrl="ngModel" required
             (blur)="GovermentRatePerSqmCtrl.control.markAsTouched()" placeholder="Enter Goverment Rate Per Sqm "
             (click)="selectAllValue($event)" />
         </div>
         <div class="col-md-6 col-6">
           <label>Basic Rate Per Sqft </label>
-          <input type="number" name="BasicRatePerSqft" class="form-control date-input" id="BasicRatePerSqft"
+          <input type="text" appCommaFormat name="BasicRatePerSqft" class="form-control date-input" id="BasicRatePerSqft"
             [(ngModel)]="Entity.p.BasicRatePerSqft" #BasicRatePerSqftCtrl="ngModel" required
             (blur)="BasicRatePerSqftCtrl.control.markAsTouched()" placeholder="Enter Basic Rate Per Sqft"
             (click)="selectAllValue($event)" />

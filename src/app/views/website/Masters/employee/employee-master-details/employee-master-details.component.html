@@ -224,7 +224,7 @@
         <div class="col-md-4 col-6">
           <div>
             <label>Salary Per Month</label>
-            <input type="number" name="SalaryPerMonth" [(ngModel)]="Entity.p.SalaryPerMonth  " class="form-control"
+            <input type="text" appCommaFormat name="SalaryPerMonth" [(ngModel)]="Entity.p.SalaryPerMonth  " class="form-control"
               id="SalaryPerMonth" placeholder="Enter Salary Per Month" required #SalaryPerMonthCtrl="ngModel"
               (blur)="SalaryPerMonthCtrl.control.markAsTouched()" (click)="selectAllValue($event)"
               (ngModelChange)="CalculatePerYearSalary()" />
@@ -236,7 +236,7 @@
         <div class="col-md-4 col-6">
           <div>
             <label>Salary Per Year</label>
-            <input type="number" name="SalaryPerYear" [(ngModel)]="Entity.p.SalaryPerYear" class="form-control"
+            <input type="text" appCommaFormat name="SalaryPerYear" [(ngModel)]="Entity.p.SalaryPerYear" class="form-control"
               id="SalaryPerYear" placeholder="Salary Per Year" readonly />
           </div>
         </div>

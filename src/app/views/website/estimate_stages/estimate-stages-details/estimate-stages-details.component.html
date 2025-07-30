@@ -41,7 +41,7 @@
         </div>
         <div class="col-md-6 col-sm-12 mb-3">
           <label for="Amount">Amount</label>
-          <input type="number" [(ngModel)]="Entity.p.Amount" name="Amount" class="form-control" id="Amount" required
+          <input type="text" appCommaFormat [(ngModel)]="Entity.p.Amount" name="Amount" class="form-control" id="Amount" required
             placeholder="Enter Display Order" #AmountCtrl="ngModel" required (blur)="AmountCtrl.control.markAsTouched()"
             (click)="selectAllValue($event)" />
           <div *ngIf="

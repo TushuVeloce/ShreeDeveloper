@@ -229,12 +229,12 @@
           </div>
           <div class="col-6 mb-1">
             <label>Required Quantity</label>
-            <input type="number" name="RequisitionQty" class=" form-control" [(ngModel)]="newQuotedMaterial.RequisitionQty"
+            <input type="text" appCommaFormat name="RequisitionQty" class=" form-control" [(ngModel)]="newQuotedMaterial.RequisitionQty"
               disabled />
           </div>
           <div class="col-6 mb-1">
             <label>Quotation Quantity</label>
-            <input type="number" name="QuotationOrderedQty" class="form-control" [(ngModel)]="newQuotedMaterial.QuotationOrderedQty"
+            <input type="text" appCommaFormat name="QuotationOrderedQty" class="form-control" [(ngModel)]="newQuotedMaterial.QuotationOrderedQty"
               #OrderedQtyCtrl="ngModel" required (blur)="OrderedQtyCtrl.control.markAsTouched()"
               placeholder="Enter Ordered Quantity" (click)="selectAllValue($event)"
               (ngModelChange)="CalculateNetAmountAndTotalAmount()" />
@@ -244,12 +244,12 @@
           </div>
           <div class="col-6 mb-1">
             <label>Required Remaining Quantity</label>
-            <input type="number" name="RequisitionRemainingQty" class=" form-control"
+            <input type="text" appCommaFormat name="RequisitionRemainingQty" class=" form-control"
               [(ngModel)]="newQuotedMaterial.RequisitionRemainingQty" disabled />
           </div>
           <div class="col-6 mb-1">
             <label>Rate</label>
-            <input type="number" name="Rate" class="form-control" [(ngModel)]="newQuotedMaterial.Rate"
+            <input type="text" appCommaFormat name="Rate" class="form-control" [(ngModel)]="newQuotedMaterial.Rate"
               #RateCtrl="ngModel" required (blur)="RateCtrl.control.markAsTouched()" placeholder="Enter Rate"
               (click)="selectAllValue($event)" (ngModelChange)="CalculateNetAmountAndTotalAmount()" />
             <div *ngIf="(RateCtrl.invalid && (RateCtrl.touched || RateCtrl.dirty))">
@@ -258,7 +258,7 @@
           </div>
           <div class="col-6 mb-1">
             <label>Discount Rate</label>
-            <input type="number" name="DiscountedRate" class="form-control"
+            <input type="text" appCommaFormat name="DiscountedRate" class="form-control"
               [(ngModel)]="newQuotedMaterial.DiscountedRate" (ngModelChange)="CalculateNetAmountAndTotalAmount()"
               #DiscountedRateCtrl="ngModel" required (blur)="DiscountedRateCtrl.control.markAsTouched()"
               placeholder="Enter Discount Rate" (click)="selectAllValue($event)" />
@@ -268,7 +268,7 @@
           </div>
           <div class="col-6 mb-1">
             <label>Net Amount</label>
-            <input type="number" name="NetAmount" class="form-control" [(ngModel)]="newQuotedMaterial.NetAmount"
+            <input type="text" appCommaFormat name="NetAmount" class="form-control" [(ngModel)]="newQuotedMaterial.NetAmount"
               disabled />
           </div>
           <div class="col-6 mb-1">
@@ -287,7 +287,7 @@
           </div>
           <div class="col-6 mb-1">
             <label>Delivery Charges</label>
-            <input type="number" name="DeliveryCharges" class="form-control"
+            <input type="text" appCommaFormat name="DeliveryCharges" class="form-control"
               [(ngModel)]="newQuotedMaterial.DeliveryCharges" #DeliveryCharges="ngModel" required
               (blur)="DeliveryCharges.control.markAsTouched()" placeholder="Enter DeliveryCharges"
               (click)="selectAllValue($event)" (ngModelChange)="CalculateNetAmountAndTotalAmount()" />
@@ -302,7 +302,7 @@
           </div>
           <div class="col-6 mb-1">
             <label>Total Amount</label>
-            <input type="number" name="TotalAmount" class=" form-control" [(ngModel)]="newQuotedMaterial.TotalAmount"
+            <input type="text" appCommaFormat name="TotalAmount" class=" form-control" [(ngModel)]="newQuotedMaterial.TotalAmount"
               disabled />
           </div>
         </div>

@@ -72,7 +72,7 @@
         <div class="col-md-4" style="margin-top: 1rem;"
           *ngIf="Entity.p.MarketingType == MarketingType.PrintingMedia">
           <label>Page</label>
-          <input type="number" [(ngModel)]="Entity.p.Page" name="Page" class="form-control" id="Page" required
+          <input type="text" appCommaFormat [(ngModel)]="Entity.p.Page" name="Page" class="form-control" id="Page" required
             placeholder="Enter Page" (click)="selectAllValue($event)"/>
         </div>
         <div class="col-md-4" style="margin-top: 1rem; ">
@@ -86,7 +86,7 @@
         </div>
         <div class="col-md-4" style="margin-top: 1rem; ">
           <label>Rate</label>
-          <input type="number" [(ngModel)]="Entity.p.Rate" name="Rate" class="form-control" id="Rate" required
+          <input type="text" appCommaFormat [(ngModel)]="Entity.p.Rate" name="Rate" class="form-control" id="Rate" required
             (ngModelChange)="calculateTotal()" (click)="selectAllValue($event)" placeholder="Enter Rate"  #RateCtrl="ngModel"
             (blur)="RateCtrl.control.markAsTouched()" />
           <div *ngIf="(RateCtrl.invalid && (RateCtrl.touched || RateCtrl.dirty))">
@@ -95,7 +95,7 @@
         </div>
         <div class="col-md-4" style="margin-top: 1rem; ">
           <label>Quantity</label>
-          <input type="number" [(ngModel)]="Entity.p.Quantity" name="Quantity" class="form-control" id="Quantity" required
+          <input type="text" appCommaFormat [(ngModel)]="Entity.p.Quantity" name="Quantity" class="form-control" id="Quantity" required
             (ngModelChange)="calculateTotal()" (click)="selectAllValue($event)" placeholder="Enter Quantity"  #QuantityCtrl="ngModel"
             (blur)="QuantityCtrl.control.markAsTouched()" />
           <div *ngIf="(QuantityCtrl.invalid && (QuantityCtrl.touched || QuantityCtrl.dirty))">
@@ -104,7 +104,7 @@
         </div>
         <div class="col-md-4" style="margin-top: 1rem; ">
           <label>Total</label>
-          <input type="number" [(ngModel)]="Entity.p.Total" name="Total" class="form-control" id="Total" required
+          <input type="text" appCommaFormat [(ngModel)]="Entity.p.Total" name="Total" class="form-control" id="Total" required
             placeholder="Total" disabled />
         </div>
         <div class="col-md-4" style="margin-top: 1rem; ">

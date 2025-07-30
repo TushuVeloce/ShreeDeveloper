@@ -53,12 +53,12 @@
         </div>
         <div class="col-md-4" style="margin-top: 1rem">
           <label for="CurrentQuantity"><b>Current Quantity</b></label>
-          <input type="number" [(ngModel)]="Entity.p.CurrentQuantity" name="CurrentQuantity" class="form-control"
+          <input type="text" appCommaFormat [(ngModel)]="Entity.p.CurrentQuantity" name="CurrentQuantity" class="form-control"
             id="CurrentQuantity" required placeholder="Enter Current Quantity" readonly/>
         </div>
         <div class="col-md-4" style="margin-top: 1rem">
           <label for="TransferredQuantity"><b>transferred Quantity</b></label>
-          <input type="number" [(ngModel)]="Entity.p.TransferredQuantity" name="TransferredQuantity"
+          <input type="text" appCommaFormat [(ngModel)]="Entity.p.TransferredQuantity" name="TransferredQuantity"
             class="form-control" id="TransferredQuantity" required placeholder="Enter Consumption Quantity" (ngModelChange)="calculateRemainingQuantity()"
             #TransferredQuantityCtrl="ngModel"  required (blur)="TransferredQuantityCtrl.control.markAsTouched()" (click)="selectAllValue($event)"/>
           <div *ngIf="TransferredQuantityCtrl.invalid && (TransferredQuantityCtrl.touched || TransferredQuantityCtrl.dirty)">
@@ -67,7 +67,7 @@
         </div>
         <!-- <div class="col-md-4" style="margin-top: 1rem">
           <label for="Rate"><b>Rate</b></label>
-          <input type="number" [(ngModel)]="Entity.p.Rate" name="Rate" class="form-control"
+          <input type="text" appCommaFormat[(ngModel)]="Entity.p.Rate" name="Rate" class="form-control"
             id="Rate" rows="1" required placeholder="Enter Rate" #RateCtrl="ngModel" (ngModelChange)="calculateAmount()"
             (blur)="RateCtrl.control.markAsTouched()" (click)="selectAllValue($event)"/>
           <div style="height: 25px" *ngIf="
@@ -90,12 +90,12 @@
         </div>
          <div class="col-md-4" style="margin-top: 1rem">
           <label for="Amount"><b>Amount</b></label>
-          <input type="number" [(ngModel)]="Entity.p.Amount" name="Amount" class="form-control" id="Amount"
+          <input type="text" appCommaFormat [(ngModel)]="Entity.p.Amount" name="Amount" class="form-control" id="Amount"
              readonly/>
         </div> -->
         <div class="col-md-4" style="margin-top: 1rem">
           <label for="RemainingQuantity"><b>Remaining Quantity</b></label>
-          <input type="number" [(ngModel)]="Entity.p.RemainingQuantity" name="RemainingQuantity" class="form-control"
+          <input type="text" appCommaFormat [(ngModel)]="Entity.p.RemainingQuantity" name="RemainingQuantity" class="form-control"
             id="RemainingQuantity" required placeholder="Enter Remaining Quantity" readonly/>
         </div>
       </div>

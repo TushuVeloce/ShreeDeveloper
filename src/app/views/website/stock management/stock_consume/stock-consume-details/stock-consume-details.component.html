@@ -48,12 +48,12 @@
         </div>
         <div class="col-md-4" style="margin-top: 1rem">
           <label for="CurrentQuantity"><b>Current Quantity</b></label>
-          <input type="number" [(ngModel)]="Entity.p.CurrentQuantity" name="CurrentQuantity" class="form-control"
+          <input type="text" appCommaFormat [(ngModel)]="Entity.p.CurrentQuantity" name="CurrentQuantity" class="form-control"
             id="CurrentQuantity" required placeholder="Enter Current Quantity" disabled />
         </div>
         <div class="col-md-4" style="margin-top: 1rem">
           <label for="ConsumedQuantity"><b>Consumed Quantity</b></label>
-          <input type="number" [(ngModel)]="Entity.p.ConsumedQuantity" name="ConsumedQuantity" class="form-control"
+          <input type="text" appCommaFormat [(ngModel)]="Entity.p.ConsumedQuantity" name="ConsumedQuantity" class="form-control"
             id="ConsumedQuantity" required placeholder="Enter Consumption Quantity" #ConsumedQuantityCtrl="ngModel"
             required (blur)="ConsumedQuantityCtrl.control.markAsTouched()" (click)="selectAllValue($event)"
             (ngModelChange)="CalculateRemainingQty()" />
@@ -64,7 +64,7 @@
         </div>
         <div class="col-md-4" style="margin-top: 1rem">
           <label for="RemainingQuantity"><b>Remaining Quantity</b></label>
-          <input type="number" [(ngModel)]="Entity.p.RemainingQuantity" name="RemainingQuantity" class="form-control"
+          <input type="text" appCommaFormat [(ngModel)]="Entity.p.RemainingQuantity" name="RemainingQuantity" class="form-control"
             id="RemainingQuantity" required placeholder="Enter Remaining Quantity" disabled />
         </div>
         <div class="col-md-4" style="margin-top: 1rem">

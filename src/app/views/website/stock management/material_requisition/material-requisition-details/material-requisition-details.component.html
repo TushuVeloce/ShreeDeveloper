@@ -133,7 +133,7 @@
           </div>
           <div class="col-md-4">
             <label>Required Quantity</label>
-            <input type="number" name="EstimatedQty" class="form-control" [(ngModel)]="newRequisition.RequisitionQty"
+            <input type="text" appCommaFormat name="EstimatedQty" class="form-control" [(ngModel)]="newRequisition.RequisitionQty"
               required placeholder="Enter Estimated Qty" (click)="selectAllValue($event)" />
           </div>
         </div>

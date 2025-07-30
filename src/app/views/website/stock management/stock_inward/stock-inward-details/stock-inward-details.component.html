@@ -248,12 +248,12 @@
           </div>
           <div class="col-6" style="margin-top: 1rem">
             <label>Ordered Quantity</label>
-            <input type="number" name="PurchaseOrderQty" class="form-control" [(ngModel)]="newInward.PurchaseOrderQty"
+            <input type="text" appCommaFormat name="PurchaseOrderQty" class="form-control" [(ngModel)]="newInward.PurchaseOrderQty"
               required placeholder="Ordered Quantity" (click)="selectAllValue($event)" />
           </div>
           <div class="col-6" style="margin-top: 1rem">
             <label>Inward Quantity</label>
-            <input type="number" name="InwardQty" class="form-control" [(ngModel)]="newInward.InwardQty" required
+            <input type="text" appCommaFormat name="InwardQty" class="form-control" [(ngModel)]="newInward.InwardQty" required
               placeholder="Inward Quantity" (click)="selectAllValue($event)" (ngModelChange)="
                 CalculateRemainingQty(
                   newInward.InwardQty,
@@ -263,7 +263,7 @@
           </div>
           <div class="col-6" style="margin-top: 1rem">
             <label>Remaining Quantity</label>
-            <input type="number" name="RemainingQty" class="form-control" [(ngModel)]="NewRemainingQty" required
+            <input type="text" appCommaFormat name="RemainingQty" class="form-control" [(ngModel)]="NewRemainingQty" required
               placeholder="Remaining Quantity" (click)="selectAllValue($event)" disabled />
           </div>
         </div>
