@@ -71,10 +71,10 @@ export class PlotMasterDetailsComponent implements OnInit {
       this.SiteName = this.Entity.p.SiteName
       this.SiteRf = this.Entity.p.SiteManagementRef
       this.appStateManage.StorageKey.removeItem('Editable');
-      if (this.Entity.p.CurrentBookingRemark == BookingRemark.Booked) {
+      if (this.Entity.p.CurrentBookingRemark == BookingRemarks.Booked) {
         this.isSaveDisabled = true
       }
-      if (this.Entity.p.CurrentBookingRemark == BookingRemark.Shree_Booked) {
+      if (this.Entity.p.CurrentBookingRemark == BookingRemarks.Plot_Of_Shree) {
         this.getCompanySingleRecord()
       }
       this.getCustomerListBySiteandBookingRef(this.Entity.p.SiteManagementRef)
@@ -132,7 +132,7 @@ export class PlotMasterDetailsComponent implements OnInit {
     this.CompanyEntity = Company.CreateNewInstance();
     this.Entity.p.CurrentOwnerRef = 0
     this.CustomerEntity = Owner.CreateNewInstance();
-    if (this.Entity.p.CurrentBookingRemark == BookingRemark.Shree_Booked) {
+    if (this.Entity.p.CurrentBookingRemark == BookingRemarks.Plot_Of_Shree) {
       let CompanyData = await Company.FetchInstance(this.CompanyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
       this.CompanyEntity = CompanyData;
     }
@@ -144,7 +144,7 @@ export class PlotMasterDetailsComponent implements OnInit {
     this.Entity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName()
     this.Entity.p.LoginEmployeeRef = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
     this.Entity.p.SiteManagementRef = this.SiteRf
-    if (this.Entity.p.CurrentBookingRemark == BookingRemark.Shree_Booked) {
+    if (this.Entity.p.CurrentBookingRemark == BookingRemarks.Plot_Of_Shree) {
       this.Entity.p.CurrentOwnerRef = 0
     }
     this.Entity.p.IsNewlyCreated = this.IsNewEntity;

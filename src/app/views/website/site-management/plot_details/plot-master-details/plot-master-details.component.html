@@ -74,12 +74,12 @@
               [nzLabel]="bookingremark.Name"></nz-option>
           </nz-select>
         </div>
-        <div class="col-md-4 col-6" *ngIf="Entity.p.CurrentBookingRemark == BookingRemark.Shree_Booked">
+        <div class="col-md-4 col-6" *ngIf="Entity.p.CurrentBookingRemark == BookingRemark.Plot_Of_Shree">
           <label>Company Name</label>
           <input type="text" name="CompanyName" class="form-control date-input" id="CompanyName" value={{CompanyName()}}
             disabled />
         </div>
-        <div class="col-md-4 col-6" *ngIf="Entity.p.CurrentBookingRemark != BookingRemark.Shree_Booked">
+        <div class="col-md-4 col-6" *ngIf="Entity.p.CurrentBookingRemark != BookingRemark.Plot_Of_Shree">
           <label>Owner Name</label>
           <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
             nzPlaceHolder="Select" [nzSize]="'large'" [(ngModel)]="Entity.p.CurrentOwnerRef" name="CurrentOwnerRef"
@@ -91,31 +91,31 @@
         <div class="col-md-4 col-6">
           <label>Mobile No</label>
           <input class="form-control date-input"
-            [value]="Entity.p.CurrentBookingRemark == BookingRemark.Shree_Booked ? CompanyEntity.p.Contacts : CustomerEntity.p.ContactNo"
+            [value]="Entity.p.CurrentBookingRemark == BookingRemark.Plot_Of_Shree ? CompanyEntity.p.Contacts : CustomerEntity.p.ContactNo"
             disabled />
         </div>
         <div class="col-md-4 col-6">
           <label>Country</label>
           <input class="form-control date-input"
-            [value]="Entity.p.CurrentBookingRemark == BookingRemark.Shree_Booked ? CompanyEntity.p.CountryName : CustomerEntity.p.CountryName"
+            [value]="Entity.p.CurrentBookingRemark == BookingRemark.Plot_Of_Shree ? CompanyEntity.p.CountryName : CustomerEntity.p.CountryName"
             disabled />
         </div>
         <div class="col-md-4 col-6">
           <label>State</label>
           <input class="form-control date-input"
-            [value]="Entity.p.CurrentBookingRemark == BookingRemark.Shree_Booked ? CompanyEntity.p.StateName : CustomerEntity.p.StateName"
+            [value]="Entity.p.CurrentBookingRemark == BookingRemark.Plot_Of_Shree ? CompanyEntity.p.StateName : CustomerEntity.p.StateName"
             disabled />
         </div>
         <div class="col-md-4 col-6">
           <label>City</label>
           <input class="form-control date-input"
-            [value]="Entity.p.CurrentBookingRemark == BookingRemark.Shree_Booked ? CompanyEntity.p.CityName : CustomerEntity.p.CityName"
+            [value]="Entity.p.CurrentBookingRemark == BookingRemark.Plot_Of_Shree ? CompanyEntity.p.CityName : CustomerEntity.p.CityName"
             disabled />
         </div>
         <div class="col-md-4 col-6">
           <label>Address</label>
           <input class="form-control date-input"
-            [value]="Entity.p.CurrentBookingRemark == BookingRemark.Shree_Booked ? CompanyEntity.p.AddressLine1 : CustomerEntity.p.Address"
+            [value]="Entity.p.CurrentBookingRemark == BookingRemark.Plot_Of_Shree ? CompanyEntity.p.AddressLine1 : CustomerEntity.p.Address"
             disabled />
         </div>
       </div>

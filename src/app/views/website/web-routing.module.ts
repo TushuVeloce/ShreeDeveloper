@@ -158,6 +158,7 @@ import { CustomersummarryReportComponent } from './customer_management/crmreport
 import { CustomerinfoReportComponent } from './customer_management/crmreports/customerinfo-report/customerinfo-report.component';
 import { StockSummaryComponent } from './stock management/stock-summary/stock-summary.component';
 import { CustomerVisitReportComponent } from './customer_management/customervisitreport/customer-visit-report/customer-visit-report.component';
+import { PaymentHistoryReportComponent } from './customer_management/crmreports/payment-history-report/payment-history-report/payment-history-report.component';
 
 
 const routes: Routes = [
@@ -307,6 +308,7 @@ const routes: Routes = [
       { path: 'Customer_Info_Report', component: CustomerinfoReportComponent },
 
       { path: 'Customer_Visit_Report', component: CustomerVisitReportComponent },
+      { path: 'Payment_History_Report', component: PaymentHistoryReportComponent },
 
 
       //Registrar Office
