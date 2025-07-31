@@ -707,6 +707,10 @@ input[type=number] {
 .form-container {
   --background: var(--ion-background-color);
   padding: 16px;
+
+  label {
+    font-weight: 500 !important;
+  }
 }
 
 .input-item {
@@ -1078,6 +1082,7 @@ textarea[placeholder]::placeholder {
     font-size: 16px;
   }
 }
+
 .custom-modal-mobile-app {
   --height: 60%;
   --width: 90%;

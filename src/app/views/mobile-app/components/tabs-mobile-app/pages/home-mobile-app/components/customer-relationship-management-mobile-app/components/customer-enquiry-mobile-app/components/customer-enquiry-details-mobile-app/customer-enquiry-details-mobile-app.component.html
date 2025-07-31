@@ -1,323 +1,315 @@
-<!-- <app-loader *ngIf="isLoading"></app-loader> -->
-
 <app-header-with-back-handler [title]="DetailsFormTitle"></app-header-with-back-handler>
 
-<ion-content class="form-container ">
-  <ion-list lines="none" class="ion-padding">
-    <!-- Date -->
-    <ion-item class="input-item" *ngIf="IsNewEntity">
-      <ion-label>Select Date</ion-label>
-      <ion-datetime-button datetime="EntryDate"></ion-datetime-button>
-    </ion-item>
-    <ion-modal keepContentsMounted="true">
-      <ng-template>
-        <ion-datetime id="EntryDate" presentation="date" [(ngModel)]="Date" show-default-buttons="true"></ion-datetime>
-      </ng-template>
-    </ion-modal>
+<ion-content class="form-container">
+  <form>
+    <ion-list lines="none" class="ion-padding">
+      <!-- Date -->
+      <ion-item class="input-item" *ngIf="IsNewEntity">
+        <ion-label>Select Date</ion-label>
+        <ion-datetime-button datetime="EntryDate"></ion-datetime-button>
+        <ion-checkbox slot="end" [(ngModel)]="Date" name="TransDate" [disabled]="true"></ion-checkbox>
+      </ion-item>
+      <ion-modal keepContentsMounted="true">
+        <ng-template>
+          <ion-datetime id="EntryDate" name="Date" presentation="date" [(ngModel)]="Date"
+            show-default-buttons="true"></ion-datetime>
+        </ng-template>
+      </ion-modal>
 
-    <!-- Customer Name -->
-    <ion-item class="input-item">
-      <ion-input label="Customer Name" labelPlacement="floating" placeholder="Enter Customer Name"
-        [(ngModel)]="Entity.p.Name"></ion-input>
-    </ion-item>
+      <!-- Customer Name -->
+      <ion-item class="input-item">
+        <ion-input label="Customer Name" name="customerName" [type]="'text'" labelPlacement="floating"
+          placeholder="Enter Customer Name" [(ngModel)]="Entity.p.Name"></ion-input>
+      </ion-item>
 
-    <!-- Contact No -->
-    <ion-item class="input-item">
-      <ion-input label="Contact No" labelPlacement="floating" placeholder="Enter Contact No"
-        [(ngModel)]="Entity.p.ContactNos" minlength="10"></ion-input>
-    </ion-item>
+      <!-- Contact No -->
+      <ion-item class="input-item">
+        <!-- appPhoneCommaFormat -->
+        <ion-input label="Contact No" name="contactNos" labelPlacement="floating" placeholder="Enter Contact No"
+          [(ngModel)]="Entity.p.ContactNos" type="text" maxlength="255"></ion-input>
+      </ion-item>
 
-    <!-- Select Country -->
-    <ion-item class="input-item" button (click)="selectCountryBottomsheet()">
-      <ion-label>Country</ion-label>
 
-      <!-- Text showing the selected status -->
-      <ion-text slot="end" class="status-text">
-        {{ CountryName }}
-      </ion-text>
-
-      <!-- Dropdown icon (chevron) on the right -->
-      <ion-icon name="chevron-down-outline" slot="end" class="dropdown-icon"></ion-icon>
-    </ion-item>
-
-    <!-- Select State -->
-    <ion-item class="input-item" button (click)="selectStateBottomsheet()">
-      <ion-label>State</ion-label>
-
-      <!-- Text showing the selected status -->
-      <ion-text slot="end" class="status-text">
-        {{ StateName }}
-      </ion-text>
-
-      <!-- Dropdown icon (chevron) on the right -->
-      <ion-icon name="chevron-down-outline" slot="end" class="dropdown-icon"></ion-icon>
-    </ion-item>
-
-    <!-- Select City -->
-    <ion-item class="input-item" button (click)="selectCityBottomsheet()">
-      <ion-label>City</ion-label>
-
-      <!-- Text showing the selected status -->
-      <ion-text slot="end" class="status-text">
-        {{ CityName }}
-      </ion-text>
-
-      <!-- Dropdown icon (chevron) on the right -->
-      <ion-icon name="chevron-down-outline" slot="end" class="dropdown-icon"></ion-icon>
-    </ion-item>
-
-    <!-- address -->
-    <ion-item class="input-item">
-      <ion-input label="Address" labelPlacement="floating" placeholder="Enter Address"
-        [(ngModel)]="Entity.p.Address"></ion-input>
-    </ion-item>
-
-    <!-- PinCode -->
-    <ion-item class="input-item">
-      <ion-input label="PinCode" labelPlacement="floating" placeholder="Enter PinCode" [(ngModel)]="Entity.p.PinCode"
-        [counter]="true" maxlength="6"></ion-input>
-    </ion-item>
-
-    <!-- Customer Requirement -->
-    <ion-item class="input-item" *ngIf="IsNewEntity">
-      <ion-input label="Customer Requirement" labelPlacement="floating" placeholder="Enter Customer Requirement"
-        [(ngModel)]="Entity.p.CustomerFollowUps[0].CustomerRequirement">
-      </ion-input>
-    </ion-item>
-
-    <!-- from of add Plot Table -->
-    <ion-list *ngIf="IsNewEntity">
-
-      <!-- Select Interested site -->
-      <ion-item class="input-item" button (click)="selectInterestedSiteBottomsheet()">
-        <ion-label>Interested Site</ion-label>
+      <!-- Select Country -->
+      <ion-item class="input-item" button detail (click)="selectCountryBottomsheet()"
+        [disabled]="CountryList.length === 0">
+        <ion-label>Country</ion-label>
 
         <!-- Text showing the selected status -->
         <ion-text slot="end" class="status-text">
-          {{ SiteManagementName|| 'Select' }}
+          {{ CountryName }}
         </ion-text>
-
-        <!-- Dropdown icon (chevron) on the right -->
-        <ion-icon name="chevron-down-outline" slot="end" class="dropdown-icon"></ion-icon>
       </ion-item>
 
-      <!-- Select Interested plots -->
-      <ion-item class="input-item" button (click)="selectInterestedPlotsBottomsheet()">
-        <ion-label>Interested Plots</ion-label>
+      <!-- Select State -->
+      <ion-item class="input-item" button detail (click)="selectStateBottomsheet()" [disabled]="StateList.length === 0">
+        <ion-label>State</ion-label>
 
         <!-- Text showing the selected status -->
         <ion-text slot="end" class="status-text">
-          {{ InterestedPlotNo|| 'Select' }}
+          {{ StateName }}
         </ion-text>
-
-        <!-- Dropdown icon (chevron) on the right -->
-        <ion-icon name="chevron-down-outline" slot="end" class="dropdown-icon"></ion-icon>
       </ion-item>
 
-      <!-- Plot Buttons -->
+      <!-- Select City -->
+      <ion-item class="input-item" button detail (click)="selectCityBottomsheet()" [disabled]="CityList.length === 0">
+        <ion-label>City</ion-label>
+
+        <!-- Text showing the selected status -->
+        <ion-text slot="end" class="status-text">
+          {{ CityName }}
+        </ion-text>
+      </ion-item>
+
+      <!-- address -->
+      <ion-item class="input-item">
+        <ion-input label="Address" labelPlacement="floating" placeholder="Enter Address" [(ngModel)]="Entity.p.Address"
+          [type]="'text'" name="address"></ion-input>
+      </ion-item>
+
+      <!-- PinCode -->
+      <ion-item class="input-item">
+        <ion-input label="PinCode" name="pinCode" labelPlacement="floating" placeholder="Enter PinCode"
+          [(ngModel)]="Entity.p.PinCode" [counter]="true" maxlength="6" [type]="'number'"></ion-input>
+      </ion-item>
+
+      <!-- Customer Requirement -->
+      <ion-item class="input-item" *ngIf="IsNewEntity">
+        <ion-input label="Customer Requirement" name="requirement" [type]="'text'" labelPlacement="floating"
+          placeholder="Enter Customer Requirement" [(ngModel)]="Entity.p.CustomerFollowUps[0].CustomerRequirement">
+        </ion-input>
+      </ion-item>
+
+      <!-- from of add Plot Table -->
+      <ion-list *ngIf="IsNewEntity">
+
+        <!-- Select Interested site -->
+        <ion-item class="input-item" button (click)="selectInterestedSiteBottomsheet()" detail
+          [disabled]="SiteList.length === 0">
+          <ion-label>Interested Site</ion-label>
+
+          <!-- Text showing the selected status -->
+          <ion-text slot="end" class="status-text">
+            {{ SiteManagementName|| 'Select' }}
+          </ion-text>
+        </ion-item>
+
+        <!-- Select Interested plots -->
+        <ion-item class="input-item" button (click)="selectInterestedPlotsBottomsheet()" detail
+          [disabled]="PlotList.length === 0">
+          <ion-label>Interested Plots</ion-label>
+
+          <!-- Text showing the selected status -->
+          <ion-text slot="end" class="status-text">
+            {{ InterestedPlotNo|| 'Select' }}
+          </ion-text>
+        </ion-item>
+
+        <!-- Plot Buttons -->
+        <ion-grid>
+          <ion-row>
+            <ion-col size="12">
+              <ion-button expand="block" (click)="addDataToTable()" class="submit-button primary-button"
+                [disabled]="InterestedPlotRef==0 || SiteManagementRef == 0">
+                Add Plots
+              </ion-button>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-list>
+
+      <!--Table For site and Plot details -->
+      <ion-list
+        *ngIf="IsPlotDetails && IsNewEntity && Entity.p.CustomerFollowUps[0].CustomerFollowUpPlotDetails.length > 0">
+        <ion-item lines="none">
+          <ion-label class="ion-text-center" style="font-weight: bold; font-size: 1.2rem;">
+            Interested Plots
+          </ion-label>
+        </ion-item>
+        <ion-card *ngFor="let plot of Entity.p.CustomerFollowUps[0].CustomerFollowUpPlotDetails; let i = index">
+          <ion-card-header>
+            <!-- <ion-card-title>{{ plot.SiteName }}</ion-card-title> -->
+            <ion-card-subtitle>Plot #{{ (currentPage - 1) * pageSize + i + 1 }}</ion-card-subtitle>
+          </ion-card-header>
+
+          <ion-card-content>
+            <ion-item>
+              <ion-label>Site Name</ion-label>
+              <ion-text>{{ plot.SiteName }}</ion-text>
+            </ion-item>
+            <ion-item>
+              <ion-label>Plot No</ion-label>
+              <ion-text>{{ plot.PlotName }}</ion-text>
+            </ion-item>
+            <ion-item>
+              <ion-label>Area (sqm)</ion-label>
+              <ion-text>{{ plot.PlotAreaInSqm }}</ion-text>
+            </ion-item>
+
+            <ion-item>
+              <ion-label>Area (sqft)</ion-label>
+              <ion-text>{{ plot.PlotAreaInSqft }}</ion-text>
+            </ion-item>
+
+            <ion-item>
+              <ion-label>Status</ion-label>
+              <ion-select interface="popover" [mode]="'ios'" name="{{plot.PlotName.trim() + '_' + i + 100}}"
+                [(ngModel)]="plot.CustomerStatus" placeholder="Select Status">
+                <ion-select-option *ngFor="let status of filteredCustomerStatusList" [value]="status.Ref">
+                  {{ status.Name }}
+                </ion-select-option>
+              </ion-select>
+            </ion-item>
+
+            <ion-item>
+              <ion-label position="stacked">Reason</ion-label>
+              <ion-input [name]="(plot?.PlotName?.trim() || 'plot') + '_' + (i + 1000)" [(ngModel)]="plot.Reason"
+                placeholder="Enter Reason"></ion-input>
+            </ion-item>
+          </ion-card-content>
+        </ion-card>
+      </ion-list>
+
+      <ion-list *ngIf="IsNewEntity">
+        <!-- Select Lead Source -->
+        <ion-item class="input-item" button (click)="selectLeadSourceBottomsheet()" detail
+          [disabled]="MarketingModesList.length === 0">
+          <ion-label>Lead Source</ion-label>
+
+          <!-- Text showing the selected status -->
+          <ion-text slot="end" class="status-text">
+            {{ LeadSourceName|| 'Select' }}
+          </ion-text>
+        </ion-item>
+
+        <!-- Additional input field for Agent Broker -->
+        <ion-item class="input-item" *ngIf="showAgentBrokerInput">
+          <ion-input label="Agent Name" name="brokerName" [type]="'text'" labelPlacement="floating"
+            placeholder="Enter Agent Name" [(ngModel)]="Entity.p.CustomerFollowUps[0].BrokerName">
+          </ion-input>
+        </ion-item>
+        <!-- END -->
+
+        <!-- Select Lead Handled By -->
+        <ion-item class="input-item" button (click)="selectLeadHandleByBottomsheet()" detail
+          [disabled]="EmployeeList.length === 0">
+          <ion-label>Lead Handled By</ion-label>
+
+          <!-- Text showing the selected status -->
+          <ion-text slot="end" class="status-text">
+            {{ LeadHandleByName|| 'Select' }}
+          </ion-text>
+        </ion-item>
+
+        <!-- Select Contact Mode -->
+        <ion-item class="input-item" button (click)="selectContactModeBottomsheet()" *ngIf="!showAgentBrokerInput"
+          detail [disabled]="ContactModeList.length === 0">
+          <ion-label>Contact Mode</ion-label>
+
+          <!-- Text showing the selected status -->
+          <ion-text slot="end" class="status-text">
+            {{ contactModeName|| 'Select' }}
+          </ion-text>
+        </ion-item>
+      </ion-list>
+
+      <ion-list *ngIf="IsNewEntity">
+        <!-- Select Contact Mode of show Agent BrokerInput -->
+        <ion-item class="input-item" button (click)="selectContactModeInAgentBrokerBottomsheet()"
+          *ngIf="showAgentBrokerInput" detail [disabled]="ContactModeList.length === 0">
+          <ion-label>Contact Mode</ion-label>
+
+          <!-- Text showing the selected status -->
+          <ion-text slot="end" class="status-text">
+            {{ contactModeNameInAgentBroker|| 'Select' }}
+          </ion-text>
+        </ion-item>
+        <!-- Reason -->
+        <ion-item class="input-item" *ngIf="IsNewEntity">
+          <ion-input label="Reason" [type]="'text'" name="main_reason" labelPlacement="floating"
+            placeholder="Enter Reason" [(ngModel)]="Entity.p.CustomerFollowUps[0].Reason">
+          </ion-input>
+        </ion-item>
+
+        <!-- Select Customer Status -->
+        <ion-item class="input-item" button detail (click)="selectCustomerStatusBottomsheet()"
+          [disabled]="CustomerStatusList.length === 0">
+          <ion-label>Customer Status</ion-label>
+
+          <!-- Text showing the selected status -->
+          <ion-text slot="end" class="status-text">
+            {{ Entity.p.CustomerFollowUps[0].CustomerStatusName || 'Select' }}
+          </ion-text>
+
+        </ion-item>
+      </ion-list>
+
+      <ion-list *ngIf="IsNewEntity">
+        <!-- Remark -->
+        <ion-item class="input-item">
+          <ion-input label="Remark" name="remark" labelPlacement="floating" placeholder="Enter Remark"
+            [(ngModel)]="Entity.p.CustomerFollowUps[0].Remark">
+          </ion-input>
+        </ion-item>
+
+        <!-- Next Site Visit Date -->
+        <ion-item class="input-item">
+          <ion-label>Next Site Visit Date</ion-label>
+          <ion-datetime-button datetime="NextSiteVisitDate"></ion-datetime-button>
+          <ion-checkbox slot="end" [(ngModel)]="localSiteVisitDate" name="siteVisitDateCheckBox" [disabled]="true"></ion-checkbox>
+        </ion-item>
+        <ion-modal keepContentsMounted="true">
+          <ng-template>
+            <ion-datetime id="NextSiteVisitDate" name="siteVisitDate" presentation="date"
+              [(ngModel)]="localSiteVisitDate" show-default-buttons="true"></ion-datetime>
+          </ng-template>
+        </ion-modal>
+
+
+        <!-- Next Office Visit Date -->
+        <ion-item class="input-item">
+          <ion-label>Next Site Office Date</ion-label>
+          <ion-datetime-button datetime="NextSiteOfficeDate"></ion-datetime-button>
+          <ion-checkbox slot="end" [(ngModel)]="localOfficeVisitDate" name="officeVisitDateCheckBox" [disabled]="true"></ion-checkbox>
+        </ion-item>
+        <ion-modal keepContentsMounted="true">
+          <ng-template>
+            <ion-datetime id="NextSiteOfficeDate" name="officeVisitDate" presentation="date"
+              [(ngModel)]="localOfficeVisitDate" show-default-buttons="true"></ion-datetime>
+          </ng-template>
+        </ion-modal>
+
+
+        <!-- Reminder Date -->
+        <ion-item class="input-item">
+          <ion-label>Reminder Date</ion-label>
+          <ion-datetime-button datetime="ReminderDate"></ion-datetime-button>
+          <ion-checkbox slot="end" [(ngModel)]="localReminderDate" name="reminderDateCheckBox" [disabled]="true"></ion-checkbox>
+        </ion-item>
+        <ion-modal [keepContentsMounted]="true">
+          <ng-template>
+            <ion-datetime id="ReminderDate" name="reminderDate" presentation="date" [(ngModel)]="localReminderDate"
+              show-default-buttons="true">
+            </ion-datetime>
+          </ng-template>
+        </ion-modal>
+      </ion-list>
+      <!-- Main Buttons -->
       <ion-grid>
         <ion-row>
-          <ion-col size="12">
-            <ion-button expand="block" (click)="addDataToTable()" class="submit-button primary-button">
-              Add Plots
+          <ion-col size="6">
+            <ion-button expand="block" color="medium" (click)="goBack()" class="submit-button cancel-button">
+              Cancel
+            </ion-button>
+          </ion-col>
+          <ion-col size="6">
+            <ion-button expand="block" color="primary" (click)="SaveCustomerEnquiry()"
+              class="submit-button primary-button">
+              Save
             </ion-button>
           </ion-col>
         </ion-row>
       </ion-grid>
     </ion-list>
-
-    <!--Table For site and Plot details -->
-    <ion-list *ngIf="IsPlotDetails && IsNewEntity">
-      <ion-item lines="none">
-        <ion-label class="ion-text-center" style="font-weight: bold; font-size: 1.2rem;">
-          Interested Plots
-        </ion-label>
-      </ion-item>
-      <ion-card *ngFor="let plot of Entity.p.CustomerFollowUps[0].CustomerFollowUpPlotDetails; let i = index">
-        <ion-card-header>
-          <!-- <ion-card-title>{{ plot.SiteName }}</ion-card-title> -->
-          <ion-card-subtitle>Plot #{{ (currentPage - 1) * pageSize + i + 1 }}</ion-card-subtitle>
-        </ion-card-header>
-
-        <ion-card-content>
-          <ion-item>
-            <ion-label>Site Name</ion-label>
-            <ion-text>{{ plot.SiteName }}</ion-text>
-          </ion-item>
-          <ion-item>
-            <ion-label>Area (sqm)</ion-label>
-            <ion-text>{{ plot.PlotAreaInSqm }}</ion-text>
-          </ion-item>
-
-          <ion-item>
-            <ion-label>Area (sqft)</ion-label>
-            <ion-text>{{ plot.PlotAreaInSqft }}</ion-text>
-          </ion-item>
-
-          <ion-item>
-            <ion-label>Status</ion-label>
-            <ion-select interface="popover" name="{{plot.PlotName.trim() + '_' + i + 100}}"
-              [(ngModel)]="plot.CustomerStatus" placeholder="Select Status">
-              <ion-select-option *ngFor="let status of CustomerStatusList" [value]="status.Ref">
-                {{ status.Name }}
-              </ion-select-option>
-            </ion-select>
-          </ion-item>
-
-          <ion-item>
-            <ion-label position="stacked">Reason</ion-label>
-            <ion-input [name]="(plot?.PlotName?.trim() || 'plot') + '_' + (i + 1000)" [(ngModel)]="plot.Reason"
-              placeholder="Enter Reason"></ion-input>
-          </ion-item>
-        </ion-card-content>
-      </ion-card>
-    </ion-list>
-
-    <ion-list *ngIf="IsNewEntity">
-      <!-- Select Lead Source -->
-      <ion-item class="input-item" button (click)="selectLeadSourceBottomsheet()">
-        <ion-label>Lead Source</ion-label>
-
-        <!-- Text showing the selected status -->
-        <ion-text slot="end" class="status-text">
-          {{ LeadSourceName|| 'Select' }}
-        </ion-text>
-
-        <!-- Dropdown icon (chevron) on the right -->
-        <ion-icon name="chevron-down-outline" slot="end" class="dropdown-icon"></ion-icon>
-      </ion-item>
-
-      <!-- Additional input field for Agent Broker -->
-      <ion-item class="input-item" *ngIf="!showAgentBrokerInput">
-        <ion-input label="Agent Name" labelPlacement="floating" placeholder="Enter Agent Name"
-          [(ngModel)]="Entity.p.CustomerFollowUps[0].BrokerName">
-        </ion-input>
-      </ion-item>
-      <!-- END -->
-
-      <!-- Select Lead Handled By -->
-      <ion-item class="input-item" button (click)="selectLeadHandleByBottomsheet()">
-        <ion-label>Lead Handled By</ion-label>
-
-        <!-- Text showing the selected status -->
-        <ion-text slot="end" class="status-text">
-          {{ LeadHandleByName|| 'Select' }}
-        </ion-text>
-
-        <!-- Dropdown icon (chevron) on the right -->
-        <ion-icon name="chevron-down-outline" slot="end" class="dropdown-icon"></ion-icon>
-      </ion-item>
-
-      <!-- Select Contact Mode -->
-      <ion-item class="input-item" button (click)="selectContactModeBottomsheet()" *ngIf="!showAgentBrokerInput">
-        <ion-label>Contact Mode</ion-label>
-
-        <!-- Text showing the selected status -->
-        <ion-text slot="end" class="status-text">
-          {{ contactModeName|| 'Select' }}
-        </ion-text>
-
-        <!-- Dropdown icon (chevron) on the right -->
-        <ion-icon name="chevron-down-outline" slot="end" class="dropdown-icon"></ion-icon>
-      </ion-item>
-    </ion-list>
-
-    <ion-list *ngIf="IsNewEntity">
-      <!-- Select Contact Mode of show Agent BrokerInput -->
-      <ion-item class="input-item" button (click)="selectContactModeInAgentBrokerBottomsheet()"
-        *ngIf="showAgentBrokerInput">
-        <ion-label>Contact Mode</ion-label>
-
-        <!-- Text showing the selected status -->
-        <ion-text slot="end" class="status-text">
-          {{ contactModeNameInAgentBroker|| 'Select' }}
-        </ion-text>
-
-        <!-- Dropdown icon (chevron) on the right -->
-        <ion-icon name="chevron-down-outline" slot="end" class="dropdown-icon"></ion-icon>
-      </ion-item>
-      <!-- Reason -->
-      <ion-item class="input-item" *ngIf="IsNewEntity">
-        <ion-input label="Reason" labelPlacement="floating" placeholder="Enter Reason"
-          [(ngModel)]="Entity.p.CustomerFollowUps[0].Reason">
-        </ion-input>
-      </ion-item>
-
-      <!-- Select Customer Status -->
-      <ion-item class="input-item" button (click)="selectCustomerStatusBottomsheet()">
-        <ion-label>Customer Status</ion-label>
-
-        <!-- Text showing the selected status -->
-        <ion-text slot="end" class="status-text">
-          {{ Entity.p.CustomerFollowUps[0].CustomerStatusName || 'Select' }}
-        </ion-text>
-
-        <!-- Dropdown icon (chevron) on the right -->
-        <ion-icon name="chevron-down-outline" slot="end" class="dropdown-icon"></ion-icon>
-      </ion-item>
-    </ion-list>
-
-    <ion-list *ngIf="IsNewEntity">
-      <!-- Remark -->
-      <ion-item class="input-item">
-        <ion-input label="Remark" labelPlacement="floating" placeholder="Enter Remark"
-          [(ngModel)]="Entity.p.CustomerFollowUps[0].Remark">
-        </ion-input>
-      </ion-item>
-
-      <!-- Next Site Visit Date -->
-      <ion-item class="input-item">
-        <ion-label>Next Site Visit Date</ion-label>
-        <ion-datetime-button datetime="NextSiteVisitDate"></ion-datetime-button>
-      </ion-item>
-      <ion-modal keepContentsMounted="true">
-        <ng-template>
-          <ion-datetime id="NextSiteVisitDate" presentation="date" [(ngModel)]="localSiteVisitDate"
-            show-default-buttons="true"></ion-datetime>
-        </ng-template>
-      </ion-modal>
-
-
-      <!-- Next Office Visit Date -->
-      <ion-item class="input-item">
-        <ion-label>Next Site Office Date</ion-label>
-        <ion-datetime-button datetime="NextSiteOfficeDate"></ion-datetime-button>
-      </ion-item>
-      <ion-modal keepContentsMounted="true">
-        <ng-template>
-          <ion-datetime id="NextSiteOfficeDate" presentation="date" [(ngModel)]="localOfficeVisitDate"
-            show-default-buttons="true"></ion-datetime>
-        </ng-template>
-      </ion-modal>
-
-
-      <!-- Reminder Date -->
-      <ion-item class="input-item">
-        <ion-label>Reminder Date</ion-label>
-        <ion-datetime-button datetime="ReminderDate"></ion-datetime-button>
-      </ion-item>
-      <ion-modal [keepContentsMounted]="true">
-        <ng-template>
-          <ion-datetime id="ReminderDate" presentation="date" [(ngModel)]="localReminderDate"
-            show-default-buttons="true">
-          </ion-datetime>
-        </ng-template>
-      </ion-modal>
-    </ion-list>
-    <!-- Main Buttons -->
-    <ion-grid>
-      <ion-row>
-        <ion-col size="6">
-          <ion-button expand="block" (click)="goBack()" class="submit-button cancel-button">
-            Cancel
-          </ion-button>
-        </ion-col>
-        <ion-col size="6">
-          <ion-button expand="block" (click)="SaveCustomerEnquiry()" class="submit-button primary-button">
-            Save
-          </ion-button>
-        </ion-col>
-      </ion-row>
-    </ion-grid>
-  </ion-list>
+  </form>
 </ion-content>

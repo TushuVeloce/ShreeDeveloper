@@ -71,7 +71,7 @@ export class CustomerEnquiryViewMobileAppComponent implements OnInit {
     (event.target as HTMLIonRefresherElement).complete();
   }
 
-  loadFilters() {
+  loadFilters=()=> {
     this.filters = [
       {
         key: 'status',
@@ -86,10 +86,7 @@ export class CustomerEnquiryViewMobileAppComponent implements OnInit {
     ];
   }
 
-  async onFiltersChanged(updatedFilters: any[]) {
-    // debugger
-    console.log('Updated Filters:', updatedFilters);
-
+  onFiltersChanged = async (updatedFilters: any[]) =>{
     for (const filter of updatedFilters) {
       const selected = filter.selected;
       const selectedValue = (selected === null || selected === undefined) ? null : selected;
@@ -106,7 +103,7 @@ export class CustomerEnquiryViewMobileAppComponent implements OnInit {
     await this.filterCustomerList();
     this.loadFilters(); // Reload filters with updated options & preserve selections
   }
-  private async loadCRMIfCompanyExists(): Promise<void> {
+  private loadCRMIfCompanyExists = async (): Promise<void> => {
     this.companyRef = Number(this.appStateManagement.localStorage.getItem('SelectedCompanyRef'));
     if (this.companyRef <= 0) {
        await this.toastService.present('company not selected', 1000, 'danger');
@@ -116,11 +113,10 @@ export class CustomerEnquiryViewMobileAppComponent implements OnInit {
     await this.getCustomerEnquiryListByCompanyRef();
   }
 
-  async getCustomerEnquiryListByCompanyRef() {
+  getCustomerEnquiryListByCompanyRef = async () =>{
     try {
       this.CustomerEnquiryList = [];
       this.FilteredCustomerEnquiryList = [];
-      // this.isLoading = true;
       await this.loadingService.show();
       if (this.companyRef <= 0) {
          await this.toastService.present('company not selected', 1000, 'danger');
@@ -130,7 +126,6 @@ export class CustomerEnquiryViewMobileAppComponent implements OnInit {
       let lst = await CustomerEnquiry.FetchEntireListByCompanyRef(
         this.companyRef,
         async (errMsg) =>{
-          //  await this.uiUtils.showErrorMessage('Error', errMsg)
           await this.toastService.present('Error'+errMsg, 1000, 'danger');
           await this.haptic.error();
           }
@@ -141,22 +136,18 @@ export class CustomerEnquiryViewMobileAppComponent implements OnInit {
       console.log('FilteredCustomerEnquiryList :', this.FilteredCustomerEnquiryList);
       this.filterCustomerList();
     } catch (error: any) {
-      // await this.uiUtils.showErrorMessage('Unexpected Error', error?.message || 'Something went wrong');
     } finally {
-      // this.isLoading = false;
       await this.loadingService.hide();
     }
   }
 
-  filterCustomerList() {
-    console.log('this.selectedStatus :', this.selectedStatus);
+  filterCustomerList=()=> {
     if (this.selectedStatus === 0) {
       this.FilteredCustomerEnquiryList = this.CustomerEnquiryList;
     } else {
       this.FilteredCustomerEnquiryList = this.CustomerEnquiryList.filter(
         (customer) => customer.p.CustomerStatus === this.selectedStatus
       );
-      console.log('this.FilteredCustomerEnquiryList :', this.FilteredCustomerEnquiryList);
     }
   }
 
@@ -168,26 +159,11 @@ export class CustomerEnquiryViewMobileAppComponent implements OnInit {
       this.appStateManagement.StorageKey.setItem('Editable', 'Edit');
       this.router.navigate(['mobile-app/tabs/dashboard/customer-relationship-management/customer-enquiry/edit']);
     } catch (error: any) {
-      // await this.uiUtils.showErrorMessage('Error', error?.message || 'Could not open edit form.');
     }
   };
 
   onDeleteClicked = async (item: CustomerEnquiry) => {
     try {
-      // await this.uiUtils.showConfirmationMessage(
-      //   'Delete',
-      //   `This process is <strong>IRREVERSIBLE!</strong><br/>Are you sure that you want to DELETE this Customer Enquiry?`,
-      //   async () => {
-      //     try {
-      //       await item.DeleteInstance(async () => {
-      //         await this.uiUtils.showSuccessToster(`Customer Enquiry ${item.p.Name} has been deleted!`);
-      //         await this.getCustomerEnquiryListByCompanyRef();
-      //       });
-      //     } catch (deleteError: any) {
-      //       await this.uiUtils.showErrorMessage('Delete Failed', deleteError?.message || 'Could not delete.');
-      //     }
-      //   }
-      // );
       this.alertService.presentDynamicAlert({
         header: 'Delete',
         subHeader: 'Confirmation needed',
@@ -216,29 +192,25 @@ export class CustomerEnquiryViewMobileAppComponent implements OnInit {
                 });
                 await this.getCustomerEnquiryListByCompanyRef();
               } catch (err) {
-                console.error('Error deleting Customer Enquiry:', err);
-                await this.toastService.present('Failed to delete Customer Enquiry', 1000, 'danger');
-                await this.haptic.error();
               }
             }
           }
         ]
       });
     } catch (error: any) {
-      // await this.uiUtils.showErrorMessage('Error', error?.message || 'Something went wrong.');
     }
   };
 
-  onViewClicked(item: CustomerEnquiry) {
+  onViewClicked= async (item: CustomerEnquiry)=> {
     this.SelectedCustomerEnquiry = item;
     this.ModalOpen = true;
   }
 
-  closeModal() {
+  closeModal=()=> {
     this.ModalOpen = false;
   }
 
-  async AddCustomerEnquiryForm() {
+  AddCustomerEnquiryForm = async () => {
     try {
       if (this.companyRef <= 0) {
          await this.toastService.present('company not selected', 1000, 'danger');
@@ -247,7 +219,6 @@ export class CustomerEnquiryViewMobileAppComponent implements OnInit {
       }
       this.router.navigate(['mobile-app/tabs/dashboard/customer-relationship-management/customer-enquiry/add']);
     } catch (error: any) {
-      // await this.uiUtils.showErrorMessage('Error', error?.message || 'Failed to open the add form.');
     }
   }
 
@@ -258,41 +229,37 @@ export class CustomerEnquiryViewMobileAppComponent implements OnInit {
     }));
   };
 
-  openFilterSheet = async () => {
-    const filterData = {
-      categories: [
-        {
-          Name: 'Customer Status',
-          Ref: 100,
-          multi: false,
-          date: false,
-          dependUponRef: 0,
-          options: this.CustomerStatusList
-        }
-      ]
-    };
-    try {
-      const res = await this.filterService.openFilter(filterData, this.selectedFilters);
-      console.log('res :', res);
-
-      if (res.selected && res.selected.length > 0) {
-        this.selectedFilters = res.selected;
-
-        for (const filter of this.selectedFilters) {
-
-          switch (filter.category.Ref) {
-            case 100:
-              this.selectedStatus = filter.selectedOptions[0].Ref;
-              break;
-          }
-        }
-        this.filterCustomerList();
-      } else {
-        this.selectedStatus = 0;
-        this.filterCustomerList();
-      }
-    } catch (error) {
-      // console.error('Error in filter selection:', error);
-    }
-  };
+  // openFilterSheet = async () => {
+  //   const filterData = {
+  //     categories: [
+  //       {
+  //         Name: 'Customer Status',
+  //         Ref: 100,
+  //         multi: false,
+  //         date: false,
+  //         dependUponRef: 0,
+  //         options: this.CustomerStatusList
+  //       }
+  //     ]
+  //   };
+  //   try {
+  //     const res = await this.filterService.openFilter(filterData, this.selectedFilters);
+  //     if (res.selected && res.selected.length > 0) {
+  //       this.selectedFilters = res.selected;
+  //       for (const filter of this.selectedFilters) {
+  //         switch (filter.category.Ref) {
+  //           case 100:
+  //             this.selectedStatus = filter.selectedOptions[0].Ref;
+  //             break;
+  //         }
+  //       }
+  //       this.filterCustomerList();
+  //     } else {
+  //       this.selectedStatus = 0;
+  //       this.filterCustomerList();
+  //     }
+  //   } catch (error) {
+  //     // console.error('Error in filter selection:', error);
+  //   }
+  // };
 }

@@ -14,9 +14,7 @@ import { State } from 'src/app/classes/domain/entities/website/masters/state/sta
 import { CurrentDateTimeRequest } from 'src/app/classes/infrastructure/request_response/currentdatetimerequest';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { BottomsheetMobileAppService } from 'src/app/services/bottomsheet-mobile-app.service';
-import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
 import { DTU } from 'src/app/services/dtu.service';
-import { UIUtils } from 'src/app/services/uiutils.service';
 import { Utils } from 'src/app/services/utils.service';
 import { AlertService } from 'src/app/views/mobile-app/components/core/alert.service';
 import { HapticService } from 'src/app/views/mobile-app/components/core/haptic.service';
@@ -30,19 +28,15 @@ import { ToastService } from 'src/app/views/mobile-app/components/core/toast.ser
   standalone: false
 })
 export class CustomerFollowupDetailsMobileAppComponent implements OnInit {
-
-
   Entity: CustomerFollowUp = CustomerFollowUp.CreateNewInstance();
   CustomerEnquiryEntity: CustomerEnquiry = CustomerEnquiry.CreateNewInstance();
   obj = CustomerFollowUpPlotDetails.CreateNewInstance();
+  today: string = new Date().toISOString().split('T')[0];
   private IsNewEntity: boolean = true;
-  DisplayMasterList: Plot[] = [];
-  InitialEntity: CustomerFollowUp = null as any;
-  todayDate: string = '';
-  showAgentBrokerInput: boolean = false;
   isSaveDisabled: boolean = false;
+  DisplayMasterList: Plot[] = [];
   IsDropdownDisabled: boolean = false;
-  // isLoading: boolean = false;
+  InitialEntity: CustomerFollowUp = null as any;
   pageSize = 10; // Items per page
   currentPage = 1; // Initialize current page
   total = 0;
@@ -51,91 +45,90 @@ export class CustomerFollowupDetailsMobileAppComponent implements OnInit {
   CityList: City[] = [];
   SiteList: Site[] = [];
   PlotList: Plot[] = [];
-  EmployeeList: Employee[] = [];
   IsPlotDetails: boolean = false;
+  InterestedPlotRef: number = 0;
+  SiteManagementRef: number = 0;
+  EmployeeList: Employee[] = [];
   localReminderDate: string | null = null;
   localOfficeVisitDate: string | null = null;
   localSiteVisitDate: string | null = null;
-  InterestedPlotRef: number = 0;
-  public InterestedPlotNo: string | null = null;
-  SiteManagementRef: number = 0;
-  SiteManagementName: string | null = null;
-  today: string = new Date().toISOString().split('T')[0];
-  DetailsFormTitle: 'Customer FollowUp' = 'Customer FollowUp';
-  public monthList = DomainEnums.MonthList();
-  public SelectedMonth: any[] = [];
-  public contactModeName: string | null = null;
-  public contactModeNameInAgentBroker: string | null = null;
-  public LeadHandleByName: string | null = null;
-  public LeadSourceName: string | null = null;
-  public CityName: string | null = null;
-  public StateName: string | null = null;
-  public CountryName: string | null = null;
-  CustomerStatuscode = CustomerStatus
+  todayDate: string = '';
 
   Date: string | null = null;
   DateWithTime: string | null = null;
-  LeadSourceList = DomainEnums.MarketingModesList();
-  ContactModesList = DomainEnums.ContactModeList();
-  CustomerStatusList = DomainEnums.CustomerStatusList();
-  companyRef: number = 0
-  selectedContactMode: any[] = [];
-  selectedLeadSource: any[] = [];
-  selectedLeadHandleBy: any[] = [];
-  selectedCustomerStatus: any[] = [];
 
+  ContactModesList = DomainEnums.ContactModeList();
+  LeadSourceList = DomainEnums.MarketingModesList();
+  LeadSourceEnum = MarketingModes;
+  CustomerStatusList = DomainEnums.CustomerStatusList();
+  CustomerStatusEnum = CustomerStatus
+  companyRef: number = 0;
+  showAgentBrokerInput: boolean = false;
+  InterestedPlotNo: string = '';
+  SiteManagementName: string = '';
+
+  selectedCustomerStatus: any[] = [];
+  CustomerStatusName: string = '';
+
+  selectedLeadHandleBy: any[] = [];
+  LeadHandleByName: string = '';
+
+  selectedLeadSource: any[] = [];
+  LeadSourceName: string = '';
+
+  selectedPlot: any[] = [];
+  plotName: string = '';
+
+  selectedSite: any[] = [];
+  SiteName: string = '';
+
+  selectedContactMode: any[] = [];
+  contactModeName: string = '';
 
   constructor(
     private router: Router,
-    // private uiUtils: UIUtils,
     private appStateManage: AppStateManageService,
     private utils: Utils,
     private dtu: DTU,
     private datePipe: DatePipe,
-    private companystatemanagement: CompanyStateManagement,
     private bottomsheetMobileAppService: BottomsheetMobileAppService,
     private toastService: ToastService,
     private haptic: HapticService,
     private alertService: AlertService,
     private loadingService: LoadingService
   ) { }
-  async ngOnInit(): Promise<void> {
-    await this.loadCustomerFollowUpIfEmployeeExists();
+
+  ngOnInit = async (): Promise<void> => {
+    // await this.loadCustomerFollowUpIfEmployeeExists();
   }
 
-  // ionViewWillEnter = async () => {
-  //   await this.loadSalarySlipRequestsIfEmployeeExists();
-  // };
-
+  ionViewWillEnter = async (): Promise<void> => {
+    await this.loadCustomerFollowUpIfEmployeeExists();
+  };
   ngOnDestroy(): void {
     // cleanup logic if needed later
   }
 
   private async loadCustomerFollowUpIfEmployeeExists(): Promise<void> {
     try {
-      // this.isLoading = true;
       this.loadingService.show();
-      this.appStateManage.setDropdownDisabled(true);
       this.companyRef = Number(this.appStateManage.localStorage.getItem('SelectedCompanyRef'));
-      this.getEmployeeListByCompanyRef()
-      this.getSiteListByCompanyRef();
-      // Check if CountryRef is already set (e.g., India is preselected)
+      await this.getEmployeeListByCompanyRef()
+      await this.getSiteListByCompanyRef();
       if (this.appStateManage.StorageKey.getItem('Editable') == 'Edit') {
         this.IsNewEntity = false;
         this.Entity = CustomerFollowUp.GetCurrentInstance();
-        console.log('this.Entity :', this.Entity);
         // Reset Required Entities
         this.Entity.p.ReminderDate = '';
         this.Entity.p.Reason = '';
         this.Entity.p.CustomerStatus = 0;
         this.Entity.p.ContactMode = 0;
-        // this.Entity.p.CustomerRequirement = '';
 
         // While Edit Converting date String into Date Format //
         if (this.Entity.p.ReminderDate) {
           this.localReminderDate = this.dtu.ConvertStringDateToShortFormat(
             this.Entity.p.ReminderDate
-          );
+          ) ?? null;
         }
 
         if (this.Entity.p.SiteVisitDate != '') {
@@ -143,18 +136,19 @@ export class CustomerFollowupDetailsMobileAppComponent implements OnInit {
           // convert  2025-02-23-00-00-00-000 to 2025-02-23
           this.localSiteVisitDate = this.dtu.ConvertStringDateToShortFormat(
             this.Entity.p.SiteVisitDate
-          );
+          ) ?? null;
         }
         if (this.Entity.p.OfficeVisitDate) {
           // While Edit Converting date String into Date Format //
           this.localOfficeVisitDate = this.dtu.ConvertStringDateToShortFormat(
             this.Entity.p.OfficeVisitDate
-          );
-        }
-        this.selectedContactMode = [{ p: { Ref: this.Entity.p.ContactMode, Name: this.Entity.p.ContactMode } }];
-        this.selectedLeadSource = [{ p: { Ref: this.Entity.p.LeadSource, Name: this.Entity.p.LeadSource } }];
-        this.selectedCustomerStatus = [{ p: { Ref: this.Entity.p.CustomerStatus, Name: this.Entity.p.CustomerStatusName } }];
-        this.selectedLeadHandleBy = [{ p: { Ref: this.Entity.p.LeadHandleBy, Name: this.Entity.p.LeadHandleBy } }];
+          ) ?? null;
+        }      
+        this.LeadSourceName = this.LeadSourceList.find(item => item.Ref == this.Entity.p.LeadSource)?.Name ?? '';
+        this.selectedLeadSource = [{ p: { Ref: this.Entity.p.LeadSource, Name: this.LeadSourceName } }];
+
+        this.LeadHandleByName = this.EmployeeList.find(item => item.p.Ref == this.Entity.p.LeadHandleBy)?.p.Name ?? '';
+        this.selectedLeadHandleBy = [{ p: { Ref: this.Entity.p.LeadHandleBy, Name: this.LeadHandleByName } }];
 
         let plotDetailsArray: CustomerFollowUpPlotDetailsProps[] = [];
         plotDetailsArray = [...this.Entity.p.CustomerFollowUpPlotDetails];
@@ -187,36 +181,37 @@ export class CustomerFollowupDetailsMobileAppComponent implements OnInit {
         this.DateWithTime = this.Entity.p.TransDateTime;
       }
     } catch (error) {
+    console.log('error :', error);
 
     } finally {
-      // this.isLoading = false;
       this.loadingService.hide()
     }
   }
+
   getEmployeeListByCompanyRef = async () => {
     if (this.companyRef <= 0) {
-      // await this.uiUtils.showErrorToster('Company not Selected');
       await this.toastService.present('company not selected', 1000, 'danger');
       await this.haptic.error();
       return;
     }
     let lst = await Employee.FetchEntireListByCompanyRef(this.companyRef, async errMsg => {
-      // await this.uiUtils.showErrorMessage('Error', errMsg)
-      await this.toastService.present('Error' + errMsg, 1000, 'danger');
+      await this.toastService.present(errMsg, 1000, 'danger');
       await this.haptic.error();
     });
     this.EmployeeList = lst;
   }
 
-  public async selectContactModeBottomsheet(): Promise<void> {
+  onCustomerStatusChange(plot: any): void {
+    if (plot.CustomerStatus !== this.CustomerStatusEnum.ConvertToDeal) {
+      plot.CustID = '';
+    }
+  }
+
+  public selectContactModeBottomsheet = async (): Promise<void> =>{
     try {
       const options = this.ContactModesList.map((item) => ({ p: item }));
-
-      // let selectData: any[] = [];
-
       this.openSelectModal(options, this.selectedContactMode, false, 'Select Contact Mode', 1, (selected) => {
         this.selectedContactMode = selected;
-
         this.Entity.p.ContactMode = selected[0].p.Ref;
         this.contactModeName = selected[0].p.Name;
       });
@@ -225,59 +220,54 @@ export class CustomerFollowupDetailsMobileAppComponent implements OnInit {
     }
   }
 
-  public async selectInterestedSiteBottomsheet(): Promise<void> {
+  public selectInterestedSiteBottomsheet = async (): Promise<void> => {
     try {
       const options = this.SiteList;
-
-      let selectData: any[] = [];
-
-      this.openSelectModal(options, selectData, false, 'Select Interested Site', 1, (selected) => {
-        selectData = selected;
-
+      this.openSelectModal(options, this.selectedSite, false, 'Select Interested Site', 1, (selected) => {
+        this.selectedSite = selected;
         this.SiteManagementRef = selected[0].p.Ref;
         this.SiteManagementName = selected[0].p.Name;
-        this.getPlotBySiteRefList(selected[0].p.Ref)
+        this.SiteName = selected[0].p.Name;
       });
+      if (this.SiteManagementRef > 0) {
+        await this.getPlotBySiteRefList(this.SiteManagementRef);
+      }
     } catch (error) {
 
     }
   }
-  public async selectInterestedPlotsBottomsheet(): Promise<void> {
+  public selectInterestedPlotsBottomsheet = async (): Promise<void> => {
     try {
       const options = this.PlotList;
-
-      let selectData: any[] = [];
-
-      this.openSelectModal(options, selectData, false, 'Select Interested Plots', 1, (selected) => {
-        selectData = selected;
-
+      this.openSelectModal(options, this.selectedPlot, false, 'Select Interested Plots', 1, (selected) => {
+        this.selectedPlot = selected;
         this.InterestedPlotRef = selected[0].p.Ref;
         this.InterestedPlotNo = selected[0].p.Name;
+        this.plotName = selected[0].p.Name;
       });
     } catch (error) {
 
     }
   }
-  public async selectLeadSourceBottomsheet(): Promise<void> {
+  public selectLeadSourceBottomsheet = async (): Promise<void> => {
     try {
       const options = this.LeadSourceList.map((item) => ({ p: item }));
-      // let selectData: any[] = [];
       this.openSelectModal(options, this.selectedLeadSource, false, 'Select Lead Source', 1, (selected) => {
         this.selectedLeadSource = selected;
-
         this.Entity.p.LeadSource = selected[0].p.Ref;
         this.LeadSourceName = selected[0].p.Name;
-        this.onLeadSourceChange(selected[0].p.Ref)
       });
+      if (this.Entity.p.LeadSource) {
+        await this.onLeadSourceChange(this.Entity.p.LeadSource)
+      }
     } catch (error) {
 
     }
   }
-  public async selectLeadHandleByBottomsheet(): Promise<void> {
+  public selectLeadHandleByBottomsheet = async (): Promise<void> =>{
     try {
       const options = this.EmployeeList;
-      // let selectData: any[] = [];
-      this.openSelectModal(options, this.selectedLeadHandleBy, false, 'Select Contact Mode', 1, (selected) => {
+      this.openSelectModal(options, this.selectedLeadHandleBy, false, 'Select Lead Handle By', 1, (selected) => {
         this.selectedLeadHandleBy = selected;
         this.Entity.p.LeadHandleBy = selected[0].p.Ref;
         this.LeadHandleByName = selected[0].p.Name;
@@ -286,18 +276,18 @@ export class CustomerFollowupDetailsMobileAppComponent implements OnInit {
 
     }
   }
-  public async selectCustomerStatusBottomsheet(): Promise<void> {
+  public selectCustomerStatusBottomsheet = async (): Promise<void> => {
     try {
       const options = this.CustomerStatusList.map((item) => ({ p: item }));
-
-      // let selectData: any[] = [];
-
       this.openSelectModal(options, this.selectedCustomerStatus, false, 'Select Customer Status', 1, (selected) => {
         this.selectedCustomerStatus = selected;
-
         this.Entity.p.CustomerStatusName = selected[0].p.Name;
         this.Entity.p.CustomerStatus = selected[0].p.Ref;
+        this.CustomerStatusName = selected[0].p.Name;
       });
+      if (this.Entity.p.CustomerStatus) {
+        await this.ConverttoDeal(this.Entity.p.CustomerStatus);
+      }
     } catch (error) {
 
     }
@@ -313,6 +303,32 @@ export class CustomerFollowupDetailsMobileAppComponent implements OnInit {
     const selected = await this.bottomsheetMobileAppService.openSelectModal(dataList, selectedItems, multiSelect, title, MaxSelection);
     if (selected) updateCallback(selected);
   }
+
+  ConverttoDeal = (CustomerStatus: number): boolean => {
+    this.localSiteVisitDate= null;
+    this.localOfficeVisitDate = null;
+    this.localReminderDate = null;
+    this.Entity.p.SiteVisitDate = '';
+    this.Entity.p.OfficeVisitDate = '';
+    this.Entity.p.ReminderDate = '';
+    this.Entity.p.CustID = ''
+    const hasDealRecord = this.Entity.p.CustomerFollowUpPlotDetails?.some(
+      (item: any) => item.CustomerStatus === this.CustomerStatusEnum.ConvertToDeal
+    );
+    if (CustomerStatus === this.CustomerStatusEnum.ConvertToDeal && !hasDealRecord) {
+      this.toastService.present('No record found in the Plots Table as "Convert to Deal"', 2000, 'danger');
+      this.haptic.error();
+      return false;
+    }
+    if (hasDealRecord && CustomerStatus !== this.CustomerStatusEnum.ConvertToDeal) {
+      this.toastService.present('One or more plots are marked as "Convert to Deal", so the Customer Status must also be "Convert to Deal"', 2000, 'danger');
+      this.haptic.error();
+      return false;
+    }
+    return true;
+  };
+
+
   // For country, state, city dropdowns
   getStateListByCountryRef = async (CountryRef: number) => {
     this.StateList = [];
@@ -326,8 +342,7 @@ export class CustomerFollowupDetailsMobileAppComponent implements OnInit {
       let lst = await State.FetchEntireListByCountryRef(
         CountryRef,
         async (errMsg) => {
-          // await this.uiUtils.showErrorMessage('Error', errMsg)
-          await this.toastService.present('Error' + errMsg, 1000, 'danger');
+          await this.toastService.present(errMsg, 1000, 'danger');
           await this.haptic.error();
         }
       );
@@ -353,9 +368,8 @@ export class CustomerFollowupDetailsMobileAppComponent implements OnInit {
       let lst = await City.FetchEntireListByStateRef(
         StateRef,
         async (errMsg) => {
-          await this.toastService.present('Error' + errMsg, 1000, 'danger');
+          await this.toastService.present( errMsg, 1000, 'danger');
           await this.haptic.error();
-          // await this.uiUtils.showErrorMessage('Error', errMsg)
         }
       );
 
@@ -374,8 +388,8 @@ export class CustomerFollowupDetailsMobileAppComponent implements OnInit {
     let lst = await Site.FetchEntireListByCompanyRef(
       this.companyRef,
       async (errMsg) => {
+        await this.toastService.present(errMsg, 1000, 'danger');
         await this.haptic.error();
-        // await this.uiUtils.showErrorMessage('Error', errMsg)
       }
     );
     this.SiteList = lst;
@@ -383,7 +397,6 @@ export class CustomerFollowupDetailsMobileAppComponent implements OnInit {
 
   getPlotBySiteRefList = async (siteRef: number) => {
     if (siteRef <= 0) {
-      // await this.uiUtils.showWarningToster(`Please Select Site`);
       await this.toastService.present('Please Select a Site', 1000, 'danger');
       await this.haptic.error();
       return;
@@ -391,8 +404,7 @@ export class CustomerFollowupDetailsMobileAppComponent implements OnInit {
     let lst = await Plot.FetchEntireListBySiteRef(
       siteRef,
       async (errMsg) => {
-        // await this.uiUtils.showErrorMessage('Error', errMsg)
-        await this.toastService.present('Error' + errMsg, 1000, 'danger');
+        await this.toastService.present(errMsg, 1000, 'danger');
         await this.haptic.error();
       }
     );
@@ -405,13 +417,11 @@ export class CustomerFollowupDetailsMobileAppComponent implements OnInit {
 
   addDataToCustomerFollowUpPlotDetail = () => {
     if (this.SiteManagementRef <= 0) {
-      // this.uiUtils.showWarningToster(`Please Select a Site`);
       this.toastService.present('Please Select a Site', 1000, 'danger');
       this.haptic.error();
       return;
     }
     if (this.InterestedPlotRef <= 0) {
-      // this.uiUtils.showWarningToster(`Please Select a Plot`);
       this.toastService.present('Please Select a Plot', 1000, 'danger');
       this.haptic.error();
       return;
@@ -438,9 +448,6 @@ export class CustomerFollowupDetailsMobileAppComponent implements OnInit {
       (plot) => plot.PlotRef === this.InterestedPlotRef
     );
     if (isAlreadyAdded) {
-      // this.uiUtils.showWarningToster(
-      //   'This plot is already added to the table.'
-      // );
       this.toastService.present('This plot is already added to the table.', 1000, 'danger');
       this.haptic.error();
       return;
@@ -500,15 +507,11 @@ export class CustomerFollowupDetailsMobileAppComponent implements OnInit {
     let entitiesToSave = [entityToSave];
     let tr = await this.utils.SavePersistableEntities(entitiesToSave);
     if (!tr.Successful) {
-      // this.uiUtils.showErrorMessage('Error', tr.Message);
-      await this.toastService.present('Error' + tr.Message, 1000, 'danger');
+      await this.toastService.present(tr.Message, 1000, 'danger');
       await this.haptic.error();
       return;
     } else {
       if (this.IsNewEntity) {
-        // await this.uiUtils.showSuccessToster(
-        //   'Customer Follow Up saved successfully'
-        // );
         await this.toastService.present('Customer Follow Up saved successfully', 1000, 'success');
         this.Entity = CustomerFollowUp.CreateNewInstance();
         this.router.navigate(['/mobile-app/tabs/dashboard/customer-relationship-management/customer-followup'], { replaceUrl: true });
@@ -517,7 +520,6 @@ export class CustomerFollowupDetailsMobileAppComponent implements OnInit {
       } else {
         await this.toastService.present('Customer Follow Up saved successfully', 1000, 'success');
         this.Entity = CustomerFollowUp.CreateNewInstance();
-        // this.router.navigate(['/homepage/Website/Customer_FollowUp']);
         this.router.navigate(['/mobile-app/tabs/dashboard/customer-relationship-management/customer-followup'], { replaceUrl: true });
         await this.haptic.success();
 
@@ -525,14 +527,8 @@ export class CustomerFollowupDetailsMobileAppComponent implements OnInit {
     }
   };
 
-  // public goBack(): void {
-  //   this.router.navigate(['/mobile-app/tabs/dashboard/customer-relationship-management/customer-followup'], { replaceUrl: true });
-  // }
-
   isDataFilled(): boolean {
     const emptyEntity = CustomerFollowUp.CreateNewInstance();
-    console.log('emptyEntity :', emptyEntity);
-    console.log('this Entity :', this.Entity);
     return !this.deepEqualIgnoringKeys(this.Entity, emptyEntity, []);
   }
 
@@ -560,13 +556,6 @@ export class CustomerFollowupDetailsMobileAppComponent implements OnInit {
     const isDataFilled = this.isDataFilled(); // Implement this function based on your form
 
     if (isDataFilled) {
-      // await this.uiUtils.showConfirmationMessage(
-      //   'Warning',
-      //   `You have unsaved data. Are you sure you want to go back? All data will be lost.`,
-      //   async () => {
-      //     this.router.navigate(['/mobile-app/tabs/dashboard/customer-relationship-management/customer-followup'], { replaceUrl: true });
-      //   }
-      // );
       this.alertService.presentDynamicAlert({
         header: 'Warning',
         subHeader: 'Confirmation needed',

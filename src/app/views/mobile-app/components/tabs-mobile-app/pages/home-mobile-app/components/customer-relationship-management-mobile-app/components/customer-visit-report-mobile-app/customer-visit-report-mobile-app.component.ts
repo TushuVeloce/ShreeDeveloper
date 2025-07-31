@@ -32,9 +32,7 @@ export class CustomerVisitReportMobileAppComponent implements OnInit {
   SelectedCustomerSiteVisit: CustomerSiteVisit = CustomerSiteVisit.CreateNewInstance();
   CustomerRef: number = 0;
   companyRef: number = 0;
-
-  Printheaders: string[] = ['Sr. No.','Site Name', 'Plot No', 'Customer Name', 'Address', 'Contact No', 'Customer Requirement'];
-
+  Printheaders: string[] = ['Sr. No.', 'Site Name', 'Plot No', 'Customer Name', 'Address', 'Contact No', 'Customer Requirement'];
   modalOpen = false;
 
   filters: FilterItem[] = [];
@@ -42,18 +40,11 @@ export class CustomerVisitReportMobileAppComponent implements OnInit {
 
 
   constructor(
-    private router: Router,
     private appStateManage: AppStateManageService,
-    private companystatemanagement: CompanyStateManagement,
     private DateconversionService: DateconversionService,
-    private dtu: DTU,
     private toastService: ToastService,
     private haptic: HapticService,
-    private alertService: AlertService,
     public loadingService: LoadingService,
-    private sanitizer: DomSanitizer,
-    private baseUrl: BaseUrlService,
-    private utils: Utils,
     private pdfService: PDFService
   ) { }
 
@@ -66,12 +57,12 @@ export class CustomerVisitReportMobileAppComponent implements OnInit {
     await this.loadFilters();
   };
 
-  async handleRefresh(event: CustomEvent) {
+  handleRefresh = async (event: CustomEvent) => {
     await this.loadCustomerVisitReportIfEmployeeExists();
     (event.target as HTMLIonRefresherElement).complete();
   }
 
-  loadFilters() {
+  loadFilters = () => {
     this.filters = [
       {
         key: 'site',
@@ -86,10 +77,7 @@ export class CustomerVisitReportMobileAppComponent implements OnInit {
     ];
   }
 
-  async onFiltersChanged(updatedFilters: any[]) {
-    // debugger
-    console.log('Updated Filters:', updatedFilters);
-
+  onFiltersChanged = async (updatedFilters: any[]) => {
     for (const filter of updatedFilters) {
       const selected = filter.selected;
       const selectedValue = (selected === null || selected === undefined) ? null : selected;
@@ -110,7 +98,7 @@ export class CustomerVisitReportMobileAppComponent implements OnInit {
   @ViewChild('PrintContainer')
   PrintContainer!: ElementRef;
 
-  async handlePrintOrShare() {
+  handlePrintOrShare = async () => {
     if (this.DisplayMasterList.length == 0) {
       await this.toastService.present('No Customer visit Records Found', 1000, 'warning');
       await this.haptic.warning();
@@ -120,7 +108,7 @@ export class CustomerVisitReportMobileAppComponent implements OnInit {
     await this.pdfService.generatePdfAndHandleAction(this.PrintContainer.nativeElement, `Receipt_${this.Entity.p.Ref}.pdf`);
   }
 
-  private async loadCustomerVisitReportIfEmployeeExists() {
+  private loadCustomerVisitReportIfEmployeeExists = async () => {
     try {
       await this.loadingService.show();
 
@@ -135,7 +123,6 @@ export class CustomerVisitReportMobileAppComponent implements OnInit {
       await this.getSiteListByCompanyRef();
       await this.getInwardListByComapnyRef();
     } catch (error) {
-      // console.error('Error in loadCustomerVisitReportIfEmployeeExists:', error);
       await this.toastService.present('Failed to load Customer Visit Report', 1000, 'danger');
       await this.haptic.error();
     } finally {
@@ -151,15 +138,10 @@ export class CustomerVisitReportMobileAppComponent implements OnInit {
     }
     this.Entity.p.SiteRef = 0
     let lst = await Site.FetchEntireListByCompanyRef(this.companyRef, async errMsg => {
-      // await this.uiUtils.showErrorMessage('Error', errMsg)
       await this.toastService.present(errMsg, 1000, 'danger');
       await this.haptic.error();
     });
     this.SiteList = lst;
-    // if (this.SiteList.length > 0) {
-    //   this.Entity.p.SiteRef = this.SiteList[0].p.Ref
-    //   this.getInwardListBySiteRef()
-    // }
   }
 
   getInwardListByComapnyRef = async () => {
@@ -172,7 +154,6 @@ export class CustomerVisitReportMobileAppComponent implements OnInit {
     }
     let lst = await CustomerSiteVisit.FetchEntireListBySiteRef(this.Entity.p.SiteRef, this.companyRef,
       async (errMsg) => {
-        // await this.uiUtils.showErrorMessage('Error', errMsg)
         await this.toastService.present(errMsg, 1000, 'danger');
         await this.haptic.error();
       }
@@ -191,7 +172,6 @@ export class CustomerVisitReportMobileAppComponent implements OnInit {
     }
     let lst = await CustomerSiteVisit.FetchEntireListBySiteRef(this.Entity.p.SiteRef, this.companyRef,
       async (errMsg) => {
-        // await this.uiUtils.showErrorMessage('Error', errMsg)
         await this.toastService.present(errMsg, 1000, 'danger');
         await this.haptic.error();
       }
@@ -204,12 +184,12 @@ export class CustomerVisitReportMobileAppComponent implements OnInit {
     return this.DateconversionService.formatDate(date);
   }
 
-  openModal(CustomerSiteVisit: any) {
+  openModal = (CustomerSiteVisit: any) => {
     this.SelectedCustomerSiteVisit = CustomerSiteVisit;
     this.modalOpen = true;
   }
 
-  closeModal() {
+  closeModal = () => {
     this.modalOpen = false;
     this.SelectedCustomerSiteVisit = CustomerSiteVisit.CreateNewInstance();
   }
