@@ -30,6 +30,7 @@ export class IncomeDetailsComponent implements OnInit {
   PayerEntity: Payer = Payer.CreateNewInstance();
   private IsNewEntity: boolean = true;
   SiteList: Site[] = [];
+  LedgerList: Ledger[] = [];
   SubLedgerList: SubLedger[] = [];
   ShreeBalance: number = 0;
   UnitList: Unit[] = [];
@@ -40,7 +41,6 @@ export class IncomeDetailsComponent implements OnInit {
   DetailsFormTitle: 'New Income' | 'Edit Income' = 'New Income';
   IsDropdownDisabled: boolean = false;
   InitialEntity: Income = null as any;
-  LedgerList: Ledger[] = [];
   companyRef = this.companystatemanagement.SelectedCompanyRef;
   BankList: OpeningBalance[] = [];
   Cash = ModeOfPayments.Cash

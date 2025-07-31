@@ -2,7 +2,9 @@ import { Component, effect, ElementRef, OnInit, ViewChild } from '@angular/core'
 import { Router } from '@angular/router';
 import { ValidationMessages, ValidationPatterns } from 'src/app/classes/domain/constants';
 import { MaterialRequisitionStatuses } from 'src/app/classes/domain/domainenums/domainenums';
+import { Ledger } from 'src/app/classes/domain/entities/website/masters/ledgermaster/ledger';
 import { Site } from 'src/app/classes/domain/entities/website/masters/site/site';
+import { SubLedger } from 'src/app/classes/domain/entities/website/masters/subledgermaster/subledger';
 import { Vendor } from 'src/app/classes/domain/entities/website/masters/vendor/vendor';
 import { RequiredMaterial } from 'src/app/classes/domain/entities/website/stock_management/material_requisition/requiredmaterial/requiredmaterial';
 import { Order } from 'src/app/classes/domain/entities/website/stock_management/stock_order/order';
@@ -47,7 +49,8 @@ export class StockOrderDetailsComponent implements OnInit {
   strCDT: string = '';
   MaterialOrderStatus = MaterialRequisitionStatuses;
   TotalOrderedQty: number = 0;
-
+  LedgerList: Ledger[] = [];
+  SubLedgerList: SubLedger[] = [];
 
   errors: string = "";
   InvoiceFile: File = null as any
@@ -89,6 +92,7 @@ export class StockOrderDetailsComponent implements OnInit {
     this.LoginToken = this.appStateManage.getLoginToken();
     this.appStateManage.setDropdownDisabled(true);
     await this.getSiteListByCompanyRef();
+    await this.getLedgerListByCompanyRef();
     if (this.appStateManage.StorageKey.getItem('Editable') == 'Edit') {
       this.IsNewEntity = false;
       this.DetailsFormTitle = this.IsNewEntity ? 'New Purchase Order' : 'Edit Purchase Order';
@@ -144,6 +148,27 @@ export class StockOrderDetailsComponent implements OnInit {
     let lst = await OrderMaterial.FetchEntireListByCompanyRefAndSiteRef(this.companyRef(), this.Entity.p.SiteRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.AllMaterialRequisitionList = lst;
     this.filterMaterialList();
+  }
+
+  getLedgerListByCompanyRef = async () => {
+    if (this.companyRef() <= 0) {
+      await this.uiUtils.showErrorToster('Company not Selected');
+      return;
+    }
+    this.Entity.p.SubLedgerRef = 0
+    let lst = await Ledger.FetchEntireListByCompanyRef(this.companyRef(),
+      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+    );
+    this.LedgerList = lst
+  };
+
+  getSubLedgerListByLedgerRef = async (ledgerref: number) => {
+    if (ledgerref <= 0) {
+      await this.uiUtils.showErrorToster('Ledger not Selected');
+      return;
+    }
+    let lst = await SubLedger.FetchEntireListByLedgerRef(ledgerref, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    this.SubLedgerList = lst;
   }
 
   filterMaterialList() {
@@ -261,6 +286,22 @@ export class StockOrderDetailsComponent implements OnInit {
       this.uiUtils.showErrorToster('Vendor not Selected');
       return;
     }
+    if (this.Entity.p.LedgerRef <= 0) {
+      this.uiUtils.showErrorToster('Ledger not Selected');
+      return;
+    }
+    if (this.Entity.p.SubLedgerRef <= 0) {
+      this.uiUtils.showErrorToster('Sub Ledger not Selected');
+      return;
+    }
+    if (this.Entity.p.Description == '') {
+      this.uiUtils.showErrorToster('Description not Selected');
+      return;
+    }
+    if (this.Entity.p.Reason == '') {
+      this.uiUtils.showErrorToster('Reason not Selected');
+      return;
+    }
     this.ModalEditable = false;
     this.getOrderedMaterialList();
     if (type === 'OrderMaterial') this.isOrderMaterialModalOpen = true;
@@ -370,7 +411,7 @@ export class StockOrderDetailsComponent implements OnInit {
     }
 
     let tr = await this.utils.SavePersistableEntities(entitiesToSave, lstFTO);
-    
+
     if (!tr.Successful) {
       this.isSaveDisabled = false;
       this.uiUtils.showErrorMessage('Error', tr.Message)

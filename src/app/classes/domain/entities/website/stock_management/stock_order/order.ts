@@ -41,6 +41,12 @@ export class OrderProps {
   public MaterialPurchaseInvoicePath: string = "";
   public MaterialPurchaseOrderDetailsArray: OrderMaterialDetailProps[] = [];
 
+  public LedgerRef: number = 0;
+  public SubLedgerRef: number = 0;
+  public Description: string = '';
+  public Reason: string = '';
+  public Narration: string = '';
+
 
   public readonly IsNewlyCreated: boolean = false;
   private constructor(isNewlyCreated: boolean) {
@@ -83,11 +89,13 @@ export class Order implements IPersistable<Order> {
 
   public CheckSaveValidity(_td: TransportData, vra: ValidationResultAccumulator): void {
     if (!this.AllowEdit) vra.add('', 'This object is not editable and hence cannot be saved.');
-    // if (this.p.Name == '') vra.add('Name', 'Order Name cannot be blank.'); else if (!new RegExp(ValidationPatterns.NameWithoutNos).test(this.p.Name)) {
-    //   vra.add('Name', ValidationMessages.NameWithoutNosMsg);
-    // }
     if (this.p.CompanyRef == 0) vra.add('CompanyRef', 'Company Name cannot be blank.');
     if (this.p.SiteRef == 0) vra.add('SiteRef', 'Site Name cannot be blank.');
+    if (this.p.LedgerRef == 0) vra.add('LedgerRef', 'Ledger cannot be blank.');
+    if (this.p.SubLedgerRef == 0) vra.add('SubLedgerRef', 'Sub Ledger cannot be blank.');
+    if (this.p.Description == '') vra.add('Description', 'Description cannot be blank.');
+    if (this.p.Reason == '') vra.add('Reason', 'Reason cannot be blank.');
+    if (this.p.MaterialPurchaseOrderDetailsArray.length < 1) vra.add('MaterialPurchaseOrderDetailsArray', 'Material table cannot be blank.');
 
   }
 

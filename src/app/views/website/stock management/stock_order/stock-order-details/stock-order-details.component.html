@@ -10,9 +10,9 @@
 
       <!-- Title Column -->
       <div class="col-10 col-md-11">
-        <span class="detail_title text-truncate d-block">{{
-          DetailsFormTitle
-          }}</span>
+        <span class="detail_title text-truncate d-block">
+          {{ DetailsFormTitle }}
+        </span>
       </div>
     </div>
     <ng-template #noDataTpl>
@@ -33,7 +33,7 @@
 
     <form autocomplete="off">
       <div class="row" style="margin-top: 1rem">
-        <div class="col-md-6">
+        <div class="col-md-3">
           <label>Date</label>
           <input type="date" name="OrderDate" class="form-control date-input" id="OrderDate" [(ngModel)]="OrderDate"
             placeholder="Select Date" [min]="CurrentDate" #OrderDateCtrl="ngModel" required
@@ -45,32 +45,70 @@
             <span class="validation-text" *ngIf="OrderDateCtrl.errors?.['required']">{{ RequiredFieldMsg }}</span>
           </div>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-3">
           <label><b>Site Name</b></label>
           <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
             nzPlaceHolder="Select" id="SiteRef" name="SiteRef" [nzSize]="'large'" [(ngModel)]="Entity.p.SiteRef">
             <nz-option *ngFor="let Site of SiteList" [nzValue]="Site.p.Ref" [nzLabel]="Site.p.Name"></nz-option>
           </nz-select>
         </div>
-      </div>
-      <div class="row" style="margin-top: 1rem">
-        <div class="col-md-4">
-          <label><b>Vendor Name</b></label>
+        <div class="col-md-3">
+          <label>Ledger</label>
           <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
-            nzPlaceHolder="Select" id="VendorRef" name="VendorRef" [nzSize]="'large'" [(ngModel)]="Entity.p.VendorRef"
-            (ngModelChange)="onVendorSelection(Entity.p.VendorRef)">
-            <nz-option *ngFor="let Vendor of VendorList" [nzValue]="Vendor.p.Ref" [nzLabel]="Vendor.p.Name"></nz-option>
+            nzPlaceHolder="Select" id="LedgerRef" name="LedgerRef" [nzSize]="'large'" [(ngModel)]="Entity.p.LedgerRef"
+            (ngModelChange)="getSubLedgerListByLedgerRef(Entity.p.LedgerRef)">
+            <nz-option *ngFor="let ledger of LedgerList" [nzValue]="ledger.p.Ref" [nzLabel]="ledger.p.Name"></nz-option>
           </nz-select>
         </div>
-        <div class="col-md-4">
-          <label>Vendor Trade Name</label>
-          <input type="text" name="VendorTradeName" class="form-control date-input" id="VendorTradeName"
-            [(ngModel)]="Entity.p.VendorTradeName" placeholder="Trade Name" disabled />
+        <div class="col-md-3">
+          <label>Sub Ledger</label>
+          <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
+            nzPlaceHolder="Select" id="SubLedgerRef" name="SubLedgerRef" [nzSize]="'large'"
+            [(ngModel)]="Entity.p.SubLedgerRef">
+            <nz-option *ngFor="let sub of SubLedgerList" [nzValue]="sub.p.Ref" [nzLabel]="sub.p.Name"></nz-option>
+          </nz-select>
         </div>
-        <div class="col-md-4">
-          <label>Address</label>
-          <input type="text" name="AddressLine1" class="form-control date-input" id="AddressLine1"
-            [(ngModel)]="Entity.p.AddressLine1" placeholder="Address" disabled />
+        <div class="row mt-3">
+          <div class="col-md-4">
+            <div>
+              <label>Description</label>
+              <input type="text" [(ngModel)]="Entity.p.Description" name="Description" class="form-control"
+                id="Description" required placeholder="Enter Description" />
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div>
+              <label>Reason</label>
+              <input type="text" [(ngModel)]="Entity.p.Reason" name="Reason" class="form-control" id="Reason" required
+                placeholder="Enter Reason" />
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div>
+              <label>Narration</label>
+              <input type="text" [(ngModel)]="Entity.p.Narration" name="Narration" class="form-control" id="Narration"
+                required placeholder="Enter Narration" />
+            </div>
+          </div>
+          <div class="col-md-4">
+            <label><b>Vendor Name</b></label>
+            <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
+              nzPlaceHolder="Select" id="VendorRef" name="VendorRef" [nzSize]="'large'" [(ngModel)]="Entity.p.VendorRef"
+              (ngModelChange)="onVendorSelection(Entity.p.VendorRef)">
+              <nz-option *ngFor="let Vendor of VendorList" [nzValue]="Vendor.p.Ref"
+                [nzLabel]="Vendor.p.Name"></nz-option>
+            </nz-select>
+          </div>
+          <div class="col-md-4">
+            <label>Vendor Trade Name</label>
+            <input type="text" name="VendorTradeName" class="form-control date-input" id="VendorTradeName"
+              [(ngModel)]="Entity.p.VendorTradeName" placeholder="Trade Name" disabled />
+          </div>
+          <div class="col-md-4">
+            <label>Address</label>
+            <input type="text" name="AddressLine1" class="form-control date-input" id="AddressLine1"
+              [(ngModel)]="Entity.p.AddressLine1" placeholder="Address" disabled />
+          </div>
         </div>
       </div>
       <div class="row mt-3">
@@ -269,10 +307,10 @@
           </div>
           <div class="col-6 mb-1">
             <label>Ordered Quantity</label>
-            <input type="text" appCommaFormat name="OrderedQty" class="form-control" [(ngModel)]="newOrderMaterial.OrderedQty"
-              #OrderedQtyCtrl="ngModel" required (blur)="OrderedQtyCtrl.control.markAsTouched()"
-              placeholder="Enter Ordered Quantity" (click)="selectAllValue($event)"
-              (ngModelChange)="CalculateNetAmountAndTotalAmount()" />
+            <input type="text" appCommaFormat name="OrderedQty" class="form-control"
+              [(ngModel)]="newOrderMaterial.OrderedQty" #OrderedQtyCtrl="ngModel" required
+              (blur)="OrderedQtyCtrl.control.markAsTouched()" placeholder="Enter Ordered Quantity"
+              (click)="selectAllValue($event)" (ngModelChange)="CalculateNetAmountAndTotalAmount()" />
             <div *ngIf="
                 OrderedQtyCtrl.invalid &&
                 (OrderedQtyCtrl.touched || OrderedQtyCtrl.dirty)
@@ -315,8 +353,8 @@
           </div>
           <div class="col-6 mb-1">
             <label>Net Amount</label>
-            <input type="text" appCommaFormat name="NetAmount" class="form-control" [(ngModel)]="newOrderMaterial.NetAmount"
-             disabled />
+            <input type="text" appCommaFormat name="NetAmount" class="form-control"
+              [(ngModel)]="newOrderMaterial.NetAmount" disabled />
           </div>
           <div class="col-6 mb-1">
             <div>
@@ -352,8 +390,8 @@
           </div>
           <div class="col-6 mb-1">
             <label>Total Amount</label>
-            <input type="text" appCommaFormat name="TotalAmount" class="form-control" [(ngModel)]="newOrderMaterial.TotalAmount"
-             disabled />
+            <input type="text" appCommaFormat name="TotalAmount" class="form-control"
+              [(ngModel)]="newOrderMaterial.TotalAmount" disabled />
           </div>
         </div>
       </form>
