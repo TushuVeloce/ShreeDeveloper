@@ -10,12 +10,12 @@ import { Utils } from "src/app/services/utils.service";
 import { isNullOrUndefined } from "src/tools";
 import { UIUtils } from "src/app/services/uiutils.service";
 import { RequestTypes } from "src/app/classes/infrastructure/enums";
-import { ValidationMessages, ValidationPatterns } from "src/app/classes/domain/constants";
 import { InvoiceFetchRequest } from "./invoicefetchrequest";
 import { GetDistinctRecipientNameFetchRequest } from "./GetDistinctRecipientNameFetchRequest";
 import { TimeDetailProps } from "../../site_management/time/time";
 import { LabourTimeProps } from "../../site_management/labourtime/labourtime";
 import { ExpenseTypes } from "src/app/classes/domain/domainenums/domainenums";
+import { OrderInvoiceMaterialDetailProps } from "./OrderInvoiceMaterial/orderinvoicematerial";
 
 
 export class InvoiceProps {
@@ -66,6 +66,7 @@ export class InvoiceProps {
   public IsDeleted: number = 0
   public MachineUsageDetailsArray: TimeDetailProps[] = [];
   public LabourExpenseDetailsArray: LabourTimeProps[] = [];
+  public MaterialInvoiceDetailsArray: OrderInvoiceMaterialDetailProps[] = [];
   public readonly AddressLine1: string = ''
   public readonly AddressLine2: string = ''
   public readonly CityName: string = ''

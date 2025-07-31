@@ -36,7 +36,8 @@
         <div class="col-md-4" style="margin-top: 1rem">
           <label>Site Name</label>
           <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
-            nzPlaceHolder="Select" id="SiteRef" name="SiteRef" [nzSize]="'large'" [(ngModel)]="Entity.p.SiteRef" (ngModelChange)="getRecipientListByRecipientTypeRef()">
+            nzPlaceHolder="Select" id="SiteRef" name="SiteRef" [nzSize]="'large'" [(ngModel)]="Entity.p.SiteRef"
+            (ngModelChange)="getRecipientListByRecipientTypeRef()">
             <nz-option *ngFor="let site of SiteList" [nzValue]="site.p.Ref" [nzLabel]="site.p.Name"></nz-option>
           </nz-select>
         </div>
@@ -77,16 +78,16 @@
             <span class="validation-text" *ngIf="DescriptionCtrl.errors?.['required']">{{ RequiredFieldMsg }}</span>
           </div>
         </div>
-         <div class="col-md-4" style="margin-top: 1rem;" *ngIf="Entity.p.ExpenseType == OtherExpenseRef">
+        <div class="col-md-4" style="margin-top: 1rem;" *ngIf="Entity.p.ExpenseType == OtherExpenseRef">
           <label>Recipient Type</label>
           <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
             nzPlaceHolder="Select" id="InvoiceRecipientType" name="InvoiceRecipientType" [nzSize]="'large'"
-            [(ngModel)]="Entity.p.InvoiceRecipientType" (ngModelChange)="getRecipientListByRecipientTypeRef(); onTypeChange()">
+            [(ngModel)]="Entity.p.InvoiceRecipientType"
+            (ngModelChange)="getRecipientListByRecipientTypeRef(); onTypeChange()">
             <nz-option *ngFor="let type of RecipientTypesList" [nzValue]="type.Ref" [nzLabel]="type.Name"></nz-option>
           </nz-select>
         </div>
-        <div class="col-md-4" style="margin-top: 1rem"
-          *ngIf="Entity.p.ExpenseType == OtherExpenseRef ">
+        <div class="col-md-4" style="margin-top: 1rem" *ngIf="Entity.p.ExpenseType == OtherExpenseRef ">
           <label>Recipient Name</label>
           <div class="d-flex align-items-center">
             <nz-select *ngIf="!RecipientNameInput && !RecipientNameReadOnly" class="nzSelect-light"
@@ -284,6 +285,64 @@
         </div>
         <!-- Labour time table Ends -->
 
+        <!-- Material time table start -->
+        <div class="row" style="margin-top: 1rem; padding: 1rem" *ngIf="Entity.p.ExpenseType == StockExpenseRef">
+          <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 col-12">
+            <h5 style="padding-top: 3px; color: black">
+              <b>Material Details</b>
+            </h5>
+          </div>
+          <!-- <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 col-12 btn-container"
+            style="display: flex; justify-content: end" routerLinkActive="active">
+            <nz-button nz-button class="btn1" (click)="isLabourTimeModalOpen = true">Add Material Time </nz-button>
+          </div> -->
+        </div>
+        <div class="table-wrapper" class="tblcard_light" style="margin-top: 1rem"
+          *ngIf="Entity.p.MaterialInvoiceDetailsArray.length > 0 && Entity.p.ExpenseType == StockExpenseRef">
+          <div class="table-container" style="margin-top: 1rem">
+            <div class="row">
+              <div class="col-12">
+                <h3 class="TableHeading"> Material Details</h3>
+              </div>
+            </div>
+            <nz-table #basicTable nzSize="small" class="no-hover-table bgtable_light" [nzScroll]="{ x: 'auto' }"
+              nzFrontPagination="false" [nzShowSizeChanger]="false" [nzData]="Entity.p.MaterialInvoiceDetailsArray">
+              <thead>
+                <tr>
+                  <th *ngFor="let header of materialheaders" class="tblsubheader">
+                    {{ header }}
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="   let material of Entity.p.MaterialInvoiceDetailsArray;   let i = index ">
+                  <td Class="tbldata">{{ i + 1 }}</td>
+                  <td Class="tbldata">{{ material.MaterialName }}</td>
+                  <td Class="tbldata">{{ material.UnitName }}</td>
+                  <td Class="tbldata">{{ material.Qty }}</td>
+                  <td Class="tbldata">{{ material.Rate | currency : "INR"}}</td>
+                  <td Class="tbldata">{{ material.DiscountedRate | currency : "INR"}}</td>
+                  <td Class="tbldata">{{ material.DeliveryCharges | currency : "INR"}}</td>
+                  <td Class="tbldata">{{ material.TotalAmount | currency : "INR"}}</td>
+                  <!-- <td class="tbldata">
+                    <span style="margin-left: 9px" (click)="EditLabourTime(i)">
+                      <img src="\assets\icons\edit.png" alt="logo" title="Edit" width="20px" height="20px" />
+                    </span>
+                    <span style="margin-left: 9px" (click)="RemoveLabourTime(i)">
+                      <img src="\assets\icons\delete.png" alt="logo" title="Delete" width="20px" height="20px" /></span>
+                  </td> -->
+                </tr>
+              </tbody>
+            </nz-table>
+          </div>
+        </div>
+        <div *ngIf="Entity.p.MaterialInvoiceDetailsArray.length === 0 && Entity.p.ExpenseType == StockExpenseRef"
+          class="card-body_light">
+          <div style="height: 200px; background-color: white" class="d-flex align-items-center justify-content-center">
+            <span class="title_light"> Data Not Found</span>
+          </div>
+        </div>
+        <!-- Labour time table Ends -->
 
         <div class="col-md-4" style="margin-top: 1rem"
           *ngIf="Entity.p.ExpenseType != LabourExpenseRef && !(Entity.p.ExpenseType == MachinaryExpenseRef&& Entity.p.UnitRef == TimeUnitRef) ">
@@ -382,7 +441,7 @@
           margin-top: 2rem;
         ">
         <div *ngIf="!Entity.p.IsInvoiceAutoGenerated">
-          <button type="button" class="btn" (click)="SaveInvoiceMaster()">
+          <button type="button" [disabled]="Entity.p.ExpenseType == StockExpenseRef" class="btn" (click)="SaveInvoiceMaster()">
             Save
           </button>
         </div>
