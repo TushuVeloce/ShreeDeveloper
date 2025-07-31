@@ -137,7 +137,7 @@ export class RegisteredCustomerDetailsComponent implements OnInit {
     const RegistrationFees = Number(this.Entity.p.RegistrationFees);
     const GSTonValueofAgreement = (Number(this.Entity.p.GoodsServicesTax) / 100) * Number(this.Entity.p.ValueOfAgreement);
     this.Entity.p.GstToatalAmount = Math.trunc(GSTonValueofAgreement * 100) / 100;
-    this.Entity.p.TotalExtraCharges = Math.trunc((LegalCharges + StampDuties + RegistrationFees + GSTonValueofAgreement) * 100) / 100;
+    this.Entity.p.TotalExtraCharges = Math.trunc((LegalCharges + StampDuties + RegistrationFees) * 100) / 100;
     this.calculateGrandTotal()
   }
 
@@ -145,7 +145,7 @@ export class RegisteredCustomerDetailsComponent implements OnInit {
     const TotalPlotAmount = Number(this.Entity.p.TotalPlotAmount);
     const ValueOfAgreement = Number(this.Entity.p.ValueOfAgreement);
     const TotalExtraCharges = Number(this.Entity.p.TotalExtraCharges);
-    this.Entity.p.GrandTotal = Math.trunc((TotalPlotAmount + ValueOfAgreement + TotalExtraCharges) * 100) / 100;
+    this.Entity.p.GrandTotal = Math.trunc((TotalPlotAmount + TotalExtraCharges) * 100) / 100;
   }
 
   selectAllValue(event: MouseEvent): void {
