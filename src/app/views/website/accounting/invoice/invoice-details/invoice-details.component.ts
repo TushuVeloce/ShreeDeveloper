@@ -115,7 +115,6 @@ export class InvoiceDetailsComponent implements OnInit {
       this.DetailsFormTitle = this.IsNewEntity ? 'New Bill' : 'Edit Bill';
       this.Entity = Invoice.GetCurrentInstance();
       console.log('this.Entity :', this.Entity);
-      this.Entity.p.RecipientType = this.Entity.p.InvoiceRecipientType;
       this.appStateManage.StorageKey.removeItem('Editable');
       this.Entity.p.UpdatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
       if (this.Entity.p.LedgerRef) {
@@ -140,7 +139,7 @@ export class InvoiceDetailsComponent implements OnInit {
       await this.getChalanNo()
     }
     // this.getRecipientListByCompanyRef()
-    if (this.Entity.p.RecipientType != 0) {
+    if (this.Entity.p.InvoiceRecipientType != 0) {
       this.getRecipientListByRecipientTypeRef()
     }
     this.InitialEntity = Object.assign(
@@ -254,8 +253,7 @@ export class InvoiceDetailsComponent implements OnInit {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
-    if (this.Entity.p.RecipientType <= 0) {
-      await this.uiUtils.showErrorToster('To Whom not Selected');
+    if (this.Entity.p.InvoiceRecipientType <= 0) {
       return;
     }
 
@@ -264,7 +262,8 @@ export class InvoiceDetailsComponent implements OnInit {
     }
 
     this.RecipientList = [];
-    let lst = await Invoice.FetchRecipientByRecipientTypeRef(this.companyRef(), this.Entity.p.RecipientType, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    let lst = await Invoice.FetchRecipientByRecipientTypeRef(this.companyRef(),this.Entity.p.SiteRef, this.Entity.p.InvoiceRecipientType, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    console.log('lst :', lst);
     this.RecipientList = lst;
   }
 
@@ -585,7 +584,7 @@ export class InvoiceDetailsComponent implements OnInit {
   ClearInputsOnExpenseChange = () => {
     this.Entity.p.MachineUsageDetailsArray = []
     this.Entity.p.LabourExpenseDetailsArray = []
-    this.Entity.p.RecipientType = 0
+    this.Entity.p.InvoiceRecipientType = 0
     this.Entity.p.RecipientMasterRef = 0
     this.RecipientNameInput = false
     this.Entity.p.VendorRef = 0

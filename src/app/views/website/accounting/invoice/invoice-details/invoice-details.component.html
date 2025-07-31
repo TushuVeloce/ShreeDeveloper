@@ -36,7 +36,7 @@
         <div class="col-md-4" style="margin-top: 1rem">
           <label>Site Name</label>
           <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
-            nzPlaceHolder="Select" id="SiteRef" name="SiteRef" [nzSize]="'large'" [(ngModel)]="Entity.p.SiteRef">
+            nzPlaceHolder="Select" id="SiteRef" name="SiteRef" [nzSize]="'large'" [(ngModel)]="Entity.p.SiteRef" (ngModelChange)="getRecipientListByRecipientTypeRef()">
             <nz-option *ngFor="let site of SiteList" [nzValue]="site.p.Ref" [nzLabel]="site.p.Name"></nz-option>
           </nz-select>
         </div>
@@ -77,17 +77,16 @@
             <span class="validation-text" *ngIf="DescriptionCtrl.errors?.['required']">{{ RequiredFieldMsg }}</span>
           </div>
         </div>
-        <div class="col-md-4" style="margin-top: 1rem;"
-          *ngIf="Entity.p.ExpenseType != MachinaryExpenseRef && Entity.p.ExpenseType != LabourExpenseRef">
+         <div class="col-md-4" style="margin-top: 1rem;" *ngIf="Entity.p.ExpenseType == OtherExpenseRef">
           <label>Recipient Type</label>
           <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
-            nzPlaceHolder="Select" id="RecipientType" name="RecipientType" [nzSize]="'large'"
-            [(ngModel)]="Entity.p.RecipientType" (ngModelChange)="getRecipientListByRecipientTypeRef(); onTypeChange()">
+            nzPlaceHolder="Select" id="InvoiceRecipientType" name="InvoiceRecipientType" [nzSize]="'large'"
+            [(ngModel)]="Entity.p.InvoiceRecipientType" (ngModelChange)="getRecipientListByRecipientTypeRef(); onTypeChange()">
             <nz-option *ngFor="let type of RecipientTypesList" [nzValue]="type.Ref" [nzLabel]="type.Name"></nz-option>
           </nz-select>
         </div>
         <div class="col-md-4" style="margin-top: 1rem"
-          *ngIf="Entity.p.ExpenseType != MachinaryExpenseRef && Entity.p.ExpenseType != LabourExpenseRef">
+          *ngIf="Entity.p.ExpenseType == OtherExpenseRef ">
           <label>Recipient Name</label>
           <div class="d-flex align-items-center">
             <nz-select *ngIf="!RecipientNameInput && !RecipientNameReadOnly" class="nzSelect-light"
