@@ -2,6 +2,7 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { NgModel } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ExpenseTypeRefs, ValidationMessages, ValidationPatterns } from 'src/app/classes/domain/constants';
+import { ExpenseTypes } from 'src/app/classes/domain/domainenums/domainenums';
 import { Invoice } from 'src/app/classes/domain/entities/website/accounting/billing/invoice';
 import { Unit } from 'src/app/classes/domain/entities/website/masters/unit/unit';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
@@ -30,6 +31,9 @@ export class InvoicePrintComponent implements OnInit {
   LabourExpenseRef: number = ExpenseTypeRefs.LabourExpense
   OtherExpenseRef: number = ExpenseTypeRefs.OtherExpense
   DisplayTotalWorkingHrs: string = ''
+  StockExpenseRef: number = ExpenseTypes.StockExpense
+
+  materialheaders: string[] = ['Sr.No.', 'Material', 'Unit', 'Order Quantity', 'Rate', 'Discount Rate', 'Delivery Charges', 'Total Amount'];
 
   @ViewChild('PrintContainer')
   PrintContainer!: ElementRef;
@@ -65,7 +69,7 @@ export class InvoicePrintComponent implements OnInit {
   }
 
 
- getTotalWorkedHours(): number {
+  getTotalWorkedHours(): number {
     let totalMinutes = this.Entity.p.MachineUsageDetailsArray.reduce((sum: number, item: any) => {
       return sum + parseFloat(item.WorkedHours || 0);
     }, 0);
@@ -76,14 +80,14 @@ export class InvoicePrintComponent implements OnInit {
     // Return hours as decimal (rounded to 2 decimals)
     let totalHours = totalMinutes / 60;
     return Math.round(totalHours * 100) / 100;
-}
+  }
 
-formatMinutesToHourMin = (totalMinutes: number): string => {
+  formatMinutesToHourMin = (totalMinutes: number): string => {
     const hours = Math.floor(totalMinutes / 60);
     const minutes = totalMinutes % 60;
     const formattedMinutes = minutes < 10 ? '0' + minutes : minutes;
     return `${hours}h ${formattedMinutes}m`;
-}
+  }
 
   printSection() {
     const printContent = this.PrintContainer.nativeElement.innerHTML;
