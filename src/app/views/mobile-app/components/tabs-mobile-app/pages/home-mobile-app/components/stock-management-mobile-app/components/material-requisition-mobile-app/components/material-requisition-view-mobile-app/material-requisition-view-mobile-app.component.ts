@@ -4,9 +4,7 @@ import { DomainEnums, MaterialRequisitionStatuses } from 'src/app/classes/domain
 import { Site } from 'src/app/classes/domain/entities/website/masters/site/site';
 import { MaterialRequisition } from 'src/app/classes/domain/entities/website/stock_management/material_requisition/materialrequisition';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
-import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
 import { DateconversionService } from 'src/app/services/dateconversion.service';
-import { DTU } from 'src/app/services/dtu.service';
 import { AlertService } from 'src/app/views/mobile-app/components/core/alert.service';
 import { HapticService } from 'src/app/views/mobile-app/components/core/haptic.service';
 import { LoadingService } from 'src/app/views/mobile-app/components/core/loading.service';
@@ -44,9 +42,7 @@ export class MaterialRequisitionViewMobileAppComponent implements OnInit, OnDest
   constructor(
     private router: Router,
     private appStateManage: AppStateManageService,
-    private companyState: CompanyStateManagement,
     private dateService: DateconversionService,
-    private dtu: DTU,
     private toast: ToastService,
     private haptic: HapticService,
     private alert: AlertService,
@@ -66,12 +62,13 @@ export class MaterialRequisitionViewMobileAppComponent implements OnInit, OnDest
     // Add cleanup if needed
   }
 
-  async handleRefresh(event: CustomEvent) {
+  handleRefresh = async (event: CustomEvent) => {
     await this.loadMaterialRequisitionIfEmployeeExists();
+    this.loadFilters();
     (event.target as HTMLIonRefresherElement).complete();
   }
 
-  private async loadMaterialRequisitionIfEmployeeExists() {
+  private loadMaterialRequisitionIfEmployeeExists = async () => {
     try {
       await this.loadingService.show();
       this.companyRef = Number(this.appStateManage.localStorage.getItem('SelectedCompanyRef'));
@@ -85,7 +82,6 @@ export class MaterialRequisitionViewMobileAppComponent implements OnInit, OnDest
       await this.getSiteListByCompanyRef();
       await this.getMaterialRequisitionListByCompanyRef();
     } catch (error) {
-      console.error('Error loading Material Requisition:', error);
       await this.toast.present('Failed to load Material Requisition', 1000, 'danger');
       await this.haptic.error();
     } finally {
@@ -93,7 +89,7 @@ export class MaterialRequisitionViewMobileAppComponent implements OnInit, OnDest
     }
   }
 
-  private async getSiteListByCompanyRef() {
+  private getSiteListByCompanyRef = async () => {
     if (this.companyRef <= 0) return;
 
     const siteList = await Site.FetchEntireListByCompanyRef(this.companyRef, async msg => {
@@ -106,7 +102,7 @@ export class MaterialRequisitionViewMobileAppComponent implements OnInit, OnDest
     this.Entity.p.Status = 0;
   }
 
-  private async getMaterialRequisitionListByCompanyRef() {
+  private getMaterialRequisitionListByCompanyRef = async () => {
     const list = await MaterialRequisition.FetchEntireListByCompanyRef(this.companyRef, async msg => {
       await this.toast.present(msg, 1000, 'danger');
       await this.haptic.error();
@@ -115,7 +111,7 @@ export class MaterialRequisitionViewMobileAppComponent implements OnInit, OnDest
     this.MasterList = this.DisplayMasterList = list;
   }
 
-  private loadFilters() {
+  private loadFilters = () => {
     this.filters = [
       {
         key: 'site',
@@ -137,8 +133,7 @@ export class MaterialRequisitionViewMobileAppComponent implements OnInit, OnDest
     ];
   }
 
-  async onFiltersChanged(updatedFilters: any[]) {
-    console.log('updatedFilters :', updatedFilters);
+  onFiltersChanged = async (updatedFilters: any[]) => {
     for (const filter of updatedFilters) {
       const selectedValue = filter.selected ?? null;
       this.selectedFilterValues[filter.key] = selectedValue;
@@ -163,16 +158,13 @@ export class MaterialRequisitionViewMobileAppComponent implements OnInit, OnDest
       await this.toast.present(errMsg, 1000, 'danger');
       await this.haptic.error();
     });
-    console.log('this.companyRef, this.Entity.p.Status, this.Entity.p.SiteRef, :', this.companyRef, this.Entity.p.Status, this.Entity.p.SiteRef);
     this.MasterList = lst;
-    console.log('lst :', lst);
-    // this.DisplayMasterList = this.MasterList;
     this.DisplayMasterList = this.MasterList.filter(item =>
       item.p.MaterialRequisitionDetailsArray.length > 0
     );
 
   }
-  getStatusClass(status: number): string {
+  getStatusClass = (status: number): string => {
     const statusMap: Record<number, string> = {
       [MaterialRequisitionStatuses.Pending]: 'pending',
       [MaterialRequisitionStatuses.Rejected]: 'rejected',
@@ -185,7 +177,7 @@ export class MaterialRequisitionViewMobileAppComponent implements OnInit, OnDest
     return statusMap[status] ?? 'default';
   }
 
-  getStatusText(status: number): string {
+  getStatusText = (status: number): string => {
     const statusMap: Record<number, string> = {
       [MaterialRequisitionStatuses.Pending]: 'Pending',
       [MaterialRequisitionStatuses.Rejected]: 'Rejected',
@@ -198,7 +190,7 @@ export class MaterialRequisitionViewMobileAppComponent implements OnInit, OnDest
     return statusMap[status] ?? '-';
   }
 
-  toggleItemDetails(requisitionId: number) {
+  toggleItemDetails = (requisitionId: number) => {
     this.expandedRequisitions.has(requisitionId)
       ? this.expandedRequisitions.delete(requisitionId)
       : this.expandedRequisitions.add(requisitionId);
@@ -208,24 +200,23 @@ export class MaterialRequisitionViewMobileAppComponent implements OnInit, OnDest
     return this.dateService.formatDate(date);
   }
 
-  async AddMaterialRequisition() {
+  AddMaterialRequisition = async () => {
     if (this.companyRef <= 0) {
       await this.toast.present('Company not Selected', 1000, 'danger');
       await this.haptic.error();
       return;
     }
-
     await this.router.navigate(['/mobile-app/tabs/dashboard/stock-management/material-requisition/add']);
   }
 
-  async onEditClicked(item: MaterialRequisition) {
+  onEditClicked = async (item: MaterialRequisition) => {
     this.SelectedMaterialRequisition = item.GetEditableVersion();
     MaterialRequisition.SetCurrentInstance(this.SelectedMaterialRequisition);
     this.appStateManage.StorageKey.setItem('Editable', 'Edit');
     await this.router.navigate(['/mobile-app/tabs/dashboard/stock-management/material-requisition/edit']);
   }
 
-  async onDeleteClicked(item: MaterialRequisition) {
+  onDeleteClicked = async (item: MaterialRequisition) => {
     try {
       this.alert.presentDynamicAlert({
         header: 'Delete',
@@ -248,7 +239,6 @@ export class MaterialRequisitionViewMobileAppComponent implements OnInit, OnDest
                 });
                 await this.getRequisitionListByAllFilters();
               } catch (err) {
-                console.error('Delete Error:', err);
                 await this.toast.present('Failed to delete', 1000, 'danger');
                 await this.haptic.error();
               }
@@ -257,19 +247,18 @@ export class MaterialRequisitionViewMobileAppComponent implements OnInit, OnDest
         ]
       });
     } catch (error) {
-      console.error('Delete alert error:', error);
       await this.toast.present('Something went wrong', 1000, 'danger');
       await this.haptic.error();
     }
   }
 
-  openModal(requisition: MaterialRequisition, materialItem: any) {
+  openModal = async (requisition: MaterialRequisition, materialItem: any) => {
     this.SelectedMaterialRequisition = requisition;
     this.SelectedMaterialItem = materialItem;
     this.modalOpen = true;
   }
 
-  closeModal() {
+  closeModal = () => {
     this.modalOpen = false;
     this.SelectedMaterialRequisition = MaterialRequisition.CreateNewInstance();
   }

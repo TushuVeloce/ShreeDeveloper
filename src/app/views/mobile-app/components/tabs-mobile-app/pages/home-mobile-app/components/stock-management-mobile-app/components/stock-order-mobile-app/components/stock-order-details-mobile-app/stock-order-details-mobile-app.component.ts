@@ -22,6 +22,8 @@ import { LoadingService } from 'src/app/views/mobile-app/components/core/loading
 import { ToastService } from 'src/app/views/mobile-app/components/core/toast.service';
 import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
 import { ActionSheetController } from '@ionic/angular';
+import { Ledger } from 'src/app/classes/domain/entities/website/masters/ledgermaster/ledger';
+import { SubLedger } from 'src/app/classes/domain/entities/website/masters/subledgermaster/subledger';
 
 interface PreviewFile {
   file: File;
@@ -75,6 +77,12 @@ export class StockOrderDetailsMobileAppComponent implements OnInit {
   ];
   filesToUpload: FileTransferObject[] = [];
 
+  LedgerList: Ledger[] = [];
+  selectedLedger: any[] = [];
+  LedgerName:string = '';
+  SubLedgerList: SubLedger[] = [];
+  selectedsubLedger: any[] = [];
+  subLedgerName: string = '';
 
   errors: string = "";
   InvoiceFile: File = null as any
@@ -135,9 +143,9 @@ export class StockOrderDetailsMobileAppComponent implements OnInit {
 
       if (this.companyRef > 0) {
         this.ImageBaseUrl = this.baseUrl.GenerateImageBaseUrl();
-
         this.LoginToken = this.appStateManage.getLoginTokenForMobile();
         this.appStateManage.setDropdownDisabled(true);
+        await this.getLedgerListByCompanyRef();
         await this.getSiteListByCompanyRef();
         await this.getVendorListByCompanyRef()
         if (this.appStateManage.StorageKey.getItem('Editable') == 'Edit') {
@@ -154,6 +162,10 @@ export class StockOrderDetailsMobileAppComponent implements OnInit {
           this.SiteName = this.Entity.p.SiteName;
           this.selectedVendor = [{ p: { Ref: this.Entity.p.VendorRef, Name: this.Entity.p.VendorName } }];
           this.VendorName = this.Entity.p.VendorName;
+          this.selectedLedger = [{ p: { Ref: this.Entity.p.LedgerRef, Name: this.Entity.p.LedgerName } }];
+          this.LedgerName = this.Entity.p.LedgerName;
+          this.selectedsubLedger = [{ p: { Ref: this.Entity.p.SubLedgerRef, Name: this.Entity.p.SubLedgerName } }];
+          this.subLedgerName = this.Entity.p.SubLedgerName;
 
           // this.OrderDate = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.PurchaseOrderDate);
           //.............New Date Format...........//
@@ -439,6 +451,41 @@ export class StockOrderDetailsMobileAppComponent implements OnInit {
     }
   }
 
+  getLedgerListByCompanyRef = async () => {
+    if (this.companyRef <= 0) {
+      // await this.uiUtils.showErrorToster('Company not Selected');
+      await this.toastService.present('Company not Selected', 1000, 'warning');
+      await this.haptic.warning();
+
+      return;
+    }
+    this.Entity.p.SubLedgerRef = 0
+    let lst = await Ledger.FetchEntireListByCompanyRef(this.companyRef,
+      async (errMsg) => {
+        await this.toastService.present('Error' + errMsg, 1000, 'danger');
+        await this.haptic.error();
+      });
+    this.LedgerList = lst
+  };
+
+  getSubLedgerListByLedgerRef = async (ledgerref: number) => {
+    if (ledgerref <= 0) {
+      // await this.uiUtils.showErrorToster('Ledger not Selected');
+      await this.toastService.present('Ledger not Selected', 1000, 'warning');
+      await this.haptic.warning();
+
+      return;
+    }
+    let lst = await SubLedger.FetchEntireListByLedgerRef(ledgerref, async errMsg => {
+      // await this.uiUtils.showErrorMessage('Error', errMsg));
+      await this.toastService.present('Error' + errMsg, 1000, 'danger');
+      await this.haptic.error();
+
+    });
+    this.SubLedgerList = lst;
+  }
+
+
   filterMaterialList() {
     // this.StockOrderList = this.AllStockOrderList.filter(material => material.p.IsRequisitionMaterial == 1)
     const usedRefs = this.Entity.p.MaterialPurchaseOrderDetailsArray.map(item => item.MaterialRef);
@@ -625,7 +672,7 @@ export class StockOrderDetailsMobileAppComponent implements OnInit {
       this.newOrderMaterial.MaterialPurchaseOrderRef = this.Entity.p.Ref;
       this.Entity.p.MaterialPurchaseOrderDetailsArray.push({ ...OrderMaterialInstance.p });
       this.selectedGST = [{ p: { Ref: this.newOrderMaterial.Gst, Name: this.newOrderMaterial.Gst } }];
-  
+
       console.log('this.newOrderMaterial :', this.newOrderMaterial);
       await this.toastService.present('Material added successfully', 1000, 'success');
       this.newOrderMaterial = OrderMaterialDetailProps.Blank();
@@ -766,7 +813,41 @@ export class StockOrderDetailsMobileAppComponent implements OnInit {
       return this.Entity.p.GrandTotal = total + Number(item.TotalAmount || 0);
     }, 0);
   }
+  public async selectsubLedgerBottomsheet(): Promise<void> {
+    try {
+      // const options = this.GSTList.map((item) => ({ p: item }));
+      // console.log('gst options :', options);
+      const options = this.SubLedgerList;
+      this.openSelectModal(options, this.selectedsubLedger, false, 'Select Sub Ledger', 1, (selected) => {
+        this.selectedsubLedger = selected;
+        this.Entity.p.SubLedgerRef = selected[0].p.Ref;
+        this.subLedgerName = selected[0].p.Name;
+      });
+    } catch (error) {
 
+    }
+  }
+
+  public async selectLedgerBottomsheet(): Promise<void> {
+    try {
+      // const options = this.GSTList.map((item) => ({ p: item }));
+      // console.log('gst options :', options);
+      const options = this.LedgerList;
+      this.openSelectModal(options, this.selectedLedger, false, 'Select Ledger', 1, (selected) => {
+        this.selectedLedger = selected;
+        this.Entity.p.LedgerRef = selected[0].p.Ref;
+        this.LedgerName = selected[0].p.Name;
+        this.selectedsubLedger=[];
+        this.subLedgerName='';
+        this.getSubLedgerListByLedgerRef(this.Entity.p.LedgerRef);
+      });
+      // if (this.Entity.p.LedgerRef) {
+      //   await this.getSubLedgerListByLedgerRef(this.Entity.p.LedgerRef);
+      // }
+    } catch (error) {
+
+    }
+  }
 
 
   public async selectGSTBottomsheet(): Promise<void> {

@@ -42,7 +42,9 @@ export class OrderProps {
   public MaterialPurchaseOrderDetailsArray: OrderMaterialDetailProps[] = [];
 
   public LedgerRef: number = 0;
+  public LedgerName: string = '';
   public SubLedgerRef: number = 0;
+  public SubLedgerName: string = '';
   public Description: string = '';
   public Reason: string = '';
   public Narration: string = '';
