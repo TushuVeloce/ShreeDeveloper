@@ -62,7 +62,7 @@
     </ion-item>
 
     <!-- Select Payer Name -->
-    <ion-item class="input-item" button detail *ngIf="!PayerNameInput && !PayerNameReadOnly  && Entity.p.PayerType == DealDoneCustomer">
+    <ion-item class="input-item" button detail *ngIf="!PayerNameInput && !PayerNameReadOnly">
       <ion-label (click)="selectPayerNameBottomsheet()">Received by </ion-label>
 
       <!-- Selected Text -->

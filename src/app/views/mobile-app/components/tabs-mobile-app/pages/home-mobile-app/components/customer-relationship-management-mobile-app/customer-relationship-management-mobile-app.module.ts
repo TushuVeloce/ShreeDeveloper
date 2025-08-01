@@ -14,6 +14,7 @@ import { SharedModule } from "src/app/views/mobile-app/components/shared/shared.
 import { CustomerInfoReportMobileAppComponent } from './components/customer-info-report-mobile-app/customer-info-report-mobile-app.component';
 import { CustomerSummaryReportMobileAppComponent } from './components/customer-summary-report-mobile-app/customer-summary-report-mobile-app.component';
 import { CustomerVisitReportMobileAppComponent } from './components/customer-visit-report-mobile-app/customer-visit-report-mobile-app.component';
+import { PaymentHistoryMobileAppComponent } from './components/payment-history-mobile-app/payment-history-mobile-app.component';
 
 @NgModule({
   imports: [
@@ -24,6 +25,6 @@ import { CustomerVisitReportMobileAppComponent } from './components/customer-vis
     LoaderComponent,
     SharedModule
 ],
-  declarations: [CustomerRelationshipManagementMobileAppPage,CustomerRelationshipManagementViewMobileAppComponent,PendingCustomerFollowupMobileAppComponent,CustomerInfoReportMobileAppComponent,CustomerSummaryReportMobileAppComponent,CustomerVisitReportMobileAppComponent]
+  declarations: [CustomerRelationshipManagementMobileAppPage,CustomerRelationshipManagementViewMobileAppComponent,PendingCustomerFollowupMobileAppComponent,CustomerInfoReportMobileAppComponent,CustomerSummaryReportMobileAppComponent,CustomerVisitReportMobileAppComponent,PaymentHistoryMobileAppComponent]
 })
 export class CustomerRelationshipManagementMobileAppPageModule {}
