@@ -14,9 +14,9 @@ import { PDFService } from 'src/app/views/mobile-app/components/core/pdf.service
   selector: 'app-invoice-print-mobile-app',
   templateUrl: './invoice-print-mobile-app.component.html',
   styleUrls: ['./invoice-print-mobile-app.component.scss'],
-  standalone:false
+  standalone: false
 })
-export class InvoicePrintMobileAppComponent  implements OnInit {
+export class InvoicePrintMobileAppComponent implements OnInit {
 
   Entity: Invoice = Invoice.CreateNewInstance();
   private IsNewEntity: boolean = true;
@@ -28,8 +28,13 @@ export class InvoicePrintMobileAppComponent  implements OnInit {
   MachinaryExpenseRef: number = ExpenseTypeRefs.MachinaryExpense;
   LabourExpenseRef: number = ExpenseTypeRefs.LabourExpense;
   OtherExpenseRef: number = ExpenseTypeRefs.OtherExpense;
+  StockExpenseRef: number = ExpenseTypeRefs.OtherExpense;
   DisplayTotalWorkingHrs: string = '';
-  
+
+  materialheaders: string[] = ['Sr.No.', 'Material', 'Unit', 'Order Quantity', 'Rate', 'Discount Rate', 'Delivery Charges', 'Total Amount'];
+
+
+
   @ViewChild('PrintContainer')
   PrintContainer!: ElementRef;
 
@@ -88,5 +93,5 @@ export class InvoicePrintMobileAppComponent  implements OnInit {
     if (!this.printContainer) return;
     await this.pdfService.generatePdfAndHandleAction(this.printContainer.nativeElement, `Receipt_${this.Entity.p.Ref}.pdf`);
   }
- 
+
 }
