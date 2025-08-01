@@ -1,7 +1,7 @@
 <div class="row">
   <div class="col-4 mb-2">
     <h1 style="padding-top: 3px" class="title title_light">
-      Customer Visit Report
+      Payment History Report
     </h1>
   </div>
   <div class="col-4 mb-2 search-container_light">
@@ -46,7 +46,7 @@
         [(ngModel)]="Entity.p.SiteRef"
         required
         id="SiteRef"
-        (ngModelChange)="getCustomerVisitListBySiteRef()"
+        (ngModelChange)="getPaymentHistoryListBySiteRef()"
       >
         <nz-option nzLabel="All" [nzValue]="0"></nz-option>
         <nz-option
@@ -85,11 +85,12 @@
       <tbody>
         <tr *ngFor="let customer of paginatedList; index as i">
           <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
-          <td Class="tbldata">{{ customer.p.Date }}</td>
+          <td Class="tbldata">{{formatDate(customer.p.Date)}}</td>
           <td Class="tbldata">{{ customer.p.SiteName }}</td>
-          <td Class="tbldata">{{ customer.p.PlotName }}</td>
-          <td Class="tbldata">{{ customer.p.PayerRef }}</td>
+          <!-- <td Class="tbldata">{{ customer.p.PlotName }}</td> -->
+          <td Class="tbldata">{{ customer.p.PayerName }}</td>
           <td Class="tbldata">{{ customer.p.IncomeAmount }}</td>
+          <td Class="tbldata">{{ customer.p.ModeOfPaymentName }}</td>
           <td
             Class="tbldata"
             style="cursor: pointer"
@@ -139,11 +140,12 @@
     <tbody>
       <tr *ngFor="let report of DisplayMasterList; index as i">
         <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
-        <td Class="tbldata">{{ report.p.Date }}</td>
+        <td Class="tbldata">{{formatDate(report.p.Date)}}</td>
         <td Class="tbldata">{{ report.p.SiteName }}</td>
-        <td Class="tbldata">{{ report.p.PlotName }}</td>
-        <td Class="tbldata">{{ report.p.PayerRef }}</td>
+        <!-- <td Class="tbldata">{{ report.p.PlotName }}</td> -->
+          <td Class="tbldata">{{ report.p.PayerName }}</td>
         <td Class="tbldata">{{ report.p.IncomeAmount }}</td>
+         <td Class="tbldata">{{ report.p.ModeOfPaymentName }}</td>
         <td
           Class="tbldata"
           style="cursor: pointer"

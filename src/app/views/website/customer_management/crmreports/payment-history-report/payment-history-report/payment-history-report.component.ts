@@ -30,13 +30,13 @@ export class PaymentHistoryReportComponent  implements OnInit {
   currentPage = 1;
   total = 0;
   companyRef = this.companystatemanagement.SelectedCompanyRef;
-  headers: string[] = ['Sr.No.', 'Date','Site Name', 'Plot Name', 'Customer Name', 'Amount', 'Mode of Payment', 'Reason'];
+  headers: string[] = ['Sr.No.', 'Date','Site Name', 'Payer Name', 'Amount', 'Mode of Payment', 'Reason'];
 
   constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private screenSizeService: ScreenSizeService, private companystatemanagement: CompanyStateManagement, private DateconversionService: DateconversionService, private dtu: DTU,
   ) {
     effect(async () => {
       await this.getSiteListByCompanyRef();
-      await this.getCustomerVisitListBySiteRef();
+      await this.getPaymentHistoryListByCompanyRef();
     });
   }
 
@@ -60,12 +60,11 @@ export class PaymentHistoryReportComponent  implements OnInit {
     // }
   }
 
-  // Extracted from services date conversion //
+   // Extracted from services date conversion //
   formatDate = (date: string | Date): string => {
     return this.DateconversionService.formatDate(date);
   }
-
-  getCustomerVisitListByCompanyRef = async () => {
+  getPaymentHistoryListByCompanyRef = async () => {
     this.MasterList = [];
     this.DisplayMasterList = [];
     if (this.companyRef() <= 0) {
@@ -80,9 +79,14 @@ export class PaymentHistoryReportComponent  implements OnInit {
     this.loadPaginationData();
   };
 
-  getCustomerVisitListBySiteRef = async () => {
+  getPaymentHistoryListBySiteRef = async () => {
     this.MasterList = [];
     this.DisplayMasterList = [];
+     if (this.companyRef() <= 0) {
+      await this.uiUtils.showErrorToster('Company not Selected');
+      return;
+    }
+    console.log('this.Entity.p.SiteRef,this.companyRef() :', this.Entity.p.SiteRef,this.companyRef());
     let lst = await Income.FetchEntireListBySiteRef(this.Entity.p.SiteRef,this.companyRef(),
       async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
     );
