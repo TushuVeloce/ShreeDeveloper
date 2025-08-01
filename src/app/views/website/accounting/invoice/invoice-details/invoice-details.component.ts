@@ -23,6 +23,7 @@ import { ServiceSuppliedByVendorProps, Vendor } from 'src/app/classes/domain/ent
 import { VendorService } from 'src/app/classes/domain/entities/website/masters/vendorservices/vendorservices';
 import { TimeDetailProps } from 'src/app/classes/domain/entities/website/site_management/time/time';
 import { LabourTimeProps } from 'src/app/classes/domain/entities/website/site_management/labourtime/labourtime';
+import { DateconversionService } from 'src/app/services/dateconversion.service';
 
 @Component({
   selector: 'app-invoice-details',
@@ -58,6 +59,7 @@ export class InvoiceDetailsComponent implements OnInit {
   MachinaryExpenseRef: number = ExpenseTypes.MachinaryExpense
   LabourExpenseRef: number = ExpenseTypes.LabourExpense
   OtherExpenseRef: number = ExpenseTypes.OtherExpense
+  StockExpenseRef: number = ExpenseTypes.StockExpense
   TimeUnitRef: number = UnitRefs.TimeUnitRef
 
   MachineTimeEntity: TimeDetailProps = TimeDetailProps.Blank();
@@ -81,6 +83,7 @@ export class InvoiceDetailsComponent implements OnInit {
   companyRef = this.companystatemanagement.SelectedCompanyRef;
   timeheaders: string[] = ['Sr.No.', 'Start Time ', 'End Time', 'Worked Hours', 'Action'];
   labourtimeheaders: string[] = ['Sr.No.', 'Labour Type', 'From Time', 'To Time', 'Quantity ', 'Rate', 'Amount', 'Action'];
+  materialheaders: string[] = ['Sr.No.', 'Material', 'Unit', 'Order Quantity', 'Rate', 'Discount Rate', 'Delivery Charges', 'Total Amount'];
   RequiredFieldMsg: string = ValidationMessages.RequiredFieldMsg
 
   // @ViewChild('invoiceForm') invoiceForm!: NgForm;
@@ -100,6 +103,7 @@ export class InvoiceDetailsComponent implements OnInit {
     private utils: Utils,
     private companystatemanagement: CompanyStateManagement,
     private dtu: DTU,
+    private DateconversionService: DateconversionService,
     private payloadPacketFacade: PayloadPacketFacade,
     private serverCommunicator: ServerCommunicatorService,
   ) { }
@@ -154,6 +158,10 @@ export class InvoiceDetailsComponent implements OnInit {
     txtName.focus();
   }
 
+  // Extracted from services date conversion //
+  formatDate = (date: string | Date): string => {
+    return this.DateconversionService.formatDate(date);
+  }
 
   convertToFullTime(timeStr: string): Date {
     const [hours, minutes] = timeStr.split(':').map(Number);
@@ -262,7 +270,7 @@ export class InvoiceDetailsComponent implements OnInit {
     }
 
     this.RecipientList = [];
-    let lst = await Invoice.FetchRecipientByRecipientTypeRef(this.companyRef(),this.Entity.p.SiteRef, this.Entity.p.InvoiceRecipientType, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    let lst = await Invoice.FetchRecipientByRecipientTypeRef(this.companyRef(), this.Entity.p.SiteRef, this.Entity.p.InvoiceRecipientType, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     console.log('lst :', lst);
     this.RecipientList = lst;
   }
@@ -488,7 +496,7 @@ export class InvoiceDetailsComponent implements OnInit {
     this.MachineEditingIndex = null;
     this.StartTime = null
     this.EndTime = null
-     this.getTotalWorkedHours();
+    this.getTotalWorkedHours();
     this.CalculateAmount();
   }
 

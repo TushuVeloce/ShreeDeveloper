@@ -241,6 +241,7 @@ export enum ExpenseTypes {
   MachinaryExpense = 105,
   LabourExpense = 110,
   OtherExpense = 115,
+  StockExpense = 120
 }
 
 export enum LabourTypes {
@@ -506,7 +507,7 @@ export class DomainEnums {
     return result;
   }
 
-    public static BookingRemarksName(itemType: BookingRemarks) {
+  public static BookingRemarksName(itemType: BookingRemarks) {
     switch (itemType) {
       case BookingRemarks.Plot_Of_Owner:
         return 'Plot of Owner ';
@@ -1944,6 +1945,8 @@ export class DomainEnums {
         return 'Machinary Expense';
       case ExpenseTypes.LabourExpense:
         return 'Labour Expense';
+      case ExpenseTypes.StockExpense:
+        return 'Stock Expense';
       case ExpenseTypes.OtherExpense:
         return 'Other Expense';
       default:
@@ -1963,6 +1966,10 @@ export class DomainEnums {
       {
         Ref: ExpenseTypes.LabourExpense,
         Name: DomainEnums.ExpenseTypeName(ExpenseTypes.LabourExpense),
+      },
+      {
+        Ref: ExpenseTypes.StockExpense,
+        Name: DomainEnums.ExpenseTypeName(ExpenseTypes.StockExpense),
       },
       {
         Ref: ExpenseTypes.OtherExpense,

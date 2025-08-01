@@ -46,19 +46,21 @@
               <td>{{ (item.p.GovermentRatePerSqm | currency : "INR") || '-' }}</td>
               <td>{{ (item.p.GovernmentValue | currency : "INR") || '-' }}</td>
               <td>{{ (item.p.ValueOfAgreement | currency : "INR") || '-' }}</td>
-              <td>{{ item.p.RegTaxValueInPercentage || '-' }}</td>
-              <td>{{ item.p.TaxValueInPercentage || '-' }}</td>
+              <td>{{ item.p.RegTaxValueInPercentage != null ? item.p.RegTaxValueInPercentage + '%' : '-' }}</td>
+              <td>{{ (item.p.RegistrationFees| currency : "INR") || '-' }}</td>
+              <td>{{ item.p.TaxValueInPercentage != null ? item.p.TaxValueInPercentage + '%' : '-' }}</td>
               <td>{{ (item.p.StampDuties | currency : "INR") || '-' }}</td>
               <td>{{ item.p.GoodsServicesTax != null ? item.p.GoodsServicesTax + '%' : '-' }}</td>
-              <td>{{ (item.p.TotalExtraCharges | currency : "INR") || '-' }}</td>
               <td>{{ (item.p.LegalCharges | currency : "INR") || '-' }}</td>
+              <td>{{ (item.p.TotalExtraCharges | currency : "INR") || '-' }}</td>
+              <td>{{ (item.p.GrandTotal | currency : "INR") || '-' }}</td>
               <td>{{ (item.p.TotalChequeRecieved | currency : "INR") || '-' }}</td>
               <td>{{ (item.p.TotalCashRecieved | currency : "INR") || '-' }}</td>
               <td>{{ (item.p.TotalAmountRecieved | currency : "INR") || '-' }}</td>
+
               <td>{{ (item.p.TotalChequeBalance | currency : "INR") || '-' }}</td>
               <td>{{ (item.p.TotalCashBalance | currency : "INR") || '-' }}</td>
               <td>{{ (item.p.TotalBalance | currency : "INR") || '-' }}</td>
-              <td>{{ (item.p.GrandTotal| currency : "INR") || '-' }}</td>
               <td>
                 <ion-button size="small" fill="outline" (click)="onViewClicked(item)">
                   View
@@ -113,18 +115,20 @@
     { label: 'Government Value', value: SelectedCRMReports.p.GovernmentValue | currency : 'INR' },
     { label: 'Value of Agreement', value: SelectedCRMReports.p.ValueOfAgreement | currency : 'INR' },
     { label: 'Reg Tax Value (%)', value: SelectedCRMReports.p.RegTaxValueInPercentage != null ? SelectedCRMReports.p.RegTaxValueInPercentage + '%' : '-' },
+    { label: 'Registration Fees', value: SelectedCRMReports.p.RegistrationFees | currency : 'INR' },
     { label: 'Tax Value (%)', value: SelectedCRMReports.p.TaxValueInPercentage != null ? SelectedCRMReports.p.TaxValueInPercentage + '%' : '-' },
     { label: 'Stamp Duties', value: SelectedCRMReports.p.StampDuties | currency : 'INR' },
     { label: 'GST (%)', value: SelectedCRMReports.p.GoodsServicesTax != null ? SelectedCRMReports.p.GoodsServicesTax + '%' : '-' },
     { label: 'Total Extra Charges', value: SelectedCRMReports.p.TotalExtraCharges | currency : 'INR' },
     { label: 'Legal Charges', value: SelectedCRMReports.p.LegalCharges | currency : 'INR' },
+    { label: 'Total Extra Charges', value: SelectedCRMReports.p.TotalExtraCharges | currency : 'INR' },
+    { label: 'Grand Total', value: SelectedCRMReports.p.GrandTotal | currency : 'INR' },
     { label: 'Total Cheque Received', value: SelectedCRMReports.p.TotalChequeRecieved | currency : 'INR' },
     { label: 'Total Cash Received', value: SelectedCRMReports.p.TotalCashRecieved | currency : 'INR' },
     { label: 'Total Amount Received', value: SelectedCRMReports.p.TotalAmountRecieved | currency : 'INR' },
     { label: 'Total Cheque Balance', value: SelectedCRMReports.p.TotalChequeBalance | currency : 'INR' },
     { label: 'Total Cash Balance', value: SelectedCRMReports.p.TotalCashBalance | currency : 'INR' },
-    { label: 'Total Balance', value: SelectedCRMReports.p.TotalBalance | currency : 'INR' },
-    { label: 'Grand Total', value: SelectedCRMReports.p.GrandTotal | currency : 'INR' }
+    { label: 'Total Balance', value: SelectedCRMReports.p.TotalBalance | currency : 'INR' }
   ]">
           <strong class="label-mobile-app">{{ field.label }}:</strong>
           <span class="value-mobile-app">

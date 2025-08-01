@@ -1,0 +1,125 @@
+<app-header-with-back-handler title="Payment History Report"
+  backRoute="mobile-app/tabs/dashboard/customer-relationship-management">
+</app-header-with-back-handler>
+
+<app-chip-filter-mobile-app [filters]="filters" (filtersChanged)="onFiltersChanged($event)">
+</app-chip-filter-mobile-app>
+
+<ion-content class="ion-padding">
+
+  <!-- Pull-to-refresh -->
+  <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+  <!-- Table -->
+  <ion-list class="requisition-list" [lines]="'none'" *ngIf="DisplayMasterList.length > 0">
+    <div class="table-container">
+      <div class="table-scroll">
+        <table class="custom-table">
+          <thead>
+            <tr>
+              <th class="sticky-col sticky-header">#</th>
+              <th class="sticky-header">Date</th>
+              <th class="sticky-header">Site</th>
+              <th class="sticky-header">Plot No</th>
+              <th class="sticky-header">Payer Ref</th>
+              <th class="sticky-header">Amount</th>
+              <th class="sticky-header">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of DisplayMasterList; let i = index">
+              <td class="sticky-col">{{ i + 1 }}</td>
+              <td>{{ formatDate(item.p.Date) || '-' }}</td>
+              <td>{{ item.p.SiteName || '-' }}</td>
+              <td>{{ item.p.PlotName || '-' }}</td>
+              <td>{{ item.p.PayerRef || '-' }}</td>
+              <td>₹{{ item.p.IncomeAmount || '0' }}</td>
+              <td>
+                <ion-button size="small" fill="outline" (click)="openModal(item)">
+                  View
+                </ion-button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </ion-list>
+
+  <!-- No Data -->
+  <div *ngIf="DisplayMasterList.length === 0 && !loadingService.isLoaderActive()" class="no-data-mobile-app">
+    <ion-icon name="alert-circle-outline" size="large" color="medium"></ion-icon>
+    <p>No Payment History Found.</p>
+  </div>
+
+  <!-- Modal -->
+  <ion-modal [isOpen]="modalOpen" (didDismiss)="closeModal()" class="custom-modal-mobile-app">
+    <ng-template>
+      <ion-header class="modal-toolbar-mobile-app">
+        <ion-toolbar color="primary">
+          <ion-title>Payment Details</ion-title>
+          <ion-buttons slot="end">
+            <ion-button fill="clear" (click)="closeModal()">
+              <ion-icon name="close-outline"></ion-icon>
+            </ion-button>
+          </ion-buttons>
+        </ion-toolbar>
+      </ion-header>
+
+      <ion-content scroll-y="true" class="ion-padding modal-content-mobile-app">
+        <div class="info-row-of-model-mobile-app" *ngFor="let field of [
+          { label: 'Date', value: formatDate(SelectedIncome.p.Date) },
+          { label: 'Site Name', value: SelectedIncome.p.SiteName },
+          { label: 'Plot No', value: SelectedIncome.p.PlotName },
+          { label: 'Payer Ref', value: SelectedIncome.p.PayerRef },
+          { label: 'Amount', value: '₹' + (SelectedIncome.p.IncomeAmount || '0') }
+        ]">
+          <strong class="label-mobile-app">{{ field.label }}:</strong>
+          <span class="value-mobile-app">
+            {{ field.value !== null && field.value !== undefined && field.value !== '' ? field.value : '-' }}
+          </span>
+        </div>
+      </ion-content>
+
+      <ion-footer class="modal-footer-mobile-app">
+        <ion-button expand="block" color="primary" shape="round" (click)="closeModal()">Close</ion-button>
+      </ion-footer>
+    </ng-template>
+  </ion-modal>
+
+  <!-- Print FAB -->
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button color="primary" (click)="handlePrintOrShare()">
+      <ion-icon name="print-outline"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+
+  <!-- Print Section -->
+  <div id="print-section" style="display: none;" #PrintContainer>
+    <h2 style="text-align: center; margin-bottom: 1rem;">Payment History Report</h2>
+    <table class="table table-bordered print-table" style="width: 100%; border-collapse: collapse;">
+      <thead>
+        <tr>
+          <th style="background-color: maroon; color: white;">#</th>
+          <th style="background-color: maroon; color: white;">Date</th>
+          <th style="background-color: maroon; color: white;">Site</th>
+          <th style="background-color: maroon; color: white;">Plot No</th>
+          <th style="background-color: maroon; color: white;">Payer Ref</th>
+          <th style="background-color: maroon; color: white;">Amount</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of DisplayMasterList; let i = index">
+          <td class="tbldata">{{ i + 1 }}</td>
+          <td class="tbldata">{{ formatDate(item.p.Date) }}</td>
+          <td class="tbldata">{{ item.p.SiteName }}</td>
+          <td class="tbldata">{{ item.p.PlotName }}</td>
+          <td class="tbldata">{{ item.p.PayerRef }}</td>
+          <td class="tbldata">₹{{ item.p.IncomeAmount }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</ion-content>

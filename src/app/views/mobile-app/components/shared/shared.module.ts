@@ -17,8 +17,24 @@ import { DatePickerComponent } from './date-picker/date-picker.component';
 import { ChipFilterMobileAppComponent } from './chip-filter-mobile-app/chip-filter-mobile-app.component';
 import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
 import { NzModalModule } from 'ng-zorro-antd/modal';
+import { PhoneCommaFormatDirective } from '../core/directives/phone-comma-format.directive';
+import { AmountCommaFormatDirective } from '../core/directives/amount-comma-format.directive';
 @NgModule({
-  declarations: [HeaderComponent, HeaderWithBackHandlerComponent, SelectModalComponent, FilterSheetComponent, SkeletonLoaderComponent, InputFieldComponent, CustomButtonComponent, DateFieldComponent, TransactionFilterComponent, ChipSelectorComponent, DatePickerComponent,ChipFilterMobileAppComponent],
+  declarations: [HeaderComponent, 
+    HeaderWithBackHandlerComponent, 
+    SelectModalComponent, 
+    FilterSheetComponent, 
+    SkeletonLoaderComponent, 
+    InputFieldComponent, 
+    CustomButtonComponent, 
+    DateFieldComponent, 
+    TransactionFilterComponent, 
+    ChipSelectorComponent, 
+    DatePickerComponent, 
+    ChipFilterMobileAppComponent, 
+    PhoneCommaFormatDirective,
+    AmountCommaFormatDirective
+  ],
   imports: [
     CommonModule,
     IonicModule,
@@ -28,6 +44,20 @@ import { NzModalModule } from 'ng-zorro-antd/modal';
     NzModalModule,
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA] ,
-  exports: [HeaderComponent, HeaderWithBackHandlerComponent, SelectModalComponent,FilterSheetComponent,SkeletonLoaderComponent,InputFieldComponent,CustomButtonComponent,DateFieldComponent,TransactionFilterComponent,ChipSelectorComponent,DatePickerComponent,ChipFilterMobileAppComponent]
+  exports: [HeaderComponent, 
+    HeaderWithBackHandlerComponent, 
+    SelectModalComponent, 
+    FilterSheetComponent, 
+    SkeletonLoaderComponent, 
+    InputFieldComponent, 
+    CustomButtonComponent, 
+    DateFieldComponent, 
+    TransactionFilterComponent, 
+    ChipSelectorComponent, 
+    DatePickerComponent, 
+    ChipFilterMobileAppComponent, 
+    PhoneCommaFormatDirective,
+    AmountCommaFormatDirective
+  ]
 })
 export class SharedModule { }

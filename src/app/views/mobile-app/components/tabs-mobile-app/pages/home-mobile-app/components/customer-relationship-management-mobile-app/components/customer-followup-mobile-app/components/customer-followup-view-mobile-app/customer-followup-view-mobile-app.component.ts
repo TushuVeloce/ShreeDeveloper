@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { DomainEnums } from 'src/app/classes/domain/domainenums/domainenums';
 import { CustomerEnquiry } from 'src/app/classes/domain/entities/website/customer_management/customerenquiry/customerenquiry';
@@ -11,8 +11,6 @@ import { CompanyStateManagement } from 'src/app/services/companystatemanagement'
 import { DateconversionService } from 'src/app/services/dateconversion.service';
 import { DTU } from 'src/app/services/dtu.service';
 import { FilterService } from 'src/app/services/filter.service';
-import { UIUtils } from 'src/app/services/uiutils.service';
-import { AlertService } from 'src/app/views/mobile-app/components/core/alert.service';
 import { HapticService } from 'src/app/views/mobile-app/components/core/haptic.service';
 import { LoadingService } from 'src/app/views/mobile-app/components/core/loading.service';
 import { ToastService } from 'src/app/views/mobile-app/components/core/toast.service';
@@ -24,7 +22,7 @@ import { FilterItem } from 'src/app/views/mobile-app/components/shared/chip-filt
   styleUrls: ['./customer-followup-view-mobile-app.component.scss'],
   standalone: false
 })
-export class CustomerFollowupViewMobileAppComponent implements OnInit {
+export class CustomerFollowupViewMobileAppComponent implements OnInit, OnDestroy {
   Entity: CustomerFollowUp = CustomerFollowUp.CreateNewInstance();
   SiteList: Site[] = [];
   PlotList: Plot[] = [];
@@ -33,23 +31,20 @@ export class CustomerFollowupViewMobileAppComponent implements OnInit {
   SelectedFollowUp: CustomerFollowUp = CustomerFollowUp.CreateNewInstance();
   SelectedCustomerEnquiry: CustomerEnquiry = CustomerEnquiry.CreateNewInstance();
 
-  CustomerRef: number = 0;
-  InterestedPlotRef: number = 0;
-  SiteManagementRef: number = 0;
-  date: string = '';
-  strCDT: string = '';
-  ModalOpen: boolean = false;
-  // isLoading: boolean = false;
-  companyRef: number = 0
+  CustomerRef = 0;
+  InterestedPlotRef = 0;
+  SiteManagementRef = 0;
+  date = '';
+  strCDT = '';
+  ModalOpen = false;
+  companyRef = 0;
 
   ContactModeList = DomainEnums.ContactModeList();
   selectedFilters: any[] = [];
   filters: FilterItem[] = [];
-  // Store current selected values here to preserve selections on filter reload
   selectedFilterValues: Record<string, any> = {};
 
   constructor(
-    // private uiUtils: UIUtils,
     private router: Router,
     private appStateManagement: AppStateManageService,
     private companystatemanagement: CompanyStateManagement,
@@ -58,28 +53,31 @@ export class CustomerFollowupViewMobileAppComponent implements OnInit {
     private dtu: DTU,
     private toastService: ToastService,
     private haptic: HapticService,
-    private alertService: AlertService,
     public loadingService: LoadingService
   ) { }
 
-  async ngOnInit() {
-    // this.LoadAllData()
+  async ngOnInit(): Promise<void> {
+    // Load initial data
+    await this.loadAllData();
+    this.loadFilters();
   }
-  ionViewWillEnter = async () => {
-    await this.LoadAllData();
-    await this.loadFilters();
+
+  ionViewWillEnter = async (): Promise<void> => {
+    await this.loadAllData();
+    this.loadFilters();
   };
+
   async handleRefresh(event: CustomEvent): Promise<void> {
-    await this.LoadAllData();
-    await this.loadFilters();
+    await this.loadAllData();
+    this.loadFilters();
     (event.target as HTMLIonRefresherElement).complete();
   }
-  ngOnDestroy(): void {
-    //Called once, before the instance is destroyed.
-    //Add 'implements OnDestroy' to the class.
 
+  ngOnDestroy(): void {
+    // Clean up if necessary
   }
-  loadFilters() {
+
+  private loadFilters(): void {
     this.filters = [
       {
         key: 'mode',
@@ -94,35 +92,31 @@ export class CustomerFollowupViewMobileAppComponent implements OnInit {
     ];
   }
 
-  async onFiltersChanged(updatedFilters: any[]) {
-    // debugger
-    console.log('Updated Filters:', updatedFilters);
-
+  async onFiltersChanged(updatedFilters: any[]): Promise<void> {
     for (const filter of updatedFilters) {
-      const selected = filter.selected;
-      const selectedValue = (selected === null || selected === undefined) ? null : selected;
+      const selectedValue = filter.selected ?? null;
+      this.selectedFilterValues[filter.key] = selectedValue;
 
-      // Save selected value to preserve after reload
-      this.selectedFilterValues[filter.key] = selectedValue ?? null;
-
-      switch (filter.key) {
-        case 'mode':
-          this.Entity.p.ContactMode = selectedValue ?? 0;
-          break;
+      if (filter.key === 'mode') {
+        this.Entity.p.ContactMode = selectedValue ?? 0;
       }
     }
+
     await this.getCustomerFollowUpListByDateCompanyAndContactModeRef();
-    this.loadFilters(); // Reload filters with updated options & preserve selections
+    // Avoid re-calling loadFilters here to prevent flicker, unless filter options depend on response
   }
 
-  private async LoadAllData() {
-    this.companyRef = Number(this.appStateManagement.localStorage.getItem('SelectedCompanyRef'));
+  private async loadAllData(): Promise<void> {
+    this.companyRef = Number(this.appStateManagement.localStorage.getItem('SelectedCompanyRef') ?? 0);
     if (!this.date) {
       await this.initializeDate();
+    } else {
+      // If date already set, just fetch follow-ups
+      await this.fetchFollowUps();
     }
   }
-  private async initializeDate() {
-    // this.isLoading = true;
+
+  private async initializeDate(): Promise<void> {
     this.loadingService.show();
     try {
       this.strCDT = await CurrentDateTimeRequest.GetCurrentDateTime();
@@ -134,25 +128,23 @@ export class CustomerFollowupViewMobileAppComponent implements OnInit {
         await this.fetchFollowUps();
       }
     } catch (error) {
-      // await this.uiUtils.showErrorMessage('Error', 'Failed to initialize date');
+      console.error('Failed to initialize date:', error);
     } finally {
-      // this.isLoading = false;
       this.loadingService.hide();
     }
   }
 
-
-  async onDateChange(date: string) {
+  async onDateChange(date: string): Promise<void> {
     if (date) {
       const parts = date.split('-');
       if (parts.length >= 3) {
         this.strCDT = `${parts[0]}-${parts[1]}-${parts[2]}-00-00-00-000`;
+        this.date = date;
       }
     } else {
       this.date = '';
       this.strCDT = '';
     }
-
     await this.fetchFollowUps();
   }
 
@@ -160,54 +152,49 @@ export class CustomerFollowupViewMobileAppComponent implements OnInit {
     return this.dateconversionService.formatDate(date);
   }
 
-  private async fetchFollowUps() {
-    // this.isLoading = true;
+  private async fetchFollowUps(): Promise<void> {
     this.loadingService.show();
     try {
-      // const followUps = await CustomerFollowUp.FetchEntireListByDateandPlotRef(
-      //   this.strCDT,
-      //   this.InterestedPlotRef,
-      //   async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
-      // );
-
-      // this.followupList = followUps;
-      // this.FilterFollowupList = followUps;
-      // this.strCDT = this.dtu.ConvertStringDateToFullFormat(this.ReminderDate);
-      let FollowUp = await CustomerFollowUp.FetchEntireListByDateComapanyAndContactModeRef(this.companyRef, this.strCDT, this.Entity.p.ContactMode,
-        async (errMsg) => {
-          // await this.uiUtils.showErrorMessage('Error', errMsg)
-          await this.toastService.present('Error' + errMsg, 1000, 'danger');
+      const followUps = await CustomerFollowUp.FetchEntireListByDateComapanyAndContactModeRef(
+        this.companyRef,
+        this.strCDT,
+        this.Entity.p.ContactMode,
+        async (errMsg: string) => {
+          await this.toastService.present('Error: ' + errMsg, 1000, 'danger');
           await this.haptic.error();
-        });
-      console.log('FollowUp :', FollowUp, this.companyRef, this.strCDT, this.Entity.p.ContactMode);
-      this.followupList = FollowUp
-      this.FilterFollowupList = FollowUp;
+        }
+      );
+      this.followupList = followUps;
+      this.FilterFollowupList = followUps;
     } catch (error) {
-      // await this.uiUtils.showErrorMessage('Error', 'Failed to fetch follow-ups');
+      console.error('Error fetching follow-ups:', error);
     } finally {
-      // this.isLoading = false;
       this.loadingService.hide();
     }
   }
 
-  async onFollowUpClick(followup: CustomerFollowUp) {
+  // async onFollowUpClick(followup: CustomerFollowUp): Promise<void> {
+  //   this.SelectedFollowUp = followup.GetEditableVersion();
+  //   CustomerFollowUp.SetCurrentInstance(this.SelectedFollowUp);
+  //   this.appStateManagement.StorageKey.setItem('Editable', 'Edit');
+  //   await this.router.navigate(['/mobile-app/tabs/dashboard/customer-relationship-management/customer-followup/edit']);
+  // }
+
+  onFollowUpClick = async (followup: CustomerFollowUp) => {
     this.SelectedFollowUp = followup.GetEditableVersion();
     CustomerFollowUp.SetCurrentInstance(this.SelectedFollowUp);
     this.appStateManagement.StorageKey.setItem('Editable', 'Edit');
-    this.onAddCustomerEnquiry()
-    // await this.router.navigate(['/app_homepage/tabs/crm/customer-follow-up/add']);
-  }
+    await this.router.navigate(['/mobile-app/tabs/dashboard/customer-relationship-management/customer-followup/edit']);
+  };
 
-  async onAddCustomerEnquiry() {
-    await this.router.navigate(['mobile-app/tabs/dashboard/customer-relationship-management/customer-followup/edit']);
-  }
-  formatData = (list: any[]) => {
+  formatData(list: any[]): { Ref: any; Name: any }[] {
     return list.map(item => ({
       Ref: item.p.Ref,
       Name: item.p.Name
     }));
-  };
-  openFilterSheet = async () => {
+  }
+
+  async openFilterSheet(): Promise<void> {
     const filterData = {
       categories: [
         {
@@ -218,47 +205,43 @@ export class CustomerFollowupViewMobileAppComponent implements OnInit {
           dependUponRef: 0,
           options: this.ContactModeList
         }
-        // ,{
-        //   Name: 'From Date',
-        //   Ref: 400,
-        //   multi: false,
-        //   date: true,
-        //   dependUponRef: 0,
-        //   options: []
-        // }
       ]
     };
 
-    // console.log('Vendor List:', this.VendorList);
-    // console.log('Stage List:', this.StageList);
-
     try {
       const res = await this.filterService.openFilter(filterData, this.selectedFilters);
-      console.log('res :', res);
-
-      if (res.selected && res.selected.length > 0) {
+      if (res.selected?.length) {
         this.selectedFilters = res.selected;
         this.Entity.p.ContactMode = this.selectedFilters[0].selectedOptions[0].Ref;
-        this.getCustomerFollowUpListByDateCompanyAndContactModeRef();
       } else {
         this.Entity.p.ContactMode = 0;
         this.selectedFilters = [];
-        this.getCustomerFollowUpListByDateCompanyAndContactModeRef();
       }
+      await this.getCustomerFollowUpListByDateCompanyAndContactModeRef();
     } catch (error) {
-      console.error('Error in filter selection:', error);
+      console.error('Filter sheet open error:', error);
     }
-  };
-  getCustomerFollowUpListByDateCompanyAndContactModeRef = async () => {
-    this.strCDT = this.dtu.ConvertStringDateToFullFormat(this.strCDT);
-    let FollowUp = await CustomerFollowUp.FetchEntireListByDateComapanyAndContactModeRef(this.companyRef, this.strCDT, this.Entity.p.ContactMode,
-      async (errMsg) => {
-        // await this.uiUtils.showErrorMessage('Error', errMsg)
-        await this.toastService.present('Error' + errMsg, 1000, 'danger');
-        await this.haptic.error();
-      });
-    console.log('FollowUp :', FollowUp);
-    this.FilterFollowupList = FollowUp
-    this.followupList = FollowUp;
-  };
+  }
+
+  private async getCustomerFollowUpListByDateCompanyAndContactModeRef(): Promise<void> {
+    try {
+      this.loadingService.show();
+      this.strCDT = this.dtu.ConvertStringDateToFullFormat(this.strCDT);
+      const followUps = await CustomerFollowUp.FetchEntireListByDateComapanyAndContactModeRef(
+        this.companyRef,
+        this.strCDT,
+        this.Entity.p.ContactMode,
+        async (errMsg: string) => {
+          await this.toastService.present('Error: ' + errMsg, 1000, 'danger');
+          await this.haptic.error();
+        }
+      );
+      this.FilterFollowupList = followUps;
+      this.followupList = followUps;
+    } catch (error) {
+      console.error('Error loading filtered follow-ups:', error);
+    } finally {
+      this.loadingService.hide();
+    }
+  }
 }

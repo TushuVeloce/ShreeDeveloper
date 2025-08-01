@@ -24,7 +24,7 @@
 
 
     <!-- Select site -->
-    <ion-item class="input-item" button detail (click)="selectSiteBottomsheet()">
+    <ion-item class="input-item" button detail (click)="selectSiteBottomsheet()" [disabled]="SiteList.length == 0">
       <ion-label>Site</ion-label>
 
       <!-- Text showing the selected status -->
@@ -32,21 +32,54 @@
         {{ SiteName|| 'Select' }}
       </ion-text>
 
-      <!-- Dropdown icon (chevron) on the right -->
-      <!-- <ion-icon name="chevron-down-outline" slot="end" class="dropdown-icon"></ion-icon> -->
+    </ion-item>
+
+    <!-- Select Ledger -->
+    <ion-item class="input-item" button detail (click)="selectLedgerBottomsheet()" [disabled]="LedgerList.length == 0">
+      <ion-label>Ledger</ion-label>
+
+      <!-- Text showing the selected status -->
+      <ion-text slot="end" class="status-text">
+        {{ LedgerName|| 'Select' }}
+      </ion-text>
+    </ion-item>
+
+    <!-- Select Sub Ledger -->
+    <ion-item class="input-item" button detail (click)="selectsubLedgerBottomsheet()" [disabled]="SubLedgerList.length == 0">
+      <ion-label>Sub Ledger</ion-label>
+
+      <!-- Text showing the selected status -->
+      <ion-text slot="end" class="status-text">
+        {{ subLedgerName|| 'Select' }}
+      </ion-text>
+    </ion-item>
+
+    <!-- Description input-->
+    <ion-item class="input-item">
+      <ion-input label="Description" labelPlacement="floating" placeholder="Enter Description"
+        [(ngModel)]="Entity.p.Description" ></ion-input>
+    </ion-item>
+
+    <!-- Reason input-->
+    <ion-item class="input-item">
+      <ion-input label="Reason" labelPlacement="floating" placeholder="Enter Reason" [(ngModel)]="Entity.p.Reason"
+        ></ion-input>
+    </ion-item>
+
+    <!-- Narration input-->
+    <ion-item class="input-item">
+      <ion-input label="Narration" labelPlacement="floating" placeholder="Enter Narration" [(ngModel)]="Entity.p.Narration"
+        ></ion-input>
     </ion-item>
 
     <!-- Select Vendor -->
-    <ion-item class="input-item" button detail (click)="selectVendorBottomsheet()">
+    <ion-item class="input-item" button detail (click)="selectVendorBottomsheet()" [disabled]="VendorList.length == 0">
       <ion-label>Vendor</ion-label>
 
       <!-- Text showing the selected status -->
       <ion-text slot="end" class="status-text">
         {{ VendorName|| 'Select' }}
       </ion-text>
-
-      <!-- Dropdown icon (chevron) on the right -->
-      <!-- <ion-icon name="chevron-down-outline" slot="end" class="dropdown-icon"></ion-icon> -->
     </ion-item>
 
     <!-- Vendor Trade Name input-->
@@ -254,7 +287,7 @@
         <ion-content scroll-y="true" class="ion-padding modal-content-mobile-app">
           <ion-list lines="none">
             <!-- Material Dropdown -->
-            <ion-item class="input-item" button detail (click)="selectMaterialBottomsheet()" *ngIf="!ModalEditable">
+            <ion-item class="input-item" button detail (click)="selectMaterialBottomsheet()" *ngIf="!ModalEditable" [disabled]="StockOrderList.length == 0">
               <ion-label>Material Name</ion-label>
 
               <!-- Text showing the selected status -->
@@ -281,7 +314,8 @@
             <!--Requisition Quantity -->
             <ion-item class="input-item">
               <ion-input label="Requisition Qty" labelPlacement="floating" type="number" placeholder="Enter Quantity"
-                [(ngModel)]="newOrderMaterial.RequisitionQty" clearInput="true" clearOnEdit="true" [disabled]="'true'"></ion-input>
+                [(ngModel)]="newOrderMaterial.RequisitionQty" clearInput="true" clearOnEdit="true"
+                [disabled]="'true'"></ion-input>
             </ion-item>
 
             <!--Total Ordered Quantity -->
@@ -373,7 +407,8 @@
             <!--Total Amount -->
             <ion-item class="input-item">
               <ion-input label="Total Amount" labelPlacement="floating" type="number" placeholder="Enter Total Amount"
-                [(ngModel)]="newOrderMaterial.TotalAmount" clearInput="true" clearOnEdit="true" [disabled]="'true'"></ion-input>
+                [(ngModel)]="newOrderMaterial.TotalAmount" clearInput="true" clearOnEdit="true"
+                [disabled]="'true'"></ion-input>
             </ion-item>
           </ion-list>
         </ion-content>

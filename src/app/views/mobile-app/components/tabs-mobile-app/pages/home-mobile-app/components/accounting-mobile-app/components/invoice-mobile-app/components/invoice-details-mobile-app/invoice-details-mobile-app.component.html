@@ -29,55 +29,43 @@
     </ion-item>
 
     <!-- Select site -->
-    <ion-item class="input-item" button detail (click)="selectSiteBottomsheet()">
+    <ion-item class="input-item" button detail (click)="selectSiteBottomsheet()" [disabled]="SiteList.length === 0">
       <ion-label>Site</ion-label>
 
       <!-- Text showing the selected status -->
       <ion-text slot="end" class="status-text">
         {{ SiteName|| 'Select' }}
       </ion-text>
-
-      <!-- Dropdown icon (chevron) on the right -->
-      <!-- <ion-icon name="chevron-down-outline" slot="end" class="dropdown-icon"></ion-icon> -->
     </ion-item>
 
     <!-- Select Ledger -->
-    <ion-item class="input-item" button detail (click)="selectLedgerBottomsheet()">
+    <ion-item class="input-item" button detail (click)="selectLedgerBottomsheet()" [disabled]="LedgerList.length === 0">
       <ion-label>Ledger</ion-label>
 
       <!-- Text showing the selected status -->
       <ion-text slot="end" class="status-text">
         {{ LedgerName|| 'Select' }}
       </ion-text>
-
-      <!-- Dropdown icon (chevron) on the right -->
-      <!-- <ion-icon name="chevron-down-outline" slot="end" class="dropdown-icon"></ion-icon> -->
     </ion-item>
 
     <!-- Select Sub Ledger -->
-    <ion-item class="input-item" button detail (click)="selectSubLedgerBottomsheet()">
+    <ion-item class="input-item" button detail (click)="selectSubLedgerBottomsheet()" [disabled]="SubLedgerList.length === 0">
       <ion-label>Sub Ledger</ion-label>
 
       <!-- Text showing the selected status -->
       <ion-text slot="end" class="status-text">
         {{ SubLedgerName|| 'Select' }}
       </ion-text>
-
-      <!-- Dropdown icon (chevron) on the right -->
-      <!-- <ion-icon name="chevron-down-outline" slot="end" class="dropdown-icon"></ion-icon> -->
     </ion-item>
 
     <!-- Select Expense Type -->
-    <ion-item class="input-item" button detail (click)="selectExpenseTypeBottomsheet()">
+    <ion-item class="input-item" button detail (click)="selectExpenseTypeBottomsheet()" [disabled]="ExpenseTypeList.length === 0">
       <ion-label>Expense Type</ion-label>
 
       <!-- Text showing the selected status -->
       <ion-text slot="end" class="status-text">
         {{ ExpenseTypeName|| 'Select' }}
       </ion-text>
-
-      <!-- Dropdown icon (chevron) on the right -->
-      <!-- <ion-icon name="chevron-down-outline" slot="end" class="dropdown-icon"></ion-icon> -->
     </ion-item>
 
     <!-- Description -->
@@ -88,16 +76,13 @@
 
     <!-- Select Recipient Type -->
     <ion-item class="input-item" button detail (click)="selectRecipientTypeBottomsheet()"
-      *ngIf="Entity.p.ExpenseType != MachinaryExpenseRef && Entity.p.ExpenseType != LabourExpenseRef">
+      *ngIf="Entity.p.ExpenseType == OtherExpenseRef" [disabled]="RecipientTypesList.length === 0">
       <ion-label>Recipient Type</ion-label>
 
       <!-- Text showing the selected status -->
       <ion-text slot="end" class="status-text">
         {{ RecipientTypeName|| 'Select' }}
       </ion-text>
-
-      <!-- Dropdown icon (chevron) on the right -->
-      <!-- <ion-icon name="chevron-down-outline" slot="end" class="dropdown-icon"></ion-icon> -->
     </ion-item>
 
 
@@ -110,10 +95,6 @@
       <ion-text slot="end" class="status-text" (click)="selectRecipientNameBottomsheet()">
         {{ RecipientName || 'Select' }}
       </ion-text>
-
-      <!-- Dropdown Icon -->
-      <!-- <ion-icon name="chevron-down-outline" slot="end" class="dropdown-icon" style="margin-left: 4px;"></ion-icon> -->
-
       <!-- Inline Add Button -->
       <ion-button slot="end" fill="solid" size="small" (click)="AddRecipientName()"
         style="--background: var(--ion-color-primary); --border-radius: 8px; --padding-start: 6px; --padding-end: 6px; margin-left: 6px;"
@@ -163,22 +144,19 @@
 
     <!-- Select Vendor -->
     <ion-item class="input-item" button detail (click)="selectVendorBottomsheet()"
-      *ngIf="Entity.p.ExpenseType == MachinaryExpenseRef || Entity.p.ExpenseType == LabourExpenseRef">
+      *ngIf="Entity.p.ExpenseType == MachinaryExpenseRef || Entity.p.ExpenseType == LabourExpenseRef" [disabled]="VendorList.length === 0">
       <ion-label>Vendor</ion-label>
 
       <!-- Text showing the selected status -->
       <ion-text slot="end" class="status-text">
         {{ VendorName|| 'Select' }}
       </ion-text>
-
-      <!-- Dropdown icon (chevron) on the right -->
-      <!-- <ion-icon name="chevron-down-outline" slot="end" class="dropdown-icon"></ion-icon> -->
     </ion-item>
 
     <!-- Vendor Service -->
     <ion-item class="input-item" button detail (click)="selectVendorServiceBottomsheet()"
       *ngIf="Entity.p.ExpenseType == MachinaryExpenseRef || Entity.p.ExpenseType == LabourExpenseRef"
-      [disabled]="!VendorName">
+      [disabled]="!VendorName && VendorServiceList.length === 0">
       <ion-label>Vendor Service</ion-label>
 
       <!-- Text showing the selected status -->
@@ -186,8 +164,6 @@
         {{ VendorServiceName|| 'Select' }}
       </ion-text>
 
-      <!-- Dropdown icon (chevron) on the right -->
-      <!-- <ion-icon name="chevron-down-outline" slot="end" class="dropdown-icon"></ion-icon> -->
     </ion-item>
 
     <!-- Vehical No. input-->
@@ -197,16 +173,13 @@
     </ion-item>
 
     <!-- Unit -->
-    <ion-item class="input-item" button detail (click)="selectUnitBottomsheet()">
+    <ion-item class="input-item" button detail (click)="selectUnitBottomsheet()" [disabled]="UnitList.length === 0">
       <ion-label>Unit</ion-label>
 
       <!-- Text showing the selected status -->
       <ion-text slot="end" class="status-text">
         {{ UnitName|| 'Select' }}
       </ion-text>
-
-      <!-- Dropdown icon (chevron) on the right -->
-      <!-- <ion-icon name="chevron-down-outline" slot="end" class="dropdown-icon"></ion-icon> -->
     </ion-item>
 
     <!--Machinary Details Header -->
@@ -269,14 +242,14 @@
       </div>
     </ng-container>
 
-    <ng-template
+    <ng-container
       *ngIf="Entity.p.MachineUsageDetailsArray.length === 0 &&( Entity.p.ExpenseType == MachinaryExpenseRef && Entity.p.UnitRef == TimeUnitRef)">
       <div class="ion-padding ion-text-center">
         <ion-text color="medium">
           <p>No Machinery Details data available</p>
         </ion-text>
       </div>
-    </ng-template>
+    </ng-container>
 
 
     <!--Labour Time Details Header -->
@@ -351,17 +324,89 @@
       </div>
     </ng-container>
 
-    <ng-template *ngIf="Entity.p.LabourExpenseDetailsArray.length === 0 && Entity.p.ExpenseType == LabourExpenseRef">
+    <ng-container *ngIf="Entity.p.LabourExpenseDetailsArray.length === 0 && Entity.p.ExpenseType == LabourExpenseRef">
       <div class="ion-padding ion-text-center">
         <ion-text color="medium">
           <p>No Labour Time Details data available</p>
         </ion-text>
       </div>
-    </ng-template>
+    </ng-container>
+
+    <!--Material Details Header -->
+    <ion-grid class="ion-margin-top" *ngIf="Entity.p.ExpenseType == StockExpenseRef">
+      <ion-row class="ion-align-items-center">
+        <ion-col size="6">
+          <h5><strong>Material Details</strong></h5>
+        </ion-col>
+        <!-- <ion-col size="6" class="ion-text-right">
+          <ion-button fill="outline" size="small" (click)="isLabourTimeModalOpen = true">
+            <ion-icon name="add-circle-outline" slot="start"></ion-icon>
+            Add
+          </ion-button>
+        </ion-col> -->
+      </ion-row>
+    </ion-grid>
+
+    <!-- Material Details Table -->
+    <ng-container *ngIf="Entity.p.MaterialInvoiceDetailsArray.length > 0 && Entity.p.ExpenseType == StockExpenseRef">
+      <div class="table-container">
+        <div class="table-scroll">
+          <table class="custom-table ion-text-center">
+            <thead>
+              <tr>
+                <th class="sticky-col sticky-header">#</th>
+                <th *ngFor="let item of materialheaders" class="sticky-header">{{ item }}</th>
+                <!-- <th class="sticky-col sticky-header">Actions</th> -->
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of Entity.p.MaterialInvoiceDetailsArray; let i = index">
+                <td class="sticky-col">{{i + 1 }}</td>
+                <td>
+                  {{ item.MaterialName || '-' }}
+                </td>
+                <td>
+                  {{ item.UnitName || '-' }}
+                </td>
+                <td>
+                  {{ item.Qty || '-' }}
+                </td>
+                <td>
+                  {{ (item.Rate | currency : "INR") || '-' }}
+                </td>
+                <td>
+                  {{ (item.DiscountedRate | currency : "INR") || '-' }}
+                </td>
+                <td>
+                  {{ (item.DeliveryCharges | currency : "INR") || '-' }}
+                </td>
+                <td>
+                  {{ (item.TotalAmount | currency : "INR") || '-' }}
+                </td>
+                <!-- <td>
+                  <ion-icon name="create-outline" color="warning" size="small"
+                    style="margin-right: 12px; cursor: pointer" (click)="EditLabourTime(i)"></ion-icon>
+                  <ion-icon name="trash-outline" color="danger" size="small" style="cursor: pointer"
+                    (click)="RemoveLabourTime(i)"></ion-icon>
+                </td> -->
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </ng-container>
+
+    <ng-container *ngIf="Entity.p.MaterialInvoiceDetailsArray.length == 0 && Entity.p.ExpenseType == StockExpenseRef">
+      <div class="ion-padding ion-text-center">
+        <ion-text color="medium">
+          <p>No Material Details data available</p>
+        </ion-text>
+      </div>
+    </ng-container>
 
     <!-- Quantity input-->
     <ion-item class="input-item"
-      *ngIf="Entity.p.ExpenseType != LabourExpenseRef && !(Entity.p.ExpenseType == MachinaryExpenseRef&& Entity.p.UnitRef == TimeUnitRef)">
+       *ngIf="Entity.p.ExpenseType != LabourExpenseRef && !(Entity.p.ExpenseType == MachinaryExpenseRef&& Entity.p.UnitRef == TimeUnitRef)">
       <ion-input label="Quantity" labelPlacement="floating" placeholder="Enter Quantity" [(ngModel)]="Entity.p.Qty"
         (ngModelChange)="CalculateAmount()" clearInput="true" clearOnEdit="true" type="number"></ion-input>
     </ion-item>
@@ -385,21 +430,23 @@
           <!-- Diesel Ltr -->
           <ion-item class="input-item">
             <ion-input type="number" label="Ltr" labelPlacement="floating" placeholder="Enter Diesel Ltr"
-              [(ngModel)]="Entity.p.DieselQty" (ngModelChange)="CalculateDieselAmount()" clearInput="true" clearOnEdit="true"></ion-input>
+              [(ngModel)]="Entity.p.DieselQty" (ngModelChange)="CalculateDieselAmount()" clearInput="true"
+              clearOnEdit="true"></ion-input>
           </ion-item>
         </ion-col>
         <ion-col size="4">
           <!-- Diesel Rate -->
           <ion-item class="input-item">
             <ion-input type="number" label="Rate" labelPlacement="floating" placeholder="Enter Diesel Rate"
-              [(ngModel)]="Entity.p.DieselRate" (ngModelChange)="CalculateDieselAmount()" clearInput="true" clearOnEdit="true"></ion-input>
+              [(ngModel)]="Entity.p.DieselRate" (ngModelChange)="CalculateDieselAmount()" clearInput="true"
+              clearOnEdit="true"></ion-input>
           </ion-item>
         </ion-col>
         <ion-col size="4">
           <!-- Diesel Amount -->
           <ion-item class="input-item">
             <ion-input type="number" [disabled]="'true'" label="Amount" labelPlacement="floating"
-              placeholder="Enter Diesel Amount" [(ngModel)]="Entity.p.DieselAmount" ></ion-input>
+              placeholder="Enter Diesel Amount" [(ngModel)]="Entity.p.DieselAmount"></ion-input>
           </ion-item>
         </ion-col>
       </ion-row>
@@ -412,16 +459,13 @@
     </ion-item>
 
     <!-- Unit -->
-    <ion-item class="input-item" button detail (click)="selectInvoiceModeOfPaymentBottomsheet()">
+    <ion-item class="input-item" button detail (click)="selectInvoiceModeOfPaymentBottomsheet()" [disabled]="ModeofPaymentList.length === 0">
       <ion-label>Mode of Payment</ion-label>
 
       <!-- Text showing the selected status -->
       <ion-text slot="end" class="status-text">
         {{ InvoiceModeOfPaymentName|| 'Select' }}
       </ion-text>
-
-      <!-- Dropdown icon (chevron) on the right -->
-      <!-- <ion-icon name="chevron-down-outline" slot="end" class="dropdown-icon"></ion-icon> -->
     </ion-item>
 
     <!-- Narration -->
@@ -523,7 +567,7 @@
         <ion-content scroll-y="true" class="ion-padding modal-content-mobile-app">
           <ion-list lines="none">
             <!-- Labour Type -->
-            <ion-item class="input-item" button detail (click)="selectLabourTypeBottomsheet()">
+            <ion-item class="input-item" button detail (click)="selectLabourTypeBottomsheet()" [disabled]="LabourTypeList.length === 0">
               <ion-label>Labour Type</ion-label>
               <ion-text slot="end" class="status-text">
                 {{ LabourTypeName || 'Select' }}
@@ -580,7 +624,8 @@
             <!-- Labour Rate -->
             <ion-item class="input-item">
               <ion-input type="number" label="Labour Rate" labelPlacement="floating" placeholder="Enter Labour Rate"
-                [(ngModel)]="LabourTimeEntity.LabourRate" (ngModelChange)="CalculateLabourAmount()" clearInput="true" clearOnEdit="true">
+                [(ngModel)]="LabourTimeEntity.LabourRate" (ngModelChange)="CalculateLabourAmount()" clearInput="true"
+                clearOnEdit="true">
               </ion-input>
             </ion-item>
 
@@ -616,12 +661,12 @@
     <ion-grid>
       <ion-row>
         <ion-col size="6">
-          <ion-button expand="block" (click)="goBack()" class="submit-button cancel-button">
+          <ion-button expand="block" color="medium" (click)="goBack()" class="submit-button cancel-button">
             Cancel
           </ion-button>
         </ion-col>
         <ion-col size="6" *ngIf="!Entity.p.IsInvoiceAutoGenerated">
-          <ion-button expand="block" (click)="SaveInvoiceMaster()" class="submit-button primary-button">
+          <ion-button expand="block" color="primary" (click)="SaveInvoiceMaster()" class="submit-button primary-button" [disabled]="Entity.p.ExpenseType == StockExpenseRef">
             Save
           </ion-button>
         </ion-col>

@@ -16,7 +16,6 @@ import { AppStateManageService } from 'src/app/services/app-state-manage.service
 import { BottomsheetMobileAppService } from 'src/app/services/bottomsheet-mobile-app.service';
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
 import { DTU } from 'src/app/services/dtu.service';
-import { UIUtils } from 'src/app/services/uiutils.service';
 import { Utils } from 'src/app/services/utils.service';
 import { AlertService } from 'src/app/views/mobile-app/components/core/alert.service';
 import { HapticService } from 'src/app/views/mobile-app/components/core/haptic.service';
@@ -57,6 +56,13 @@ export class CustomerEnquiryDetailsMobileAppComponent implements OnInit {
   DetailsFormTitle: 'New Customer Enquiry' | 'Edit Customer Enquiry' = 'New Customer Enquiry';
   public monthList = DomainEnums.MonthList();
   public SelectedMonth: any[] = [];
+  public SelectedCustomerStatus: any[] = [];
+  public SelectedContactModeInAgentBroker: any[] = [];
+  public SelectedContactMode: any[] = [];
+  public SelectedLeadHandleBy: any[] = [];
+  public SelectedLeadSource: any[] = [];
+  public SelectedInterestedPlots: any[] = [];
+  public SelectedInterestedSite: any[] = [];
   public contactModeName: string | null = null;
   public contactModeNameInAgentBroker: string | null = null;
   public LeadHandleByName: string | null = null;
@@ -79,7 +85,6 @@ export class CustomerEnquiryDetailsMobileAppComponent implements OnInit {
 
   constructor(
     private router: Router,
-    // private uiUtils: UIUtils,
     private appStateManagement: AppStateManageService,
     private utils: Utils,
     private dtu: DTU,
@@ -91,24 +96,25 @@ export class CustomerEnquiryDetailsMobileAppComponent implements OnInit {
     private alertService: AlertService,
     private loadingService: LoadingService
   ) { }
-  async ngOnInit(): Promise<void> {
-    await this.loadCustomerEnquiryIfEmployeeExists();
+  ngOnInit = async () => {
+    // await this.loadCustomerEnquiryIfEmployeeExists();
   }
 
-  // ionViewWillEnter = async () => {
-  //   await this.loadSalarySlipRequestsIfEmployeeExists();
-  // };
+  ionViewWillEnter = async () => {
+    await this.loadCustomerEnquiryIfEmployeeExists();
+  };
 
   ngOnDestroy(): void {
     // cleanup logic if needed later
   }
 
 
-  private async loadCustomerEnquiryIfEmployeeExists(): Promise<void> {
+  private loadCustomerEnquiryIfEmployeeExists = async () => {
+  console.log('loadCustomerEnquiryIfEmployeeExists ');
     try {
-      // this.isLoading = true;
       await this.loadingService.show();
       this.companyRef = Number(this.appStateManagement.localStorage.getItem('SelectedCompanyRef'));
+      console.log('this.companyRef :', this.companyRef);
       this.appStateManagement.setDropdownDisabled(true);
 
       await this.FormulateCountryList();
@@ -144,10 +150,6 @@ export class CustomerEnquiryDetailsMobileAppComponent implements OnInit {
           this.localOfficeVisitDate = this.dtu.ConvertStringDateToShortFormat(
             this.Entity.p.CustomerFollowUps[0].OfficeVisitDate
           );
-          // this.localOfficeVisitDate = this.datePipe.transform(
-          //   this.dtu.FromString(this.Entity.p.OfficeVisitDate),
-          //   'yyyy-MM-dd'
-          // );
         }
 
         // Reminde Date
@@ -155,13 +157,7 @@ export class CustomerEnquiryDetailsMobileAppComponent implements OnInit {
           this.localReminderDate = this.dtu.ConvertStringDateToShortFormat(
             this.Entity.p.CustomerFollowUps[0].ReminderDate
           );
-          // this.localReminderDate = this.datePipe.transform(
-          //   this.dtu.FromString(this.Entity.p.ReminderDate),
-          //   'yyyy-MM-dd'
-          // );
         }
-
-        this.appStateManagement.StorageKey.removeItem('Editable');
         this.IsPlotDetails = true;
         if (this.Entity.p.CountryRef) {
           this.StateList = this.StateList.filter(
@@ -181,13 +177,22 @@ export class CustomerEnquiryDetailsMobileAppComponent implements OnInit {
         this.getCityListByStateRef(this.Entity.p.StateRef);
         this.selectedCity = [{ p: { Ref: this.Entity.p.CityRef, Name: this.Entity.p.CityName } }];
         this.CityName = this.selectedCity[0].p.Name;
+        this.appStateManagement.StorageKey.removeItem('Editable');
+
       } else {
         this.Entity = CustomerEnquiry.CreateNewInstance();
         CustomerEnquiry.SetCurrentInstance(this.Entity);
         // Check if CountryRef is already set (e.g., India is preselected)
         if (this.Entity.p.CountryRef) {
           // Load states for the preselected country
+          this.CountryName = this.CountryList.find(item => item.p.Ref == this.Entity.p.CountryRef)?.p.Name ?? '';
+          this.selectedCountry = [{ p: { Ref: this.Entity.p.CountryRef, Name: this.CountryName } }];
           await this.getStateListByCountryRef(this.Entity.p.CountryRef);
+          this.StateName = this.StateList.find(item => item.p.Ref == this.Entity.p.StateRef)?.p.Name ?? '';
+          this.selectedState = [{ p: { Ref: this.Entity.p.StateRef, Name: this.StateName } }];
+          await this.getCityListByStateRef(this.Entity.p.StateRef);
+          this.CityName = this.CityList.find(item => item.p.Ref == this.Entity.p.CityRef)?.p.Name ?? '';
+          this.selectedCity = [{ p: { Ref: this.Entity.p.CityRef, Name: this.CityName } }];
         }
       }
       this.InitialEntity = Object.assign(
@@ -198,8 +203,6 @@ export class CustomerEnquiryDetailsMobileAppComponent implements OnInit {
 
       if (this.Entity.p.CustomerFollowUps[0].TransDateTime.trim().length <= 0) {
         let strCDT = await CurrentDateTimeRequest.GetCurrentDateTime();
-
-        // this.BillDate = this.datePipe.transform(this.dtu.FromString(strCDT), 'yyyy-MM-dd');
         this.Date = strCDT.substring(0, 10);
         this.DateWithTime = strCDT;
       } else {
@@ -221,60 +224,56 @@ export class CustomerEnquiryDetailsMobileAppComponent implements OnInit {
       await this.loadingService.hide();
     }
   }
-  public async selectCountryBottomsheet(): Promise<void> {
+  public selectCountryBottomsheet = async (): Promise<void> => {
     try {
       const options = this.CountryList;
       this.openSelectModal(options, this.selectedCountry, false, 'Select Country', 1, (selected) => {
         this.selectedCountry = selected;
-
         this.Entity.p.CountryRef = selected[0].p.Ref;
         this.CountryName = selected[0].p.Name;
-        this.getStateListByCountryRef(selected[0].p.Ref)
+        this.selectedState = [];
+        this.StateList = [];
+        this.StateName = '';
+        this.Entity.p.StateRef = 0;
+        this.selectedCity = [];
+        this.CityList = [];
+        this.CityName = '';
+        this.Entity.p.CityRef = 0;
       });
+      if (this.Entity.p.CountryRef > 0) {
+        await this.getStateListByCountryRef(this.Entity.p.CountryRef);
+      }
     } catch (error) {
 
     }
   }
 
-  public async selectStateBottomsheet(): Promise<void> {
+  public selectStateBottomsheet = async (): Promise<void> => {
     try {
-      // Filter the list before mapping
-      // const filteredList = this.CustomerStatusList.filter(
-      //   (item) => item.Ref !== CustomerStatus.ConvertToDeal && item.Ref !== CustomerStatus.LeadClosed
-      // );
-
-      // const options = this.MarketingModesList.map((item) => ({ p: item }));
       const options = this.StateList;
-
-      // let selectData: any[] = [];
 
       this.openSelectModal(options, this.selectedState, false, 'Select State', 1, (selected) => {
         this.selectedState = selected;
-
         this.Entity.p.StateRef = selected[0].p.Ref;
         this.StateName = selected[0].p.Name;
-        this.getCityListByStateRef(selected[0].p.Ref)
+        this.selectedCity = [];
+        this.CityList = [];
+        this.CityName = '';
+        this.Entity.p.CityRef = 0;
       });
+      if (this.Entity.p.StateRef > 0) {
+        await this.getCityListByStateRef(this.Entity.p.StateRef);
+      }
     } catch (error) {
 
     }
   }
 
-  public async selectCityBottomsheet(): Promise<void> {
+  public selectCityBottomsheet = async (): Promise<void> => {
     try {
-      // Filter the list before mapping
-      // const filteredList = this.CustomerStatusList.filter(
-      //   (item) => item.Ref !== CustomerStatus.ConvertToDeal && item.Ref !== CustomerStatus.LeadClosed
-      // );
-
-      // const options = this.MarketingModesList.map((item) => ({ p: item }));
       const options = this.CityList;
-
-      // let selectData: any[] = [];
-
       this.openSelectModal(options, this.selectedCity, false, 'Select City', 1, (selected) => {
         this.selectedCity = selected;
-
         this.Entity.p.CityRef = selected[0].p.Ref;
         this.CityName = selected[0].p.Name;
       });
@@ -283,45 +282,32 @@ export class CustomerEnquiryDetailsMobileAppComponent implements OnInit {
     }
   }
 
-  public async selectInterestedSiteBottomsheet(): Promise<void> {
+  public selectInterestedSiteBottomsheet = async (): Promise<void> => {
     try {
-      // Filter the list before mapping
-      // const filteredList = this.CustomerStatusList.filter(
-      //   (item) => item.Ref !== CustomerStatus.ConvertToDeal && item.Ref !== CustomerStatus.LeadClosed
-      // );
-
-      // const options = this.MarketingModesList.map((item) => ({ p: item }));
       const options = this.SiteList;
-
-      let selectData: any[] = [];
-
-      this.openSelectModal(options, selectData, false, 'Select Interested Site', 1, (selected) => {
-        selectData = selected;
-
+      this.openSelectModal(options, this.SelectedInterestedSite, false, 'Select Interested Site', 1, (selected) => {
+        this.SelectedInterestedSite = selected;
         this.SiteManagementRef = selected[0].p.Ref;
         this.SiteManagementName = selected[0].p.Name;
-        this.getPlotBySiteRefList(selected[0].p.Ref)
       });
+      if (this.SiteManagementRef > 0) {
+       await this.getPlotBySiteRefList(this.SiteManagementRef)
+      }
     } catch (error) {
 
     }
   }
 
-  public async selectInterestedPlotsBottomsheet(): Promise<void> {
+  public selectInterestedPlotsBottomsheet = async (): Promise<void> => {
     try {
       if (this.SiteManagementRef <= 0) {
-        // this.uiUtils.showWarningToster(`Please Select a Site`);
-        await this.toastService.present('Please Select a Site', 1000, 'danger');
+        await this.toastService.present('Please Select a Plot', 1000, 'danger');
         await this.haptic.error();
         return;
       }
       const options = this.PlotList;
-
-      let selectData: any[] = [];
-
-      this.openSelectModal(options, selectData, false, 'Select Interested Plots', 1, (selected) => {
-        selectData = selected;
-
+      this.openSelectModal(options, this.SelectedInterestedPlots, false, 'Select Interested Plots', 1, (selected) => {
+        this.SelectedInterestedPlots = selected;
         this.InterestedPlotRef = selected[0].p.Ref;
         this.InterestedPlotNo = selected[0].p.PlotNo;
       });
@@ -330,20 +316,11 @@ export class CustomerEnquiryDetailsMobileAppComponent implements OnInit {
     }
   }
 
-  public async selectLeadSourceBottomsheet(): Promise<void> {
+  public selectLeadSourceBottomsheet = async (): Promise<void> => {
     try {
-      // Filter the list before mapping
-      // const filteredList = this.CustomerStatusList.filter(
-      //   (item) => item.Ref !== CustomerStatus.ConvertToDeal && item.Ref !== CustomerStatus.LeadClosed
-      // );
-
       const options = this.MarketingModesList.map((item) => ({ p: item }));
-
-      let selectData: any[] = [];
-
-      this.openSelectModal(options, selectData, false, 'Select Lead Source', 1, (selected) => {
-        selectData = selected;
-
+      this.openSelectModal(options, this.SelectedLeadSource, false, 'Select Lead Source', 1, (selected) => {
+        this.SelectedLeadSource = selected;
         this.Entity.p.CustomerFollowUps[0].LeadSource = selected[0].p.Ref;
         this.LeadSourceName = selected[0].p.Name;
         this.onLeadSourceChange(selected[0].p.Ref)
@@ -352,21 +329,11 @@ export class CustomerEnquiryDetailsMobileAppComponent implements OnInit {
 
     }
   }
-  public async selectLeadHandleByBottomsheet(): Promise<void> {
+  public selectLeadHandleByBottomsheet = async (): Promise<void> => {
     try {
-      // Filter the list before mapping
-      // const filteredList = this.CustomerStatusList.filter(
-      //   (item) => item.Ref !== CustomerStatus.ConvertToDeal && item.Ref !== CustomerStatus.LeadClosed
-      // );
-
-      // const options = this.ContactModeList.map((item) => ({ p: item }));
       const options = this.EmployeeList;
-
-      let selectData: any[] = [];
-
-      this.openSelectModal(options, selectData, false, 'Select Lead Handle By', 1, (selected) => {
-        selectData = selected;
-
+      this.openSelectModal(options, this.SelectedLeadHandleBy, false, 'Select Lead Handle By', 1, (selected) => {
+        this.SelectedLeadHandleBy = selected;
         this.Entity.p.CustomerFollowUps[0].LeadHandleBy = selected[0].p.Ref;
         this.LeadHandleByName = selected[0].p.Name;
       });
@@ -375,20 +342,11 @@ export class CustomerEnquiryDetailsMobileAppComponent implements OnInit {
     }
   }
 
-  public async selectContactModeBottomsheet(): Promise<void> {
+  public selectContactModeBottomsheet = async (): Promise<void> => {
     try {
-      // Filter the list before mapping
-      // const filteredList = this.CustomerStatusList.filter(
-      //   (item) => item.Ref !== CustomerStatus.ConvertToDeal && item.Ref !== CustomerStatus.LeadClosed
-      // );
-
       const options = this.ContactModeList.map((item) => ({ p: item }));
-
-      let selectData: any[] = [];
-
-      this.openSelectModal(options, selectData, false, 'Select Contact Mode', 1, (selected) => {
-        selectData = selected;
-
+      this.openSelectModal(options, this.SelectedContactMode, false, 'Select Contact Mode', 1, (selected) => {
+        this.SelectedContactMode = selected;
         this.Entity.p.CustomerFollowUps[0].ContactMode = selected[0].p.Ref;
         this.contactModeName = selected[0].p.Name;
       });
@@ -397,20 +355,11 @@ export class CustomerEnquiryDetailsMobileAppComponent implements OnInit {
     }
   }
 
-  public async selectContactModeInAgentBrokerBottomsheet(): Promise<void> {
+  public selectContactModeInAgentBrokerBottomsheet = async (): Promise<void> => {
     try {
-      // Filter the list before mapping
-      // const filteredList = this.CustomerStatusList.filter(
-      //   (item) => item.Ref !== CustomerStatus.ConvertToDeal && item.Ref !== CustomerStatus.LeadClosed
-      // );
-
       const options = this.ContactModeList.map((item) => ({ p: item }));
-
-      let selectData: any[] = [];
-
-      this.openSelectModal(options, selectData, false, 'Select Contact Mode', 1, (selected) => {
-        selectData = selected;
-
+      this.openSelectModal(options, this.SelectedContactModeInAgentBroker, false, 'Select Contact Mode', 1, (selected) => {
+        this.SelectedContactModeInAgentBroker = selected;
         this.Entity.p.CustomerFollowUps[0].ContactMode = selected[0].p.Ref;
         this.contactModeNameInAgentBroker = selected[0].p.Name;
       });
@@ -419,24 +368,21 @@ export class CustomerEnquiryDetailsMobileAppComponent implements OnInit {
     }
   }
 
-  public async selectCustomerStatusBottomsheet(): Promise<void> {
+  public selectCustomerStatusBottomsheet = async (): Promise<void> => {
     try {
       // Filter the list before mapping
       const filteredList = this.CustomerStatusList.filter(
         (item) => item.Ref !== CustomerStatus.ConvertToDeal && item.Ref !== CustomerStatus.LeadClosed
       );
-
       const options = filteredList.map((item) => ({ p: item }));
-
-      let selectData: any[] = [];
-
-      this.openSelectModal(options, selectData, false, 'Select Customer Status', 1, (selected) => {
-        selectData = selected;
-
+      this.openSelectModal(options, this.SelectedCustomerStatus, false, 'Select Customer Status', 1, (selected) => {
+        this.SelectedCustomerStatus = selected;
         this.Entity.p.CustomerFollowUps[0].CustomerStatusName = selected[0].p.Name;
         this.Entity.p.CustomerFollowUps[0].CustomerStatus = selected[0].p.Ref;
-        this.onStatusChange(selected[0]?.p?.Ref);
       });
+      if (this.Entity.p.CustomerFollowUps[0].CustomerStatus){
+        await this.onStatusChange(this.Entity.p.CustomerFollowUps[0].CustomerStatus);
+      }
     } catch (error) {
 
     }
@@ -459,8 +405,7 @@ export class CustomerEnquiryDetailsMobileAppComponent implements OnInit {
   FormulateCountryList = async () => {
     this.CountryList = await Country.FetchEntireList(
       async (errMsg) => {
-        // await this.uiUtils.showErrorMessage('Error', errMsg)
-        await this.toastService.present('Error'+errMsg, 1000, 'danger');
+        await this.toastService.present('Error' + errMsg, 1000, 'danger');
         await this.haptic.error();
       }
     );
@@ -479,7 +424,6 @@ export class CustomerEnquiryDetailsMobileAppComponent implements OnInit {
     this.StateList = await State.FetchEntireListByCountryRef(
       CountryRef,
       async (errMsg) => {
-        // await this.uiUtils.showErrorMessage('Error', errMsg)
         await this.toastService.present('Error' + errMsg, 1000, 'danger');
         await this.haptic.error();
       }
@@ -489,7 +433,6 @@ export class CustomerEnquiryDetailsMobileAppComponent implements OnInit {
     if (this.StateList.length) {
       const defaultState = this.StateList.find(s => s.p.Ref === this.Entity.p.StateRef);
       this.Entity.p.StateRef = defaultState ? defaultState.p.Ref : this.StateList[0].p.Ref;
-
       // Fetch the corresponding cities
       await this.getCityListByStateRef(this.Entity.p.StateRef);
     }
@@ -499,7 +442,6 @@ export class CustomerEnquiryDetailsMobileAppComponent implements OnInit {
     this.CityList = await City.FetchEntireListByStateRef(
       StateRef,
       async (errMsg) => {
-        // await this.uiUtils.showErrorMessage('Error', errMsg)
         await this.toastService.present('Error' + errMsg, 1000, 'danger');
         await this.haptic.error();
       }
@@ -517,7 +459,6 @@ export class CustomerEnquiryDetailsMobileAppComponent implements OnInit {
     let lst = await Site.FetchEntireListByCompanyRef(
       this.companyRef,
       async (errMsg) => {
-        // await this.uiUtils.showErrorMessage('Error', errMsg)
         await this.toastService.present('Error' + errMsg, 1000, 'danger');
         await this.haptic.error();
       }
@@ -529,7 +470,6 @@ export class CustomerEnquiryDetailsMobileAppComponent implements OnInit {
     let lst = await Employee.FetchEntireListByCompanyRef(
       this.companyRef,
       async (errMsg) => {
-        // await this.uiUtils.showErrorMessage('Error', errMsg)
         await this.toastService.present('Error' + errMsg, 1000, 'danger');
         await this.haptic.error();
       }
@@ -538,26 +478,15 @@ export class CustomerEnquiryDetailsMobileAppComponent implements OnInit {
   };
   getPlotBySiteRefList = async (siteRef: number) => {
     if (siteRef <= 0) {
-      // await this.uiUtils.showWarningToster(`Please Select Site`);
       await this.toastService.present('Please Select a Site', 1000, 'danger');
       await this.haptic.error();
       return;
     }
     this.InterestedPlotRef = 0;
-    // old code start
-    // let bookingref = BookingRemark.Booked;
-    // let lst = await Plot.FetchEntireListBySiteandbookingremarkRef(
-    //   siteRef,
-    //   bookingref,
-    //   async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
-    // );
-    // this.PlotList = lst;
-    // old code End
 
     let lst = await Plot.FetchEntireListBySiteRef(
       siteRef,
       async (errMsg) => {
-        // await this.uiUtils.showErrorMessage('Error', errMsg)
         await this.toastService.present('Error' + errMsg, 1000, 'danger');
         await this.haptic.error();
       }
@@ -565,13 +494,9 @@ export class CustomerEnquiryDetailsMobileAppComponent implements OnInit {
     this.PlotList = lst.filter(
       (plot) => plot.p.CurrentBookingRemark !== BookingRemark.Booked
     );
-
-
-    // this.DisplayMasterList = this.PlotList
-    // this.IsPlotDetails = true;
   };
 
-  addDataToTable() {
+  addDataToTable = () => {
     if (this.SiteManagementRef <= 0) {
       // this.uiUtils.showWarningToster(`Please Select a Site`);
       this.toastService.present('Please Select a Site', 1000, 'danger');
@@ -594,6 +519,7 @@ export class CustomerEnquiryDetailsMobileAppComponent implements OnInit {
       obj.p.SiteRef = this.SiteManagementRef;
       obj.p.SiteName = this.SiteManagementName ?? '';
       obj.p.PlotRef = this.InterestedPlotRef;
+      obj.p.PlotName = selectedPlot.p.PlotNo;
       obj.p.PlotAreaInSqft = selectedPlot.p.AreaInSqft;
       obj.p.PlotAreaInSqm = selectedPlot.p.AreaInSqm;
     }
@@ -614,8 +540,7 @@ export class CustomerEnquiryDetailsMobileAppComponent implements OnInit {
     }
 
     if (selectedPlot) {
-      this.Entity.p.CustomerFollowUps[0].CompanyRef =
-        this.companystatemanagement.getCurrentCompanyRef();
+      this.Entity.p.CustomerFollowUps[0].CompanyRef = this.companyRef;
 
       this.Entity.p.CustomerFollowUps[0].CustomerFollowUpPlotDetails.push(
         obj.p
@@ -625,13 +550,16 @@ export class CustomerEnquiryDetailsMobileAppComponent implements OnInit {
       this.InterestedPlotRef = 0;
       this.SiteManagementName = '';
       this.InterestedPlotNo = '';
+      this.SelectedInterestedPlots = [];
+      this.PlotList = [];
+      this.SelectedInterestedSite = [];
     }
   }
 
   // On lead source broker selected
   showAgentBrokerInput: boolean = false;
 
-  onLeadSourceChange(selectedValue: number) {
+  onLeadSourceChange = (selectedValue: number)=> {
     // Check if the selected value is AgentBroker (50)
     if (selectedValue === 50) {
       this.showAgentBrokerInput = true;
@@ -640,14 +568,11 @@ export class CustomerEnquiryDetailsMobileAppComponent implements OnInit {
     }
   }
 
-  // onPlotSelected(selectedvalue: any) {
-  //   this.Entity.p.CustomerFollowUpPlotDetails = selectedvalue;
-  // }
   selectedCustomerStatus: number = 0;
   isReminderRequired: boolean = false;
   reminderMessage: string = '';
 
-  onStatusChange(selectedStatus: number) {
+  onStatusChange=(selectedStatus: number)=> {
     this.selectedCustomerStatus = selectedStatus;
 
     // Reminder is required unless status is 30 (Lead Closed) or 40 (Convert To Deal)
@@ -661,9 +586,12 @@ export class CustomerEnquiryDetailsMobileAppComponent implements OnInit {
     }
   }
 
+  get filteredCustomerStatusList() {
+    return this.CustomerStatusList.filter(status => status.Ref !== 30 && status.Ref !== 40);
+  }
+
   SaveCustomerEnquiry = async () => {
-    this.Entity.p.CompanyRef =
-      this.companystatemanagement.getCurrentCompanyRef();
+    this.Entity.p.CompanyRef = this.companyRef;
     this.Entity.p.CustomerFollowUps[0].Ref =
       await CustomerFollowUp.getPrimaryKeysWithValidValues();
 
@@ -679,10 +607,6 @@ export class CustomerEnquiryDetailsMobileAppComponent implements OnInit {
 
     this.Entity.p.IsNewlyCreated = this.IsNewEntity;
 
-    // if (this.Entity.p.CustomerFollowUps[0].CustomerStatus == 30 || this.Entity.p.CustomerFollowUps[0].CustomerStatus == 40) {
-    //   this.Entity.p.CustomerFollowUps[0].ReminderDate = '';
-    // }
-
     this.Entity.p.CustomerFollowUps[0].TransDateTime = this.DateWithTime!;
     this.Entity.p.CustomerFollowUps[0].SiteVisitDate =
       this.dtu.ConvertStringDateToFullFormat(this.localSiteVisitDate ? this.localSiteVisitDate : '');
@@ -692,32 +616,24 @@ export class CustomerEnquiryDetailsMobileAppComponent implements OnInit {
       this.dtu.ConvertStringDateToFullFormat(this.localReminderDate ? this.localReminderDate : '');
 
     let entityToSave = this.Entity.GetEditableVersion();
+    console.log('entityToSave :', entityToSave);
     let entitiesToSave = [entityToSave];
 
-    // await this.Entity.EnsurePrimaryKeysWithValidValues()
     let tr = await this.utils.SavePersistableEntities(entitiesToSave);
     if (!tr.Successful) {
-      // this.uiUtils.showErrorMessage('Error', tr.Message);
-      await this.toastService.present('Error'+ tr.Message, 1000, 'danger');
+      await this.toastService.present('Error' + tr.Message, 1000, 'danger');
       await this.haptic.error();
       return;
     } else {
-      // this.onEntitySaved.emit(entityToSave);
       if (this.IsNewEntity) {
-        // await this.uiUtils.showSuccessToster(
-        //   'Customer Enquiry saved successfully'
-        // );
         await this.toastService.present('Customer Enquiry saved successfully', 1000, 'success');
-        await this.haptic.success();
+        this.router.navigate(['/mobile-app/tabs/dashboard/customer-relationship-management/customer-enquiry']);
         this.Entity = CustomerEnquiry.CreateNewInstance();
-        this.router.navigate(['/mobile-app/tabs/dashboard/customer-relationship-management/customer-enquiry']);
-      } else {
-        // await this.uiUtils.showSuccessToster(
-        //   'Customer Enquiry Updated successfully'
-        // );
-        await this.toastService.present('Customer Enquiry Updated successfully', 1000, 'success');
         await this.haptic.success();
+      } else {
+        await this.toastService.present('Customer Enquiry Updated successfully', 1000, 'success');
         this.router.navigate(['/mobile-app/tabs/dashboard/customer-relationship-management/customer-enquiry']);
+        await this.haptic.success();
       }
     }
   };
@@ -754,13 +670,6 @@ export class CustomerEnquiryDetailsMobileAppComponent implements OnInit {
     const isDataFilled = this.isDataFilled(); // Implement this function based on your form
 
     if (isDataFilled) {
-      // await this.uiUtils.showConfirmationMessage(
-      //   'Warning',
-      //   `You have unsaved data. Are you sure you want to go back? All data will be lost.`,
-      //   async () => {
-      //     this.router.navigate(['/mobile-app/tabs/dashboard/customer-relationship-management/customer-enquiry'], { replaceUrl: true });
-      //   }
-      // );
       this.alertService.presentDynamicAlert({
         header: 'Warnings',
         subHeader: 'Confirmation needed',
@@ -779,11 +688,8 @@ export class CustomerEnquiryDetailsMobileAppComponent implements OnInit {
             cssClass: 'custom-confirm',
             handler: async () => {
               try {
-                  this.router.navigate(['/mobile-app/tabs/dashboard/customer-relationship-management/customer-enquiry'], { replaceUrl: true });
+                this.router.navigate(['/mobile-app/tabs/dashboard/customer-relationship-management/customer-enquiry'], { replaceUrl: true });
               } catch (err) {
-                // console.error('Error deleting Customer Enquiry:', err);
-                // await this.toastService.present('Failed to delete Customer Enquiry', 1000, 'danger');
-                // await this.haptic.error();
               }
             }
           }

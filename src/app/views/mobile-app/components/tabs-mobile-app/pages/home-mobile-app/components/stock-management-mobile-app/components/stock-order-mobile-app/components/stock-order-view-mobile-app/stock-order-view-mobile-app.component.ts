@@ -4,12 +4,11 @@ import { Router } from '@angular/router';
 import { MaterialRequisitionStatuses } from 'src/app/classes/domain/domainenums/domainenums';
 import { Site } from 'src/app/classes/domain/entities/website/masters/site/site';
 import { Order } from 'src/app/classes/domain/entities/website/stock_management/stock_order/order';
+import { OrderMaterialDetailProps } from 'src/app/classes/domain/entities/website/stock_management/stock_order/OrderMaterial/ordermaterial';
 import { FileTransferObject } from 'src/app/classes/infrastructure/filetransferobject';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { BaseUrlService } from 'src/app/services/baseurl.service';
-import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
 import { DateconversionService } from 'src/app/services/dateconversion.service';
-import { DTU } from 'src/app/services/dtu.service';
 import { Utils } from 'src/app/services/utils.service';
 import { AlertService } from 'src/app/views/mobile-app/components/core/alert.service';
 import { HapticService } from 'src/app/views/mobile-app/components/core/haptic.service';
@@ -53,9 +52,7 @@ export class StockOrderViewMobileAppComponent  implements OnInit {
   constructor(
     private router: Router,
     private appStateManage: AppStateManageService,
-    private companystatemanagement: CompanyStateManagement,
     private DateconversionService: DateconversionService,
-    private dtu: DTU,
     private toastService: ToastService,
     private haptic: HapticService,
     private alertService: AlertService,
@@ -72,18 +69,18 @@ export class StockOrderViewMobileAppComponent  implements OnInit {
   }
   ionViewWillEnter = async () => {
     await this.loadMaterialRequisitionIfEmployeeExists();
-    await this.loadFilters();
+    this.loadFilters();
   }
   ngOnDestroy() {
     // Cleanup if needed
   }
 
-  async handleRefresh(event: CustomEvent) {
+  handleRefresh = async (event: CustomEvent) =>{
     await this.loadMaterialRequisitionIfEmployeeExists();
     (event.target as HTMLIonRefresherElement).complete();
   }
 
-  loadFilters() {
+  loadFilters= () => {
     this.filters = [
       {
         key: 'site',
@@ -98,9 +95,7 @@ export class StockOrderViewMobileAppComponent  implements OnInit {
     ];
   }
 
-  async onFiltersChanged(updatedFilters: any[]) {
-    console.log('Updated Filters:', updatedFilters);
-
+   onFiltersChanged= async(updatedFilters: any[])=> {
     for (const filter of updatedFilters) {
       const selected = filter.selected;
       const selectedValue = (selected === null || selected === undefined) ? null : selected;
@@ -119,7 +114,7 @@ export class StockOrderViewMobileAppComponent  implements OnInit {
   }
 
 
-  getStatusClass(status: any): string {
+  getStatusClass=(status: any): string=> {
     switch (status) {
       case this.MaterialPurchaseOrderStatus.Pending:
         return 'pending';
@@ -138,7 +133,7 @@ export class StockOrderViewMobileAppComponent  implements OnInit {
     }
   }
 
-  getStatusText(status: any): string {
+  getStatusText=(status: any): string=> {
     switch (status) {
       case this.MaterialPurchaseOrderStatus.Pending:
         return 'Pending';
@@ -159,7 +154,7 @@ export class StockOrderViewMobileAppComponent  implements OnInit {
 
   expandedRequisitions: Set<number> = new Set();
 
-  toggleItemDetails(requisitionId: number) {
+  toggleItemDetails=(requisitionId: number)=> {
     if (this.expandedRequisitions.has(requisitionId)) {
       this.expandedRequisitions.delete(requisitionId);
     } else {
@@ -167,7 +162,7 @@ export class StockOrderViewMobileAppComponent  implements OnInit {
     }
   }
 
-  prepareInvoiceUrl(path: string) {
+  prepareInvoiceUrl=(path: string)=> {
     this.showInvoicePreview = !this.showInvoicePreview
     const ImageBaseUrl = this.baseUrl.GenerateImageBaseUrl();
     const LoginToken = this.appStateManage.localStorage.getItem('LoginToken');
@@ -183,11 +178,11 @@ export class StockOrderViewMobileAppComponent  implements OnInit {
     this.sanitizedInvoiceUrl = this.sanitizer.bypassSecurityTrustResourceUrl(fileUrl);
   }
 
-  isPDF(filePath: string): boolean {
+  isPDF=(filePath: string): boolean=> {
     return filePath?.toLowerCase().endsWith('.pdf');
   }
 
-  fileNavigation(filePath: string) {
+  fileNavigation=(filePath: string)=> {
     const ImageBaseUrl = this.baseUrl.GenerateImageBaseUrl();
     const LoginToken = this.appStateManage.localStorage.getItem('LoginToken');
 
@@ -195,13 +190,11 @@ export class StockOrderViewMobileAppComponent  implements OnInit {
 
     const TimeStamp = Date.now();
     const fileUrl = `${ImageBaseUrl}${filePath}/${LoginToken}?${TimeStamp}`;
-    console.log('Invoice Preview URL:', fileUrl);
-
     window.open(fileUrl, '_blank');
   }
 
 
-  private async loadMaterialRequisitionIfEmployeeExists() {
+  private loadMaterialRequisitionIfEmployeeExists = async ()=> {
     try {
       await this.loadingService.show();
       this.companyRef = Number(this.appStateManage.localStorage.getItem('SelectedCompanyRef'));
@@ -209,13 +202,11 @@ export class StockOrderViewMobileAppComponent  implements OnInit {
       if (this.companyRef > 0) {
         await this.getSiteListByCompanyRef();
         await this.getOrderListByCompanyRef();
-        // this.prepareInvoiceUrl();
       } else {
         await this.toastService.present('company not selected', 1000, 'danger');
         await this.haptic.error();
       }
     } catch (error) {
-      console.error('Error loading Vendor Quotation:', error);
       await this.toastService.present('Failed to load Vendor Quotation', 1000, 'danger');
       await this.haptic.error();
     } finally {
@@ -227,13 +218,11 @@ export class StockOrderViewMobileAppComponent  implements OnInit {
     this.Entity.p.SiteRef = 0
     this.Entity.p.SiteName = ''
     if (this.companyRef <= 0) {
-      // await this.uiUtils.showErrorToster('Company not Selected');
       await this.toastService.present('Company not Selected', 1000, 'danger');
       await this.haptic.error();
       return;
     }
     let lst = await Site.FetchEntireListByCompanyRef(this.companyRef, async errMsg => {
-      // await this.uiUtils.showErrorMessage('Error', errMsg)
       await this.toastService.present(errMsg, 1000, 'danger');
       await this.haptic.error();
     });
@@ -244,19 +233,16 @@ export class StockOrderViewMobileAppComponent  implements OnInit {
     this.MasterList = [];
     this.DisplayMasterList = [];
     if (this.companyRef <= 0) {
-      // await this.uiUtils.showErrorToster('Company not Selected');
       await this.toastService.present('Company not Selected', 1000, 'danger');
       await this.haptic.error();
       return;
     }
     let lst = await Order.FetchEntireListByCompanyRef(this.companyRef,
       async (errMsg) => {
-        // await this.uiUtils.showErrorMessage('Error', errMsg)
         await this.toastService.present(errMsg, 1000, 'danger');
         await this.haptic.error()
       }
     );
-    console.log('lst :', lst);
     this.MasterList = lst;
     this.DisplayMasterList = this.MasterList;
   };
@@ -279,6 +265,15 @@ export class StockOrderViewMobileAppComponent  implements OnInit {
     console.log('lst :', lst);
     this.DisplayMasterList = this.MasterList;
   };
+
+    checkIsEnable = (data: OrderMaterialDetailProps[]): boolean => {
+      // Collect boolean values based on the condition
+      const booleanValues = data.map(item => item.RequisitionQty <= item.TotalOrderedQty);
+  
+      // If ANY entry fails (QuotationOrderedQty <= OrderedQty), return false
+      const status = booleanValues.every(value => value);
+      return status;
+    };
 
   onEditClicked = async (item: Order) => {
     this.SelectedOrder = item.GetEditableVersion();
@@ -321,7 +316,6 @@ export class StockOrderViewMobileAppComponent  implements OnInit {
                   this.getOrderListByCompanyRefAndSiteRef();
                 }
               } catch (err) {
-                console.error('Error deleting Stock Order:', err);
                 await this.toastService.present('Failed to delete Stock Order', 1000, 'danger');
                 await this.haptic.error();
               }
@@ -330,7 +324,6 @@ export class StockOrderViewMobileAppComponent  implements OnInit {
         ]
       });
     } catch (error) {
-      console.error('Error showing delete confirmation:', error);
       await this.toastService.present('Something went wrong', 1000, 'danger');
       await this.haptic.error();
     }
@@ -342,29 +335,26 @@ export class StockOrderViewMobileAppComponent  implements OnInit {
   }
 
   navigateToPrint = async (item: Order) => {
-    this.router.navigate(['/mobile-app/tabs/dashboard/stock-management/stock-order/print'], {
+    await this.router.navigate(['/mobile-app/tabs/dashboard/stock-management/stock-order/print'], {
       state: { printData: item.GetEditableVersion() }
     });
   }
 
   AddOrder = async () => {
     if (this.companyRef <= 0) {
-      // await this.uiUtils.showErrorToster('Company not Selected');
       await this.toastService.present('Company not Selected', 1000, 'danger');
       await this.haptic.error();
       return;
     }
-    this.router.navigate(['/mobile-app/tabs/dashboard/stock-management/stock-order/add']);
+    await this.router.navigate(['/mobile-app/tabs/dashboard/stock-management/stock-order/add']);
   }
 
-  openModal(requisition: any) {
-    console.log('requisition: any:', requisition);
+  openModal=(requisition: any)=> {
     this.SelectedOrder = requisition;
-    // this.prepareInvoiceUrl(requisition.p.MaterialPurchaseInvoicePath)
     this.modalOpen = true;
   }
 
-  closeModal() {
+  closeModal=() =>{
     this.modalOpen = false;
     this.SelectedOrder = Order.CreateNewInstance();
   }
@@ -376,21 +366,10 @@ export class StockOrderViewMobileAppComponent  implements OnInit {
     this.EntityOfOrder.p.CreatedBy = Number(this.appStateManage.localStorage.getItem('LoginEmployeeRef'))
     this.EntityOfOrder.p.UpdatedBy = Number(this.appStateManage.localStorage.getItem('LoginEmployeeRef'))
     this.EntityOfOrder.p.MaterialPurchaseOrderStatus = status;
-    console.log('this.EntityOfApprove :', this.EntityOfOrder);
 
     let entityToSave = this.EntityOfOrder.GetEditableVersion();
     let entitiesToSave = [entityToSave];
-    console.log('entitiesToSave :', entitiesToSave);
 
-    // if (this.InvoiceFile) {
-    //   lstFTO.push(
-    //     FileTransferObject.FromFile(
-    //       "InvoiceFile",
-    //       this.InvoiceFile,
-    //       this.InvoiceFile.name
-    //     )
-    //   );
-    // }
     let tr = await this.utils.SavePersistableEntities(entitiesToSave, lstFTO);
     if (!tr.Successful) {
       await this.toastService.present(tr.Message, 1000, 'danger');

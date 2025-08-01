@@ -1,11 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
 import { CRMReports } from 'src/app/classes/domain/entities/website/customer_management/crmreports/crmreport';
 import { Site } from 'src/app/classes/domain/entities/website/masters/site/site';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { BottomsheetMobileAppService } from 'src/app/services/bottomsheet-mobile-app.service';
-import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
-import { AlertService } from 'src/app/views/mobile-app/components/core/alert.service';
 import { HapticService } from 'src/app/views/mobile-app/components/core/haptic.service';
 import { LoadingService } from 'src/app/views/mobile-app/components/core/loading.service';
 import { ToastService } from 'src/app/views/mobile-app/components/core/toast.service';
@@ -46,16 +43,14 @@ export class CustomerSummaryReportMobileAppComponent implements OnInit {
   selectedFilterValues: Record<string, any> = {};
 
   constructor(
-    private router: Router,
     private appStateManagement: AppStateManageService,
     private toastService: ToastService,
     private haptic: HapticService,
-    private alertService: AlertService,
     public loadingService: LoadingService,
     private bottomsheetMobileAppService: BottomsheetMobileAppService,
   ) { }
 
-  ngOnInit(): void {
+  ngOnInit= (): void => {
     // Optional: you can call loadCustomerSummaryReportIfCompanyExists here if needed
   }
 
@@ -63,27 +58,24 @@ export class CustomerSummaryReportMobileAppComponent implements OnInit {
     await this.loadCustomerSummaryReportIfCompanyExists();
   };
 
-  async handleRefresh(event: CustomEvent): Promise<void> {
+  handleRefresh = async (event: CustomEvent): Promise<void> => {
     await this.loadCustomerSummaryReportIfCompanyExists();
     (event.target as HTMLIonRefresherElement).complete();
   }
 
-  private async loadCustomerSummaryReportIfCompanyExists(): Promise<void> {
+  private loadCustomerSummaryReportIfCompanyExists = async (): Promise<void>=> {
     try {
       this.loadingService.show();
-
-      this.companyRef = Number(await this.appStateManagement.localStorage.getItem('SelectedCompanyRef'));
-      this.companyName = await this.appStateManagement.localStorage.getItem('companyName') || '';
+      this.companyRef = Number(this.appStateManagement.localStorage.getItem('SelectedCompanyRef'));
+      this.companyName = this.appStateManagement.localStorage.getItem('companyName') || '';
 
       if (this.companyRef <= 0) {
         await this.toastService.present('Company not selected', 1000, 'danger');
         await this.haptic.error();
         return;
       }
-
       await this.FormulateSiteListByCompanyRef();
     } catch (error) {
-      console.error('Error in loadCustomerSummaryReportIfCompanyExists:', error);
     } finally {
       this.loadingService.hide();
     }
@@ -95,21 +87,16 @@ export class CustomerSummaryReportMobileAppComponent implements OnInit {
       this.SiteRef = 0;
       this.CustomerList = [];
       this.Entity = CRMReports.CreateNewInstance();
-
       if (this.companyRef <= 0) return;
-
       const lst = await Site.FetchEntireListByCompanyRef(this.companyRef, async errMsg => {
-        console.error('Error fetching site list:', errMsg);
+        await this.toastService.present(errMsg, 1000, 'danger');
       });
-
       this.SiteList = lst;
-
       if (this.SiteRef === 0 && lst.length > 0) {
         this.SiteRef = lst[0].p.Ref;
         await this.getCustomerReportByCompanyAndSiteRef();
       }
     } catch (error) {
-      console.error('Error in FormulateSiteListByCompanyRef:', error);
     }
   }
 
@@ -117,20 +104,16 @@ export class CustomerSummaryReportMobileAppComponent implements OnInit {
     try {
       this.Entity = CRMReports.CreateNewInstance();
       this.CustomerList = [];
-
       if (this.companyRef <= 0 || this.SiteRef <= 0) return;
-
       const lst = await CRMReports.FetchEntireListByCompanyAndSiteRef(this.companyRef, this.SiteRef, async errMsg => {
-        console.error('Error fetching customer report:', errMsg);
+        await this.toastService.present(errMsg, 1000, 'danger');
       });
 
       this.CustomerList = lst;
       this.DropdownCustomerList=lst
       this.DropdownCustomerList = lst.filter(item => item.p && item.p.CustID);
       this.CustomerList = lst.filter(item => item.p && item.p.CustID);
-      console.log('this.CustomerList :', this.CustomerList);
     } catch (error) {
-      console.error('Error in getCustomerReportByCompanyAndSiteRef:', error);
     }
   }
 
@@ -142,7 +125,7 @@ export class CustomerSummaryReportMobileAppComponent implements OnInit {
   }
 
 
-  public async selectCustomerIDBottomsheet(): Promise<void> {
+  public selectCustomerIDBottomsheet = async (): Promise<void>=> {
     try {
       let options: any[] = [];
       if (options) {
@@ -152,9 +135,7 @@ export class CustomerSummaryReportMobileAppComponent implements OnInit {
             Name: item.p.CustID
           }
         }));
-        // options = this.CustomerList
       }
-
       this.openSelectModal(options, this.selectedCustomerID, false, 'Select Customer ID', 1, (selected) => {
         this.selectedCustomerID = selected;
         this.CustomerIDName = selected[0].p.Name;
@@ -167,18 +148,20 @@ export class CustomerSummaryReportMobileAppComponent implements OnInit {
   }
   
 
-  public async selectSiteBottomsheet(): Promise<void> {
+  public selectSiteBottomsheet = async (): Promise<void>=> {
       try {
-  
         const options = this.SiteList;
-  
         this.openSelectModal(options, this.selectedSite, false, 'Select Site', 1, (selected) => {
           this.selectedSite = selected;
           this.SiteName = selected[0].p.Name;
           this.SiteRef = selected[0].p.Ref;
           this.Entity.p.Ref = selected[0].p.Ref;
-          this.getCustomerReportByCompanyAndSiteRef();
+          this.selectedCustomerID=[];
+          this.CustomerIDName='';
         });
+        if (this.SiteRef){
+          await this.getCustomerReportByCompanyAndSiteRef();
+        }
       } catch (error) {
   
       }

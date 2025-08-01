@@ -1,4 +1,3 @@
-<!-- <app-loader *ngIf="isLoading"></app-loader> -->
 
 <app-header-with-back-handler title="Pending Customer Follow-Up" backRoute="mobile-app/tabs/dashboard/customer-relationship-management">
 </app-header-with-back-handler>
@@ -35,12 +34,6 @@
               <ion-button fill="clear" size="small" color="primary" (click)="onFollowUpClick(item)">
                 <ion-icon slot="start" name="people-outline"></ion-icon> Follow up
               </ion-button>
-              <!-- <ion-button fill="clear" size="small" color="secondary" (click)="onEditClicked(item)">
-                <ion-icon slot="start" name="create-outline"></ion-icon> Edit
-              </ion-button>
-              <ion-button fill="clear" size="small" color="danger" (click)="onDeleteClicked(item)">
-                <ion-icon slot="start" name="trash-outline"></ion-icon> Delete
-              </ion-button> -->
             </div>
           </ion-card-content>
         </ion-card>
@@ -52,12 +45,5 @@
         <p>No Pending Follow up records found.</p>
       </div>
   </ion-list>
-
-  <!-- Floating Action Button -->
-  <!-- <ion-fab vertical="bottom" horizontal="end" slot="fixed">
-    <ion-fab-button color="primary" (click)="openFilterSheet()">
-      <ion-icon name="filter-outline"></ion-icon>
-    </ion-fab-button>
-  </ion-fab> -->
 
 </ion-content>
