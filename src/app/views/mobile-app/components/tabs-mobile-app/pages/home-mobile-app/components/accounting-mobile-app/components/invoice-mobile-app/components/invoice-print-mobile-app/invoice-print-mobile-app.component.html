@@ -169,56 +169,47 @@
         </table>
       </div>
 
-      <div class="table-wrapper" class="tblcard_light" style="margin-top: 1rem"
-        *ngIf="Entity.p.MaterialInvoiceDetailsArray.length > 0 && Entity.p.ExpenseType == StockExpenseRef">
-        <div class="table-container" style="margin-top: 1rem">
-          <div class="row">
-            <div class="col-12">
-              <h3 class="TableHeading"> Material Details</h3>
-            </div>
-          </div>
-          <table style="width: 100%; border-collapse: collapse; text-align: center;">
-            <thead>
-              <tr>
-                <th *ngFor="let header of materialheaders" class="tblsubheader">
-                  {{ header }}
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="   let material of Entity.p.MaterialInvoiceDetailsArray;   let i = index ">
-                <td Class="tbldata">{{ i + 1 }}</td>
-                <td Class="tbldata">{{ material.MaterialName }}</td>
-                <td Class="tbldata">{{ material.UnitName }}</td>
-                <td Class="tbldata">{{ material.Qty }}</td>
-                <td Class="tbldata">{{ material.Rate | currency : "INR"}}</td>
-                <td Class="tbldata">{{ material.DiscountedRate | currency : "INR"}}</td>
-                <td Class="tbldata">{{ material.DeliveryCharges | currency : "INR"}}</td>
-                <td Class="tbldata">{{ material.TotalAmount | currency : "INR"}}</td>
-              </tr>
-
-              <tr>
-
-                <td colspan="7" *ngIf="Entity.p.ExpenseType == StockExpenseRef"
-                  style="padding: 8px; border: none; text-align: center; font-weight: bold; background-color: #fef4d4;">
-                  <strong>TOTAL</strong>
-                </td>
-                <td style="padding: 8px; border: none; font-weight: bold; background-color: #fef4d4;"><strong>
-                    {{Entity.p.InvoiceAmount | currency : "INR" }}</strong>
-                </td>
-              </tr>
-              <!-- In Words -->
-              <tr>
-                <td style="border: none;"></td>
-                <td style="border: none;"></td>
-                <td style="border: none;"></td>
-                <td colspan="3" style="padding: 8px; border: none; text-align: end;"><strong>Inwords - {{
-                    this.totalAmountInWords(Entity.p.InvoiceAmount) }}</strong></td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
+      <table *ngIf="Entity.p.ExpenseType == StockExpenseRef"
+        style="width: 100%; border-collapse: collapse; text-align: center;">
+        <thead>
+          <tr style="background-color: maroon; color: white;">
+            <th *ngFor="let header of materialheaders" style="padding: 8px; border: none;">
+              {{ header }}
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <ng-container *ngIf="Entity.p.ExpenseType == StockExpenseRef">
+            <tr *ngFor="let material of Entity.p.MaterialInvoiceDetailsArray; let i = index">
+              <td Class="tbldata">{{ i + 1 }}</td>
+              <td style="padding: 8px; border: none;">{{ material.MaterialName }}</td>
+              <td style="padding: 8px; border: none;">{{ material.UnitName }}</td>
+              <td style="padding: 8px; border: none;">{{ material.Qty }}</td>
+              <td style="padding: 8px; border: none;">{{ material.Rate | currency : "INR"}}</td>
+              <td style="padding: 8px; border: none;">{{ material.DiscountedRate | currency : "INR"}}</td>
+              <td style="padding: 8px; border: none;">{{ material.DeliveryCharges | currency : "INR"}}</td>
+              <td style="padding: 8px; border: none;">{{ material.TotalAmount | currency : "INR"}}</td>
+            </tr>
+          </ng-container>
+          <!-- Total -->
+          <tr>
+            <td colspan="7" *ngIf="Entity.p.ExpenseType == StockExpenseRef"
+              style="padding: 8px; border: none; text-align: center; font-weight: bold; background-color: #fef4d4;">
+              <strong>TOTAL</strong>
+            </td>
+            <td style="padding: 8px; border: none; font-weight: bold; background-color: #fef4d4;"><strong>
+                {{Entity.p.InvoiceAmount | currency : "INR" }}</strong>
+            </td>
+          </tr>
+          <tr>
+            <td style="border: none;"></td>
+            <td style="border: none;"></td>
+            <td style="border: none;"></td>
+            <td colspan="3" style="padding: 8px; border: none; text-align: end;"><strong>Inwords - {{
+                this.totalAmountInWords(Entity.p.InvoiceAmount) }}</strong></td>
+          </tr>
+        </tbody>
+      </table>
 
       <!-- Comments -->
       <div style="margin-top: 5px; ">
