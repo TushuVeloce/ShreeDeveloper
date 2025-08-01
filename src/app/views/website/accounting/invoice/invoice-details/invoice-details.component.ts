@@ -136,6 +136,8 @@ export class InvoiceDetailsComponent implements OnInit {
     } else {
       this.Entity = Invoice.CreateNewInstance();
       Invoice.SetCurrentInstance(this.Entity);
+
+      this.ModeofPaymentList = this.ModeofPaymentList.filter((data) => data.Ref != this.StockExpenseRef);
       this.strCDT = await CurrentDateTimeRequest.GetCurrentDateTime();
       let parts = this.strCDT.substring(0, 16).split('-');
       this.Entity.p.Date = `${parts[0]}-${parts[1]}-${parts[2]}`;

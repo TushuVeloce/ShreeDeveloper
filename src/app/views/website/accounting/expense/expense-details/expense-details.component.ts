@@ -31,7 +31,7 @@ export class ExpenseDetailsComponent implements OnInit {
   Entity: Expense = Expense.CreateNewInstance();
   RecipientEntity: Recipient = Recipient.CreateNewInstance();
   RecipientList: Invoice[] = [];
-  private IsNewEntity: boolean = true;
+  IsNewEntity: boolean = true;
   SiteList: Site[] = [];
   LedgerList: Ledger[] = [];
   SubLedgerList: SubLedger[] = [];
