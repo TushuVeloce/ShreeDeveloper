@@ -72,6 +72,7 @@ export class InvoiceDetailsMobileAppComponent implements OnInit {
   MachinaryExpenseRef: number = ExpenseTypes.MachinaryExpense
   LabourExpenseRef: number = ExpenseTypes.LabourExpense
   OtherExpenseRef: number = ExpenseTypes.OtherExpense
+  StockExpenseRef: number = ExpenseTypes.StockExpense
   TimeUnitRef: number = UnitRefs.TimeUnitRef
 
   MachineTimeEntity: TimeDetailProps = TimeDetailProps.Blank();
@@ -86,6 +87,7 @@ export class InvoiceDetailsMobileAppComponent implements OnInit {
   RecipientTypesList = DomainEnums.RecipientTypesList();
   timeheaders: string[] = ['Start Time ', 'End Time', 'Worked Hours'];
   labourtimeheaders: string[] = ['Labour Type', 'From Time', 'To Time', 'Work Hours', 'Quantity ', 'Rate', 'Amount'];
+  materialheaders: string[] = ['Material', 'Unit', 'Order Quantity', 'Rate', 'Discount Rate', 'Delivery Charges', 'Total Amount'];
 
   companyRef: number = 0;
 
@@ -180,10 +182,10 @@ export class InvoiceDetailsMobileAppComponent implements OnInit {
       this.companyRef = Number(this.appStateManage.localStorage.getItem('SelectedCompanyRef'));
 
       if (this.companyRef > 0) {
-        await this.appStateManage.setDropdownDisabled(true);
+        this.appStateManage.setDropdownDisabled(true);
         await this.getVendorListByCompanyRef();
-        this.getSiteListByCompanyRef()
-        this.getLedgerListByCompanyRef()
+        await this.getSiteListByCompanyRef()
+        await this.getLedgerListByCompanyRef()
         await this.getUnitList()
         if (this.appStateManage.StorageKey.getItem('Editable') == 'Edit') {
           this.IsNewEntity = false;
@@ -463,7 +465,7 @@ export class InvoiceDetailsMobileAppComponent implements OnInit {
   //     this.Entity.p.InvoiceAmount = Math.round(((Qty * Rate) - DieselAmount) * 100) / 100;
   //   }
   // }
-    CalculateAmount = () => {
+  CalculateAmount = () => {
     const TotalWorkedHours = this.getTotalWorkedHours()
     const TotalLabourAmount = this.getTotalLabourAmount()
     const Qty = Number(this.Entity.p.Qty)
@@ -511,7 +513,7 @@ export class InvoiceDetailsMobileAppComponent implements OnInit {
       }
     }
     // await this.uiUtils.showErrorMessage('Error', 'Chalan number could not be retrieved.');
-    await this.toastService.present('Error ' + 'Chalan number could not be retrieved.', 1000, 'danger');
+    await this.toastService.present('Chalan number could not be retrieved.', 1000, 'danger');
     await this.haptic.error();
   };
 
@@ -599,7 +601,7 @@ export class InvoiceDetailsMobileAppComponent implements OnInit {
       const hours = Math.floor(diffMinutes / 60);
       const minutes = diffMinutes % 60;
 
-      this.MachineTimeEntity.WorkedHours = +diffMinutes; 
+      this.MachineTimeEntity.WorkedHours = +diffMinutes;
       this.MachineTimeEntity.DisplayWorkedHours = `${hours}h ${minutes.toString().padStart(2, '0')}m`;
     } else {
       this.MachineTimeEntity.WorkedHours = 0;
@@ -947,13 +949,16 @@ export class InvoiceDetailsMobileAppComponent implements OnInit {
     }
     if (this.Entity.p.RecipientType <= 0) {
       // await this.uiUtils.showErrorToster('To Whom not Selected');
-      await this.toastService.present('To Whom not Selected', 1000, 'warning');
-      await this.haptic.warning();
+      // await this.toastService.present('To Whom not Selected', 1000, 'warning');
+      // await this.haptic.warning();
+      return;
+    }
+    if (this.Entity.p.ExpenseType != ExpenseTypes.OtherExpense) {
       return;
     }
 
     this.RecipientList = [];
-    let lst = await Invoice.FetchRecipientByRecipientTypeRef(this.companyRef,this.Entity.p.SiteRef, this.Entity.p.RecipientType, async errMsg => {
+    let lst = await Invoice.FetchRecipientByRecipientTypeRef(this.companyRef, this.Entity.p.SiteRef, this.Entity.p.RecipientType, async errMsg => {
       // await this.uiUtils.showErrorMessage('Error', errMsg)
       await this.toastService.present('Error' + errMsg, 1000, 'danger');
       await this.haptic.warning();
@@ -1216,6 +1221,7 @@ export class InvoiceDetailsMobileAppComponent implements OnInit {
         this.selectedSite = selected;
         this.Entity.p.SiteRef = selected[0].p.Ref;
         this.SiteName = selected[0].p.Name;
+        this.getRecipientListByRecipientTypeRef()
       });
     } catch (error) {
 

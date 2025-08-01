@@ -173,7 +173,7 @@ export class IncomeDetailsMobileAppComponent implements OnInit {
           this.DisplayIncomeDate = this.datePipe.transform(this.IncomeDate, 'yyyy-MM-dd') ?? '';;
         }
 
-        this.getPayerListByPayerType()
+        this.getPayerListBySiteAndPayerType()
         this.getCurrentBalanceByCompanyRef();
         this.InitialEntity = Object.assign(
           Income.CreateNewInstance(),
@@ -249,23 +249,6 @@ export class IncomeDetailsMobileAppComponent implements OnInit {
     this.ShreeBalance = lst[0].p.ShreesBalance;
   }
 
-  getPayerListByPayerType = async () => {
-    if (this.companyRef <= 0) {
-      await this.toastService.present('company not selected', 1000, 'danger');
-      await this.haptic.error();
-      return;
-    }
-    if (this.Entity.p.PayerType <= 0) {
-      // await this.uiUtils.showErrorToster('Payer Type not Selected');
-      return;
-    }
-    let lst = await Income.FetchPayerNameByPayerTypeRef(this.Entity.p.SiteRef, this.companyRef, this.Entity.p.PayerType, async errMsg => {
-      await this.toastService.present('Error ' + errMsg, 1000, 'danger');
-      await this.haptic.error();
-    });
-    this.PayerList = lst;
-  }
-
   onPayerChange = () => {
     try {
       let SingleRecord = this.PayerList.find((data) => data.p.Ref == this.Entity.p.PayerRef);
@@ -334,12 +317,55 @@ export class IncomeDetailsMobileAppComponent implements OnInit {
         await this.toastService.present('Payer Name saved successfully', 1000, 'success');
         await this.haptic.success();
         this.PayerNameInput = false
-        await this.getPayerListByPayerType()
+        await this.getPayerListBySiteAndPayerType()
         this.PayerEntity = Payer.CreateNewInstance();
       }
     }
   };
 
+  onTypeChange = () => {
+    this.Entity.p.PayerRef = 0;
+    this.selectedPayer = [];
+    this.PayerName = '';
+    this.PayerPlotNo = '';
+    this.PayerNameInput = false
+  }
+
+  // getPayerListByPayerType = async () => {
+  //   if (this.companyRef <= 0) {
+  //     await this.toastService.present('company not selected', 1000, 'danger');
+  //     await this.haptic.error();
+  //     return;
+  //   }
+  //   if (this.Entity.p.PayerType <= 0) {
+  //     // await this.uiUtils.showErrorToster('Payer Type not Selected');
+  //     return;
+  //   }
+  //   let lst = await Income.FetchPayerNameByPayerTypeRef(this.Entity.p.SiteRef, this.companyRef, this.Entity.p.PayerType, async errMsg => {
+  //     await this.toastService.present('Error ' + errMsg, 1000, 'danger');
+  //     await this.haptic.error();
+  //   });
+  //   this.PayerList = lst;
+  // }
+
+  getPayerListBySiteAndPayerType = async () => {
+    if (this.companyRef <= 0) {
+      // await this.uiUtils.showErrorToster('Company not Selected');
+      await this.toastService.present('Company not Selected', 1000, 'danger');
+      await this.haptic.error();
+      return;
+    }
+    if (this.Entity.p.PayerType <= 0) {
+      // await this.uiUtils.showErrorToster('Payer Type not Selected');
+      return;
+    }
+    let lst = await Income.FetchPayerNameByPayerTypeRef(this.Entity.p.SiteRef, this.companyRef, this.Entity.p.PayerType, async errMsg => {
+      // await this.uiUtils.showErrorMessage('Error', errMsg)
+      await this.toastService.present(errMsg, 1000, 'danger');
+      await this.haptic.error();
+    });
+    this.PayerList = lst;
+  }
 
   getSiteListByCompanyRef = async () => {
     if (this.companyRef <= 0) {
@@ -500,7 +526,9 @@ export class IncomeDetailsMobileAppComponent implements OnInit {
         this.selectedPayerType = selected;
         this.Entity.p.PayerType = selected[0].p.Ref;
         this.PayerTypeName = selected[0].p.Name;
-        this.getPayerListByPayerType();
+        // this.getPayerListByPayerType();
+        this.getPayerListBySiteAndPayerType(); 
+        this.onTypeChange();
         this.selectedPayer = [];
         this.PayerName = '';
 
@@ -544,14 +572,24 @@ export class IncomeDetailsMobileAppComponent implements OnInit {
         this.selectedSite = selected;
         this.Entity.p.SiteRef = selected[0].p.Ref;
         this.SiteName = selected[0].p.Name;
-        this.getPayerListByPayerType();
+        this.getPayerListBySiteAndPayerType();
         this.Entity.p.PayerRef = 0;
+        this.selectedPayer = [];
+        this.PayerName = '';
         // this.PayerPlotNo = '';
         this.Entity.p.LedgerRef = 0;
+        this.selectedLedger = [];
+        this.LedgerName = '';
         this.Entity.p.SubLedgerRef = 0;
+        this.selectedSubLedger = [];
+        this.SubLedgerName = '';
         this.Entity.p.PayerType = 0;
+        this.selectedPayerType = [];
+        this.PayerTypeName = '';
         this.Entity.p.PlotName = '';
+        this.PayerPlotNo = ''; 
         this.PayerList = []
+        this.getPayerListBySiteAndPayerType()
       });
     } catch (error) {
 

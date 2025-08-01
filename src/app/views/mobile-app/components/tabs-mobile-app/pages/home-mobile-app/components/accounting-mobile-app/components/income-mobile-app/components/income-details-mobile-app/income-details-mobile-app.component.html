@@ -22,59 +22,47 @@
       (modalDismissed)="showIncomeDatePicker = false" />
 
     <!-- Select site -->
-    <ion-item class="input-item" button detail (click)="selectSiteBottomsheet()">
+    <ion-item class="input-item" button detail (click)="selectSiteBottomsheet()" [disabled]="SiteList.length == 0">
       <ion-label>Site</ion-label>
 
       <!-- Text showing the selected status -->
       <ion-text slot="end" class="status-text">
         {{ SiteName|| 'Select' }}
       </ion-text>
-
-      <!-- Dropdown icon (chevron) on the right -->
-      <!-- <ion-icon name="chevron-down-outline" slot="end" class="dropdown-icon"></ion-icon> -->
     </ion-item>
 
     <!-- Select Ledger -->
-    <ion-item class="input-item" button detail (click)="selectLedgerBottomsheet()">
+    <ion-item class="input-item" button detail (click)="selectLedgerBottomsheet()" [disabled]="LedgerList.length == 0">
       <ion-label>Ledger</ion-label>
 
       <!-- Text showing the selected status -->
       <ion-text slot="end" class="status-text">
         {{ LedgerName|| 'Select' }}
       </ion-text>
-
-      <!-- Dropdown icon (chevron) on the right -->
-      <!-- <ion-icon name="chevron-down-outline" slot="end" class="dropdown-icon"></ion-icon> -->
     </ion-item>
 
     <!-- Select Sub Ledger -->
-    <ion-item class="input-item" button detail (click)="selectSubLedgerBottomsheet()">
+    <ion-item class="input-item" button detail (click)="selectSubLedgerBottomsheet()" [disabled]="SubLedgerList.length == 0">
       <ion-label>Sub Ledger</ion-label>
 
       <!-- Text showing the selected status -->
       <ion-text slot="end" class="status-text">
         {{ SubLedgerName|| 'Select' }}
       </ion-text>
-
-      <!-- Dropdown icon (chevron) on the right -->
-      <!-- <ion-icon name="chevron-down-outline" slot="end" class="dropdown-icon"></ion-icon> -->
     </ion-item>
 
     <!-- Select To Whom Type -->
-    <ion-item class="input-item" button detail (click)="selectFromWhomTypeBottomsheet()">
+    <ion-item class="input-item" button detail (click)="selectFromWhomTypeBottomsheet()" [disabled]="PayerTypesList.length == 0">
       <ion-label>From Whom Type</ion-label>
 
       <!-- Text showing the selected status -->
       <ion-text slot="end" class="status-text">
         {{ PayerTypeName|| 'Select' }}
       </ion-text>
-
-      <!-- Dropdown icon (chevron) on the right -->
-      <!-- <ion-icon name="chevron-down-outline" slot="end" class="dropdown-icon"></ion-icon> -->
     </ion-item>
 
     <!-- Select Payer Name -->
-    <ion-item class="input-item" button detail *ngIf="!PayerNameInput && !PayerNameReadOnly">
+    <ion-item class="input-item" button detail *ngIf="!PayerNameInput && !PayerNameReadOnly  && Entity.p.PayerType == DealDoneCustomer">
       <ion-label (click)="selectPayerNameBottomsheet()">Received by </ion-label>
 
       <!-- Selected Text -->
@@ -82,10 +70,7 @@
         {{ PayerName || 'Select' }}
       </ion-text>
 
-      <!-- Dropdown Icon -->
-      <!-- <ion-icon name="chevron-down-outline" slot="end" class="dropdown-icon" style="margin-left: 4px;"></ion-icon> -->
-
-      <!-- Inline Add Button -->
+     <!-- Inline Add Button -->
       <ion-button slot="end" fill="solid" size="small" (click)="AddPayerName()"
         style="--background: var(--ion-color-primary); --border-radius: 8px; --padding-start: 6px; --padding-end: 6px; margin-left: 6px;"
         *ngIf="Entity.p.PayerType == payerTypeRecipient"
@@ -152,30 +137,24 @@
     </ion-item>
 
     <!-- mode of payment -->
-    <ion-item class="input-item" button detail (click)="selectModeOfPaymentBottomsheet()">
+    <ion-item class="input-item" button detail (click)="selectModeOfPaymentBottomsheet()" [disabled]="ModeofPaymentList.length == 0">
       <ion-label>Mode of Payment</ion-label>
 
       <!-- Text showing the selected status -->
       <ion-text slot="end" class="status-text">
         {{ ModeOfPaymentName|| 'Select' }}
       </ion-text>
-
-      <!-- Dropdown icon (chevron) on the right -->
-      <!-- <ion-icon name="chevron-down-outline" slot="end" class="dropdown-icon"></ion-icon> -->
     </ion-item>
 
     <!-- Bank -->
     <ion-item class="input-item" button (click)="selectBankBottomsheet()"
-     *ngIf="Entity.p.IncomeModeOfPayment != Cash && Entity.p.IncomeModeOfPayment">
+     *ngIf="Entity.p.IncomeModeOfPayment != Cash && Entity.p.IncomeModeOfPayment" [disabled]="BankList.length == 0">
       <ion-label>Bank</ion-label>
 
       <!-- Text showing the selected status -->
       <ion-text slot="end" class="status-text">
         {{ BankName|| 'Select' }}
       </ion-text>
-
-      <!-- Dropdown icon (chevron) on the right -->
-      <!-- <ion-icon name="chevron-down-outline" slot="end" class="dropdown-icon"></ion-icon> -->
     </ion-item>
 
     <!-- Narration -->
