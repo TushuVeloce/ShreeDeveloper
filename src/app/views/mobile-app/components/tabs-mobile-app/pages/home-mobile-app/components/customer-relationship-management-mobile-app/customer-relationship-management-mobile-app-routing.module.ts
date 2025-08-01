@@ -7,6 +7,7 @@ import { PendingCustomerFollowupMobileAppComponent } from './components/pending-
 import { CustomerInfoReportMobileAppComponent } from './components/customer-info-report-mobile-app/customer-info-report-mobile-app.component';
 import { CustomerSummaryReportMobileAppComponent } from './components/customer-summary-report-mobile-app/customer-summary-report-mobile-app.component';
 import { CustomerVisitReportMobileAppComponent } from './components/customer-visit-report-mobile-app/customer-visit-report-mobile-app.component';
+import { PaymentHistoryMobileAppComponent } from './components/payment-history-mobile-app/payment-history-mobile-app.component';
 
 const routes: Routes = [
   {
@@ -19,6 +20,7 @@ const routes: Routes = [
       { path: 'customer-info-report', component: CustomerInfoReportMobileAppComponent },
       { path: 'customer-summary-report', component: CustomerSummaryReportMobileAppComponent },
       { path: 'customer-visit-report', component: CustomerVisitReportMobileAppComponent },
+      { path: 'payment-history-report', component: PaymentHistoryMobileAppComponent },
       {
         path: 'customer-enquiry',
         loadChildren: () => import('./components/customer-enquiry-mobile-app/customer-enquiry-mobile-app.module').then(m => m.CustomerEnquiryMobileAppPageModule)

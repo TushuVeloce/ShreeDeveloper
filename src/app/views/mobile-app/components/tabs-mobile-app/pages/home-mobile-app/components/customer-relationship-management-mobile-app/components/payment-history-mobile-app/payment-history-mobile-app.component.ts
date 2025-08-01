@@ -1,0 +1,192 @@
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Income } from 'src/app/classes/domain/entities/website/accounting/income/income';
+import { Site } from 'src/app/classes/domain/entities/website/masters/site/site';
+import { AppStateManageService } from 'src/app/services/app-state-manage.service';
+import { DateconversionService } from 'src/app/services/dateconversion.service';
+import { HapticService } from 'src/app/views/mobile-app/components/core/haptic.service';
+import { LoadingService } from 'src/app/views/mobile-app/components/core/loading.service';
+import { PDFService } from 'src/app/views/mobile-app/components/core/pdf.service';
+import { ToastService } from 'src/app/views/mobile-app/components/core/toast.service';
+import { FilterItem } from 'src/app/views/mobile-app/components/shared/chip-filter-mobile-app/chip-filter-mobile-app.component';
+
+@Component({
+  selector: 'app-payment-history-mobile-app',
+  templateUrl: './payment-history-mobile-app.component.html',
+  styleUrls: ['./payment-history-mobile-app.component.scss'],
+  standalone: false
+})
+export class PaymentHistoryMobileAppComponent implements OnInit {
+  Entity: Income = Income.CreateNewInstance();
+  MasterList: Income[] = [];
+  DisplayMasterList: Income[] = [];
+  list: [] = []
+  SiteList: Site[] = [];
+  SearchString: string = '';
+  SelectedIncome: Income = Income.CreateNewInstance();
+  CustomerRef: number = 0;
+  companyRef: number = 0;
+  Printheaders: string[] = ['Sr. No.', 'Site Name', 'Plot No', 'Customer Name', 'Address', 'Contact No', 'Customer Requirement'];
+  modalOpen = false;
+
+  filters: FilterItem[] = [];
+  selectedFilterValues: Record<string, any> = {};
+
+
+  constructor(
+    private appStateManage: AppStateManageService,
+    private DateconversionService: DateconversionService,
+    private toastService: ToastService,
+    private haptic: HapticService,
+    public loadingService: LoadingService,
+    private pdfService: PDFService
+  ) { }
+
+  ngOnInit = async () => {
+    // await this.loadCustomerVisitReportIfEmployeeExists();
+  };
+
+  ionViewWillEnter = async () => {
+    await this.loadCustomerVisitReportIfEmployeeExists();
+    await this.loadFilters();
+  };
+
+  handleRefresh = async (event: CustomEvent) => {
+    await this.loadCustomerVisitReportIfEmployeeExists();
+    (event.target as HTMLIonRefresherElement).complete();
+  }
+
+  loadFilters = () => {
+    this.filters = [
+      {
+        key: 'site',
+        label: 'Site',
+        multi: false,
+        options: this.SiteList.map(item => ({
+          Ref: item.p.Ref,
+          Name: item.p.Name,
+        })),
+        selected: this.selectedFilterValues['site'] > 0 ? this.selectedFilterValues['site'] : null,
+      }
+    ];
+  }
+
+  onFiltersChanged = async (updatedFilters: any[]) => {
+    for (const filter of updatedFilters) {
+      const selected = filter.selected;
+      const selectedValue = (selected === null || selected === undefined) ? null : selected;
+
+      // Save selected value to preserve after reload
+      this.selectedFilterValues[filter.key] = selectedValue ?? null;
+
+      switch (filter.key) {
+        case 'site':
+          this.Entity.p.SiteRef = selectedValue ?? 0;
+          break;
+      }
+    }
+    if (this.Entity.p.SiteRef > 0) {
+      await this.getCustomerVisitListBySiteRef();
+    }else {
+      await this.getCustomerVisitListByCompanyRef();
+    }
+    this.loadFilters(); // Reload filters with updated options & preserve selections
+  }
+
+  @ViewChild('PrintContainer')
+  PrintContainer!: ElementRef;
+
+  handlePrintOrShare = async () => {
+    if (this.DisplayMasterList.length == 0) {
+      await this.toastService.present('No Payment History Records Found', 1000, 'warning');
+      await this.haptic.warning();
+      return;
+    }
+    if (!this.PrintContainer) return;
+    await this.pdfService.generatePdfAndHandleAction(this.PrintContainer.nativeElement, `Receipt_${this.Entity.p.Ref}.pdf`);
+  }
+
+  private loadCustomerVisitReportIfEmployeeExists = async () => {
+    try {
+      await this.loadingService.show();
+
+      const company = this.appStateManage.localStorage.getItem('SelectedCompanyRef');
+      this.companyRef = Number(company || 0);
+
+      if (this.companyRef <= 0) {
+        await this.toastService.present('Company not selected', 1000, 'warning');
+        await this.haptic.warning();
+        return;
+      }
+      await this.getSiteListByCompanyRef();
+      await this.getCustomerVisitListByCompanyRef();
+    } catch (error) {
+      await this.toastService.present('Failed to load Payment History Report', 1000, 'danger');
+      await this.haptic.error();
+    } finally {
+      await this.loadingService.hide();
+    }
+  }
+  getSiteListByCompanyRef = async () => {
+    if (this.companyRef <= 0) {
+      // await this.uiUtils.showErrorToster('Company not Selected');
+      await this.toastService.present('Company not Selected', 1000, 'warning');
+      await this.haptic.warning();
+      return;
+    }
+    this.Entity.p.SiteRef = 0
+    let lst = await Site.FetchEntireListByCompanyRef(this.companyRef, async errMsg => {
+      // await this.uiUtils.showErrorMessage('Error', errMsg)
+      await this.toastService.present(errMsg, 1000, 'danger');
+      await this.haptic.error();
+    });
+    this.SiteList = lst;
+  }
+
+  getCustomerVisitListByCompanyRef = async () => {
+    this.MasterList = [];
+    this.DisplayMasterList = [];
+    if (this.companyRef <= 0) {
+      // await this.uiUtils.showErrorToster('Company not Selected');
+      await this.toastService.present('Company not Selected', 1000, 'warning');
+      await this.haptic.warning();
+      return;
+    }
+    let lst = await Income.FetchEntireListByCompanyRef(this.companyRef,
+      async (errMsg) => {
+        // await this.uiUtils.showErrorMessage('Error', errMsg)
+        await this.toastService.present(errMsg, 1000, 'danger');
+        await this.haptic.error();
+      }
+    );
+    this.MasterList = lst;
+    this.DisplayMasterList = this.MasterList;
+  };
+
+  getCustomerVisitListBySiteRef = async () => {
+    this.MasterList = [];
+    this.DisplayMasterList = [];
+    let lst = await Income.FetchEntireListBySiteRef(this.Entity.p.SiteRef, this.companyRef,
+      async (errMsg) => {
+        // await this.uiUtils.showErrorMessage('Error', errMsg)
+        await this.toastService.present(errMsg, 1000, 'danger');
+        await this.haptic.error();
+      }
+    );
+    this.MasterList = lst;
+    this.DisplayMasterList = this.MasterList;
+  };
+
+  formatDate = (date: string | Date): string => {
+    return this.DateconversionService.formatDate(date);
+  }
+
+  openModal = (Income: any) => {
+    this.SelectedIncome = Income;
+    this.modalOpen = true;
+  }
+
+  closeModal = () => {
+    this.modalOpen = false;
+    this.SelectedIncome = Income.CreateNewInstance();
+  }
+}
