@@ -71,6 +71,7 @@ export class InvoiceDetailsComponent implements OnInit {
   isLabourTimeModalOpen: boolean = false;
   Bill = ModeOfPayments.Bill
   TypeRecipient = RecipientTypes.Recipient
+  TypeRecipientVendor = RecipientTypes.Vendor
   ModeofPaymentList = DomainEnums.ModeOfPaymentsList().filter(item => item.Ref == this.Bill);
   RecipientTypesList = DomainEnums.RecipientTypesList();
 
@@ -82,12 +83,11 @@ export class InvoiceDetailsComponent implements OnInit {
 
   companyRef = this.companystatemanagement.SelectedCompanyRef;
   timeheaders: string[] = ['Sr.No.', 'Start Time ', 'End Time', 'Worked Hours', 'Action'];
-  labourtimeheaders: string[] = ['Sr.No.', 'Labour Type', 'From Time', 'To Time', 'Quantity ', 'Rate', 'Amount', 'Action'];
+  labourtimeheaders: string[] = ['Sr.No.', 'Labour Type', 'Days', 'Quantity ', 'Rate', 'Amount', 'Action'];
   materialheaders: string[] = ['Sr.No.', 'Material', 'Unit', 'Order Quantity', 'Rate', 'Discount Rate', 'Delivery Charges', 'Total Amount'];
   RequiredFieldMsg: string = ValidationMessages.RequiredFieldMsg
 
   // @ViewChild('invoiceForm') invoiceForm!: NgForm;
-  @ViewChild('NameCtrl') NameInputControl!: NgModel;
   @ViewChild('DateCtrl') DateInputControl!: NgModel;
   @ViewChild('DescriptionCtrl') DescriptionCtrlInputControl!: NgModel;
   @ViewChild('RecipientNameCtrl') RecipientNameInputControl!: NgModel;
@@ -136,8 +136,7 @@ export class InvoiceDetailsComponent implements OnInit {
       this.Entity = Invoice.CreateNewInstance();
       Invoice.SetCurrentInstance(this.Entity);
 
-      this.ModeofPaymentList = this.ModeofPaymentList.filter((data) => data.Ref != this.StockExpenseRef);
-      console.log('this.ModeofPaymentList :', this.ModeofPaymentList);
+      this.ExpenseTypeList = this.ExpenseTypeList.filter((data) => data.Ref != this.StockExpenseRef);
       this.strCDT = await CurrentDateTimeRequest.GetCurrentDateTime();
       let parts = this.strCDT.substring(0, 16).split('-');
       this.Entity.p.Date = `${parts[0]}-${parts[1]}-${parts[2]}`;
@@ -158,6 +157,12 @@ export class InvoiceDetailsComponent implements OnInit {
   focusInput = () => {
     let txtName = document.getElementById('SiteRef')!;
     txtName.focus();
+  }
+
+  onRecipientTypeVendor = () => {
+    if (this.Entity.p.InvoiceRecipientType == this.TypeRecipientVendor) {
+      this.Entity.p.VendorRef = this.Entity.p.RecipientMasterRef;
+    }
   }
 
   // Extracted from services date conversion //
@@ -181,14 +186,6 @@ export class InvoiceDetailsComponent implements OnInit {
       return '';
     }
   };
-
-  getLabourFromTime = () => {
-    this.LabourTimeEntity.LabourFromTime = this.convertIOS12To24HoursFormat(this.LabourFromTime);
-  }
-
-  getLabourToTime = () => {
-    this.LabourTimeEntity.LabourToTime = this.convertIOS12To24HoursFormat(this.LabourToTime);
-  }
 
   getVendorListByCompanyRef = async () => {
     if (this.companyRef() <= 0) {
@@ -540,14 +537,17 @@ export class InvoiceDetailsComponent implements OnInit {
   };
 
   async SaveLabourTime() {
-    if (!this.LabourTimeEntity.LabourFromTime) {
-      await this.uiUtils.showErrorMessage('Error', 'From Time is required!');
+    if (!this.LabourTimeEntity.Days) {
+      await this.uiUtils.showErrorMessage('Error', 'Days is required!');
       return;
-    } else if (!this.LabourTimeEntity.LabourToTime) {
-      await this.uiUtils.showErrorMessage('Error', 'To Time is required!');
+    } else if (!this.LabourTimeEntity.LabourRate) {
+      await this.uiUtils.showErrorMessage('Error', 'Rate is required!');
       return;
     } else if (!this.LabourTimeEntity.LabourType) {
       await this.uiUtils.showErrorMessage('Error', 'Labour Type is required!');
+      return;
+    } else if (!this.LabourTimeEntity.LabourQty) {
+      await this.uiUtils.showErrorMessage('Error', 'Labour Qty is required!');
       return;
     }
     if (this.LabourTimeEntity.LabourType != 0) {
@@ -575,8 +575,6 @@ export class InvoiceDetailsComponent implements OnInit {
   EditLabourTime(index: number) {
     this.isLabourTimeModalOpen = true
     this.LabourTimeEntity = { ...this.Entity.p.LabourExpenseDetailsArray[index] }
-    this.LabourFromTime = this.convertToFullTime(this.LabourTimeEntity.LabourFromTime);
-    this.LabourToTime = this.convertToFullTime(this.LabourTimeEntity.LabourToTime);
     this.LabourEditingIndex = index;
   }
 
@@ -613,15 +611,15 @@ export class InvoiceDetailsComponent implements OnInit {
     this.LabourTimeEntity.LabourQty = 0
     this.LabourTimeEntity.LabourRate = 0
     this.LabourTimeEntity.LabourAmount = 0
-    this.LabourTimeEntity.LabourFromTime = ''
-    this.LabourTimeEntity.LabourToTime = ''
   }
 
   CalculateLabourAmount = () => {
+    if (this.LabourTimeEntity.Days == 0 || !this.LabourTimeEntity.LabourRate || !this.LabourTimeEntity.LabourQty) {
+      return;
+    }
     const Qty = this.LabourTimeEntity.LabourQty
-    const Rate = this.LabourTimeEntity.LabourRate
+    const Rate = this.LabourTimeEntity.LabourRate * this.LabourTimeEntity.Days;
     this.LabourTimeEntity.LabourAmount = Math.round(Qty * Rate * 100) / 100;
-
   }
 
   // for value 0 selected while click on Input //
@@ -712,7 +710,6 @@ export class InvoiceDetailsComponent implements OnInit {
 
   resetAllControls = async () => {
     // reset touched
-    this.NameInputControl.control.markAsUntouched();
     this.DateInputControl.control.markAsUntouched();
     this.DescriptionCtrlInputControl.control.markAsUntouched();
     this.RecipientNameInputControl.control.markAsUntouched();
@@ -722,7 +719,6 @@ export class InvoiceDetailsComponent implements OnInit {
     this.DieselRateInputControl.control.markAsUntouched();
 
     // reset dirty
-    this.NameInputControl.control.markAsPristine();
     this.DateInputControl.control.markAsPristine();
     this.DescriptionCtrlInputControl.control.markAsPristine();
     this.RecipientNameInputControl.control.markAsPristine();

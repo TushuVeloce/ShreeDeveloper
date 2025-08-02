@@ -1,9 +1,10 @@
 <div class="row">
-   <div class="col-4 mb-2">
+  <div class="col-4 mb-2">
     <h1 style="padding-top: 3px;" class="title title_light">Stock Consume</h1>
   </div>
-   <div class="col-4 mb-2 search-container_light">
-    <app-shared-filter [masterList]="MasterList" [filterFields]="['SiteName', 'ConsumptionDate', 'MaterialName','UnitName','CurrentQuantity','ConsumedQuantity','RemainingQuantity','StageName','Description','Remark']"
+  <div class="col-4 mb-2 search-container_light">
+    <app-shared-filter [masterList]="MasterList"
+      [filterFields]="['SiteName', 'ConsumptionDate', 'MaterialName','UnitName','CurrentQuantity','ConsumedQuantity','RemainingQuantity','StageName','Description','Remark']"
       (filteredList)="DisplayMasterList = $event"></app-shared-filter>
   </div>
   <div class="col-4 mb-2" routerLinkActive="active">
@@ -18,11 +19,19 @@
       <label for="SiteRef"><b>Site</b></label>
       <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear nzPlaceHolder="Select"
         [nzSize]="'large'" name="SiteRef" [(ngModel)]="Entity.p.SiteRef" required id="SiteRef"
-        (ngModelChange)="getConsumeListByCompanyRefAndSiteRef()">
+        (ngModelChange)="getConsumeListByCompanySiteAndVendorRef()">
         <nz-option nzLabel="All" [nzValue]="0"></nz-option>
         <nz-option *ngFor="let Site of SiteList" [nzValue]="Site.p.Ref" [nzLabel]="Site.p.Name"></nz-option>
       </nz-select>
     </div>
+  </div>
+  <div class="col-md-4">
+    <label for="StageRef"><b>Stage</b></label>
+    <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear nzPlaceHolder="Select"
+      id="StageRef" name="StageRef" [nzSize]="'large'" [(ngModel)]="Entity.p.StageRef"
+      (ngModelChange)="getConsumeListByCompanySiteAndVendorRef()">
+      <nz-option *ngFor="let stage of StageList" [nzValue]="stage.p.Ref" [nzLabel]="stage.p.Name"></nz-option>
+    </nz-select>
   </div>
 </div>
 <ng-template #noDataTpl>
@@ -43,11 +52,11 @@
           <td Class="tbldata">{{consume.p.SiteName}}</td>
           <td Class="tbldata">{{formatDate(consume.p.ConsumptionDate)}}</td>
           <td Class="tbldata">{{consume.p.MaterialName}}</td>
-           <td Class="tbldata">{{consume.p.UnitName}}</td>
+          <td Class="tbldata">{{consume.p.UnitName}}</td>
           <td Class="tbldata">{{consume.p.CurrentQuantity}}</td>
           <td Class="tbldata">{{consume.p.ConsumedQuantity}}</td>
-           <td Class="tbldata">{{consume.p.RemainingQuantity}}</td>
-           <td Class="tbldata">{{consume.p.StageName}}</td>
+          <td Class="tbldata">{{consume.p.RemainingQuantity}}</td>
+          <td Class="tbldata">{{consume.p.StageName}}</td>
           <td Class="tbldata">{{consume.p.Description}}</td>
           <td Class="tbldata">{{consume.p.Remark}}</td>
           <td class="tbldata">
@@ -58,11 +67,12 @@
       </tbody>
     </nz-table>
   </div>
- <div class="fixed-pagination">
+  <div class="fixed-pagination">
     <nz-pagination class="try light-theme" [nzPageSize]="pageSize" [nzTotal]="total" [(nzPageIndex)]="currentPage"
       (nzPageIndexChange)="onPageChange($event)" [nzShowSizeChanger]="false" [nzResponsive]="true">
     </nz-pagination>
-  </div></div>
+  </div>
+</div>
 <div *ngIf="DisplayMasterList.length === 0">
   <Data-Not-Found />
 </div>

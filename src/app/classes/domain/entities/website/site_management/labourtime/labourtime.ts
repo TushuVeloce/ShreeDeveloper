@@ -21,12 +21,13 @@ export class LabourTimeProps {
   public UpdatedByName: number = 0;
   public Ref: number = 0;
   public LabourType : number = 0;
+  public Days : number = 0;
   public LabourTypeName : string = '';
   public LabourQty: number = 0;
   public LabourRate: number = 0;
   public LabourAmount : number = 0;
-  public LabourFromTime: string = '';
-  public LabourToTime: string = '';
+  // public LabourFromTime: string = '';
+  // public LabourToTime: string = '';
   public LabourWorkedHours: number = 0;
   // public Total: number = 0;
   public InvoiceRef: number = 0;

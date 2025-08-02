@@ -1,6 +1,7 @@
 import { Component, effect, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Site } from 'src/app/classes/domain/entities/website/masters/site/site';
+import { Stage } from 'src/app/classes/domain/entities/website/masters/stage/stage';
 import { StockConsume } from 'src/app/classes/domain/entities/website/stock_management/stock_consume/stockconsume';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
@@ -14,11 +15,12 @@ import { UIUtils } from 'src/app/services/uiutils.service';
   styleUrls: ['./stock-consume.component.scss'],
   standalone: false,
 })
-export class StockConsumeComponent  implements OnInit {
- Entity: StockConsume = StockConsume.CreateNewInstance();
+export class StockConsumeComponent implements OnInit {
+  Entity: StockConsume = StockConsume.CreateNewInstance();
   MasterList: StockConsume[] = [];
   DisplayMasterList: StockConsume[] = [];
   SiteList: Site[] = [];
+  StageList: Stage[] = [];
   SearchString: string = '';
   SelectedStockConsume: StockConsume = StockConsume.CreateNewInstance();
   CustomerRef: number = 0;
@@ -28,13 +30,14 @@ export class StockConsumeComponent  implements OnInit {
 
   companyRef = this.companystatemanagement.SelectedCompanyRef;
 
-  headers: string[] = ['Sr.No.', 'Site Name', 'Consumption Date', 'Material Name','Unit', 'Current Qty.' ,'Consumption Qty.','Remaining Qty.','Stage Name','Description','Remark','Action'];
+  headers: string[] = ['Sr.No.', 'Site Name', 'Consumption Date', 'Material Name', 'Unit', 'Current Qty.', 'Consumption Qty.', 'Remaining Qty.', 'Stage Name', 'Description', 'Remark', 'Action'];
   constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private screenSizeService: ScreenSizeService,
     private companystatemanagement: CompanyStateManagement, private DateconversionService: DateconversionService,
   ) {
     effect(async () => {
-       this.getSiteListByCompanyRef();
-      await this.getStockConsumeListByCompanyRef();
+      this.getSiteListByCompanyRef();
+      await this.getConsumeListByCompanySiteAndVendorRef();
+      await this.getStageListByCompanyRef();
     });
   }
 
@@ -44,7 +47,20 @@ export class StockConsumeComponent  implements OnInit {
     this.pageSize = this.screenSizeService.getPageSize('withDropdown');
   }
 
- getSiteListByCompanyRef = async () => {
+  getStageListByCompanyRef = async () => {
+    this.StageList = [];
+    if (this.companyRef() <= 0) {
+      await this.uiUtils.showErrorToster('Company not Selected');
+      return;
+    }
+    let lst = await Stage.FetchEntireListByCompanyRef(
+      this.companyRef(),
+      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+    );
+    this.StageList = lst;
+  };
+
+  getSiteListByCompanyRef = async () => {
     if (this.companyRef() <= 0) {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
@@ -57,36 +73,20 @@ export class StockConsumeComponent  implements OnInit {
     }
   }
 
-  getStockConsumeListByCompanyRef = async () => {
+  getConsumeListByCompanySiteAndVendorRef = async () => {
     this.MasterList = [];
     this.DisplayMasterList = [];
     if (this.companyRef() <= 0) {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
-    let lst = await StockConsume.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    let lst = await StockConsume.FetchEntireListByCompanySiteAndVendorRef(this.companyRef(), this.Entity.p.SiteRef, this.Entity.p.StageRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.MasterList = lst;
-
     this.DisplayMasterList = this.MasterList;
     this.loadPaginationData();
   }
 
-   getConsumeListByCompanyRefAndSiteRef = async () => {
-        this.MasterList = [];
-        this.DisplayMasterList = [];
-        if (this.Entity.p.SiteRef <= 0) {
-          this.getStockConsumeListByCompanyRef();
-          return;
-        }
-        let lst = await StockConsume.FetchEntireListByCompanyRefAndSiteRef(this.companyRef(), this.Entity.p.SiteRef,
-          async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
-        );
-        this.MasterList = lst;
-        this.DisplayMasterList = this.MasterList;
-        this.loadPaginationData();
-      };
-
-    // Extracted from services date conversion //
+  // Extracted from services date conversion //
   formatDate = (date: string | Date): string => {
     return this.DateconversionService.formatDate(date);
   }
@@ -108,14 +108,10 @@ export class StockConsumeComponent  implements OnInit {
           await this.uiUtils.showSuccessToster(
             `Stock Consume ${StockConsume.p.SiteName} has been deleted!`
           );
-          await this.getStockConsumeListByCompanyRef();
+          await this.getConsumeListByCompanySiteAndVendorRef();
           this.SearchString = '';
           this.loadPaginationData();
-            if (this.Entity.p.SiteRef <= 0) {
-            this.getStockConsumeListByCompanyRef();
-          } else {
-            this.getConsumeListByCompanyRefAndSiteRef();
-          }
+          this.getConsumeListByCompanySiteAndVendorRef();
         });
       }
     );

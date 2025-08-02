@@ -14,12 +14,14 @@ import { InvoiceFetchRequest } from "./invoicefetchrequest";
 import { GetDistinctRecipientNameFetchRequest } from "./GetDistinctRecipientNameFetchRequest";
 import { TimeDetailProps } from "../../site_management/time/time";
 import { LabourTimeProps } from "../../site_management/labourtime/labourtime";
-import { ExpenseTypes } from "src/app/classes/domain/domainenums/domainenums";
+import { ExpenseTypes, ModeOfPayments } from "src/app/classes/domain/domainenums/domainenums";
 import { OrderInvoiceMaterialDetailProps } from "./OrderInvoiceMaterial/orderinvoicematerial";
 
 
 export class InvoiceProps {
   public readonly Db_Table_Name = "Invoice";
+  Bill = ModeOfPayments.Bill
+
   public CreatedBy: number = 0;
   public CreatedByName: string = '';
   public CreatedDate: string = ''
@@ -47,6 +49,7 @@ export class InvoiceProps {
   public Description: string = ''
   public RecipientType: number = 0
   public InvoiceRecipientType: number = 0
+  public DisplayPurchaseOrderId: string = '';
   public RecipientMasterRef: number = 0
   public RecipientName: string = ''
   public IsSiteRef: number = 0
@@ -60,7 +63,7 @@ export class InvoiceProps {
   public readonly UnitName: string = ''
   public Rate: number = 0
   public InvoiceAmount: number = 0
-  public InvoiceModeOfPayment: number = 0
+  public InvoiceModeOfPayment: number = this.Bill;
   public Narration: string = ''
   public TransDateTime: string = ''
   public IsDeleted: number = 0

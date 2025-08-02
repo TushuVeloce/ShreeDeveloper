@@ -1,7 +1,7 @@
 import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { BookingRemark, CustomerStatus, DomainEnums, MarketingModes } from 'src/app/classes/domain/domainenums/domainenums';
+import { BookingRemark, BookingRemarks, CustomerStatus, DomainEnums, MarketingModes } from 'src/app/classes/domain/domainenums/domainenums';
 import { CustomerEnquiry } from 'src/app/classes/domain/entities/website/customer_management/customerenquiry/customerenquiry';
 import { CustomerFollowUp } from 'src/app/classes/domain/entities/website/customer_management/customerfollowup/customerfollowup';
 import {
@@ -260,7 +260,7 @@ export class CustomerFollowupDetailsComponent implements OnInit {
       siteRef,
       async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
     );
-    this.PlotList = lst.filter((plot) => plot.p.CurrentBookingRemark !== BookingRemark.Booked);
+    this.PlotList = lst.filter((plot) => plot.p.CurrentBookingRemark == BookingRemarks.Plot_Of_Owner || plot.p.CurrentBookingRemark == BookingRemarks.Plot_Of_Shree);
 
     this.DisplayMasterList = this.PlotList;
     this.IsPlotDetails = true;
@@ -366,6 +366,7 @@ export class CustomerFollowupDetailsComponent implements OnInit {
     }
     if (hasDealRecord && CustomerStatus !== this.CustomerStatusEnum.ConvertToDeal) {
       this.uiUtils.showWarningToster('One or more plots are marked as "Convert to Deal", so the Customer Status must also be "Convert to Deal"');
+      this.Entity.p.CustomerStatus = 0;
       return false;
     }
     return true;
@@ -406,6 +407,16 @@ export class CustomerFollowupDetailsComponent implements OnInit {
     );
     if (!this.ConverttoDeal(this.Entity.p.CustomerStatus)) {
       return
+    }
+
+    const missingList = this.Entity.p.CustomerFollowUpPlotDetails?.filter(detail =>
+      detail.CustomerStatus === this.CustomerStatusEnum.ConvertToDeal && !detail.CustID
+    );
+
+    if (missingList?.length > 0) {
+      // alert(`${missingList.length} 'convert to deal' entries are missing CustID.`);
+       await this.uiUtils.showWarningToster(`Please Enter Customer ID to convert to deal plots`);
+      return;
     }
     // return
     let entityToSave = this.Entity.GetEditableVersion();

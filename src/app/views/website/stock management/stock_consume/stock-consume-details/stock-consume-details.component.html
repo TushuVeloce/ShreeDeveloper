@@ -44,19 +44,19 @@
         </div>
         <div class="col-md-4" style="margin-top: 1rem">
           <label for="UnitRef">Unit</label>
-          <input type="text" name="UnitRef" class="form-control" [(ngModel)]="Entity.p.UnitName" />
+          <input type="text" name="UnitRef" class="form-control" disabled [(ngModel)]="Entity.p.UnitName" />
         </div>
         <div class="col-md-4" style="margin-top: 1rem">
           <label for="CurrentQuantity"><b>Current Quantity</b></label>
-          <input type="text" appCommaFormat [(ngModel)]="Entity.p.CurrentQuantity" name="CurrentQuantity" class="form-control"
-            id="CurrentQuantity" required placeholder="Enter Current Quantity" disabled />
+          <input type="text" appCommaFormat [(ngModel)]="Entity.p.CurrentQuantity" name="CurrentQuantity"
+            class="form-control" id="CurrentQuantity" required placeholder="Enter Current Quantity" disabled />
         </div>
         <div class="col-md-4" style="margin-top: 1rem">
           <label for="ConsumedQuantity"><b>Consumed Quantity</b></label>
-          <input type="text" appCommaFormat [(ngModel)]="Entity.p.ConsumedQuantity" name="ConsumedQuantity" class="form-control"
-            id="ConsumedQuantity" required placeholder="Enter Consumption Quantity" #ConsumedQuantityCtrl="ngModel"
-            required (blur)="ConsumedQuantityCtrl.control.markAsTouched()" (click)="selectAllValue($event)"
-            (ngModelChange)="CalculateRemainingQty()" />
+          <input type="text" appCommaFormat [(ngModel)]="Entity.p.ConsumedQuantity" name="ConsumedQuantity"
+            class="form-control" id="ConsumedQuantity" required placeholder="Enter Consumption Quantity"
+            #ConsumedQuantityCtrl="ngModel" required (blur)="ConsumedQuantityCtrl.control.markAsTouched()"
+            (click)="selectAllValue($event)" (ngModelChange)="CalculateRemainingQty()" />
           <div *ngIf="ConsumedQuantityCtrl.invalid && (ConsumedQuantityCtrl.touched || ConsumedQuantityCtrl.dirty)">
             <span class="validation-text" *ngIf="ConsumedQuantityCtrl.errors?.['required']">{{ RequiredFieldMsg
               }}</span>
@@ -64,8 +64,8 @@
         </div>
         <div class="col-md-4" style="margin-top: 1rem">
           <label for="RemainingQuantity"><b>Remaining Quantity</b></label>
-          <input type="text" appCommaFormat [(ngModel)]="Entity.p.RemainingQuantity" name="RemainingQuantity" class="form-control"
-            id="RemainingQuantity" required placeholder="Enter Remaining Quantity" disabled />
+          <input type="text" appCommaFormat [(ngModel)]="Entity.p.RemainingQuantity" name="RemainingQuantity"
+            class="form-control" id="RemainingQuantity" required placeholder="Enter Remaining Quantity" disabled />
         </div>
         <div class="col-md-4" style="margin-top: 1rem">
           <label for="StageRef"><b>Stage</b></label>
@@ -79,12 +79,6 @@
           <textarea type="text" [(ngModel)]="Entity.p.Description" name="Description" class="form-control"
             id="Description" rows="1" required placeholder="Enter Description" #DescriptionCtrl="ngModel"
             (blur)="DescriptionCtrl.control.markAsTouched()"></textarea>
-          <!-- <div style="height: 25px" *ngIf="
-              DescriptionCtrl.invalid &&
-              (DescriptionCtrl.touched || DescriptionCtrl.dirty)
-            ">
-            <span class="validation-text" *ngIf="DescriptionCtrl.errors?.['required']">{{ RequiredFieldMsg }}</span>
-          </div> -->
         </div>
         <div class="col-md-4" style="margin-top: 1rem">
           <label for="Remark"><b>Remark</b></label>
@@ -92,12 +86,7 @@
             required placeholder="Enter Remark" />
         </div>
       </div>
-      <div style="
-          justify-content: center;
-          display: flex;
-          gap: 2rem;
-          margin-top: 2rem;
-        ">
+      <div style="justify-content: center; display: flex; gap: 2rem; margin-top: 2rem;">
         <div>
           <button type="button" class="btn" (click)="SaveStockConsumption()">
             Save

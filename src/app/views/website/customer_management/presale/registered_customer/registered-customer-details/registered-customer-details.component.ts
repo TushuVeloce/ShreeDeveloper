@@ -127,7 +127,13 @@ export class RegisteredCustomerDetailsComponent implements OnInit {
   calculateRegistrationFees = () => {
     const ValueOfAgreement = Number(this.Entity.p.ValueOfAgreement);
     const RegTaxValuesInPercentage = Number(this.Entity.p.RegTaxValuesInPercentage);
-    this.Entity.p.RegistrationFees = Math.ceil(ValueOfAgreement * (RegTaxValuesInPercentage / 100));
+    const RegistrationFees = Math.ceil(ValueOfAgreement * (RegTaxValuesInPercentage / 100));
+
+    if(RegistrationFees > 30000){
+      this.Entity.p.RegistrationFees = 30000
+    }else{
+      this.Entity.p.RegistrationFees = RegistrationFees
+    }
     this.calculateExtraCharges()
   }
 
