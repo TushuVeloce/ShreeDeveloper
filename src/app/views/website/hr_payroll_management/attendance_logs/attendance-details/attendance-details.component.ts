@@ -410,8 +410,8 @@ export class AttendanceDetailsComponent implements OnInit {
         this.resetAllControls()
       } else {
         await this.uiUtils.showSuccessToster('Attendance Updated successfully');
-        await this.router.navigate(['/homepage/Website/Attendance_Logs']);
       }
+      await this.router.navigate(['/homepage/Website/Attendance_Logs']);
     }
   }
 

@@ -94,7 +94,7 @@
             <nz-select *ngIf="!RecipientNameInput && Entity.p.RecipientType == DealDoneCustomer"  class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch
               nzAllowClear nzPlaceHolder="Select" id="RecipientRef" name="RecipientRef" [nzSize]="'large'"
               [(ngModel)]="PayerPlotNo"
-              (ngModelChange)="getTotalInvoiceAmountFromSiteAndRecipientRef(); onRecipientChange();">
+              (ngModelChange)="onRecipientChange(); getTotalInvoiceAmountFromSiteAndRecipientRef();">
                <nz-option *ngFor="let recipient of RecipientList" [nzValue]="recipient.p.PlotName"
                   [nzLabel]="recipient.p.RecipientName + ' - ' + recipient.p.PlotName | titleCase">
                   <span *ngIf="Entity.p.RecipientType"
