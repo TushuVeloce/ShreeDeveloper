@@ -321,6 +321,7 @@ export class CustomerFollowupDetailsComponent implements OnInit {
       this.IsPlotDetails = true;
       this.SiteManagementRef = 0;
       this.InterestedPlotRef = 0;
+      this.PlotList = []
     }
   };
 
