@@ -14,29 +14,29 @@
     <ng-container *ngIf="FilteredCustomerEnquiryList.length > 0">
       <ion-card *ngFor="let item of FilteredCustomerEnquiryList" class="data-card">
         <ion-card-header>
-          <ion-card-title class="info-row"><strong>Name : </strong>{{ item.p.Name ? item.p.Name:'-'
-            }}</ion-card-title>
-          <ion-card-subtitle class="info-row"><strong>Contact No : </strong>{{ item.p.ContactNos ? item.p.ContactNos :
-            '-' }}</ion-card-subtitle>
-          <ion-card-subtitle class="info-row"><strong>Customer Address : </strong>{{ item.p.Address ? item.p.Address :
-            '-' }}</ion-card-subtitle>
+          <ion-card-title>Customer Name: <span>{{ item.p.Name }}</span></ion-card-title>
         </ion-card-header>
+
         <ion-card-content>
+          <div class="info-row"><strong>Contact No:</strong><span>{{ item.p.ContactNos }}</span></div>
+          <div class="info-row"><strong>Address:</strong><span>{{ item.p.Address }}</span></div>
+
           <div class="btn-row">
-            <ion-button fill="clear" size="small" color="primary" (click)="onViewClicked(item)">
-              <ion-icon slot="start" name="eye-outline"></ion-icon> View
-            </ion-button>
-            <ion-button fill="clear" size="small" color="secondary" (click)="onEditClicked(item)">
-              <ion-icon slot="start" name="create-outline"></ion-icon> Edit
-            </ion-button>
-            <!-- <ion-button fill="clear" size="small" color="danger" (click)="onDeleteClicked(item)">
-              <ion-icon slot="start" name="trash-outline"></ion-icon> Delete
+            <!-- <ion-button fill="outline" size="small" color="primary" (click)="onDeleteClicked(item)">
+              <ion-icon slot="start" name="trash-outline"></ion-icon> Follow Up
             </ion-button> -->
+            <ion-button fill="outline" size="small" color="primary" (click)="onEditClicked(item)">
+              <ion-icon slot="start" name="create-outline"></ion-icon> Follow Up
+            </ion-button>
+            <ion-button fill="outline" size="small" color="primary" (click)="onViewClicked(item)">
+              <ion-icon slot="start" name="eye-outline"></ion-icon> Follow Up
+            </ion-button>
           </div>
         </ion-card-content>
       </ion-card>
     </ng-container>
-    <!-- Show "Data not found" if list is empty -->
+
+    <!-- No Data -->
     <div *ngIf="FilteredCustomerEnquiryList.length === 0 && !loadingService.isLoaderActive()"
       class="no-data-mobile-app">
       <ion-icon name="alert-circle-outline" size="large" color="medium"></ion-icon>
@@ -66,7 +66,7 @@
       </ion-header>
       <!-- { label: 'Status', value: SelectedCustomerEnquiry.p.CustomerStatusName }, -->
 
-       <ion-content scroll-y="true" class="ion-padding modal-content-mobile-app">
+      <ion-content scroll-y="true" class="ion-padding modal-content-mobile-app">
         <div class="info-row-of-model-mobile-app" *ngFor="let field of [
           { label: 'Name', value: SelectedCustomerEnquiry.p.Name },
           { label: 'Contact No', value: SelectedCustomerEnquiry.p.ContactNos },

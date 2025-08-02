@@ -7,6 +7,7 @@ import {
 } from 'src/app/classes/domain/constants';
 import {
   BookingRemark,
+  BookingRemarks,
   DomainEnums,
 } from 'src/app/classes/domain/domainenums/domainenums';
 import { CustomerEnquiry } from 'src/app/classes/domain/entities/website/customer_management/customerenquiry/customerenquiry';
@@ -290,7 +291,7 @@ export class CustomerEnquiryDetailsComponent implements OnInit {
     let lst = await Plot.FetchEntireListBySiteRef(
       siteRef,
       async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg));
-    this.PlotList = lst.filter((plot) => plot.p.CurrentBookingRemark !== BookingRemark.Booked);
+    this.PlotList = lst.filter((plot) => plot.p.CurrentBookingRemark == BookingRemarks.Plot_Of_Owner || plot.p.CurrentBookingRemark == BookingRemarks.Plot_Of_Shree);
   };
 
   addDataToTable() {

@@ -8,44 +8,76 @@
 }
 
 .data-list {
-    padding: 16px;
-
     .data-card {
-        border-radius: 14px;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+        border-radius: 12px;
         margin-bottom: 16px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
         background: var(--ion-item-background);
+        overflow: hidden;
 
         ion-card-header {
-            background-color: #f5f5f5;
-            padding-bottom: 8px;
-            border-bottom: 1px solid #ddd;
-        }
+            background: #f0f0f0;
+            padding: 12px 16px;
 
-        ion-card-title {
-            font-size: 18px;
-            font-weight: bold;
-            color: #222;
-        }
+            ion-card-title {
+                font-size: 16px;
+                color: #222;
+                font-weight: 600;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
 
-        ion-card-subtitle {
-            font-size: 14px;
-            color: #666;
+                span {
+                    font-weight: normal;
+                }
+            }
         }
 
         ion-card-content {
+            padding: 16px;
             display: flex;
             flex-direction: column;
-            padding-top: 8px;
+            gap: 10px;
 
-            .btn-row {
+            .info-row {
                 display: flex;
                 justify-content: space-between;
-                flex-wrap: wrap;
-                gap: 8px;
-                margin-top: 8px;
+                font-size: 14px;
+                color: #444;
+
+                strong {
+                    font-weight: 600;
+                    color: #333;
+                }
+
+                span {
+                    text-align: right;
+                    color: #666;
+                }
+            }
+
+            .btn-row {
+                margin-top: 10px;
+                display: flex;
+                justify-content: flex-end;
             }
         }
+    }
+}
+
+.no-data-mobile-app {
+    text-align: center;
+    margin-top: 40px;
+    color: #999;
+
+    ion-icon {
+        font-size: 48px;
+        margin-bottom: 12px;
+    }
+
+    p {
+        font-size: 16px;
+        color: #666;
     }
 }
 

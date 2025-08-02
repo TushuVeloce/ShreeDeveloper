@@ -1,7 +1,7 @@
 import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { BookingRemark, CustomerStatus, DomainEnums, MarketingModes } from 'src/app/classes/domain/domainenums/domainenums';
+import { BookingRemark, BookingRemarks, CustomerStatus, DomainEnums, MarketingModes } from 'src/app/classes/domain/domainenums/domainenums';
 import { CustomerEnquiry } from 'src/app/classes/domain/entities/website/customer_management/customerenquiry/customerenquiry';
 import { CustomerFollowUp } from 'src/app/classes/domain/entities/website/customer_management/customerfollowup/customerfollowup';
 import { CustomerFollowUpPlotDetails, CustomerFollowUpPlotDetailsProps } from 'src/app/classes/domain/entities/website/customer_management/customerfollowupplotdetails/CustomerFollowUpPlotDetails';
@@ -228,17 +228,23 @@ export class CustomerFollowupDetailsMobileAppComponent implements OnInit {
         this.SiteManagementRef = selected[0].p.Ref;
         this.SiteManagementName = selected[0].p.Name;
         this.SiteName = selected[0].p.Name;
+        this.InterestedPlotRef = 0;
+        this.InterestedPlotNo = '';
+        this.plotName = '';
+        this.selectedPlot = []; 
+        this.PlotList = [];
+        if (this.SiteManagementRef > 0) {
+          this.getPlotBySiteRefList(this.SiteManagementRef);
+        }
       });
-      if (this.SiteManagementRef > 0) {
-        await this.getPlotBySiteRefList(this.SiteManagementRef);
-      }
     } catch (error) {
 
     }
   }
   public selectInterestedPlotsBottomsheet = async (): Promise<void> => {
     try {
-      const options = this.PlotList;
+      // const options = this.PlotList;
+      const options = this.PlotList.filter((plot) => plot.p.CurrentBookingRemark == BookingRemarks.Plot_Of_Owner || plot.p.CurrentBookingRemark == BookingRemarks.Plot_Of_Shree);
       this.openSelectModal(options, this.selectedPlot, false, 'Select Interested Plots', 1, (selected) => {
         this.selectedPlot = selected;
         this.InterestedPlotRef = selected[0].p.Ref;
@@ -256,10 +262,10 @@ export class CustomerFollowupDetailsMobileAppComponent implements OnInit {
         this.selectedLeadSource = selected;
         this.Entity.p.LeadSource = selected[0].p.Ref;
         this.LeadSourceName = selected[0].p.Name;
+        if (this.Entity.p.LeadSource) {
+          this.onLeadSourceChange(this.Entity.p.LeadSource)
+        }
       });
-      if (this.Entity.p.LeadSource) {
-        await this.onLeadSourceChange(this.Entity.p.LeadSource)
-      }
     } catch (error) {
 
     }
@@ -284,10 +290,10 @@ export class CustomerFollowupDetailsMobileAppComponent implements OnInit {
         this.Entity.p.CustomerStatusName = selected[0].p.Name;
         this.Entity.p.CustomerStatus = selected[0].p.Ref;
         this.CustomerStatusName = selected[0].p.Name;
+        if (this.Entity.p.CustomerStatus) {
+          this.ConverttoDeal(this.Entity.p.CustomerStatus);
+        }
       });
-      if (this.Entity.p.CustomerStatus) {
-        await this.ConverttoDeal(this.Entity.p.CustomerStatus);
-      }
     } catch (error) {
 
     }
@@ -396,23 +402,30 @@ export class CustomerFollowupDetailsMobileAppComponent implements OnInit {
   };
 
   getPlotBySiteRefList = async (siteRef: number) => {
-    if (siteRef <= 0) {
-      await this.toastService.present('Please Select a Site', 1000, 'danger');
-      await this.haptic.error();
-      return;
-    }
-    let lst = await Plot.FetchEntireListBySiteRef(
-      siteRef,
-      async (errMsg) => {
-        await this.toastService.present(errMsg, 1000, 'danger');
+    try {
+      await this.loadingService.show();
+      if (siteRef <= 0) {
+        await this.toastService.present('Please Select a Site', 1000, 'danger');
         await this.haptic.error();
+        return;
       }
-    );
-    this.PlotList = lst.filter((plot) => plot.p.CurrentBookingRemark !== BookingRemark.Booked);
+      let lst = await Plot.FetchEntireListBySiteRef(
+        siteRef,
+        async (errMsg) => {
+          await this.toastService.present(errMsg, 1000, 'danger');
+          await this.haptic.error();
+        }
+      );
+      this.PlotList = lst.filter((plot) => plot.p.CurrentBookingRemark !== BookingRemark.Booked);
 
 
-    this.DisplayMasterList = this.PlotList;
-    this.IsPlotDetails = true;
+      this.DisplayMasterList = this.PlotList;
+      this.IsPlotDetails = true;
+    } catch (error) {
+      
+    }finally{
+      await this.loadingService.hide();
+    }
   };
 
   addDataToCustomerFollowUpPlotDetail = () => {

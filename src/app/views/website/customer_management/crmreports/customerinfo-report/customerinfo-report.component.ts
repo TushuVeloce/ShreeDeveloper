@@ -33,7 +33,7 @@ export class CustomerinfoReportComponent implements OnInit {
     private companystatemanagement: CompanyStateManagement
   ) {
     effect(async () => {
-      await this.FormulateSiteListByCompanyRef(); this.getCustomerReportByCompanyRef();
+      await this.FormulateSiteListByCompanyRef(); this.getCustomerReportByCompanyAndSiteRef();
     });
   }
 
@@ -63,6 +63,7 @@ export class CustomerinfoReportComponent implements OnInit {
     }
 
     let lst = await CRMReports.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    console.log('lst :', lst);
     this.DisplayMasterList = lst;
   }
 

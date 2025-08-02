@@ -5,7 +5,6 @@ import { CustomerEnquiry } from 'src/app/classes/domain/entities/website/custome
 import { CustomerFollowUpProps } from 'src/app/classes/domain/entities/website/customer_management/customerfollowup/customerfollowup';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { FilterService } from 'src/app/services/filter.service';
-import { UIUtils } from 'src/app/services/uiutils.service';
 import { AlertService } from 'src/app/views/mobile-app/components/core/alert.service';
 import { HapticService } from 'src/app/views/mobile-app/components/core/haptic.service';
 import { LoadingService } from 'src/app/views/mobile-app/components/core/loading.service';
@@ -45,33 +44,30 @@ export class CustomerEnquiryViewMobileAppComponent implements OnInit {
 
 
   constructor(
-    // private uiUtils: UIUtils,
     private router: Router,
     private appStateManagement: AppStateManageService,
-    private filterService: FilterService,
     private toastService: ToastService,
     private haptic: HapticService,
     private alertService: AlertService,
     public loadingService: LoadingService
   ) { }
 
-  ngOnInit(): void {
+  ngOnInit = (): void => {
     // this.loadCRMIfCompanyExists();
   }
 
   ionViewWillEnter = async () => {
     await this.loadCRMIfCompanyExists();
-    await this.loadFilters();
+    this.loadFilters();
   };
 
-  async handleRefresh(event: CustomEvent): Promise<void> {
+  handleRefresh = async (event: CustomEvent): Promise<void> => {
     await this.loadCRMIfCompanyExists();
-    // await this.filterCustomerList();
-    await this.loadFilters();
+    this.loadFilters();
     (event.target as HTMLIonRefresherElement).complete();
   }
 
-  loadFilters=()=> {
+  loadFilters = () => {
     this.filters = [
       {
         key: 'status',
@@ -86,7 +82,7 @@ export class CustomerEnquiryViewMobileAppComponent implements OnInit {
     ];
   }
 
-  onFiltersChanged = async (updatedFilters: any[]) =>{
+  onFiltersChanged = async (updatedFilters: any[]) => {
     for (const filter of updatedFilters) {
       const selected = filter.selected;
       const selectedValue = (selected === null || selected === undefined) ? null : selected;
@@ -100,40 +96,39 @@ export class CustomerEnquiryViewMobileAppComponent implements OnInit {
           break;
       }
     }
-    await this.filterCustomerList();
+    this.filterCustomerList();
     this.loadFilters(); // Reload filters with updated options & preserve selections
   }
   private loadCRMIfCompanyExists = async (): Promise<void> => {
     this.companyRef = Number(this.appStateManagement.localStorage.getItem('SelectedCompanyRef'));
     if (this.companyRef <= 0) {
-       await this.toastService.present('company not selected', 1000, 'danger');
-        await this.haptic.error();
+      await this.toastService.present('company not selected', 1000, 'danger');
+      await this.haptic.error();
       return;
     }
     await this.getCustomerEnquiryListByCompanyRef();
   }
 
-  getCustomerEnquiryListByCompanyRef = async () =>{
+  getCustomerEnquiryListByCompanyRef = async () => {
     try {
       this.CustomerEnquiryList = [];
       this.FilteredCustomerEnquiryList = [];
       await this.loadingService.show();
       if (this.companyRef <= 0) {
-         await this.toastService.present('company not selected', 1000, 'danger');
+        await this.toastService.present('company not selected', 1000, 'danger');
         await this.haptic.error();
         return;
       }
       let lst = await CustomerEnquiry.FetchEntireListByCompanyRef(
         this.companyRef,
-        async (errMsg) =>{
-          await this.toastService.present('Error'+errMsg, 1000, 'danger');
+        async (errMsg) => {
+          await this.toastService.present(errMsg, 1000, 'danger');
           await this.haptic.error();
-          }
+        }
       );
       this.CustomerEnquiryList = lst;
       this.CustomerEnquiryList.forEach(e => e.p.CustomerFollowUps.push(CustomerFollowUpProps.Blank()))
       this.FilteredCustomerEnquiryList = this.CustomerEnquiryList;
-      console.log('FilteredCustomerEnquiryList :', this.FilteredCustomerEnquiryList);
       this.filterCustomerList();
     } catch (error: any) {
     } finally {
@@ -141,7 +136,7 @@ export class CustomerEnquiryViewMobileAppComponent implements OnInit {
     }
   }
 
-  filterCustomerList=()=> {
+  filterCustomerList = () => {
     if (this.selectedStatus === 0) {
       this.FilteredCustomerEnquiryList = this.CustomerEnquiryList;
     } else {
@@ -188,7 +183,6 @@ export class CustomerEnquiryViewMobileAppComponent implements OnInit {
                     1000,
                     'success'
                   );
-                  await this.haptic.success();
                 });
                 await this.getCustomerEnquiryListByCompanyRef();
               } catch (err) {
@@ -201,19 +195,19 @@ export class CustomerEnquiryViewMobileAppComponent implements OnInit {
     }
   };
 
-  onViewClicked= async (item: CustomerEnquiry)=> {
+  onViewClicked = async (item: CustomerEnquiry) => {
     this.SelectedCustomerEnquiry = item;
     this.ModalOpen = true;
   }
 
-  closeModal=()=> {
+  closeModal = () => {
     this.ModalOpen = false;
   }
 
   AddCustomerEnquiryForm = async () => {
     try {
       if (this.companyRef <= 0) {
-         await this.toastService.present('company not selected', 1000, 'danger');
+        await this.toastService.present('company not selected', 1000, 'danger');
         await this.haptic.error();
         return;
       }
@@ -228,38 +222,4 @@ export class CustomerEnquiryViewMobileAppComponent implements OnInit {
       Name: item.p.Name
     }));
   };
-
-  // openFilterSheet = async () => {
-  //   const filterData = {
-  //     categories: [
-  //       {
-  //         Name: 'Customer Status',
-  //         Ref: 100,
-  //         multi: false,
-  //         date: false,
-  //         dependUponRef: 0,
-  //         options: this.CustomerStatusList
-  //       }
-  //     ]
-  //   };
-  //   try {
-  //     const res = await this.filterService.openFilter(filterData, this.selectedFilters);
-  //     if (res.selected && res.selected.length > 0) {
-  //       this.selectedFilters = res.selected;
-  //       for (const filter of this.selectedFilters) {
-  //         switch (filter.category.Ref) {
-  //           case 100:
-  //             this.selectedStatus = filter.selectedOptions[0].Ref;
-  //             break;
-  //         }
-  //       }
-  //       this.filterCustomerList();
-  //     } else {
-  //       this.selectedStatus = 0;
-  //       this.filterCustomerList();
-  //     }
-  //   } catch (error) {
-  //     // console.error('Error in filter selection:', error);
-  //   }
-  // };
 }

@@ -10,53 +10,24 @@ import { Utils } from "src/app/services/utils.service";
 import { isNullOrUndefined } from "src/tools";
 import { UIUtils } from "src/app/services/uiutils.service";
 import { RequestTypes } from "src/app/classes/infrastructure/enums";
-import { CRMReportsFetchRequest } from "./crmreportfetchrequest";
+import { DealCancelledCustomerFetchRequest } from "./dealcancelledcustomerfetchrequest";
+import { ValidationMessages, ValidationPatterns } from "src/app/classes/domain/constants";
 
 
-export class CRMReportsProps {
+export class DealCancelledCustomerProps {
+  public CreatedBy: number = 0;
+  public CreatedByName: string = '';
+  public UpdatedBy: number = 0;
+  public UpdatedByName: number = 0;
   public Ref: number = 0;
-  public CustomerEnquiryRef: number = 0;
-  public RegisterDate: string = '';
-  public CustID: string = '';
-  public SiteName: string = '';
   public CustomerName: string = '';
-  public CustomerAddress: string = '';
-  public ContactNos: string = '';
-  public Reference: string = '';
-  public AdharNo: string = '';
-  public PANNo: string = '';
+  public Address: string = '';
+  public ContactNos : string = '';
+  public CityName: string = '';
   public PlotNo: string = '';
-  public LeadSourceName: string = '';
-  public RegisterCustomerBookingRemarkName: string = '';
-  public AreaInSqm: number = 0;
-  public AreaInSqft: number = 0;
-  public BasicRate: number = 0;
-  public DiscountedRateOnArea: number = 0;
-  public DiscountOnTotalPlotAmount: number = 0;
-  public TotalPlotAmount: number = 0;
-  public GovernmentValue: number = 0;
-  public GovernmentRecknor: number = 0;
-  public StampDuties: number = 0;
-  public RegistrationFees: number = 0;
-  public LegalCharges: number = 0;
-  public TotalExtraCharges: number = 0;
-  public GrandTotal: number = 0;
-  public ValueOfAgreement: number = 0;
-  public TaxValueInPercentage: number = 0
-  public GovermentRatePerSqm: number = 0;
-  public RegTaxValueInPercentage: number = 0;
-  public GoodsServicesTax: number = 0;
-  public GstToatalAmount: number = 0;
-  public TotalChequeRecieved: number = 0;
-  public TotalCashRecieved: number = 0;
-  public TotalAmountRecieved: number = 0;
-  public TotalChequeBalance: number = 0;
-  public TotalCashBalance: number = 0;
-  public TotalBalance: number = 0;
-  public RemainingAmount: number = 0;
-  public BrokerName: string = '';
-  public LeadHandleByName: string = '';
-
+  public SiteRef: number = 0;
+  public SiteName: string = '';
+  public Reason: string = '';
 
 
   public readonly IsNewlyCreated: boolean = false;
@@ -66,14 +37,14 @@ export class CRMReportsProps {
   }
 
   public static Blank() {
-    return new CRMReportsProps(true);
+    return new DealCancelledCustomerProps(true);
   }
 }
 
-export class CRMReports implements IPersistable<CRMReports> {
-  public static readonly Db_Table_Name: string = 'CustomerSummarry';
+export class DealCancelledCustomer implements IPersistable<DealCancelledCustomer> {
+  public static readonly Db_Table_Name: string = 'DealCancelledCustomer';
 
-  private constructor(public readonly p: CRMReportsProps, public readonly AllowEdit: boolean) {
+  private constructor(public readonly p: DealCancelledCustomerProps, public readonly AllowEdit: boolean) {
 
   }
 
@@ -94,17 +65,17 @@ export class CRMReports implements IPersistable<CRMReports> {
     return newRef
   }
 
-  public GetEditableVersion(): CRMReports {
-    let newState: CRMReportsProps = Utils.GetInstance().DeepCopy(this.p);
-    return CRMReports.CreateInstance(newState, true);
+  public GetEditableVersion(): DealCancelledCustomer {
+    let newState: DealCancelledCustomerProps = Utils.GetInstance().DeepCopy(this.p);
+    return DealCancelledCustomer.CreateInstance(newState, true);
   }
 
   public static CreateNewInstance() {
-    return new CRMReports(CRMReportsProps.Blank(), true);
+    return new DealCancelledCustomer(DealCancelledCustomerProps.Blank(), true);
   }
 
   public static CreateInstance(data: any, allowEdit: boolean) {
-    return new CRMReports(data as CRMReportsProps, allowEdit);
+    return new DealCancelledCustomer(data as DealCancelledCustomerProps, allowEdit);
   }
 
   public CheckSaveValidity(_td: TransportData, vra: ValidationResultAccumulator): void {
@@ -112,28 +83,28 @@ export class CRMReports implements IPersistable<CRMReports> {
   }
 
   public MergeIntoTransportData(td: TransportData) {
-    DataContainerService.GetInstance().MergeIntoContainer(td.MainData, CRMReports.Db_Table_Name, this.p);
+    DataContainerService.GetInstance().MergeIntoContainer(td.MainData, DealCancelledCustomer.Db_Table_Name, this.p);
   }
 
-  private static m_currentInstance: CRMReports = CRMReports.CreateNewInstance();
+  private static m_currentInstance: DealCancelledCustomer = DealCancelledCustomer.CreateNewInstance();
 
   public static GetCurrentInstance() {
-    return CRMReports.m_currentInstance;
+    return DealCancelledCustomer.m_currentInstance;
   }
 
-  public static SetCurrentInstance(value: CRMReports) {
-    CRMReports.m_currentInstance = value;
+  public static SetCurrentInstance(value: DealCancelledCustomer) {
+    DealCancelledCustomer.m_currentInstance = value;
   }
 
 
   // ********************************************
   public static cacheDataChangeLevel: number = -1;
 
-  public static SingleInstanceFromTransportData(td: TransportData): CRMReports {
+  public static SingleInstanceFromTransportData(td: TransportData): DealCancelledCustomer {
     let dcs = DataContainerService.GetInstance();
-    if (dcs.CollectionExists(td.MainData, CRMReports.Db_Table_Name)) {
-      for (let data of dcs.GetCollection(td.MainData, CRMReports.Db_Table_Name)!.Entries) {
-        return CRMReports.CreateInstance(data, false);
+    if (dcs.CollectionExists(td.MainData, DealCancelledCustomer.Db_Table_Name)) {
+      for (let data of dcs.GetCollection(td.MainData, DealCancelledCustomer.Db_Table_Name)!.Entries) {
+        return DealCancelledCustomer.CreateInstance(data, false);
       }
     }
 
@@ -142,13 +113,13 @@ export class CRMReports implements IPersistable<CRMReports> {
 
   public static ListFromDataContainer(cont: DataContainer,
     filterPredicate: (arg0: any) => boolean = null as any,
-    sortPropertyName: string = ""): CRMReports[] {
-    let result: CRMReports[] = [];
+    sortPropertyName: string = ""): DealCancelledCustomer[] {
+    let result: DealCancelledCustomer[] = [];
 
     let dcs = DataContainerService.GetInstance();
 
-    if (dcs.CollectionExists(cont, CRMReports.Db_Table_Name)) {
-      let coll = dcs.GetCollection(cont, CRMReports.Db_Table_Name)!;
+    if (dcs.CollectionExists(cont, DealCancelledCustomer.Db_Table_Name)) {
+      let coll = dcs.GetCollection(cont, DealCancelledCustomer.Db_Table_Name)!;
       let entries = coll.Entries;
 
       if (!isNullOrUndefined(filterPredicate)) entries = entries.filter(filterPredicate);
@@ -158,18 +129,18 @@ export class CRMReports implements IPersistable<CRMReports> {
       }
 
       for (let data of entries) {
-        result.push(CRMReports.CreateInstance(data, false));
+        result.push(DealCancelledCustomer.CreateInstance(data, false));
       }
     }
 
     return result;
   }
 
-  public static ListFromTransportData(td: TransportData): CRMReports[] {
-    return CRMReports.ListFromDataContainer(td.MainData);
+  public static ListFromTransportData(td: TransportData): DealCancelledCustomer[] {
+    return DealCancelledCustomer.ListFromDataContainer(td.MainData);
   }
 
-  public static async FetchTransportData(req: CRMReportsFetchRequest, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+  public static async FetchTransportData(req: DealCancelledCustomerFetchRequest, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let tdRequest = req.FormulateTransportData();
     let pktRequest = PayloadPacketFacade.GetInstance().CreateNewPayloadPacket2(tdRequest);
 
@@ -184,39 +155,39 @@ export class CRMReports implements IPersistable<CRMReports> {
   }
 
   public static async FetchInstance(ref: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-    let req = new CRMReportsFetchRequest();
-    req.CRMReportsRefs.push(ref);
+    let req = new DealCancelledCustomerFetchRequest();
+    req.DealCancelledCustomerRefs.push(ref);
 
-    let tdResponse = await CRMReports.FetchTransportData(req, errorHandler) as TransportData;
-    return CRMReports.SingleInstanceFromTransportData(tdResponse);
+    let tdResponse = await DealCancelledCustomer.FetchTransportData(req, errorHandler) as TransportData;
+    return DealCancelledCustomer.SingleInstanceFromTransportData(tdResponse);
   }
 
-  public static async FetchList(req: CRMReportsFetchRequest, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-    let tdResponse = await CRMReports.FetchTransportData(req, errorHandler) as TransportData;
-    return CRMReports.ListFromTransportData(tdResponse);
+  public static async FetchList(req: DealCancelledCustomerFetchRequest, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+    let tdResponse = await DealCancelledCustomer.FetchTransportData(req, errorHandler) as TransportData;
+    return DealCancelledCustomer.ListFromTransportData(tdResponse);
   }
 
   public static async FetchEntireList(errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-    let req = new CRMReportsFetchRequest();
-    let tdResponse = await CRMReports.FetchTransportData(req, errorHandler) as TransportData;
-    return CRMReports.ListFromTransportData(tdResponse);
+    let req = new DealCancelledCustomerFetchRequest();
+    let tdResponse = await DealCancelledCustomer.FetchTransportData(req, errorHandler) as TransportData;
+    return DealCancelledCustomer.ListFromTransportData(tdResponse);
   }
 
   public static async FetchEntireListByCompanyRef(CompanyRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-    let req = new CRMReportsFetchRequest();
-    req.CompanyRef = CompanyRef
-    let tdResponse = await CRMReports.FetchTransportData(req, errorHandler) as TransportData;
-    return CRMReports.ListFromTransportData(tdResponse);
+    let req = new DealCancelledCustomerFetchRequest();
+    req.CompanyRefs.push(CompanyRef)
+    let tdResponse = await DealCancelledCustomer.FetchTransportData(req, errorHandler) as TransportData;
+    return DealCancelledCustomer.ListFromTransportData(tdResponse);
   }
 
-  public static async FetchEntireListByCompanyAndSiteRef(CompanyRef: number, SiteRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-    let req = new CRMReportsFetchRequest();
+  public static async FetchEntireListBySiteRef(SiteRef: number, CompanyRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+    let req = new DealCancelledCustomerFetchRequest();
     req.CompanyRef = CompanyRef
     if(SiteRef){
       req.SiteRef = SiteRef
     }
-    let tdResponse = await CRMReports.FetchTransportData(req, errorHandler) as TransportData;
-    return CRMReports.ListFromTransportData(tdResponse);
+    let tdResponse = await DealCancelledCustomer.FetchTransportData(req, errorHandler) as TransportData;
+    return DealCancelledCustomer.ListFromTransportData(tdResponse);
   }
 
   public async DeleteInstance(successHandler: () => Promise<void> = null!, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
