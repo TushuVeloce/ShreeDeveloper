@@ -401,7 +401,7 @@
         </div>
         <div class="col-md-4" style="margin-top: 1rem" *ngIf="isDieselPaid">
           <label>Diesel Amount</label>
-          <input type="text" appCommaFormat [(ngModel)]="Entity.p.DieselAmount" name="DieselAmount" class="form-control"
+          <input type="text" appCommaFormat [(ngModel)]="Entity.p.DieselAmount" disabled name="DieselAmount" class="form-control"
             id="DieselAmount" required placeholder="Diesel Amount" />
         </div>
       </div>
@@ -554,7 +554,7 @@
           </div>
           <div class="col-md-4" style="margin-top: 1rem">
             <div>
-              <label for="LabourRate">Labour Rate</label>
+              <label for="LabourRate">Labour Day Rate</label>
               <input type="text" appCommaFormat name="LabourRate" class="form-control" id="LabourRate"
                 [(ngModel)]="LabourTimeEntity.LabourRate" (ngModelChange)="calculateWorkedHours()"
                 placeholder="Enter Rate " #LabourRateCtrl="ngModel" (ngModelChange)="CalculateLabourAmount()" required

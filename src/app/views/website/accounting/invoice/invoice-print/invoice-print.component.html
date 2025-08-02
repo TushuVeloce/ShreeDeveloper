@@ -105,8 +105,7 @@
             <tr style="background-color: maroon; color: white;">
               <th style="padding: 8px; border: none;">Sr.No</th>
               <th style="padding: 8px; border: none;">Labour Type</th>
-              <th style="padding: 8px; border: none;">From Time</th>
-              <th style="padding: 8px; border: none;">To Time</th>
+              <th style="padding: 8px; border: none;">Days</th>
               <th style="padding: 8px; border: none;">Qty.</th>
               <th style="padding: 8px; border: none;">Rate</th>
               <th style="padding: 8px; border: none;">Amount</th>
@@ -140,8 +139,7 @@
               <tr *ngFor="let time of Entity.p.LabourExpenseDetailsArray; let i = index">
                 <td style="padding: 8px; border: none;">{{ i + 1 }}</td>
                 <td style="padding: 8px; border: none;">{{ time.LabourTypeName }}</td>
-                <td style="padding: 8px; border: none;">{{ time.LabourFromTime }}</td>
-                <td style="padding: 8px; border: none;">{{ time.LabourToTime }}</td>
+                <td style="padding: 8px; border: none;">{{ time.Days }}</td>
                 <td style="padding: 8px; border: none;">{{ time.LabourQty}}</td>
                 <td style="padding: 8px; border: none;">{{ time.LabourRate}}</td>
                 <td style="padding: 8px; border: none;">{{ time.LabourAmount}}</td>
@@ -156,7 +154,7 @@
                 style="padding: 8px; border: none; text-align: center; font-weight: bold; background-color: #fef4d4;">
                 <strong>TOTAL</strong>
               </td>
-              <td colspan="6" *ngIf="Entity.p.ExpenseType == LabourExpenseRef"
+              <td colspan="5" *ngIf="Entity.p.ExpenseType == LabourExpenseRef"
                 style="padding: 8px; border: none; text-align: center; font-weight: bold; background-color: #fef4d4;">
                 <strong>TOTAL</strong>
               </td>
