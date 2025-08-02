@@ -118,7 +118,6 @@ export class InvoiceDetailsComponent implements OnInit {
       this.IsNewEntity = false;
       this.DetailsFormTitle = this.IsNewEntity ? 'New Bill' : 'Edit Bill';
       this.Entity = Invoice.GetCurrentInstance();
-      console.log('this.Entity :', this.Entity);
       this.appStateManage.StorageKey.removeItem('Editable');
       this.Entity.p.UpdatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
       if (this.Entity.p.LedgerRef) {
@@ -136,6 +135,9 @@ export class InvoiceDetailsComponent implements OnInit {
     } else {
       this.Entity = Invoice.CreateNewInstance();
       Invoice.SetCurrentInstance(this.Entity);
+
+      this.ModeofPaymentList = this.ModeofPaymentList.filter((data) => data.Ref != this.StockExpenseRef);
+      console.log('this.ModeofPaymentList :', this.ModeofPaymentList);
       this.strCDT = await CurrentDateTimeRequest.GetCurrentDateTime();
       let parts = this.strCDT.substring(0, 16).split('-');
       this.Entity.p.Date = `${parts[0]}-${parts[1]}-${parts[2]}`;
@@ -271,7 +273,6 @@ export class InvoiceDetailsComponent implements OnInit {
 
     this.RecipientList = [];
     let lst = await Invoice.FetchRecipientByRecipientTypeRef(this.companyRef(), this.Entity.p.SiteRef, this.Entity.p.InvoiceRecipientType, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-    console.log('lst :', lst);
     this.RecipientList = lst;
   }
 

@@ -31,7 +31,7 @@ export class ExpenseDetailsComponent implements OnInit {
   Entity: Expense = Expense.CreateNewInstance();
   RecipientEntity: Recipient = Recipient.CreateNewInstance();
   RecipientList: Invoice[] = [];
-  private IsNewEntity: boolean = true;
+  IsNewEntity: boolean = true;
   SiteList: Site[] = [];
   LedgerList: Ledger[] = [];
   SubLedgerList: SubLedger[] = [];
@@ -199,7 +199,7 @@ export class ExpenseDetailsComponent implements OnInit {
       return;
     }
     if (this.Entity.p.RecipientType <= 0) {
-      await this.uiUtils.showErrorToster('To Whom not Selected');
+      // await this.uiUtils.showErrorToster('To Whom not Selected');
       return;
     }
 
@@ -283,8 +283,6 @@ export class ExpenseDetailsComponent implements OnInit {
   onRecipientChange = () => {
     this.PaymentType = 0;
     this.Entity.p.Reason = '';
-    this.Entity.p.IsAdvancePayment = 0;
-    this.Entity.p.IsSalaryExpense = false;
     this.Entity.p.TotalAdvance = 0;
     this.Entity.p.RemainingAdvance = 0;
     this.Entity.p.InvoiceAmount = 0;
@@ -387,6 +385,7 @@ export class ExpenseDetailsComponent implements OnInit {
     this.Entity.p.Date = this.dtu.ConvertStringDateToFullFormat(this.Date);
     let entityToSave = this.Entity.GetEditableVersion();
     let entitiesToSave = [entityToSave];
+    console.log('entitiesToSave :', entitiesToSave);
     let tr = await this.utils.SavePersistableEntities(entitiesToSave);
 
     if (!tr.Successful) {

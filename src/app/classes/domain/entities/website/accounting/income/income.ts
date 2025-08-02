@@ -230,15 +230,17 @@ export class Income implements IPersistable<Income> {
 
   public static async FetchEntireListBySiteRef(SiteRef:number,CompanyRef: number,  errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let req = new IncomeFetchRequest();
-    req.CompanyRef = CompanyRef;
-    req.SiteRef = SiteRef
+   req.CompanyRefs.push(CompanyRef)
+    if (SiteRef) {
+         req.SiteRefs.push(SiteRef)
+      }
     let tdResponse = await Income.FetchTransportData(req, errorHandler) as TransportData;
     return Income.ListFromTransportData(tdResponse);
   }
 
   public static async FetchEntireListByFilters(SiteRef: number, LedgerRef: number, SubLedgerRef: number,ModeOfPayment:number,Ref:number, CompanyRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let req = new IncomeFetchRequest();
-    req.CompanyRefs.push(CompanyRef)
+      req.CompanyRefs.push(CompanyRef)
       if (LedgerRef) {
         req.LedgerRefs.push(LedgerRef)
       }
