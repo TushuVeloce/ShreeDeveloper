@@ -71,6 +71,7 @@ export class InvoiceDetailsComponent implements OnInit {
   isLabourTimeModalOpen: boolean = false;
   Bill = ModeOfPayments.Bill
   TypeRecipient = RecipientTypes.Recipient
+  TypeRecipientVendor = RecipientTypes.Vendor
   ModeofPaymentList = DomainEnums.ModeOfPaymentsList().filter(item => item.Ref == this.Bill);
   RecipientTypesList = DomainEnums.RecipientTypesList();
 
@@ -158,6 +159,12 @@ export class InvoiceDetailsComponent implements OnInit {
   focusInput = () => {
     let txtName = document.getElementById('SiteRef')!;
     txtName.focus();
+  }
+
+  onRecipientTypeVendor = () => {
+    if (this.Entity.p.InvoiceRecipientType == this.TypeRecipientVendor) {
+      this.Entity.p.VendorRef = this.Entity.p.RecipientMasterRef;
+    }
   }
 
   // Extracted from services date conversion //
