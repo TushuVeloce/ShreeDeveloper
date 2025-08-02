@@ -1,7 +1,7 @@
 import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { BookingRemark, CustomerStatus, DomainEnums } from 'src/app/classes/domain/domainenums/domainenums';
+import { BookingRemark, BookingRemarks, CustomerStatus, DomainEnums } from 'src/app/classes/domain/domainenums/domainenums';
 import { CustomerEnquiry } from 'src/app/classes/domain/entities/website/customer_management/customerenquiry/customerenquiry';
 import { CustomerFollowUp } from 'src/app/classes/domain/entities/website/customer_management/customerfollowup/customerfollowup';
 import { CustomerFollowUpPlotDetails } from 'src/app/classes/domain/entities/website/customer_management/customerfollowupplotdetails/CustomerFollowUpPlotDetails';
@@ -14,7 +14,6 @@ import { State } from 'src/app/classes/domain/entities/website/masters/state/sta
 import { CurrentDateTimeRequest } from 'src/app/classes/infrastructure/request_response/currentdatetimerequest';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { BottomsheetMobileAppService } from 'src/app/services/bottomsheet-mobile-app.service';
-import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
 import { DTU } from 'src/app/services/dtu.service';
 import { Utils } from 'src/app/services/utils.service';
 import { AlertService } from 'src/app/views/mobile-app/components/core/alert.service';
@@ -33,7 +32,6 @@ export class CustomerEnquiryDetailsMobileAppComponent implements OnInit {
   public IsNewEntity: boolean = true;
   isSaveDisabled: boolean = false;
   IsDropdownDisabled: boolean = false;
-  // isLoading: boolean = false;
   InitialEntity: CustomerEnquiry = null as any;
   pageSize = 10; // Items per page
   currentPage = 1; // Initialize current page
@@ -89,7 +87,6 @@ export class CustomerEnquiryDetailsMobileAppComponent implements OnInit {
     private utils: Utils,
     private dtu: DTU,
     private datePipe: DatePipe,
-    private companystatemanagement: CompanyStateManagement,
     private bottomsheetMobileAppService: BottomsheetMobileAppService,
     private toastService: ToastService,
     private haptic: HapticService,
@@ -110,11 +107,9 @@ export class CustomerEnquiryDetailsMobileAppComponent implements OnInit {
 
 
   private loadCustomerEnquiryIfEmployeeExists = async () => {
-  console.log('loadCustomerEnquiryIfEmployeeExists ');
     try {
       await this.loadingService.show();
       this.companyRef = Number(this.appStateManagement.localStorage.getItem('SelectedCompanyRef'));
-      console.log('this.companyRef :', this.companyRef);
       this.appStateManagement.setDropdownDisabled(true);
 
       await this.FormulateCountryList();
@@ -134,7 +129,6 @@ export class CustomerEnquiryDetailsMobileAppComponent implements OnInit {
         this.IsNewEntity = false;
         this.DetailsFormTitle = this.IsNewEntity ? 'New Customer Enquiry' : 'Edit Customer Enquiry';
         this.Entity = CustomerEnquiry.GetCurrentInstance();
-        console.log('this.Entity :', this.Entity);
         // Site Visit Date
         if (this.Entity.p.CustomerFollowUps[0].SiteVisitDate != '') {
           // While Edit Converting date String into Date Format //
@@ -199,7 +193,6 @@ export class CustomerEnquiryDetailsMobileAppComponent implements OnInit {
         CustomerEnquiry.CreateNewInstance(),
         this.utils.DeepCopy(this.Entity)
       ) as CustomerEnquiry;
-      // this.focusInput();
 
       if (this.Entity.p.CustomerFollowUps[0].TransDateTime.trim().length <= 0) {
         let strCDT = await CurrentDateTimeRequest.GetCurrentDateTime();
@@ -220,7 +213,6 @@ export class CustomerEnquiryDetailsMobileAppComponent implements OnInit {
 
 
     } finally {
-      // this.isLoading = false;
       await this.loadingService.hide();
     }
   }
@@ -239,10 +231,10 @@ export class CustomerEnquiryDetailsMobileAppComponent implements OnInit {
         this.CityList = [];
         this.CityName = '';
         this.Entity.p.CityRef = 0;
+        if (this.Entity.p.CountryRef > 0) {
+          this.getStateListByCountryRef(this.Entity.p.CountryRef);
+        }
       });
-      if (this.Entity.p.CountryRef > 0) {
-        await this.getStateListByCountryRef(this.Entity.p.CountryRef);
-      }
     } catch (error) {
 
     }
@@ -260,10 +252,10 @@ export class CustomerEnquiryDetailsMobileAppComponent implements OnInit {
         this.CityList = [];
         this.CityName = '';
         this.Entity.p.CityRef = 0;
+        if (this.Entity.p.StateRef > 0) {
+          this.getCityListByStateRef(this.Entity.p.StateRef);
+        }
       });
-      if (this.Entity.p.StateRef > 0) {
-        await this.getCityListByStateRef(this.Entity.p.StateRef);
-      }
     } catch (error) {
 
     }
@@ -289,10 +281,14 @@ export class CustomerEnquiryDetailsMobileAppComponent implements OnInit {
         this.SelectedInterestedSite = selected;
         this.SiteManagementRef = selected[0].p.Ref;
         this.SiteManagementName = selected[0].p.Name;
+        this.InterestedPlotRef = 0;
+        this.InterestedPlotNo = null;
+        this.SelectedInterestedPlots = [];
+        this.PlotList = [];
+        if (this.SiteManagementRef > 0) {
+          this.getPlotBySiteRefList(this.SiteManagementRef)
+        }
       });
-      if (this.SiteManagementRef > 0) {
-       await this.getPlotBySiteRefList(this.SiteManagementRef)
-      }
     } catch (error) {
 
     }
@@ -305,7 +301,8 @@ export class CustomerEnquiryDetailsMobileAppComponent implements OnInit {
         await this.haptic.error();
         return;
       }
-      const options = this.PlotList;
+      // const options = this.PlotList;
+      const options = this.PlotList.filter((plot) => plot.p.CurrentBookingRemark == BookingRemarks.Plot_Of_Owner || plot.p.CurrentBookingRemark == BookingRemarks.Plot_Of_Shree);
       this.openSelectModal(options, this.SelectedInterestedPlots, false, 'Select Interested Plots', 1, (selected) => {
         this.SelectedInterestedPlots = selected;
         this.InterestedPlotRef = selected[0].p.Ref;
@@ -383,9 +380,7 @@ export class CustomerEnquiryDetailsMobileAppComponent implements OnInit {
       if (this.Entity.p.CustomerFollowUps[0].CustomerStatus){
         await this.onStatusChange(this.Entity.p.CustomerFollowUps[0].CustomerStatus);
       }
-    } catch (error) {
-
-    }
+    } catch (error) {}
   }
 
   private async openSelectModal(
@@ -405,7 +400,7 @@ export class CustomerEnquiryDetailsMobileAppComponent implements OnInit {
   FormulateCountryList = async () => {
     this.CountryList = await Country.FetchEntireList(
       async (errMsg) => {
-        await this.toastService.present('Error' + errMsg, 1000, 'danger');
+        await this.toastService.present(errMsg, 1000, 'danger');
         await this.haptic.error();
       }
     );
@@ -424,7 +419,7 @@ export class CustomerEnquiryDetailsMobileAppComponent implements OnInit {
     this.StateList = await State.FetchEntireListByCountryRef(
       CountryRef,
       async (errMsg) => {
-        await this.toastService.present('Error' + errMsg, 1000, 'danger');
+        await this.toastService.present(errMsg, 1000, 'danger');
         await this.haptic.error();
       }
     );
@@ -442,7 +437,7 @@ export class CustomerEnquiryDetailsMobileAppComponent implements OnInit {
     this.CityList = await City.FetchEntireListByStateRef(
       StateRef,
       async (errMsg) => {
-        await this.toastService.present('Error' + errMsg, 1000, 'danger');
+        await this.toastService.present(errMsg, 1000, 'danger');
         await this.haptic.error();
       }
     );
@@ -459,7 +454,7 @@ export class CustomerEnquiryDetailsMobileAppComponent implements OnInit {
     let lst = await Site.FetchEntireListByCompanyRef(
       this.companyRef,
       async (errMsg) => {
-        await this.toastService.present('Error' + errMsg, 1000, 'danger');
+        await this.toastService.present(errMsg, 1000, 'danger');
         await this.haptic.error();
       }
     );
@@ -470,30 +465,37 @@ export class CustomerEnquiryDetailsMobileAppComponent implements OnInit {
     let lst = await Employee.FetchEntireListByCompanyRef(
       this.companyRef,
       async (errMsg) => {
-        await this.toastService.present('Error' + errMsg, 1000, 'danger');
+        await this.toastService.present(errMsg, 1000, 'danger');
         await this.haptic.error();
       }
     );
     this.EmployeeList = lst;
   };
   getPlotBySiteRefList = async (siteRef: number) => {
-    if (siteRef <= 0) {
-      await this.toastService.present('Please Select a Site', 1000, 'danger');
-      await this.haptic.error();
-      return;
-    }
-    this.InterestedPlotRef = 0;
-
-    let lst = await Plot.FetchEntireListBySiteRef(
-      siteRef,
-      async (errMsg) => {
-        await this.toastService.present('Error' + errMsg, 1000, 'danger');
+    try {
+      await this.loadingService.show();
+      if (siteRef <= 0) {
+        await this.toastService.present('Please Select a Site', 1000, 'danger');
         await this.haptic.error();
+        return;
       }
-    );
-    this.PlotList = lst.filter(
-      (plot) => plot.p.CurrentBookingRemark !== BookingRemark.Booked
-    );
+      this.InterestedPlotRef = 0;
+
+      let lst = await Plot.FetchEntireListBySiteRef(
+        siteRef,
+        async (errMsg) => {
+          await this.toastService.present(errMsg, 1000, 'danger');
+          await this.haptic.error();
+        }
+      );
+      this.PlotList = lst.filter(
+        (plot) => plot.p.CurrentBookingRemark !== BookingRemark.Booked
+      );
+    } catch (error) {
+      
+    }finally{
+      await this.loadingService.hide();
+    }
   };
 
   addDataToTable = () => {
@@ -531,9 +533,6 @@ export class CustomerEnquiryDetailsMobileAppComponent implements OnInit {
       );
 
     if (isAlreadyAdded) {
-      // this.uiUtils.showWarningToster(
-      //   'This plot is already added to the table.'
-      // );
       this.toastService.present('This plot is already added to the table', 1000, 'danger');
       this.haptic.error();
       return;
@@ -616,12 +615,11 @@ export class CustomerEnquiryDetailsMobileAppComponent implements OnInit {
       this.dtu.ConvertStringDateToFullFormat(this.localReminderDate ? this.localReminderDate : '');
 
     let entityToSave = this.Entity.GetEditableVersion();
-    console.log('entityToSave :', entityToSave);
     let entitiesToSave = [entityToSave];
 
     let tr = await this.utils.SavePersistableEntities(entitiesToSave);
     if (!tr.Successful) {
-      await this.toastService.present('Error' + tr.Message, 1000, 'danger');
+      await this.toastService.present(tr.Message, 1000, 'danger');
       await this.haptic.error();
       return;
     } else {
@@ -641,8 +639,6 @@ export class CustomerEnquiryDetailsMobileAppComponent implements OnInit {
 
   isDataFilled(): boolean {
     const emptyEntity = CustomerEnquiry.CreateNewInstance();
-    console.log('emptyEntity :', emptyEntity);
-    console.log('this Entity :', this.Entity);
     return !this.deepEqualIgnoringKeys(this.Entity, emptyEntity, []);
   }
 
@@ -680,7 +676,6 @@ export class CustomerEnquiryDetailsMobileAppComponent implements OnInit {
             role: 'cancel',
             cssClass: 'custom-cancel',
             handler: () => {
-              console.log('Deletion cancelled.');
             }
           },
           {

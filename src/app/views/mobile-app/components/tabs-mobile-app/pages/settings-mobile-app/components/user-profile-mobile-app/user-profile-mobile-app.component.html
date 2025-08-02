@@ -121,7 +121,7 @@
 
             <ng-template #viewGender>
               <ion-text *ngIf="IsEmployee">{{ findGenderName(Entity.p.Gender) }}</ion-text>
-              <ion-text *ngIf="IsAdmin">{{ findGenderName(Entity.p.Gender) }}</ion-text>
+              <ion-text *ngIf="IsAdmin">{{ findGenderName(AdminEntity.p.Gender) }}</ion-text>
             </ng-template>
           </ion-item>
         </div>

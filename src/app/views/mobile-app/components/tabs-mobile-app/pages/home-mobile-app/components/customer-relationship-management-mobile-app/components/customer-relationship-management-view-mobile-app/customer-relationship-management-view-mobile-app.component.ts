@@ -241,8 +241,8 @@ export class CustomerRelationshipManagementViewMobileAppComponent implements OnI
     try {
       this.SelectedFollowUp = followup.GetEditableVersion();
       CustomerFollowUp.SetCurrentInstance(this.SelectedFollowUp);
-      // this.appStateManage.StorageKey.setItem('Editable', 'Edit');
-      // await this.router.navigate(['mobile-app/tabs/dashboard/customer-relationship-management/customer-followup/add']);
+      this.appStateManagement.StorageKey.setItem('Editable', 'Edit');
+      await this.router.navigate(['mobile-app/tabs/dashboard/customer-relationship-management/customer-followup/add']);
     } catch (error) {
     }
   }
