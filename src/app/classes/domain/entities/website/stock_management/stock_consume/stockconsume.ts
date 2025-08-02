@@ -183,9 +183,14 @@ export class StockConsume implements IPersistable<StockConsume> {
     return StockConsume.ListFromTransportData(tdResponse);
   }
 
-  public static async FetchEntireListByCompanyRefAndSiteRef(CompanyRef: number, SiteRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+  public static async FetchEntireListByCompanySiteAndVendorRef(CompanyRef: number, SiteRef: number, StageRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let req = new StockConsumeFetchRequest();
-    req.SiteRefs.push(SiteRef)
+    if (SiteRef != 0) {
+      req.SiteRefs.push(SiteRef)
+    }
+    if (StageRef != 0) {
+      req.StageRefs.push(StageRef)
+    }
     req.CompanyRefs.push(CompanyRef)
     let tdResponse = await StockConsume.FetchTransportData(req, errorHandler) as TransportData;
     return StockConsume.ListFromTransportData(tdResponse);
