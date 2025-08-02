@@ -748,42 +748,42 @@ export class InvoiceDetailsMobileAppComponent implements OnInit {
   };
 
   calculateLaboursWorkedHours() {
-    const start = this.LabourTimeEntity.LabourFromTime;
-    const end = this.LabourTimeEntity.LabourToTime;
+    // const start = this.LabourTimeEntity.LabourFromTime;
+    // const end = this.LabourTimeEntity.LabourToTime;
 
-    if (start && end) {
-      const [startHour, startMin] = start.split(':').map(Number);
-      const [endHour, endMin] = end.split(':').map(Number);
+    // if (start && end) {
+    //   const [startHour, startMin] = start.split(':').map(Number);
+    //   const [endHour, endMin] = end.split(':').map(Number);
 
-      const startDate = new Date();
-      startDate.setHours(startHour, startMin, 0);
+    //   const startDate = new Date();
+    //   startDate.setHours(startHour, startMin, 0);
 
-      const endDate = new Date();
-      endDate.setHours(endHour, endMin, 0);
+    //   const endDate = new Date();
+    //   endDate.setHours(endHour, endMin, 0);
 
-      let diffMs = endDate.getTime() - startDate.getTime();
+    //   let diffMs = endDate.getTime() - startDate.getTime();
 
-      // If end time is before start time, assume it's the next day
-      if (diffMs < 0) {
-        endDate.setDate(endDate.getDate() + 1);
-        diffMs = endDate.getTime() - startDate.getTime();
-      }
+    //   // If end time is before start time, assume it's the next day
+    //   if (diffMs < 0) {
+    //     endDate.setDate(endDate.getDate() + 1);
+    //     diffMs = endDate.getTime() - startDate.getTime();
+    //   }
 
-      const diffHrs = diffMs / (1000 * 60 * 60); // convert ms to hours
-      this.LabourTimeEntity.LabourWorkedHours = +diffHrs.toFixed(2); // round to 2 decimal places
-    } else {
-      this.LabourTimeEntity.LabourWorkedHours = 0;
-    }
+    //   const diffHrs = diffMs / (1000 * 60 * 60); // convert ms to hours
+    //   this.LabourTimeEntity.LabourWorkedHours = +diffHrs.toFixed(2); // round to 2 decimal places
+    // } else {
+    //   this.LabourTimeEntity.LabourWorkedHours = 0;
+    // }
   }
 
   async SaveLabourTime() {
     try {
-      if (!this.LabourTimeEntity.LabourFromTime || !this.LabourTimeEntity.LabourToTime) {
-        // await this.uiUtils.showErrorMessage('Error', 'Start Time and End Time are required!');
-        await this.toastService.present('Error ' + 'Start Time and End Time are required!', 1000, 'warning');
-        await this.haptic.warning();
-        return;
-      }
+      // if (!this.LabourTimeEntity.LabourFromTime || !this.LabourTimeEntity.LabourToTime) {
+      //   // await this.uiUtils.showErrorMessage('Error', 'Start Time and End Time are required!');
+      //   await this.toastService.present('Error ' + 'Start Time and End Time are required!', 1000, 'warning');
+      //   await this.haptic.warning();
+      //   return;
+      // }
       if (!this.LabourTimeEntity.LabourType) {
         await this.toastService.present('Error ' + 'LabourType is required!', 1000, 'warning');
         await this.haptic.warning();
@@ -864,8 +864,8 @@ export class InvoiceDetailsMobileAppComponent implements OnInit {
     this.LabourTimeEntity.LabourQty = 0
     this.LabourTimeEntity.LabourRate = 0
     this.LabourTimeEntity.LabourAmount = 0
-    this.LabourTimeEntity.LabourFromTime = ''
-    this.LabourTimeEntity.LabourToTime = ''
+    // this.LabourTimeEntity.LabourFromTime = ''
+    // this.LabourTimeEntity.LabourToTime = ''
   }
 
   CalculateLabourAmount = () => {
@@ -922,7 +922,7 @@ export class InvoiceDetailsMobileAppComponent implements OnInit {
 
   LabourStartTimeChange(value: string) {
     this.LabourStartTime = value;
-    this.LabourTimeEntity.LabourFromTime = this.formatTimeToHHMM(value);
+    // this.LabourTimeEntity.LabourFromTime = this.formatTimeToHHMM(value);
     this.calculateLaboursWorkedHours();
   }
 
@@ -932,7 +932,7 @@ export class InvoiceDetailsMobileAppComponent implements OnInit {
       this.LabourStartTimeChange(this.formatToTrimmedISOString(now.toISOString()));
     }
     this.LabourEndTime = value;
-    this.LabourTimeEntity.LabourToTime = this.formatTimeToHHMM(value);
+    // this.LabourTimeEntity.LabourToTime = this.formatTimeToHHMM(value);
     this.calculateLaboursWorkedHours();
   }
 
@@ -942,7 +942,7 @@ export class InvoiceDetailsMobileAppComponent implements OnInit {
   }
   getRecipientListByRecipientTypeRef = async () => {
     if (this.companyRef <= 0) {
-      // await this.uiUtils.showErrorToster('Company not Selected'); 
+      // await this.uiUtils.showErrorToster('Company not Selected');
       await this.toastService.present('Company not Selected', 1000, 'warning');
       await this.haptic.warning();
       return;

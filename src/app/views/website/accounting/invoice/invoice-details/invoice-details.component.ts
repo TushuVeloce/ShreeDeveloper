@@ -82,7 +82,7 @@ export class InvoiceDetailsComponent implements OnInit {
 
   companyRef = this.companystatemanagement.SelectedCompanyRef;
   timeheaders: string[] = ['Sr.No.', 'Start Time ', 'End Time', 'Worked Hours', 'Action'];
-  labourtimeheaders: string[] = ['Sr.No.', 'Labour Type', 'From Time', 'To Time', 'Quantity ', 'Rate', 'Amount', 'Action'];
+  labourtimeheaders: string[] = ['Sr.No.', 'Labour Type', 'Days', 'Quantity ', 'Rate', 'Amount', 'Action'];
   materialheaders: string[] = ['Sr.No.', 'Material', 'Unit', 'Order Quantity', 'Rate', 'Discount Rate', 'Delivery Charges', 'Total Amount'];
   RequiredFieldMsg: string = ValidationMessages.RequiredFieldMsg
 
@@ -118,6 +118,7 @@ export class InvoiceDetailsComponent implements OnInit {
       this.IsNewEntity = false;
       this.DetailsFormTitle = this.IsNewEntity ? 'New Bill' : 'Edit Bill';
       this.Entity = Invoice.GetCurrentInstance();
+      console.log('this.Entity :', this.Entity);
       this.appStateManage.StorageKey.removeItem('Editable');
       this.Entity.p.UpdatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
       if (this.Entity.p.LedgerRef) {
@@ -136,8 +137,7 @@ export class InvoiceDetailsComponent implements OnInit {
       this.Entity = Invoice.CreateNewInstance();
       Invoice.SetCurrentInstance(this.Entity);
 
-      this.ModeofPaymentList = this.ModeofPaymentList.filter((data) => data.Ref != this.StockExpenseRef);
-      console.log('this.ModeofPaymentList :', this.ModeofPaymentList);
+      this.ExpenseTypeList = this.ExpenseTypeList.filter((data) => data.Ref != this.StockExpenseRef);
       this.strCDT = await CurrentDateTimeRequest.GetCurrentDateTime();
       let parts = this.strCDT.substring(0, 16).split('-');
       this.Entity.p.Date = `${parts[0]}-${parts[1]}-${parts[2]}`;
@@ -181,14 +181,6 @@ export class InvoiceDetailsComponent implements OnInit {
       return '';
     }
   };
-
-  getLabourFromTime = () => {
-    this.LabourTimeEntity.LabourFromTime = this.convertIOS12To24HoursFormat(this.LabourFromTime);
-  }
-
-  getLabourToTime = () => {
-    this.LabourTimeEntity.LabourToTime = this.convertIOS12To24HoursFormat(this.LabourToTime);
-  }
 
   getVendorListByCompanyRef = async () => {
     if (this.companyRef() <= 0) {
@@ -273,6 +265,7 @@ export class InvoiceDetailsComponent implements OnInit {
 
     this.RecipientList = [];
     let lst = await Invoice.FetchRecipientByRecipientTypeRef(this.companyRef(), this.Entity.p.SiteRef, this.Entity.p.InvoiceRecipientType, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    console.log('lst :', lst);
     this.RecipientList = lst;
   }
 
@@ -540,14 +533,17 @@ export class InvoiceDetailsComponent implements OnInit {
   };
 
   async SaveLabourTime() {
-    if (!this.LabourTimeEntity.LabourFromTime) {
-      await this.uiUtils.showErrorMessage('Error', 'From Time is required!');
+    if (!this.LabourTimeEntity.Days) {
+      await this.uiUtils.showErrorMessage('Error', 'Days is required!');
       return;
-    } else if (!this.LabourTimeEntity.LabourToTime) {
-      await this.uiUtils.showErrorMessage('Error', 'To Time is required!');
+    } else if (!this.LabourTimeEntity.LabourRate) {
+      await this.uiUtils.showErrorMessage('Error', 'Rate is required!');
       return;
     } else if (!this.LabourTimeEntity.LabourType) {
       await this.uiUtils.showErrorMessage('Error', 'Labour Type is required!');
+      return;
+    } else if (!this.LabourTimeEntity.LabourQty) {
+      await this.uiUtils.showErrorMessage('Error', 'Labour Qty is required!');
       return;
     }
     if (this.LabourTimeEntity.LabourType != 0) {
@@ -575,8 +571,6 @@ export class InvoiceDetailsComponent implements OnInit {
   EditLabourTime(index: number) {
     this.isLabourTimeModalOpen = true
     this.LabourTimeEntity = { ...this.Entity.p.LabourExpenseDetailsArray[index] }
-    this.LabourFromTime = this.convertToFullTime(this.LabourTimeEntity.LabourFromTime);
-    this.LabourToTime = this.convertToFullTime(this.LabourTimeEntity.LabourToTime);
     this.LabourEditingIndex = index;
   }
 
@@ -613,15 +607,15 @@ export class InvoiceDetailsComponent implements OnInit {
     this.LabourTimeEntity.LabourQty = 0
     this.LabourTimeEntity.LabourRate = 0
     this.LabourTimeEntity.LabourAmount = 0
-    this.LabourTimeEntity.LabourFromTime = ''
-    this.LabourTimeEntity.LabourToTime = ''
   }
 
   CalculateLabourAmount = () => {
+    if (this.LabourTimeEntity.Days == 0 || !this.LabourTimeEntity.LabourRate || !this.LabourTimeEntity.LabourQty) {
+      return;
+    }
     const Qty = this.LabourTimeEntity.LabourQty
-    const Rate = this.LabourTimeEntity.LabourRate
+    const Rate = this.LabourTimeEntity.LabourRate * this.LabourTimeEntity.Days;
     this.LabourTimeEntity.LabourAmount = Math.round(Qty * Rate * 100) / 100;
-
   }
 
   // for value 0 selected while click on Input //

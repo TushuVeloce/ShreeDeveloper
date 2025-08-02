@@ -270,8 +270,7 @@
                 <tr *ngFor="   let time of Entity.p.LabourExpenseDetailsArray;   let i = index ">
                   <td Class="tbldata">{{ i + 1 }}</td>
                   <td Class="tbldata">{{ time.LabourTypeName }}</td>
-                  <td Class="tbldata">{{ convertTo12Hour(time.LabourFromTime) }}</td>
-                  <td Class="tbldata">{{ convertTo12Hour(time.LabourToTime) }}</td>
+                  <td Class="tbldata">{{ time.Days}}</td>
                   <td Class="tbldata">{{ time.LabourQty}}</td>
                   <td Class="tbldata">{{ time.LabourRate}}</td>
                   <td Class="tbldata">{{ time.LabourAmount}}</td>
@@ -302,10 +301,6 @@
               <b>Material Details</b>
             </h5>
           </div>
-          <!-- <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 col-12 btn-container"
-            style="display: flex; justify-content: end" routerLinkActive="active">
-            <nz-button nz-button class="btn1" (click)="isLabourTimeModalOpen = true">Add Material Time </nz-button>
-          </div> -->
         </div>
         <div class="table-wrapper" class="tblcard_light" style="margin-top: 1rem"
           *ngIf="Entity.p.MaterialInvoiceDetailsArray.length > 0 && Entity.p.ExpenseType == StockExpenseRef">
@@ -524,7 +519,7 @@
     <div class="custom-modal-body">
       <form autocomplete="off">
         <div class="row">
-          <div class="col-md-4" style="margin-top: 2rem; ">
+          <div class="col-md-6" style="margin-top: 1rem; ">
             <label>Labour Type</label>
             <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="LabourType"
               name="LabourType" [nzSize]="'large'" [(ngModel)]="LabourTimeEntity.LabourType"
@@ -533,23 +528,19 @@
                 [nzLabel]="labour.Name"></nz-option>
             </nz-select>
           </div>
-          <div class="col-md-4" style="margin-top: 2rem">
+          <div class="col-md-6" style="margin-top: 1rem">
             <div>
-              <label for="LabourFromTime">From Time</label>
-              <nz-time-picker [(ngModel)]="LabourFromTime" name="FromTime" nzUse12Hours nzFormat="h:mm a"
-                (ngModelChange)="getLabourFromTime()" class="form-control">
-              </nz-time-picker>
+              <label for="Days">Number of Days</label>
+              <input type="number" name="Days" class="form-control" id="Days"
+                [(ngModel)]="LabourTimeEntity.Days" placeholder="Enter Days " #DaysCtrl="ngModel"
+                (ngModelChange)="CalculateLabourAmount()" required (blur)="DaysCtrl.control.markAsTouched()"
+                (click)="selectAllValue($event)" />
+              <div *ngIf="(DaysCtrl.invalid && (DaysCtrl.touched || DaysCtrl.dirty))">
+                <span class="validation-text" *ngIf="DaysCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
+              </div>
             </div>
           </div>
-          <div class="col-md-4" style="margin-top: 2rem">
-            <div>
-              <label for="LabourToTime">To Time </label>
-              <nz-time-picker [(ngModel)]="LabourToTime" name="ToTime" nzUse12Hours nzFormat="h:mm a"
-                (ngModelChange)="getLabourToTime()" class="form-control">
-              </nz-time-picker>
-            </div>
-          </div>
-          <div class="col-md-4" style="margin-top: 2rem">
+          <div class="col-md-4" style="margin-top: 1rem">
             <div>
               <label for="LabourQty">Labour Quantity</label>
               <input type="text" appCommaFormat name="LabourQty" class="form-control" id="LabourQty"
@@ -561,7 +552,7 @@
               </div>
             </div>
           </div>
-          <div class="col-md-4" style="margin-top: 2rem">
+          <div class="col-md-4" style="margin-top: 1rem">
             <div>
               <label for="LabourRate">Labour Rate</label>
               <input type="text" appCommaFormat name="LabourRate" class="form-control" id="LabourRate"
@@ -573,7 +564,7 @@
               </div>
             </div>
           </div>
-          <div class="col-md-4" style="margin-top: 2rem">
+          <div class="col-md-4" style="margin-top: 1rem">
             <div>
               <label for="LabourAmount">Labour Amount</label>
               <input type="text" appCommaFormat name="LabourAmount" class="form-control" id="LabourAmount"
