@@ -91,49 +91,52 @@ export class UserProfileMobileAppComponent  implements OnInit {
   };
 
   getEmployeeDetails = async () => {
+    let employeeData = null;
+
     if (this.currentemployee && this.companyRef) {
-      const employeeData = await Employee.FetchInstance(
+      employeeData = await Employee.FetchInstance(
         this.currentemployee,
         this.companyRef,
-        async errMsg => {
+        async (errMsg) => {
           await this.toastService.present("Error " + errMsg, 1000, 'danger');
           await this.haptic.error();
         }
       );
+    }
 
-      if (employeeData == null) {
-        const adminData = await AdminProfile.FetchAdminData(async errMsg => {
-          await this.toastService.present("Error " + errMsg, 1000, 'danger');
-          await this.haptic.error();
-          // await this.uiUtils.showErrorMessage('Error', errMsg)
+    if (employeeData == null) {
+      const adminData = await AdminProfile.FetchAdminData(async (errMsg) => {
+        await this.toastService.present("Error " + errMsg, 1000, 'danger');
+        await this.haptic.error();
+      });
+
+      if (adminData?.[0]) {
+        this.AdminEntity = adminData[0];
+        this.IsAdmin = true;
+        this.IsEmployee = false;
+
+        if (this.AdminEntity.p.DOB) {
+          this.AdminEntity.p.DOB = this.dtu.ConvertStringDateToShortFormat(this.AdminEntity.p.DOB);
         }
-        );
 
-        if (adminData?.[0]) {
-          this.AdminEntity = adminData[0];
-          this.IsAdmin = true;
-          this.IsEmployee = false;
-
-          if (this.AdminEntity.p.DOB) {
-            this.AdminEntity.p.DOB = this.dtu.ConvertStringDateToShortFormat(this.AdminEntity.p.DOB);
-          }
-          this.imageUrl = this.AdminEntity.p.ProfilePicPath;
-          this.loadImageFromBackend(this.imageUrl);
-        }
-      } else {
-        this.Entity = employeeData;
-        this.IsEmployee = true;
-        this.IsAdmin = false;
-
-        if (this.Entity.p.DOB) {
-          this.Entity.p.DOB = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.DOB);
-        }
-        this.imageUrl = this.Entity.p.ProfilePicPath;
+        this.imageUrl = this.AdminEntity.p.ProfilePicPath;
         this.loadImageFromBackend(this.imageUrl);
-        this.AdminEntity = AdminProfile.CreateNewInstance();
       }
+    } else {
+      this.Entity = employeeData;
+      this.IsEmployee = true;
+      this.IsAdmin = false;
+
+      if (this.Entity.p.DOB) {
+        this.Entity.p.DOB = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.DOB);
+      }
+
+      this.imageUrl = this.Entity.p.ProfilePicPath;
+      this.loadImageFromBackend(this.imageUrl);
+      this.AdminEntity = AdminProfile.CreateNewInstance();
     }
   };
+
 
     findGenderName(GenderRef: number): string {
       const gender = this.GenderList.find(g => g.Ref === GenderRef);

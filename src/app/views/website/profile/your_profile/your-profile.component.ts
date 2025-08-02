@@ -65,33 +65,82 @@ export class YourProfileComponent implements OnInit {
     }
   }
 
+  // getEmployeeDetails = async () => {
+  //   if (this.currentemployee && this.companyRef()) {
+  //     let EmployeeData = await Employee.FetchInstance(this.currentemployee, this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+  //     if (EmployeeData == null) {
+  //       let AdminData = await AdminProfile.FetchAdminData(async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+  //       this.IsAdmin = true
+  //       this.IsEmployee = false
+  //       this.AdminEntity = AdminData[0]
+  //       if (this.AdminEntity.p.DOB != '') {
+  //            this.AdminEntity.p.DOB = this.dtu.ConvertStringDateToShortFormat(this.AdminEntity.p.DOB)
+  //          }
+  //       this.imageUrl = this.AdminEntity.p.ProfilePicPath;
+  //       this.loadImageFromBackend(this.AdminEntity.p.ProfilePicPath)
+  //     } else {
+  //       this.IsAdmin = false
+  //       this.IsEmployee = true
+  //       this.Entity = EmployeeData
+  //       if (this.Entity.p.DOB != '') {
+  //         this.Entity.p.DOB = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.DOB)
+  //       }
+  //       this.imageUrl = this.Entity.p.ProfilePicPath;
+  //       this.loadImageFromBackend(this.Entity.p.ProfilePicPath)
+  //       this.AdminEntity = [] as any;
+  //     }
+
+  //   }
+  // }
   getEmployeeDetails = async () => {
+    let employeeData = null;
+
+    // Try fetching employee only if both currentemployee and companyRef() exist
     if (this.currentemployee && this.companyRef()) {
-      let EmployeeData = await Employee.FetchInstance(this.currentemployee, this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-      if (EmployeeData == null) {
-        let AdminData = await AdminProfile.FetchAdminData(async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-        this.IsAdmin = true
-        this.IsEmployee = false
-        this.AdminEntity = AdminData[0]
-        if (this.AdminEntity.p.DOB != '') {
-             this.AdminEntity.p.DOB = this.dtu.ConvertStringDateToShortFormat(this.AdminEntity.p.DOB)
-           }
-        this.imageUrl = this.AdminEntity.p.ProfilePicPath;
-        this.loadImageFromBackend(this.AdminEntity.p.ProfilePicPath)
-      } else {
-        this.IsAdmin = false
-        this.IsEmployee = true
-        this.Entity = EmployeeData
-        if (this.Entity.p.DOB != '') {
-          this.Entity.p.DOB = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.DOB)
-        }
-        this.imageUrl = this.Entity.p.ProfilePicPath;
-        this.loadImageFromBackend(this.Entity.p.ProfilePicPath)
-        this.AdminEntity = [] as any;
+      employeeData = await Employee.FetchInstance(
+        this.currentemployee,
+        this.companyRef(),
+        async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg)
+      );
+    }
+
+    if (!employeeData) {
+      // Fall back to admin data
+      const adminData = await AdminProfile.FetchAdminData(
+        async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg)
+      );
+
+      this.IsAdmin = true;
+      this.IsEmployee = false;
+      this.AdminEntity = adminData?.[0];
+
+      if (this.AdminEntity?.p?.DOB) {
+        this.AdminEntity.p.DOB = this.dtu.ConvertStringDateToShortFormat(this.AdminEntity.p.DOB);
       }
 
+      this.imageUrl = this.AdminEntity?.p?.ProfilePicPath;
+      if (this.imageUrl) {
+        this.loadImageFromBackend(this.imageUrl);
+      }
+
+    } else {
+      this.IsAdmin = false;
+      this.IsEmployee = true;
+      this.Entity = employeeData;
+
+      if (this.Entity?.p?.DOB) {
+        this.Entity.p.DOB = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.DOB);
+      }
+
+      this.imageUrl = this.Entity?.p?.ProfilePicPath;
+      if (this.imageUrl) {
+        this.loadImageFromBackend(this.imageUrl);
+      }
+
+      this.AdminEntity = [] as any;
     }
-  }
+  };
+
 
   loadImageFromBackend(imageUrl: string): void {
     if (imageUrl) {
