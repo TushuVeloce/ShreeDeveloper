@@ -88,7 +88,6 @@ export class InvoiceDetailsComponent implements OnInit {
   RequiredFieldMsg: string = ValidationMessages.RequiredFieldMsg
 
   // @ViewChild('invoiceForm') invoiceForm!: NgForm;
-  @ViewChild('NameCtrl') NameInputControl!: NgModel;
   @ViewChild('DateCtrl') DateInputControl!: NgModel;
   @ViewChild('DescriptionCtrl') DescriptionCtrlInputControl!: NgModel;
   @ViewChild('RecipientNameCtrl') RecipientNameInputControl!: NgModel;
@@ -119,7 +118,6 @@ export class InvoiceDetailsComponent implements OnInit {
       this.IsNewEntity = false;
       this.DetailsFormTitle = this.IsNewEntity ? 'New Bill' : 'Edit Bill';
       this.Entity = Invoice.GetCurrentInstance();
-      console.log('this.Entity :', this.Entity);
       this.appStateManage.StorageKey.removeItem('Editable');
       this.Entity.p.UpdatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
       if (this.Entity.p.LedgerRef) {
@@ -272,7 +270,6 @@ export class InvoiceDetailsComponent implements OnInit {
 
     this.RecipientList = [];
     let lst = await Invoice.FetchRecipientByRecipientTypeRef(this.companyRef(), this.Entity.p.SiteRef, this.Entity.p.InvoiceRecipientType, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-    console.log('lst :', lst);
     this.RecipientList = lst;
   }
 
@@ -713,7 +710,6 @@ export class InvoiceDetailsComponent implements OnInit {
 
   resetAllControls = async () => {
     // reset touched
-    this.NameInputControl.control.markAsUntouched();
     this.DateInputControl.control.markAsUntouched();
     this.DescriptionCtrlInputControl.control.markAsUntouched();
     this.RecipientNameInputControl.control.markAsUntouched();
@@ -723,7 +719,6 @@ export class InvoiceDetailsComponent implements OnInit {
     this.DieselRateInputControl.control.markAsUntouched();
 
     // reset dirty
-    this.NameInputControl.control.markAsPristine();
     this.DateInputControl.control.markAsPristine();
     this.DescriptionCtrlInputControl.control.markAsPristine();
     this.RecipientNameInputControl.control.markAsPristine();
