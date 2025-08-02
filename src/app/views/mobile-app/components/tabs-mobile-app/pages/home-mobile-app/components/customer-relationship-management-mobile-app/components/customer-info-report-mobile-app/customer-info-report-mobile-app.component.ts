@@ -26,10 +26,7 @@ export class CustomerInfoReportMobileAppComponent implements OnInit {
   ModalOpen: boolean = false;
   companyRef = 0;
 
-   headers: string[] = ['Sr.No.', 'Customer ID', 'Customer Name', 'Address', 'Contact No', 'PAN No', 'Aadhar No', 'Lead Source', 'Lead Handle By', 'Agent/Broker', 'Booking Remark', 'Plot No', 'Area in Sqm', 'Area in Sqft', 'Basic Rate', 'Discount Rate on Area', 'Discount On Plot Amount', 'Total Plot Amount', 'Government Recknor', 'Government Value', 'Value of Agreement', 'Reg Tax Value In %', 'Registration Fees', 'SD Tax Value In %', 'Stamp Duties', 'Goods Services Tax', 'Legal Charges', 'Total Extra Charges', 'Grand Total', 'Total Cheque Recieved', 'Total Cash Recieved', 'Total Recieved (cash + cheque)', 'Total Cheque Balance', 'Total Cash Balance', 'Total Balance',];
-
-
-
+  headers: string[] = ['Sr.No.', 'Customer ID', 'Customer Name', 'Address', 'Contact No', 'PAN No', 'Aadhar No', 'Lead Source', 'Lead Handle By', 'Agent/Broker', 'Booking Remark', 'Plot No', 'Area in Sqm', 'Area in Sqft', 'Basic Rate', 'Discount Rate on Area', 'Discount On Plot Amount', 'Total Plot Amount', 'Government Recknor', 'Government Value', 'Value of Agreement', 'Reg Tax Value In %', 'Registration Fees', 'SD Tax Value In %', 'Stamp Duties', 'Goods Services Tax', 'Legal Charges', 'Total Extra Charges', 'Grand Total', 'Total Cheque Recieved', 'Total Cash Recieved', 'Total Recieved (cash + cheque)', 'Total Cheque Balance', 'Total Cash Balance', 'Total Balance',];
   filters: FilterItem[] = [];
   // Store current selected values here to preserve selections on filter reload
   selectedFilterValues: Record<string, any> = {};
@@ -43,7 +40,7 @@ export class CustomerInfoReportMobileAppComponent implements OnInit {
     private pdfService: PDFService
   ) { }
 
-  ngOnInit =(): void => {
+  ngOnInit = (): void => {
     // this.loadCustomerInfoReportIfCompanyExists();
   }
 
@@ -61,7 +58,7 @@ export class CustomerInfoReportMobileAppComponent implements OnInit {
   @ViewChild('PrintContainer')
   PrintContainer!: ElementRef;
 
-  handlePrintOrShare = async ()=> {
+  handlePrintOrShare = async () => {
     if (this.DisplayMasterList.length == 0) {
       await this.toastService.present('No Customer Info Records Found', 1000, 'warning');
       await this.haptic.warning();
@@ -71,7 +68,7 @@ export class CustomerInfoReportMobileAppComponent implements OnInit {
     await this.pdfService.generatePdfAndHandleAction(this.PrintContainer.nativeElement, `Receipt_${this.Entity.p.RegisterDate}.pdf`);
   }
 
-  loadFilters =()=> {
+  loadFilters = () => {
     this.filters = [
       {
         key: 'site',
@@ -86,7 +83,7 @@ export class CustomerInfoReportMobileAppComponent implements OnInit {
     ];
   }
 
-  onFiltersChanged = async (updatedFilters: any[])=> {
+  onFiltersChanged = async (updatedFilters: any[]) => {
     for (const filter of updatedFilters) {
       const selected = filter.selected;
       const selectedValue = (selected === null || selected === undefined) ? null : selected;
@@ -173,12 +170,12 @@ export class CustomerInfoReportMobileAppComponent implements OnInit {
     }
   }
 
-  onViewClicked = async (item: CRMReports) =>{
+  onViewClicked = async (item: CRMReports) => {
     this.SelectedCRMReports = item;
     this.ModalOpen = true;
   }
 
-  closeModal() {
+  closeModal = () => {
     this.ModalOpen = false;
   }
 }

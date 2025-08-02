@@ -10,40 +10,34 @@
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
 
-  <!-- Follow-Up List -->
-  <ion-list class="followup-list">
-
-  </ion-list>
-  <!-- Customer List -->
+  <!-- Customer Follow-Up List -->
   <ion-list class="data-list">
-      <ng-container *ngIf="FilterFollowupList.length > 0">
-        <ion-card *ngFor="let item of FilterFollowupList" class="data-card">
-          <ion-card-header>
-            <ion-card-title class="info-row"><strong>Customer Name : </strong>{{ item.p.CustomerName }}</ion-card-title>
-            <ion-card-subtitle class="info-row"><strong>Contact No : </strong>{{ item.p.ContactNos
-              }}</ion-card-subtitle>
-            <ion-card-subtitle class="info-row"><strong>Reminder Date : </strong>{{
-              formatDate(item.p.ReminderDate)}}</ion-card-subtitle>
-            <ion-card-subtitle class="info-row"><strong>Customer Status : </strong>{{
-              item.p.CustomerStatusName}}</ion-card-subtitle>
-            <ion-card-subtitle class="info-row"><strong>Requirement : </strong>{{
-              item.p.CustomerRequirement}}</ion-card-subtitle>
-          </ion-card-header>
-          <ion-card-content>
-            <div class="btn-row">
-              <ion-button fill="clear" size="small" color="primary" (click)="onFollowUpClick(item)">
-                <ion-icon slot="start" name="people-outline"></ion-icon> Follow up
-              </ion-button>
-            </div>
-          </ion-card-content>
-        </ion-card>
-      </ng-container>
-
-      <!-- Show "Data not found" if list is empty -->
-      <div *ngIf="FilterFollowupList.length === 0 && !loadingService.isLoaderActive()" class="no-data-mobile-app">
-        <ion-icon name="alert-circle-outline" size="large" color="medium"></ion-icon>
-        <p>No Pending Follow up records found.</p>
-      </div>
+    <ng-container *ngIf="FilterFollowupList.length > 0">
+      <ion-card *ngFor="let item of FilterFollowupList" class="data-card">
+        <ion-card-header>
+          <ion-card-title>Customer Name: <span>{{ item.p.CustomerName }}</span></ion-card-title>
+        </ion-card-header>
+  
+        <ion-card-content>
+          <div class="info-row"><strong>Contact No:</strong><span>{{ item.p.ContactNos }}</span></div>
+          <div class="info-row"><strong>Reminder Date:</strong><span>{{ formatDate(item.p.ReminderDate) }}</span></div>
+          <div class="info-row"><strong>Customer Status:</strong><span>{{ item.p.CustomerStatusName }}</span></div>
+          <div class="info-row"><strong>Requirement:</strong><span>{{ item.p.CustomerRequirement }}</span></div>
+  
+          <div class="btn-row">
+            <ion-button fill="outline" size="small" color="primary" (click)="onFollowUpClick(item)">
+              <ion-icon slot="start" name="people-outline"></ion-icon> Follow Up
+            </ion-button>
+          </div>
+        </ion-card-content>
+      </ion-card>
+    </ng-container>
+  
+    <!-- No Data -->
+    <div *ngIf="FilterFollowupList.length === 0 && !loadingService.isLoaderActive()" class="no-data-mobile-app">
+      <ion-icon name="alert-circle-outline" size="large" color="medium"></ion-icon>
+      <p>No customer follow-up records found.</p>
+    </div>
   </ion-list>
 
 </ion-content>

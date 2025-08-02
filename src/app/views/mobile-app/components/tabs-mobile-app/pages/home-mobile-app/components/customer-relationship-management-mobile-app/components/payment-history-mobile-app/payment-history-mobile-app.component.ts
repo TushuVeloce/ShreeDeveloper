@@ -47,7 +47,7 @@ export class PaymentHistoryMobileAppComponent implements OnInit {
 
   ionViewWillEnter = async () => {
     await this.loadCustomerVisitReportIfEmployeeExists();
-    await this.loadFilters();
+    this.loadFilters();
   };
 
   handleRefresh = async (event: CustomEvent) => {
@@ -128,14 +128,12 @@ export class PaymentHistoryMobileAppComponent implements OnInit {
   }
   getSiteListByCompanyRef = async () => {
     if (this.companyRef <= 0) {
-      // await this.uiUtils.showErrorToster('Company not Selected');
       await this.toastService.present('Company not Selected', 1000, 'warning');
       await this.haptic.warning();
       return;
     }
     this.Entity.p.SiteRef = 0
     let lst = await Site.FetchEntireListByCompanyRef(this.companyRef, async errMsg => {
-      // await this.uiUtils.showErrorMessage('Error', errMsg)
       await this.toastService.present(errMsg, 1000, 'danger');
       await this.haptic.error();
     });
@@ -146,14 +144,12 @@ export class PaymentHistoryMobileAppComponent implements OnInit {
     this.MasterList = [];
     this.DisplayMasterList = [];
     if (this.companyRef <= 0) {
-      // await this.uiUtils.showErrorToster('Company not Selected');
       await this.toastService.present('Company not Selected', 1000, 'warning');
       await this.haptic.warning();
       return;
     }
     let lst = await Income.FetchEntireListByCompanyRef(this.companyRef,
       async (errMsg) => {
-        // await this.uiUtils.showErrorMessage('Error', errMsg)
         await this.toastService.present(errMsg, 1000, 'danger');
         await this.haptic.error();
       }
@@ -167,7 +163,6 @@ export class PaymentHistoryMobileAppComponent implements OnInit {
     this.DisplayMasterList = [];
     let lst = await Income.FetchEntireListBySiteRef(this.Entity.p.SiteRef, this.companyRef,
       async (errMsg) => {
-        // await this.uiUtils.showErrorMessage('Error', errMsg)
         await this.toastService.present(errMsg, 1000, 'danger');
         await this.haptic.error();
       }
