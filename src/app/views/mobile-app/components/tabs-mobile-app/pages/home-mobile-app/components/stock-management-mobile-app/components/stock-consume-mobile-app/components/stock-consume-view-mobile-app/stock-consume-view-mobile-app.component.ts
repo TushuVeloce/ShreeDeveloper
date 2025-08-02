@@ -19,9 +19,9 @@ import { FilterItem } from 'src/app/views/mobile-app/components/shared/chip-filt
   selector: 'app-stock-consume-view-mobile-app',
   templateUrl: './stock-consume-view-mobile-app.component.html',
   styleUrls: ['./stock-consume-view-mobile-app.component.scss'],
-  standalone:false
+  standalone: false
 })
-export class StockConsumeViewMobileAppComponent  implements OnInit {
+export class StockConsumeViewMobileAppComponent implements OnInit {
 
   Entity: StockConsume = StockConsume.CreateNewInstance();
   MasterList: StockConsume[] = [];
@@ -166,7 +166,7 @@ export class StockConsumeViewMobileAppComponent  implements OnInit {
       this.MasterList = [];
       this.DisplayMasterList = [];
 
-      const lst = await StockConsume.FetchEntireListByCompanyRefAndSiteRef(this.companyRef, this.Entity.p.SiteRef, async (errMsg) => {
+      const lst = await StockConsume.FetchEntireListByCompanySiteAndVendorRef(this.companyRef, this.Entity.p.SiteRef, this.Entity.p.StageRef, async (errMsg) => {
         await this.toastService.present('Error: ' + errMsg, 1000, 'danger');
         await this.haptic.error();
       });
