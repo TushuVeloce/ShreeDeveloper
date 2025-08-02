@@ -1,6 +1,6 @@
 import { Component, effect, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Income } from 'src/app/classes/domain/entities/website/accounting/income/income';
+import { DealCancelledCustomer } from 'src/app/classes/domain/entities/website/customer_management/dealcancelledcustomer/dealcancelledcustomer';
 import { Site } from 'src/app/classes/domain/entities/website/masters/site/site';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
@@ -8,35 +8,34 @@ import { DateconversionService } from 'src/app/services/dateconversion.service';
 import { DTU } from 'src/app/services/dtu.service';
 import { ScreenSizeService } from 'src/app/services/screensize.service';
 import { UIUtils } from 'src/app/services/uiutils.service';
-import { SharedFilterComponent } from "src/app/views/website/Helpers/shared-filter/shared-filter.component";
-import { NzSelectComponent } from "ng-zorro-antd/select";
 
 @Component({
-  selector: 'app-payment-history-report',
+  selector: 'app-deal-cancelled-customer-report',
   standalone: false,
-  templateUrl: './payment-history-report.component.html',
-  styleUrls: ['./payment-history-report.component.scss'],
+  templateUrl: './deal-cancelled-customer-report.component.html',
+  styleUrls: ['./deal-cancelled-customer-report.component.scss'],
 })
-export class PaymentHistoryReportComponent  implements OnInit {
- Entity: Income = Income.CreateNewInstance();
-  MasterList: Income[] = [];
-  DisplayMasterList: Income[] = [];
+export class DealCancelledCustomerReportComponent  implements OnInit {
+ Entity: DealCancelledCustomer = DealCancelledCustomer.CreateNewInstance();
+  MasterList: DealCancelledCustomer[] = [];
+  DisplayMasterList: DealCancelledCustomer[] = [];
   list: [] = []
   SiteList: Site[] = [];
   SearchString: string = '';
-  SelectedIncome: Income = Income.CreateNewInstance();
+  SelectedDealCancelledCustomer: DealCancelledCustomer = DealCancelledCustomer.CreateNewInstance();
   CustomerRef: number = 0;
   pageSize = 10;
   currentPage = 1;
   total = 0;
   companyRef = this.companystatemanagement.SelectedCompanyRef;
-  headers: string[] = ['Sr.No.', 'Date','Site Name', 'Payer Name', 'Amount', 'Mode of Payment', 'Reason'];
+
+  headers: string[] = ['Sr.No.', 'Site Name', 'Plot No', 'Customer Name', 'Address','City', 'Contact No', 'Reason '];
 
   constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private screenSizeService: ScreenSizeService, private companystatemanagement: CompanyStateManagement, private DateconversionService: DateconversionService, private dtu: DTU,
   ) {
     effect(async () => {
       await this.getSiteListByCompanyRef();
-      await this.getPaymentHistoryListByCompanyRef();
+      await this.getDealCancelledCustomerListBySiteRef();
     });
   }
 
@@ -56,22 +55,23 @@ export class PaymentHistoryReportComponent  implements OnInit {
     this.SiteList = lst;
     // if (this.SiteList.length > 0) {
     //   this.Entity.p.SiteRef = this.SiteList[0].p.Ref
-    //   this.getCustomerVisitListBySiteRef()
+    //   this.getDealCancelledCustomerListBySiteRef()
     // }
   }
 
-   // Extracted from services date conversion //
+  // Extracted from services date conversion //
   formatDate = (date: string | Date): string => {
     return this.DateconversionService.formatDate(date);
   }
-  getPaymentHistoryListByCompanyRef = async () => {
+
+  getDealCancelledCustomerListByCompanyRef = async () => {
     this.MasterList = [];
     this.DisplayMasterList = [];
     if (this.companyRef() <= 0) {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
-    let lst = await Income.FetchEntireListByCompanyRef(this.companyRef(),
+    let lst = await DealCancelledCustomer.FetchEntireListByCompanyRef(this.companyRef(),
       async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
     );
     this.MasterList = lst;
@@ -79,17 +79,18 @@ export class PaymentHistoryReportComponent  implements OnInit {
     this.loadPaginationData();
   };
 
-  getPaymentHistoryListBySiteRef = async () => {
+  getDealCancelledCustomerListBySiteRef = async () => {
     this.MasterList = [];
     this.DisplayMasterList = [];
-     if (this.companyRef() <= 0) {
-      await this.uiUtils.showErrorToster('Company not Selected');
-      return;
-    }
-    let lst = await Income.FetchEntireListBySiteRef(this.Entity.p.SiteRef,this.companyRef(),
+    // if (this.Entity.p.SiteRef <= 0) {
+    //   this.getDealCancelledCustomerListByCompanyRef();
+    //   return;
+    // }
+    let lst = await DealCancelledCustomer.FetchEntireListBySiteRef(this.Entity.p.SiteRef,this.companyRef(),
       async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
     );
     this.MasterList = lst;
+    console.log('lst :', lst);
     this.DisplayMasterList = this.MasterList;
     this.loadPaginationData();
   };

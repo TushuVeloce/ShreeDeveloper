@@ -9,11 +9,10 @@
       [masterList]="MasterList"
       [filterFields]="[
         'SiteName',
-        'PlotNo',
-        'CustomerName',
-        'CustomerAddress',
-        'CustomerPhoneNo',
-        'CustomerRequirement'
+        'PayerName',
+        'IncomeAmount',
+        'ModeOfPaymentName',
+        'Reason',
       ]"
       (filteredList)="DisplayMasterList = $event"
     ></app-shared-filter>

@@ -47,6 +47,7 @@ export class CustomersummarryReportComponent implements OnInit {
   getCustomerReportByCompanyAndSiteRef = async () => {
     this.Entity = CRMReports.CreateNewInstance();
     this.CustomerList = [];
+    this.CustomerRef = 0
     if (this.companyRef() <= 0) {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;

@@ -159,6 +159,8 @@ import { CustomerinfoReportComponent } from './customer_management/crmreports/cu
 import { StockSummaryComponent } from './stock management/stock-summary/stock-summary.component';
 import { CustomerVisitReportComponent } from './customer_management/customervisitreport/customer-visit-report/customer-visit-report.component';
 import { PaymentHistoryReportComponent } from './customer_management/crmreports/payment-history-report/payment-history-report/payment-history-report.component';
+import { DealCancelledCustomer } from 'src/app/classes/domain/entities/website/customer_management/dealcancelledcustomer/dealcancelledcustomer';
+import { DealCancelledCustomerReportComponent } from './customer_management/crmreports/deal-cancelled-customer-report/deal-cancelled-customer-report.component';
 
 
 const routes: Routes = [
@@ -309,6 +311,7 @@ const routes: Routes = [
 
       { path: 'Customer_Visit_Report', component: CustomerVisitReportComponent },
       { path: 'Payment_History_Report', component: PaymentHistoryReportComponent },
+      { path: 'Deal_Cancelled_Customer_Report', component: DealCancelledCustomerReportComponent },
 
 
       //Registrar Office
