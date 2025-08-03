@@ -144,7 +144,7 @@ export class StockOrderComponent implements OnInit {
 
     // If ANY entry fails (QuotationOrderedQty <= OrderedQty), return false
     const status = booleanValues.every(value => value);
-    return status;
+    return true;
   };
 
   navigateToPrint = async (item: Order) => {

@@ -54,19 +54,6 @@ export class CustomerinfoReportComponent implements OnInit {
 
   }
 
-  getCustomerReportByCompanyRef = async () => {
-    this.MasterList = [];
-    this.DisplayMasterList = [];
-    if (this.companyRef() <= 0) {
-      await this.uiUtils.showErrorToster('Company not Selected');
-      return;
-    }
-
-    let lst = await CRMReports.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-    console.log('lst :', lst);
-    this.DisplayMasterList = lst;
-  }
-
   getCustomerReportByCompanyAndSiteRef = async () => {
     this.MasterList = [];
     this.DisplayMasterList = [];
@@ -75,6 +62,7 @@ export class CustomerinfoReportComponent implements OnInit {
       return;
     }
     let lst = await CRMReports.FetchEntireListByCompanyAndSiteRef(this.companyRef(), this.SiteRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    console.log('lst :', lst);
     this.DisplayMasterList = lst;
   }
 

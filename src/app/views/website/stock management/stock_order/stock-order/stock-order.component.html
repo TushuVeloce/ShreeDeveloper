@@ -123,22 +123,22 @@
                   <img src="\assets\icons\printer.png" alt="logo" title="Print" width="20px" height="20px" />
                 </span> -->
                 <span style="margin-left: 5px;"
-                  *ngIf="!checkIsEnable(Order.p.MaterialPurchaseOrderDetailsArray) || Order.p.MaterialPurchaseOrderStatus == MaterialPurchaseOrderStatus.Approved"
+                  *ngIf="Order.p.MaterialPurchaseOrderStatus == MaterialPurchaseOrderStatus.Pending"
                   (click)="onEditClicked(Order)">
                   <img src="/assets/icons/edit.png" alt="Edit" title="Edit" width="20px" height="20px" />
                 </span>
                 <span style="margin-left: 5px;"
-                  *ngIf="!checkIsEnable(Order.p.MaterialPurchaseOrderDetailsArray) || Order.p.MaterialPurchaseOrderStatus == MaterialPurchaseOrderStatus.Approved"
+                  *ngIf="Order.p.MaterialPurchaseOrderStatus == MaterialPurchaseOrderStatus.Pending"
                   (click)="onDeleteClicked(Order)">
                   <img src="/assets/icons/delete.png" alt="Delete" title="Delete" width="20px" height="20px" />
                 </span>
                 <span style="margin-left: 5px;"
-                  *ngIf="checkIsEnable(Order.p.MaterialPurchaseOrderDetailsArray) && Order.p.MaterialPurchaseOrderStatus != MaterialPurchaseOrderStatus.Approved">
+                  *ngIf="Order.p.MaterialPurchaseOrderStatus != MaterialPurchaseOrderStatus.Pending">
                   <img src="/assets/icons/GrayEditIcon.png" alt="Edit" title="Disable Edit" width="20px"
                     height="20px" />
                 </span>
                 <span style="margin-left: 5px;"
-                  *ngIf="checkIsEnable(Order.p.MaterialPurchaseOrderDetailsArray) && Order.p.MaterialPurchaseOrderStatus != MaterialPurchaseOrderStatus.Approved">
+                  *ngIf="Order.p.MaterialPurchaseOrderStatus != MaterialPurchaseOrderStatus.Pending">
                   <img src="/assets/icons/GreyDustbin.png" alt="Delete" title="Disable Delete" width="20px"
                     height="20px" />
                 </span>

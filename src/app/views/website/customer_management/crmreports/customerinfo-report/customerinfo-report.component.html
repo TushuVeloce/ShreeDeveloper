@@ -29,15 +29,6 @@
           <nz-option *ngFor="let site of SiteList" [nzValue]="site.p.Ref" [nzLabel]="site.p.Name"></nz-option>
         </nz-select>
       </div>
-      <!-- <div class="col-md-4 col-6">
-        <label for="CustomerRef"><b>Customer</b></label>
-        <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
-          nzPlaceHolder="Select" id="CustomerRef" name="CustomerRef" [nzSize]="'large'" [(ngModel)]="CustomerRef"
-          (ngModelChange)="OnCustomerSelection()">
-          <nz-option *ngFor="let cus of CustomerList" [nzValue]="cus.p.CustomerEnquiryRef"
-            [nzLabel]="cus.p.CustomerName"></nz-option>
-        </nz-select>
-      </div> -->
     </div>
   </form>
   <div class="tblcard_light" style="margin-top: 2rem;" *ngIf="DisplayMasterList.length > 0">
@@ -73,7 +64,7 @@
             <td Class="tbldata">{{material.p.GovernmentRecknor | currency : "INR"}}</td>
             <td Class="tbldata">{{material.p.GovernmentValue | currency : "INR"}}</td>
             <td Class="tbldata">{{material.p.ValueOfAgreement | currency : "INR"}}</td>
-            <td Class="tbldata">{{material.p.RegTaxValueInPercentage}}</td>
+            <td Class="tbldata">1</td>
             <td Class="tbldata">{{material.p.RegistrationFees}}</td>
             <td Class="tbldata">{{material.p.TaxValueInPercentage }}%</td>
             <td Class="tbldata">{{material.p.StampDuties | currency : "INR"}}</td>
