@@ -436,22 +436,22 @@ export class SidebarlayoutComponent implements OnInit {
     let MasterSubModuleList = [
 
       {
-        Name: 'Company Master',
+        Name: 'Company',
         RouterLink: '/homepage/Website/Company_Master',
         LogoPath: '/assets/icons/Company Master.png',
       },
       {
-        Name: 'Owner Master',
+        Name: 'Owner',
         RouterLink: '/homepage/Website/Owner_Master',
         LogoPath: '/assets/icons/owner_master.png',
       },
       {
-        Name: 'Department Master',
+        Name: 'Department',
         RouterLink: '/homepage/Website/Department_Master',
         LogoPath: '/assets/icons/Department Master.png',
       },
       {
-        Name: 'Designation Master',
+        Name: 'Designation',
         RouterLink: '/homepage/Website/Designation_Master',
         LogoPath: '/assets/icons/Designation Master.png',
       },
@@ -461,57 +461,57 @@ export class SidebarlayoutComponent implements OnInit {
         LogoPath: '/assets/icons/User Role Right Master.png',
       },
       {
-        Name: 'Employee Master',
+        Name: 'Employee',
         RouterLink: '/homepage/Website/Employee_Master',
         LogoPath: '/assets/icons/Employee Master.png',
       },
       {
-        Name: 'Bank Account Master',
+        Name: 'Bank Account',
         RouterLink: '/homepage/Website/Bank_Account_Master',
         LogoPath: '/assets/icons/Bank Account Master.png',
       },
       {
-        Name: 'Opening Balance Master',
+        Name: 'Opening Balance',
         RouterLink: '/homepage/Website/Opening_Balance_Master',
         LogoPath: '/assets/icons/Bank Account Master.png',
       },
       {
-        Name: 'Financial Year Master',
+        Name: 'Financial Year',
         RouterLink: '/homepage/Website/Financial_Year_Master',
         LogoPath: '/assets/icons/Financial Year Master.png',
       },
       {
-        Name: 'Account Main Ledger',
+        Name: 'Main Ledger',
         RouterLink: '/homepage/Website/Account_Main_Ledger',
         LogoPath: '/assets/icons/Account Main Ledger.png',
       },
       {
-        Name: 'Account Sub Ledger',
+        Name: 'Sub Ledger',
         RouterLink: '/homepage/Website/Account_Sub_Ledger',
         LogoPath: '/assets/icons/Account Sub Ledger.png',
       },
       {
-        Name: 'Stage Master',
+        Name: 'Stage',
         RouterLink: '/homepage/Website/Stage_Master',
         LogoPath: '/assets/icons/Stage Master.png',
       },
       {
-        Name: 'Unit Master',
+        Name: 'Unit',
         RouterLink: '/homepage/Website/Unit_Master',
         LogoPath: '/assets/icons/Unit Master.png',
       },
       {
-        Name: 'Material Master',
+        Name: 'Material',
         RouterLink: '/homepage/Website/Material_Master',
         LogoPath: '/assets/icons/Material Master.png',
       },
       {
-        Name: 'Vendor Service Master',
+        Name: 'Vendor Service',
         RouterLink: '/homepage/Website/Vendor_Services_Master',
         LogoPath: '/assets/icons/Vendor Service Master.png',
       },
       {
-        Name: 'Vendor Master',
+        Name: 'Vendor',
         RouterLink: '/homepage/Website/Vendor_Master',
         LogoPath: '/assets/icons/Vendor Master.png',
       },
@@ -573,13 +573,13 @@ export class SidebarlayoutComponent implements OnInit {
 
 
       {
-        Name: 'Recipient Master',
+        Name: 'Recipient',
         RouterLink: '/homepage/Website/Recipient_Master',
         LogoPath: '/assets/icons/Employee Master.png',
       },
 
       {
-        Name: 'Payer Master',
+        Name: 'Payer',
         RouterLink: '/homepage/Website/Payer_Master',
         LogoPath: '/assets/icons/payer_master.png',
       },
@@ -694,7 +694,7 @@ export class SidebarlayoutComponent implements OnInit {
         LogoPath: '/assets/icons/customer_visit_report.png',
       },
       {
-        Name: 'Deal Cancelled Customer Report',
+        Name: 'Deal Cancelled Customer',
         RouterLink: '/homepage/Website/Deal_Cancelled_Customer_Report',
         LogoPath: '/assets/icons/customer_visit_report.png',
       },
