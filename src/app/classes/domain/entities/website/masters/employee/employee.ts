@@ -121,11 +121,13 @@ export class Employee implements IPersistable<Employee> {
     if (!new RegExp(ValidationPatterns.Email).test(this.p.PersonalEmailId) && this.p.PersonalEmailId) {
       vra.add('PersonalEmailId', ValidationMessages.EmailMsg + ' for Personal Email Id.');
     }
+
     if (this.p.OfficialEmailId == '') {
       vra.add('Office Email Id', 'Office Email Id cannot be blank.');
     } else if (!new RegExp(ValidationPatterns.Email).test(this.p.OfficialEmailId)) {
       vra.add('OfficeEmailId', ValidationMessages.EmailMsg + ' for Office Email Id.');
     }
+    
     if (this.p.AddressLine1 == '') vra.add('AddressLine1', ' Address Line 1 cannot be blank.');
     if (this.p.CountryRef == 0) vra.add('CountryRef', ' Country cannot be blank.');
     if (this.p.StateRef == 0) vra.add('StateRef', '   State cannot be blank.');

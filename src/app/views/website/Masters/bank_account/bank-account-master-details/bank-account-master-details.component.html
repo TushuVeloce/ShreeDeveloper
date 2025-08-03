@@ -18,17 +18,16 @@
         <div class="col-4" style="margin-top: 1rem">
           <label>Bank Name</label>
           <input type="text" [(ngModel)]="Entity.p.Name" name="Name" class="form-control" id="Name" required
-            placeholder="Enter Bank Name" pattern="{{NameWithoutNos}}" #NameCtrl="ngModel" required
+            placeholder="Enter Bank Name" #NameCtrl="ngModel" required
             (blur)="NameCtrl.control.markAsTouched()" />
           <div *ngIf="(NameCtrl.invalid && (NameCtrl.touched || NameCtrl.dirty))">
-            <span class="validation-text" *ngIf="NameCtrl.errors?.['pattern']">{{NameWithoutNosMsg}}</span>
             <span class="validation-text" *ngIf="NameCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
           </div>
         </div>
         <div class="col-4" style="margin-top: 1rem">
           <label>Branch Name</label>
           <input type="text" [(ngModel)]="Entity.p.BranchName" name="BranchName" class="form-control" id="BranchName"
-            placeholder="Enter Branch Name" #BranchNameCtrl="ngModel" required
+            placeholder="Enter Branch Name" #BranchNameCtrl="ngModel"
             (blur)="BranchNameCtrl.control.markAsTouched()" />
           <div *ngIf="(BranchNameCtrl.invalid && (BranchNameCtrl.touched || BranchNameCtrl.dirty))">
             <span class="validation-text" *ngIf="BranchNameCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
@@ -37,34 +36,21 @@
         <div class="col-4" style="margin-top: 1rem">
           <label>Account No</label>
           <input type="text" [(ngModel)]="Entity.p.AccountNumber" name="AccountNo" class="form-control" id="AccountNo"
-            pattern="{{LargeInputNumber}}" placeholder="Enter Account Number" #AccountNumberCtrl="ngModel" required
+            pattern="{{LargeInputNumber}}" placeholder="Enter Account Number" #AccountNumberCtrl="ngModel"
             (blur)="AccountNumberCtrl.control.markAsTouched()" (click)="selectAllValue($event)" />
           <div *ngIf="(AccountNumberCtrl.invalid && (AccountNumberCtrl.touched || AccountNumberCtrl.dirty))">
             <span class="validation-text" *ngIf="AccountNumberCtrl.errors?.['pattern']">{{LargeInputNumberMsg}}</span>
-            <span class="validation-text" *ngIf="AccountNumberCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
           </div>
         </div>
         <div class="col-4" style="margin-top: 1rem">
           <label for="IFSCCode">IFSC Code</label>
           <input type="text" [(ngModel)]="Entity.p.IFSCCode" name="IFSCCode" class="form-control" id="IFSCCode"
-            pattern="{{IFSCPattern}}" placeholder="Enter IFSC" #IFSCCodeCtrl="ngModel" required
+            pattern="{{IFSCPattern}}" placeholder="Enter IFSC" #IFSCCodeCtrl="ngModel"
             (blur)="IFSCCodeCtrl.control.markAsTouched()" />
           <div *ngIf="(IFSCCodeCtrl.invalid && (IFSCCodeCtrl.touched || IFSCCodeCtrl.dirty))">
             <span class="validation-text" *ngIf="IFSCCodeCtrl.errors?.['pattern']">{{IFSCMsg}}</span>
-            <span class="validation-text" *ngIf="IFSCCodeCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
           </div>
         </div>
-        <!-- <div class="col-4" style="margin-top: 1rem">
-          <label>Opening Balance</label>
-          <input type="text" appCommaFormat [(ngModel)]="Entity.p.OpeningBalance" name="OpeningBalance" class="form-control"
-            id="OpeningBalance" pattern="{{LargeInputNumber}}" placeholder="Enter Opening Balance"
-            (click)="selectAllValue($event)" #OpeningBalanceCtrl="ngModel" required
-            (blur)="OpeningBalanceCtrl.control.markAsTouched()" />
-          <div *ngIf="(OpeningBalanceCtrl.invalid && (OpeningBalanceCtrl.touched || OpeningBalanceCtrl.dirty))">
-            <span class="validation-text" *ngIf="OpeningBalanceCtrl.errors?.['pattern']">{{LargeInputNumberMsg}}</span>
-            <span class="validation-text" *ngIf="OpeningBalanceCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
-          </div>
-        </div> -->
         <div class="col-4" style="margin-top: 1rem">
           <label>Date of Opening</label>
           <input type="date" [(ngModel)]="Entity.p.DateofOpening" name="DateofOpening" class="form-control" id="DateofOpening"

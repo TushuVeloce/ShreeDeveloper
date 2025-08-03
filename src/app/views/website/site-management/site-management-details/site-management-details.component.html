@@ -22,48 +22,33 @@
       <div class="row" style="margin-top: 1rem">
         <div class="col-md-4 col-6">
           <label>Site Name</label>
-          <input type="text" name="Name" class="form-control" id="Name" [(ngModel)]="Entity.p.Name"
-            [pattern]="NameWithoutNos" #NameCtrl="ngModel" required (blur)="NameCtrl.control.markAsTouched()"
+          <input type="text" name="Name" class="form-control" id="Name" [(ngModel)]="Entity.p.Name" #NameCtrl="ngModel" required (blur)="NameCtrl.control.markAsTouched()"
             placeholder="Enter Site Name" />
           <div *ngIf="NameCtrl.invalid && (NameCtrl.touched || NameCtrl.dirty)">
-            <!-- <span class="validation-text" *ngIf="NameCtrl.errors?.['pattern']">{{ NameWithoutNosMsg }}</span> -->
             <span class="validation-text" *ngIf="NameCtrl.errors?.['required']">{{ RequiredFieldMsg }}</span>
           </div>
         </div>
         <div class="col-md-4 col-6">
           <label>Address</label>
           <input type="text" name="AddressLine1" class="form-control" id="AddressLine1"
-            [(ngModel)]="Entity.p.AddressLine1" #AddressLine1Ctrl="ngModel" required
+            [(ngModel)]="Entity.p.AddressLine1" #AddressLine1Ctrl="ngModel"
             (blur)="AddressLine1Ctrl.control.markAsTouched()" placeholder="Enter  Address" />
-          <!-- <div *ngIf="
-              AddressLine1Ctrl.invalid &&
-              (AddressLine1Ctrl.touched || AddressLine1Ctrl.dirty)
-            ">
-            <span class="validation-text" *ngIf="AddressLine1Ctrl.errors?.['required']">{{ RequiredFieldMsg }}</span>
-          </div> -->
         </div>
         <div class="col-md-4 col-6">
           <label>Site Location</label>
           <input type="text" name="AddressLine2" class="form-control" id="AddressLine2"
-            [(ngModel)]="Entity.p.AddressLine2" #AddressLine2Ctrl="ngModel" required
+            [(ngModel)]="Entity.p.AddressLine2" #AddressLine2Ctrl="ngModel"
             (blur)="AddressLine2Ctrl.control.markAsTouched()" placeholder="Enter Site Location" />
-          <!-- <div *ngIf="
-              AddressLine2Ctrl.invalid &&
-              (AddressLine2Ctrl.touched || AddressLine2Ctrl.dirty)
-            ">
-            <span class="validation-text" *ngIf="AddressLine2Ctrl.errors?.['required']">{{ RequiredFieldMsg }}</span>
-          </div> -->
         </div>
         <div class="col-md-4 col-6">
           <label>Pin Code</label>
           <input type="text" name="PinCode" class="form-control" id="PinCode" [(ngModel)]="Entity.p.PinCode"
-            pattern="{{ PinCodePattern }}" #PinCodeCtrl="ngModel" required (blur)="PinCodeCtrl.control.markAsTouched()"
+            pattern="{{ PinCodePattern }}" #PinCodeCtrl="ngModel" (blur)="PinCodeCtrl.control.markAsTouched()"
             placeholder="Enter Pin Code" />
           <div *ngIf="
               PinCodeCtrl.invalid && (PinCodeCtrl.touched || PinCodeCtrl.dirty)
             ">
             <span class="validation-text" *ngIf="PinCodeCtrl.errors?.['pattern']">{{ PinCodeMsg }}</span>
-            <!-- <span class="validation-text" *ngIf="PinCodeCtrl.errors?.['required']">{{ RequiredFieldMsg }}</span> -->
           </div>
         </div>
         <div class="col-md-4 col-6">
@@ -100,67 +85,34 @@
             </nz-select>
           </div>
         </div>
-        <!-- <div class="col-md-4 col-6">
-          <label>Site Incharge</label>
-          <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
-            nzPlaceHolder="Select" [nzSize]="'large'" name="SiteInchargeRef" required id="SiteInchargeRef"
-            [(ngModel)]="Entity.p.SiteInchargeRef">
-            <nz-option *ngFor="let employee of EmployeeList" [nzLabel]="employee.p.Name"
-              [nzValue]="employee.p.Ref"></nz-option>
-          </nz-select>
-        </div> -->
         <div class="col-md-4 col-6">
           <label>Starting Date</label>
           <input type="date" name="localEstimatedStartingDate" class="form-control date-input"
-            id="localEstimatedStartingDate" [(ngModel)]="localEstimatedStartingDate" placeholder="Select Date"
-            #EstimatedStartingDateCtrl="ngModel" required (blur)="EstimatedStartingDateCtrl.control.markAsTouched()" />
-          <!-- <div
-            *ngIf="(EstimatedStartingDateCtrl.invalid && (EstimatedStartingDateCtrl.touched || EstimatedStartingDateCtrl.dirty))">
-            <span class="validation-text"
-              *ngIf="EstimatedStartingDateCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
-          </div> -->
+            id="localEstimatedStartingDate" [(ngModel)]="localEstimatedStartingDate" placeholder="Select Date"/>
         </div>
         <div class="col-md-4 col-6">
           <label>Estimated End Date</label>
           <input type="date" name="localEstimatedEndDate" class="form-control date-input" id="localEstimatedEndDate"
-            [(ngModel)]="localEstimatedEndDate" [min]="localEstimatedStartingDate" placeholder="Select Date" #EstimatedEndDateCtrl="ngModel" required
+            [(ngModel)]="localEstimatedEndDate" [min]="localEstimatedStartingDate" placeholder="Select Date" #EstimatedEndDateCtrl="ngModel"
             (blur)="EstimatedEndDateCtrl.control.markAsTouched()" />
-          <!-- <div *ngIf="(EstimatedEndDateCtrl.invalid && (EstimatedEndDateCtrl.touched || EstimatedEndDateCtrl.dirty))">
-            <span class="validation-text" *ngIf="EstimatedEndDateCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
-          </div> -->
         </div>
         <div class="col-md-4 col-6">
           <label>Estimated Cost</label>
           <input type="text" appCommaFormat name="EstimatedCost" class="form-control" id="EstimatedCost"
             [(ngModel)]="Entity.p.EstimatedCost" placeholder="Enter Estimated Cost" (click)="selectAllValue($event)"
-            #EstimatedCostCtrl="ngModel" required (blur)="EstimatedCostCtrl.control.markAsTouched()" />
-          <!-- <div *ngIf="(EstimatedCostCtrl.invalid && (EstimatedCostCtrl.touched || EstimatedCostCtrl.dirty))">
-            <span class="validation-text" *ngIf="EstimatedCostCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
-          </div> -->
+            #EstimatedCostCtrl="ngModel" (blur)="EstimatedCostCtrl.control.markAsTouched()" />
         </div>
          <div class="col-md-4 col-6">
           <label for="TotalLandAreaInSqm">Total Land Area in Sqm</label>
-          <input type="number" class="form-control" name="TotalLandAreaInSqm" id="TotalLandAreaInSqm" 
-            [(ngModel)]="Entity.p.TotalLandAreaInSqm" (input)="restrictToTwoDecimalsForSqm($event)" 
-            #TotalLandAreaInSqmCtrl="ngModel" required (blur)="TotalLandAreaInSqmCtrl.control.markAsTouched()"
+          <input type="number" class="form-control" name="TotalLandAreaInSqm" id="TotalLandAreaInSqm"
+            [(ngModel)]="Entity.p.TotalLandAreaInSqm" (input)="restrictToTwoDecimalsForSqm($event)"
             placeholder="Enter Total Land Area in Sqm" (click)="selectAllValue($event)" />
-          <!-- <div
-            *ngIf="(TotalLandAreaInSqmCtrl.invalid && (TotalLandAreaInSqmCtrl.touched || TotalLandAreaInSqmCtrl.dirty))">
-            <span class="validation-text"
-              *ngIf="TotalLandAreaInSqmCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
-          </div> -->
         </div>
          <div class="col-md-4 col-6">
           <label for="TotalLandAreaInSqft">Total Land Area in Sqft</label>
-          <input type="number" class="form-control" name="TotalLandAreaInSqft" id="TotalLandAreaInSqft" 
+          <input type="number" class="form-control" name="TotalLandAreaInSqft" id="TotalLandAreaInSqft"
             [(ngModel)]="Entity.p.TotalLandAreaInSqft" (input)="restrictToTwoDecimalsForSqFt($event)"
-            #TotalLandAreaInSqftCtrl="ngModel" required (blur)="TotalLandAreaInSqftCtrl.control.markAsTouched()"
             placeholder="Enter Total Land Area in Sqft" (click)="selectAllValue($event)" />
-          <!-- <div
-            *ngIf="(TotalLandAreaInSqftCtrl.invalid && (TotalLandAreaInSqftCtrl.touched || TotalLandAreaInSqftCtrl.dirty))">
-            <span class="validation-text"
-              *ngIf="TotalLandAreaInSqftCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
-          </div> -->
         </div>
         <div class="col-md-4 col-6">
           <label>Number Of Plots</label>
@@ -280,18 +232,13 @@
           <div class="col-6">
             <label>Email Id</label>
             <input type="email" name="EmailId" class="form-control" [(ngModel)]="newOwner.EmailId"
-              placeholder="Enter Email Id" [pattern]="Email" #OwnerEmailCtrl="ngModel" required
-              (blur)="OwnerEmailCtrl.control.markAsTouched()" />
-            <div *ngIf="(OwnerEmailCtrl.invalid && (OwnerEmailCtrl.touched || OwnerEmailCtrl.dirty))">
-              <span class="validation-text" *ngIf="OwnerEmailCtrl.errors?.['pattern']">{{ EmailMsg }}</span>
-              <!-- <span class="validation-text" *ngIf="OwnerEmailCtrl.errors?.['required']">{{ RequiredFieldMsg }}</span> -->
-            </div>
+              placeholder="Enter Email Id" [pattern]="Email" />
           </div>
           <div class="col-6">
             <div>
               <label for="CountryRef"><b>Country</b></label>
               <nz-select class="nzSelect-light" nzShowSearch nzAllowClear [nzNotFoundContent]="noDataTpl"
-                nzPlaceHolder="Select" [nzSize]="'large'" name="CountryRef" required id="CountryRef"
+                nzPlaceHolder="Select" [nzSize]="'large'" name="CountryRef" id="CountryRef"
                 [(ngModel)]="newOwner.CountryRef" (ngModelChange)="
                   getStateListByCountryRefforOwner(newOwner.CountryRef)
                 ">
@@ -305,7 +252,7 @@
               <label for="StateRef"><b>State</b></label>
               <nz-select class="nzSelect-light" nzShowSearch [nzNotFoundContent]="noDataTpl" nzAllowClear
                 nzPlaceHolder="Select" id="StateRef" name="StateRef" [nzSize]="'large'" [(ngModel)]="newOwner.StateRef"
-                required (ngModelChange)="
+                (ngModelChange)="
                   getCityListByStateRefforOwner(newOwner.StateRef)
                 ">
                 <nz-option *ngFor="let state of StateListforOwner" [nzValue]="state.p.Ref"
@@ -316,7 +263,7 @@
           <div class="col-6">
             <label for="CityRef"><b>City</b></label>
             <nz-select class="nzSelect-light" nzShowSearch [nzNotFoundContent]="noDataTpl" nzAllowClear
-              nzPlaceHolder="Select" id="CityRef" name="CityRef" [nzSize]="'large'" required
+              nzPlaceHolder="Select" id="CityRef" name="CityRef" [nzSize]="'large'"
               [(ngModel)]="newOwner.CityRef">
               <nz-option *ngFor="let city of CityListforOwner" [nzValue]="city.p.Ref"
                 [nzLabel]="city.p.Name"></nz-option>
@@ -334,11 +281,10 @@
           <div class="col-6">
             <label>Pin Code</label>
             <input type="text" name="PinCode" class="form-control" [(ngModel)]="newOwner.PinCode"
-              pattern="{{ PinCodePattern }}" #OwnerPincodeCtrl="ngModel" required
+              pattern="{{ PinCodePattern }}" #OwnerPincodeCtrl="ngModel"
               (blur)="OwnerPincodeCtrl.control.markAsTouched()" placeholder="Enter Pin Code" />
             <div *ngIf="(OwnerPincodeCtrl.invalid && (OwnerPincodeCtrl.touched || OwnerPincodeCtrl.dirty))">
               <span class="validation-text" *ngIf="OwnerPincodeCtrl.errors?.['pattern']">{{ PinCodeMsg }}</span>
-              <!-- <span class="validation-text" *ngIf="OwnerPincodeCtrl.errors?.['required']">{{ RequiredFieldMsg }}</span> -->
             </div>
           </div>
         </div>

@@ -106,11 +106,6 @@ export class Vendor implements IPersistable<Vendor> {
     if (this.p.CompanyType == 0) vra.add('CompanyType', 'Company Type cannot be blank.');
     if (this.p.Name == '') { vra.add('Name', 'Vendor Name cannot be blank.'); }
     if (this.p.TradeName == '') vra.add('TradeName', 'Trade Name cannot be blank.');
-    // if (this.p.MobileNo == '') {
-    //   vra.add('MobileNo', 'Mobile No cannot be blank.');
-    // } else if (!new RegExp(ValidationPatterns.INDPhoneNo).test(this.p.MobileNo)) {
-    //   vra.add('MobileNo', ValidationMessages.INDPhoneNoMsg);
-    // }
     if (this.p.AddressLine1 == '') vra.add('AddressLine1', 'Address Line 1 cannot be blank.');
     if (this.p.CountryRef == 0) vra.add('CountryRef', 'Country cannot be blank.');
     if (this.p.StateRef == 0) vra.add('StateRef', 'State cannot be blank.');

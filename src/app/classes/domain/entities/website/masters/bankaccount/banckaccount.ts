@@ -76,6 +76,9 @@ export class BankAccount implements IPersistable<BankAccount> {
     if (this.p.Name == '') {
       vra.add('Name', 'Bank Name cannot be blank.');
     }
+    if (this.p.BranchName == '') {
+      vra.add('BranchName', 'Branch Name cannot be blank.');
+    }
     if (this.p.CompanyRef == 0) vra.add('CompanyRef', 'Company Name cannot be blank.');
 
   }

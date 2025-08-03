@@ -98,9 +98,6 @@ export class Site implements IPersistable<Site> {
     if (this.p.StateRef == 0) vra.add('StateRef', 'State cannot be blank.');
     if (this.p.CityRef == 0) vra.add('CityRef', 'City cannot be blank.');
     if (this.p.NumberOfPlots == 0) vra.add('NumberOfPlots', 'Number Of Plots cannot be blank.');
-    // if (this.p.EstimatedStartingDate == '') vra.add('EstimatedStartingDate', 'Estimated Starting Date cannot be blank.');
-    // if (this.p.EstimatedEndDate == '') vra.add('EstimatedEndDate', 'Estimated End Date cannot be blank.');
-
   }
 
   public MergeIntoTransportData(td: TransportData) {
