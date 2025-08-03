@@ -162,6 +162,10 @@
                   [(ngModel)]="plot.CustID" required placeholder=" Cust ID" />
               </td>
               <td Class="tbldata" *ngIf="plot.CustomerStatus !== CustomerStatusEnum.ConvertToDeal"> -- </td>
+               <td class="tbldata">
+                  <span style="margin-left: 9px" (click)="removePlot(i)">
+                    <img src="\assets\icons\delete.png" alt="logo" title="Delete" width="20px" height="20px" /></span>
+                </td>
             </tr>
           </tbody>
         </nz-table>

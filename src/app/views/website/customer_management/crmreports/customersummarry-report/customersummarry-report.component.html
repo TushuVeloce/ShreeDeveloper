@@ -1,8 +1,6 @@
 <div class="table-wrapper tblcard_light mt-4">
   <ng-template #noDataTpl>
-    <div style="text-align: center; color: rgba(0, 0, 0, 0.25);">
-      No Data
-    </div>
+    <div style="text-align: center; color: rgba(0, 0, 0, 0.25)">No Data</div>
   </ng-template>
 
   <div class="card-body m-3">
@@ -10,26 +8,62 @@
       <div class="row gy-3">
         <div class="col-md-4 col-6">
           <label for="SiteRef"><b>Site</b></label>
-          <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
-            nzPlaceHolder="Select" id="SiteRef" name="SiteRef" [nzSize]="'large'" [(ngModel)]="SiteRef"
-            (ngModelChange)="getCustomerReportByCompanyAndSiteRef()">
-            <nz-option *ngFor="let site of SiteList" [nzValue]="site.p.Ref" [nzLabel]="site.p.Name"></nz-option>
+          <nz-select
+            class="nzSelect-light"
+            [nzNotFoundContent]="noDataTpl"
+            nzShowSearch
+            nzAllowClear
+            nzPlaceHolder="Select"
+            id="SiteRef"
+            name="SiteRef"
+            [nzSize]="'large'"
+            [(ngModel)]="SiteRef"
+            (ngModelChange)="getCustomerReportByCompanyAndSiteRef()"
+          >
+            <nz-option
+              *ngFor="let site of SiteList"
+              [nzValue]="site.p.Ref"
+              [nzLabel]="site.p.Name"
+            ></nz-option>
           </nz-select>
         </div>
         <div class="col-md-4 col-6">
           <label for="CustomerRef"><b>Customer ID</b></label>
-          <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
-            nzPlaceHolder="Select" id="CustomerRef" name="CustomerRef" [nzSize]="'large'" [(ngModel)]="CustomerRef"
-            (ngModelChange)="OnCustomerSelection()">
-            <nz-option *ngFor="let cus of CustomerList" [nzValue]="cus.p.PlotNo"
-              [nzLabel]="cus.p.CustID"></nz-option>
+          <nz-select
+            class="nzSelect-light"
+            [nzNotFoundContent]="noDataTpl"
+            nzShowSearch
+            nzAllowClear
+            nzPlaceHolder="Select"
+            id="CustomerRef"
+            name="CustomerRef"
+            [nzSize]="'large'"
+            [(ngModel)]="CustomerRef"
+            (ngModelChange)="OnCustomerSelection()"
+          >
+            <nz-option
+              *ngFor="let cus of CustomerList"
+              [nzValue]="cus.p.PlotNo"
+              [nzLabel]="cus.p.CustID"
+            ></nz-option>
           </nz-select>
+        </div>
+        <div class="col-4 mb-2 text-end">
+          <img
+            class="no-print"
+            src="/assets/icons/printer.png"
+            alt="Print"
+            title="Print"
+            width="30px"
+            height="30px"
+            style="cursor: pointer; padding-top: 4px"
+            (click)="printReport()"
+          />
         </div>
       </div>
     </form>
   </div>
-  <div class="table-container">
-
+  <div id="print-section" class="table-container">
     <div class="row bg-brown text-white text-center py-2">
       <div class="col-12">
         <b>PROJECT BY - SHREE DEVELOPERS</b>
@@ -37,12 +71,13 @@
     </div>
 
     <!-- Project Info -->
+   
     <div class="row table-row">
       <div class="col-md-3 col-6 table-cell-heading">Customer ID</div>
-      <div class="col-md-3 col-6 table-cell">{{Entity.p.CustID}}</div>
+      <div class="col-md-3 col-6 table-cell">{{ Entity.p.CustID }}</div>
 
       <div class="col-md-3 col-6 table-cell-heading">Name of Project</div>
-      <div class="col-md-3 col-6 table-cell">{{Entity.p.SiteName}}</div>
+      <div class="col-md-3 col-6 table-cell">{{ Entity.p.SiteName }}</div>
     </div>
 
     <!-- Customer Details -->
@@ -52,26 +87,31 @@
 
     <div class="row table-row">
       <div class="col-md-3 col-6 table-cell-heading">Customer Name</div>
-      <div class="col-md-9 col-6 table-cell">{{Entity.p.CustomerName}}</div>
+      <div class="col-md-9 col-6 table-cell" style="justify-content: flex-start; text-align: left;">{{ Entity.p.CustomerName }}</div>
+
     </div>
 
     <div class="row table-row">
       <div class="col-md-3 col-6 table-cell-heading">Address</div>
-      <div class="col-md-9 col-6 table-cell">{{Entity.p.CustomerAddress}}</div>
+      <div class="col-md-9 col-6 table-cell" style="justify-content: flex-start; text-align: left;">
+        {{ Entity.p.CustomerAddress }}
+      </div>
     </div>
 
     <div class="row table-row">
       <div class="col-md-3 col-6 table-cell-heading">Mobile No.</div>
-      <div class="col-md-3 col-6 table-cell">{{Entity.p.ContactNos}}</div>
+      <div class="col-md-3 col-6 table-cell">{{ Entity.p.ContactNos }}</div>
 
       <div class="col-md-3 col-6 table-cell-heading">Adhar No.</div>
-      <div class="col-md-3 col-6 table-cell">{{Entity.p.AdharNo}}</div>
+      <div class="col-md-3 col-6 table-cell">{{ Entity.p.AdharNo }}</div>
 
       <div class="col-md-3 col-6 table-cell-heading">PAN No.</div>
-      <div class="col-md-3 col-6 table-cell">{{Entity.p.PANNo}}</div>
+      <div class="col-md-3 col-6 table-cell">{{ Entity.p.PANNo }}</div>
 
       <div class="col-md-3 col-6 table-cell-heading">Reference</div>
-      <div class="col-md-3 col-6 table-cell">{{Entity.p.BrokerName? Entity.p.BrokerName : '--'}}</div>
+      <div class="col-md-3 col-6 table-cell">
+        {{ Entity.p.BrokerName ? Entity.p.BrokerName : "--" }}
+      </div>
     </div>
 
     <!-- Plot Details -->
@@ -81,31 +121,38 @@
 
     <div class="row table-row">
       <div class="col-md-3 col-6 table-cell-heading">Plot No.</div>
-      <div class="col-md-3 col-6 table-cell">{{Entity.p.PlotNo}}</div>
+      <div class="col-md-3 col-6 table-cell">{{ Entity.p.PlotNo }}</div>
 
       <div class="col-md-3 col-6 table-cell-heading">Booking Remark</div>
-      <div class="col-md-3 col-6 table-cell">{{Entity.p.RegisterCustomerBookingRemarkName}}</div>
+      <div class="col-md-3 col-6 table-cell">
+        {{ Entity.p.RegisterCustomerBookingRemarkName }}
+      </div>
     </div>
 
     <div class="row table-row">
       <div class="col-md-3 col-6 table-cell-heading">Plot Area (SQ.MT.)</div>
-      <div class="col-md-3 col-6 table-cell">{{Entity.p.AreaInSqm}}</div>
+      <div class="col-md-3 col-6 table-cell">{{ Entity.p.AreaInSqm }}</div>
 
       <div class="col-md-3 col-6 table-cell-heading">Plot Area (SQ.FT.)</div>
-      <div class="col-md-3 col-6 table-cell">{{Entity.p.AreaInSqft}}</div>
+      <div class="col-md-3 col-6 table-cell">{{ Entity.p.AreaInSqft }}</div>
     </div>
 
     <div class="row table-row">
       <div class="col-md-3 col-6 table-cell-heading">Basic Rate/Sq.Ft.</div>
-      <div class="col-md-3 col-6 table-cell">{{Entity.p.BasicRate | currency : "INR"}}</div>
+      <div class="col-md-3 col-6 table-cell">
+        {{ Entity.p.BasicRate | currency : "INR" }}
+      </div>
 
       <div class="col-md-3 col-6 table-cell-heading">Discounted Rate</div>
-      <div class="col-md-3 col-6 table-cell">{{Entity.p.DiscountedRateOnArea | currency : "INR"}}</div>
+      <div class="col-md-3 col-6 table-cell">
+        {{ Entity.p.DiscountedRateOnArea | currency : "INR" }}
+      </div>
     </div>
 
     <div class="row table-row">
-      <div class="col-12 highlight-yellow text-center">TOTAL PLOT AMOUNT - Rs {{Entity.p.TotalPlotAmount | currency :
-        "INR"}}</div>
+      <div class="col-12 highlight-yellow text-center">
+        TOTAL PLOT AMOUNT - Rs {{ Entity.p.TotalPlotAmount | currency : "INR" }}
+      </div>
     </div>
 
     <!-- Agreement and Legal Charges -->
@@ -115,15 +162,21 @@
 
     <div class="row table-row">
       <div class="col-md-3 col-6 table-cell-heading">Government Recknor</div>
-      <div class="col-md-3 col-6 table-cell">{{Entity.p.GovernmentRecknor | currency : "INR"}}</div>
+      <div class="col-md-3 col-6 table-cell">
+        {{ Entity.p.GovernmentRecknor | currency : "INR" }}
+      </div>
 
       <div class="col-md-3 col-6 table-cell-heading">Government Value</div>
-      <div class="col-md-3 col-6 table-cell">{{Entity.p.GovernmentValue | currency : "INR"}}</div>
+      <div class="col-md-3 col-6 table-cell">
+        {{ Entity.p.GovernmentValue | currency : "INR" }}
+      </div>
     </div>
 
     <div class="row table-row">
       <div class="col-md-3 col-6 table-cell-heading">Value of Agreement</div>
-      <div class="col-md-3 col-6 table-cell">{{Entity.p.ValueOfAgreement | currency : "INR"}}</div>
+      <div class="col-md-3 col-6 table-cell">
+        {{ Entity.p.ValueOfAgreement | currency : "INR" }}
+      </div>
 
       <div class="col-md-3 col-6 table-cell-heading"></div>
       <div class="col-md-3 col-6 table-cell"></div>
@@ -131,19 +184,26 @@
 
     <div class="row table-row">
       <div class="col-md-3 col-6 table-cell-heading">Stamp Duty</div>
-      <div class="col-md-3 col-6 table-cell">{{Entity.p.StampDuties | currency : "INR"}}</div>
+      <div class="col-md-3 col-6 table-cell">
+        {{ Entity.p.StampDuties | currency : "INR" }}
+      </div>
 
       <div class="col-md-3 col-6 table-cell-heading">Registration Fees</div>
-      <div class="col-md-3 col-6 table-cell">{{Entity.p.RegistrationFees | currency : "INR"}}</div>
+      <div class="col-md-3 col-6 table-cell">
+        {{ Entity.p.RegistrationFees | currency : "INR" }}
+      </div>
     </div>
 
     <div class="row table-row">
       <div class="col-md-3 col-6 table-cell-heading">Legal Charges</div>
-      <div class="col-md-3 col-6 table-cell">{{Entity.p.LegalCharges | currency : "INR"}}</div>
+      <div class="col-md-3 col-6 table-cell">
+        {{ Entity.p.LegalCharges | currency : "INR" }}
+      </div>
 
       <div class="col-md-3 col-6 table-cell-heading">TOTAL EXTRA CHARGES</div>
-      <div class="col-md-3 col-6 table-cell">{{Entity.p.TotalExtraCharges | currency : "INR"}}</div>
-
+      <div class="col-md-3 col-6 table-cell">
+        {{ Entity.p.TotalExtraCharges | currency : "INR" }}
+      </div>
     </div>
 
     <!-- Payment Details -->
@@ -152,38 +212,47 @@
     </div>
 
     <div class="row table-row">
-      <div class="col-12 highlight-yellow text-center">GRAND TOTAL - Rs {{Entity.p.GrandTotal | currency : "INR"}}</div>
+      <div class="col-12 highlight-yellow text-center">
+        GRAND TOTAL - Rs {{ Entity.p.GrandTotal | currency : "INR" }}
+      </div>
     </div>
 
     <div class="row table-row">
-
       <div class="col-md-3 col-6 table-cell-heading">Total Cheque Received</div>
-      <div class="col-md-3 col-6 table-cell">{{Entity.p.TotalChequeRecieved | currency : "INR"}}</div>
+      <div class="col-md-3 col-6 table-cell">
+        {{ Entity.p.TotalChequeRecieved | currency : "INR" }}
+      </div>
 
       <div class="col-md-3 col-6 table-cell-heading">Total Cheque Balance</div>
-      <div class="col-md-3 col-6 table-cell">{{Entity.p.TotalChequeBalance | currency : "INR"}}</div>
-
-
+      <div class="col-md-3 col-6 table-cell">
+        {{ Entity.p.TotalChequeBalance | currency : "INR" }}
+      </div>
     </div>
 
     <div class="row table-row">
-
       <div class="col-md-3 col-6 table-cell-heading">Total Cash Received</div>
-      <div class="col-md-3 col-6 table-cell">{{Entity.p.TotalCashRecieved | currency : "INR"}}</div>
+      <div class="col-md-3 col-6 table-cell">
+        {{ Entity.p.TotalCashRecieved | currency : "INR" }}
+      </div>
 
       <div class="col-md-3 col-6 table-cell-heading">Total Cash Balance</div>
-      <div class="col-md-3 col-6 table-cell">{{Entity.p.TotalCashBalance | currency : "INR"}}</div>
-
+      <div class="col-md-3 col-6 table-cell">
+        {{ Entity.p.TotalCashBalance | currency : "INR" }}
+      </div>
     </div>
 
     <div class="row table-row">
       <div class="col-md-3 col-6 table-cell-heading">Total Received</div>
-      <div class="col-md-3 col-6 table-cell">{{Entity.p.TotalAmountRecieved | currency : "INR"}}</div>
+      <div class="col-md-3 col-6 table-cell">
+        {{ Entity.p.TotalAmountRecieved | currency : "INR" }}
+      </div>
 
-      <div class="col-md-3 col-6 table-cell-heading">Total Balance (cash & chq.)</div>
-      <div class="col-md-3 col-6 table-cell">{{Entity.p.TotalBalance | currency : "INR"}}</div>
+      <div class="col-md-3 col-6 table-cell-heading">
+        Total Balance (cash & chq.)
+      </div>
+      <div class="col-md-3 col-6 table-cell">
+        {{ Entity.p.TotalBalance | currency : "INR" }}
+      </div>
     </div>
-
   </div>
-
 </div>

@@ -135,6 +135,9 @@ export class PlotMasterDetailsComponent implements OnInit {
     if (this.Entity.p.CurrentBookingRemark == BookingRemarks.Plot_Of_Shree) {
       let CompanyData = await Company.FetchInstance(this.CompanyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
       this.CompanyEntity = CompanyData;
+    }else if (this.Entity.p.CurrentBookingRemark == BookingRemarks.Plot_Of_Owner && this.CustomerList.length == 1) {
+      this.Entity.p.CurrentOwnerRef = this.CustomerList[0].p.Ref
+      this.getCustomerDataBycustomerRef(this.Entity.p.CurrentOwnerRef )
     }
   }
 

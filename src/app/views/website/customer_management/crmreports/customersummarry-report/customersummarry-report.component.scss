@@ -85,3 +85,49 @@ body {
     font-size: 0.85rem;
   }
 }
+
+@media print {
+  body * {
+    visibility: hidden;
+  }
+
+  #print-section,
+  #print-section * {
+    visibility: visible;
+  }
+
+  #print-section {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+  }
+
+  .no-print {
+    display: none !important;
+  }
+
+  /* Preserve box styling */
+  .tblcard_light {
+    box-shadow: none;
+    border: none;
+  }
+
+  /* Force background and color printing for headings and highlights */
+  .section-header,
+  .bg-brown,
+  .highlight-yellow,
+  .table-cell-heading,
+  .table-cell {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* Optional: Fix padding/font-size during print */
+  .table-cell,
+  .table-cell-heading {
+    padding: 6px;
+    font-size: 0.9rem;
+  }
+}
+

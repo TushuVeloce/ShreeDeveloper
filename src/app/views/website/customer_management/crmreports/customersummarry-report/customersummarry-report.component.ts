@@ -70,4 +70,10 @@ console.log("Filtered customer list:", this.CustomerList);
     }
   }
 
+   printReport() {
+  window.print();
 }
+
+
+}
+

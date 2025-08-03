@@ -282,12 +282,12 @@ export class CustomerEnquiryDetailsComponent implements OnInit {
   };
 
   getPlotBySiteRefList = async (siteRef: number) => {
-    if (siteRef <= 0) {
-      await this.uiUtils.showWarningToster(`Please Select Site`);
-      return;
-    }
     this.PlotList = []
     this.InterestedPlotRef = 0;
+    if (siteRef <= 0) {
+      // await this.uiUtils.showWarningToster(`Please Select Site`);
+      return;
+    }
     let lst = await Plot.FetchEntireListBySiteRef(
       siteRef,
       async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg));
