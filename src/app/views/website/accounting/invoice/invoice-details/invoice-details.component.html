@@ -69,7 +69,7 @@
             <nz-option *ngFor="let sub of SubLedgerList" [nzValue]="sub.p.Ref" [nzLabel]="sub.p.Name"></nz-option>
           </nz-select>
         </div>
-        <div class="col-md-4" style="margin-top: 1rem; ">
+        <div class="col-md-4" style="margin-top: 1rem;">
           <label>Expense Type</label>
           <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="ExpenseType"
             name="ExpenseType" [nzSize]="'large'" [(ngModel)]="Entity.p.ExpenseType"
@@ -415,7 +415,7 @@
               class="form-control" id="InvoiceAmount" required placeholder="Enter InvoiceAmount" disabled />
           </div>
         </div>
-        <div class="col-md-4" style="margin-top: 1rem; ">
+        <div class="col-md-4" style="margin-top: 1rem;">
           <label>Mode of Payment</label>
           <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
             nzPlaceHolder="Select" id="InvoiceModeOfPayment" name="InvoiceModeOfPayment" [nzSize]="'large'"
@@ -518,7 +518,7 @@
     <div class="custom-modal-body">
       <form autocomplete="off">
         <div class="row">
-          <div class="col-md-6" style="margin-top: 1rem; ">
+          <div class="col-md-6" style="margin-top: 1rem;">
             <label>Labour Type</label>
             <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="LabourType"
               name="LabourType" [nzSize]="'large'" [(ngModel)]="LabourTimeEntity.LabourType"
@@ -531,7 +531,7 @@
             <div>
               <label for="Days">Number of Days</label>
               <input type="number" name="Days" class="form-control" id="Days"
-                [(ngModel)]="LabourTimeEntity.Days" placeholder="Enter Days " #DaysCtrl="ngModel"
+                [(ngModel)]="LabourTimeEntity.Days" placeholder="Enter Days" #DaysCtrl="ngModel"
                 (ngModelChange)="CalculateLabourAmount()" required (blur)="DaysCtrl.control.markAsTouched()"
                 (click)="selectAllValue($event)" />
               <div *ngIf="(DaysCtrl.invalid && (DaysCtrl.touched || DaysCtrl.dirty))">
@@ -544,7 +544,7 @@
               <label for="LabourQty">Labour Quantity</label>
               <input type="text" appCommaFormat name="LabourQty" class="form-control" id="LabourQty"
                 [(ngModel)]="LabourTimeEntity.LabourQty" (ngModelChange)="calculateWorkedHours()"
-                placeholder="Enter Quantity " #LabourQtyCtrl="ngModel" (ngModelChange)="CalculateLabourAmount()"
+                placeholder="Enter Quantity" #LabourQtyCtrl="ngModel" (ngModelChange)="CalculateLabourAmount()"
                 required (blur)="LabourQtyCtrl.control.markAsTouched()" (click)="selectAllValue($event)" />
               <div *ngIf="(LabourQtyCtrl.invalid && (LabourQtyCtrl.touched || LabourQtyCtrl.dirty))">
                 <span class="validation-text" *ngIf="LabourQtyCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
@@ -556,7 +556,7 @@
               <label for="LabourRate">Labour Day Rate</label>
               <input type="text" appCommaFormat name="LabourRate" class="form-control" id="LabourRate"
                 [(ngModel)]="LabourTimeEntity.LabourRate" (ngModelChange)="calculateWorkedHours()"
-                placeholder="Enter Rate " #LabourRateCtrl="ngModel" (ngModelChange)="CalculateLabourAmount()" required
+                placeholder="Enter Rate" #LabourRateCtrl="ngModel" (ngModelChange)="CalculateLabourAmount()" required
                 (blur)="LabourRateCtrl.control.markAsTouched()" (click)="selectAllValue($event)" />
               <div *ngIf="(LabourRateCtrl.invalid && (LabourRateCtrl.touched || LabourRateCtrl.dirty))">
                 <span class="validation-text" *ngIf="LabourRateCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>

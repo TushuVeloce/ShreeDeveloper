@@ -210,13 +210,13 @@
         <!-- Remark  -->
         <div class="col-md-4" style="margin-top: 1rem;" *ngIf="!showAgentBrokerInput">
           <label>Remark</label>
-          <input type="text" name="Remark" class="form-control" id="Remark " required placeholder="Enter Remark"
+          <input type="text" name="Remark" class="form-control" id="Remark" required placeholder="Enter Remark"
             [(ngModel)]="Entity.p.Remark" (focus)="selectAll($event)" />
         </div>
 
         <div class="col-md-4" style="margin-top: 1rem;" *ngIf="showAgentBrokerInput">
           <label>Remark</label>
-          <input type="text" name="Remark" class="form-control" id="Remark " required placeholder="Enter Remark"
+          <input type="text" name="Remark" class="form-control" id="Remark" required placeholder="Enter Remark"
             [(ngModel)]="Entity.p.Remark" />
         </div>
         <!-- Customer Status  -->

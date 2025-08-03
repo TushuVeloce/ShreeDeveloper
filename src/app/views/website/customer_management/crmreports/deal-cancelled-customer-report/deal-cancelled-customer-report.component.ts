@@ -82,15 +82,11 @@ export class DealCancelledCustomerReportComponent  implements OnInit {
   getDealCancelledCustomerListBySiteRef = async () => {
     this.MasterList = [];
     this.DisplayMasterList = [];
-    // if (this.Entity.p.SiteRef <= 0) {
-    //   this.getDealCancelledCustomerListByCompanyRef();
-    //   return;
-    // }
+
     let lst = await DealCancelledCustomer.FetchEntireListBySiteRef(this.Entity.p.SiteRef,this.companyRef(),
       async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
     );
     this.MasterList = lst;
-    console.log('lst :', lst);
     this.DisplayMasterList = this.MasterList;
     this.loadPaginationData();
   };

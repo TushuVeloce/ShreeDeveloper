@@ -17,21 +17,21 @@
     </ng-template>
     <form autocomplete="off" #companyForm="ngForm">
       <div class="row">
-        <div class="col-md-6" style="margin-top: 1rem; ">
+        <div class="col-md-6" style="margin-top: 1rem;">
           <div>
             <label for="Date">Date</label>
             <input type="date" name="Date" required class="form-control" id="Date" [(ngModel)]="Entity.p.Date"
-              placeholder="Enter From Time " #DateCtrl="ngModel" required (blur)="DateCtrl.control.markAsTouched()" />
+              placeholder="Enter From Time" #DateCtrl="ngModel" required (blur)="DateCtrl.control.markAsTouched()" />
           <div *ngIf="(DateCtrl.invalid && (DateCtrl.touched || DateCtrl.dirty))">
             <span class="validation-text" *ngIf="DateCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
           </div>
           </div>
         </div>
-        <div class="col-md-6" style="margin-top: 1rem; ">
+        <div class="col-md-6" style="margin-top: 1rem;">
           <div>
             <label for="Reason">Reason</label>
             <input type="text" name="Reason" required class="form-control" id="Reason" [(ngModel)]="Entity.p.Reason"
-              placeholder="Enter Reason " #ReasonCtrl="ngModel" required (blur)="ReasonCtrl.control.markAsTouched()" />
+              placeholder="Enter Reason" #ReasonCtrl="ngModel" required (blur)="ReasonCtrl.control.markAsTouched()" />
           <div *ngIf="(ReasonCtrl.invalid && (ReasonCtrl.touched || ReasonCtrl.dirty))">
             <span class="validation-text" *ngIf="ReasonCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
           </div>

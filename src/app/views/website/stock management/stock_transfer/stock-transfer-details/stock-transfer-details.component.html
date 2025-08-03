@@ -65,34 +65,6 @@
             <span class="validation-text" *ngIf="TransferredQuantityCtrl.errors?.['required']">{{ RequiredFieldMsg }}</span>
           </div>
         </div>
-        <!-- <div class="col-md-4" style="margin-top: 1rem">
-          <label for="Rate"><b>Rate</b></label>
-          <input type="text" appCommaFormat[(ngModel)]="Entity.p.Rate" name="Rate" class="form-control"
-            id="Rate" rows="1" required placeholder="Enter Rate" #RateCtrl="ngModel" (ngModelChange)="calculateAmount()"
-            (blur)="RateCtrl.control.markAsTouched()" (click)="selectAllValue($event)"/>
-          <div style="height: 25px" *ngIf="
-              RateCtrl.invalid &&
-              (RateCtrl.touched || RateCtrl.dirty)
-            ">
-            <span class="validation-text" *ngIf="RateCtrl.errors?.['required']">{{ RequiredFieldMsg }}</span>
-          </div>
-        </div>
-        <div class="col-md-4" style="margin-top: 1rem">
-          <label for="GST"><b>GST</b></label>
-          <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" [nzSize]="'large'"
-            name="GST" [(ngModel)]="Entity.p.GST" required id="GST" (ngModelChange)="calculateAmount()">
-            <nz-option
-            *ngFor="let gst of GSTList"
-            [nzValue]="gst.Ref"
-            [nzLabel]="gst.Name"
-          ></nz-option>
-          </nz-select>
-        </div>
-         <div class="col-md-4" style="margin-top: 1rem">
-          <label for="Amount"><b>Amount</b></label>
-          <input type="text" appCommaFormat [(ngModel)]="Entity.p.Amount" name="Amount" class="form-control" id="Amount"
-             readonly/>
-        </div> -->
         <div class="col-md-4" style="margin-top: 1rem">
           <label for="RemainingQuantity"><b>Remaining Quantity</b></label>
           <input type="text" appCommaFormat [(ngModel)]="Entity.p.RemainingQuantity" name="RemainingQuantity" class="form-control"

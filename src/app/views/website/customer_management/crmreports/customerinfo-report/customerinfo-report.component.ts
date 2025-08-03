@@ -62,7 +62,6 @@ export class CustomerinfoReportComponent implements OnInit {
       return;
     }
     let lst = await CRMReports.FetchEntireListByCompanyAndSiteRef(this.companyRef(), this.SiteRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-    console.log('lst :', lst);
     this.DisplayMasterList = lst;
   }
 

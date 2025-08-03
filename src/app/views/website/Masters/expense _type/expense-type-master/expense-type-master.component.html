@@ -50,13 +50,11 @@
             <Edit-Icon (editClick)="onEditClicked(ExpenseType)" [class.disabled-icon]="
                   ExpenseType.p.ExpenseType === ExpenseTypeRef ||
                   ExpenseType.p.ExpenseType === LabourExpenseRef ||
-                  ExpenseType.p.ExpenseType === OtherExpenseRef
-                " />
+                  ExpenseType.p.ExpenseType === OtherExpenseRef" />
             <Delete-Icon (deleteClicked)="onDeleteClicked(ExpenseType)" [class.disabled-icon]="
                   ExpenseType.p.ExpenseType === ExpenseTypeRef ||
                   ExpenseType.p.ExpenseType === LabourExpenseRef ||
-                  ExpenseType.p.ExpenseType === OtherExpenseRef
-                " />
+                  ExpenseType.p.ExpenseType === OtherExpenseRef" />
           </td>
         </tr>
       </tbody>

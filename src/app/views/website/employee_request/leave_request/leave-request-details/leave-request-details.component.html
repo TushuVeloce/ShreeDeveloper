@@ -16,7 +16,7 @@
       </div>
     </ng-template>
     <form autocomplete="off">
-      <div class="row" style="margin-top: 1rem; ">
+      <div class="row" style="margin-top: 1rem;">
         <div class="col-lg-4 col-md-4 col-sm-12">
           <label>Name</label>
           <input type="text" [(ngModel)]="Entity.p.EmployeeName" disabled name="EmployeeName" class="form-control"
@@ -66,7 +66,7 @@
           <label>Days</label>
           <input type="number" [(ngModel)]="Entity.p.Days" [disabled]="!todate" name="Days" class="form-control"
             id="Days" required placeholder="Enter Days" #DaysCtrl="ngModel" (blur)="DaysCtrl.control.markAsTouched()"
-            (ngModelChange)="onDaysChanged()" (click)="selectAllValue($event); " />
+            (ngModelChange)="onDaysChanged()" (click)="selectAllValue($event);" />
           <div style="height: 25px;" *ngIf="(DaysCtrl.invalid && (DaysCtrl.touched || DaysCtrl.dirty))">
             <span class="validation-text" *ngIf="DaysCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
           </div>

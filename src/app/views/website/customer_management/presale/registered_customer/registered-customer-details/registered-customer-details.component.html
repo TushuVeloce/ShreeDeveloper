@@ -17,7 +17,7 @@
       </div>
     </ng-template>
     <form autocomplete="off">
-      <div class="row" style="margin-top: 1rem; ">
+      <div class="row" style="margin-top: 1rem;">
         <div class="col-md-4 col-6">
           <label>Customer Id</label>
           <input type="text" [(ngModel)]="Entity.p.CustID" name="CustID" class="form-control" id="CustID"
@@ -41,12 +41,12 @@
           </div>
         </div>
       </div>
-      <div class="row" style="margin-top: 1rem; ">
+      <div class="row" style="margin-top: 1rem;">
         <div class="col-12">
           <h3 class="TableHeading"> Customer Details</h3>
         </div>
       </div>
-      <div class="row" style="margin-top: 1rem; ">
+      <div class="row" style="margin-top: 1rem;">
         <div class="col-md-4">
           <div>
             <label>Address</label>
@@ -110,12 +110,12 @@
           </nz-select>
         </div>
       </div>
-      <div class="row" style="margin-top: 1rem; ">
+      <div class="row" style="margin-top: 1rem;">
         <div class="col-12">
           <h3 class="TableHeading">Plot Details</h3>
         </div>
       </div>
-      <div class="row" style="margin-top: 1rem; ">
+      <div class="row" style="margin-top: 1rem;">
         <div class="col-md-4">
           <div>
             <label>Plot Number</label>
@@ -138,7 +138,7 @@
           </div>
         </div>
       </div>
-      <div class="row" style="margin-top: 1rem; ">
+      <div class="row" style="margin-top: 1rem;">
         <div class="col-md-4">
           <div>
             <label>Area Sqft</label>
@@ -149,7 +149,7 @@
         <div class="col-md-4">
           <div>
             <label>Discounted Rate On Area </label>
-            <input type="text" appCommaFormat name="DiscountedRateOnArea " class="form-control" id="DiscountedRateOnArea "
+            <input type="text" appCommaFormat name="DiscountedRateOnArea" class="form-control" id="DiscountedRateOnArea "
               [(ngModel)]="Entity.p.DiscountedRateOnArea" (ngModelChange)="calculateTotalPlotAmount()"
               placeholder="Enter Discounted Rate" (click)="selectAllValue($event)" />
           </div>
@@ -157,13 +157,13 @@
         <div class="col-md-4">
           <div>
             <label>Discount On Total Plot Amount </label>
-            <input type="text" appCommaFormat name="DiscountOnTotalPlotAmount " class="form-control" id="DiscountOnTotalPlotAmount "
+            <input type="text" appCommaFormat name="DiscountOnTotalPlotAmount" class="form-control" id="DiscountOnTotalPlotAmount "
               [(ngModel)]="Entity.p.DiscountOnTotalPlotAmount" (ngModelChange)="calculateTotalPlotAmount()" required
               placeholder="Enter Discount On Total Plot Amount" (click)="selectAllValue($event)" />
           </div>
         </div>
       </div>
-      <div class="row" style="margin-top: 1rem; ">
+      <div class="row" style="margin-top: 1rem;">
         <div class="col-md-4">
           <div>
             <label>Total Plot Amount</label>
@@ -172,12 +172,12 @@
           </div>
         </div>
       </div>
-      <div class="row" style="margin-top: 1rem; ">
+      <div class="row" style="margin-top: 1rem;">
         <div class="col-12">
           <h3 class="TableHeading">Agreement Value & Legal Charges</h3>
         </div>
       </div>
-      <div class="row" style="margin-top: 1rem; ">
+      <div class="row" style="margin-top: 1rem;">
         <div class="col-md-4">
           <div>
             <label>Register Date</label>
@@ -200,7 +200,7 @@
           </div>
         </div>
       </div>
-      <div class="row" style="margin-top: 1rem; ">
+      <div class="row" style="margin-top: 1rem;">
         <div class="col-md-4">
           <div>
             <label>Government Value</label>
@@ -224,7 +224,7 @@
           </div>
         </div>
       </div>
-      <div class="row" style="margin-top: 1rem; ">
+      <div class="row" style="margin-top: 1rem;">
         <div class="col-md-4">
           <div>
             <label>Stamp Duties</label>
@@ -247,7 +247,7 @@
           </div>
         </div>
       </div>
-      <div class="row" style="margin-top: 1rem; ">
+      <div class="row" style="margin-top: 1rem;">
         <div class="col-md-4">
           <div>
             <label>Goods & Services Tax (GST)</label>
@@ -262,7 +262,7 @@
         <div class="col-md-4">
           <div>
             <label>Gst Total Amount </label>
-            <input type="text" appCommaFormat name="GstToatalAmount " class="form-control" id="GstToatalAmount "
+            <input type="text" appCommaFormat name="GstToatalAmount" class="form-control" id="GstToatalAmount "
               [(ngModel)]="Entity.p.GstToatalAmount" required placeholder="Enter Gst Total Amount" disabled />
           </div>
         </div>
@@ -275,7 +275,7 @@
           </div>
         </div>
       </div>
-      <div class="row" style="margin-top: 1rem; ">
+      <div class="row" style="margin-top: 1rem;">
         <div class="col-md-4">
           <div>
             <label>Total Extra Charges</label>

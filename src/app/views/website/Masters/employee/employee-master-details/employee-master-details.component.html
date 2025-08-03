@@ -18,11 +18,11 @@
       </div>
     </ng-template>
     <form autocomplete="off" #employeeForm="ngForm">
-      <div class="row" style="margin-top: 1rem; ">
+      <div class="row" style="margin-top: 1rem;">
         <div class="col-md-4 col-6">
           <div>
             <label>Employee Name</label>
-            <input type="text" name="Name" [(ngModel)]="Entity.p.Name " class="form-control" id="Name" required
+            <input type="text" name="Name" [(ngModel)]="Entity.p.Name" class="form-control" id="Name" required
               placeholder="Enter Employee Name" #NameCtrl="ngModel"
               (blur)="NameCtrl.control.markAsTouched()" />
             <div *ngIf="(NameCtrl.invalid && (NameCtrl.touched || NameCtrl.dirty))">
@@ -33,7 +33,7 @@
         <div class="col-md-4 col-6">
           <div>
             <label>Date of Birth</label>
-            <input type="date" name="DOB " [(ngModel)]="dob " class="form-control" id="DOB " required #DOBCtrl="ngModel"
+            <input type="date" name="DOB" [(ngModel)]="dob" class="form-control" id="DOB" required #DOBCtrl="ngModel"
               (blur)="DOBCtrl.control.markAsTouched()" [max]="maxDOB" />
             <div *ngIf="(DOBCtrl.invalid && (DOBCtrl.touched || DOBCtrl.dirty))">
               <span class="validation-text" *ngIf="DOBCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
@@ -135,14 +135,14 @@
         <div class="col-md-4 col-6">
           <div>
             <label>Emergency Contact Name</label>
-            <input type="text" name="EmergencyContactName " [(ngModel)]="Entity.p.EmergencyContactName"
+            <input type="text" name="EmergencyContactName" [(ngModel)]="Entity.p.EmergencyContactName"
               placeholder="Enter Emergency Contact Name" class="form-control" id="EmergencyContactName" />
           </div>
         </div>
         <div class="col-md-4 col-6">
           <div>
             <label>Emergency Contact No</label>
-            <input type="text" name="EmergencyContactNo " [(ngModel)]="Entity.p.EmergencyContactNo"
+            <input type="text" name="EmergencyContactNo" [(ngModel)]="Entity.p.EmergencyContactNo"
               placeholder="Enter Emengency Contact No" class="form-control" id="EmergencyContactNo "
               pattern="{{INDPhoneNo}}" #EmergencyContactNoCtrl="ngModel" required
               (blur)="EmergencyContactNoCtrl.control.markAsTouched()" />
@@ -179,7 +179,7 @@
           <div>
             <label for="DesignationRef">Designation</label>
             <nz-select class="nzSelect-light" [disabled]="Entity.p.DepartmentRef == 0" [nzNotFoundContent]="noDataTpl"
-              nzShowSearch nzAllowClear nzPlaceHolder="Select" id="DesignationRef " name="DesignationRef "
+              nzShowSearch nzAllowClear nzPlaceHolder="Select" id="DesignationRef" name="DesignationRef "
               [nzSize]="'large'" [(ngModel)]="Entity.p.DesignationRef ">
               <nz-option *ngFor="let designation of DesignationList" [nzValue]="designation.p.Ref"
                 [nzLabel]="designation.p.Name"></nz-option>
@@ -200,8 +200,8 @@
         <div class="col-md-4 col-6">
           <div>
             <label>Date Of Joining</label>
-            <input type="date" name="DateOfJoining " [(ngModel)]="dateofjoining " class="form-control"
-              id="DateOfJoining " required #DateOfJoiningCtrl="ngModel"
+            <input type="date" name="DateOfJoining" [(ngModel)]="dateofjoining" class="form-control"
+              id="DateOfJoining" required #DateOfJoiningCtrl="ngModel"
               (blur)="DateOfJoiningCtrl.control.markAsTouched()" [max]="today" />
             <div *ngIf="(DateOfJoiningCtrl.invalid && (DateOfJoiningCtrl.touched || DateOfJoiningCtrl.dirty))">
               <span class="validation-text" *ngIf="DateOfJoiningCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
@@ -227,7 +227,7 @@
         <div class="col-md-4 col-6">
           <div>
             <label>Bank Name</label>
-            <input type="text" name="BankName  " [(ngModel)]="Entity.p.BankName" class="form-control" id="BankName"
+            <input type="text" name="BankName" [(ngModel)]="Entity.p.BankName" class="form-control" id="BankName"
               [pattern]="NameWithoutNos" placeholder="Enter Bank Name" />
           </div>
         </div>

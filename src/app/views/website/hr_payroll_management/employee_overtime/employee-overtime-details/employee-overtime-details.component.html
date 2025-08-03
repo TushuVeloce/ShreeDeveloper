@@ -17,17 +17,17 @@
     </ng-template>
     <form autocomplete="off" #OvertimeForm="ngForm">
       <div class="row">
-        <div class="col-md-6" style="margin-top: 1rem; ">
+        <div class="col-md-6" style="margin-top: 1rem;">
           <div>
             <label for="Date">Date</label>
             <input type="date" name="Date" required class="form-control" id="Date" [(ngModel)]="Date"
-              placeholder="Enter From Time " #DateCtrl="ngModel" required (blur)="DateCtrl.control.markAsTouched()" />
+              placeholder="Enter From Time" #DateCtrl="ngModel" required (blur)="DateCtrl.control.markAsTouched()" />
             <div *ngIf="(DateCtrl.invalid && (DateCtrl.touched || DateCtrl.dirty))">
               <span class="validation-text" *ngIf="DateCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
             </div>
           </div>
         </div>
-        <div class="col-md-6" style="margin-top: 1rem; ">
+        <div class="col-md-6" style="margin-top: 1rem;">
           <div>
             <label for="EmployeeRef">Employee Name</label>
             <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear

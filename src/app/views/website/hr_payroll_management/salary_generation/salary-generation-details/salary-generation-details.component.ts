@@ -193,7 +193,6 @@ export class SalaryGenerationDetailsComponent implements OnInit {
       this.Entity.p.RemainingAdvance = Number(lst[0].p.RemainingAdvance)
       this.Entity.p.GrossTotal = Number(lst[0].p.GrossTotal)
       this.GrossTotal = Number(lst[0].p.GrossTotal)
-      console.log('lst[0] :', lst[0]);
 
       await this.calculatetotaldeduction()
     }

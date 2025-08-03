@@ -357,7 +357,6 @@ export class StockOrderDetailsComponent implements OnInit {
       await this.uiUtils.showSuccessToster('Material added successfully');
       this.resetMaterialControls()
     }
-    console.log('this.newOrderMaterial :', this.newOrderMaterial);
     this.newOrderMaterial = OrderMaterialDetailProps.Blank();
     this.editingIndex = null;
   }
@@ -392,7 +391,6 @@ export class StockOrderDetailsComponent implements OnInit {
 
     let entityToSave = this.Entity.GetEditableVersion();
     let entitiesToSave = [entityToSave];
-    console.log('entitiesToSave :', entitiesToSave);
 
     if (this.InvoiceFile) {
       lstFTO.push(

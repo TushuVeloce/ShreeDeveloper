@@ -89,11 +89,6 @@ export class OfficeDutyTimeDetailsComponent implements OnInit {
     } else {
       return '';
     }
-
-    // const isPM = value.getHours() >= 12;
-    // const hours12 = (value.getHours() % 12 || 12).toString().padStart(2, '0');
-    // const time12 = `${hours12}:${minutes} ${isPM ? 'PM' : 'AM'}`;
-    // console.log('Time in 12-hour format:', time12);
   };
 
   getFromTime = () => {

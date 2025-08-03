@@ -14,7 +14,7 @@
                   {{ siteWork.SiteWorkName }}:
                 </strong>
               </div>
-              <div class="col-md-3 col-sm-12 col-xs-12 " style="justify-items: end;" *ngFor="let type of siteWork.ApplicableTypes; let i = index">
+              <div class="col-md-3 col-sm-12 col-xs-12" style="justify-items: end;" *ngFor="let type of siteWork.ApplicableTypes; let i = index">
                 <!-- Checkbox -->
                 <div *ngIf="getTypeOnApplicableTypeName(type.SiteWorkApplicableTypeName) === 'checkbox'"
                   style="margin-right: 1.5rem;">

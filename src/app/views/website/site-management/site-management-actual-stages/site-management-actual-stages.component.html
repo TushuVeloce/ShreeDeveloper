@@ -18,18 +18,18 @@
     </ng-template>
     <div class="card-body" style="margin-left: 14px; margin-right: 14px;">
       <form autocomplete="off">
-        <div class="row" style="margin-top: 1rem; ">
-          <div class="col-md-4" style="margin-top: 1rem; ">
+        <div class="row" style="margin-top: 1rem;">
+          <div class="col-md-4" style="margin-top: 1rem;">
             <label for="FromDate"><b>From Date</b></label>
             <input type="date" name="FromDate" class="form-control" id="FromDate" [(ngModel)]="FromDate"
               (ngModelChange)="getActualStageListByAllFilters()" />
           </div>
-          <div class="col-md-4" style="margin-top: 1rem; ">
+          <div class="col-md-4" style="margin-top: 1rem;">
             <label for="ToDate"><b>To Date</b></label>
             <input type="date" name="ToDate" [min]="FromDate" class="form-control" id="ToDate" [(ngModel)]="ToDate"
               (ngModelChange)="getActualStageListByAllFilters()" />
           </div>
-          <div class="col-md-4" style="margin-top: 1rem; ">
+          <div class="col-md-4" style="margin-top: 1rem;">
             <div>
               <label for="SiteRef"><b>Site</b></label>
               <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
@@ -40,7 +40,7 @@
               </nz-select>
             </div>
           </div>
-          <div class="col-md-4" style="margin-top: 1rem; ">
+          <div class="col-md-4" style="margin-top: 1rem;">
             <div>
               <label for="VendorRef"><b>Vendor</b></label>
               <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
@@ -52,7 +52,7 @@
               </nz-select>
             </div>
           </div>
-          <div class="col-md-4" style="margin-top: 1rem; ">
+          <div class="col-md-4" style="margin-top: 1rem;">
             <div>
               <label for="StageRef"><b>Stage</b></label>
               <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
@@ -63,7 +63,7 @@
               </nz-select>
             </div>
           </div>
-          <div class="col-md-4" style="margin-top: 1rem; ">
+          <div class="col-md-4" style="margin-top: 1rem;">
             <label><b>Expense Type</b></label>
             <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
               nzPlaceHolder="Select" id="ExpenseTypeRef" name="ExpenseTypeRef" [nzSize]="'large'"

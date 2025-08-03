@@ -16,15 +16,15 @@
       </div>
     </ng-template>
     <form autocomplete="off">
-      <div class="row" style="margin-top: 1rem; ">
-        <div class="col-md-4" style="margin-top: 1rem; ">
+      <div class="row" style="margin-top: 1rem;">
+        <div class="col-md-4" style="margin-top: 1rem;">
           <label for="SiteRef"><b>Site Name</b></label>
           <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
             nzPlaceHolder="Select" id="SiteRef" name="SiteRef" [nzSize]="'large'" [(ngModel)]="Entity.p.SiteRef">
             <nz-option *ngFor="let site of SiteList" [nzValue]="site.p.Ref" [nzLabel]="site.p.Name"></nz-option>
           </nz-select>
         </div>
-        <div class="col-md-4" style="margin-top: 1rem; ">
+        <div class="col-md-4" style="margin-top: 1rem;">
           <div>
             <label>Date</label>
             <input type="date" [(ngModel)]="Entity.p.Date" name="Date" class="form-control" id="Date" required
@@ -34,7 +34,7 @@
           </div>
           </div>
         </div>
-        <div class="col-md-4" style="margin-top: 1rem; ">
+        <div class="col-md-4" style="margin-top: 1rem;">
           <label>Marketing Type</label>
           <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
             nzPlaceHolder="Select" id="MarketingType" name="MarketingType" [nzSize]="'large'"
@@ -42,7 +42,7 @@
             <nz-option *ngFor="let Mode of MarketingModesList" [nzValue]="Mode.Ref" [nzLabel]="Mode.Name"></nz-option>
           </nz-select>
         </div>
-        <div class="col-md-4" style="margin-top: 1rem; ">
+        <div class="col-md-4" style="margin-top: 1rem;">
           <label>Vendor</label>
           <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
             nzPlaceHolder="Select" id="VendorRef" name="VendorRef" [nzSize]="'large'" [(ngModel)]="Entity.p.VendorRef"
@@ -60,7 +60,7 @@
             placeholder="Services"
           />
         </div> -->
-        <div class="col-md-4" style="margin-top: 1rem; ">
+        <div class="col-md-4" style="margin-top: 1rem;">
           <label>Vendor Service</label>
          <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" [disabled]="VendorServiceListByVendor.length == 0"
             nzShowSearch nzAllowClear nzPlaceHolder="Select" id="VendorServiceRef" name="VendorServiceRef"
@@ -75,7 +75,7 @@
           <input type="text" appCommaFormat [(ngModel)]="Entity.p.Page" name="Page" class="form-control" id="Page" required
             placeholder="Enter Page" (click)="selectAllValue($event)"/>
         </div>
-        <div class="col-md-4" style="margin-top: 1rem; ">
+        <div class="col-md-4" style="margin-top: 1rem;">
           <label>Place</label>
           <input type="text" [(ngModel)]="Entity.p.Place" name="Place" class="form-control" id="Place" required
             placeholder="Enter Place"  #PlaceCtrl="ngModel" required
@@ -84,7 +84,7 @@
             <span class="validation-text" *ngIf="PlaceCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
           </div>
         </div>
-        <div class="col-md-4" style="margin-top: 1rem; ">
+        <div class="col-md-4" style="margin-top: 1rem;">
           <label>Rate</label>
           <input type="text" appCommaFormat [(ngModel)]="Entity.p.Rate" name="Rate" class="form-control" id="Rate" required
             (ngModelChange)="calculateTotal()" (click)="selectAllValue($event)" placeholder="Enter Rate"  #RateCtrl="ngModel"
@@ -93,7 +93,7 @@
             <span class="validation-text" *ngIf="RateCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
           </div>
         </div>
-        <div class="col-md-4" style="margin-top: 1rem; ">
+        <div class="col-md-4" style="margin-top: 1rem;">
           <label>Quantity</label>
           <input type="text" appCommaFormat [(ngModel)]="Entity.p.Quantity" name="Quantity" class="form-control" id="Quantity" required
             (ngModelChange)="calculateTotal()" (click)="selectAllValue($event)" placeholder="Enter Quantity"  #QuantityCtrl="ngModel"
@@ -102,12 +102,12 @@
             <span class="validation-text" *ngIf="QuantityCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
           </div>
         </div>
-        <div class="col-md-4" style="margin-top: 1rem; ">
+        <div class="col-md-4" style="margin-top: 1rem;">
           <label>Total</label>
           <input type="text" appCommaFormat [(ngModel)]="Entity.p.Total" name="Total" class="form-control" id="Total" required
             placeholder="Total" disabled />
         </div>
-        <div class="col-md-4" style="margin-top: 1rem; ">
+        <div class="col-md-4" style="margin-top: 1rem;">
           <label>Name</label>
           <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
             nzPlaceHolder="Select" id="Name" name=" Name" [nzSize]="'large'" [(ngModel)]="Entity.p.Name">
@@ -115,7 +115,7 @@
               [nzLabel]="employee.p.Name"></nz-option>
           </nz-select>
         </div>
-        <div class="col-md-4" style="margin-top: 1rem; ">
+        <div class="col-md-4" style="margin-top: 1rem;">
           <label>Description</label>
           <input type="text" [(ngModel)]="Entity.p.Narration" name="Narration" class="form-control" id="Narration"
             required placeholder="Enter Description" />

@@ -12,11 +12,7 @@
     </nz-button>
   </div>
 </div>
-<div class="row" style="margin-top: 1rem; ">
-  <!-- <div class="col-md-4" style="margin-top: 1rem; ">
-      <label for="Date"><b>Date</b></label>
-      <input type="date" name="Date" class="form-control" id="Date" [(ngModel)]="Entity.p.Date" (ngModelChange)="getRequisitionListByAllFilters()" />
-    </div> -->
+<div class="row" style="margin-top: 1rem;">
   <div class="col-md-4">
     <div>
       <label for="SiteRef"><b>site</b></label>
@@ -28,14 +24,6 @@
       </nz-select>
     </div>
   </div>
-  <!-- <div class="col-md-4">
-    <label><b>Status</b></label>
-    <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear nzPlaceHolder="Select"
-      id="Status" name="Status" [nzSize]="'large'" [(ngModel)]="Entity.p.Status"
-      (ngModelChange)="getRequisitionListByAllFilters()">
-      <nz-option *ngFor="let status of StatusList" [nzValue]="status.Ref" [nzLabel]="status.Name"></nz-option>
-    </nz-select>
-  </div> -->
 </div>
 <ng-template #noDataTpl>
   <div class="no-data-text">Data Not Found</div>
@@ -49,67 +37,6 @@
           <th *ngFor="let header of headers" class="tblheader">{{ header }}</th>
         </tr>
       </thead>
-      <!-- <tbody>
-        <tr *ngFor="let requisition of paginatedList; index as i">
-          <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
-          <td Class="tbldata">{{requisition.p.Date}}</td>
-          <td Class="tbldata">{{requisition.p.SiteName}}</td>
-          <td Class="tbldata">{{requisition.p.MaterialRequisitionDetailsArray[0].MaterialName}}</td>
-           <td Class="tbldata">{{requisition.p.MaterialRequisitionDetailsArray[0].UnitName}}</td>
-            <td Class="tbldata">{{requisition.p.MaterialRequisitionDetailsArray[0].EstimatedQty}}</td>
-            <td Class="tbldata">{{requisition.p.Status}}</td>
-          <td class="tbldata">
-            <span style="margin-left: 9px;" (click)="onEditClicked(requisition);">
-              <img src="\assets\icons\edit.png" alt="logo" title="Edit" width="20px" height="20px" />
-            </span>
-            <span style="margin-left: 9px;" (click)="onDeleteClicked(requisition);">
-              <img src="\assets\icons\delete.png" alt="logo" title="Delete" width="20px" height="20px" /></span>
-          </td>
-        </tr>
-  </ng-container>
-</tr>
-
-      </tbody> -->
-      <!-- <tbody>
-  <ng-container *ngFor="let requisition of paginatedList; let i = index">
-    <ng-container *ngFor="let detail of requisition.p.MaterialRequisitionDetailsArray; let j = index">
-      <tr >
-        <td class="tbldata" *ngIf="j === 0" [attr.rowspan]="requisition.p.MaterialRequisitionDetailsArray.length">
-          {{ (currentPage - 1) * pageSize + i + 1 }}
-        </td>
-
-        <td class="tbldata" *ngIf="j === 0" [attr.rowspan]="requisition.p.MaterialRequisitionDetailsArray.length">
-          {{ formatDate(requisition.p.Date) }}
-        </td>
-
-        <td class="tbldata" *ngIf="j === 0" [attr.rowspan]="requisition.p.MaterialRequisitionDetailsArray.length">
-          {{ requisition.p.SiteName }}
-        </td>
-
-        <td class="tbldata">{{ detail.MaterialName }}</td>
-        <td class="tbldata">{{ detail.UnitName }}</td>
-        <td class="tbldata">{{ detail.EstimatedQty }}</td>
-
-        <td class="tbldata" *ngIf="j === 0" [attr.rowspan]="requisition.p.MaterialRequisitionDetailsArray.length">
-          {{ requisition.p.Status }}
-        </td>
-
-        <td class="tbldata" *ngIf="j === 0" [attr.rowspan]="requisition.p.MaterialRequisitionDetailsArray.length">
-          <span style="margin-left: 9px;" (click)="onEditClicked(requisition)">
-            <img src="/assets/icons/edit.png" alt="Edit" title="Edit" width="20px" height="20px" />
-          </span>
-          <span style="margin-left: 9px;" (click)="onDeleteClicked(requisition)">
-            <img src="/assets/icons/delete.png" alt="Delete" title="Delete" width="20px" height="20px" />
-          </span>
-        </td>
-      </tr>
-      <tr *ngIf="j === requisition.p.MaterialRequisitionDetailsArray.length - 1">
-        <td colspan="8" style="background-color: #333; height: 2px; padding: 0;"></td>
-      </tr>
-    </ng-container>
-  </ng-container>
-</tbody> -->
-
       <tbody>
         <ng-container *ngFor="let requisition of paginatedList; let i = index">
           <ng-container
@@ -124,33 +51,6 @@
               <td class="tbldata">{{ detail.MaterialName }}</td>
               <td class="tbldata">{{ detail.UnitName }}</td>
               <td class="tbldata">{{ detail.RequisitionQty }}</td>
-              <!-- Optional: Requisition status -->
-              <!-- <td class="tbldata">
-                <span class="status" style="cursor: pointer;"
-                  *ngIf="detail.MaterialStatus == MaterialRequisitionStatuses.Pending" ngClass="pending">
-                  Pending
-                </span>
-                <span class="status" *ngIf="detail.MaterialStatus == MaterialRequisitionStatuses.Approved"
-                  ngClass="approved">
-                  Approved
-                </span>
-                <span class="status" *ngIf="detail.MaterialStatus == MaterialRequisitionStatuses.Rejected"
-                  ngClass="rejected">
-                  Rejected
-                </span>
-                <span class="status" *ngIf="detail.MaterialStatus == MaterialRequisitionStatuses.Completed"
-                  ngClass="completed">
-                  Completed
-                </span>
-                <span class="status" *ngIf="detail.MaterialStatus == MaterialRequisitionStatuses.Incomplete"
-                  ngClass="incomplete">
-                  Incomplete
-                </span>
-                <span class="status" *ngIf="detail.MaterialStatus == MaterialRequisitionStatuses.Ordered"
-                  ngClass="ordered">
-                  Ordered
-                </span>
-              </td> -->
               <!-- Actions -->
               <td class="tbldata">
                 <span style="margin-left: 9px;" (click)="onEditClicked(requisition)">

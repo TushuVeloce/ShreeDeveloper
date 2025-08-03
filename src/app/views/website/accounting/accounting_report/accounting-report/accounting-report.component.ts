@@ -119,7 +119,6 @@ export class AccountingReportComponent implements OnInit {
     }
     let lst = await SubLedger.FetchEntireListByLedgerRef(ledgerref, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.SubLedgerList = lst;
-    console.log('this.SubLedgerList :', this.SubLedgerList);
   }
 
   onPayerChange = () => {

@@ -15,16 +15,16 @@
     </div>
   </div>
 
-  <div class="row" style="margin-top: 1rem; ">
-    <div class="col-md-4" style="margin-top: 1rem; ">
+  <div class="row" style="margin-top: 1rem;">
+    <div class="col-md-4" style="margin-top: 1rem;">
       <label for="FromDate"><b>From Date</b></label>
       <input type="date" name="FromDate" class="form-control" id="FromDate" [(ngModel)]="FromDate"  (ngModelChange)="getActualStageListByAllFilters()" />
     </div>
-    <div class="col-md-4" style="margin-top: 1rem; ">
+    <div class="col-md-4" style="margin-top: 1rem;">
       <label for="ToDate"><b>To Date</b></label>
       <input type="date" name="ToDate" class="form-control" id="ToDate" [(ngModel)]="ToDate"  (ngModelChange)="getActualStageListByAllFilters()" />
     </div>
-    <div class="col-md-4" style="margin-top: 1rem; ">
+    <div class="col-md-4" style="margin-top: 1rem;">
       <div>
         <label for="SiteRef"><b>site</b></label>
         <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
@@ -33,7 +33,7 @@
         </nz-select>
       </div>
     </div>
-    <div class="col-md-4" style="margin-top: 1rem; ">
+    <div class="col-md-4" style="margin-top: 1rem;">
       <div>
         <label for="VendorRef"><b>Vendor</b></label>
         <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
@@ -43,7 +43,7 @@
         </nz-select>
       </div>
     </div>
-    <div class="col-md-4" style="margin-top: 1rem; ">
+    <div class="col-md-4" style="margin-top: 1rem;">
       <label><b>Marketing Type</b></label>
       <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear nzPlaceHolder="Select"
         id="MarketingType" name="MarketingType" [nzSize]="'large'" [(ngModel)]="Entity.p.MarketingType"  (ngModelChange)="getActualStageListByAllFilters()" >

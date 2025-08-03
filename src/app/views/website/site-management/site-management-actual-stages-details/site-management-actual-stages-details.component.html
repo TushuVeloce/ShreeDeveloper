@@ -70,7 +70,7 @@
               style="width: 36px; height: 36px; cursor: pointer">
               <i class="fa-solid fa-plus"></i>
             </span>
-            <span *ngIf="isAddingExpense " (click)="cancelNewExpenseType()"
+            <span *ngIf="isAddingExpense" (click)="cancelNewExpenseType()"
               class="ms-2 d-flex justify-content-center align-items-center border rounded text-danger"
               style="width: 36px; height: 36px; cursor: pointer">
               <i class="fa-solid fa-xmark"></i>
@@ -509,7 +509,7 @@
             <div>
               <label for="StartTime">Start Time</label>
               <input type="time" name="StartTime" class="form-control" id="StartTime" [(ngModel)]="TimeEntity.StartTime"
-                (ngModelChange)="calculateWorkedHours()" placeholder="Enter Start Time " #StartTimeCtrl="ngModel"
+                (ngModelChange)="calculateWorkedHours()" placeholder="Enter Start Time" #StartTimeCtrl="ngModel"
                 required (blur)="StartTimeCtrl.control.markAsTouched()" />
               <!-- <i class="fa fa-clock"></i> -->
               <div *ngIf="(StartTimeCtrl.invalid && (StartTimeCtrl.touched || StartTimeCtrl.dirty))">
