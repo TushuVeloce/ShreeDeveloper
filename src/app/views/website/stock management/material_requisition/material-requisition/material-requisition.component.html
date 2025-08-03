@@ -42,7 +42,6 @@
           <ng-container
             *ngFor="let detail of requisition.p.MaterialRequisitionDetailsArray; let materialRowIndex = index">
             <tr>
-              <!-- Sr.No. (optional: can be based on loop index instead) -->
               <td class="tbldata">{{ (currentPage - 1) * pageSize + materialRowIndex + 1 }}</td>
               <!-- Requisition level data -->
               <td class="tbldata">{{ formatDate(requisition.p.Date) }}</td>

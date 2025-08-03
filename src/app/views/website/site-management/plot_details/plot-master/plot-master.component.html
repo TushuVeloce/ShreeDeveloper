@@ -26,7 +26,6 @@
         <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
           nzPlaceHolder="Select" id="SiteManagementRef" name="SiteManagementRef" [nzSize]="'large'"
           [(ngModel)]="Entity.p.SiteManagementRef" (ngModelChange)="onsitechange(Entity.p.SiteManagementRef)">
-          <!-- <nz-option [nzValue]="0" nzLabel="All"></nz-option> -->
           <nz-option *ngFor="let site of SiteList" [nzValue]="site.p.Ref" [nzLabel]="site.p.Name"></nz-option>
         </nz-select>
       </div>
@@ -59,8 +58,6 @@
           <td Class="tbldata">{{formatToFixed(plot.p.AreaInSqm)}}</td>
           <td Class="tbldata">{{formatToFixed(plot.p.AreaInSqft)}}</td>
           <td Class="tbldata">{{plot.p.GovermentRatePerSqm | currency : "INR"}}</td>
-          <!-- <td Class="tbldata">{{plot.p.GovermentRatePerSqft}}</td> -->
-          <!-- <td Class="tbldata">{{plot.p.BasicRatePerSqm}}</td> -->
           <td Class="tbldata">{{plot.p.BasicRatePerSqft | currency : "INR"}}</td>
           <td Class="tbldata">{{plot.p.BookingRemarkName}}</td>
           <td class="tbldata">

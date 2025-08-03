@@ -199,7 +199,6 @@ export class ExpenseDetailsComponent implements OnInit {
       return;
     }
     if (this.Entity.p.RecipientType <= 0) {
-      // await this.uiUtils.showErrorToster('To Whom not Selected');
       return;
     }
 

@@ -4,13 +4,10 @@
       <h1 class="title title_light">Government Office</h1>
     </div>
      <div class="col-4 mb-2 search-container_light">
-      <!-- <input type="text" Class="search-box_light" placeholder="Search..." (input)="filterTable()" autofocus
-        [(ngModel)]="SearchString" /> -->
+
     </div>
     <div class="col-4 mb-2" routerLinkActive="active">
-      <!-- <nz-button nz-button class="btn1" (click)='AddDocument ()'>
-        Add Document
-      </nz-button> -->
+
     </div>
     <div>
     </div>
@@ -44,7 +41,6 @@
           <strong>{{ siteWork.SiteWorkName }}</strong>
           <ul>
             <li *ngFor="let type of siteWork.ApplicableTypes">
-              <!-- {{ type.SiteWorkApplicableTypeName }}: {{ type.Value || 'N/A' }} -->
               {{ type.SiteWorkApplicableTypeName }} : <!-- Checkbox Input -->
               <input *ngIf="getTypeOnApplicableTypeName(type.SiteWorkApplicableTypeName) === 'checkbox'"
                 class="form-check-input" style="align-self: flex-end;" type="checkbox" [(ngModel)]="type.Value" [checked]="type.Value === 'true'">

@@ -4,7 +4,6 @@
       <h1 style="padding-top: 3px;" class="title title_light">Actual Stage List</h1>
     </div>
      <div class="col-4 mb-2 search-container_light">
-      <!-- <input type="text" Class="search-box_light" placeholder="Search..." autofocus /> -->
     </div>
     <div class="col-4 mb-2" routerLinkActive="active">
       <nz-button nz-button class="btn1" (click)="AddActualStages()">
@@ -154,10 +153,7 @@
           <td Class="tbldata" style="white-space: nowrap;">{{formatDate(LabourExpense.p.Date)}}</td>
           <td Class="tbldata" style="white-space: nowrap;">{{LabourExpense.p.ChalanNo}}</td>
           <td Class="tbldata" style="white-space: nowrap;">{{LabourExpense.p.SiteName}}</td>
-          <!-- <td Class="tbldata">{{LabourExpense.p.Description}}</td> -->
           <td Class="tbldata" style="white-space: nowrap;">{{LabourExpense.p.VendorName}}</td>
-          <!-- <td Class="tbldata">{{LabourExpense.p.Rate}}</td>
-          <td Class="tbldata">{{LabourExpense.p.Quantity}}</td> -->
           <td Class="tbldata" style="white-space: nowrap;">{{LabourExpense.p.GrandTotal}}</td>
           <td class="tbldata" style="white-space: nowrap;">
             <Edit-Icon (editClick)="onEditClicked(LabourExpense)" />
@@ -204,8 +200,6 @@
           <td Class="tbldata" style="white-space: nowrap;">{{OtherExpense.p.ChalanNo}}</td>
           <td Class="tbldata" style="white-space: nowrap;">{{OtherExpense.p.ExpenseTypeName}}</td>
           <td Class="tbldata" style="white-space: nowrap;">{{OtherExpense.p.SiteName}}</td>
-          <!-- <td Class="tbldata">{{OtherExpense.p.Description}}</td> -->
-          <!-- <td Class="tbldata" style="white-space: nowrap;">{{OtherExpense.p.VendorName}}</td> -->
           <td Class="tbldata" style="white-space: nowrap;">{{OtherExpense.p.Quantity}}</td>
           <td Class="tbldata" style="white-space: nowrap;">{{OtherExpense.p.Rate}}</td>
           <td Class="tbldata" style="white-space: nowrap;">{{OtherExpense.p.GrandTotal}}</td>

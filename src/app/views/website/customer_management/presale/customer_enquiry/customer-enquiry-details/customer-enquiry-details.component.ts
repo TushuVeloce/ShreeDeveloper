@@ -6,7 +6,6 @@ import {
   ValidationMessages, ValidationPatterns,
 } from 'src/app/classes/domain/constants';
 import {
-  BookingRemark,
   BookingRemarks,
   DomainEnums,
 } from 'src/app/classes/domain/domainenums/domainenums';
@@ -14,7 +13,6 @@ import { CustomerEnquiry } from 'src/app/classes/domain/entities/website/custome
 import { CustomerFollowUp } from 'src/app/classes/domain/entities/website/customer_management/customerfollowup/customerfollowup';
 import {
   CustomerFollowUpPlotDetails,
-  CustomerFollowUpPlotDetailsProps,
 } from 'src/app/classes/domain/entities/website/customer_management/customerfollowupplotdetails/CustomerFollowUpPlotDetails';
 import { City } from 'src/app/classes/domain/entities/website/masters/city/city';
 import { Country } from 'src/app/classes/domain/entities/website/masters/country/country';
@@ -77,7 +75,6 @@ export class CustomerEnquiryDetailsComponent implements OnInit {
   @ViewChild('PinCodeCtrl') PinCodeNoInputControl!: NgModel;
   @ViewChild('localSiteVisitDateCtrl') localSiteVisitDateInputControl!: NgModel;
   @ViewChild('localOfficeVisitDateDateCtrl') localOfficeVisitDateDateInputControl!: NgModel;
-  // @ViewChild('localSiteVisitDateCtrl') localSiteVisitDateInputControl!: NgModel;
 
   MarketingModesList = DomainEnums.MarketingModesList(
     true,
@@ -150,10 +147,7 @@ export class CustomerEnquiryDetailsComponent implements OnInit {
         this.localOfficeVisitDate = this.dtu.ConvertStringDateToShortFormat(
           this.Entity.p.CustomerFollowUps[0].OfficeVisitDate
         );
-        // this.localOfficeVisitDate = this.datePipe.transform(
-        //   this.dtu.FromString(this.Entity.p.OfficeVisitDate),
-        //   'yyyy-MM-dd'
-        // );
+
       }
 
       // Reminde Date
@@ -161,10 +155,6 @@ export class CustomerEnquiryDetailsComponent implements OnInit {
         this.localReminderDate = this.dtu.ConvertStringDateToShortFormat(
           this.Entity.p.CustomerFollowUps[0].ReminderDate
         );
-        // this.localReminderDate = this.datePipe.transform(
-        //   this.dtu.FromString(this.Entity.p.ReminderDate),
-        //   'yyyy-MM-dd'
-        // );
       }
 
       this.appStateManage.StorageKey.removeItem('Editable');
@@ -192,7 +182,6 @@ export class CustomerEnquiryDetailsComponent implements OnInit {
       CustomerEnquiry.CreateNewInstance(),
       this.utils.DeepCopy(this.Entity)
     ) as CustomerEnquiry;
-    // this.focusInput();
 
     if (this.Entity.p.CustomerFollowUps[0].TransDateTime.trim().length <= 0) {
       let strCDT = await CurrentDateTimeRequest.GetCurrentDateTime();
@@ -285,7 +274,6 @@ export class CustomerEnquiryDetailsComponent implements OnInit {
     this.PlotList = []
     this.InterestedPlotRef = 0;
     if (siteRef <= 0) {
-      // await this.uiUtils.showWarningToster(`Please Select Site`);
       return;
     }
     let lst = await Plot.FetchEntireListBySiteRef(
@@ -369,9 +357,6 @@ export class CustomerEnquiryDetailsComponent implements OnInit {
     }
   }
 
-  // onPlotSelected(selectedvalue: any) {
-  //   this.Entity.p.CustomerFollowUpPlotDetails = selectedvalue;
-  // }
   selectedCustomerStatus: number = 0;
   isReminderRequired: boolean = false;
   reminderMessage: string = '';
@@ -393,11 +378,6 @@ export class CustomerEnquiryDetailsComponent implements OnInit {
   markTouched(control: any) {
     control.control.markAsTouched();
   }
-
-  // isSIteVisitSelected(): boolean {
-  // const visitRefs = [30, 40, 50]; // these are the "visit" type Ref values
-  // return visitRefs.includes(this.Entity.p.CustomerFollowUps[0].ContactMode);
-  // }
 
   resetAllControls = () => {
     // reset touched
@@ -446,10 +426,6 @@ export class CustomerEnquiryDetailsComponent implements OnInit {
 
 
     this.Entity.p.IsNewlyCreated = this.IsNewEntity;
-
-    // if (this.Entity.p.CustomerFollowUps[0].CustomerStatus == 30 || this.Entity.p.CustomerFollowUps[0].CustomerStatus == 40) {
-    //   this.Entity.p.CustomerFollowUps[0].ReminderDate = '';
-    // }
 
     this.Entity.p.CustomerFollowUps[0].TransDateTime = this.DateWithTime!;
     this.Entity.p.CustomerFollowUps[0].SiteVisitDate = this.dtu.ConvertStringDateToFullFormat(this.localSiteVisitDate);

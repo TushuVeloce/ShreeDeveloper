@@ -29,12 +29,6 @@
           <tr *ngFor="let document  of paginatedList; index as i">
             <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
             <td Class="tbldata">{{document.p.SiteName}}</td>
-            <!-- <td Class="tbldata">{{document.p.TpOffice}}</td>
-            <td Class="tbldata">{{document.p.NALetter}}</td>
-            <td Class="tbldata">{{document.p.Mojani}}</td>
-            <td Class="tbldata">{{document.p.ULC}}</td>
-            <td Class="tbldata">{{document.p.FinalLayout}}</td>
-            <td Class="tbldata">{{document.p.KaJaPa}}</td> -->
             <td class="tbldata">
               <span style="margin-left: 9px;" (click)="onEditClicked(document );">
                 <img src="\assets\icons\edit.png" alt="logo" title="Edit" width="20px" height="20px" />

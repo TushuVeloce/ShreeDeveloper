@@ -70,15 +70,9 @@
         <nz-option *ngFor="let Month of MonthList" [nzLabel]="Month.Name" [nzValue]="Month.Ref"></nz-option>
       </nz-select>
     </div>
-    <!-- To Date
-      <div class="col-12 col-md-4">
-        <label class="form-label">To Date</label>
-        <input type="date" class="form-control" />
-      </div> -->
   </div>
 </div>
 <!-- for table  -->
-<!-- <div *ngFor="let empName of groupedAttendanceLogs | keyvalue"> -->
 <div class="mb-5 p-3 border rounded shadow-sm bg-light">
   <h5 class="mb-3">{{ Entity.p.EmployeeName }}</h5>
   <div class="summary-label">Summary</div>
@@ -108,7 +102,6 @@
   </div>
   <!-- For table  -->
   <div class="table-wrapper tblcard_light" style="margin-top: 2rem" *ngIf="DisplayMasterList.length > 0">
-    <!-- <div class="table-container"> -->
     <div class="table-container">
       <nz-table #basicTable nzSize="small" class="no-hover-table bgtable_light" [nzData]="paginatedList()"
         [nzScroll]="{x:'auto' }" nzFrontPagination="false" [nzShowSizeChanger]="false">
@@ -122,8 +115,10 @@
             <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
             <td Class="tbldata">{{attendancelog.p.EmployeeName}}</td>
             <td Class="tbldata">{{ formatDate(attendancelog.p.TransDateTime) }}</td>
-            <td Class="tbldata">{{attendancelog.p.FirstCheckInTime ? convertTo12Hour(attendancelog.p.FirstCheckInTime) : "--"}}</td>
-            <td Class="tbldata">{{attendancelog.p.LastCheckOutTime? convertTo12Hour(attendancelog.p.LastCheckOutTime) : "--"}}</td>
+            <td Class="tbldata">{{attendancelog.p.FirstCheckInTime ? convertTo12Hour(attendancelog.p.FirstCheckInTime) :
+              "--"}}</td>
+            <td Class="tbldata">{{attendancelog.p.LastCheckOutTime? convertTo12Hour(attendancelog.p.LastCheckOutTime) :
+              "--"}}</td>
             <td Class="tbldata">{{attendancelog.p.TotalWorkingHrs?
               convertFractionTimeToHM(attendancelog.p.TotalWorkingHrs): "--"}}</td>
             <td Class="tbldata">{{attendancelog.p.OnLeave ?
@@ -153,8 +148,6 @@
         </tbody>
       </nz-table>
     </div>
-
-    <!-- </div> -->
   </div>
   <div *ngIf="DisplayMasterList.length === 0" class="card-body_light">
     <div style="height: 200px" class="d-flex align-items-center justify-content-center">
@@ -162,8 +155,8 @@
     </div>
   </div>
 </div>
- <div class="pagination-wrapper">
-      <nz-pagination class="try light-theme" *ngIf="DisplayMasterList.length > 0" [nzTotal]="DisplayMasterList.length"
-        [nzPageSize]="pageSize" [(nzPageIndex)]="currentPage" (nzPageIndexChange)="onPageChange($event)">
-      </nz-pagination>
-    </div>
+<div class="pagination-wrapper">
+  <nz-pagination class="try light-theme" *ngIf="DisplayMasterList.length > 0" [nzTotal]="DisplayMasterList.length"
+    [nzPageSize]="pageSize" [(nzPageIndex)]="currentPage" (nzPageIndexChange)="onPageChange($event)">
+  </nz-pagination>
+</div>

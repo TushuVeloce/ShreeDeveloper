@@ -171,9 +171,6 @@
                 <td Class="tbldata">{{ material.InwardQty }}</td>
                 <td Class="tbldata">{{ material.PurchaseOrderRemainingQty}}</td>
                 <td class="tbldata">
-                  <!-- <span style="margin-left: 9px" (click)="editMaterial(i)">
-                    <img src="\assets\icons\edit.png" alt="logo" title="Edit" width="20px" height="20px" />
-                  </span> -->
                   <span style="margin-left: 9px" (click)="removeMaterial(i)">
                     <img src="\assets\icons\delete.png" alt="logo" title="Delete" width="20px" height="20px" /></span>
                 </td>
@@ -194,7 +191,6 @@
           margin-top: 2rem;
         ">
         <div>
-          <!-- <button  type="button" class="btn" (click)="SaveStockInward()" [disabled]="isSaveDisabled"> -->
           <button type="button" class="btn" (click)="SaveStockInward()">
             Save
           </button>

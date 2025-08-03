@@ -6,28 +6,6 @@
     <app-shared-filter [masterList]="MasterList" [filterFields]="['Name']"
       (filteredList)="DisplayMasterList = $event"></app-shared-filter>
   </div>
-  <!-- <div class="card-body" style="margin-left: 14px;">
-        <form autocomplete="off">
-          <div class="row">
-            <div class="col-md-4">
-               <label>Name</label>
-                <input
-                  type="text"
-                  name="name"
-                  class="form-control"
-                  id="name"
-                  required
-                  placeholder="Enter Country Name"
-                />
-              </div>
-          <div class="col-md-2" style="justify-content: center; display: flex; gap: 2rem; margin-top : 5vh">
-              <div>
-                <button type="button" class="btn">Save</button>
-              </div>
-          </div>
-        </div>
-        </form>
-      </div> -->
 </div>
 <div class="table-wrapper" class="tblcard_light" style="margin-top: 2rem" *ngIf="DisplayMasterList.length > 0">
   <div class="table-container">

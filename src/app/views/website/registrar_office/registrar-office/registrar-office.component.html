@@ -1,17 +1,11 @@
 <div class="row">
-   <div class="col-4 mb-2">
+  <div class="col-4 mb-2">
     <h1 style="padding-top: 3px" class="title title_light">Registrar Office</h1>
   </div>
   <div class="col-4 mb-2 search-container_light">
     <app-shared-filter [masterList]="MasterList" [filterFields]="['CustomerName']"
       (filteredList)="DisplayMasterList = $event"></app-shared-filter>
   </div>
-  <!-- <div class="col-4 mb-2" routerLinkActive="active">v
-  >
-    <nz-button nz-button class="btn1" (click)="AddRegistrarOffice()">
-      Add Registrar Office
-    </nz-button>
-  </div> -->
   <ng-template #noDataTpl>
     <div style="text-align: center; color: rgba(0, 0, 0, 0.25);">
       No Data
@@ -34,13 +28,6 @@
         <nz-option *ngFor="let plot of PlotNoList" [nzValue]="plot.p.Ref" [nzLabel]="plot.p.PlotNo"></nz-option>
       </nz-select>
     </div>
-    <!-- <div class="col-md-4">
-      <label for="CustomerRef"><b>Customer Name</b></label>
-      <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="CustomerRef"
-        name="CustomerRef" [nzSize]="'large'" [(ngModel)]="Entity.p.CustomerRef" (ngModelChange)="getRegistrarOfficeListByCustomerRef(Entity.p.CustomerRef)">
-        <nz-option *ngFor="let customer of CustomerList" [nzValue]="customer.p.Ref" [nzLabel]="customer.p.CustomerName"></nz-option>
-      </nz-select>
-    </div> -->
   </div>
 </div>
 <div class="table-wrapper" class="tblcard_light" style="margin-top: 2rem" *ngIf="DisplayMasterList.length > 0">
@@ -56,7 +43,6 @@
         <tr *ngFor="let registraroffice of paginatedList; index as i">
           <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
           <td Class="tbldata">{{ registraroffice.p.CustomerName }}</td>
-          <!-- <td Class="tbldata">{{registraroffice.p.IsChequeSubmit}}</td> -->
           <td class="tbldata">
             <span class="status" [ngClass]="registraroffice.p.IsChequeSubmit ? 'completed' : 'pending' ">
               {{ registraroffice.p.IsChequeSubmit ? "Completed" : "Pending" }}
@@ -107,8 +93,6 @@
             <span style="margin-left: 9px" (click)="onEditClicked(registraroffice)">
               <img src="\assets\icons\edit.png" alt="logo" title="Edit" width="20px" height="20px" />
             </span>
-            <!-- <span style="margin-left: 9px;" (click)="onDeleteClicked(registraroffice);">
-              <img src="\assets\icons\delete.png" alt="logo" title="Delete" width="20px" height="20px" /></span> -->
           </td>
         </tr>
       </tbody>

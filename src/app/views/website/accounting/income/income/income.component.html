@@ -96,7 +96,6 @@
             {{ Income.p.ShreesBalance | currency : "INR" }}
           </td>
           <td Class="tbldata">{{ Income.p.ModeOfPaymentName }}</td>
-          <!-- <td Class="tbldata">{{Income.p.Narration}}</td> -->
           <td class="tbldata">
             <Edit-Icon (editClick)="onEditClicked(Income)" />
             <Delete-Icon (deleteClicked)="onDeleteClicked(Income)" />
@@ -144,7 +143,6 @@
         <td Class="tbldata">{{ Income.p.IncomeAmount | currency : "INR" }}</td>
         <td Class="tbldata">{{ Income.p.ShreesBalance | currency : "INR" }}</td>
         <td Class="tbldata">{{ Income.p.ModeOfPaymentName }}</td>
-        <!-- <td Class="tbldata">{{Income.p.Narration}}</td> -->
       </tr>
     </tbody>
   </table>

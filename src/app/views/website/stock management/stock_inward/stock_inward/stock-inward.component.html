@@ -68,10 +68,6 @@
                 [attr.rowspan]="Inward.p.MaterialInwardDetailsArray.length">
                 {{ Inward.p.SiteName }}
               </td>
-              <!-- <td class="tbldata" *ngIf="j === 0" [attr.rowspan]="Inward.p.MaterialInwardDetailsArray.length"
-                width="9%">
-                {{ formatDate(Inward.p.PurchaseOrderDate ) }}
-              </td> -->
               <td class="tbldata" *ngIf="j === 0" [attr.rowspan]="Inward.p.MaterialInwardDetailsArray.length">
                 {{ Inward.p.VendorName }}
               </td>
@@ -84,38 +80,6 @@
               <td Class="tbldata" width="9%">
                 {{ detail.Date ? formatDate(detail.Date) : '--'}}
               </td>
-              <!-- Optional: Requisition status -->
-              <!-- <td class="tbldata" *ngIf="j === 0" [attr.rowspan]="Inward.p.MaterialInwardDetailsArray.length">
-                <span class="status" *ngIf="Inward.p.MaterialInwardStatus == MaterialInwardStatus.Pending"
-                  ngClass="pending">
-                  Pending
-                </span>
-
-                <span class="status" style="cursor: pointer;"
-                  *ngIf="Inward.p.MaterialInwardStatus == MaterialInwardStatus.Approved" ngClass="approved">
-                  Approved
-                </span>
-
-                <span class="status" *ngIf="Inward.p.MaterialInwardStatus == MaterialInwardStatus.Rejected"
-                  ngClass="rejected">
-                  Rejected
-                </span>
-
-                <span class="status" *ngIf="Inward.p.MaterialInwardStatus == MaterialInwardStatus.Completed"
-                  ngClass="completed">
-                  Completed
-                </span>
-
-                <span class="status" *ngIf="Inward.p.MaterialInwardStatus == MaterialInwardStatus.Incomplete"
-                  ngClass="incomplete">
-                  Incomplete
-                </span>
-
-                <span class="status" *ngIf="Inward.p.MaterialInwardStatus == MaterialInwardStatus.Ordered"
-                  ngClass="ordered">
-                  Ordered
-                </span>
-              </td> -->
 
               <td class="tbldata" *ngIf="j === 0" [attr.rowspan]="Inward.p.MaterialInwardDetailsArray.length">
                 <span style="margin-left: 5px; margin-right: 5px; cursor: pointer;">
@@ -124,29 +88,6 @@
                 <span style="margin-left: 5px;" (click)="onEditClicked(Inward)">
                   <img src="/assets/icons/edit.png" alt="Edit" title="Edit" width="20px" height="20px" />
                 </span>
-                <!-- <span style="margin-left: 5px;" (click)="onDeleteClicked(Inward)">
-                  <img src="/assets/icons/delete.png" alt="Delete" title="Delete" width="20px" height="20px" />
-                </span> -->
-                <!-- <span style="margin-left: 5px;"
-                  *ngIf="!checkIsEnable(Inward.p.MaterialInwardDetailsArray) || Inward.p.MaterialInwardStatus == MaterialInwardStatus.Approved"
-                  (click)="onEditClicked(Order)">
-                  <img src="/assets/icons/edit.png" alt="Edit" title="Edit" width="20px" height="20px" />
-                </span>
-                <span style="margin-left: 5px;"
-                  *ngIf="!checkIsEnable(Inward.p.MaterialInwardDetailsArray) || Inward.p.MaterialInwardStatus == MaterialInwardStatus.Approved"
-                  (click)="onDeleteClicked(Order)">
-                  <img src="/assets/icons/delete.png" alt="Delete" title="Delete" width="20px" height="20px" />
-                </span>
-                <span style="margin-left: 5px;"
-                  *ngIf="checkIsEnable(Inward.p.MaterialInwardDetailsArray) && Inward.p.MaterialInwardStatus != MaterialInwardStatus.Approved">
-                  <img src="/assets/icons/GrayEditIcon.png" alt="Edit" title="Disable Edit" width="20px"
-                    height="20px" />
-                </span>
-                <span style="margin-left: 5px;"
-                  *ngIf="checkIsEnable(Inward.p.MaterialInwardDetailsArray) && Inward.p.MaterialInwardStatus != MaterialInwardStatus.Approved">
-                  <img src="/assets/icons/GreyDustbin.png" alt="Delete" title="Disable Delete" width="20px"
-                    height="20px" />
-                </span> -->
               </td>
             </tr>
             <tr *ngIf="j === Inward.p.MaterialInwardDetailsArray.length - 1 && !Entity.p.SiteRef">

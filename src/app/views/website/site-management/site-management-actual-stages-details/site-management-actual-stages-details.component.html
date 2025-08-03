@@ -175,12 +175,6 @@
           <input type="text" [(ngModel)]="Entity.p.VehicleNo" name="VehicleNo" class="form-control" id="VehicleNo"
             placeholder="Enter Vehicle No" #VehicleNoCtrl="ngModel" (blur)="VehicleNoCtrl.control.markAsTouched()"
             maxlength="10" />
-          <!-- <div *ngIf="
-              VehicleNoCtrl.invalid &&
-              (VehicleNoCtrl.touched || VehicleNoCtrl.dirty)
-            ">
-            <span class="validation-text" *ngIf="VehicleNoCtrl.errors?.['pattern']">{{ NameWithNosAndSpaceMsg }}</span>
-          </div> -->
         </div>
         <div [ngClass]="{
           'col-lg-3 col-md-6 col-sm-12 mb-3': Entity.p.ExpenseTypeRef === ExpenseTypeRef,
@@ -511,7 +505,6 @@
               <input type="time" name="StartTime" class="form-control" id="StartTime" [(ngModel)]="TimeEntity.StartTime"
                 (ngModelChange)="calculateWorkedHours()" placeholder="Enter Start Time" #StartTimeCtrl="ngModel"
                 required (blur)="StartTimeCtrl.control.markAsTouched()" />
-              <!-- <i class="fa fa-clock"></i> -->
               <div *ngIf="(StartTimeCtrl.invalid && (StartTimeCtrl.touched || StartTimeCtrl.dirty))">
                 <span class="validation-text" *ngIf="StartTimeCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
               </div>
@@ -523,8 +516,6 @@
               <input type="time" name="EndTime" class="form-control" id="EndTime" [(ngModel)]="TimeEntity.EndTime"
                 (ngModelChange)="calculateWorkedHours()" placeholder="Enter To Time" #EndTimeCtrl="ngModel" required
                 (blur)="EndTimeCtrl.control.markAsTouched()" />
-              <!-- <i class="fa fa-clock"></i> -->
-
               <div *ngIf="(EndTimeCtrl.invalid && (EndTimeCtrl.touched || EndTimeCtrl.dirty))">
                 <span class="validation-text" *ngIf="EndTimeCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
               </div>

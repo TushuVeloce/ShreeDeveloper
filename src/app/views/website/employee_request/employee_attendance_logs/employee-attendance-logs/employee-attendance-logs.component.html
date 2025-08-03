@@ -21,8 +21,6 @@
       </div>
       <div class="col-12 col-md-3"> </div>
       <div class="col-12 col-md-2">
-        <!-- <button type="button" class="mybtn" (click)="AddAttendance()">Add
-          Attendance</button> -->
       </div>
     </div>
   </div>
@@ -70,24 +68,14 @@
           <nz-option *ngFor="let Month of MonthList" [nzLabel]="Month.Name" [nzValue]="Month.Ref"></nz-option>
         </nz-select>
       </div>
-      <!-- To Date
-      <div class="col-12 col-md-4">
-        <label class="form-label">To Date</label>
-        <input type="date" class="form-control" />
-      </div> -->
     </div>
   </div>
-  <!-- for table  -->
-  <!-- <div *ngFor="let empName of groupedAttendanceLogs | keyvalue"> -->
   <div class="mb-5 p-3 border rounded shadow-sm bg-light">
     <h5 class="mb-3">{{ Entity.p.EmployeeName }}</h5>
     <div class="summary-label">Summary</div>
     <!-- ROW 2: Attendance Count -->
     <div class="p-3 rounded border bg-white shadow-sm">
       <div class="row g-3">
-        <!-- <div class="col-6 col-md-3" *ngIf="!isDaysShow && !isDaysShowMonth">
-          <button class="attbtn teamsize w-100">Team Size: <strong>{{ AttendanceLogCount.p.TeamSize }}</strong></button>
-        </div> -->
         <div class="col-6 col-md-3" *ngIf="!isDaysShow && !isDaysShowMonth">
           <button class="attbtn days w-100">Days: <strong>1</strong></button>
         </div>
@@ -111,7 +99,6 @@
     </div>
     <!-- For table  -->
     <div class="table-wrapper tblcard_light" style="margin-top: 2rem" *ngIf="DisplayMasterList.length > 0">
-      <!-- <div class="table-container"> -->
       <nz-table #basicTable nzSize="small" class="no-hover-table bgtable_light" [nzScroll]="{x:'auto' }"
         nzFrontPagination="false" [nzShowSizeChanger]="false" [nzTotal]="total" [nzPageSize]="pageSize"
         [nzPageIndex]="currentPage" (nzPageIndexChange)="onPageChange($event)" [nzData]="paginatedList"
@@ -136,17 +123,9 @@
               '--'}}</td>
             <td Class="tbldata" *ngIf="isTodayAttendanceView">{{attendancelog.p.LeaveType ? attendancelog.p.LeaveType :
               '--'}}</td>
-            <!-- <td class="tbldata">
-            <span style="margin-left: 9px;">
-              <img src="\assets\icons\edit.png" alt="logo" title="Edit" width="20px" height="20px" />
-            </span>
-            <span style="margin-left: 9px;">
-              <img src="\assets\icons\delete.png" alt="logo" title="Delete" width="20px" height="20px" /></span>
-          </td> -->
           </tr>
         </tbody>
       </nz-table>
-      <!-- </div> -->
     </div>
     <div class="fixed-pagination">
       <nz-pagination class="try light-theme" [nzPageSize]="pageSize" [nzTotal]="total" [(nzPageIndex)]="currentPage"

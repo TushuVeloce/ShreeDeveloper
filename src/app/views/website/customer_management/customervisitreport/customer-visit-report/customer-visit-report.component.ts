@@ -54,10 +54,6 @@ export class CustomerVisitReportComponent implements OnInit {
     this.Entity.p.SiteRef = 0
     let lst = await Site.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.SiteList = lst;
-    // if (this.SiteList.length > 0) {
-    //   this.Entity.p.SiteRef = this.SiteList[0].p.Ref
-    //   this.getCustomerVisitListBySiteRef()
-    // }
   }
 
   // Extracted from services date conversion //

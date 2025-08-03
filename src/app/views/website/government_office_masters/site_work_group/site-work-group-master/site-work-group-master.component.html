@@ -28,13 +28,6 @@
             <td Class="tbldata">{{SiteWorkGroup.p.Name}}</td>
             <td Class="tbldata">{{SiteWorkGroup.p.DisplayOrder}}</td>
             <td class="tbldata">
-
-              <!-- <span style="margin-left: 9px;" (click)="onEditClicked(SiteWorkGroup);">
-              <img src="\assets\icons\edit.png" alt="logo" title="Edit" width="20px" height="20px" />
-            </span> -->
-              <!-- <span style="margin-left: 9px;" (click)="onDeleteClicked(SiteWorkGroup);">
-              <img src="\assets\icons\delete.png" alt="logo" title="Delete" width="20px" height="20px" /></span> -->
-
               <Edit-Icon (editClick)="onEditClicked(SiteWorkGroup)" />
               <Delete-Icon (deleteClicked)="onDeleteClicked(SiteWorkGroup)" />
             </td>
@@ -48,12 +41,6 @@
       </nz-pagination>
     </div>
   </div>
-  <!-- <div *ngIf="DisplayMasterList.length === 0" class="card-body_light">
-  <div style="height: 60vh" class="d-flex align-items-center justify-content-center">
-    <span class="title_light"> Data Not Found</span>
-  </div>
-</div> -->
-
   <div *ngIf="DisplayMasterList.length === 0">
     <Data-Not-Found />
   </div>
