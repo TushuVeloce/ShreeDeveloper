@@ -6,7 +6,9 @@
       </h1>
     </div>
     <div class="col-4 mb-2 search-container_light">
-      <app-shared-filter [masterList]="MasterList" [filterFields]="[ 'SiteName', 'PlotName', 'CustomerName', 'CustomerMobileNo', 'CustomerAddress']" (filteredList)="DisplayMasterList = $event"></app-shared-filter>
+      <app-shared-filter [masterList]="MasterList"
+        [filterFields]="[ 'SiteName', 'PlotName', 'CustomerName', 'CustomerMobileNo', 'CustomerAddress']"
+        (filteredList)="DisplayMasterList = $event"></app-shared-filter>
     </div>
     <div></div>
   </div>
@@ -50,7 +52,9 @@
                 <img src="\assets\icons\edit.png" alt="logo" title="Edit" width="20px" height="20px" />
               </span>
               <span style="margin-left: 9px" (click)="CancelDeal(registercustomer)">
-                <img src="\assets\icons\Cancel.png" alt="logo" title="Edit" width="20px" height="20px" />
+                <img
+                  [src]="registercustomer.p.ValueOfAgreement ? '/assets/icons/greencross.png' : '/assets/icons/Cancel.png'"
+                  alt="logo" title="Edit" width="20px" height="20px" />
               </span>
             </td>
           </tr>
