@@ -52,10 +52,10 @@
         <input type="text" [(ngModel)]="Entity.p.MobileNo" name="MobileNo" class="form-control" id="MobileNo" required
           placeholder="Enter Mobile No." pattern="{{INDPhoneNo}}" #MobileNoCtrl="ngModel"
           (blur)="MobileNoCtrl.control.markAsTouched()" />
-        <div *ngIf="(MobileNoCtrl.invalid && (MobileNoCtrl.touched || MobileNoCtrl.dirty))">
-          <span class="validation-text" *ngIf="MobileNoCtrl.errors?.['pattern']">{{INDPhoneNoMsg}}</span>
+        <!-- <div *ngIf="(MobileNoCtrl.invalid && (MobileNoCtrl.touched || MobileNoCtrl.dirty))"> -->
+          <!-- <span class="validation-text" *ngIf="MobileNoCtrl.errors?.['pattern']">{{INDPhoneNoMsg}}</span> -->
           <!-- <span class="validation-text" *ngIf="MobileNoCtrl.errors?.['required']">{{RequiredFieldMsg}}</span> -->
-        </div>
+        <!-- </div> -->
       </div>
       <div class="col-md-4 col-6">
         <label for="AddressLine1">Address Line 1</label>
