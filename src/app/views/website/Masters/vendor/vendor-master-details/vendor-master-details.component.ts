@@ -63,7 +63,7 @@ export class VendorMasterDetailsComponent implements OnInit {
   @ViewChild('NameCtrl') NameInputControl!: NgModel;
   @ViewChild('CodeCtrl') CodeInputControl!: NgModel;
   @ViewChild('AddressLine1Ctrl') AddressLine1InputControl!: NgModel;
-  @ViewChild('MobileNoCtrl') MobileNoInputControl!: NgModel;
+  // @ViewChild('MobileNoCtrl') MobileNoInputControl!: NgModel;
   @ViewChild('TradeNameCtrl') TradeNameInputControl!: NgModel;
   @ViewChild('PinCodeCtrl') PinCodeInputControl!: NgModel;
   @ViewChild('BankNameCtrl') BankNameInputControl!: NgModel;
@@ -226,7 +226,7 @@ export class VendorMasterDetailsComponent implements OnInit {
     this.NameInputControl.control.markAsUntouched();
     this.CodeInputControl.control.markAsUntouched();
     this.AddressLine1InputControl.control.markAsUntouched();
-    this.MobileNoInputControl.control.markAsUntouched();
+    // this.MobileNoInputControl.control.markAsUntouched();
     this.TradeNameInputControl.control.markAsUntouched();
     this.BankNameInputControl.control.markAsUntouched();
     this.BranchNameInputControl.control.markAsUntouched();
@@ -237,7 +237,7 @@ export class VendorMasterDetailsComponent implements OnInit {
     this.NameInputControl.control.markAsPristine();
     this.CodeInputControl.control.markAsPristine();
     this.AddressLine1InputControl.control.markAsPristine();
-    this.MobileNoInputControl.control.markAsPristine();
+    // this.MobileNoInputControl.control.markAsPristine();
     this.TradeNameInputControl.control.markAsPristine();
     this.BankNameInputControl.control.markAsPristine();
     this.BranchNameInputControl.control.markAsPristine();
