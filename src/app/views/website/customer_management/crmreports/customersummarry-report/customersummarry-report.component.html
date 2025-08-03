@@ -21,7 +21,7 @@
           <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
             nzPlaceHolder="Select" id="CustomerRef" name="CustomerRef" [nzSize]="'large'" [(ngModel)]="CustomerRef"
             (ngModelChange)="OnCustomerSelection()">
-            <nz-option *ngFor="let cus of CustomerList" [nzValue]="cus.p.CustomerEnquiryRef"
+            <nz-option *ngFor="let cus of CustomerList" [nzValue]="cus.p.PlotNo"
               [nzLabel]="cus.p.CustID"></nz-option>
           </nz-select>
         </div>

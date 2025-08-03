@@ -15,7 +15,7 @@ export class CustomersummarryReportComponent implements OnInit {
   SiteList: Site[] = [];
   CustomerList: CRMReports[] = [];
   SiteRef: number = 0;
-  CustomerRef: number = 0;
+  CustomerRef: string = '';
   companyRef = this.companystatemanagement.SelectedCompanyRef;
 
   constructor(private uiUtils: UIUtils, private companystatemanagement: CompanyStateManagement) {
@@ -47,7 +47,7 @@ export class CustomersummarryReportComponent implements OnInit {
   getCustomerReportByCompanyAndSiteRef = async () => {
     this.Entity = CRMReports.CreateNewInstance();
     this.CustomerList = [];
-    this.CustomerRef = 0
+    this.CustomerRef = ''
     if (this.companyRef() <= 0) {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
@@ -64,7 +64,7 @@ console.log("Filtered customer list:", this.CustomerList);
   }
 
   OnCustomerSelection = () => {
-    let report = this.CustomerList.filter((data) => data.p.CustomerEnquiryRef == this.CustomerRef);
+    let report = this.CustomerList.filter((data) => data.p.PlotNo == this.CustomerRef);
     if (report.length > 0) {
       this.Entity = report[0];
     }

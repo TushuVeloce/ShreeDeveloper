@@ -2,6 +2,7 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { NgForm, NgModel } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ValidationMessages, ValidationPatterns } from 'src/app/classes/domain/constants';
+import { MaterialRequisitionStatuses } from 'src/app/classes/domain/domainenums/domainenums';
 import { Material } from 'src/app/classes/domain/entities/website/masters/material/material';
 import { MaterialFromOrder } from 'src/app/classes/domain/entities/website/masters/material/orderedmaterial/materialfromorder';
 import { Site } from 'src/app/classes/domain/entities/website/masters/site/site';
@@ -69,6 +70,10 @@ export class StockInwardDetailsComponent implements OnInit {
   imagePostView: string = '';
   imagePostViewUrl: string = '';
   selectedFileName: string = '';
+
+  Ordered = MaterialRequisitionStatuses.Ordered;
+  Incomplete = MaterialRequisitionStatuses.Incomplete;
+
 
   NameWithoutNos: string = ValidationPatterns.NameWithoutNos
   PinCodePattern: string = ValidationPatterns.PinCode;
@@ -194,7 +199,7 @@ export class StockInwardDetailsComponent implements OnInit {
       async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
     );
 
-    this.PurchaseOrderIdList = lst;
+    this.PurchaseOrderIdList = lst.filter((data) => data.p.MaterialPurchaseOrderStatus == this.Incomplete || data.p.MaterialPurchaseOrderStatus == this.Ordered);
 
   };
 
@@ -270,10 +275,12 @@ export class StockInwardDetailsComponent implements OnInit {
 
   CalculateRemainingQty = (InwardQty: number, RemainingQty: number) => {
     InwardQty = Number(InwardQty) || 0;
-    if (RemainingQty - InwardQty > 0) {
+    if (RemainingQty - InwardQty >= 0) {
       this.NewRemainingQty = RemainingQty - InwardQty;
     } else {
-      this.NewRemainingQty = 0;
+      this.uiUtils.showErrorToster('Inward quantity cannot be greater than the Order quantity');
+      this.newInward.InwardQty = 0;
+      this.NewRemainingQty = RemainingQty;
     }
   }
 
