@@ -74,10 +74,6 @@ export class CustomerinfoReportComponent implements OnInit {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
-    if (this.SiteRef <= 0) {
-      await this.uiUtils.showErrorToster('Site not Selected');
-      return;
-    }
     let lst = await CRMReports.FetchEntireListByCompanyAndSiteRef(this.companyRef(), this.SiteRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.DisplayMasterList = lst;
   }

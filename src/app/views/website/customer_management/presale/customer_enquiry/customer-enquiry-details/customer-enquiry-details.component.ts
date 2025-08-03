@@ -294,7 +294,7 @@ export class CustomerEnquiryDetailsComponent implements OnInit {
     this.PlotList = lst.filter((plot) => plot.p.CurrentBookingRemark == BookingRemarks.Plot_Of_Owner || plot.p.CurrentBookingRemark == BookingRemarks.Plot_Of_Shree);
   };
 
-  addDataToTable() {
+    addDataToTable() {
     if (this.SiteManagementRef <= 0) {
       this.uiUtils.showWarningToster(`Please Select a Site`);
       return;
@@ -342,6 +342,7 @@ export class CustomerEnquiryDetailsComponent implements OnInit {
       this.IsPlotDetails = true;
       this.SiteManagementRef = 0;
       this.InterestedPlotRef = 0;
+      this.PlotList = []
     }
   }
 
