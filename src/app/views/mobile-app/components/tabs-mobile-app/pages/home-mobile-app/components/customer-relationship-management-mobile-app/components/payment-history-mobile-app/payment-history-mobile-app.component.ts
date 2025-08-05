@@ -25,7 +25,8 @@ export class PaymentHistoryMobileAppComponent implements OnInit {
   SelectedIncome: Income = Income.CreateNewInstance();
   CustomerRef: number = 0;
   companyRef: number = 0;
-  Printheaders: string[] = ['Sr. No.', 'Site Name', 'Plot No', 'Customer Name', 'Address', 'Contact No', 'Customer Requirement'];
+  Printheaders: string[] = ['Sr.No.', 'Date', 'Site Name', 'Payer Name', 'Amount', 'Mode of Payment', 'Reason'];
+  headers: string[] = ['Sr.No.', 'Date', 'Site Name', 'Payer Name', 'Amount', 'Mode of Payment', 'Reason','Actions'];
   modalOpen = false;
 
   filters: FilterItem[] = [];

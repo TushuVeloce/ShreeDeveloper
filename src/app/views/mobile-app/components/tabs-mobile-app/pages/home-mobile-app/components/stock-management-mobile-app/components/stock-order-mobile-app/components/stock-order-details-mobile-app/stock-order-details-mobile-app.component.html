@@ -1,451 +1,440 @@
 <app-header-with-back-handler title={{DetailsFormTitle}}></app-header-with-back-handler>
 
-<ion-content class="form-container">
-  <ion-list lines="none" class="ion-padding">
-    <!--  Date -->
-    <!-- <ion-item class="input-item">
-      <ion-label>Select Date</ion-label>
-      <ion-datetime-button datetime="FromDate" trigger="entry-date-modal"></ion-datetime-button>
-    </ion-item>
-    <ion-modal keepContentsMounted="true" trigger="entry-date-modal">
-      <ng-template>
-        <ion-datetime id="FromDate" presentation="date" [(ngModel)]="Date" show-default-buttons="true"
-          (ionChange)="onDateChange($event.detail.value)"></ion-datetime>
-      </ng-template>
-    </ion-modal> -->
-    <ion-item (click)="showPurchaseOrderDatePicker = true" class="input-item">
-      <ion-label>Date</ion-label>
-      <ion-label slot="end">{{ DisplayPurchaseOrderDate || 'Select Date' }}</ion-label>
-    </ion-item>
-    <app-date-picker [show]="showPurchaseOrderDatePicker" [selectedDate]="PurchaseOrderDate" [defaultToday]="true"
-      (dateChanged)="onPurchaseOrderDateChange($event)"
-      (dateSelected)="DisplayPurchaseOrderDate = $event; showPurchaseOrderDatePicker = false"
-      (modalDismissed)="showPurchaseOrderDatePicker = false" />
+<ion-content class="form-container" [scrollEvents]="true">
+  <form>
+    <ion-list lines="none" class="ion-padding">
+      <!--  Date -->
+      <ion-item class="input-item">
+        <ion-label>Select Date</ion-label>
+        <ion-datetime-button datetime="PurchaseOrderDate"
+          trigger="PurchaseOrderDate-modal"></ion-datetime-button>
+        <ion-checkbox slot="end" name = "PurchaseOrderDateCheckBox" [(ngModel)]="PurchaseOrderDate" name="TransDate" [disabled]="true"></ion-checkbox>
+      </ion-item>
+      <ion-modal keepContentsMounted="true" trigger="PurchaseOrderDate-modal">
+        <ng-template>
+          <ion-datetime id="PurchaseOrderDate" name="PurchaseOrderDate" presentation="date" [(ngModel)]="PurchaseOrderDate"
+            show-default-buttons="true" (ionChange)="onPurchaseOrderDateChange($event.detail.value)"></ion-datetime>
+        </ng-template>
+      </ion-modal>
 
+      <!-- Select site -->
+      <ion-item class="input-item" button detail (click)="selectSiteBottomsheet()" [disabled]="SiteList.length == 0">
+        <ion-label>Site</ion-label>
 
-    <!-- Select site -->
-    <ion-item class="input-item" button detail (click)="selectSiteBottomsheet()" [disabled]="SiteList.length == 0">
-      <ion-label>Site</ion-label>
-
-      <!-- Text showing the selected status -->
-      <ion-text slot="end" class="status-text">
-        {{ SiteName|| 'Select' }}
-      </ion-text>
-
-    </ion-item>
-
-    <!-- Select Ledger -->
-    <ion-item class="input-item" button detail (click)="selectLedgerBottomsheet()" [disabled]="LedgerList.length == 0">
-      <ion-label>Ledger</ion-label>
-
-      <!-- Text showing the selected status -->
-      <ion-text slot="end" class="status-text">
-        {{ LedgerName|| 'Select' }}
-      </ion-text>
-    </ion-item>
-
-    <!-- Select Sub Ledger -->
-    <ion-item class="input-item" button detail (click)="selectsubLedgerBottomsheet()" [disabled]="SubLedgerList.length == 0">
-      <ion-label>Sub Ledger</ion-label>
-
-      <!-- Text showing the selected status -->
-      <ion-text slot="end" class="status-text">
-        {{ subLedgerName|| 'Select' }}
-      </ion-text>
-    </ion-item>
-
-    <!-- Description input-->
-    <ion-item class="input-item">
-      <ion-input label="Description" labelPlacement="floating" placeholder="Enter Description"
-        [(ngModel)]="Entity.p.Description" ></ion-input>
-    </ion-item>
-
-    <!-- Reason input-->
-    <ion-item class="input-item">
-      <ion-input label="Reason" labelPlacement="floating" placeholder="Enter Reason" [(ngModel)]="Entity.p.Reason"
-        ></ion-input>
-    </ion-item>
-
-    <!-- Narration input-->
-    <ion-item class="input-item">
-      <ion-input label="Narration" labelPlacement="floating" placeholder="Enter Narration" [(ngModel)]="Entity.p.Narration"
-        ></ion-input>
-    </ion-item>
-
-    <!-- Select Vendor -->
-    <ion-item class="input-item" button detail (click)="selectVendorBottomsheet()" [disabled]="VendorList.length == 0">
-      <ion-label>Vendor</ion-label>
-
-      <!-- Text showing the selected status -->
-      <ion-text slot="end" class="status-text">
-        {{ VendorName|| 'Select' }}
-      </ion-text>
-    </ion-item>
-
-    <!-- Vendor Trade Name input-->
-    <ion-item class="input-item">
-      <ion-input label="Vendor Trade" labelPlacement="floating" placeholder="Enter Vendor Trade"
-        [(ngModel)]="Entity.p.VendorTradeName" [disabled]="'true'"></ion-input>
-    </ion-item>
-
-    <!-- Address input-->
-    <ion-item class="input-item">
-      <ion-input label="Address" labelPlacement="floating" placeholder="Enter Address"
-        [(ngModel)]="Entity.p.AddressLine1" [disabled]="'true'"></ion-input>
-    </ion-item>
-
-    <!-- Material List Header -->
-    <ion-grid class="ion-margin-top">
-      <ion-row class="ion-align-items-center">
-        <ion-col size="6">
-          <h5><strong>Order Material List</strong></h5>
-        </ion-col>
-        <ion-col size="6" class="ion-text-right">
-          <ion-button fill="outline" size="small" (click)="openModal(100)">
-            <ion-icon name="add-circle-outline" slot="start"></ion-icon>
-            Add
-          </ion-button>
-        </ion-col>
-      </ion-row>
-    </ion-grid>
-
-    <!-- Material Table -->
-    <ng-container *ngIf="Entity.p.MaterialPurchaseOrderDetailsArray.length > 0; else noMaterials">
-      <div class="table-container">
-        <div class="table-scroll">
-          <table class="custom-table ion-text-center">
-            <thead>
-              <tr>
-                <th class="sticky-col sticky-header">#</th>
-                <th *ngFor="let item of OrderMaterialheaders" class="sticky-header">{{ item }}</th>
-                <th class="sticky-col sticky-header">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let item of Entity.p.MaterialPurchaseOrderDetailsArray; let i = index">
-                <td class="sticky-col">{{i + 1 }}</td>
-                <td>
-                  {{ item.MaterialName }}
-                </td>
-                <td>
-                  {{ item.UnitName || '-' }}
-                </td>
-                <td>
-                  {{ item.RequisitionQty || '-' }}
-                </td>
-                <td>
-                  {{ item.OrderedQty || '-' }}
-                </td>
-                <td>
-                  {{ item.RequisitionRemainingQty || '-' }}
-                </td>
-                <td>
-                  {{ item.Rate || '-' }}
-                </td>
-                <td>
-                  {{ item.DiscountedRate || '-' }}
-                </td>
-                <td>
-                  {{ item.Gst || '-' }}
-                </td>
-                <td>
-                  {{ item.DeliveryCharges || '-' }}
-                </td>
-                <td>
-                  {{ formatDate(item.ExpectedDeliveryDate) || '-' }}
-                </td>
-                <td>
-                  {{ item.NetAmount || '-' }}
-                </td>
-                <td>
-                  {{ item.TotalAmount || '-' }}
-                </td>
-                <td>
-                  <ion-icon name="create-outline" color="warning" size="small"
-                    style="margin-right: 12px; cursor: pointer" (click)="editOrderMaterial(i)"></ion-icon>
-                  <ion-icon name="trash-outline" color="danger" size="small" style="cursor: pointer"
-                    (click)="removeOrderMaterial(i)"></ion-icon>
-                </td>
-              </tr>
-              <tr>
-                <td class="sticky-col" colspan="2"><b>Grand Total</b></td>
-                <td colspan="11"></td>
-                <td><b>{{ getGrandTotal() | currency : "INR" }}</b></td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </ng-container>
-
-    <ng-template #noMaterials>
-      <div class="ion-padding ion-text-center">
-        <ion-text color="medium">
-          <p>No material data available</p>
+        <!-- Text showing the selected status -->
+        <ion-text slot="end" class="status-text">
+          {{ SiteName|| 'Select' }}
         </ion-text>
-      </div>
-    </ng-template>
 
-    <ion-grid class="ion-margin-top">
-      <ion-row class="ion-align-items-center">
-        <ion-col size="6">
-          <h5><strong>File Upload</strong></h5>
-        </ion-col>
-        <ion-col size="6" class="ion-text-right">
-          <ion-button fill="outline" size="small" (click)="fileInput.click()"
-            [disabled]="selectedFiles.length >= maxFiles">
-            <ion-icon name="cloud-upload-outline" slot="start"></ion-icon>
-            Choose Files
-          </ion-button>
-          <input #fileInput type="file" hidden (change)="onFilesSelected($event)" multiple
-            accept="image/*,application/pdf" />
-        </ion-col>
-      </ion-row>
-    </ion-grid>
+      </ion-item>
 
-    <ng-container *ngIf="hasFiles(); else noFiles">
-      <ion-text color="danger" *ngIf="selectedFiles.length >= maxFiles">
-        Maximum {{ maxFiles }} files allowed.
-      </ion-text>
+      <!-- Select Ledger -->
+      <ion-item class="input-item" button detail (click)="selectLedgerBottomsheet()"
+        [disabled]="LedgerList.length == 0">
+        <ion-label>Ledger</ion-label>
 
-      <ion-grid>
-        <ion-row>
-          <ion-col size="4" class="ion-text-center" *ngFor="let file of previewFiles(); let i = index">
-            <div class="file-preview-container">
-              <div class="file-preview">
-                <!-- Existing File -->
-                <ng-container *ngIf="selectedFiles.length==0 && selectedFileName">
-                  <img *ngIf="isImageFile(selectedFileName)" [src]="imagePostView" class="preview-img"
-                    (click)="viewImage(imagePostView)" />
-                  <img *ngIf="!isImageFile(selectedFileName)" [src]="'assets/icons/doc-placeholder.png'"
-                    class="preview-pdf" (click)="fileNavigation(selectedFileName)" />
-                </ng-container>
+        <!-- Text showing the selected status -->
+        <ion-text slot="end" class="status-text">
+          {{ LedgerName|| 'Select' }}
+        </ion-text>
+      </ion-item>
 
-                <!-- Uploaded File -->
-                <ng-container *ngIf="selectedFiles.length">
-                  <img *ngIf="file.type === 'image'" [src]="file.preview" class="preview-img"
-                    (click)="viewImage(file.preview)" />
-                  <img *ngIf="file.type === 'pdf'" [src]="file.preview" class="preview-pdf"
-                    (click)="viewPdf(file.file)" />
-                  <ion-button size="small" color="danger" fill="clear" (click)="removeFile(i)">
-                    <ion-icon name="trash-outline"></ion-icon>
-                  </ion-button>
-                </ng-container>
-              </div>
-            </div>
+      <!-- Select Sub Ledger -->
+      <ion-item class="input-item" button detail (click)="selectsubLedgerBottomsheet()"
+        [disabled]="SubLedgerList.length == 0">
+        <ion-label>Sub Ledger</ion-label>
+
+        <!-- Text showing the selected status -->
+        <ion-text slot="end" class="status-text">
+          {{ subLedgerName|| 'Select' }}
+        </ion-text>
+      </ion-item>
+
+      <!-- Description input-->
+      <ion-item class="input-item">
+        <ion-input label="Description" name="Description" labelPlacement="floating" placeholder="Enter Description"
+          [(ngModel)]="Entity.p.Description"></ion-input>
+      </ion-item>
+
+      <!-- Reason input-->
+      <ion-item class="input-item">
+        <ion-input label="Reason" name="Reason" labelPlacement="floating" placeholder="Enter Reason"
+          [(ngModel)]="Entity.p.Reason"></ion-input>
+      </ion-item>
+
+      <!-- Narration input-->
+      <ion-item class="input-item">
+        <ion-input label="Narration" name="Narration" labelPlacement="floating" placeholder="Enter Narration"
+          [(ngModel)]="Entity.p.Narration"></ion-input>
+      </ion-item>
+
+      <!-- Select Vendor -->
+      <ion-item class="input-item" button detail (click)="selectVendorBottomsheet()"
+        [disabled]="VendorList.length == 0">
+        <ion-label>Vendor</ion-label>
+
+        <!-- Text showing the selected status -->
+        <ion-text slot="end" class="status-text">
+          {{ VendorName|| 'Select' }}
+        </ion-text>
+      </ion-item>
+
+      <!-- Vendor Trade Name input-->
+      <ion-item class="input-item">
+        <ion-input label="Vendor Trade" name="VendorTradeName" labelPlacement="floating" placeholder="Enter Vendor Trade"
+          [(ngModel)]="Entity.p.VendorTradeName" [disabled]="'true'"></ion-input>
+      </ion-item>
+
+      <!-- Address input-->
+      <ion-item class="input-item">
+        <ion-input label="Address" name="Address" labelPlacement="floating" placeholder="Enter Address"
+          [(ngModel)]="Entity.p.AddressLine1" [disabled]="'true'"></ion-input>
+      </ion-item>
+
+      <!-- Material List Header -->
+      <ion-grid class="ion-margin-top">
+        <ion-row class="ion-align-items-center">
+          <ion-col size="6">
+            <h5><strong>Order Material List</strong></h5>
+          </ion-col>
+          <ion-col size="6" class="ion-text-right">
+            <ion-button fill="outline" size="small" (click)="openModal(100)">
+              <ion-icon name="add-circle-outline" slot="start"></ion-icon>
+              Add
+            </ion-button>
           </ion-col>
         </ion-row>
       </ion-grid>
-    </ng-container>
 
-    <ng-template #noFiles>
-      <div class="ion-padding ion-text-center">
-        <ion-text color="medium">
-          <p>No file records available</p>
-        </ion-text>
-      </div>
-    </ng-template>
-
-    <!-- Image Modal -->
-    <ion-modal [isOpen]="isImageModalOpen" (didDismiss)="isImageModalOpen = false" class="custom-modal-mobile-app">
-      <ng-template>
-        <ion-header class="modal-toolbar-mobile-app">
-          <ion-toolbar color="primary">
-            <ion-title>Image Preview</ion-title>
-            <ion-buttons slot="end">
-              <ion-button fill="clear" (click)="isImageModalOpen = false">
-                <ion-icon name="close-outline"></ion-icon>
-              </ion-button>
-            </ion-buttons>
-          </ion-toolbar>
-        </ion-header>
-
-        <ion-content scroll-y="true" class="ion-padding modal-content-mobile-app">
-          <div class="image-preview-wrapper-modal">
-            <img [src]="selectedImage" class="full-image-modal" />
+      <!-- Material Table -->
+      <ng-container *ngIf="Entity.p.MaterialPurchaseOrderDetailsArray.length > 0; else noMaterials">
+        <div class="table-container">
+          <div class="table-scroll">
+            <table class="custom-table ion-text-center">
+              <thead>
+                <tr>
+                  <th class="sticky-col sticky-header">#</th>
+                  <th *ngFor="let item of OrderMaterialheaders" class="sticky-header">{{ item }}</th>
+                  <th class="sticky-col sticky-header">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let item of Entity.p.MaterialPurchaseOrderDetailsArray; let i = index">
+                  <td class="sticky-col">{{i + 1 }}</td>
+                  <td>
+                    {{ item.MaterialName }}
+                  </td>
+                  <td>
+                    {{ item.UnitName || '-' }}
+                  </td>
+                  <td>
+                    {{ item.RequisitionQty || '-' }}
+                  </td>
+                  <td>
+                    {{ item.OrderedQty || '-' }}
+                  </td>
+                  <td>
+                    {{ item.RequisitionRemainingQty || '-' }}
+                  </td>
+                  <td>
+                    {{ item.Rate || '-' }}
+                  </td>
+                  <td>
+                    {{ item.DiscountedRate || '-' }}
+                  </td>
+                  <td>
+                    {{ item.Gst || '-' }}
+                  </td>
+                  <td>
+                    {{ item.DeliveryCharges || '-' }}
+                  </td>
+                  <td>
+                    {{ formatDate(item.ExpectedDeliveryDate) || '-' }}
+                  </td>
+                  <td>
+                    {{ item.NetAmount || '-' }}
+                  </td>
+                  <td>
+                    {{ item.TotalAmount || '-' }}
+                  </td>
+                  <td>
+                    <ion-icon name="create-outline" color="warning" size="small"
+                      style="margin-right: 12px; cursor: pointer" (click)="editOrderMaterial(i)"></ion-icon>
+                    <ion-icon name="trash-outline" color="danger" size="small" style="cursor: pointer"
+                      (click)="removeOrderMaterial(i)"></ion-icon>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="sticky-col" colspan="2"><b>Grand Total</b></td>
+                  <td colspan="10"></td>
+                  <td><b>{{ getGrandTotal() | currency : "INR" }}</b></td>
+                </tr>
+              </tbody>
+            </table>
           </div>
-        </ion-content>
+        </div>
+      </ng-container>
+
+      <ng-template #noMaterials>
+        <div class="ion-padding ion-text-center">
+          <ion-text color="medium">
+            <p>No material data available</p>
+          </ion-text>
+        </div>
       </ng-template>
-    </ion-modal>
+
+      <ion-grid class="ion-margin-top">
+        <ion-row class="ion-align-items-center">
+          <ion-col size="6">
+            <h5><strong>File Upload</strong></h5>
+          </ion-col>
+          <ion-col size="6" class="ion-text-right">
+            <ion-button fill="outline" size="small" (click)="fileInput.click()"
+              [disabled]="selectedFiles.length >= maxFiles">
+              <ion-icon name="cloud-upload-outline" slot="start"></ion-icon>
+              Choose Files
+            </ion-button>
+            <input #fileInput type="file" name="file" hidden (change)="onFilesSelected($event)" multiple
+              accept="image/*,application/pdf" />
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+
+      <ng-container *ngIf="hasFiles(); else noFiles">
+        <ion-text color="danger" *ngIf="selectedFiles.length >= maxFiles">
+          Maximum {{ maxFiles }} files allowed.
+        </ion-text>
+
+        <ion-grid>
+          <ion-row>
+            <ion-col size="4" class="ion-text-center" *ngFor="let file of previewFiles(); let i = index">
+              <div class="file-preview-container">
+                <div class="file-preview">
+                  <!-- Existing File -->
+                  <ng-container *ngIf="selectedFiles.length==0 && selectedFileName">
+                    <img *ngIf="isImageFile(selectedFileName)" [src]="imagePostView" class="preview-img"
+                      (click)="viewImage(imagePostView)" />
+                    <img *ngIf="!isImageFile(selectedFileName)" [src]="'assets/icons/doc-placeholder.png'"
+                      class="preview-pdf" (click)="fileNavigation(selectedFileName)" />
+                  </ng-container>
+
+                  <!-- Uploaded File -->
+                  <ng-container *ngIf="selectedFiles.length">
+                    <img *ngIf="file.type === 'image'" [src]="file.preview" class="preview-img"
+                      (click)="viewImage(file.preview)" />
+                    <img *ngIf="file.type === 'pdf'" [src]="file.preview" class="preview-pdf"
+                      (click)="viewPdf(file.file)" />
+                    <ion-button size="small" color="danger" fill="clear" (click)="removeFile(i)">
+                      <ion-icon name="trash-outline"></ion-icon>
+                    </ion-button>
+                  </ng-container>
+                </div>
+              </div>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ng-container>
+
+      <ng-template #noFiles>
+        <div class="ion-padding ion-text-center">
+          <ion-text color="medium">
+            <p>No file records available</p>
+          </ion-text>
+        </div>
+      </ng-template>
+
+      <!-- Image Modal -->
+      <ion-modal [isOpen]="isImageModalOpen" (didDismiss)="isImageModalOpen = false" class="custom-modal-mobile-app">
+        <ng-template>
+          <ion-header class="modal-toolbar-mobile-app">
+            <ion-toolbar color="primary">
+              <ion-title>Image Preview</ion-title>
+              <ion-buttons slot="end">
+                <ion-button fill="clear" (click)="isImageModalOpen = false">
+                  <ion-icon name="close-outline"></ion-icon>
+                </ion-button>
+              </ion-buttons>
+            </ion-toolbar>
+          </ion-header>
+
+          <ion-content scroll-y="true" class="ion-padding modal-content-mobile-app">
+            <div class="image-preview-wrapper-modal">
+              <img [src]="selectedImage" class="full-image-modal" />
+            </div>
+          </ion-content>
+        </ng-template>
+      </ion-modal>
 
 
-    <ion-modal [isOpen]="isOrderMaterialModalOpen" (didDismiss)="isOrderMaterialModalOpen=false"
-      class="custom-modal-mobile-app">
-      <ng-template>
+      <ion-modal [isOpen]="isOrderMaterialModalOpen" (didDismiss)="isOrderMaterialModalOpen=false"
+        class="custom-modal-mobile-app">
+        <ng-template>
 
-        <ion-header class="modal-toolbar-mobile-app">
-          <ion-toolbar color="primary">
-            <ion-title>Material Details</ion-title>
-            <ion-buttons slot="end">
-              <ion-button fill="clear" (click)="closeModal(100)">
-                <ion-icon name="close-outline"></ion-icon>
-              </ion-button>
-            </ion-buttons>
-          </ion-toolbar>
-        </ion-header>
+          <ion-header class="modal-toolbar-mobile-app">
+            <ion-toolbar color="primary">
+              <ion-title>Material Details</ion-title>
+              <ion-buttons slot="end">
+                <ion-button fill="clear" (click)="closeModal(100)">
+                  <ion-icon name="close-outline"></ion-icon>
+                </ion-button>
+              </ion-buttons>
+            </ion-toolbar>
+          </ion-header>
 
-        <ion-content scroll-y="true" class="ion-padding modal-content-mobile-app">
-          <ion-list lines="none">
-            <!-- Material Dropdown -->
-            <ion-item class="input-item" button detail (click)="selectMaterialBottomsheet()" *ngIf="!ModalEditable" [disabled]="StockOrderList.length == 0">
-              <ion-label>Material Name</ion-label>
+          <ion-content scroll-y="true" class="ion-padding modal-content-mobile-app">
+            <ion-list lines="none">
+              <!-- Material Dropdown -->
+              <ion-item class="input-item" button detail (click)="selectMaterialBottomsheet()" *ngIf="!ModalEditable"
+                [disabled]="StockOrderList.length == 0">
+                <ion-label>Material Name</ion-label>
 
-              <!-- Text showing the selected status -->
-              <ion-text slot="end" class="status-text">
-                {{ MaterialName|| 'Select' }}
-              </ion-text>
-
-              <!-- Dropdown icon (chevron) on the right -->
-              <!-- <ion-icon name="chevron-down-outline" slot="end" class="dropdown-icon"></ion-icon> -->
-            </ion-item>
-
-            <!-- Material input-->
-            <ion-item class="input-item" *ngIf="ModalEditable">
-              <ion-input label="Material Name" labelPlacement="floating" placeholder="Enter Material Name"
-                [(ngModel)]="newOrderMaterial.MaterialName" [disabled]="'true'"></ion-input>
-            </ion-item>
-
-            <!-- Unit -->
-            <ion-item class="input-item">
-              <ion-input label="Unit" labelPlacement="floating" placeholder="Enter Unit"
-                [(ngModel)]="newOrderMaterial.UnitName" [disabled]="'true'"></ion-input>
-            </ion-item>
-
-            <!--Requisition Quantity -->
-            <ion-item class="input-item">
-              <ion-input label="Requisition Qty" labelPlacement="floating" type="number" placeholder="Enter Quantity"
-                [(ngModel)]="newOrderMaterial.RequisitionQty" clearInput="true" clearOnEdit="true"
-                [disabled]="'true'"></ion-input>
-            </ion-item>
-
-            <!--Total Ordered Quantity -->
-            <ion-item class="input-item">
-              <ion-input label="Total Ordered Qty" labelPlacement="floating" type="number"
-                placeholder="Enter Total Ordered Quantity" [(ngModel)]="newOrderMaterial.TotalOrderedQty"
-                clearInput="true" clearOnEdit="true" [disabled]="'true'"></ion-input> </ion-item>
-
-            <!--Ordered Quantity -->
-            <ion-item class="input-item">
-              <ion-input label="Ordered Qty" labelPlacement="floating" type="number"
-                placeholder="Enter Ordered Quantity" [(ngModel)]="newOrderMaterial.OrderedQty" clearInput="true"
-                clearOnEdit="true" (ngModelChange)="CalculateNetAmountAndTotalAmount()"></ion-input> </ion-item>
-
-            <!-- Requisition Remaining Quantity -->
-            <ion-item class="input-item">
-              <ion-input label="Requisition Remaining Qty" labelPlacement="floating"
-                placeholder="Enter Requisition Remaining Qty" [(ngModel)]="newOrderMaterial.RequisitionRemainingQty"
-                [disabled]="'true'"></ion-input>
-            </ion-item>
-
-            <!-- Extra Ordered Quantity -->
-            <ion-item class="input-item">
-              <ion-input label="Extra Ordered Qty" labelPlacement="floating" placeholder="Enter Extra Ordered Qty"
-                [(ngModel)]="newOrderMaterial.ExtraOrderedQty" [disabled]="'true'"></ion-input> </ion-item>
-
-            <!-- Rate -->
-            <ion-item class="input-item">
-              <ion-input label="Rate" labelPlacement="floating" type="number" placeholder="Enter Rate"
-                [(ngModel)]="newOrderMaterial.Rate" (ngModelChange)="CalculateNetAmountAndTotalAmount()"
-                clearInput="true" clearOnEdit="true"></ion-input>
-            </ion-item>
-
-            <!-- Discount Rate -->
-            <ion-item class="input-item">
-              <ion-input label="Discount Rate" labelPlacement="floating" type="number" placeholder="Enter Discount Rate"
-                [(ngModel)]="newOrderMaterial.DiscountedRate" clearInput="true" clearOnEdit="true"
-                (ngModelChange)="CalculateNetAmountAndTotalAmount()"></ion-input>
-            </ion-item>
-
-            <!-- Net Amount-->
-            <ion-item class="input-item">
-              <ion-input label="Net Amount" labelPlacement="floating" placeholder="Enter Net Amount"
-                [(ngModel)]="newOrderMaterial.NetAmount" [disabled]="'true'"></ion-input>
-            </ion-item>
-
-            <!-- GST Dropdown -->
-            <ion-item class="input-item" button (click)="selectGSTBottomsheet()">
-              <ion-label>GST</ion-label>
-
-              <!-- Text showing the selected status -->
-              <ion-text slot="end" class="status-text">
-                {{ gstName|| 'Select' }}
-              </ion-text>
-
-              <!-- Dropdown icon (chevron) on the right -->
-              <ion-icon name="chevron-down-outline" slot="end" class="dropdown-icon"></ion-icon>
-            </ion-item>
-
-            <!-- Delivery Charges -->
-            <ion-item class="input-item">
-              <ion-input label="Delivery Charges" labelPlacement="floating" type="number"
-                placeholder="Enter Discount Rate" [(ngModel)]="newOrderMaterial.DeliveryCharges"
-                (ngModelChange)="CalculateNetAmountAndTotalAmount()" clearInput="true" clearOnEdit="true"></ion-input>
-            </ion-item>
-
-            <!-- Expected Delivery Date -->
-            <!-- <ion-item class="input-item">
-                <ion-label>Expected Delivery Date</ion-label>
-                <ion-datetime-button datetime="ExpectedDeliveryDate" trigger="entry-date-modal"></ion-datetime-button>
+                <!-- Text showing the selected status -->
+                <ion-text slot="end" class="status-text">
+                  {{ MaterialName|| 'Select' }}
+                </ion-text>
               </ion-item>
 
-              <ion-modal keepContentsMounted="true" trigger="entry-date-modal">
+              <!-- Material input-->
+              <ion-item class="input-item" *ngIf="ModalEditable">
+                <ion-input label="Material Name" name="MaterialName" labelPlacement="floating" placeholder="Enter Material Name"
+                  [(ngModel)]="newOrderMaterial.MaterialName" [disabled]="'true'"></ion-input>
+              </ion-item>
+
+              <!-- Unit -->
+              <ion-item class="input-item">
+                <ion-input label="Unit" name="UnitName" labelPlacement="floating" placeholder="Enter Unit"
+                  [(ngModel)]="newOrderMaterial.UnitName" [disabled]="'true'"></ion-input>
+              </ion-item>
+
+              <!--Requisition Quantity -->
+              <ion-item class="input-item">
+                <ion-input label="Requisition Qty" name="RequisitionQty" labelPlacement="floating" type="number" placeholder="Enter Quantity"
+                  [(ngModel)]="newOrderMaterial.RequisitionQty" clearInput="true" clearOnEdit="true"
+                  [disabled]="'true'"></ion-input>
+              </ion-item>
+
+              <!--Total Ordered Quantity -->
+              <ion-item class="input-item">
+                <ion-input label="Total Ordered Qty" name="TotalOrderedQty" labelPlacement="floating" type="number"
+                  placeholder="Enter Total Ordered Quantity" [(ngModel)]="newOrderMaterial.TotalOrderedQty"
+                  clearInput="true" clearOnEdit="true" [disabled]="'true'"></ion-input> </ion-item>
+
+              <!--Ordered Quantity -->
+              <ion-item class="input-item">
+                <ion-input label="Ordered Qty" name="OrderedQty" labelPlacement="floating" type="number"
+                  placeholder="Enter Ordered Quantity" [(ngModel)]="newOrderMaterial.OrderedQty" clearInput="true"
+                  clearOnEdit="true" (ngModelChange)="CalculateNetAmountAndTotalAmount()"></ion-input> </ion-item>
+
+              <!-- Requisition Remaining Quantity -->
+              <ion-item class="input-item">
+                <ion-input label="Requisition Remaining Qty" name="RequisitionRemainingQty" labelPlacement="floating"
+                  placeholder="Enter Requisition Remaining Qty" [(ngModel)]="newOrderMaterial.RequisitionRemainingQty"
+                  [disabled]="'true'"></ion-input>
+              </ion-item>
+
+              <!-- Extra Ordered Quantity -->
+              <ion-item class="input-item">
+                <ion-input label="Extra Ordered Qty" name="ExtraOrderedQty" labelPlacement="floating" placeholder="Enter Extra Ordered Qty"
+                  [(ngModel)]="newOrderMaterial.ExtraOrderedQty" [disabled]="'true'"></ion-input> </ion-item>
+
+              <!-- Rate -->
+              <ion-item class="input-item">
+                <ion-input label="Rate" name="Rate" labelPlacement="floating" type="number" placeholder="Enter Rate"
+                  [(ngModel)]="newOrderMaterial.Rate" (ngModelChange)="CalculateNetAmountAndTotalAmount()"
+                  clearInput="true" clearOnEdit="true"></ion-input>
+              </ion-item>
+
+              <!-- Discount Rate -->
+              <ion-item class="input-item">
+                <ion-input label="Discount Rate" name="DiscountedRate" labelPlacement="floating" type="number"
+                  placeholder="Enter Discount Rate" [(ngModel)]="newOrderMaterial.DiscountedRate" clearInput="true"
+                  clearOnEdit="true" (ngModelChange)="CalculateNetAmountAndTotalAmount()"></ion-input>
+              </ion-item>
+
+              <!-- Net Amount-->
+              <ion-item class="input-item">
+                <ion-input label="Net Amount" name="NetAmount" labelPlacement="floating" placeholder="Enter Net Amount"
+                  [(ngModel)]="newOrderMaterial.NetAmount" [disabled]="'true'"></ion-input>
+              </ion-item>
+
+              <!-- GST Dropdown -->
+              <ion-item class="input-item" button detail (click)="selectGSTBottomsheet()">
+                <ion-label>GST</ion-label>
+
+                <!-- Text showing the selected status -->
+                <ion-text slot="end" class="status-text">
+                  {{ gstName|| 'Select' }}
+                </ion-text>
+              </ion-item>
+
+              <!-- Delivery Charges -->
+              <ion-item class="input-item">
+                <ion-input label="Delivery Charges" name="DeliveryCharges" labelPlacement="floating" type="number"
+                  placeholder="Enter Discount Rate" [(ngModel)]="newOrderMaterial.DeliveryCharges"
+                  (ngModelChange)="CalculateNetAmountAndTotalAmount()" clearInput="true" clearOnEdit="true"></ion-input>
+              </ion-item>
+
+              <!-- Expected Delivery Date -->
+              <ion-item class="input-item">
+                <ion-label>Expected Delivery Date</ion-label>
+                <ion-datetime-button datetime="ExpectedDeliveryDate"
+                  trigger="ExpectedDeliveryDate-modal"></ion-datetime-button>
+                <ion-checkbox slot="end" name="ExpectedDeliveryDateCheckBox" [(ngModel)]="ExpectedDeliveryDate" name="TransDate"
+                  [disabled]="true"></ion-checkbox>
+
+              </ion-item>
+
+              <ion-modal keepContentsMounted="true" trigger="ExpectedDeliveryDate-modal">
                 <ng-template>
-                  <ion-datetime id="ExpectedDeliveryDate" presentation="date" [(ngModel)]="ExpectedDeliveryDate"
+                  <ion-datetime id="ExpectedDeliveryDate" name="ExpectedDeliveryDate" presentation="date" [(ngModel)]="ExpectedDeliveryDate"
                     show-default-buttons="true"
                     (ionChange)="onExpectedDeliveryDateChange($event.detail.value)"></ion-datetime>
                 </ng-template>
-              </ion-modal> -->
-            <ion-item (click)="showExpectedDeliveryDatePicker = true" class="input-item">
-              <ion-label>Date</ion-label>
-              <ion-label slot="end">{{ DisplayExpectedDeliveryDate || 'Select Date' }}</ion-label>
-            </ion-item>
-            <app-date-picker [show]="showExpectedDeliveryDatePicker" [selectedDate]="ExpectedDeliveryDate"
-              [defaultToday]="true" (dateChanged)="onExpectedDeliveryDateChange($event)"
-              (dateSelected)="DisplayExpectedDeliveryDate = $event; showExpectedDeliveryDatePicker = false"
-              (modalDismissed)="showExpectedDeliveryDatePicker = false" />
+              </ion-modal>
 
-            <!--Total Amount -->
-            <ion-item class="input-item">
-              <ion-input label="Total Amount" labelPlacement="floating" type="number" placeholder="Enter Total Amount"
-                [(ngModel)]="newOrderMaterial.TotalAmount" clearInput="true" clearOnEdit="true"
-                [disabled]="'true'"></ion-input>
-            </ion-item>
-          </ion-list>
-        </ion-content>
+              <!--Total Amount -->
+              <ion-item class="input-item">
+                <ion-input label="Total Amount" name="TotalAmount" labelPlacement="floating" type="number" placeholder="Enter Total Amount"
+                  [(ngModel)]="newOrderMaterial.TotalAmount" clearInput="true" clearOnEdit="true"
+                  [disabled]="'true'"></ion-input>
+              </ion-item>
+            </ion-list>
+          </ion-content>
 
-        <ion-footer class="modal-footer-mobile-app">
-          <ion-grid>
-            <ion-row>
-              <ion-col size="6">
-                <ion-button expand="block" color="primary" shape="round" (click)="closeModal(100)">
-                  Close
-                </ion-button>
-              </ion-col>
-              <ion-col size="6">
-                <ion-button expand="block" color="primary" shape="round" (click)="addOrderMaterial()">
-                  {{ModalEditable ? "Update" : "Save"}}
-                </ion-button>
-              </ion-col>
-            </ion-row>
-          </ion-grid>
-        </ion-footer>
-      </ng-template>
-    </ion-modal>
+          <ion-footer class="modal-footer-mobile-app">
+            <ion-grid>
+              <ion-row>
+                <ion-col size="6">
+                  <ion-button expand="block" color="medium" shape="round" (click)="closeModal(100)">
+                    Close
+                  </ion-button>
+                </ion-col>
+                <ion-col size="6">
+                  <ion-button expand="block" color="primary" shape="round" (click)="addOrderMaterial()">
+                    {{ModalEditable ? "Update" : "Save"}}
+                  </ion-button>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </ion-footer>
+        </ng-template>
+      </ion-modal>
 
-    <!-- Main Buttons -->
-    <ion-grid>
-      <ion-row>
-        <ion-col size="6">
-          <ion-button expand="block" (click)="goBack()" class="submit-button cancel-button">
-            Cancel
-          </ion-button>
-        </ion-col>
-        <ion-col size="6">
-          <ion-button expand="block" (click)="SaveOrder()" class="submit-button primary-button">
-            {{IsNewEntity ? 'Save' : 'Update'}}
-          </ion-button>
-        </ion-col>
-      </ion-row>
-    </ion-grid>
-  </ion-list>
+      <!-- Main Buttons -->
+      <ion-grid>
+        <ion-row>
+          <ion-col size="6">
+            <ion-button expand="block" color="medium" shape="round" (click)="goBack()">
+              Cancel
+            </ion-button>
+          </ion-col>
+          <ion-col size="6">
+            <ion-button expand="block" color="primary" shape="round" (click)="SaveOrder()">
+              {{IsNewEntity ? 'Save' : 'Update'}}
+            </ion-button>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-list>
+  </form>
 </ion-content>

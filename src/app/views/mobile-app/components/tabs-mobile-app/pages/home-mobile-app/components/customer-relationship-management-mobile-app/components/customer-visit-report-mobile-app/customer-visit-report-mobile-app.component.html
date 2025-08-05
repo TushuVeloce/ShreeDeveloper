@@ -45,6 +45,10 @@
 
       <ion-content scroll-y="true" class="ion-padding modal-content-mobile-app">
         <div class="info-row-of-model-mobile-app">
+          <span class="label-mobile-app">Date:</span>
+          <span class="value-mobile-app">{{ formatDate(SelectedCustomerSiteVisit.p.TransDateTime)|| '-' }}</span>
+        </div>
+        <div class="info-row-of-model-mobile-app">
           <span class="label-mobile-app">Site Name:</span>
           <span class="value-mobile-app">{{ SelectedCustomerSiteVisit.p.SiteName || '-' }}</span>
         </div>

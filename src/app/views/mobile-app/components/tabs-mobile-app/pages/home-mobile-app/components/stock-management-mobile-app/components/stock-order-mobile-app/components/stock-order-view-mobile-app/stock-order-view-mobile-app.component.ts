@@ -20,9 +20,9 @@ import { FilterItem } from 'src/app/views/mobile-app/components/shared/chip-filt
   selector: 'app-stock-order-view-mobile-app',
   templateUrl: './stock-order-view-mobile-app.component.html',
   styleUrls: ['./stock-order-view-mobile-app.component.scss'],
-  standalone:false
+  standalone: false
 })
-export class StockOrderViewMobileAppComponent  implements OnInit {
+export class StockOrderViewMobileAppComponent implements OnInit {
 
   Entity: Order = Order.CreateNewInstance();
   MasterList: Order[] = [];
@@ -75,12 +75,12 @@ export class StockOrderViewMobileAppComponent  implements OnInit {
     // Cleanup if needed
   }
 
-  handleRefresh = async (event: CustomEvent) =>{
+  handleRefresh = async (event: CustomEvent) => {
     await this.loadMaterialRequisitionIfEmployeeExists();
     (event.target as HTMLIonRefresherElement).complete();
   }
 
-  loadFilters= () => {
+  loadFilters = () => {
     this.filters = [
       {
         key: 'site',
@@ -95,7 +95,7 @@ export class StockOrderViewMobileAppComponent  implements OnInit {
     ];
   }
 
-   onFiltersChanged= async(updatedFilters: any[])=> {
+  onFiltersChanged = async (updatedFilters: any[]) => {
     for (const filter of updatedFilters) {
       const selected = filter.selected;
       const selectedValue = (selected === null || selected === undefined) ? null : selected;
@@ -114,7 +114,7 @@ export class StockOrderViewMobileAppComponent  implements OnInit {
   }
 
 
-  getStatusClass=(status: any): string=> {
+  getStatusClass = (status: any): string => {
     switch (status) {
       case this.MaterialPurchaseOrderStatus.Pending:
         return 'pending';
@@ -133,7 +133,7 @@ export class StockOrderViewMobileAppComponent  implements OnInit {
     }
   }
 
-  getStatusText=(status: any): string=> {
+  getStatusText = (status: any): string => {
     switch (status) {
       case this.MaterialPurchaseOrderStatus.Pending:
         return 'Pending';
@@ -154,7 +154,7 @@ export class StockOrderViewMobileAppComponent  implements OnInit {
 
   expandedRequisitions: Set<number> = new Set();
 
-  toggleItemDetails=(requisitionId: number)=> {
+  toggleItemDetails = (requisitionId: number) => {
     if (this.expandedRequisitions.has(requisitionId)) {
       this.expandedRequisitions.delete(requisitionId);
     } else {
@@ -162,27 +162,23 @@ export class StockOrderViewMobileAppComponent  implements OnInit {
     }
   }
 
-  prepareInvoiceUrl=(path: string)=> {
+  prepareInvoiceUrl = (path: string) => {
     this.showInvoicePreview = !this.showInvoicePreview
     const ImageBaseUrl = this.baseUrl.GenerateImageBaseUrl();
     const LoginToken = this.appStateManage.localStorage.getItem('LoginToken');
-    // const path = this.SelectedQuotation.p.InvoicePath;
-
 
     if (!path) return;
 
     const TimeStamp = Date.now();
     const fileUrl = `${ImageBaseUrl}${path}/${LoginToken}?${TimeStamp}`;
-    console.log('Invoice Preview URL:', fileUrl);
-
     this.sanitizedInvoiceUrl = this.sanitizer.bypassSecurityTrustResourceUrl(fileUrl);
   }
 
-  isPDF=(filePath: string): boolean=> {
+  isPDF = (filePath: string): boolean => {
     return filePath?.toLowerCase().endsWith('.pdf');
   }
 
-  fileNavigation=(filePath: string)=> {
+  fileNavigation = (filePath: string) => {
     const ImageBaseUrl = this.baseUrl.GenerateImageBaseUrl();
     const LoginToken = this.appStateManage.localStorage.getItem('LoginToken');
 
@@ -194,7 +190,7 @@ export class StockOrderViewMobileAppComponent  implements OnInit {
   }
 
 
-  private loadMaterialRequisitionIfEmployeeExists = async ()=> {
+  private loadMaterialRequisitionIfEmployeeExists = async () => {
     try {
       await this.loadingService.show();
       this.companyRef = Number(this.appStateManage.localStorage.getItem('SelectedCompanyRef'));
@@ -256,24 +252,22 @@ export class StockOrderViewMobileAppComponent  implements OnInit {
     }
     let lst = await Order.FetchEntireListByCompanyRefAndSiteRef(this.companyRef, this.Entity.p.SiteRef,
       async (errMsg) => {
-        // await this.uiUtils.showErrorMessage('Error', errMsg)
         await this.toastService.present(errMsg, 1000, 'danger')
         await this.haptic.error()
       }
     );
     this.MasterList = lst;
-    console.log('lst :', lst);
     this.DisplayMasterList = this.MasterList;
   };
 
-    checkIsEnable = (data: OrderMaterialDetailProps[]): boolean => {
-      // Collect boolean values based on the condition
-      const booleanValues = data.map(item => item.RequisitionQty <= item.TotalOrderedQty);
-  
-      // If ANY entry fails (QuotationOrderedQty <= OrderedQty), return false
-      const status = booleanValues.every(value => value);
-      return status;
-    };
+  checkIsEnable = (data: OrderMaterialDetailProps[]): boolean => {
+    // Collect boolean values based on the condition
+    const booleanValues = data.map(item => item.RequisitionQty <= item.TotalOrderedQty);
+
+    // If ANY entry fails (QuotationOrderedQty <= OrderedQty), return false
+    const status = booleanValues.every(value => value);
+    return status;
+  };
 
   onEditClicked = async (item: Order) => {
     this.SelectedOrder = item.GetEditableVersion();
@@ -349,16 +343,16 @@ export class StockOrderViewMobileAppComponent  implements OnInit {
     await this.router.navigate(['/mobile-app/tabs/dashboard/stock-management/stock-order/add']);
   }
 
-  openModal=(requisition: any)=> {
+  openModal = (requisition: any) => {
     this.SelectedOrder = requisition;
     this.modalOpen = true;
   }
 
-  closeModal=() =>{
+  closeModal = () => {
     this.modalOpen = false;
     this.SelectedOrder = Order.CreateNewInstance();
   }
- 
+
   SaveOrder = async (status: number) => {
     let lstFTO: FileTransferObject[] = [];
 

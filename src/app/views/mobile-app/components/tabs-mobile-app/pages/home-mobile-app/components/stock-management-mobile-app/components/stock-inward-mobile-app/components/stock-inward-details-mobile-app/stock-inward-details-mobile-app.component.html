@@ -1,6 +1,6 @@
 <app-header-with-back-handler title={{DetailsFormTitle}}></app-header-with-back-handler>
 
-<ion-content class="form-container">
+<ion-content class="form-container" [scrollEvents]="true">
   <ion-list lines="none" class="ion-padding">
     <!--  Inward Date -->
     <ion-item (click)="showInwardDatePicker = true" class="input-item" button detail [disabled]="!this.IsNewEntity">

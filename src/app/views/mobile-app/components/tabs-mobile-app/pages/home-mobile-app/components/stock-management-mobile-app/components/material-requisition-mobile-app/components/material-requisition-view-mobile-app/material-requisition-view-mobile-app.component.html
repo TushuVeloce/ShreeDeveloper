@@ -17,7 +17,7 @@
         <p class="date-label">Materials : {{ requisition.p.MaterialRequisitionDetailsArray.length || 'Unknown Date' }}</p>
       </ion-label>
 
-      <div class="action-buttons" slot="end" (click)="$event.stopPropagation()">
+      <div class="action-buttons" slot="end" (click)="$event.stopPropagation()" *ngIf="isAnyMaterialPending(requisition)">
         <ion-button fill="clear" size="small" color="primary" (click)="onEditClicked(requisition)">
           <ion-icon name="pencil-outline" slot="icon-only"></ion-icon>
         </ion-button>
@@ -49,7 +49,7 @@
         </ion-toolbar>
       </ion-header>
 
-      <ion-content scroll-y="true" class="ion-padding modal-content">
+      <ion-content scroll-y="true" class="ion-padding modal-content ion-text-center">
         <div class="info-row-of-model-mobile-app" *ngIf="SelectedMaterialRequisition">
           <strong class="label-mobile-app">Date:</strong>
           <span class="value-mobile-app">{{ formatDate(SelectedMaterialRequisition.p.Date) || '-' }}</span>
@@ -79,11 +79,11 @@
                   <td>
                     {{ item.RequisitionQty || '-' }}
                   </td>
-                  <!-- <td>
+                  <td>
                     <div class="status-badge" [ngClass]="getStatusClass(item.MaterialStatus)">
                       {{ getStatusText(item.MaterialStatus)}}
                     </div>
-                  </td> -->
+                  </td>
                 </tr>
               </tbody>
             </table>

@@ -11,7 +11,7 @@
   </ion-refresher>
 
   <!-- Table -->
-  <ion-list class="requisition-list" [lines]="'none'" *ngIf="DisplayMasterList.length> 0">
+  <ion-list class="requisition-list ion-text-center" [lines]="'none'" *ngIf="DisplayMasterList.length> 0">
     <div class="table-container">
       <div class="table-scroll">
         <table class="custom-table">
@@ -43,7 +43,7 @@
               <td>{{ (item.p.DiscountedRateOnArea |currency : "INR") || '-' }}</td>
               <td>{{ (item.p.DiscountOnTotalPlotAmount | currency : "INR") || '-' }}</td>
               <td>{{ (item.p.TotalPlotAmount | currency : "INR") || '-' }}</td>
-              <td>{{ (item.p.GovermentRatePerSqm | currency : "INR") || '-' }}</td>
+              <td>{{ (item.p.GovernmentRecknor| currency : "INR") || '-' }}</td>
               <td>{{ (item.p.GovernmentValue | currency : "INR") || '-' }}</td>
               <td>{{ (item.p.ValueOfAgreement | currency : "INR") || '-' }}</td>
               <td>{{ item.p.RegTaxValueInPercentage != null ? item.p.RegTaxValueInPercentage + '%' : '-' }}</td>
@@ -111,7 +111,7 @@
     { label: 'Discounted Rate on Area', value: SelectedCRMReports.p.DiscountedRateOnArea | currency : 'INR' },
     { label: 'Discount On Total Plot Amount', value: SelectedCRMReports.p.DiscountOnTotalPlotAmount | currency : 'INR' },
     { label: 'Total Plot Amount', value: SelectedCRMReports.p.TotalPlotAmount | currency : 'INR' },
-    { label: 'Government Rate per Sqm', value: SelectedCRMReports.p.GovermentRatePerSqm | currency : 'INR' },
+    { label: 'Government Rate per Sqm', value: SelectedCRMReports.p.GovernmentRecknor | currency : 'INR' },
     { label: 'Government Value', value: SelectedCRMReports.p.GovernmentValue | currency : 'INR' },
     { label: 'Value of Agreement', value: SelectedCRMReports.p.ValueOfAgreement | currency : 'INR' },
     { label: 'Reg Tax Value (%)', value: SelectedCRMReports.p.RegTaxValueInPercentage != null ? SelectedCRMReports.p.RegTaxValueInPercentage + '%' : '-' },

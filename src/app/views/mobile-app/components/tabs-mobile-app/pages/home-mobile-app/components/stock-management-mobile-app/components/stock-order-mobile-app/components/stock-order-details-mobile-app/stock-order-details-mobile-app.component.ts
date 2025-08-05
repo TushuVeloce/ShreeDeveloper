@@ -12,7 +12,6 @@ import { CurrentDateTimeRequest } from 'src/app/classes/infrastructure/request_r
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { BaseUrlService } from 'src/app/services/baseurl.service';
 import { BottomsheetMobileAppService } from 'src/app/services/bottomsheet-mobile-app.service';
-import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
 import { DateconversionService } from 'src/app/services/dateconversion.service';
 import { DTU } from 'src/app/services/dtu.service';
 import { Utils } from 'src/app/services/utils.service';
@@ -20,16 +19,9 @@ import { AlertService } from 'src/app/views/mobile-app/components/core/alert.ser
 import { HapticService } from 'src/app/views/mobile-app/components/core/haptic.service';
 import { LoadingService } from 'src/app/views/mobile-app/components/core/loading.service';
 import { ToastService } from 'src/app/views/mobile-app/components/core/toast.service';
-import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
-import { ActionSheetController } from '@ionic/angular';
 import { Ledger } from 'src/app/classes/domain/entities/website/masters/ledgermaster/ledger';
 import { SubLedger } from 'src/app/classes/domain/entities/website/masters/subledgermaster/subledger';
 
-interface PreviewFile {
-  file: File;
-  type: 'image' | 'pdf' | 'other';
-  url: string;
-}
 @Component({
   selector: 'app-stock-order-details-mobile-app',
   templateUrl: './stock-order-details-mobile-app.component.html',
@@ -47,11 +39,9 @@ export class StockOrderDetailsMobileAppComponent implements OnInit {
   VendorList: Vendor[] = [];
   StockOrderList: OrderMaterial[] = [];
   AllStockOrderList: OrderMaterial[] = [];
-  // OrderDate: string | null = null;
   CurrentDate: string | null = null;
   Date: string | null = null;
   ModalEditable: boolean = false;
-  // ExpectedDeliveryDate: string = '';
   OrderMaterialheaders: string[] = ['Material ', 'Unit', 'Requisition Quantity', 'Ordered Quantity', 'Requisition Remaining Quantity', 'Rate', 'Discount Rate', 'GST', 'Delivery Charges', 'Expected Delivery Date', 'Net Amount', 'Total Amount'];
   isOrderMaterialModalOpen: boolean = false;
   newOrderMaterial: OrderMaterialDetailProps = OrderMaterialDetailProps.Blank();
@@ -79,7 +69,7 @@ export class StockOrderDetailsMobileAppComponent implements OnInit {
 
   LedgerList: Ledger[] = [];
   selectedLedger: any[] = [];
-  LedgerName:string = '';
+  LedgerName: string = '';
   SubLedgerList: SubLedger[] = [];
   selectedsubLedger: any[] = [];
   subLedgerName: string = '';
@@ -98,19 +88,12 @@ export class StockOrderDetailsMobileAppComponent implements OnInit {
   imagePreviewUrl: string | null = null;
   imageUrl: string | null = null;
   ProfilePicFile: File | null = null;
-
-  showPurchaseOrderDatePicker = false;
-  PurchaseOrderDate = '';
-  DisplayPurchaseOrderDate = '';
-
-  showExpectedDeliveryDatePicker = false;
-  ExpectedDeliveryDate = '';
-  DisplayExpectedDeliveryDate = '';
+  PurchaseOrderDate: string | null = null;
+  ExpectedDeliveryDate: string | null = null;
 
   constructor(
     private router: Router,
     private appStateManage: AppStateManageService,
-    private companystatemanagement: CompanyStateManagement,
     private dtu: DTU,
     private DateconversionService: DateconversionService,
     private bottomsheetMobileAppService: BottomsheetMobileAppService,
@@ -121,7 +104,6 @@ export class StockOrderDetailsMobileAppComponent implements OnInit {
     private utils: Utils,
     private datePipe: DatePipe,
     private baseUrl: BaseUrlService,
-    private actionSheetController: ActionSheetController,
   ) { }
 
   ngOnInit = async () => {
@@ -136,9 +118,8 @@ export class StockOrderDetailsMobileAppComponent implements OnInit {
   }
 
   private async loadStockOrderDetailsIfCompanyExists() {
-    // debugger
     try {
-      await this.loadingService.show(); // Awaiting this is critical
+      await this.loadingService.show();
       this.companyRef = Number(this.appStateManage.localStorage.getItem('SelectedCompanyRef'));
 
       if (this.companyRef > 0) {
@@ -152,25 +133,20 @@ export class StockOrderDetailsMobileAppComponent implements OnInit {
           this.IsNewEntity = false;
           this.DetailsFormTitle = this.IsNewEntity ? 'New Order' : 'Edit Order';
           this.Entity = Order.GetCurrentInstance();
-          console.log('this.Entity :', this.Entity);
           this.imagePostView = `${this.ImageBaseUrl}${this.Entity.p.MaterialPurchaseInvoicePath}/${this.LoginToken}?${this.TimeStamp}`;
-          console.log('this.imagePostView :', this.imagePostView);
           this.selectedFileName = this.Entity.p.MaterialPurchaseInvoicePath;
-          console.log('this.selectedFileName :', this.selectedFileName);
 
           this.selectedSite = [{ p: { Ref: this.Entity.p.SiteRef, Name: this.Entity.p.SiteName } }];
           this.SiteName = this.Entity.p.SiteName;
           this.selectedVendor = [{ p: { Ref: this.Entity.p.VendorRef, Name: this.Entity.p.VendorName } }];
           this.VendorName = this.Entity.p.VendorName;
-          this.selectedLedger = [{ p: { Ref: this.Entity.p.LedgerRef, Name: this.Entity.p.LedgerName } }];
-          this.LedgerName = this.Entity.p.LedgerName;
-          this.selectedsubLedger = [{ p: { Ref: this.Entity.p.SubLedgerRef, Name: this.Entity.p.SubLedgerName } }];
-          this.subLedgerName = this.Entity.p.SubLedgerName;
-
-          // this.OrderDate = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.PurchaseOrderDate);
+          this.LedgerName = this.LedgerList.find(item => item.p.Ref == this.Entity.p.LedgerRef)?.p.Name ?? '';
+          this.selectedLedger = [{ p: { Ref: this.Entity.p.LedgerRef, Name: this.LedgerName } }];
+          await this.getSubLedgerListByLedgerRef(this.Entity.p.LedgerRef);
+          this.subLedgerName = this.SubLedgerList.find(item => item.p.Ref == this.Entity.p.SubLedgerRef)?.p.Name ?? '';
+          this.selectedLedger = [{ p: { Ref: this.Entity.p.SubLedgerRef, Name: this.subLedgerName } }];
           //.............New Date Format...........//
           this.PurchaseOrderDate = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.PurchaseOrderDate);
-          this.DisplayPurchaseOrderDate = this.datePipe.transform(this.PurchaseOrderDate, 'yyyy-MM-dd') ?? '';;
 
           this.appStateManage.StorageKey.removeItem('Editable');
         } else {
@@ -179,25 +155,19 @@ export class StockOrderDetailsMobileAppComponent implements OnInit {
           this.strCDT = await CurrentDateTimeRequest.GetCurrentDateTime();
           let parts = this.strCDT.substring(0, 16).split('-');
           // Construct the new date format
-          // this.OrderDate = `${parts[0]}-${parts[1]}-${parts[2]}`;
           this.CurrentDate = `${parts[0]}-${parts[1]}-${parts[2]}`;
           //.............New Date Format...........//
           this.PurchaseOrderDate = `${parts[0]}-${parts[1]}-${parts[2]}`;
-          this.DisplayPurchaseOrderDate = this.datePipe.transform(this.PurchaseOrderDate, 'yyyy-MM-dd') ?? '';;
-          // this.selectedGST = [{ p: { Ref: this.newOrderMaterial.Gst, Name: this.newOrderMaterial.Gst } }];
-          // this.gstName = this.newOrderMaterial.Gst;
           this.gstName = this.GSTList.find(item => item.Ref == this.GSTList[0].Ref)?.Name ?? '';
           this.selectedGST = [{ p: { Ref: this.newOrderMaterial.Gst, Name: this.gstName } }];
 
         }
         this.InitialEntity = Object.assign(Order.CreateNewInstance(), this.utils.DeepCopy(this.Entity)) as Order;
-
       } else {
         await this.toastService.present('company not selected', 1000, 'danger');
         await this.haptic.error();
       }
     } catch (error) {
-      console.error('Error loading Material Requisition details:', error);
       await this.toastService.present('Failed to load Material Requisition details', 1000, 'danger');
       await this.haptic.error();
     } finally {
@@ -208,12 +178,10 @@ export class StockOrderDetailsMobileAppComponent implements OnInit {
   public async onPurchaseOrderDateChange(date: any): Promise<void> {
     this.PurchaseOrderDate = this.datePipe.transform(date, 'yyyy-MM-dd') ?? '';
     this.Entity.p.PurchaseOrderDate = this.PurchaseOrderDate;
-    this.DisplayPurchaseOrderDate = this.PurchaseOrderDate;
   }
   public async onExpectedDeliveryDateChange(date: any): Promise<void> {
     this.ExpectedDeliveryDate = this.datePipe.transform(date, 'yyyy-MM-dd') ?? '';
     this.newOrderMaterial.ExpectedDeliveryDate = this.ExpectedDeliveryDate;
-    this.DisplayExpectedDeliveryDate = this.ExpectedDeliveryDate;
   }
 
   // Extracted from services date conversion //
@@ -279,7 +247,6 @@ export class StockOrderDetailsMobileAppComponent implements OnInit {
           this.haptic.warning();
           continue;
         }
-
         const preview = await this.readFileAsDataURL(compressedFile);
         this.selectedFiles.push({ file: compressedFile, type: 'image', preview });
 
@@ -297,7 +264,6 @@ export class StockOrderDetailsMobileAppComponent implements OnInit {
         this.toastService.present('Unsupported file type.', 1000, 'warning');
       }
     }
-
     input.value = '';
   }
 
@@ -337,14 +303,6 @@ export class StockOrderDetailsMobileAppComponent implements OnInit {
     });
   }
 
-  // isImageFile(filePath: string): boolean {
-  //   console.log('isImageFile :', filePath);
-  //   if (!filePath) return false;
-  //   const imageExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.bmp', '.webp'];
-  //   const ext = filePath.substring(filePath.lastIndexOf('.')).toLowerCase();
-  //   return imageExtensions.includes(ext);
-  // }
-
   isImageFile(input: string | File): boolean {
     const name = typeof input === 'string' ? input : input.name;
     const ext = name.slice(name.lastIndexOf('.')).toLowerCase();
@@ -373,7 +331,6 @@ export class StockOrderDetailsMobileAppComponent implements OnInit {
 
   // For loading previously uploaded file (if editing)
   loadFileFromBackend(imageUrl: string): void {
-    console.log('loadFileFromBackend :', imageUrl);
     if (imageUrl) {
       this.imagePostView = `${this.ImageBaseUrl}${imageUrl}/${this.LoginToken}?${this.TimeStamp}`;
       this.selectedFileName = imageUrl;
@@ -389,13 +346,11 @@ export class StockOrderDetailsMobileAppComponent implements OnInit {
 
   getSiteListByCompanyRef = async () => {
     if (this.companyRef <= 0) {
-      // await this.uiUtils.showErrorToster('Company not Selected');
       await this.toastService.present('Company not Selected', 1000, 'warning');
       await this.haptic.warning();
       return;
     }
     let lst = await Site.FetchEntireListByCompanyRef(this.companyRef, async errMsg => {
-      // await this.uiUtils.showErrorMessage('Error', errMsg)
       await this.toastService.present(errMsg, 1000, 'danger');
       await this.haptic.error();
     });
@@ -408,13 +363,11 @@ export class StockOrderDetailsMobileAppComponent implements OnInit {
     this.Entity.p.VendorTradeName = ''
     this.Entity.p.AddressLine1 = ''
     if (this.companyRef <= 0) {
-      // await this.uiUtils.showErrorToster('Company not Selected');
       await this.toastService.present('Company not Selected', 1000, 'warning');
       await this.haptic.warning();
       return;
     }
     let lst = await Vendor.FetchEntireListByCompanyRef(this.companyRef, async errMsg => {
-      //  await this.uiUtils.showErrorMessage('Error', errMsg)
       await this.toastService.present(errMsg, 1000, 'danger');
       await this.haptic.error();
     });
@@ -435,17 +388,15 @@ export class StockOrderDetailsMobileAppComponent implements OnInit {
         return;
       }
       let lst = await OrderMaterial.FetchEntireListByCompanyRefAndSiteRef(this.companyRef, this.Entity.p.SiteRef, async errMsg => {
-        // await this.uiUtils.showErrorMessage('Error', errMsg)
-        await this.toastService.present('Error' + errMsg, 1000, 'danger');
+        await this.toastService.present(errMsg, 1000, 'danger');
         await this.haptic.error();
       }
       );
-      console.log('lst :', lst);
-      // this.AllStockOrderList = lst;
-      this.AllStockOrderList = lst.filter(material => material.p.IsRequisitionMaterial == 1)
+      this.AllStockOrderList = lst
       this.filterMaterialList();
     } catch (error) {
-
+      await this.toastService.present('Error '+error, 1000, 'danger');
+      await this.haptic.error();
     } finally {
       await this.loadingService.hide();
     }
@@ -453,16 +404,14 @@ export class StockOrderDetailsMobileAppComponent implements OnInit {
 
   getLedgerListByCompanyRef = async () => {
     if (this.companyRef <= 0) {
-      // await this.uiUtils.showErrorToster('Company not Selected');
       await this.toastService.present('Company not Selected', 1000, 'warning');
       await this.haptic.warning();
-
       return;
     }
     this.Entity.p.SubLedgerRef = 0
     let lst = await Ledger.FetchEntireListByCompanyRef(this.companyRef,
       async (errMsg) => {
-        await this.toastService.present('Error' + errMsg, 1000, 'danger');
+        await this.toastService.present(errMsg, 1000, 'danger');
         await this.haptic.error();
       });
     this.LedgerList = lst
@@ -470,24 +419,19 @@ export class StockOrderDetailsMobileAppComponent implements OnInit {
 
   getSubLedgerListByLedgerRef = async (ledgerref: number) => {
     if (ledgerref <= 0) {
-      // await this.uiUtils.showErrorToster('Ledger not Selected');
       await this.toastService.present('Ledger not Selected', 1000, 'warning');
       await this.haptic.warning();
-
       return;
     }
     let lst = await SubLedger.FetchEntireListByLedgerRef(ledgerref, async errMsg => {
-      // await this.uiUtils.showErrorMessage('Error', errMsg));
-      await this.toastService.present('Error' + errMsg, 1000, 'danger');
+      await this.toastService.present(errMsg, 1000, 'danger');
       await this.haptic.error();
 
     });
     this.SubLedgerList = lst;
   }
 
-
   filterMaterialList() {
-    // this.StockOrderList = this.AllStockOrderList.filter(material => material.p.IsRequisitionMaterial == 1)
     const usedRefs = this.Entity.p.MaterialPurchaseOrderDetailsArray.map(item => item.MaterialRef);
     this.StockOrderList = this.AllStockOrderList.filter(
       material => !usedRefs.includes(material.p.MaterialRef)
@@ -510,9 +454,7 @@ export class StockOrderDetailsMobileAppComponent implements OnInit {
     this.newOrderMaterial.TotalOrderedQty = SingleRecord[0].p.TotalOrderedQty;
   }
 
-
   // On file selected
-
   onFileUpload(event: Event): void {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files[0]) {
@@ -530,7 +472,6 @@ export class StockOrderDetailsMobileAppComponent implements OnInit {
           this.imagePostViewUrl = URL.createObjectURL(file);
           this.Entity.p.MaterialPurchaseInvoicePath = '';
         } else {
-          // this.uiUtils.showWarningToster('Only PDF or image files are supported.')
           this.toastService.present('Only PDF or image files are supported.', 1000, 'warning');
           this.haptic.warning();
         }
@@ -560,29 +501,28 @@ export class StockOrderDetailsMobileAppComponent implements OnInit {
 
   openModal = async (type: number) => {
     if (this.Entity.p.SiteRef <= 0) {
-      // this.uiUtils.showErrorToster('Site not Selected');
       this.toastService.present('Site not Selected', 1000, 'warning');
       this.haptic.warning();
       return;
     }
     if (this.Entity.p.VendorRef <= 0) {
-      // this.uiUtils.showErrorToster('Vendor not Selected');
       this.toastService.present('Vendor not Selected', 1000, 'warning');
       this.haptic.warning();
       return;
     }
     this.ModalEditable = false;
-    this.getOrderedMaterialList();
     if (type === 100) this.isOrderMaterialModalOpen = true;
+    await this.getOrderedMaterialList();
   }
 
   closeModal = async (type: number) => {
     if (type === 100) {
-      const keysToCheck = ['MaterialRef ', 'OrderedQty', 'Rate', 'DiscountedRate', 'Gst', 'DeliveryCharges', 'ExpectedDeliveryDate'] as const;
+      const keysToCheck = ['MaterialRef', 'OrderedQty', 'Rate', 'DiscountedRate', 'DeliveryCharges', 'ExpectedDeliveryDate'] as const;
 
-      const hasData = keysToCheck.some(
-        key => (this.newOrderMaterial as any)[key]?.toString().trim()
-      );
+      const hasData = keysToCheck.some(key => {
+        const value = (this.newOrderMaterial as any)[key];
+        return value !== 0 && value !== undefined && value !== null && value.toString().trim() !== '';
+      });
 
       if (hasData) {
         await this.alertService.presentDynamicAlert({
@@ -595,7 +535,6 @@ export class StockOrderDetailsMobileAppComponent implements OnInit {
               role: 'cancel',
               cssClass: 'custom-cancel',
               handler: () => {
-                console.log('User cancelled.');
               }
             },
             {
@@ -603,15 +542,14 @@ export class StockOrderDetailsMobileAppComponent implements OnInit {
               cssClass: 'custom-confirm',
               handler: () => {
                 this.isOrderMaterialModalOpen = false;
+                this.ModalEditable = false;
                 this.newOrderMaterial = OrderMaterialDetailProps.Blank();
                 this.selectedGST = [];
                 this.selectedMaterial = [];
-                this.ExpectedDeliveryDate = '';
-                this.DisplayExpectedDeliveryDate = '';
+                this.ExpectedDeliveryDate = null;
                 this.MaterialName = '';
                 this.gstName = '';
                 this.haptic.success();
-                console.log('User confirmed.');
               }
             }
           ]
@@ -624,32 +562,27 @@ export class StockOrderDetailsMobileAppComponent implements OnInit {
     }
   };
 
+
   async addOrderMaterial() {
     if (this.newOrderMaterial.MaterialQuotationDetailRef == 0) {
-      // return this.uiUtils.showWarningToster('Material Name cannot be blank.');
       this.toastService.present('Material Name cannot be blank.', 1000, 'warning');
       this.haptic.warning();
       return;
     }
     if (this.newOrderMaterial.OrderedQty == 0) {
-      // return this.uiUtils.showWarningToster('Ordered Quantity cannot be blank.');
       this.toastService.present('Ordered Quantity cannot be blank.', 1000, 'warning');
       this.haptic.warning();
       return;
     }
     if (this.newOrderMaterial.Rate == 0) {
-      // return this.uiUtils.showWarningToster('Rate cannot be blank.');
       this.toastService.present('Rate cannot be blank.', 1000, 'warning');
       this.haptic.warning();
       return;
     }
 
-    // this.ExpectedDeliveryDate = '';
     if (this.editingIndex !== null && this.editingIndex !== undefined && this.editingIndex >= 0) {
       this.Entity.p.MaterialPurchaseOrderDetailsArray[this.editingIndex] = { ...this.newOrderMaterial };
-      this.newOrderMaterial.ExpectedDeliveryDate = this.dtu.ConvertStringDateToFullFormat(this.ExpectedDeliveryDate);
-      console.log('this.newOrderMaterial.ExpectedDeliveryDate  :', this.newOrderMaterial.ExpectedDeliveryDate);
-      console.log('this.ExpectedDeliveryDate :', this.ExpectedDeliveryDate);
+      this.newOrderMaterial.ExpectedDeliveryDate = this.dtu.ConvertStringDateToFullFormat(this.ExpectedDeliveryDate ? this.ExpectedDeliveryDate : '');
 
       await this.toastService.present('Material updated successfully', 1000, 'success');
       this.newOrderMaterial = OrderMaterialDetailProps.Blank();
@@ -659,8 +592,7 @@ export class StockOrderDetailsMobileAppComponent implements OnInit {
       this.selectedGST = [];
       this.MaterialName = '';
       this.gstName = '';
-      this.ExpectedDeliveryDate = '';
-      this.DisplayExpectedDeliveryDate = '';
+      this.ExpectedDeliveryDate = null;
       await this.haptic.success();
 
     } else {
@@ -673,7 +605,6 @@ export class StockOrderDetailsMobileAppComponent implements OnInit {
       this.Entity.p.MaterialPurchaseOrderDetailsArray.push({ ...OrderMaterialInstance.p });
       this.selectedGST = [{ p: { Ref: this.newOrderMaterial.Gst, Name: this.newOrderMaterial.Gst } }];
 
-      console.log('this.newOrderMaterial :', this.newOrderMaterial);
       await this.toastService.present('Material added successfully', 1000, 'success');
       this.newOrderMaterial = OrderMaterialDetailProps.Blank();
       this.editingIndex = null;
@@ -682,8 +613,7 @@ export class StockOrderDetailsMobileAppComponent implements OnInit {
       this.selectedGST = [];
       this.MaterialName = '';
       this.gstName = '';
-      this.ExpectedDeliveryDate = '';
-      this.DisplayExpectedDeliveryDate = '';
+      this.ExpectedDeliveryDate = null;
       await this.haptic.success();
     }
   }
@@ -697,7 +627,6 @@ export class StockOrderDetailsMobileAppComponent implements OnInit {
     this.editingIndex = index;
     this.ModalEditable = true;
     this.ExpectedDeliveryDate = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.MaterialPurchaseOrderDetailsArray[index].ExpectedDeliveryDate);
-    this.DisplayExpectedDeliveryDate = this.datePipe.transform(this.ExpectedDeliveryDate, 'yyyy-MM-dd') ?? '';
   }
 
   async removeOrderMaterial(index: number) {
@@ -711,7 +640,6 @@ export class StockOrderDetailsMobileAppComponent implements OnInit {
           role: 'cancel',
           cssClass: 'custom-cancel',
           handler: () => {
-            console.log('User cancelled.');
           }
         },
         {
@@ -720,7 +648,6 @@ export class StockOrderDetailsMobileAppComponent implements OnInit {
           handler: () => {
             this.Entity.p.MaterialPurchaseOrderDetailsArray.splice(index, 1);
             this.haptic.success();
-            console.log('User confirmed.');
           }
         }
       ]
@@ -729,27 +656,14 @@ export class StockOrderDetailsMobileAppComponent implements OnInit {
 
 
   SaveOrder = async () => {
-    let lstFTO: FileTransferObject[] = [];
     this.Entity.p.CompanyRef = this.companyRef;
     this.newOrderMaterial.MaterialPurchaseOrderRef = this.Entity.p.Ref
     this.Entity.p.UpdatedBy = Number(this.appStateManage.localStorage.getItem('EmployeeRef'))
     this.Entity.p.CreatedBy = Number(this.appStateManage.localStorage.getItem('EmployeeRef'))
-    this.Entity.p.PurchaseOrderDate = this.dtu.ConvertStringDateToFullFormat(this.PurchaseOrderDate);
+    this.Entity.p.PurchaseOrderDate = this.dtu.ConvertStringDateToFullFormat(this.PurchaseOrderDate ? this.PurchaseOrderDate : '');
 
     let entityToSave = this.Entity.GetEditableVersion();
     let entitiesToSave = [entityToSave];
-    console.log('entitiesToSave :', entitiesToSave);
-
-    // if (this.InvoiceFile) {
-    //   lstFTO.push(
-    //     FileTransferObject.FromFile(
-    //       "InvoiceFile",
-    //       this.InvoiceFile,
-    //       this.InvoiceFile.name
-    //     )
-    //   );
-    // }
-
 
     if (this.Entity.p.MaterialPurchaseOrderStatus == MaterialRequisitionStatuses.Ordered) {
       this.Entity.p.MaterialPurchaseOrderDetailsArray.map((data) => {
@@ -760,19 +674,16 @@ export class StockOrderDetailsMobileAppComponent implements OnInit {
     let tr = await this.utils.SavePersistableEntities(entitiesToSave, this.filesToUpload);
     if (!tr.Successful) {
       this.isSaveDisabled = false;
-      // this.uiUtils.showErrorMessage('Error', tr.Message)
       await this.toastService.present(tr.Message, 1000, 'danger');
       await this.haptic.error();
       return;
     } else {
       this.isSaveDisabled = false;
       if (this.IsNewEntity) {
-        // await this.uiUtils.showSuccessToster('Order saved successfully');
         await this.toastService.present('Order saved successfully', 1000, 'success');
         await this.haptic.success();
         this.Entity = Order.CreateNewInstance();
       } else {
-        // await this.uiUtils.showSuccessToster('Order Updated successfully');
         await this.toastService.present('Order Updated successfully', 1000, 'success');
         await this.haptic.success();
       }
@@ -815,8 +726,6 @@ export class StockOrderDetailsMobileAppComponent implements OnInit {
   }
   public async selectsubLedgerBottomsheet(): Promise<void> {
     try {
-      // const options = this.GSTList.map((item) => ({ p: item }));
-      // console.log('gst options :', options);
       const options = this.SubLedgerList;
       this.openSelectModal(options, this.selectedsubLedger, false, 'Select Sub Ledger', 1, (selected) => {
         this.selectedsubLedger = selected;
@@ -824,28 +733,25 @@ export class StockOrderDetailsMobileAppComponent implements OnInit {
         this.subLedgerName = selected[0].p.Name;
       });
     } catch (error) {
-
+      await this.toastService.present('Error ' + error, 1000, 'danger');
+      await this.haptic.error();
     }
   }
 
   public async selectLedgerBottomsheet(): Promise<void> {
     try {
-      // const options = this.GSTList.map((item) => ({ p: item }));
-      // console.log('gst options :', options);
       const options = this.LedgerList;
       this.openSelectModal(options, this.selectedLedger, false, 'Select Ledger', 1, (selected) => {
         this.selectedLedger = selected;
         this.Entity.p.LedgerRef = selected[0].p.Ref;
         this.LedgerName = selected[0].p.Name;
-        this.selectedsubLedger=[];
-        this.subLedgerName='';
+        this.selectedsubLedger = [];
+        this.subLedgerName = '';
         this.getSubLedgerListByLedgerRef(this.Entity.p.LedgerRef);
       });
-      // if (this.Entity.p.LedgerRef) {
-      //   await this.getSubLedgerListByLedgerRef(this.Entity.p.LedgerRef);
-      // }
     } catch (error) {
-
+      await this.toastService.present('Error ' + error, 1000, 'danger');
+      await this.haptic.error();
     }
   }
 
@@ -853,8 +759,6 @@ export class StockOrderDetailsMobileAppComponent implements OnInit {
   public async selectGSTBottomsheet(): Promise<void> {
     try {
       const options = this.GSTList.map((item) => ({ p: item }));
-      console.log('gst options :', options);
-      // const options = this.GSTList;
       this.openSelectModal(options, this.selectedGST, false, 'Select GST', 1, (selected) => {
         this.selectedGST = selected;
         this.newOrderMaterial.Gst = selected[0].p.Ref;
@@ -862,30 +766,10 @@ export class StockOrderDetailsMobileAppComponent implements OnInit {
         this.CalculateNetAmountAndTotalAmount()
       });
     } catch (error) {
-
+      await this.toastService.present('Error ' + error, 1000, 'danger');
+      await this.haptic.error();
     }
   }
-
-  // public async selectMaterialBottomsheet(): Promise<void> {
-  //   try {
-  //     const options = this.StockOrderList;
-  //     console.log('StockOrderList :', this.StockOrderList);
-  //     this.openSelectModal(options, this.selectedMaterial, false, 'Select Material', 1, (selected) => {
-  //       this.selectedMaterial = selected;
-  //       this.MaterialName = selected[0].p.MaterialName;
-  //       this.newOrderMaterial.MaterialName = selected[0].p.MaterialName;
-  //       this.newOrderMaterial.MaterialRef = selected[0].p.MaterialRef;
-  //       this.onMaterialSelection(this.newOrderMaterial.MaterialRef)
-  //       // console.log('selected :', selected);
-  //       // this.newOrderMaterial.MaterialRef = selected[0].p.MaterialRef;
-  //       // this.newOrderMaterial.MaterialName = selected[0].p.MaterialName;
-  //       // this.MaterialName = selected[0].p.MaterialName;
-  //       // this.onMaterialSelection(selected[0].p.MaterialRef);
-  //     });
-  //   } catch (error) {
-
-  //   }
-  // }
 
   public async selectMaterialBottomsheet(): Promise<void> {
     try {
@@ -899,8 +783,6 @@ export class StockOrderDetailsMobileAppComponent implements OnInit {
         }
       }));
 
-      console.log('Formatted StockOrderList:', options);
-
       this.openSelectModal(options, this.selectedMaterial, false, 'Select Material', 1, (selected) => {
         this.selectedMaterial = selected;
 
@@ -912,7 +794,8 @@ export class StockOrderDetailsMobileAppComponent implements OnInit {
         this.onMaterialSelection(this.newOrderMaterial.MaterialRef);
       });
     } catch (error) {
-      console.error('Error in selectMaterialBottomsheet:', error);
+      await this.toastService.present('Error ' + error, 1000, 'danger');
+      await this.haptic.error();
     }
   }
 
@@ -926,11 +809,11 @@ export class StockOrderDetailsMobileAppComponent implements OnInit {
         this.Entity.p.VendorName = selected[0].p.Name;
         this.Entity.p.VendorTradeName = selected[0].p.TradeName;
         this.VendorName = selected[0].p.Name;
-        // this.VendorRef = selected[0].p.Ref;
         this.onVendorSelection(selected[0].p.Ref)
       });
     } catch (error) {
-
+      await this.toastService.present('Error ' + error, 1000, 'danger');
+      await this.haptic.error();
     }
   }
 
@@ -943,7 +826,8 @@ export class StockOrderDetailsMobileAppComponent implements OnInit {
         this.SiteName = selected[0].p.Name;
       });
     } catch (error) {
-
+      await this.toastService.present('Error ' + error, 1000, 'danger');
+      await this.haptic.error();
     }
   }
   private async openSelectModal(
@@ -959,9 +843,7 @@ export class StockOrderDetailsMobileAppComponent implements OnInit {
   }
   isDataFilled(): boolean {
     const emptyEntity = QuotedMaterial.CreateNewInstance();
-    console.log('emptyEntity :', emptyEntity);
-    console.log('this Entity :', this.Entity);
-    return !this.deepEqualIgnoringKeys(this.Entity, emptyEntity, ['p.Date']);
+    return !this.deepEqualIgnoringKeys(this.Entity, emptyEntity, ['p.PurchaseOrderDate']);
   }
 
   deepEqualIgnoringKeys(obj1: any, obj2: any, ignorePaths: string[]): boolean {

@@ -1,78 +1,87 @@
 .requisition-list {
-    --background-color: var(--ion-background-color);
+    background: #fff;
+    padding: 0 8px;
 }
 
 .requisition-item {
     --padding-start: 16px;
     --padding-end: 16px;
-    --background: var(--ion-background-color-step-50);
-    // margin: 15px 10px;
-    border-radius: 12px;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
-    transition: transform 0.2s;
+    margin: 12px 0;
+    border-radius: 16px;
+    background: var(--ion-background-color-step-50);
     border: 1px solid var(--ion-border-color-step-100);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .requisition-item:hover {
-    transform: scale(1.01);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.08);
 }
 
 .date-label {
     color: #6b7280;
     font-size: 13px;
-    margin-top: 4px;
+    margin-top: 2px;
 }
 
 .action-buttons {
     display: flex;
-    flex-direction: row;
-    align-items: flex-end;
+    justify-content: flex-end;
     gap: 6px;
+    padding-left: 8px;
+    padding-right: 8px;
+
+    ion-button {
+        width: 40px;
+        height: 40px;
+    }
 }
 
-.status-badge {
-    padding: 0.25em 0.75em;
-    border-radius: 12px;
+/* Status Chips (Optional: move to component CSS if reused) */
+ion-chip.status-badge {
+    height: 24px;
+    font-size: 13px;
     font-weight: 600;
-    font-size: 0.8rem;
-    min-width: 70px;
-    text-align: center;
     text-transform: capitalize;
+    padding: 0 12px;
+    margin-top: 4px;
+    --color: #fff;
 }
 
-.status-badge.pending {
-    // background-color: #fbbf24;
-    color: #92400e;
+ion-chip.status-badge.pending {
+    --background: #fbbf24;
+    --color: #92400e;
 }
 
-.status-badge.rejected {
-    // background-color: #ef4444;
-    color: #7f1d1d;
+ion-chip.status-badge.rejected {
+    --background: #ef4444;
+    --color: #7f1d1d;
 }
 
-.status-badge.approved {
-    // background-color: #22c55e;
-    color: #14532d;
+ion-chip.status-badge.approved {
+    --background: #22c55e;
+    --color: #14532d;
 }
 
-.status-badge.ordered {
-    // background-color: #3b82f6;
-    color: #1e3a8a;
+ion-chip.status-badge.ordered {
+    --background: #3b82f6;
+    --color: #1e3a8a;
 }
 
-.status-badge.incomplete {
-    // background-color: #f59e0b;
-    color: #7c4d00;
+ion-chip.status-badge.incomplete {
+    --background: #f59e0b;
+    --color: #78350f;
 }
 
-.status-badge.completed {
-    // background-color: #4ade80;
-    color: #1f3a1f;
+ion-chip.status-badge.completed {
+    --background: #4ade80;
+    --color: #1f3a1f;
 }
 
-.status-badge.default {
-    // background-color: #6b7280;
-    color: #6b7280;
+ion-chip.status-badge.default {
+    --background: #6b7280;
+    --color: #fff;
 }
 
 .modal-card {

@@ -30,7 +30,7 @@ export class MaterialRequisitionViewMobileAppComponent implements OnInit, OnDest
   companyRef = 0;
   modalOpen = false;
   SearchString = '';
-  tableHeaderData = ['Material', 'Unit', 'Required Qty'];
+  tableHeaderData = ['Material', 'Unit', 'Required Qty', 'Status'];
   StatusList = DomainEnums.MaterialRequisitionStatusesList();
 
   filters: FilterItem[] = [];
@@ -120,16 +120,16 @@ export class MaterialRequisitionViewMobileAppComponent implements OnInit, OnDest
         options: this.SiteList.map(site => ({ Ref: site.p.Ref, Name: site.p.Name })),
         selected: this.selectedFilterValues['site'] || null
       },
-      // {
-      //   key: 'status',
-      //   label: 'Status',
-      //   multi: false,
-      //   options: this.StatusList.map(status => ({
-      //     Ref: status.Ref,
-      //     Name: status.Name
-      //   })),
-      //   selected: this.selectedFilterValues['status'] || null
-      // }
+      {
+        key: 'status',
+        label: 'Status',
+        multi: false,
+        options: this.StatusList.map(status => ({
+          Ref: status.Ref,
+          Name: status.Name
+        })),
+        selected: this.selectedFilterValues['status'] || null
+      }
     ];
   }
 
@@ -162,8 +162,14 @@ export class MaterialRequisitionViewMobileAppComponent implements OnInit, OnDest
     this.DisplayMasterList = this.MasterList.filter(item =>
       item.p.MaterialRequisitionDetailsArray.length > 0
     );
-
   }
+
+  isAnyMaterialPending(requisition: MaterialRequisition): boolean {
+    return requisition.p.MaterialRequisitionDetailsArray?.some(
+      item => item.MaterialStatus === MaterialRequisitionStatuses.Pending
+    );
+  }
+
   getStatusClass = (status: number): string => {
     const statusMap: Record<number, string> = {
       [MaterialRequisitionStatuses.Pending]: 'pending',

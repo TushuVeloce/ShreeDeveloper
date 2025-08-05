@@ -92,10 +92,10 @@ export class CustomerSummaryReportMobileAppComponent implements OnInit {
         await this.toastService.present(errMsg, 1000, 'danger');
       });
       this.SiteList = lst;
-      if (this.SiteRef === 0 && lst.length > 0) {
-        this.SiteRef = lst[0].p.Ref;
-        await this.getCustomerReportByCompanyAndSiteRef();
-      }
+      // if (this.SiteRef === 0 && lst.length > 0) {
+      //   this.SiteRef = lst[0].p.Ref;
+      //   await this.getCustomerReportByCompanyAndSiteRef();
+      // }
     } catch (error) {
     }
   }

@@ -1,28 +1,20 @@
 <app-header-with-back-handler title={{DetailsFormTitle}}></app-header-with-back-handler>
 
-<ion-content class="form-container">
+<ion-content class="form-container" [scrollEvents]="true">
   <form>
     <ion-list lines="none" class="ion-padding">
       <!--  Date -->
-      <!-- <ion-item class="input-item">
-            <ion-label>Select Date</ion-label>
-            <ion-datetime-button datetime="FromDate" trigger="entry-date-modal"></ion-datetime-button>
-        </ion-item>
-        <ion-modal keepContentsMounted="true" trigger="entry-date-modal">
-            <ng-template>
-                <ion-datetime id="FromDate" presentation="date" [(ngModel)]="Date" show-default-buttons="true"
-                    (ionChange)="onDateChange($event.detail.value)"></ion-datetime>
-            </ng-template>
-        </ion-modal> -->
-      <!-- Date -->
-      <ion-item (click)="showFromPicker = true" class="input-item">
-        <ion-label>Date</ion-label>
-        <ion-label slot="end">{{ DisplayDate || 'Please select...' }}</ion-label>
+      <ion-item class="input-item">
+        <ion-label>Select Date</ion-label>
+        <ion-datetime-button datetime="Date" trigger="entry-date-modal"></ion-datetime-button>
+        <ion-checkbox slot="end" [(ngModel)]="Date" name="TransDate" [disabled]="true"></ion-checkbox>
       </ion-item>
-      <app-date-picker [show]="showFromPicker" [selectedDate]="Date" [defaultToday]="true"
-        (dateChanged)="onDateChange($event)" (dateSelected)="DisplayDate = $event; showFromPicker = false"
-        (modalDismissed)="showFromPicker = false" />
-
+      <ion-modal keepContentsMounted="true" trigger="entry-date-modal">
+        <ng-template>
+          <ion-datetime id="Date" name="Date" presentation="date" [(ngModel)]="Date" show-default-buttons="true"
+            (ionChange)="onDateChange($event.detail.value)"></ion-datetime>
+        </ng-template>
+      </ion-modal>
 
       <!-- Select site -->
       <ion-item class="input-item" button detail (click)="selectSiteBottomsheet()" [disabled]="SiteList.length === 0">
@@ -41,7 +33,7 @@
             <h5><strong>Requisition Material List</strong></h5>
           </ion-col>
           <ion-col size="6" class="ion-text-right">
-            <ion-button fill="outline" size="small" (click)="ismaterialModalOpen = true">
+            <ion-button fill="outline" size="small" (click)="openModal(100)">
               <ion-icon name="add-circle-outline" slot="start"></ion-icon>
               Add Material
             </ion-button>
@@ -51,7 +43,7 @@
 
       <!-- Material Table -->
       <ng-container *ngIf="Entity.p.MaterialRequisitionDetailsArray.length > 0; else noMaterials">
-        <div class="table-container">
+        <div class="table-container ion-text-center">
           <div class="table-scroll">
             <table class="custom-table">
               <thead>
@@ -73,11 +65,12 @@
                   <td>
                     {{ item.RequisitionQty || '-' }}
                   </td>
-                  <td>
-                    <ion-icon name="create-outline" color="warning" size="small"
-                      style="margin-right: 12px; cursor: pointer" (click)="editMaterial(i)"></ion-icon>
-                    <ion-icon name="trash-outline" color="danger" size="small" style="cursor: pointer"
-                      (click)="removeMaterial(i)"></ion-icon>
+                  <td *ngIf="((item.MaterialStatus === MaterialRequisitionStatuses.Pending || item.MaterialStatus === 0) && !IsNewEntity) || IsNewEntity">
+                    <ion-icon name="create-outline" color="warning" size="small" style="margin-right: 12px; cursor: pointer"
+                      (click)="editMaterial(i)">
+                    </ion-icon>
+                    <ion-icon name="trash-outline" color="danger" size="small" style="cursor: pointer" (click)="removeMaterial(i)">
+                    </ion-icon>
                   </td>
                 </tr>
               </tbody>
@@ -94,7 +87,7 @@
         </div>
       </ng-template>
 
-      <ion-modal [isOpen]="ismaterialModalOpen" (didDismiss)="closeModal(100)" class="custom-modal-mobile-app">
+      <ion-modal [isOpen]="ismaterialModalOpen" (didDismiss)="ismaterialModalOpen=false" class="custom-modal-mobile-app">
         <ng-template>
           <ion-header class="modal-toolbar-mobile-app">
             <ion-toolbar color="primary">
@@ -110,7 +103,8 @@
           <ion-content class="ion-padding modal-content-mobile-app" scroll-y="true">
             <ion-list lines="none">
               <!-- Material Dropdown -->
-              <ion-item class="input-item" button detail [disabled]="MaterialList.length === 0" (click)="selectMaterialBottomsheet()" *ngIf="!ModalEditable">
+              <ion-item class="input-item" button detail [disabled]="MaterialList.length === 0"
+                (click)="selectMaterialBottomsheet()" *ngIf="!ModalEditable">
                 <ion-label>Material Name</ion-label>
 
                 <!-- Text showing the selected status -->
@@ -133,8 +127,9 @@
 
               <!-- Quantity -->
               <ion-item class="input-item">
-                <ion-input label="Required Qty" name="RequisitionQty" labelPlacement="floating" type="number" placeholder="Enter Quantity"
-                  [(ngModel)]="newRequisition.RequisitionQty" clearInput="true" clearOnEdit="true"></ion-input>
+                <ion-input label="Required Qty" name="RequisitionQty" labelPlacement="floating" type="number"
+                  placeholder="Enter Quantity" [(ngModel)]="newRequisition.RequisitionQty" clearInput="true"
+                  clearOnEdit="true"></ion-input>
               </ion-item>
             </ion-list>
           </ion-content>
@@ -143,12 +138,12 @@
             <ion-grid>
               <ion-row>
                 <ion-col size="6">
-                  <ion-button expand="block" color="primary" shape="round" (click)="closeModal(100)">
+                  <ion-button expand="block" shape="round" color="medium" (click)="closeModal(100)">
                     Close
                   </ion-button>
                 </ion-col>
                 <ion-col size="6">
-                  <ion-button expand="block" color="primary" shape="round" (click)="addMaterial()">
+                  <ion-button expand="block" shape="round" color="primary" (click)="addMaterial()">
                     {{ModalEditable ? "Update" : "Save"}}
                   </ion-button>
                 </ion-col>
@@ -162,13 +157,13 @@
       <ion-grid>
         <ion-row>
           <ion-col size="6">
-            <ion-button expand="block" (click)="goBack()" class="submit-button cancel-button">
+            <ion-button expand="block" shape="round" color="medium" (click)="goBack()">
               Cancel
             </ion-button>
           </ion-col>
           <ion-col size="6">
-            <ion-button expand="block" (click)="SaveMaterialRequisition()" class="submit-button primary-button">
-              Save
+            <ion-button expand="block" shape="round" color="primary" (click)="SaveMaterialRequisition()">
+              {{IsNewEntity ? "Save" : "Update"}}
             </ion-button>
           </ion-col>
         </ion-row>

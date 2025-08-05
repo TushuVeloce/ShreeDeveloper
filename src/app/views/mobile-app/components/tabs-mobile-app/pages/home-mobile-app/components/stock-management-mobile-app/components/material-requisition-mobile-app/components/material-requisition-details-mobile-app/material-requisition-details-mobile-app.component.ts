@@ -1,6 +1,7 @@
 import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { MaterialRequisitionStatuses } from 'src/app/classes/domain/domainenums/domainenums';
 import { Material } from 'src/app/classes/domain/entities/website/masters/material/material';
 import { Site } from 'src/app/classes/domain/entities/website/masters/site/site';
 import { MaterialRequisition } from 'src/app/classes/domain/entities/website/stock_management/material_requisition/materialrequisition';
@@ -8,10 +9,7 @@ import { RequiredMaterialDetailProps } from 'src/app/classes/domain/entities/web
 import { CurrentDateTimeRequest } from 'src/app/classes/infrastructure/request_response/currentdatetimerequest';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { BottomsheetMobileAppService } from 'src/app/services/bottomsheet-mobile-app.service';
-import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
-import { DateconversionService } from 'src/app/services/dateconversion.service';
 import { DTU } from 'src/app/services/dtu.service';
-import { UIUtils } from 'src/app/services/uiutils.service';
 import { Utils } from 'src/app/services/utils.service';
 import { AlertService } from 'src/app/views/mobile-app/components/core/alert.service';
 import { HapticService } from 'src/app/views/mobile-app/components/core/haptic.service';
@@ -26,7 +24,7 @@ import { ToastService } from 'src/app/views/mobile-app/components/core/toast.ser
 })
 export class MaterialRequisitionDetailsMobileAppComponent implements OnInit {
   Entity: MaterialRequisition = MaterialRequisition.CreateNewInstance();
-  private IsNewEntity: boolean = true;
+  IsNewEntity: boolean = true;
   isSaveDisabled: boolean = false;
   DetailsFormTitle: 'New Material Requisition' | 'Edit Material Requisition' = 'New Material Requisition';
   IsDropdownDisabled: boolean = false;
@@ -36,8 +34,6 @@ export class MaterialRequisitionDetailsMobileAppComponent implements OnInit {
   MaterialList: Material[] = [];
   localEstimatedStartingDate: string = '';
   localEstimatedEndDate: string = '';
-  // plotheaders: string[] = ['Sr.No.', 'Plot No', 'Area sq.m', 'Area sq.ft', 'Goverment Rate', 'Company Rate', 'Action'];
-  // materialheaders: string[] = ['Sr.No.', 'Material Name ', 'Unit', 'Estimated Qty', 'Action'];
   ismaterialModalOpen: boolean = false;
   newRequisition: RequiredMaterialDetailProps = RequiredMaterialDetailProps.Blank();
   editingIndex: null | undefined | number
@@ -48,19 +44,14 @@ export class MaterialRequisitionDetailsMobileAppComponent implements OnInit {
   selectedSite: any[] = [];
   MaterialName: string = '';
   selectedMaterial: any[] = [];
-  // Date: string | null = null;
   tableHeaderData = ['Material', 'Unit', 'Required Qty'];
+  MaterialRequisitionStatuses = MaterialRequisitionStatuses;
+  Date : string | null = null;
 
-  showFromPicker = false;
-  Date = '';
-  DisplayDate = '';
-
-  constructor(private uiUtils: UIUtils,
+  constructor(
     private router: Router,
     private appStateManage: AppStateManageService,
-    private companystatemanagement: CompanyStateManagement,
     private dtu: DTU,
-    private DateconversionService: DateconversionService,
     private bottomsheetMobileAppService: BottomsheetMobileAppService,
     private toastService: ToastService,
     private haptic: HapticService,
@@ -81,12 +72,11 @@ export class MaterialRequisitionDetailsMobileAppComponent implements OnInit {
     // Cleanup if needed
   }
 
-  private async loadMaterialRequisitionDetailsIfCompanyExists() {
+  private loadMaterialRequisitionDetailsIfCompanyExists = async () => {
     try {
       await this.loadingService.show(); // Awaiting this is critical
       this.companyRef = Number(this.appStateManage.localStorage.getItem('SelectedCompanyRef'));
       this.Date = this.datePipe.transform(new Date(), 'yyyy-MM-dd') ?? '';
-      this.DisplayDate = this.Date;
       if (this.companyRef > 0) {
         this.appStateManage.setDropdownDisabled(true);
 
@@ -101,7 +91,6 @@ export class MaterialRequisitionDetailsMobileAppComponent implements OnInit {
 
           if (this.Entity.p.Date != '') {
             this.Date = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.Date);
-            this.DisplayDate = this.datePipe.transform(this.Date, 'yyyy-MM-dd') ?? '';
           }
           this.selectedSite = [{
             p: {
@@ -127,11 +116,10 @@ export class MaterialRequisitionDetailsMobileAppComponent implements OnInit {
           this.utils.DeepCopy(this.Entity)
         ) as MaterialRequisition;
       } else {
-        await this.toastService.present('company not selected', 1000, 'danger');
-        await this.haptic.error();
+        await this.toastService.present('company not selected', 1000, 'warning');
+        await this.haptic.warning();
       }
     } catch (error) {
-      console.error('Error loading Material Requisition details:', error);
       await this.toastService.present('Failed to load Material Requisition details', 1000, 'danger');
       await this.haptic.error();
     } finally {
@@ -139,48 +127,45 @@ export class MaterialRequisitionDetailsMobileAppComponent implements OnInit {
     }
   }
 
-  public async onDateChange(date: any): Promise<void> {
+  public onDateChange = async (date: any): Promise<void> => {
     this.Date = this.datePipe.transform(date, 'yyyy-MM-dd') ?? '';
-    this.DisplayDate = this.Date;
-    this.Entity.p.Date = this.Date;
+    this.Entity.p.Date = this.Date ?? '';
   }
 
   getSiteListByCompanyRef = async () => {
     try {
       if (this.companyRef <= 0) {
-        // await this.uiUtils.showErrorToster('Company not Selected');
-        await this.toastService.present('Company not Selected', 1000, 'danger');
-        await this.haptic.error();
+        await this.toastService.present('Company not Selected', 1000, 'warning');
+        await this.haptic.warning();
         return;
       }
       let lst = await Site.FetchEntireListByCompanyRef(this.companyRef, async errMsg => {
-        // await this.uiUtils.showErrorMessage('Error', errMsg)
-        await this.toastService.present('Error' + errMsg, 1000, 'danger')
+        await this.toastService.present(errMsg, 1000, 'danger')
         await this.haptic.error();
       });
       this.SiteList = lst;
     } catch (error) {
-
+      await this.toastService.present('Failed to load Site list', 1000, 'danger');
+      await this.haptic.error();
     }
   }
 
   getMaterialListByCompanyRef = async () => {
     try {
       if (this.companyRef <= 0) {
-        // await this.uiUtils.showErrorToster('Company not Selected');
-        await this.toastService.present('Company not Selected', 1000, 'danger');
-        await this.haptic.error();
+        await this.toastService.present('Company not Selected', 1000, 'warning');
+        await this.haptic.warning();
         return;
       }
       let lst = await Material.FetchEntireListByCompanyRef(this.companyRef, async errMsg => {
-        await this.toastService.present('Error' + errMsg, 1000, 'danger')
+        await this.toastService.present(errMsg, 1000, 'danger')
         await this.haptic.error();
-        // await this.uiUtils.showErrorMessage('Error', errMsg)
       });
       this.AllMaterialList = lst;
       this.filterMaterialList();
     } catch (error) {
-
+      await this.toastService.present('Failed to load Material list', 1000, 'danger');
+      await this.haptic.error();
     }
   }
 
@@ -190,25 +175,30 @@ export class MaterialRequisitionDetailsMobileAppComponent implements OnInit {
       this.newRequisition.UnitName = '';
       this.newRequisition.MaterialName = ''
       if (materialref <= 0 || materialref <= 0) {
-        // await this.uiUtils.showErrorToster('Material not Selected');
-        await this.toastService.present('Material not Selected', 1000, 'danger');
-        await this.haptic.error();
+        await this.toastService.present('Material not Selected', 1000, 'warning');
+        await this.haptic.warning();
         return;
       }
       let lst = await Material.FetchInstance(materialref, this.companyRef, async errMsg => {
-        await this.toastService.present('Error' + errMsg, 1000, 'danger');
+        await this.toastService.present(errMsg, 1000, 'danger');
         await this.haptic.error();
-        // await this.uiUtils.showErrorMessage('Error', errMsg)
       });
       this.newRequisition.UnitRef = lst.p.UnitRef;
       this.newRequisition.UnitName = lst.p.UnitName;
       this.newRequisition.MaterialName = lst.p.Name
     } catch (error) {
-
+      await this.toastService.present('Failed to load Unit list', 1000, 'danger');
+      await this.haptic.error();
     }
   }
 
-  openModal(type: number) {
+
+  openModal = async (type: number) => {
+    if (this.Entity.p.SiteRef == 0){
+      await this.toastService.present('Site not Selected', 1000, 'warning');
+      await this.haptic.warning();
+      return;
+    }
     if (type === 100) this.ismaterialModalOpen = true;
     this.ModalEditable = false;
   }
@@ -241,7 +231,6 @@ export class MaterialRequisitionDetailsMobileAppComponent implements OnInit {
               role: 'cancel',
               cssClass: 'custom-cancel',
               handler: () => {
-                console.log('User cancelled.');
               }
             },
             {
@@ -254,7 +243,6 @@ export class MaterialRequisitionDetailsMobileAppComponent implements OnInit {
                 this.MaterialName = '';
                 this.selectedMaterial = [];
                 this.haptic.success();
-                console.log('User confirmed.');
               }
             }
           ]
@@ -268,7 +256,7 @@ export class MaterialRequisitionDetailsMobileAppComponent implements OnInit {
     }
   };
 
-  filterMaterialList() {
+  filterMaterialList = () => {
     const usedRefs = this.Entity.p.MaterialRequisitionDetailsArray.map(item => item.MaterialRef);
     this.MaterialList = this.AllMaterialList.filter(
       material => !usedRefs.includes(material.p.Ref)
@@ -276,20 +264,20 @@ export class MaterialRequisitionDetailsMobileAppComponent implements OnInit {
   }
 
 
-  async addMaterial() {
+  addMaterial = async () => {
     try {
-      this.loadingService.show();
       if (this.newRequisition.MaterialRef == 0) {
-        await this.toastService.present('Material cannot be blank.', 1000, 'danger');
-        await this.haptic.error();
+        await this.toastService.present('Material cannot be blank.', 1000, 'warning');
+        await this.haptic.warning();
         return;
       }
       if (this.newRequisition.RequisitionQty == 0) {
-        await this.toastService.present('Required Quantity cannot be blank.', 1000, 'danger');
-        await this.haptic.error();
+        await this.toastService.present('Required Quantity cannot be blank.', 1000, 'warning');
+        await this.haptic.warning();
         return;
       }
-
+      this.loadingService.show();
+      console.log('this.newRequisition :', this.newRequisition);
       if (this.editingIndex !== null && this.editingIndex !== undefined && this.editingIndex >= 0) {
         this.Entity.p.MaterialRequisitionDetailsArray[this.editingIndex] = { ...this.newRequisition };
         this.ismaterialModalOpen = false;
@@ -306,18 +294,18 @@ export class MaterialRequisitionDetailsMobileAppComponent implements OnInit {
       this.filterMaterialList();
       this.ismaterialModalOpen = false;
       this.ModalEditable = false;
-      this.newRequisition = RequiredMaterialDetailProps.Blank();
       this.MaterialName = '';
       this.selectedMaterial = [];
     } catch (error) {
-
+      await this.toastService.present('Failed to add material', 1000, 'danger');
+      await this.haptic.error();
     }
     finally {
       this.loadingService.hide();
     }
   }
 
-  editMaterial(index: number) {
+  editMaterial = async (index: number) => {
     try {
       this.ismaterialModalOpen = true
       this.newRequisition = { ...this.Entity.p.MaterialRequisitionDetailsArray[index] }
@@ -327,11 +315,12 @@ export class MaterialRequisitionDetailsMobileAppComponent implements OnInit {
       this.selectedMaterial = [{ p: { Ref: this.newRequisition.MaterialRef, Name: this.newRequisition.MaterialName } }];
       this.MaterialName = this.selectedMaterial[0].p.Name;
     } catch (error) {
-
+      await this.toastService.present('Failed to edit material', 1000, 'danger');
+      await this.haptic.error();
     }
   }
 
-  async removeMaterial(index: number) {
+  removeMaterial = async (index: number) => {
     this.alertService.presentDynamicAlert({
       header: 'Delete',
       subHeader: 'Confirmation needed',
@@ -342,18 +331,15 @@ export class MaterialRequisitionDetailsMobileAppComponent implements OnInit {
           role: 'cancel',
           cssClass: 'custom-cancel',
           handler: () => {
-            console.log('User cancelled.');
           }
         },
         {
           text: 'Yes, Delete',
           cssClass: 'custom-confirm',
           handler: () => {
-            console.log('MaterialRequisitionDetailsArray Deleted.');
             this.Entity.p.MaterialRequisitionDetailsArray.splice(index, 1);
             this.filterMaterialList();
             this.haptic.success();
-            console.log('User confirmed.');
           }
         }
       ]
@@ -369,7 +355,6 @@ export class MaterialRequisitionDetailsMobileAppComponent implements OnInit {
       this.Entity.p.Date = this.dtu.ConvertStringDateToFullFormat(this.Entity.p.Date)
       let entityToSave = this.Entity.GetEditableVersion();
       let entitiesToSave = [entityToSave];
-      console.log('entitiesToSave :', entitiesToSave);
       let tr = await this.utils.SavePersistableEntities(entitiesToSave);
       if (!tr.Successful) {
         this.isSaveDisabled = false;
@@ -390,7 +375,8 @@ export class MaterialRequisitionDetailsMobileAppComponent implements OnInit {
         await this.router.navigate(['/mobile-app/tabs/dashboard/stock-management/material-requisition']);
       }
     } catch (error) {
-
+      await this.toastService.present('Failed to save Material Requisition', 1000, 'danger')
+      await this.haptic.error();
     }
   };
 
@@ -399,7 +385,7 @@ export class MaterialRequisitionDetailsMobileAppComponent implements OnInit {
     const input = event.target as HTMLInputElement;
     input.select();
   }
-  public async selectMaterialBottomsheet(): Promise<void> {
+  public selectMaterialBottomsheet = async (): Promise<void> => {
     try {
       const options = this.MaterialList;
       this.openSelectModal(options, this.selectedMaterial, false, 'Select Material', 1, (selected) => {
@@ -409,10 +395,11 @@ export class MaterialRequisitionDetailsMobileAppComponent implements OnInit {
         this.getUnitByMaterialRef(this.newRequisition.MaterialRef)
       });
     } catch (error) {
-
+      await this.toastService.present('Failed to load Material list', 1000, 'danger');
+      await this.haptic.error();
     }
   }
-  public async selectSiteBottomsheet(): Promise<void> {
+  public selectSiteBottomsheet = async (): Promise<void> => {
     try {
       const options = this.SiteList;
       this.openSelectModal(options, this.selectedSite, false, 'Select Site', 1, (selected) => {
@@ -421,7 +408,8 @@ export class MaterialRequisitionDetailsMobileAppComponent implements OnInit {
         this.SiteName = selected[0].p.Name;
       });
     } catch (error) {
-
+      await this.toastService.present('Failed to load Site list', 1000, 'danger');
+      await this.haptic.error();
     }
   }
   private async openSelectModal(
@@ -437,8 +425,6 @@ export class MaterialRequisitionDetailsMobileAppComponent implements OnInit {
   }
   isDataFilled(): boolean {
     const emptyEntity = MaterialRequisition.CreateNewInstance();
-    console.log('emptyEntity :', emptyEntity);
-    console.log('this Entity :', this.Entity);
     return !this.deepEqualIgnoringKeys(this.Entity, emptyEntity, ['p.Date']);
   }
 
@@ -476,7 +462,7 @@ export class MaterialRequisitionDetailsMobileAppComponent implements OnInit {
             role: 'cancel',
             cssClass: 'custom-cancel',
             handler: () => {
-              console.log('User cancelled.');
+
             }
           },
           {
@@ -485,7 +471,6 @@ export class MaterialRequisitionDetailsMobileAppComponent implements OnInit {
             handler: () => {
               this.router.navigate(['/mobile-app/tabs/dashboard/stock-management/material-requisition'], { replaceUrl: true });
               this.haptic.success();
-              console.log('User confirmed.');
             }
           }
         ]

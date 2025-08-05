@@ -10,20 +10,21 @@
   <ion-list class="requisition-list" [lines]="'none'">
     <ion-item *ngFor="let order of DisplayMasterList" class="requisition-item" button detail (click)="openModal(order)">
       <ion-label>
-        <h2>Purchase Order ID : {{ order.p.DisplayPurchaseOrderId || '-' }}</h2>
+        <h2>PO ID : {{ order.p.DisplayPurchaseOrderId || '-' }}</h2>
         <p>Site : {{ order.p.SiteName || 'Unknown Site' }}</p>
         <p class="date-label">Date : {{ formatDate(order.p.PurchaseOrderDate) || 'Unknown Date' }}</p>
-        <p class="date-label">Status : <span class="status-badge"
-            [ngClass]="getStatusClass(order.p.MaterialPurchaseOrderStatus)">
-            {{ getStatusText(order.p.MaterialPurchaseOrderStatus) }}
-          </span></p>
+        <ion-chip class="status-badge" [ngClass]="getStatusClass(order.p.MaterialPurchaseOrderStatus)">
+          {{ getStatusText(order.p.MaterialPurchaseOrderStatus) }}
+        </ion-chip>
       </ion-label>
 
       <div class="action-buttons" slot="end" (click)="$event.stopPropagation()">
-        <ion-button fill="clear" size="small" color="primary" (click)="onEditClicked(order)"  *ngIf="!checkIsEnable(order.p.MaterialPurchaseOrderDetailsArray) || order.p.MaterialPurchaseOrderStatus == MaterialPurchaseOrderStatus.Approved">
+        <ion-button fill="clear" size="small" color="primary" (click)="onEditClicked(order)"
+          *ngIf="!checkIsEnable(order.p.MaterialPurchaseOrderDetailsArray) || order.p.MaterialPurchaseOrderStatus == MaterialPurchaseOrderStatus.Approved">
           <ion-icon name="pencil-outline" slot="icon-only"></ion-icon>
         </ion-button>
-        <ion-button fill="clear" size="small" color="primary" (click)="onDeleteClicked(order)" *ngIf="!checkIsEnable(order.p.MaterialPurchaseOrderDetailsArray) || order.p.MaterialPurchaseOrderStatus == MaterialPurchaseOrderStatus.Approved">
+        <ion-button fill="clear" size="small" color="primary" (click)="onDeleteClicked(order)"
+          *ngIf="!checkIsEnable(order.p.MaterialPurchaseOrderDetailsArray) || order.p.MaterialPurchaseOrderStatus == MaterialPurchaseOrderStatus.Approved">
           <ion-icon name="trash-outline" slot="icon-only"></ion-icon>
         </ion-button>
       </div>
@@ -97,7 +98,7 @@
         <div class="info-row-of-model-mobile-app">
           <span class="label-mobile-app">Materials :</span>
         </div>
-        <div class="table-container">
+        <div class="table-container ion-text-center">
           <div class="table-scroll">
             <table class="custom-table">
               <thead>
@@ -157,9 +158,9 @@
         </div>
         <div class="info-row-of-model-mobile-app">
           <span class="label-mobile-app">Status:</span>
-          <span class="status-badge" [ngClass]="getStatusClass(SelectedOrder.p.MaterialPurchaseOrderStatus)">
+          <ion-chip class="status-badge" [ngClass]="getStatusClass(SelectedOrder.p.MaterialPurchaseOrderStatus)">
             {{ getStatusText(SelectedOrder.p.MaterialPurchaseOrderStatus) }}
-          </span>
+          </ion-chip>
         </div>
       </ion-content>
 

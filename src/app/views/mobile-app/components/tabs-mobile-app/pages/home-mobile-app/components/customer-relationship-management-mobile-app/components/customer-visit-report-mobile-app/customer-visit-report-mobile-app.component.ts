@@ -153,6 +153,7 @@ export class CustomerVisitReportMobileAppComponent implements OnInit {
     );
     this.MasterList = lst;
     this.DisplayMasterList = this.MasterList;
+    console.log('DisplayMasterList :', this.DisplayMasterList);
 
   };
 

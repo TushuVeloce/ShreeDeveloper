@@ -708,6 +708,10 @@ input[type=number] {
   --background: var(--ion-background-color);
   padding: 16px;
 
+  ion-list {
+    background: #FFF;
+  }
+
   label {
     font-weight: 500 !important;
   }
@@ -1087,7 +1091,6 @@ textarea[placeholder]::placeholder {
   --height: 60%;
   --width: 90%;
   --border-radius: 20px;
-  --background: var(--ion-background-color);
 
   .modal-toolbar-mobile-app {
     border-top-left-radius: 20px;
@@ -1097,6 +1100,10 @@ textarea[placeholder]::placeholder {
   .modal-content-mobile-app {
     max-height: 100%;
     overflow-y: auto;
+
+    ion-list {
+      background: #FFF;
+    }
   }
 
   .info-row-of-model-mobile-app {
