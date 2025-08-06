@@ -32,6 +32,7 @@ export class SalaryGenerationDetailsComponent implements OnInit {
   companyName = this.companystatemanagement.SelectedCompanyName;
   companyRef = this.companystatemanagement.SelectedCompanyRef;
   GrossTotal = 0;
+
   constructor(private router: Router, private uiUtils: UIUtils, private appStateManage: AppStateManageService, private utils: Utils, private companystatemanagement: CompanyStateManagement, private serverCommunicator: ServerCommunicatorService, private payloadPacketFacade: PayloadPacketFacade) { }
 
 
@@ -67,13 +68,8 @@ export class SalaryGenerationDetailsComponent implements OnInit {
   }
 
   calculategrosstotal = () => {
-    if (this.Entity.p.TotalOverTimeHrs) {
-      const ExtraAmountTotal = this.Entity.p.TotalAllowance + this.Entity.p.TotalIncentive + this.Entity.p.Other
-      this.Entity.p.GrossTotal = parseFloat(ExtraAmountTotal.toFixed(2)) + this.GrossTotal;
-    } else {
-      const GrossTotal = this.Entity.p.BasicSalary + this.Entity.p.TotalAllowance + this.Entity.p.TotalIncentive + this.Entity.p.Other
-      this.Entity.p.GrossTotal = parseFloat(GrossTotal.toFixed(2));
-    }
+    const Total = this.GrossTotal + this.Entity.p.TotalAllowance + this.Entity.p.TotalIncentive + this.Entity.p.Other
+    this.Entity.p.GrossTotal = parseFloat(Total.toFixed(2));
     this.calculatenetsalary()
   }
 
@@ -81,7 +77,7 @@ export class SalaryGenerationDetailsComponent implements OnInit {
     const tds = Number(this.Entity.p.TDS) || 0;
     const pf = Number(this.Entity.p.PF) || 0;
     const advance = Number(this.Entity.p.AdvanceDeduction) || 0;
-    const advancepayment =  Number(this.Entity.p.AdvancePayment) || 0;
+    const advancepayment = Number(this.Entity.p.AdvancePayment) || 0;
 
     const TotalDeduction = tds + pf + advance;
     const RemainingAdvance = advancepayment - advance
@@ -113,45 +109,6 @@ export class SalaryGenerationDetailsComponent implements OnInit {
     this.calculatetotaldeduction()
   }
 
-  // EmployeeData = async (employee: number, month: number) => {
-  //   if (month != 0) {
-  //     const selectedMonthData = this.MonthList.find(m => m.Ref === month);
-  //     if (selectedMonthData) {
-  //       this.Entity.p.TotalDays = selectedMonthData.Days;
-  //     }
-  //   } else {
-  //     this.Entity.p.TotalDays = 0;
-  //   }
-  //   if (employee === 0 || month === 0) {
-  //     return;
-  //   }
-  //   this.Entity.p.TotalWorkingDays = 0
-  //   this.Entity.p.TotalLeaves = 0
-  //   this.Entity.p.TotalOverTimeHrs = 0
-  //   this.Entity.p.TotalWorkingHrs = 0
-  //   this.Entity.p.TotalLeavesHrs = 0
-  //   this.Entity.p.OverAllWorkingHrs = 0
-  //   let req = new SalaryGenerationCustomRequest();
-  //   req.EmployeeRef = employee;
-  //   req.Month = month;
-  //   let td = req.FormulateTransportData();
-  //   let pkt = this.payloadPacketFacade.CreateNewPayloadPacket2(td);
-  //   let tr = await this.serverCommunicator.sendHttpRequest(pkt);
-
-  //   if (!tr.Successful) {
-  //     await this.uiUtils.showErrorMessage('Error', tr.Message);
-  //     return;
-  //   }
-
-  //   let tdResult = JSON.parse(tr.Tag) as TransportData;
-  //   let res = SalaryGenerationCustomRequest.FromTransportData(tdResult);
-  //   if (res.Data.length > 0) {
-  //     let checkInData: SalaryGenerationProps[] = res.Data as SalaryGenerationProps[];
-  //     Object.assign(this.Entity.p, checkInData[0]);
-  //   }
-  // };
-
-
   EmployeeData = async (employee: number, month: number) => {
     if (month != 0) {
       const selectedMonthData = this.MonthList.find(m => m.Ref === month);
@@ -162,11 +119,7 @@ export class SalaryGenerationDetailsComponent implements OnInit {
       this.Entity.p.TotalDays = 0;
     }
     this.Entity.p.TotalWorkingDays = 0
-    // this.Entity.p.TotalLeaves = 0
     this.Entity.p.TotalOverTimeHrs = 0
-    // this.Entity.p.TotalWorkingHrs = 0
-    // this.Entity.p.TotalLeavesHrs = 0
-    // this.Entity.p.OverallWorkingHrs = 0
     this.Entity.p.BasicSalary = 0
     this.Entity.p.AdvancePayment = 0
     if (employee === 0 || month === 0) {
