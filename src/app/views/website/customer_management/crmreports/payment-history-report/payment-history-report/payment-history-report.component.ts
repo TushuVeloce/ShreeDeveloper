@@ -97,6 +97,7 @@ export class PaymentHistoryReportComponent  implements OnInit {
     }
     if(this.Entity.p.SiteRef == null){
       this.Entity.p.SiteRef = 0
+      this.Entity.p.PlotRef = 0
     }else if(this.Entity.p.PlotRef == null){
       this.Entity.p.PlotRef = 0
     }
