@@ -105,7 +105,7 @@ export class SalaryGenerationComponent implements OnInit {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
-    let lst = await SalaryGeneration.FetchEmployeeDataByEmployeeRefandMonth(this.companyRef(), this.EmployeeRef, this.Month, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    let lst = await SalaryGeneration.FetchEmployeeDataForTableByEmployeeRefandMonth(this.companyRef(), this.EmployeeRef, this.Month, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.MasterList = lst;
     this.DisplayMasterList = this.MasterList;
     this.loadPaginationData();

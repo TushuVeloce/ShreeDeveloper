@@ -205,7 +205,7 @@ export class SalaryGeneration implements IPersistable<SalaryGeneration> {
     return SalaryGeneration.ListFromTransportData(tdResponse);
   }
 
-  public static async FetchEmployeeDataByEmployeeRefandMonth(CompanyRef: number, EmployeeRef: number, Month: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+  public static async FetchEmployeeDataForTableByEmployeeRefandMonth(CompanyRef: number, EmployeeRef: number, Month: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let req = new SalaryGenerationCustomRequest();
     req.CompanyRef = CompanyRef;
     if (EmployeeRef > 0) {
@@ -214,6 +214,15 @@ export class SalaryGeneration implements IPersistable<SalaryGeneration> {
     if (Month > 0) {
       req.Months.push(Month);
     }
+    let tdResponse = await SalaryGeneration.FetchTransportData(req, errorHandler) as TransportData;
+    return SalaryGeneration.ListFromTransportData(tdResponse);
+  }
+
+  public static async FetchEmployeeDataByEmployeeRefandMonth(CompanyRef: number, EmployeeRef: number, Month: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+    let req = new SalaryGenerationCustomRequest();
+    req.CompanyRef = CompanyRef;
+    req.EmployeeRef = EmployeeRef;
+    req.Month = Month;
     let tdResponse = await SalaryGeneration.FetchTransportData(req, errorHandler) as TransportData;
     return SalaryGeneration.ListFromTransportData(tdResponse);
   }
