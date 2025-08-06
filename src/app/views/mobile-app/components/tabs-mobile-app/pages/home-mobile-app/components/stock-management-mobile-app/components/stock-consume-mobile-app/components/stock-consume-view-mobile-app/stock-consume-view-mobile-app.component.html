@@ -14,7 +14,7 @@
       (click)="openModal(stockConsume)">
       <ion-label>
         <h2>Site : {{ stockConsume.p.SiteName || 'Unknown Site' }}</h2>
-        <p class="date-label">Consumption Date : {{ formatDate(stockConsume.p.ConsumptionDate) || '-' }}</p>
+        <p class="date-label">Date : {{ formatDate(stockConsume.p.ConsumptionDate) || '-' }}</p>
         <p class="date-label">Material : {{ stockConsume.p.MaterialName || '-' }}</p>
         <p class="date-label">Consumption Qty. : {{ stockConsume.p.ConsumedQuantity + " " + stockConsume.p.UnitName }}
         </p>
@@ -27,9 +27,6 @@
         <ion-button fill="clear" size="small" color="primary" (click)="onDeleteClicked(stockConsume)">
           <ion-icon name="trash-outline" slot="icon-only"></ion-icon>
         </ion-button>
-        <!-- <ion-button fill="clear" size="small" color="primary" (click)="navigateToPrint(stockConsume)">
-          <ion-icon name="print-outline" slot="icon-only"></ion-icon>
-        </ion-button> -->
       </div>
     </ion-item>
   </ion-list>

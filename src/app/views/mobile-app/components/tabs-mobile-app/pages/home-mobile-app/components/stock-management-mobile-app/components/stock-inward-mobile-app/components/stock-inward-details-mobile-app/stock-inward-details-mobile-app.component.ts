@@ -15,7 +15,6 @@ import { TransportData } from 'src/app/classes/infrastructure/transportdata';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { BaseUrlService } from 'src/app/services/baseurl.service';
 import { BottomsheetMobileAppService } from 'src/app/services/bottomsheet-mobile-app.service';
-import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
 import { DateconversionService } from 'src/app/services/dateconversion.service';
 import { DTU } from 'src/app/services/dtu.service';
 import { ServerCommunicatorService } from 'src/app/services/server-communicator.service';
@@ -55,7 +54,6 @@ export class StockInwardDetailsMobileAppComponent implements OnInit {
   shouldFilterDropdown = false; // 🔁 Used to toggle filtering after add
   SessionAddedRefs: number[] = [];
   PurchaseOrderDate: string = ''
-  // InwardDate: string = ''
 
   today: string = new Date().toISOString().split('T')[0];
   NewRemainingQty: number = 0;
@@ -84,21 +82,15 @@ export class StockInwardDetailsMobileAppComponent implements OnInit {
   imagePostViewUrl: string = '';
   selectedFileName: string = '';
 
-  showChildInwardDatePicker = false;
-  ChildInwardDate = '';
-  DisplayChildInwardDate = '';
+  ChildInwardDate: string | null = null;
 
-  showInwardDatePicker = false;
-  InwardDate = '';
-  DisplayInwardDate = '';
-
+  InwardDate: string | null = null;
   DisplayOrderDate: string = ''
   filesToUpload: FileTransferObject[] = [];
 
   constructor(
     private router: Router,
     private appStateManage: AppStateManageService,
-    private companystatemanagement: CompanyStateManagement,
     private dtu: DTU,
     private DateconversionService: DateconversionService,
     private bottomsheetMobileAppService: BottomsheetMobileAppService,
@@ -194,6 +186,7 @@ export class StockInwardDetailsMobileAppComponent implements OnInit {
         this.filesToUpload.push(FileTransferObject.FromFile("MaterialInwardInvoiceFile", file, file.name));
       } else {
         this.toastService.present('Unsupported file type.', 1000, 'warning');
+        this.haptic.warning();
       }
     }
 
@@ -264,7 +257,6 @@ export class StockInwardDetailsMobileAppComponent implements OnInit {
 
   // For loading previously uploaded file (if editing)
   loadFileFromBackend(imageUrl: string): void {
-    console.log('loadFileFromBackend :', imageUrl);
     if (imageUrl) {
       this.imagePostView = `${this.ImageBaseUrl}${imageUrl}/${this.LoginToken}?${this.TimeStamp}`;
       this.selectedFileName = imageUrl;
@@ -285,7 +277,7 @@ export class StockInwardDetailsMobileAppComponent implements OnInit {
       this.companyRef = Number(this.appStateManage.localStorage.getItem('SelectedCompanyRef'));
 
       if (this.companyRef > 0) {
-           this.ImageBaseUrl = this.baseUrl.GenerateImageBaseUrl();
+        this.ImageBaseUrl = this.baseUrl.GenerateImageBaseUrl();
         this.LoginToken = this.appStateManage.getLoginTokenForMobile();
         this.appStateManage.setDropdownDisabled(true);
         await this.getSiteListByCompanyRef();
@@ -297,14 +289,10 @@ export class StockInwardDetailsMobileAppComponent implements OnInit {
           this.Entity = StockInward.GetCurrentInstance();
           this.imagePostView = `${this.ImageBaseUrl}${this.Entity.p.MaterialInwardInvoicePath}/${this.LoginToken}?${this.TimeStamp}`;
           this.selectedFileName = this.Entity.p.MaterialInwardInvoicePath;
-          // this.InwardDate = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.InwardDate);
-
           await this.getOrderIdListByCompanySiteAndVendorRef();
           this.appStateManage.StorageKey.removeItem('Editable');
-          console.log('this.Entity :', this.Entity);
-          if (this.Entity.p.InwardDate != '') {
+          if (this.Entity.p.InwardDate != '' || this.Entity.p.InwardDate != null) {
             this.InwardDate = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.InwardDate);
-            this.DisplayInwardDate = this.datePipe.transform(this.InwardDate, 'yyyy-MM-dd') ?? '';
           }
           this.selectedSite = [{
             p: {
@@ -322,8 +310,6 @@ export class StockInwardDetailsMobileAppComponent implements OnInit {
           this.VendorName = this.selectedVendor[0].p.Name;
 
           this.PurchaseIDName = this.PurchaseOrderIdList.find(item => item.p.Ref == this.Entity.p.MaterialPurchaseOrderRef)?.p.DisplayPurchaseOrderId ?? '';
-          console.log('this.PurchaseOrderIdList :', this.PurchaseOrderIdList);
-          console.log('this.PurchaseIDName :', this.PurchaseIDName);
           this.selectedPurchaseID = [{
             p: {
               Ref: this.Entity.p.MaterialPurchaseOrderRef,
@@ -334,44 +320,35 @@ export class StockInwardDetailsMobileAppComponent implements OnInit {
         } else {
           this.Entity = StockInward.CreateNewInstance();
           StockInward.SetCurrentInstance(this.Entity);
-          // this.strCDT = await CurrentDateTimeRequest.GetCurrentDateTime();
-          // console.log('this.Entity :', this.Entity);
-          // let parts = this.strCDT.substring(0, 16).split('-');
-          // // Construct the new date format
-          // this.InwardDate = `${parts[0]}-${parts[1]}-${parts[2]}`;
           this.strCDT = await CurrentDateTimeRequest.GetCurrentDateTime();
           let parts = this.strCDT.substring(0, 16).split('-');
           // Construct the new date format
-          this.InwardDate = `${parts[0]}-${parts[1]}-${parts[2]}`;
+          this.Entity.p.InwardDate = `${parts[0]}-${parts[1]}-${parts[2]}`;
           this.InwardDate = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.InwardDate);
-          this.DisplayInwardDate = this.datePipe.transform(this.InwardDate, 'yyyy-MM-dd') ?? '';
+
           this.ChildInwardDate = `${parts[0]}-${parts[1]}-${parts[2]}`;
           this.ChildInwardDate = this.dtu.ConvertStringDateToShortFormat(this.ChildInwardDate);
-          this.DisplayChildInwardDate = this.datePipe.transform(this.ChildInwardDate, 'yyyy-MM-dd') ?? '';
           await this.ChalanNo()
         }
       } else {
-        await this.toastService.present('company not selected', 1000, 'danger');
-        await this.haptic.error();
+        await this.toastService.present('company not selected', 1000, 'warning');
+        await this.haptic.warning();
       }
     } catch (error) {
-      console.error('Error loading Stock Inward details:', error);
       await this.toastService.present('Failed to load Stock Inward details', 1000, 'danger');
       await this.haptic.error();
     } finally {
-      await this.loadingService.hide(); // Also ensure this is awaited
+      await this.loadingService.hide();
     }
   }
 
   public async onInwardDateChange(date: any): Promise<void> {
     this.InwardDate = this.datePipe.transform(date, 'yyyy-MM-dd') ?? '';
     this.Entity.p.InwardDate = this.InwardDate;
-    this.DisplayInwardDate = this.InwardDate;
   }
   public async onChildInwardDateChange(date: any): Promise<void> {
     this.ChildInwardDate = this.datePipe.transform(date, 'yyyy-MM-dd') ?? '';
     this.newInward.Date = this.ChildInwardDate;
-    this.DisplayChildInwardDate = this.ChildInwardDate;
   }
 
   ChalanNo = async () => {
@@ -381,7 +358,8 @@ export class StockInwardDetailsMobileAppComponent implements OnInit {
     let tr = await this.serverCommunicator.sendHttpRequest(pkt);
 
     if (!tr.Successful) {
-      await this.toastService.present('Error ' + tr.Message, 1000, 'danger');
+      await this.toastService.present( tr.Message, 1000, 'danger');
+      await this.haptic.error();
       return;
     }
 
@@ -402,18 +380,17 @@ export class StockInwardDetailsMobileAppComponent implements OnInit {
         }
       }
     }
-    await this.toastService.present('Error' + ' Chalan number could not be retrieved.', 1000, 'danger');
+    await this.toastService.present('Chalan number could not be retrieved.', 1000, 'danger');
     await this.haptic.error();
   };
 
   getSiteListByCompanyRef = async () => {
     if (this.companyRef <= 0) {
-      await this.toastService.present('company not selected', 1000, 'danger');
-      await this.haptic.error();
+      await this.toastService.present('company not selected', 1000, 'warning');
+      await this.haptic.warning();
       return;
     }
     let lst = await Site.FetchEntireListByCompanyRef(this.companyRef, async errMsg => {
-      // await this.uiUtils.showErrorMessage('Error', errMsg)
       await this.toastService.present(errMsg, 1000, 'danger');
       await this.haptic.error();
     });
@@ -422,12 +399,11 @@ export class StockInwardDetailsMobileAppComponent implements OnInit {
 
   getVendorListByCompanyRef = async () => {
     if (this.companyRef <= 0) {
-      await this.toastService.present('company not selected', 1000, 'danger');
-      await this.haptic.error();
+      await this.toastService.present('company not selected', 1000, 'warning');
+      await this.haptic.warning();
       return;
     }
     let lst = await Vendor.FetchEntireListByCompanyRef(this.companyRef, async errMsg => {
-      // await this.uiUtils.showErrorMessage('Error', errMsg)
       await this.toastService.present(errMsg, 1000, 'danger');
       await this.haptic.error();
     });
@@ -442,31 +418,27 @@ export class StockInwardDetailsMobileAppComponent implements OnInit {
 
   getOrderIdListByCompanySiteAndVendorRef = async () => {
     if (this.companyRef <= 0) {
-      // await this.toastService.present('company not selected', 1000, 'danger');
-      // await this.haptic.error();
+      // await this.toastService.present('company not selected', 1000, 'warning');
+      // await this.haptic.warning();
       return;
     }
     if (this.Entity.p.SiteRef <= 0) {
-      // await this.toastService.present('Site not selected', 1000, 'danger');
-      // await this.haptic.error();
+      // await this.toastService.present('Site not selected', 1000, 'warning');
+      // await this.haptic.warning();
       return;
     }
     if (this.Entity.p.VendorRef <= 0) {
-      // await this.toastService.present('Vendor not selected', 1000, 'danger');
-      // await this.haptic.error();
+      // await this.toastService.present('Vendor not selected', 1000, 'warning');
+      // await this.haptic.warning();
       return;
     }
     let lst = await Order.FetchEntireListByCompanySiteAndVendorRef(this.companyRef, this.Entity.p.SiteRef, this.Entity.p.VendorRef,
       async (errMsg) => {
-        // await this.uiUtils.showErrorMessage('Error', errMsg)
         await this.toastService.present(errMsg, 1000, 'danger');
         await this.haptic.error();
       }
     );
-
     this.PurchaseOrderIdList = lst;
-    console.log('lst :', lst);
-
   };
 
   // Extracted from services date conversion //
@@ -476,12 +448,11 @@ export class StockInwardDetailsMobileAppComponent implements OnInit {
 
   getMaterialListByCompanySiteVendorRefAndPurchaseOrderID = async () => {
     if (this.Entity.p.MaterialPurchaseOrderRef <= 0) {
-      await this.toastService.present('Purchase Id not Selected', 1000, 'danger');
-      await this.haptic.error();
+      await this.toastService.present('Purchase Id not Selected', 1000, 'warning');
+      await this.haptic.warning();
       return;
     }
     const lst = await MaterialFromOrder.FetchOrderedMaterials(this.Entity.p.MaterialPurchaseOrderRef, async errMsg => {
-      // await this.uiUtils.showErrorMessage('Error', errMsg)
       await this.toastService.present(errMsg, 1000, 'danger');
       await this.haptic.error();
     });
@@ -524,9 +495,8 @@ export class StockInwardDetailsMobileAppComponent implements OnInit {
       this.newInward.InternalRef = UnitData.p.InternalRef;
       this.NewRemainingQty = UnitData.p.RemainingQty;
     } else {
-      // await this.uiUtils.showErrorToster('Material not found');
-      await this.toastService.present('Material not found', 1000, 'danger');
-      await this.haptic.error()
+      await this.toastService.present('Material not found', 1000, 'warning');
+      await this.haptic.warning()
     }
   };
 
@@ -539,12 +509,18 @@ export class StockInwardDetailsMobileAppComponent implements OnInit {
     }
   }
   openModal = async (type: number) => {
+    if (this.PurchaseIDName === ''){
+      await this.toastService.present('Purchase ID is not Selected', 1000, 'warning');
+      await this.haptic.warning();
+      return;
+    }
     if (type === 100) this.ismaterialModalOpen = true;
     this.strCDT = await CurrentDateTimeRequest.GetCurrentDateTime();
     let parts = this.strCDT.substring(0, 16).split('-');
 
     // Construct the new date format
     this.newInward.Date = `${parts[0]}-${parts[1]}-${parts[2]}`;
+    this.ChildInwardDate = this.dtu.ConvertStringDateToShortFormat(this.newInward.Date);
     this.ModalEditable = false;
   }
 
@@ -562,17 +538,6 @@ export class StockInwardDetailsMobileAppComponent implements OnInit {
         }
       });
       if (hasData) {
-        // await this.uiUtils.showConfirmationMessage(
-        //   'Close',
-        //   `This process is <strong>IRREVERSIBLE!</strong><br/>
-        //    Are you sure you want to close this modal?`,
-        //   async () => {
-        //     this.ismaterialModalOpen = false;
-        //     this.ModalEditable = false;
-        //     this.newInward = InwardMaterialDetailProps.Blank();
-        //     this.NewRemainingQty = 0
-        //   }
-        // );
         this.alertService.presentDynamicAlert({
           header: 'Warning',
           subHeader: 'Confirmation needed',
@@ -612,32 +577,20 @@ export class StockInwardDetailsMobileAppComponent implements OnInit {
       this.newInward.InternalRef <= 0 ||
       this.newInward.InwardQty <= 0
     ) {
-      // await this.uiUtils.showErrorMessage('Error', 'Inward Quantity must be greater than 0 and material must be selected');
-      await this.toastService.present('Error ' + 'Inward Quantity must be greater than 0 and material must be selected', 1000, 'danger');
-      await this.haptic.error();
+      await this.toastService.present('Inward Quantity must be greater than 0 and material must be selected', 1000, 'warning');
+      await this.haptic.warning();
       return;
     }
-
-    // if (this.newInward.InwardQty > this.newInward.PurchaseOrderRemainingQty) {
-    //   await this.uiUtils.showErrorMessage('Error', 'Inward Quantity cannot be more than Remaining Quantity');
-    //   return;
-    // }
 
     const newInternalRef = this.newInward.InternalRef;
 
     if (typeof this.editingIndex === 'number' && this.editingIndex >= 0) {
       this.newInward.Date = this.dtu.ConvertStringDateToFullFormat(this.newInward.Date);
       this.Entity.p.MaterialInwardDetailsArray[this.editingIndex] = { ...this.newInward };
-      // this.selectedMaterial = [{
-      //   p: {
-      //     Ref: this.Entity.p.MaterialInwardDetailsArray[this.editingIndex].MaterialRef,
-      //     Name: this.Entity.p.MaterialInwardDetailsArray[this.editingIndex].MaterialName
-      //   }
-      // }];
-      // this.MaterialName = this.selectedMaterial[0].p.Name;
+
       this.ChildInwardDate = this.newInward.Date;
       this.ChildInwardDate = this.dtu.ConvertStringDateToShortFormat(this.ChildInwardDate);
-      this.DisplayChildInwardDate = this.datePipe.transform(this.ChildInwardDate, 'yyyy-MM-dd') ?? '';
+  
       this.ismaterialModalOpen = false;
       await this.toastService.present('Material details updated successfully', 1000, 'success');
       await this.haptic.success();
@@ -645,7 +598,7 @@ export class StockInwardDetailsMobileAppComponent implements OnInit {
       this.newInward.Date = this.dtu.ConvertStringDateToFullFormat(this.newInward.Date);
       this.ChildInwardDate = this.newInward.Date;
       this.ChildInwardDate = this.dtu.ConvertStringDateToShortFormat(this.ChildInwardDate);
-      this.DisplayChildInwardDate = this.datePipe.transform(this.ChildInwardDate, 'yyyy-MM-dd') ?? '';
+     
       this.newInward.MaterialInwardRef = this.Entity.p.Ref;
       this.newInward.PurchaseOrderRemainingQty = this.NewRemainingQty;
       this.Entity.p.MaterialInwardDetailsArray.push({ ...this.newInward });
@@ -666,7 +619,7 @@ export class StockInwardDetailsMobileAppComponent implements OnInit {
     }
 
     this.newInward = InwardMaterialDetailProps.Blank();
-    this.newInward.Date = this.InwardDate;
+    this.newInward.Date = this.InwardDate ? this.InwardDate : '';
     this.NewRemainingQty = 0;
     this.editingIndex = null;
   }
@@ -685,7 +638,6 @@ export class StockInwardDetailsMobileAppComponent implements OnInit {
     const dbRef = removedItem.Ref;
 
     if (dbRef !== 0) {
-      // this.uiUtils.showWarningToster('This record cannot be deleted');
       await this.toastService.present('This record cannot be deleted', 1000, 'warning');
       await this.haptic.warning();
       return;
@@ -722,34 +674,21 @@ export class StockInwardDetailsMobileAppComponent implements OnInit {
     this.Entity.p.CompanyRef = this.companyRef;
     this.Entity.p.UpdatedBy = Number(this.appStateManage.localStorage.getItem('LoginEmployeeRef'))
     this.Entity.p.CreatedBy = Number(this.appStateManage.localStorage.getItem('LoginEmployeeRef'))
-    this.Entity.p.InwardDate = this.dtu.ConvertStringDateToFullFormat(this.InwardDate);
+    this.Entity.p.InwardDate = this.dtu.ConvertStringDateToFullFormat(this.InwardDate ?? '');
 
     let entityToSave = this.Entity.GetEditableVersion();
 
     let entitiesToSave = [entityToSave];
-    console.log('entitiesToSave :', entitiesToSave);
-
-    // if (this.InvoiceFile) {
-    //   lstFTO.push(
-    //     FileTransferObject.FromFile(
-    //       "MaterialInwardInvoiceFile",
-    //       this.InvoiceFile,
-    //       this.InvoiceFile.name
-    //     )
-    //   );
-    // }
     let tr = await this.utils.SavePersistableEntities(entitiesToSave, this.filesToUpload);
 
     if (!tr.Successful) {
       this.isSaveDisabled = false;
-      // this.uiUtils.showErrorMessage('Error', tr.Message)
-      await this.toastService.present('Error ' + tr.Message, 1000, 'danger');
+      await this.toastService.present(tr.Message, 1000, 'danger');
       await this.haptic.error();
       return;
     } else {
       this.isSaveDisabled = false;
       if (this.IsNewEntity) {
-        // await this.uiUtils.showSuccessToster('Stock Inward saved successfully');
         await this.toastService.present('Stock Inward saved successfully', 1000, 'success');
         await this.haptic.success();
 
@@ -757,12 +696,10 @@ export class StockInwardDetailsMobileAppComponent implements OnInit {
         this.SessionAddedRefs = [];
         this.filterMaterialList();
       } else {
-        // await this.uiUtils.showSuccessToster('Stock Inward Updated successfully');
         await this.toastService.present('Stock Inward Updated successfully', 1000, 'success');
         this.haptic.success();
       }
     }
-    // await this.router.navigate(['/homepage/Website/Stock_Inward']);
     this.router.navigate(['/mobile-app/tabs/dashboard/stock-management/stock-inward'], { replaceUrl: true });
     this.haptic.success();
   };
@@ -785,7 +722,6 @@ export class StockInwardDetailsMobileAppComponent implements OnInit {
             role: 'cancel',
             cssClass: 'custom-cancel',
             handler: () => {
-              console.log('User cancelled.');
             }
           },
           {
@@ -794,7 +730,6 @@ export class StockInwardDetailsMobileAppComponent implements OnInit {
             handler: () => {
               this.router.navigate(['/mobile-app/tabs/dashboard/stock-management/stock-inward'], { replaceUrl: true });
               this.haptic.success();
-              console.log('User confirmed.');
             }
           }
         ]
@@ -816,20 +751,17 @@ export class StockInwardDetailsMobileAppComponent implements OnInit {
         }
       }));
 
-      console.log('Formatted Material:', options);
-
       this.openSelectModal(options, this.selectedMaterial, false, 'Select Material', 1, (selected) => {
         this.selectedMaterial = selected;
 
-        // Use standardized keys now
         this.MaterialName = selected[0].p.Name;
         this.newInward.MaterialName = selected[0].p.Name;
         this.newInward.InternalRef = selected[0].p.Ref;
-        // this.getUnitByMaterialRef(this.newInward.MaterialRef);
         this.OnMaterialSelection(this.newInward.InternalRef)
       });
     } catch (error) {
-      console.error('Error in selectMaterialBottomsheet:', error);
+      await this.toastService.present('Error in selectMaterialBottomsheet', 1000, 'danger');
+      await this.haptic.error();
     }
   }
 
@@ -858,7 +790,8 @@ export class StockInwardDetailsMobileAppComponent implements OnInit {
         }
       );
     } catch (error) {
-      console.error('Error in selectPurchaseIDBottomsheet:', error);
+      await this.toastService.present('Error in selectPurchaseIDBottomsheet', 1000, 'danger');
+      await this.haptic.error();
     }
   }
 
@@ -874,7 +807,8 @@ export class StockInwardDetailsMobileAppComponent implements OnInit {
         this.onVendorSelection(this.Entity.p.VendorRef);
       });
     } catch (error) {
-
+      await this.toastService.present('Error in selectVendorBottomsheet', 1000, 'danger');
+      await this.haptic.error();
     }
   }
   public async selectSiteBottomsheet(): Promise<void> {
@@ -887,7 +821,8 @@ export class StockInwardDetailsMobileAppComponent implements OnInit {
         this.getOrderIdListByCompanySiteAndVendorRef();
       });
     } catch (error) {
-
+      await this.toastService.present('Error in selectSiteBottomsheet', 1000, 'danger');
+      await this.haptic.error();
     }
   }
   private async openSelectModal(
@@ -903,9 +838,7 @@ export class StockInwardDetailsMobileAppComponent implements OnInit {
   }
   isDataFilled(): boolean {
     const emptyEntity = StockInward.CreateNewInstance();
-    console.log('emptyEntity :', emptyEntity);
-    console.log('this Entity :', this.Entity);
-    return !this.deepEqualIgnoringKeys(this.Entity, emptyEntity, ['p.Date']);
+    return !this.deepEqualIgnoringKeys(this.Entity, emptyEntity, ['p.InwardDate','p.ChalanNo']);
   }
 
   deepEqualIgnoringKeys(obj1: any, obj2: any, ignorePaths: string[]): boolean {
@@ -928,8 +861,7 @@ export class StockInwardDetailsMobileAppComponent implements OnInit {
   }
 
   goBack = async () => {
-    // Replace this with your actual condition to check if data is filled
-    const isDataFilled = this.isDataFilled(); // Implement this function based on your form
+    const isDataFilled = this.isDataFilled(); 
 
     if (isDataFilled) {
       this.alertService.presentDynamicAlert({
@@ -942,7 +874,6 @@ export class StockInwardDetailsMobileAppComponent implements OnInit {
             role: 'cancel',
             cssClass: 'custom-cancel',
             handler: () => {
-              console.log('User cancelled.');
             }
           },
           {
@@ -951,7 +882,6 @@ export class StockInwardDetailsMobileAppComponent implements OnInit {
             handler: () => {
               this.router.navigate(['/mobile-app/tabs/dashboard/stock-management/stock-inward'], { replaceUrl: true });
               this.haptic.success();
-              console.log('User confirmed.');
             }
           }
         ]

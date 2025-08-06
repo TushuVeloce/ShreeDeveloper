@@ -11,15 +11,14 @@
     <ion-item *ngFor="let StockTransfer of DisplayMasterList" class="requisition-item" button detail
       (click)="openModal(StockTransfer)">
       <ion-label>
-        <h2>From Site : {{ StockTransfer.p.FromSiteName || '-' }}</h2>
-        <p>To Site : {{ StockTransfer.p.ToSiteName || '-' }}</p>
-        <p class="date-label">Transfer Date : {{ formatDate(StockTransfer.p.Date) || '-' }}</p>
+        <h2>Date : {{ formatDate(StockTransfer.p.Date) || '-' }}</h2>
+        <p class="date-label">From Site : {{ StockTransfer.p.FromSiteName || '-' }}</p>
+        <p class="date-label">To Site : {{ StockTransfer.p.ToSiteName || '-' }}</p>
         <p class="date-label">Material : {{ StockTransfer.p.MaterialName || '-' }}</p>
-        <p class="date-label">Consumption Qty. : {{ StockTransfer.p.TransferredQuantity + " " + StockTransfer.p.UnitName
+        <p class="date-label">Transfer Qty. : {{ StockTransfer.p.TransferredQuantity + " " + StockTransfer.p.UnitName
           }}
         </p>
-        <!-- <p class="date-label" *ngIf="StockTransfer.p.InwardDate">Inward Date : {{ formatDate(StockTransfer.p.InwardDate) || '-' }}</p> -->
-      </ion-label>
+        </ion-label>
 
       <div class="action-buttons" slot="end" (click)="$event.stopPropagation()">
         <ion-button fill="clear" size="small" color="primary" (click)="onEditClicked(StockTransfer)">
@@ -28,9 +27,6 @@
         <ion-button fill="clear" size="small" color="primary" (click)="onDeleteClicked(StockTransfer)">
           <ion-icon name="trash-outline" slot="icon-only"></ion-icon>
         </ion-button>
-        <!-- <ion-button fill="clear" size="small" color="primary" (click)="navigateToPrint(StockTransfer)">
-            <ion-icon name="print-outline" slot="icon-only"></ion-icon>
-          </ion-button> -->
       </div>
     </ion-item>
   </ion-list>

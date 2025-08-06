@@ -14,12 +14,13 @@
         <h2>Chalan No. : {{ Inward.p.ChalanNo || '-' }}</h2>
         <p>Site : {{ Inward.p.SiteName || '-' }}</p>
         <p class="date-label">Date : {{ formatDate(Inward.p.InwardDate) || '-' }}</p>
+        <p class="date-label">Material : {{Inward.p.MaterialInwardDetailsArray.length || '-' }}</p>
       </ion-label>
 
       <div class="action-buttons" slot="end" (click)="$event.stopPropagation()">
-        <ion-button fill="clear" size="small" color="primary" (click)="onEditClicked(Inward)">
+        <!-- <ion-button fill="clear" size="small" color="primary" (click)="onEditClicked(Inward)">
           <ion-icon name="pencil-outline" slot="icon-only"></ion-icon>
-        </ion-button>
+        </ion-button> -->
         <ion-button fill="clear" size="small" color="primary" (click)="onDeleteClicked(Inward)">
           <ion-icon name="trash-outline" slot="icon-only"></ion-icon>
         </ion-button>

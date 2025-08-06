@@ -36,21 +36,14 @@ export class StockConsumeViewMobileAppComponent implements OnInit {
   // Store current selected values here to preserve selections on filter reload
   selectedFilterValues: Record<string, any> = {};
 
-
-
   constructor(
     private router: Router,
     private appStateManage: AppStateManageService,
-    private companystatemanagement: CompanyStateManagement,
     private DateconversionService: DateconversionService,
-    private dtu: DTU,
     private toastService: ToastService,
     private haptic: HapticService,
     private alertService: AlertService,
     public loadingService: LoadingService,
-    private sanitizer: DomSanitizer,
-    private baseUrl: BaseUrlService,
-    private utils: Utils,
   ) { }
 
   ngOnInit = async () => {
@@ -59,15 +52,16 @@ export class StockConsumeViewMobileAppComponent implements OnInit {
 
   ionViewWillEnter = async () => {
     await this.loadStockConsumeIfEmployeeExists();
-    await this.loadFilters();
+    this.loadFilters();
   };
 
-  async handleRefresh(event: CustomEvent) {
+  handleRefresh = async (event: CustomEvent) => {
     await this.loadStockConsumeIfEmployeeExists();
+    this.loadFilters();
     (event.target as HTMLIonRefresherElement).complete();
   }
 
-  loadFilters() {
+  loadFilters = () => {
     this.filters = [
       {
         key: 'site',
@@ -82,10 +76,7 @@ export class StockConsumeViewMobileAppComponent implements OnInit {
     ];
   }
 
-  async onFiltersChanged(updatedFilters: any[]) {
-    // debugger
-    console.log('Updated Filters:', updatedFilters);
-
+  onFiltersChanged = async (updatedFilters: any[]) => {
     for (const filter of updatedFilters) {
       const selected = filter.selected;
       const selectedValue = (selected === null || selected === undefined) ? null : selected;
@@ -100,10 +91,10 @@ export class StockConsumeViewMobileAppComponent implements OnInit {
       }
     }
     await this.getInwardListByCompanyRefAndSiteRef();
-    this.loadFilters(); // Reload filters with updated options & preserve selections
+    this.loadFilters();
   }
 
-  private async loadStockConsumeIfEmployeeExists() {
+  private loadStockConsumeIfEmployeeExists = async () => {
     try {
       await this.loadingService.show();
 
@@ -111,15 +102,14 @@ export class StockConsumeViewMobileAppComponent implements OnInit {
       this.companyRef = Number(company || 0);
 
       if (this.companyRef <= 0) {
-        await this.toastService.present('Company not selected', 1000, 'danger');
-        await this.haptic.error();
+        await this.toastService.present('Company not selected', 1000, 'warning');
+        await this.haptic.warning();
         return;
       }
 
       await this.getSiteListByCompanyRef();
       await this.getStockConsumeListByCompanyRef();
     } catch (error) {
-      console.error('Error in loadStockConsumeIfEmployeeExists:', error);
       await this.toastService.present('Failed to load Stock Inward', 1000, 'danger');
       await this.haptic.error();
     } finally {
@@ -127,63 +117,66 @@ export class StockConsumeViewMobileAppComponent implements OnInit {
     }
   }
 
-  private async getSiteListByCompanyRef() {
+  private getSiteListByCompanyRef = async () => {
     try {
       if (this.companyRef <= 0) return;
 
       const lst = await Site.FetchEntireListByCompanyRef(this.companyRef, async (errMsg) => {
-        await this.toastService.present('Error: ' + errMsg, 1000, 'danger');
+        await this.toastService.present(errMsg, 1000, 'danger');
         await this.haptic.error();
       });
 
       this.SiteList = lst || [];
 
-      this.Entity.p.SiteRef = 0; // Default selection
+      this.Entity.p.SiteRef = 0;
     } catch (err) {
-      console.error('Error fetching site list:', err);
+      await this.toastService.present('Error fetching site list:' + err, 1000, 'danger');
+      await this.haptic.error();
     }
   }
 
-  private async getStockConsumeListByCompanyRef() {
+  private getStockConsumeListByCompanyRef = async () => {
     try {
       this.MasterList = [];
       this.DisplayMasterList = [];
 
       const lst = await StockConsume.FetchEntireListByCompanyRef(this.companyRef, async (errMsg) => {
-        await this.toastService.present('Error: ' + errMsg, 1000, 'danger');
+        await this.toastService.present(errMsg, 1000, 'danger');
         await this.haptic.error();
       });
 
       this.MasterList = lst || [];
       this.DisplayMasterList = [...this.MasterList];
     } catch (err) {
-      console.error('Error fetching stock inward list:', err);
+      await this.toastService.present('Error fetching Stock Inward list:' + err, 1000, 'danger');
+      await this.haptic.error();
     }
   }
 
-  private async getInwardListByCompanyRefAndSiteRef() {
+  private getInwardListByCompanyRefAndSiteRef = async () => {
     try {
       this.MasterList = [];
       this.DisplayMasterList = [];
 
       const lst = await StockConsume.FetchEntireListByCompanySiteAndVendorRef(this.companyRef, this.Entity.p.SiteRef, this.Entity.p.StageRef, async (errMsg) => {
-        await this.toastService.present('Error: ' + errMsg, 1000, 'danger');
+        await this.toastService.present(errMsg, 1000, 'danger');
         await this.haptic.error();
       });
 
       this.MasterList = lst || [];
       this.DisplayMasterList = [...this.MasterList];
     } catch (err) {
-      console.error('Error fetching stock inward list:', err);
+      await this.toastService.present('Error fetching Stock Inward list:' + err, 1000, 'danger');
+      await this.haptic.error();
     }
   }
 
-  openModal(StockConsume: StockConsume) {
+  openModal = (StockConsume: StockConsume) => {
     this.SelectedStockConsume = StockConsume;
     this.modalOpen = true;
   }
 
-  closeModal() {
+  closeModal = () => {
     this.modalOpen = false;
     this.SelectedStockConsume = StockConsume.CreateNewInstance();
   }
@@ -194,7 +187,6 @@ export class StockConsumeViewMobileAppComponent implements OnInit {
       await this.haptic.error();
       return;
     }
-
     this.router.navigate(['/mobile-app/tabs/dashboard/stock-management/stock-consume/add']);
   };
 
@@ -217,7 +209,6 @@ export class StockConsumeViewMobileAppComponent implements OnInit {
             role: 'cancel',
             cssClass: 'custom-cancel',
             handler: () => {
-              console.log('Deletion cancelled.');
             },
           },
           {
@@ -225,15 +216,6 @@ export class StockConsumeViewMobileAppComponent implements OnInit {
             cssClass: 'custom-confirm',
             handler: async () => {
               try {
-                // await StockConsume.DeleteInstance(async () => {
-                //   await this.toastService.present(
-                //     `Deleted Stock Inward on ${this.formatDate(StockConsume.p.PurchaseOrderDate)}!`,
-                //     1000,
-                //     'success'
-                //   );
-                //   await this.haptic.success();
-                //   await this.loadStockConsumeIfEmployeeExists();
-                // });
                 await stockConsume.DeleteInstance(async () => {
                   await this.toastService.present(
                     `Deleted Stock Inward on ${this.formatDate(stockConsume.p.ConsumptionDate)}!`,
@@ -248,7 +230,6 @@ export class StockConsumeViewMobileAppComponent implements OnInit {
                   }
                 });
               } catch (err) {
-                console.error('Error deleting Stock Inward:', err);
                 await this.toastService.present('Failed to delete Stock Inward', 1000, 'danger');
                 await this.haptic.error();
               }
@@ -257,8 +238,7 @@ export class StockConsumeViewMobileAppComponent implements OnInit {
         ],
       });
     } catch (error) {
-      console.error('Delete Alert Error:', error);
-      await this.toastService.present('Something went wrong', 1000, 'danger');
+      await this.toastService.present('Delete Alert Error:' + error, 1000, 'danger');
       await this.haptic.error();
     }
   };
