@@ -6,10 +6,7 @@ import { Vendor } from 'src/app/classes/domain/entities/website/masters/vendor/v
 import { StockInward } from 'src/app/classes/domain/entities/website/stock_management/stock_inward/stockinward';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { BaseUrlService } from 'src/app/services/baseurl.service';
-import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
 import { DateconversionService } from 'src/app/services/dateconversion.service';
-import { DTU } from 'src/app/services/dtu.service';
-import { Utils } from 'src/app/services/utils.service';
 import { AlertService } from 'src/app/views/mobile-app/components/core/alert.service';
 import { HapticService } from 'src/app/views/mobile-app/components/core/haptic.service';
 import { LoadingService } from 'src/app/views/mobile-app/components/core/loading.service';
@@ -46,16 +43,13 @@ export class StockInwardViewMobileAppComponent implements OnInit {
   constructor(
     private router: Router,
     private appStateManage: AppStateManageService,
-    private companystatemanagement: CompanyStateManagement,
     private DateconversionService: DateconversionService,
-    private dtu: DTU,
     private toastService: ToastService,
     private haptic: HapticService,
     private alertService: AlertService,
     public loadingService: LoadingService,
     private sanitizer: DomSanitizer,
     private baseUrl: BaseUrlService,
-    private utils: Utils,
   ) { }
 
   ngOnInit = async () => {
@@ -64,15 +58,16 @@ export class StockInwardViewMobileAppComponent implements OnInit {
 
   ionViewWillEnter = async () => {
     await this.loadStockInwordsIfEmployeeExists();
-    await this.loadFilters();
+    this.loadFilters();
   };
 
-  async handleRefresh(event: CustomEvent) {
+  handleRefresh = async (event: CustomEvent) => {
     await this.loadStockInwordsIfEmployeeExists();
+    this.loadFilters();
     (event.target as HTMLIonRefresherElement).complete();
   }
 
-  loadFilters() {
+  loadFilters = () => {
     this.filters = [
       {
         key: 'site',
@@ -97,10 +92,7 @@ export class StockInwardViewMobileAppComponent implements OnInit {
     ];
   }
 
-  async onFiltersChanged(updatedFilters: any[]) {
-    // debugger
-    console.log('Updated Filters:', updatedFilters);
-
+  onFiltersChanged = async (updatedFilters: any[]) => {
     for (const filter of updatedFilters) {
       const selected = filter.selected;
       const selectedValue = (selected === null || selected === undefined) ? null : selected;
@@ -121,23 +113,19 @@ export class StockInwardViewMobileAppComponent implements OnInit {
     this.loadFilters(); // Reload filters with updated options & preserve selections
   }
 
-  prepareInvoiceUrl(path: string) {
+  prepareInvoiceUrl = (path: string) => {
     this.showInvoicePreview = !this.showInvoicePreview
     const ImageBaseUrl = this.baseUrl.GenerateImageBaseUrl();
     const LoginToken = this.appStateManage.localStorage.getItem('LoginToken');
-    // const path = this.SelectedQuotation.p.InvoicePath;
-
 
     if (!path) return;
 
     const TimeStamp = Date.now();
     const fileUrl = `${ImageBaseUrl}${path}/${LoginToken}?${TimeStamp}`;
-    console.log('Invoice Preview URL:', fileUrl);
-
     this.sanitizedInvoiceUrl = this.sanitizer.bypassSecurityTrustResourceUrl(fileUrl);
   }
 
-  isPDF(filePath: string): boolean {
+  isPDF = (filePath: string): boolean => {
     return filePath?.toLowerCase().endsWith('.pdf');
   }
 
@@ -149,12 +137,10 @@ export class StockInwardViewMobileAppComponent implements OnInit {
 
     const TimeStamp = Date.now();
     const fileUrl = `${ImageBaseUrl}${filePath}/${LoginToken}?${TimeStamp}`;
-    console.log('Invoice Preview URL:', fileUrl);
-
     window.open(fileUrl, '_blank');
   }
 
-  private async loadStockInwordsIfEmployeeExists() {
+  private loadStockInwordsIfEmployeeExists = async () => {
     try {
       await this.loadingService.show();
 
@@ -162,8 +148,8 @@ export class StockInwardViewMobileAppComponent implements OnInit {
       this.companyRef = Number(company || 0);
 
       if (this.companyRef <= 0) {
-        await this.toastService.present('Company not selected', 1000, 'danger');
-        await this.haptic.error();
+        await this.toastService.present('Company not selected', 1000, 'warning');
+        await this.haptic.warning();
         return;
       }
 
@@ -171,7 +157,6 @@ export class StockInwardViewMobileAppComponent implements OnInit {
       await this.getVendorListByCompanyRef();
       await this.getInwardListByCompanySiteAndVendorRef();
     } catch (error) {
-      console.error('Error in loadStockInwordsIfEmployeeExists:', error);
       await this.toastService.present('Failed to load Stock Inward', 1000, 'danger');
       await this.haptic.error();
     } finally {
@@ -180,13 +165,12 @@ export class StockInwardViewMobileAppComponent implements OnInit {
   }
   getSiteListByCompanyRef = async () => {
     if (this.companyRef <= 0) {
-      await this.toastService.present('Company not selected', 1000, 'danger');
-      await this.haptic.error();
+      await this.toastService.present('Company not selected', 1000, 'warning');
+      await this.haptic.warning();
       return;
     }
     this.Entity.p.SiteRef = 0
     let lst = await Site.FetchEntireListByCompanyRef(this.companyRef, async errMsg => {
-      // await this.uiUtils.showErrorMessage('Error', errMsg)
       await this.toastService.present(errMsg, 1000, 'danger');
       await this.haptic.error();
     });
@@ -198,17 +182,15 @@ export class StockInwardViewMobileAppComponent implements OnInit {
 
   getVendorListByCompanyRef = async () => {
     if (this.companyRef <= 0) {
-      await this.toastService.present('Company not selected', 1000, 'danger');
-      await this.haptic.error();
+      await this.toastService.present('Company not selected', 1000, 'warning');
+      await this.haptic.warning();
       return;
     }
     this.Entity.p.VendorRef = 0
     let lst = await Vendor.FetchEntireListByCompanyRef(this.companyRef, async errMsg => {
-      // await this.uiUtils.showErrorMessage('Error', errMsg)
       await this.toastService.present(errMsg, 1000, 'danger');
       await this.haptic.error();
     });
-    console.log('lst :', lst);
     this.VendorList = lst;
     if (this.VendorList.length > 0) {
       this.Entity.p.VendorRef = 0
@@ -223,36 +205,31 @@ export class StockInwardViewMobileAppComponent implements OnInit {
   getInwardListByCompanySiteAndVendorRef = async () => {
     this.MasterList = [];
     this.DisplayMasterList = [];
-
-    // console.log('this.Entity.p.SiteRef, this.Entity.p.VendorRef :', this.Entity.p.SiteRef, this.Entity.p.VendorRef);
     let lst = await StockInward.FetchEntireListByCompanyRefSiteAndVendorRef(this.companyRef, this.Entity.p.SiteRef, this.Entity.p.VendorRef,
       async (errMsg) => {
-        // await this.uiUtils.showErrorMessage('Error', errMsg)
-        await this.toastService.present(errMsg, 1000, 'danger');
+         await this.toastService.present(errMsg, 1000, 'danger');
         await this.haptic.error();
       }
     );
     this.MasterList = lst;
     this.DisplayMasterList = this.MasterList;
-    console.log('this.MasterList :', this.MasterList);
-  };
+   };
 
   AddStockInward = async () => {
     if (this.companyRef <= 0) {
-      // this.uiUtils.showWarningToster('Please select company');
-      await this.toastService.present('Please select company', 1000, 'warning');
+       await this.toastService.present('Please select company', 1000, 'warning');
       await this.haptic.warning();
       return;
     }
     await this.router.navigate(['mobile-app/tabs/dashboard/stock-management/stock-inward/add']);
   }
 
-    onEditClicked = async (item: StockInward) => {
-      this.SelectedStockInward = item.GetEditableVersion();
-      StockInward.SetCurrentInstance(this.SelectedStockInward);
-      this.appStateManage.StorageKey.setItem('Editable', 'Edit');
-      await this.router.navigate(['mobile-app/tabs/dashboard/stock-management/stock-inward/edit']);
-    };
+  onEditClicked = async (item: StockInward) => {
+    this.SelectedStockInward = item.GetEditableVersion();
+    StockInward.SetCurrentInstance(this.SelectedStockInward);
+    this.appStateManage.StorageKey.setItem('Editable', 'Edit');
+    await this.router.navigate(['mobile-app/tabs/dashboard/stock-management/stock-inward/edit']);
+  };
 
   navigateToPrint = async (item: StockInward) => {
     this.router.navigate(['mobile-app/tabs/dashboard/stock-management/stock-inward/print'], {
@@ -271,7 +248,7 @@ export class StockInwardViewMobileAppComponent implements OnInit {
           role: 'cancel',
           cssClass: 'custom-cancel',
           handler: () => {
-            console.log('Deletion cancelled.');
+           
           }
         },
         {
@@ -287,12 +264,11 @@ export class StockInwardViewMobileAppComponent implements OnInit {
                   'success'
                 );
               });
-              // await this.haptic.success();
+              await this.haptic.success();
               await this.getInwardListByCompanySiteAndVendorRef();
             } catch (err) {
-              // console.error('Error deleting Stock Inward:', err);
-              // await this.toastService.present('Failed to delete Stock Inward', 1000, 'danger');
-              // await this.haptic.error();
+              await this.toastService.present('Failed to delete Stock Inward', 1000, 'danger');
+              await this.haptic.error();
             }
             finally {
               this.loadingService.hide();
@@ -305,7 +281,6 @@ export class StockInwardViewMobileAppComponent implements OnInit {
 
   openModal(stockInward: StockInward) {
     this.SelectedStockInward = stockInward;
-    console.log('stockInward :', stockInward);
     this.modalOpen = true;
   }
 

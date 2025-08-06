@@ -13,9 +13,9 @@ import { UserLoginRequest } from 'src/app/classes/infrastructure/request_respons
   selector: 'app-login-mobile-app',
   templateUrl: './login-mobile-app.component.html',
   styleUrls: ['./login-mobile-app.component.scss'],
-  standalone: false
+  standalone: false,
 })
-export class LoginMobileAppComponent  implements OnInit {
+export class LoginMobileAppComponent implements OnInit {
 
   loginForm!: FormGroup;
   isLoggingIn = false;
@@ -38,18 +38,19 @@ export class LoginMobileAppComponent  implements OnInit {
     });
   }
 
-  onSubmit = async () => {
+  async onSubmit() {
     if (this.loginForm.invalid) return;
-    this.isLoggingIn = true;
-    const { email, password } = this.loginForm.value;
 
-    let req = new UserLoginRequest();
+    this.isLoggingIn = true;
+
+    const { email, password } = this.loginForm.value;
+    const req = new UserLoginRequest();
     req.UserId = email;
     req.Password = password;
     req.LoginDeviceId = this.sessionValues.MobileLoginDeviceId;
 
     const response = await this.servercommunicator.LoginUser(req);
- 
+
     if (!response.Successful) {
       this.isLoggingIn = false;
       this.toastService.present(response.Message, 2000, 'danger');
@@ -57,33 +58,35 @@ export class LoginMobileAppComponent  implements OnInit {
       return;
     }
 
-    //  Store session values
+    // Store login session data
     this.appStateManage.setEmployeeRef(response.LoginEmployeeRef);
     this.appStateManage.setLoginTokenForMobile(response.LoginToken);
     this.companystatemanagement.setCompanyRef(response.LastSelectedCompanyRef, response.CompanyName);
 
-    this.appStateManage.localStorage.setItem('LoginToken', response.LoginToken);
-    this.appStateManage.localStorage.setItem('IsDefaultUser', response.IsDefault.toString());
-    this.appStateManage.localStorage.setItem('UserDisplayName', response.UserDisplayName);
-    this.appStateManage.localStorage.setItem('SelectedCompanyRef', response.LastSelectedCompanyRef.toString());
-    this.appStateManage.localStorage.setItem('companyName', response.CompanyName);
-    this.appStateManage.localStorage.setItem('userEmail', response.EMailId);
-    this.appStateManage.localStorage.setItem('LoginEmployeeRef', response.LoginEmployeeRef.toString());
+    const storage = this.appStateManage.localStorage;
+    storage.setItem('LoginToken', response.LoginToken);
+    storage.setItem('IsDefaultUser', response.IsDefault.toString());
+    storage.setItem('UserDisplayName', response.UserDisplayName);
+    storage.setItem('SelectedCompanyRef', response.LastSelectedCompanyRef.toString());
+    storage.setItem('companyName', response.CompanyName);
+    storage.setItem('userEmail', response.EMailId);
+    storage.setItem('LoginEmployeeRef', response.LoginEmployeeRef.toString());
 
-    this.isLoggingIn = false;
     this.toastService.present('Logged in successfully', 2000, 'success');
-    this.loginForm.reset();
+    await this.haptic.success();
 
-    if (response.LoginForFirstTime == 0) {
+    this.loginForm.reset();
+    this.isLoggingIn = false;
+
+    if (response.LoginForFirstTime === 0) {
       this.router.navigate(['/mobile-app/auth/create-new-password']);
     } else {
       this.router.navigate(['/mobile-app/tabs']);
     }
-    await this.haptic.success();
-  };
+  }
 
-  goToForgotPassword = async () => {
+  async goToForgotPassword() {
     await this.router.navigate(['mobile-app/auth/forgot-password'], { replaceUrl: true });
     await this.haptic.selectionChanged();
-  };
+  }
 }

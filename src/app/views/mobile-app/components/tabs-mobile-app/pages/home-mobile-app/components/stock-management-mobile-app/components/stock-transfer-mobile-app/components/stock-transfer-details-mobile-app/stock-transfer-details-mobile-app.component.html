@@ -2,54 +2,52 @@
 
 <ion-content class="form-container" [scrollEvents]="true">
   <ion-list lines="none" class="ion-padding">
+    <!--  Date -->
+    <ion-item class="input-item">
+      <ion-label>Select Date</ion-label>
+      <ion-datetime-button id="TransferDate-modal" datetime="Date" trigger="TransferDate-modal">
+      </ion-datetime-button>
+      <ion-checkbox slot="end" [(ngModel)]="TransferDate" name="TransferDateCheckBox" [disabled]="true">
+      </ion-checkbox>
+    </ion-item>
+
+    <ion-modal keepContentsMounted="true" trigger="TransferDate-modal">
+      <ng-template>
+        <ion-datetime id="Date" name="TransferDate" presentation="date" [(ngModel)]="TransferDate"
+          show-default-buttons="true" (ionChange)="onTransferDateChange($event.detail.value)">
+        </ion-datetime>
+      </ng-template>
+    </ion-modal>
+
     <!-- Select From site -->
-    <ion-item class="input-item" button detail (click)="selectFromSiteBottomsheet()">
+    <ion-item class="input-item" button detail (click)="selectFromSiteBottomsheet()" [disabled]="SiteList.length === 0">
       <ion-label>From Site</ion-label>
 
       <!-- Text showing the selected status -->
       <ion-text slot="end" class="status-text">
         {{ FromSiteName|| 'Select' }}
       </ion-text>
-
-      <!-- Dropdown icon (chevron) on the right -->
-      <!-- <ion-icon name="chevron-down-outline" slot="end" class="dropdown-icon"></ion-icon> -->
-    </ion-item>
+ </ion-item>
 
     <!-- Select To site -->
-    <ion-item class="input-item" button detail (click)="selectToSiteBottomsheet()">
+    <ion-item class="input-item" button detail (click)="selectToSiteBottomsheet()" [disabled]="SiteList.length === 0">
       <ion-label>To Site</ion-label>
 
       <!-- Text showing the selected status -->
       <ion-text slot="end" class="status-text">
         {{ ToSiteName|| 'Select' }}
       </ion-text>
-
-      <!-- Dropdown icon (chevron) on the right -->
-      <!-- <ion-icon name="chevron-down-outline" slot="end" class="dropdown-icon"></ion-icon> -->
     </ion-item>
-
-    <ion-item (click)="showTransferDatePicker = true" class="input-item">
-      <ion-label>Date</ion-label>
-      <ion-label slot="end">{{ DisplayTransferDate || 'Select Date' }}</ion-label>
-    </ion-item>
-    <app-date-picker [show]="showTransferDatePicker" [selectedDate]="TransferDate" [defaultToday]="true"
-      (dateChanged)="onTransferDateChange($event)"
-      (dateSelected)="onTransferDateChange($event); showTransferDatePicker = false"
-      (modalDismissed)="showTransferDatePicker = false" />
-
 
     <!-- Select Vendor -->
-    <ion-item class="input-item" button detail (click)="selectMaterialBottomsheet()">
+    <ion-item class="input-item" button detail (click)="selectMaterialBottomsheet()" [disabled]="MaterialList.length === 0">
       <ion-label>Material</ion-label>
 
       <!-- Text showing the selected status -->
       <ion-text slot="end" class="status-text">
         {{ MaterialName|| 'Select' }}
       </ion-text>
-
-      <!-- Dropdown icon (chevron) on the right -->
-      <!-- <ion-icon name="chevron-down-outline" slot="end" class="dropdown-icon"></ion-icon> -->
-    </ion-item>
+   </ion-item>
 
     <!-- Unit input-->
     <ion-item class="input-item">
@@ -80,12 +78,12 @@
     <ion-grid>
       <ion-row>
         <ion-col size="6">
-          <ion-button expand="block" (click)="goBack()" class="submit-button cancel-button">
+          <ion-button expand="block" color="medium" shape="round" (click)="goBack()" >
             Cancel
           </ion-button>
         </ion-col>
         <ion-col size="6">
-          <ion-button expand="block" (click)="SaveStockTransfer()" class="submit-button primary-button">
+          <ion-button expand="block" color="primary" shape="round" (click)="SaveStockTransfer()">
             Save
           </ion-button>
         </ion-col>

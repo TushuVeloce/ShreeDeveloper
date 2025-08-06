@@ -277,8 +277,7 @@ export class MaterialRequisitionDetailsMobileAppComponent implements OnInit {
         return;
       }
       this.loadingService.show();
-      console.log('this.newRequisition :', this.newRequisition);
-      if (this.editingIndex !== null && this.editingIndex !== undefined && this.editingIndex >= 0) {
+        if (this.editingIndex !== null && this.editingIndex !== undefined && this.editingIndex >= 0) {
         this.Entity.p.MaterialRequisitionDetailsArray[this.editingIndex] = { ...this.newRequisition };
         this.ismaterialModalOpen = false;
         await this.toastService.present('material details updated successfully.', 1000, 'success');

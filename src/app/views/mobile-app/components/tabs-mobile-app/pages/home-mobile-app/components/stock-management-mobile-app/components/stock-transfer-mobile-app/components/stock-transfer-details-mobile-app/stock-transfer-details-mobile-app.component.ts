@@ -1,16 +1,14 @@
+// Angular and App imports
 import { DatePipe } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
-import { DomainEnums } from 'src/app/classes/domain/domainenums/domainenums';
 import { Site } from 'src/app/classes/domain/entities/website/masters/site/site';
 import { MaterialCurrentStock } from 'src/app/classes/domain/entities/website/stock_management/Material-Current-Stock/materialcurrentstock';
 import { StockTransfer } from 'src/app/classes/domain/entities/website/stock_management/stock-transfer/stocktransfer';
 import { StockConsume } from 'src/app/classes/domain/entities/website/stock_management/stock_consume/stockconsume';
+import { CurrentDateTimeRequest } from 'src/app/classes/infrastructure/request_response/currentdatetimerequest';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
-import { BaseUrlService } from 'src/app/services/baseurl.service';
 import { BottomsheetMobileAppService } from 'src/app/services/bottomsheet-mobile-app.service';
-import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
-import { DateconversionService } from 'src/app/services/dateconversion.service';
 import { DTU } from 'src/app/services/dtu.service';
 import { Utils } from 'src/app/services/utils.service';
 import { AlertService } from 'src/app/views/mobile-app/components/core/alert.service';
@@ -22,107 +20,96 @@ import { ToastService } from 'src/app/views/mobile-app/components/core/toast.ser
   selector: 'app-stock-transfer-details-mobile-app',
   templateUrl: './stock-transfer-details-mobile-app.component.html',
   styleUrls: ['./stock-transfer-details-mobile-app.component.scss'],
-  standalone:false
+  standalone: false
 })
-export class StockTransferDetailsMobileAppComponent  implements OnInit {
-  isSaveDisabled: boolean = false;
-  private IsNewEntity: boolean = true;
+export class StockTransferDetailsMobileAppComponent implements OnInit, OnDestroy {
+  isSaveDisabled = false;
+  private IsNewEntity = true;
   Entity: StockTransfer = StockTransfer.CreateNewInstance();
   DetailsFormTitle: 'New Stock Transfer' | 'Edit Stock Transfer' = 'New Stock Transfer';
-  InitialEntity: StockTransfer = null as any;
   SiteList: Site[] = [];
+  FromSiteList: Site[] = [];
+  ToSiteList: Site[] = [];
   MaterialList: StockConsume[] = [];
-  GSTList = DomainEnums.GoodsAndServicesTaxList();
-  companyRef: number = 0;
+  companyRef = 0;
 
-  gstName: string = '';
+  // UI fields
+  TransferDate: string | null = null;
   selectedGST: any[] = [];
-
   selectedFromSite: any[] = [];
-  FromSiteName: string = '';
   selectedToSite: any[] = [];
-  ToSiteName: string = '';
-
   selectedMaterial: any[] = [];
-  MaterialName: string = '';
-
-  showTransferDatePicker = false;
-  TransferDate = '';
-  DisplayTransferDate = '';
+  FromSiteName = '';
+  ToSiteName = '';
+  MaterialName = '';
 
   constructor(
     private router: Router,
     private appStateManage: AppStateManageService,
-    private companystatemanagement: CompanyStateManagement,
     private dtu: DTU,
-    private DateconversionService: DateconversionService,
+    private datePipe: DatePipe,
     private bottomsheetMobileAppService: BottomsheetMobileAppService,
     private toastService: ToastService,
     private haptic: HapticService,
     private alertService: AlertService,
     private loadingService: LoadingService,
-    private utils: Utils,
-    private datePipe: DatePipe,
-    private baseUrl: BaseUrlService,
+    private utils: Utils
   ) { }
 
-  ngOnInit = async () => {
-    await this.loadMaterialRequisitionDetailsIfCompanyExists();
+  ngOnInit = async () => { };
 
-  }
   ionViewWillEnter = async () => {
     await this.loadMaterialRequisitionDetailsIfCompanyExists();
-  }
-  ngOnDestroy() {
-    // Cleanup if needed
-  }
+  };
+
+  ngOnDestroy(): void { }
 
   private async loadMaterialRequisitionDetailsIfCompanyExists() {
     try {
       await this.loadingService.show();
       this.companyRef = Number(this.appStateManage.localStorage.getItem('SelectedCompanyRef'));
 
-      if (this.companyRef > 0) {
-        this.appStateManage.setDropdownDisabled(true);
-        await this.getSiteListByCompanyRef(); // ✅ FIXED
+      if (this.companyRef <= 0) {
+        await this.toastService.present('Company not selected', 1000, 'warning');
+        await this.haptic.warning();
+        return;
+      }
 
-        const isEditable = this.appStateManage.StorageKey.getItem('Editable') === 'Edit';
-        this.IsNewEntity = !isEditable;
-        this.DetailsFormTitle = this.IsNewEntity ? 'New Stock Transfer' : 'Edit Stock Transfer';
+      this.appStateManage.setDropdownDisabled(true);
+      await this.getSiteListByCompanyRef();
 
-        if (isEditable) {
-          this.Entity = StockTransfer.GetCurrentInstance();
-          this.appStateManage.StorageKey.removeItem('Editable');
-          if (this.Entity.p.Date !== '') {
-            this.Entity.p.Date = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.Date);
-            this.DisplayTransferDate = this.Entity.p.Date;
-          }
-          if (this.Entity.p.FromSiteRef) {
-            await this.getMaterialListBySiteRef(this.Entity.p.FromSiteRef);
-          }
-          if (this.Entity.p.MaterialRef && this.Entity.p.FromSiteRef) {
-            await this.getUnitByMaterialRef(this.Entity.p.FromSiteRef, this.Entity.p.MaterialRef);
-          }
-          this.selectedFromSite = [{ p: { Ref: this.Entity.p.FromSiteRef, Name: this.Entity.p.FromSiteName } }];
-          this.FromSiteName = this.Entity.p.FromSiteName;
-          this.selectedToSite = [{ p: { Ref: this.Entity.p.ToSiteRef, Name: this.Entity.p.ToSiteName } }];
-          this.ToSiteName = this.Entity.p.ToSiteName;
-          this.selectedMaterial = [{ p: { Ref: this.Entity.p.MaterialRef, Name: this.Entity.p.MaterialName } }];
-          this.MaterialName = this.Entity.p.MaterialName;
+      const isEditable = this.appStateManage.StorageKey.getItem('Editable') === 'Edit';
+      this.IsNewEntity = !isEditable;
+      this.DetailsFormTitle = this.IsNewEntity ? 'New Stock Transfer' : 'Edit Stock Transfer';
 
-          this.appStateManage.StorageKey.removeItem('Editable');
-        } else {
-          this.Entity = StockTransfer.CreateNewInstance();
-          StockTransfer.SetCurrentInstance(this.Entity);
-          this.Entity.p.CreatedBy = Number(this.appStateManage.localStorage.getItem('LoginEmployeeRef'));
-        }
+      if (isEditable) {
+        this.Entity = StockTransfer.GetCurrentInstance();
+        this.appStateManage.StorageKey.removeItem('Editable');
 
+        this.TransferDate = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.Date);
+        this.selectedFromSite = [{ p: { Ref: this.Entity.p.FromSiteRef, Name: this.Entity.p.FromSiteName } }];
+        this.FromSiteName = this.Entity.p.FromSiteName;
+
+        this.selectedToSite = [{ p: { Ref: this.Entity.p.ToSiteRef, Name: this.Entity.p.ToSiteName } }];
+        this.ToSiteName = this.Entity.p.ToSiteName;
+
+        this.selectedMaterial = [{ p: { Ref: this.Entity.p.MaterialRef, Name: this.Entity.p.MaterialName } }];
+        this.MaterialName = this.Entity.p.MaterialName;
+
+        await this.getMaterialListBySiteRef(this.Entity.p.FromSiteRef);
+        await this.getUnitByMaterialRef(this.Entity.p.FromSiteRef, this.Entity.p.MaterialRef);
       } else {
-        await this.toastService.present('Company not selected', 1000, 'danger');
-        await this.haptic.error();
+        this.Entity = StockTransfer.CreateNewInstance();
+        StockTransfer.SetCurrentInstance(this.Entity);
+
+        const strCDT = await CurrentDateTimeRequest.GetCurrentDateTime();
+        const parts = strCDT.substring(0, 16).split('-');
+        this.Entity.p.Date = `${parts[0]}-${parts[1]}-${parts[2]}`;
+        this.TransferDate = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.Date);
+
+        this.Entity.p.CreatedBy = Number(this.appStateManage.localStorage.getItem('LoginEmployeeRef'));
       }
     } catch (error) {
-      console.error('Error loading stock Transfer details:', error);
       await this.toastService.present('Failed to load stock Transfer details', 1000, 'danger');
       await this.haptic.error();
     } finally {
@@ -130,243 +117,180 @@ export class StockTransferDetailsMobileAppComponent  implements OnInit {
     }
   }
 
+  private async getSiteListByCompanyRef() {
+    if (this.companyRef <= 0) return;
 
-  public async onTransferDateChange(date: any): Promise<void> {
-    console.log('date :', date);
-    this.TransferDate = this.datePipe.transform(date, 'yyyy-MM-dd') ?? '';
-    this.Entity.p.Date = this.TransferDate;
-    this.DisplayTransferDate = this.TransferDate;
-  }
-
-  // Extracted from services date conversion //
-  formatDate = (date: string | Date): string => {
-    return this.DateconversionService.formatDate(date);
-  }
-  getSiteListByCompanyRef = async () => {
-    this.SiteList = [];
-    if (this.companyRef <= 0) {
-      // await this.uiUtils.showErrorToster('Company not Selected');
-      await this.toastService.present('Company not Selected', 1000, 'warning');
-      await this.haptic.warning();
-      return;
-    }
-    let lst = await Site.FetchEntireListByCompanyRef(this.companyRef, async errMsg => {
-      // await this.uiUtils.showErrorMessage('Error', errMsg)
-      await this.toastService.present('Error ' + errMsg, 1000, 'danger');
+    const lst = await Site.FetchEntireListByCompanyRef(this.companyRef, async errMsg => {
+      await this.toastService.present(errMsg, 1000, 'danger');
       await this.haptic.error();
     });
+
     this.SiteList = lst;
+    this.FromSiteList = lst;
+    this.ToSiteList = [...lst];
   }
 
-  getMaterialListBySiteRef = async (SiteRef: number) => {
+  private async getMaterialListBySiteRef(siteRef: number) {
     this.MaterialList = [];
-    if (this.companyRef <= 0) {
-      // await this.uiUtils.showErrorToster('Company not Selected');
-      await this.toastService.present('Company not Selected', 1000, 'warning');
-      await this.haptic.warning();
-      return;
-    }
-    if (SiteRef <= 0) {
-      // await this.uiUtils.showErrorToster('Site not Selected');
-      await this.toastService.present('Site not Selected', 1000, 'warning');
-      await this.haptic.warning();
-      return;
-    }
-    let lst = await StockConsume.FetchMaterialListBySiteRef(
-      SiteRef,
-      this.companyRef,
-      async (errMsg) => {
-        // await this.uiUtils.showErrorMessage('Error', errMsg)
-        await this.toastService.present('Error ' + errMsg, 1000, 'danger');
-        await this.haptic.error();
-      }
-    );
-    console.log('lst :', lst);
-    this.MaterialList = lst;
-  };
+    if (this.companyRef <= 0 || siteRef <= 0) return;
 
-  getUnitByMaterialRef = async (siteref: number, materialref: number) => {
-    this.Entity.p.UnitRef = 0;
-    this.Entity.p.UnitName = '';
-    this.Entity.p.CurrentQuantity = 0;
-    if (siteref < 0) {
-      return;
-    }
-    if (materialref <= 0) {
-      return;
-    }
-    let lst = await MaterialCurrentStock.FetchMaterialData(siteref, materialref, this.companyRef, async errMsg => {
-      // await this.uiUtils.showErrorMessage('Error', errMsg)
-      await this.toastService.present('Error ' + errMsg, 1000, 'danger');
+    const lst = await StockConsume.FetchMaterialListBySiteRef(siteRef, this.companyRef, async errMsg => {
+      await this.toastService.present(errMsg, 1000, 'danger');
       await this.haptic.error();
     });
-    if (lst) {
-      this.Entity.p.UnitRef = lst[0].p.UnitRef;
-      this.Entity.p.UnitName = lst[0].p.UnitName;
-      this.Entity.p.CurrentQuantity = lst[0].p.CurrentQuantity;
+    this.MaterialList = lst;
+  }
+
+  private async getUnitByMaterialRef(siteRef: number, materialRef: number) {
+    const lst = await MaterialCurrentStock.FetchMaterialData(siteRef, materialRef, this.companyRef, async errMsg => {
+      await this.toastService.present(errMsg, 1000, 'danger');
+      await this.haptic.error();
+    });
+
+    if (lst && lst.length > 0) {
+      const data = lst[0];
+      this.Entity.p.UnitRef = data.p.UnitRef;
+      this.Entity.p.UnitName = data.p.UnitName;
+      this.Entity.p.CurrentQuantity = data.p.CurrentQuantity;
       this.calculateRemainingQuantity();
     }
-  };
+  }
 
-  SiteValidation = async () => {
-    const FromSite = this.Entity.p.FromSiteRef
-    const ToSite = this.Entity.p.ToSiteRef
-    if (FromSite == ToSite) {
-      // await this.uiUtils.showWarningToster("From Site and To Site can not be same");
-      await this.toastService.present('From Site and To Site can not be same', 1000, 'warning');
-      await this.haptic.warning();
-      setTimeout(() => {
-        this.Entity.p.FromSiteRef = 0;
-        this.Entity.p.ToSiteRef = 0;
-      }, 0);
+  public async onTransferDateChange(date: any): Promise<void> {
+    this.TransferDate = this.datePipe.transform(date, 'yyyy-MM-dd') ?? '';
+    this.Entity.p.Date = this.TransferDate;
+  }
+
+  public async selectFromSiteBottomsheet(): Promise<void> {
+    const options = this.FromSiteList;
+    const selected = await this.bottomsheetMobileAppService.openSelectModal(options, this.selectedFromSite, false, 'Select From Site', 1);
+
+    if (selected) {
+      this.selectedFromSite = selected;
+      this.Entity.p.FromSiteRef = selected[0]?.p?.Ref || 0;
+      this.FromSiteName = selected[0]?.p?.Name || '';
+
+      this.ToSiteList = this.SiteList.filter(site => site.p.Ref !== this.Entity.p.FromSiteRef);
+
+      await this.getMaterialListBySiteRef(this.Entity.p.FromSiteRef);
+      this.onSiteChange();
     }
   }
 
-  onSiteChange = () => {
+  public async selectToSiteBottomsheet(): Promise<void> {
+    const options = this.ToSiteList;
+    const selected = await this.bottomsheetMobileAppService.openSelectModal(options, this.selectedToSite, false, 'Select To Site', 1);
+
+    if (selected) {
+      this.selectedToSite = selected;
+      this.Entity.p.ToSiteRef = selected[0]?.p?.Ref || 0;
+      this.ToSiteName = selected[0]?.p?.Name || '';
+
+      if (this.Entity.p.FromSiteRef === this.Entity.p.ToSiteRef) {
+        await this.toastService.present('From Site and To Site cannot be the same', 1000, 'warning');
+        await this.haptic.warning();
+        this.Entity.p.ToSiteRef = 0;
+        this.ToSiteName = '';
+      }
+    }
+  }
+
+  public async selectMaterialBottomsheet(): Promise<void> {
+    const options = this.MaterialList.map(item => ({
+      ...item,
+      p: { ...item.p, Name: item.p.MaterialName, Ref: item.p.MaterialRef }
+    }));
+
+    const selected = await this.bottomsheetMobileAppService.openSelectModal(options, this.selectedMaterial, false, 'Select Material', 1);
+
+    if (selected) {
+      this.selectedMaterial = selected;
+      this.Entity.p.MaterialRef = selected[0].p.MaterialRef;
+      this.MaterialName = selected[0].p.MaterialName;
+
+      await this.getUnitByMaterialRef(this.Entity.p.FromSiteRef, this.Entity.p.MaterialRef);
+    }
+  }
+
+  private onSiteChange() {
+    this.selectedMaterial = [];
+    this.MaterialName = '';
+    this.ToSiteName = '';
+    this.selectedToSite = [];
     this.Entity.p.MaterialRef = 0;
     this.Entity.p.UnitRef = 0;
     this.Entity.p.UnitName = '';
     this.Entity.p.CurrentQuantity = 0;
     this.Entity.p.TransferredQuantity = 0;
     this.Entity.p.RemainingQuantity = 0;
-  };
+  }
 
-  SaveStockTransfer = async () => {
+  public async SaveStockTransfer(): Promise<void> {
     try {
       this.loadingService.show();
       this.Entity.p.CompanyRef = this.companyRef;
-      this.Entity.p.CompanyName = this.appStateManage.localStorage.getItem('companyName') || ''
-      this.Entity.p.Date = this.dtu.ConvertStringDateToFullFormat(this.Entity.p.Date)
-      this.Entity.p.UpdatedBy = Number(this.appStateManage.localStorage.getItem('LoginEmployeeRef'))
-      this.Entity.p.CreatedBy = Number(this.appStateManage.localStorage.getItem('LoginEmployeeRef'))
-      let entityToSave = this.Entity.GetEditableVersion();
-      let entitiesToSave = [entityToSave]
-      console.log('entitiesToSave :', entitiesToSave);
-      await this.Entity.EnsurePrimaryKeysWithValidValues()
-      let tr = await this.utils.SavePersistableEntities(entitiesToSave);
-      if (!tr.Successful) {
-        this.isSaveDisabled = false;
-        // this.uiUtils.showErrorMessage('Error', tr.Message);
-        await this.toastService.present('Error ' + tr.Message, 1000, 'danger');
-        await this.haptic.error();
-        return
-      }
-      else {
-        this.isSaveDisabled = false;
-        if (this.IsNewEntity) {
-          // await this.uiUtils.showSuccessToster('Stock Transfer saved successfully');
-          await this.toastService.present('Stock Transfer saved successfully', 1000, 'success');
-          await this.haptic.success();
-          this.Entity = StockTransfer.CreateNewInstance();
-          await this.router.navigate(['/mobile-app/tabs/dashboard/stock-management/stock-transfer']);
-        } else {
-          // await this.uiUtils.showSuccessToster('Stock Transfer Updated successfully');
-          await this.toastService.present('Stock Transfer Updated successfully', 1000, 'success');
-          await this.haptic.success();
-          await this.router.navigate(['/mobile-app/tabs/dashboard/stock-management/stock-transfer']);
-        }
-      }
-    } catch (error) {
+      this.Entity.p.CompanyName = this.appStateManage.localStorage.getItem('companyName') || '';
+      this.Entity.p.Date = this.dtu.ConvertStringDateToFullFormat(this.Entity.p.Date);
+      this.Entity.p.UpdatedBy = Number(this.appStateManage.localStorage.getItem('LoginEmployeeRef'));
+      this.Entity.p.CreatedBy = Number(this.appStateManage.localStorage.getItem('LoginEmployeeRef'));
 
+      const result = await this.utils.SavePersistableEntities([this.Entity.GetEditableVersion()]);
+
+      if (!result.Successful) {
+        await this.toastService.present('Error ' + result.Message, 1000, 'danger');
+        await this.haptic.error();
+        return;
+      }
+
+      await this.toastService.present(
+        this.IsNewEntity ? 'Stock Transfer saved successfully' : 'Stock Transfer updated successfully',
+        1000,
+        'success'
+      );
+      await this.haptic.success();
+      await this.router.navigate(['/mobile-app/tabs/dashboard/stock-management/stock-transfer']);
+    } catch (error) {
+      console.error('Save Error:', error);
     } finally {
       this.loadingService.hide();
     }
   }
 
-  calculateAmount = () => {
-    const Rate = Number(this.Entity.p.Rate);
-    const GSTOnRate = Number((this.Entity.p.GST / 100) * Rate);
-    this.Entity.p.Amount = Math.ceil(Rate + GSTOnRate);
+  calculateRemainingQuantity() {
+    this.Entity.p.RemainingQuantity = Math.ceil(this.Entity.p.CurrentQuantity - this.Entity.p.TransferredQuantity);
   }
 
-  calculateRemainingQuantity = () => {
-    const CurrentQuantity = Number(this.Entity.p.CurrentQuantity);
-    const TransfferedQuantity = Number(this.Entity.p.TransferredQuantity);
-    this.Entity.p.RemainingQuantity = Math.ceil(CurrentQuantity - TransfferedQuantity);
-  }
-
-  // for value 0 selected while click on Input //
-  selectAllValue(event: MouseEvent): void {
-    const input = event.target as HTMLInputElement;
-    input.select();
-  }
-  public async selectMaterialBottomsheet(): Promise<void> {
-    try {
-      const options = this.MaterialList.map(item => ({
-        ...item,
-        p: {
-          ...item.p,
-          Name: item.p.MaterialName, // Add 'Name'
-          Ref: item.p.MaterialRef   // Add 'Ref'
-        }
-      }));
-      // const options = this.MaterialList;
-      this.openSelectModal(options, this.selectedMaterial, false, 'Select Material', 1, async (selected) => {
-        this.selectedMaterial = selected;
-        this.Entity.p.MaterialRef = selected[0].p.MaterialRef || 0;
-        this.MaterialName = selected[0].p.MaterialName || '';
-
-        if (this.Entity.p.FromSiteRef && this.Entity.p.MaterialRef) {
-          await this.getUnitByMaterialRef(this.Entity.p.FromSiteRef, this.Entity.p.MaterialRef);
-        }
+  public goBack = async () => {
+    if (this.isDataFilled()) {
+      this.alertService.presentDynamicAlert({
+        header: 'Warning',
+        subHeader: 'Confirmation needed',
+        message: 'You have unsaved data. Are you sure you want to go back? All data will be lost.',
+        buttons: [
+          { text: 'Cancel', role: 'cancel' },
+          {
+            text: 'Yes, Close',
+            handler: async () => {
+              await this.router.navigate(['/mobile-app/tabs/dashboard/stock-management/stock-transfer'], { replaceUrl: true });
+              this.haptic.success();
+            }
+          }
+        ]
       });
-    } catch (error) {
-      console.error('Material selection error:', error);
+    } else {
+      await this.router.navigate(['/mobile-app/tabs/dashboard/stock-management/stock-transfer'], { replaceUrl: true });
+      this.haptic.success();
     }
+  };
+
+  private isDataFilled(): boolean {
+    const empty = StockTransfer.CreateNewInstance();
+    return !this.deepEqualIgnoringKeys(this.Entity, empty, ['p.Date']);
   }
 
-  public async selectFromSiteBottomsheet(): Promise<void> {
-    try {
-      const options = this.SiteList;
-      this.openSelectModal(options, this.selectedFromSite, false, 'Select From Site', 1, async (selected) => {
-        this.selectedFromSite = selected;
-        this.Entity.p.FromSiteRef = selected[0]?.p?.Ref || 0;
-        this.FromSiteName = selected[0]?.p?.Name || '';
-
-        await this.getMaterialListBySiteRef(this.Entity.p.FromSiteRef);
-        this.onSiteChange();
-        await this.SiteValidation();
-      });
-    } catch (error) {
-      console.error('From site selection error:', error);
-    }
-  }
-
-  public async selectToSiteBottomsheet(): Promise<void> {
-    try {
-      const options = this.SiteList;
-      this.openSelectModal(options, this.selectedToSite, false, 'Select To Site', 1, async (selected) => {
-        this.selectedToSite = selected;
-        this.Entity.p.ToSiteRef = selected[0]?.p?.Ref || 0;
-        this.ToSiteName = selected[0]?.p?.Name || '';
-        await this.SiteValidation();
-      });
-    } catch (error) {
-      console.error('To site selection error:', error);
-    }
-  }
-  private async openSelectModal(
-    dataList: any[],
-    selectedItems: any[],
-    multiSelect: boolean,
-    title: string,
-    MaxSelection: number,
-    updateCallback: (selected: any[]) => void
-  ): Promise<void> {
-    const selected = await this.bottomsheetMobileAppService.openSelectModal(dataList, selectedItems, multiSelect, title, MaxSelection);
-    if (selected) updateCallback(selected);
-  }
-  isDataFilled(): boolean {
-    const emptyEntity = StockTransfer.CreateNewInstance();
-    console.log('emptyEntity :', emptyEntity);
-    console.log('this Entity :', this.Entity);
-    return !this.deepEqualIgnoringKeys(this.Entity, emptyEntity, ['p.Date']);
-  }
-
-  deepEqualIgnoringKeys(obj1: any, obj2: any, ignorePaths: string[]): boolean {
+  private deepEqualIgnoringKeys(obj1: any, obj2: any, ignorePaths: string[]): boolean {
     const clean = (obj: any, path = ''): any => {
       if (obj === null || typeof obj !== 'object') return obj;
-
       const result: any = Array.isArray(obj) ? [] : {};
       for (const key in obj) {
         const fullPath = path ? `${path}.${key}` : key;
@@ -375,43 +299,6 @@ export class StockTransferDetailsMobileAppComponent  implements OnInit {
       }
       return result;
     };
-
-    const cleanedObj1 = clean(obj1);
-    const cleanedObj2 = clean(obj2);
-
-    return JSON.stringify(cleanedObj1) === JSON.stringify(cleanedObj2);
-  }
-
-  goBack = async () => {
-    // Replace this with your actual condition to check if data is filled
-    const isDataFilled = this.isDataFilled(); // Implement this function based on your form
-
-    if (isDataFilled) {
-      this.alertService.presentDynamicAlert({
-        header: 'Warning',
-        subHeader: 'Confirmation needed',
-        message: 'You have unsaved data. Are you sure you want to go back? All data will be lost.',
-        buttons: [
-          {
-            text: 'Cancel',
-            role: 'cancel',
-            cssClass: 'custom-cancel',
-            handler: () => {
-            }
-          },
-          {
-            text: 'Yes, Close',
-            cssClass: 'custom-confirm',
-            handler: () => {
-              this.router.navigate(['/mobile-app/tabs/dashboard/stock-management/stock-transfer'], { replaceUrl: true });
-              this.haptic.success();
-            }
-          }
-        ]
-      });
-    } else {
-      this.router.navigate(['/mobile-app/tabs/dashboard/stock-management/stock-transfer'], { replaceUrl: true });
-      this.haptic.success();
-    }
+    return JSON.stringify(clean(obj1)) === JSON.stringify(clean(obj2));
   }
 }

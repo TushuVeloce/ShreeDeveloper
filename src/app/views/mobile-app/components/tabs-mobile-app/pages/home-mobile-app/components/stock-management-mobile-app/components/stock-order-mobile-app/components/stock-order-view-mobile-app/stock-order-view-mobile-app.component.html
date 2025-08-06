@@ -18,16 +18,15 @@
         </ion-chip>
       </ion-label>
 
-      <div class="action-buttons" slot="end" (click)="$event.stopPropagation()">
-        <ion-button fill="clear" size="small" color="primary" (click)="onEditClicked(order)"
-          *ngIf="!checkIsEnable(order.p.MaterialPurchaseOrderDetailsArray) || order.p.MaterialPurchaseOrderStatus == MaterialPurchaseOrderStatus.Approved">
-          <ion-icon name="pencil-outline" slot="icon-only"></ion-icon>
-        </ion-button>
-        <ion-button fill="clear" size="small" color="primary" (click)="onDeleteClicked(order)"
-          *ngIf="!checkIsEnable(order.p.MaterialPurchaseOrderDetailsArray) || order.p.MaterialPurchaseOrderStatus == MaterialPurchaseOrderStatus.Approved">
-          <ion-icon name="trash-outline" slot="icon-only"></ion-icon>
-        </ion-button>
-      </div>
+    <div class="action-buttons" slot="end" (click)="$event.stopPropagation()"
+      *ngIf="order.p.MaterialPurchaseOrderStatus == MaterialPurchaseOrderStatus.Pending">
+      <ion-button fill="clear" size="small" color="primary" (click)="onEditClicked(order)">
+        <ion-icon name="pencil-outline" slot="icon-only"></ion-icon>
+      </ion-button>
+      <ion-button fill="clear" size="small" color="primary" (click)="onDeleteClicked(order)">
+        <ion-icon name="trash-outline" slot="icon-only"></ion-icon>
+      </ion-button>
+    </div>
     </ion-item>
   </ion-list>
 

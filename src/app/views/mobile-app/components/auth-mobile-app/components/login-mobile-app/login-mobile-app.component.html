@@ -1,4 +1,4 @@
-<ion-content [fullscreen]="true" [scrollEvents]="true" keyboard-attach scroll="true" class="login-content ion-padding">
+<ion-content [fullscreen]="true" scrollY="true" class="login-content ion-padding">
   <ion-grid class="h-100">
     <ion-row class="ion-justify-content-center ion-align-items-center h-100">
       <ion-col size="12" size-sm="10" size-md="6" size-lg="4" class="ion-text-center">
@@ -14,21 +14,19 @@
         <!-- Login Form -->
         <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="form-wrapper">
 
-          <app-input-field label="Email" controlName="email" type="email" icon="mail" [clearInput]="true"
-            [formGroup]="loginForm" placeholder="Enter your email" customClass="input-wrapper">
+          <!-- Email Input -->
+          <app-input-field label="Email" controlName="email" type="email" icon="mail" placeholder="Enter your email"
+            [clearInput]="true" [formGroup]="loginForm" customClass="input-wrapper">
           </app-input-field>
 
-          <!-- <app-input-field label="Password" controlName="password" type="password" icon="lock-closed"
-            [formGroup]="loginForm" placeholder="Enter your password" [maxlength]="20"
-            [pattern]="'^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{6,}$'" customClass="input-wrapper">
-          </app-input-field> -->
+          <!-- Password Input -->
           <app-input-field label="Password" controlName="password" type="password" icon="lock-closed"
-            [formGroup]="loginForm" placeholder="Enter your password" [maxlength]="20" customClass="input-wrapper">
+            placeholder="Enter your password" [maxlength]="20" [formGroup]="loginForm" customClass="input-wrapper">
           </app-input-field>
 
-          <!-- Align forget password to right below password -->
-          <div class="forgot-password-wrapper">
-            <ion-button fill="clear" size="small" (click)="goToForgotPassword()">forgot Password?</ion-button>
+          <!-- Forgot Password -->
+          <div class="forgot-password-wrapper ion-text-right">
+            <ion-button fill="clear" size="small" (click)="goToForgotPassword()">Forgot Password?</ion-button>
           </div>
 
           <!-- Login Button -->
@@ -37,8 +35,11 @@
           </app-custom-button>
         </form>
 
-        <ion-button fill="clear" expand="full" class="Button-In-loginPage">New User? Contact Admin</ion-button>
-        <!-- (click)="goToForgotPassword()" -->
+        <!-- Optional: New User Info -->
+        <ion-button fill="clear" expand="full" class="Button-In-loginPage" disabled>
+          New User? Contact Admin
+        </ion-button>
+
       </ion-col>
     </ion-row>
   </ion-grid>

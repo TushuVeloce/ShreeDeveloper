@@ -1,95 +1,98 @@
 <app-header-with-back-handler title={{DetailsFormTitle}}></app-header-with-back-handler>
 
 <ion-content class="form-container" [scrollEvents]="true">
-  <ion-list lines="none" class="ion-padding">
-    <!-- Select From site -->
-    <ion-item class="input-item" button detail (click)="selectSiteBottomsheet()">
-      <ion-label>Site</ion-label>
-
-      <!-- Text showing the selected status -->
-      <ion-text slot="end" class="status-text">
-        {{ SiteName|| 'Select' }}
-      </ion-text>
-
-      <!-- Dropdown icon (chevron) on the right -->
-      <!-- <ion-icon name="chevron-down-outline" slot="end" class="dropdown-icon"></ion-icon> -->
-    </ion-item>
-
-    <!-- Select To site -->
-    <ion-item class="input-item" button detail (click)="selectStageBottomsheet()">
-      <ion-label>Stage</ion-label>
-
-      <!-- Text showing the selected status -->
-      <ion-text slot="end" class="status-text">
-        {{ StageName|| 'Select' }}
-      </ion-text>
-
-      <!-- Dropdown icon (chevron) on the right -->
-      <!-- <ion-icon name="chevron-down-outline" slot="end" class="dropdown-icon"></ion-icon> -->
-    </ion-item>
-
-    <ion-item (click)="showConsumptionDatePicker = true" class="input-item">
-      <ion-label>Date</ion-label>
-      <ion-label slot="end">{{ DisplayConsumptionDate || 'Select Date' }}</ion-label>
-    </ion-item>
-    <app-date-picker [show]="showConsumptionDatePicker" [selectedDate]="ConsumptionDate" [defaultToday]="true"
-      (dateChanged)="onConsumptionDateChange($event)"
-      (dateSelected)="onConsumptionDateChange($event); showConsumptionDatePicker = false"
-      (modalDismissed)="showConsumptionDatePicker = false" />
+  <form>
+    <ion-list lines="none" class="ion-padding">
+      <!--  Date -->
+      <ion-item class="input-item">
+        <ion-label>Select Date</ion-label>
+        <ion-datetime-button id="ConsumptionDate-modal" datetime="Date" trigger="ConsumptionDate-modal">
+        </ion-datetime-button>
+        <ion-checkbox slot="end" [(ngModel)]="ConsumptionDate" name="ConsumptionDateCheckBox" [disabled]="true">
+        </ion-checkbox>
+      </ion-item>
+      
+      <ion-modal keepContentsMounted="true" trigger="ConsumptionDate-modal">
+        <ng-template>
+          <ion-datetime id="Date" name="ConsumptionDate" presentation="date" [(ngModel)]="ConsumptionDate"
+            show-default-buttons="true" (ionChange)="onConsumptionDateChange($event.detail.value)">
+          </ion-datetime>
+        </ng-template>
+      </ion-modal>
 
 
-    <!-- Select Vendor -->
-    <ion-item class="input-item" button detail (click)="selectMaterialBottomsheet()">
-      <ion-label>Material</ion-label>
+      <!-- Select From site -->
+      <ion-item class="input-item" button detail (click)="selectSiteBottomsheet()" [disabled]="SiteList.length === 0">
+        <ion-label>Site</ion-label>
 
-      <!-- Text showing the selected status -->
-      <ion-text slot="end" class="status-text">
-        {{ MaterialName|| 'Select' }}
-      </ion-text>
+        <!-- Text showing the selected status -->
+        <ion-text slot="end" class="status-text">
+          {{ SiteName|| 'Select' }}
+        </ion-text>
+      </ion-item>
 
-      <!-- Dropdown icon (chevron) on the right -->
-      <!-- <ion-icon name="chevron-down-outline" slot="end" class="dropdown-icon"></ion-icon> -->
-    </ion-item>
+      <!-- Select To site -->
+      <ion-item class="input-item" button detail (click)="selectStageBottomsheet()" [disabled]="StageList.length === 0">
+        <ion-label>Stage</ion-label>
 
-    <!-- Unit input-->
-    <ion-item class="input-item">
-      <ion-input label="Unit" labelPlacement="floating" placeholder="Enter Unit" [(ngModel)]="Entity.p.UnitName"
-        [disabled]="'true'"></ion-input>
-    </ion-item>
+        <!-- Text showing the selected status -->
+        <ion-text slot="end" class="status-text">
+          {{ StageName|| 'Select' }}
+        </ion-text>
+      </ion-item>
 
-    <!-- Current Quantity input-->
-    <ion-item class="input-item">
-      <ion-input label="Current Quantity" labelPlacement="floating" placeholder="Enter Current Quantity"
-        [(ngModel)]="Entity.p.CurrentQuantity" [disabled]="'true'"></ion-input>
-    </ion-item>
+      <!-- Select Vendor -->
+      <ion-item class="input-item" button detail (click)="selectMaterialBottomsheet()"
+        [disabled]="MaterialList.length === 0">
+        <ion-label>Material</ion-label>
 
-    <!-- Consumed Quantity input-->
-    <ion-item class="input-item">
-      <ion-input label="Consumed Quantity" labelPlacement="floating" placeholder="Enter Consumed Quantity"
-        [(ngModel)]="Entity.p.ConsumedQuantity" (ngModelChange)="CalculateRemainingQty()" [clearOnEdit]="true"
-        [clearInput]="true" type="number"></ion-input>
-    </ion-item>
+        <!-- Text showing the selected status -->
+        <ion-text slot="end" class="status-text">
+          {{ MaterialName|| 'Select' }}
+        </ion-text>
+      </ion-item>
 
-    <!-- Remaining Quantity input-->
-    <ion-item class="input-item">
-      <ion-input label="Remaining Quantity" labelPlacement="floating" placeholder="Enter Remaining Quantity"
-        [(ngModel)]="Entity.p.RemainingQuantity" [disabled]="'true'"></ion-input>
-    </ion-item>
+      <!-- Unit input-->
+      <ion-item class="input-item">
+        <ion-input label="Unit" name="UnitName" labelPlacement="floating" placeholder="Enter Unit"
+          [(ngModel)]="Entity.p.UnitName" [disabled]="'true'"></ion-input>
+      </ion-item>
 
-    <!-- Main Buttons -->
-    <ion-grid>
-      <ion-row>
-        <ion-col size="6">
-          <ion-button expand="block" (click)="goBack()" class="submit-button cancel-button">
-            Cancel
-          </ion-button>
-        </ion-col>
-        <ion-col size="6">
-          <ion-button expand="block" (click)="SaveStockConsumption()" class="submit-button primary-button">
-            Save
-          </ion-button>
-        </ion-col>
-      </ion-row>
-    </ion-grid>
-  </ion-list>
+      <!-- Current Quantity input-->
+      <ion-item class="input-item">
+        <ion-input label="Current Quantity" name="CurrentQuantity" labelPlacement="floating"
+          placeholder="Enter Current Quantity" [(ngModel)]="Entity.p.CurrentQuantity" [disabled]="'true'"></ion-input>
+      </ion-item>
+
+      <!-- Consumed Quantity input-->
+      <ion-item class="input-item">
+        <ion-input label="Consumed Quantity" name="ConsumedQuantity" labelPlacement="floating"
+          placeholder="Enter Consumed Quantity" [(ngModel)]="Entity.p.ConsumedQuantity"
+          (ngModelChange)="CalculateRemainingQty()" [clearOnEdit]="true" [clearInput]="true" type="number"></ion-input>
+      </ion-item>
+
+      <!-- Remaining Quantity input-->
+      <ion-item class="input-item">
+        <ion-input label="Remaining Quantity" name="RemainingQuantity" labelPlacement="floating"
+          placeholder="Enter Remaining Quantity" [(ngModel)]="Entity.p.RemainingQuantity"
+          [disabled]="'true'"></ion-input>
+      </ion-item>
+
+      <!-- Main Buttons -->
+      <ion-grid>
+        <ion-row>
+          <ion-col size="6">
+            <ion-button expand="block" color="medium" shape="round" (click)="goBack()">
+              Cancel
+            </ion-button>
+          </ion-col>
+          <ion-col size="6">
+            <ion-button expand="block" color="primary" shape="round" (click)="SaveStockConsumption()">
+              Save
+            </ion-button>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-list>
+  </form>
 </ion-content>
