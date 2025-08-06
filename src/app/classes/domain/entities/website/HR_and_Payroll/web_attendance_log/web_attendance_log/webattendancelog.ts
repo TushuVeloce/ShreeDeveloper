@@ -46,9 +46,10 @@ export class WebAttendaneLogProps {
   public FirstCheckInTime: string = '';
   public LastCheckOutTime: string = '';
 
-  public IsLeave: number = 0;
+  public IsLeave: boolean = false;
   public IsHalfDay: number = 0;
   public LeaveType: number = 0;
+  public LeaveTypeName: string = '';
   public OnLeave: number = 0;
   public AttendanceLogDetailsArray: WebAttendaneLogDetailsLogProps[] = [];
 

@@ -121,11 +121,11 @@
               "--"}}</td>
             <td Class="tbldata">{{attendancelog.p.TotalWorkingHrs?
               convertFractionTimeToHM(attendancelog.p.TotalWorkingHrs): "--"}}</td>
-            <td Class="tbldata">{{attendancelog.p.OnLeave ?
-              attendancelog.p.OnLeave :
+            <td Class="tbldata">{{attendancelog.p.IsLeave ?
+              'Yes' :
               '--'}}</td>
             <td Class="tbldata">{{attendancelog.p.LeaveType
-              ? attendancelog.p.LeaveType :
+              ? attendancelog.p.LeaveTypeName :
               '--'}}</td>
             <td Class="tbldata">
               <!-- PENDING -->
