@@ -1,5 +1,6 @@
 import { Component, OnInit, effect } from '@angular/core';
 import { Router } from '@angular/router';
+import { BookingRemarks } from 'src/app/classes/domain/domainenums/domainenums';
 import { CustomerEnquiry } from 'src/app/classes/domain/entities/website/customer_management/customerenquiry/customerenquiry';
 import { CustomerFollowUp } from 'src/app/classes/domain/entities/website/customer_management/customerfollowup/customerfollowup';
 import { Plot } from 'src/app/classes/domain/entities/website/masters/plot/plot';
@@ -29,10 +30,11 @@ export class RegistrarOfficeComponent implements OnInit {
   pageSize = 10; // Items per page
   currentPage = 1; // Initialize current page
   total = 0;
+  BookingRemarks = BookingRemarks;
   companyRef = this.companystatemanagement.SelectedCompanyRef;
   headers: string[] = ['Sr.No.', 'Customer', 'Cheque', 'Witness 1', 'Agreement to Sale', 'Sale Deed', 'Talathi', '7/12	', 'Spiral', 'Client Submit	', 'Action'];
 
-  constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private companystatemanagement: CompanyStateManagement,private screenSizeService: ScreenSizeService) {
+  constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private companystatemanagement: CompanyStateManagement, private screenSizeService: ScreenSizeService) {
     effect(() => {
       this.getSiteListByCompanyRef();
     });
@@ -42,9 +44,9 @@ export class RegistrarOfficeComponent implements OnInit {
     this.appStateManage.setDropdownDisabled();
     this.loadPaginationData();
     this.pageSize = this.screenSizeService.getPageSize('withDropdown');
-    this.Entity.p.SiteRef =   Number(this.appStateManage.StorageKey.getItem('registartsiteRef'));
+    this.Entity.p.SiteRef = Number(this.appStateManage.StorageKey.getItem('registartsiteRef'));
     this.Entity.p.PlotRef = Number(this.appStateManage.StorageKey.getItem('registartplotRef'));
-    if(this.Entity.p.SiteRef){
+    if (this.Entity.p.SiteRef) {
       this.getPlotListBySiteRef(this.Entity.p.SiteRef)
     }
   }
@@ -62,12 +64,6 @@ export class RegistrarOfficeComponent implements OnInit {
     let lst = await Site.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.SiteList = lst;
 
-    // if (this.SiteList.length > 0 && !this.islocalstoragedata) {
-    //   this.Entity.p.SiteRef = this.SiteList[0].p.Ref;
-    //   this.appStateManage.StorageKey.setItem('registartsiteRef', String(this.Entity.p.SiteRef));
-    //   await this.getPlotListBySiteRef(this.Entity.p.SiteRef)
-    //   this.getRegistrarOfficeListBySiteRef(this.Entity.p.SiteRef);
-    // }
     this.loadPaginationData();
   }
 
@@ -85,7 +81,7 @@ export class RegistrarOfficeComponent implements OnInit {
       return
     }
     let lst = await Plot.FetchEntireListBySiteRef(SiteRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-    this.PlotNoList = lst.filter(plot => plot.p.CurrentBookingRemark === 50);
+    this.PlotNoList = lst.filter(plot => plot.p.CurrentBookingRemark != BookingRemarks.Plot_Of_Owner && plot.p.CurrentBookingRemark != BookingRemarks.Plot_Of_Shree);
     this.getRegistrarOfficeListBySiteRef(SiteRef)
     this.loadPaginationData();
   }
@@ -147,7 +143,7 @@ export class RegistrarOfficeComponent implements OnInit {
     this.appStateManage.StorageKey.setItem('Editable', 'Edit');
     await this.router.navigate(['/homepage/Website/Registrar_Office_Details']);
     // this.router.navigate(['/homepage/Website/Registrar_Office_Details'], {
-    //   state: { registrarData: item.GetEditableVersion() }
+    //   state: { SiteRef: this.Entity.p.SiteRef }
     // });
   }
 

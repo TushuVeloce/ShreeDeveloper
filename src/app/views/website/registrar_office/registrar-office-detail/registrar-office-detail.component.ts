@@ -97,6 +97,8 @@ export class RegistrarOfficeDetailComponent implements OnInit {
     this.LoginToken = this.appStateManage.getLoginToken();
     this.Entity = RegistrarOffice.GetCurrentInstance();
 
+    // this.Entity = history.state.printData;
+
     this.filePostViews['CustomerAadharFile'] = `${this.ImageBaseUrl}${this.Entity.p.CustomerAadharPath}/${this.LoginToken}?${this.TimeStamp}`;
     this.selectedFileNames['CustomerAadharFile'] = this.Entity.p.CustomerAadharPath;
 
@@ -267,7 +269,6 @@ export class RegistrarOfficeDetailComponent implements OnInit {
     this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef()
     this.Entity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName()
     this.Entity.p.UpdatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
-    this.Entity.p.SiteRef = Number(this.appStateManage.StorageKey.getItem('siteRef'))
 
     // convert date 2025-02-23 to 2025-02-23-00-00-00-000
     this.Entity.p.AgreementDate = this.dtu.ConvertStringDateToFullFormat(this.localagreementdate)
