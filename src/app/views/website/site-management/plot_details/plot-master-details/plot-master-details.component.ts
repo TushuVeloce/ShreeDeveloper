@@ -29,16 +29,16 @@ export class PlotMasterDetailsComponent implements OnInit {
   IsDropdownDisabled: boolean = false;
   InitialEntity: Plot = null as any;
   BookingRemark = BookingRemarks
-  BookingRemarkList = DomainEnums.BookingRemarksList(true, '--- Select Booking Remark ---')  .filter(item =>
-      item.Ref === this.BookingRemark.Plot_Of_Owner ||
-      item.Ref === this.BookingRemark.Plot_Of_Shree 
-    );
+  BookingRemarkList = DomainEnums.BookingRemarksList(true, '--- Select Booking Remark ---').filter(item =>
+    item.Ref === this.BookingRemark.Plot_Of_Owner ||
+    item.Ref === this.BookingRemark.Plot_Of_Shree
+  );
   SiteRf: number = 0
   SiteName: string = ''
   CustomerList: Owner[] = [];
   CompanyList: Company[] = [];
   SiteList: Site[] = [];
-  Site:number = 0
+  Site: number = 0
   RequiredFieldMsg: string = ValidationMessages.RequiredFieldMsg;
   CompanyName = this.companystatemanagement.SelectedCompanyName;
   CompanyRef = this.companystatemanagement.SelectedCompanyRef;
@@ -120,7 +120,7 @@ export class PlotMasterDetailsComponent implements OnInit {
     this.CustomerEntity = CuctomerData;
   }
 
-  onsitechange = (Site:number) => {
+  onsitechange = (Site: number) => {
     this.Site = Site
     this.Entity.p.CurrentBookingRemark = 0
     this.CompanyEntity = Company.CreateNewInstance();
@@ -135,9 +135,9 @@ export class PlotMasterDetailsComponent implements OnInit {
     if (this.Entity.p.CurrentBookingRemark == BookingRemarks.Plot_Of_Shree) {
       let CompanyData = await Company.FetchInstance(this.CompanyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
       this.CompanyEntity = CompanyData;
-    }else if (this.Entity.p.CurrentBookingRemark == BookingRemarks.Plot_Of_Owner && this.CustomerList.length == 1) {
+    } else if (this.Entity.p.CurrentBookingRemark == BookingRemarks.Plot_Of_Owner && this.CustomerList.length == 1) {
       this.Entity.p.CurrentOwnerRef = this.CustomerList[0].p.Ref
-      this.getCustomerDataBycustomerRef(this.Entity.p.CurrentOwnerRef )
+      this.getCustomerDataBycustomerRef(this.Entity.p.CurrentOwnerRef)
     }
   }
 
@@ -146,7 +146,6 @@ export class PlotMasterDetailsComponent implements OnInit {
     this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef()
     this.Entity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName()
     this.Entity.p.LoginEmployeeRef = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
-    this.Entity.p.SiteManagementRef = this.SiteRf
     if (this.Entity.p.CurrentBookingRemark == BookingRemarks.Plot_Of_Shree) {
       this.Entity.p.CurrentOwnerRef = 0
     }
@@ -175,6 +174,10 @@ export class PlotMasterDetailsComponent implements OnInit {
         await this.router.navigate(['/homepage/Website/Plot_Master']);
       }
       this.Entity.p.SiteManagementRef = this.Site
+      this.InitialEntity = Object.assign(
+        Plot.CreateNewInstance(),
+        this.utils.DeepCopy(this.Entity)
+      ) as Plot;
     }
   };
 
@@ -207,7 +210,7 @@ export class PlotMasterDetailsComponent implements OnInit {
 
     // Update model manually
     this.Entity.p.AreaInSqft = parseFloat(event.target.value) || 0;
-     this.convertSqftToSqm()
+    this.convertSqftToSqm()
   }
 
   restrictToTwoDecimalsForSqm(event: any): void {
@@ -220,7 +223,7 @@ export class PlotMasterDetailsComponent implements OnInit {
     }
 
     this.Entity.p.AreaInSqm = parseFloat(event.target.value) || 0;
-     this.convertSqmToSqft()
+    this.convertSqmToSqft()
   }
 
   selectAllValue(event: MouseEvent): void {
