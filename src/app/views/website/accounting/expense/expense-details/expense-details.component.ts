@@ -138,6 +138,8 @@ export class ExpenseDetailsComponent implements OnInit {
   };
 
   onPaymentTypeSelection = () => {
+    this.Entity.p.RecipientRef = 0;
+    this.Entity.p.InvoiceAmount = 0;
     if (this.PaymentType == this.TypeofEmployeePayments.Advance) {
       this.Entity.p.IsAdvancePayment = 1;
       this.Entity.p.IsSalaryExpense = true;
@@ -207,12 +209,19 @@ export class ExpenseDetailsComponent implements OnInit {
     this.RecipientList = lst;
   }
 
-  onTypeChange = async () => {
+  onSitechange = () => {
+    this.Entity.p.RecipientType = 0;
+    this.Entity.p.LedgerRef = 0;
+    this.Entity.p.SubLedgerRef = 0;
+    this.RecipientList = [];
+
     this.Entity.p.IncomeLedgerRef = 0;
     this.Entity.p.IncomeSubLedgerRef = 0;
     this.PaymentType = 0;
     this.Entity.p.RecipientRef = 0;
     this.Entity.p.Reason = '';
+    this.PayerPlotNo = '';
+    this.Entity.p.PlotName = '';
     this.Entity.p.IsAdvancePayment = 0;
     this.Entity.p.IsSalaryExpense = false;
     this.Entity.p.TotalAdvance = 0;
@@ -224,7 +233,31 @@ export class ExpenseDetailsComponent implements OnInit {
     this.Entity.p.Narration = '';
     this.Entity.p.ExpenseModeOfPayment = 0;
     this.Entity.p.IsAutoInvoiceEnabled = 0;
-    this.RecipientNameInput = false
+    this.RecipientNameInput = false;
+    this.getCurrentBalanceByCompanyRef()
+  }
+
+  onTypeChange = async () => {
+    this.Entity.p.IncomeLedgerRef = 0;
+    this.Entity.p.IncomeSubLedgerRef = 0;
+    this.PaymentType = 0;
+    this.Entity.p.RecipientRef = 0;
+    this.Entity.p.Reason = '';
+    this.PayerPlotNo = '';
+    this.Entity.p.PlotName = '';
+    this.Entity.p.IsAdvancePayment = 0;
+    this.Entity.p.IsSalaryExpense = false;
+    this.Entity.p.TotalAdvance = 0;
+    this.Entity.p.RemainingAdvance = 0;
+    this.Entity.p.InvoiceAmount = 0;
+    this.Entity.p.RemainingAmount = 0;
+    this.Entity.p.GivenAmount = 0
+    this.Entity.p.BankAccountRef = 0
+    this.Entity.p.Narration = '';
+    this.Entity.p.ExpenseModeOfPayment = 0;
+    this.Entity.p.IsAutoInvoiceEnabled = 0;
+    this.RecipientNameInput = false;
+    this.getCurrentBalanceByCompanyRef()
   }
 
   onChangeIncomeLedger = () => {
@@ -260,7 +293,9 @@ export class ExpenseDetailsComponent implements OnInit {
       if (lst[0].p.InvoiceAmount < 0) {
         this.Entity.p.InvoiceAmount = 0;
       } else {
-        this.Entity.p.InvoiceAmount = lst[0].p.InvoiceAmount;
+        if (this.PaymentType != this.TypeofEmployeePayments.Advance) {
+          this.Entity.p.InvoiceAmount = lst[0].p.InvoiceAmount;
+        }
       }
       this.Entity.p.RemainingAdvance = lst[0].p.RemainingAdvance;
     }
@@ -291,7 +326,9 @@ export class ExpenseDetailsComponent implements OnInit {
     this.Entity.p.Narration = '';
     this.Entity.p.ExpenseModeOfPayment = 0;
     this.Entity.p.IsAutoInvoiceEnabled = 0;
-    this.RecipientNameInput = false
+    this.RecipientNameInput = false;
+    this.getCurrentBalanceByCompanyRef()
+
     let SingleRecord;
     try {
       if (this.Entity.p.RecipientType == this.DealDoneCustomer) {
@@ -317,10 +354,10 @@ export class ExpenseDetailsComponent implements OnInit {
     } else {
       this.Entity.p.RemainingAmount = 0;
     }
-    if (this.Entity.p.RecipientType == this.SiteType) {
-      this.getCurrentBalanceByCompanyRef()
-      return
-    }
+    // if (this.Entity.p.RecipientType == this.SiteType) {
+    //   this.getCurrentBalanceByCompanyRef()
+    //   return
+    // }
     if (this.Entity.p.GivenAmount <= this.Entity.p.ShreesBalance) {
       this.Entity.p.ShreesBalance = Number((this.ShreeBalance - this.Entity.p.GivenAmount).toFixed(2));
     } else {

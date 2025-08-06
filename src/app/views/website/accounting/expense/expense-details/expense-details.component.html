@@ -32,7 +32,7 @@
           <label>Site Name</label>
           <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
             nzPlaceHolder="Select" id="SiteRef" name="SiteRef" [nzSize]="'large'" [(ngModel)]="Entity.p.SiteRef"
-            (ngModelChange)="getRecipientListByRecipientTypeRef(); Entity.p.RecipientType = 0; Entity.p.RecipientRef = 0; PayerPlotNo = ''; Entity.p.LedgerRef = 0; Entity.p.SubLedgerRef = 0; Entity.p.PlotName = ''; RecipientList = []; Entity.p.InvoiceAmount = 0">
+            (ngModelChange)="getRecipientListByRecipientTypeRef(); onSitechange();">
             <nz-option *ngFor=" let site of SiteList" [nzValue]="site.p.Ref" [nzLabel]="site.p.Name"></nz-option>
           </nz-select>
         </div>
@@ -83,7 +83,7 @@
           <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
             nzPlaceHolder="Select" id="PaymentType" name="PaymentType" [nzSize]="'large'" [(ngModel)]="PaymentType"
             (ngModelChange)="onPaymentTypeSelection(); getTotalInvoiceAmountFromSiteAndRecipientRef();
-            onRecipientChange(); Entity.p.RecipientRef = 0;">
+            onRecipientChange();">
             <nz-option *ngFor="let type of TypeofEmployeePaymentList" [nzValue]="type.Ref"
               [nzLabel]="type.Name"></nz-option>
           </nz-select>
@@ -112,11 +112,11 @@
                 id="PayerRef" name="PayerRef" [nzSize]="'large'" [(ngModel)]="Entity.p.RecipientRef"
                (ngModelChange)="getTotalInvoiceAmountFromSiteAndRecipientRef(); onRecipientChange();">
                 <nz-option *ngFor="let recipient of RecipientList" [nzValue]="recipient.p.Ref"
-                  [nzLabel]="recipient.p.RecipientName + ' - ' + recipient.p.PlotName | titleCase">
-                  <span *ngIf="Entity.p.RecipientType == DealDoneCustomer"
+                  [nzLabel]="recipient.p.RecipientName">
+                  <!-- <span *ngIf="Entity.p.RecipientType == DealDoneCustomer"
                     [ngClass]="recipient.p.IsRegisterCustomerRef == 1 ? 'sitecus' : 'nonsitecus'">
                     {{ recipient.p.RecipientName + ' - ' + recipient.p.PlotName| titleCase }}
-                  </span>
+                  </span> -->
                   <span *ngIf="Entity.p.RecipientType != DealDoneCustomer"
                     [ngClass]="recipient.p.IsRegisterCustomerRef == 1 ? 'sitecus' : 'nonsitecus'">
                     {{ recipient.p.RecipientName| titleCase }}
