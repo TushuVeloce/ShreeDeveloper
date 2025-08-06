@@ -5,54 +5,39 @@
     </h1>
   </div>
   <div class="col-4 mb-2 search-container_light">
-    <app-shared-filter
-      [masterList]="MasterList"
-      [filterFields]="[
+    <app-shared-filter [masterList]="MasterList" [filterFields]="[
         'SiteName',
         'PayerName',
         'IncomeAmount',
         'ModeOfPaymentName',
         'Reason',
-      ]"
-      (filteredList)="DisplayMasterList = $event"
-    ></app-shared-filter>
+      ]" (filteredList)="DisplayMasterList = $event"></app-shared-filter>
   </div>
   <div class="col-4 mb-2 text-end" *ngIf="DisplayMasterList.length > 0">
-    <img
-      class="no-print"
-      src="/assets/icons/printer.png"
-      alt="Print"
-      title="Print"
-      width="30px"
-      height="30px"
-      style="cursor: pointer; padding-top: 4px"
-      (click)="printReport()"
-    />
+    <img class="no-print" src="/assets/icons/printer.png" alt="Print" title="Print" width="30px" height="30px"
+      style="cursor: pointer; padding-top: 4px" (click)="printReport()" />
   </div>
 </div>
 <div class="row" style="margin-top: 1rem">
   <div class="col-md-4">
     <div>
       <label for="SiteRef"><b>Site</b></label>
-      <nz-select
-        class="nzSelect-light"
-        [nzNotFoundContent]="noDataTpl"
-        nzShowSearch
-        nzAllowClear
-        nzPlaceHolder="Select"
-        [nzSize]="'large'"
-        name="SiteRef"
-        [(ngModel)]="Entity.p.SiteRef"
-        required
-        id="SiteRef"
-        (ngModelChange)="getPaymentHistoryListBySiteRef()"
-      >
+      <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear nzPlaceHolder="Select"
+        [nzSize]="'large'" name="SiteRef" [(ngModel)]="Entity.p.SiteRef" required id="SiteRef"
+        (ngModelChange)="getPaymentHistoryListBySiteRef(); getPlotListBySiteRef(Entity.p.SiteRef)">
         <nz-option nzLabel="All" [nzValue]="0"></nz-option>
-        <nz-option
-          *ngFor="let Site of SiteList"
-          [nzValue]="Site.p.Ref"
-          [nzLabel]="Site.p.Name"
-        ></nz-option>
+         <nz-option *ngFor="let Site of SiteList" [nzValue]="Site.p.Ref" [nzLabel]="Site.p.Name"></nz-option>
+      </nz-select>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div>
+      <label for="PlotRef"><b>Plot</b></label>
+      <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear nzPlaceHolder="Select"
+        [nzSize]="'large'" name="PlotRef" [(ngModel)]="Entity.p.PlotRef" required id="PlotRef"
+        (ngModelChange)="getPaymentHistoryListBySiteRef()">
+        <nz-option nzLabel="All" [nzValue]="0"></nz-option>
+         <nz-option *ngFor="let plot of PlotList" [nzValue]="plot.p.Ref" [nzLabel]="plot.p.PlotNo"></nz-option>
       </nz-select>
     </div>
   </div>
@@ -60,22 +45,10 @@
 <ng-template #noDataTpl>
   <div class="no-data-text">Data Not Found</div>
 </ng-template>
-<div
-  class="table-wrapper"
-  class="tblcard_light"
-  style="margin-top: 2rem"
-  *ngIf="DisplayMasterList.length > 0"
->
+<div class="table-wrapper" class="tblcard_light" style="margin-top: 2rem" *ngIf="DisplayMasterList.length > 0">
   <div class="table-container">
-    <nz-table
-      #basicTable
-      nzSize="small"
-      class="no-hover-table bgtable_light"
-      [nzData]="paginatedList"
-      [nzScroll]="{ x: 'auto' }"
-      nzFrontPagination="false"
-      [nzShowSizeChanger]="false"
-    >
+    <nz-table #basicTable nzSize="small" class="no-hover-table bgtable_light" [nzData]="paginatedList"
+      [nzScroll]="{ x: 'auto' }" nzFrontPagination="false" [nzShowSizeChanger]="false">
       <thead>
         <tr>
           <th *ngFor="let header of headers" class="tblheader">{{ header }}</th>
@@ -89,15 +62,8 @@
           <td Class="tbldata">{{ customer.p.PayerName }}</td>
           <td Class="tbldata">{{ customer.p.IncomeAmount }}</td>
           <td Class="tbldata">{{ customer.p.ModeOfPaymentName }}</td>
-          <td
-            Class="tbldata"
-            style="cursor: pointer"
-            [nzTooltipTitle]="customer.p.Reason"
-            nzTooltipPlacement="top"
-            nzTooltipColor="#A52A2A"
-            nz-button
-            nz-tooltip
-          >
+          <td Class="tbldata" style="cursor: pointer" [nzTooltipTitle]="customer.p.Reason" nzTooltipPlacement="top"
+            nzTooltipColor="#A52A2A" nz-button nz-tooltip>
             {{ customer.p.Reason }}
           </td>
         </tr>
@@ -105,15 +71,8 @@
     </nz-table>
   </div>
   <div class="fixed-pagination">
-    <nz-pagination
-      class="try light-theme"
-      [nzPageSize]="pageSize"
-      [nzTotal]="total"
-      [(nzPageIndex)]="currentPage"
-      (nzPageIndexChange)="onPageChange($event)"
-      [nzShowSizeChanger]="false"
-      [nzResponsive]="true"
-    >
+    <nz-pagination class="try light-theme" [nzPageSize]="pageSize" [nzTotal]="total" [(nzPageIndex)]="currentPage"
+      (nzPageIndexChange)="onPageChange($event)" [nzShowSizeChanger]="false" [nzResponsive]="true">
     </nz-pagination>
   </div>
 </div>
@@ -127,10 +86,7 @@
   <table class="table table-bordered print-table">
     <thead>
       <tr>
-        <th
-          *ngFor="let header of headers"
-          style="background-color: maroon; color: white"
-        >
+        <th *ngFor="let header of headers" style="background-color: maroon; color: white">
           {{ header }}
         </th>
       </tr>
@@ -140,18 +96,11 @@
         <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
         <td Class="tbldata">{{formatDate(report.p.Date)}}</td>
         <td Class="tbldata">{{ report.p.SiteName }}</td>
-          <td Class="tbldata">{{ report.p.PayerName }}</td>
+        <td Class="tbldata">{{ report.p.PayerName }}</td>
         <td Class="tbldata">{{ report.p.IncomeAmount }}</td>
-         <td Class="tbldata">{{ report.p.ModeOfPaymentName }}</td>
-        <td
-          Class="tbldata"
-          style="cursor: pointer"
-          [nzTooltipTitle]="report.p.Reason"
-          nzTooltipPlacement="top"
-          nzTooltipColor="#A52A2A"
-          nz-button
-          nz-tooltip
-        >
+        <td Class="tbldata">{{ report.p.ModeOfPaymentName }}</td>
+        <td Class="tbldata" style="cursor: pointer" [nzTooltipTitle]="report.p.Reason" nzTooltipPlacement="top"
+          nzTooltipColor="#A52A2A" nz-button nz-tooltip>
           {{ report.p.Reason }}
         </td>
       </tr>
