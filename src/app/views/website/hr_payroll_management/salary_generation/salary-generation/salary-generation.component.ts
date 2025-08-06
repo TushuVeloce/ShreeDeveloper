@@ -7,6 +7,7 @@ import { CompanyStateManagement } from 'src/app/services/companystatemanagement'
 import { ScreenSizeService } from 'src/app/services/screensize.service';
 import { UIUtils } from 'src/app/services/uiutils.service';
 import { Employee } from 'src/app/classes/domain/entities/website/masters/employee/employee';
+import { DomainEnums } from 'src/app/classes/domain/domainenums/domainenums';
 
 @Component({
   selector: 'app-salary-generation',
@@ -36,6 +37,9 @@ export class SalaryGenerationComponent implements OnInit {
   EmployeeBankBranch: string = ''
   EmployeeBankAccountNo: string = ''
   EmployeeBankIFSCCode: string = ''
+  Month: number = 0;
+  EmployeeRef: number = 0;
+  MonthList = DomainEnums.MonthList(true, '--Select Month List--');
   companyRef = this.companystatemanagement.SelectedCompanyRef;
   isModalVisible = false;
   UserDisplayName = this.appStateManage.StorageKey.getItem('UserDisplayName');
@@ -47,7 +51,7 @@ export class SalaryGenerationComponent implements OnInit {
     private companystatemanagement: CompanyStateManagement
   ) {
     effect(async () => {
-      await this.getSalaryListByCompanyRef();
+      await this.getSalaryListByCompanyRef(); this.getEmployeeListByCompanyRef();
     });
   }
 
@@ -93,6 +97,19 @@ export class SalaryGenerationComponent implements OnInit {
     this.EmployeeList = lst;
   }
 
+
+  getSalaryListByEmployeeAndMonth = async () => {
+    this.MasterList = [];
+    this.DisplayMasterList = [];
+    if (this.companyRef() <= 0) {
+      await this.uiUtils.showErrorToster('Company not Selected');
+      return;
+    }
+    let lst = await SalaryGeneration.FetchEmployeeDataByEmployeeRefandMonth(this.companyRef(), this.EmployeeRef, this.Month, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    this.MasterList = lst;
+    this.DisplayMasterList = this.MasterList;
+    this.loadPaginationData();
+  }
 
   getSalaryListByCompanyRef = async () => {
     this.MasterList = [];
