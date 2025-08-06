@@ -206,8 +206,8 @@ export class SalaryGeneration implements IPersistable<SalaryGeneration> {
   }
 
   public static async FetchEmployeeDataForTableByEmployeeRefandMonth(CompanyRef: number, EmployeeRef: number, Month: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-    let req = new SalaryGenerationCustomRequest();
-    req.CompanyRef = CompanyRef;
+    let req = new SalaryGenerationFetchRequest();
+    req.CompanyRefs.push(CompanyRef)
     if (EmployeeRef > 0) {
       req.EmployeeRefs.push(EmployeeRef);
     }
