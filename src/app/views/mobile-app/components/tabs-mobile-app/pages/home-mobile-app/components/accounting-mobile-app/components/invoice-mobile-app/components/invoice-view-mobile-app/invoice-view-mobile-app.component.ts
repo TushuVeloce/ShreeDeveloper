@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { DomSanitizer } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { DomainEnums } from 'src/app/classes/domain/domainenums/domainenums';
 import { Invoice } from 'src/app/classes/domain/entities/website/accounting/billing/invoice';
@@ -7,11 +6,7 @@ import { Ledger } from 'src/app/classes/domain/entities/website/masters/ledgerma
 import { Site } from 'src/app/classes/domain/entities/website/masters/site/site';
 import { SubLedger } from 'src/app/classes/domain/entities/website/masters/subledgermaster/subledger';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
-import { BaseUrlService } from 'src/app/services/baseurl.service';
-import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
 import { DateconversionService } from 'src/app/services/dateconversion.service';
-import { DTU } from 'src/app/services/dtu.service';
-import { Utils } from 'src/app/services/utils.service';
 import { AlertService } from 'src/app/views/mobile-app/components/core/alert.service';
 import { HapticService } from 'src/app/views/mobile-app/components/core/haptic.service';
 import { LoadingService } from 'src/app/views/mobile-app/components/core/loading.service';
@@ -40,7 +35,7 @@ export class InvoiceViewMobileAppComponent implements OnInit {
   LedgerList: Ledger[] = [];
   SubLedgerList: SubLedger[] = [];
   MachineTableHeaderData = ['Machine Start Time', 'Machine End Time', 'Machine Worked Hours'];
-  LabourTableHeaderData = ['Labour Type','Labour Start Time', 'Labour End Time', 'Labour Worked Hours', 'Labour Rate', 'Labour Amount'];
+  LabourTableHeaderData = ['Labour Type', 'Days', 'Labour Rate', 'Labour Amount'];
 
   // Store current selected values here to preserve selections on filter reload
   selectedFilterValues: Record<string, any> = {};
@@ -48,16 +43,11 @@ export class InvoiceViewMobileAppComponent implements OnInit {
   constructor(
     private router: Router,
     private appStateManage: AppStateManageService,
-    private companystatemanagement: CompanyStateManagement,
     private DateconversionService: DateconversionService,
-    private dtu: DTU,
     private toastService: ToastService,
     private haptic: HapticService,
     private alertService: AlertService,
     public loadingService: LoadingService,
-    private sanitizer: DomSanitizer,
-    private baseUrl: BaseUrlService,
-    private utils: Utils,
   ) { }
 
   ngOnInit = async () => {
@@ -69,7 +59,7 @@ export class InvoiceViewMobileAppComponent implements OnInit {
     this.loadFilters();
   };
 
-  loadFilters() {
+  loadFilters = () => {
     this.filters = [
       {
         key: 'site',
@@ -125,8 +115,7 @@ export class InvoiceViewMobileAppComponent implements OnInit {
   }
 
 
-  async onFiltersChanged(updatedFilters: any[]) {
-    console.log('Updated Filters:', updatedFilters);
+  onFiltersChanged = async (updatedFilters: any[]) => {
 
     for (const filter of updatedFilters) {
       const selected = filter.selected;
@@ -150,7 +139,7 @@ export class InvoiceViewMobileAppComponent implements OnInit {
 
         case 'ledger':
           this.Entity.p.LedgerRef = selectedValue ?? 0;
-          if (selectedValue != null)  await this.getSubLedgerListByLedgerRef(selectedValue) ;  // Updates SubLedgerList
+          if (selectedValue != null) await this.getSubLedgerListByLedgerRef(selectedValue);  // Updates SubLedgerList
           break;
 
         case 'modeOfPayment':
@@ -162,12 +151,12 @@ export class InvoiceViewMobileAppComponent implements OnInit {
     this.loadFilters(); // Reload filters with updated options & preserve selections
   }
 
-  async handleRefresh(event: CustomEvent) {
+  handleRefresh = async (event: CustomEvent) => {
     await this.loadInvoiceIfEmployeeExists();
     (event.target as HTMLIonRefresherElement).complete();
   }
 
-  convertTo12HourFormat(time: string): string {
+  convertTo12HourFormat = (time: string): string => {
     const [hourStr, minuteStr] = time.split(':');
     let hour = parseInt(hourStr, 10);
     const minute = parseInt(minuteStr, 10);
@@ -179,7 +168,7 @@ export class InvoiceViewMobileAppComponent implements OnInit {
     return `${hour}:${minute.toString().padStart(2, '0')} ${ampm}`;
   }
 
-  private async loadInvoiceIfEmployeeExists() {
+  private loadInvoiceIfEmployeeExists = async () => {
     try {
       await this.loadingService.show();
 
@@ -205,23 +194,22 @@ export class InvoiceViewMobileAppComponent implements OnInit {
     }
   }
 
-    FetchEntireListByFilters = async () => {
-      this.MasterList = [];
-      this.DisplayMasterList = [];
-      if (this.companyRef <= 0) {
-        await this.toastService.present('Company not selected', 1000, 'danger');
-        await this.haptic.error();
-        return;
-      }
-      let lst = await Invoice.FetchEntireListByFilters(this.Entity.p.SiteRef, this.Entity.p.LedgerRef, this.Entity.p.SubLedgerRef, this.Entity.p.Ref, this.companyRef, async errMsg => {
-        // await this.uiUtils.showErrorMessage('Error', errMsg)
-        await this.toastService.present('Error ' + errMsg, 1000, 'danger');
-        await this.haptic.error();
-      });
-      console.log('lst :', lst);
-      this.MasterList = lst;
-      this.DisplayMasterList = this.MasterList;
+  FetchEntireListByFilters = async () => {
+    this.MasterList = [];
+    this.DisplayMasterList = [];
+    if (this.companyRef <= 0) {
+      await this.toastService.present('Company not selected', 1000, 'danger');
+      await this.haptic.error();
+      return;
     }
+    let lst = await Invoice.FetchEntireListByFilters(this.Entity.p.SiteRef, this.Entity.p.LedgerRef, this.Entity.p.SubLedgerRef, this.Entity.p.Ref, this.companyRef, async errMsg => {
+      await this.toastService.present(errMsg, 1000, 'danger');
+      await this.haptic.error();
+    });
+    console.log('lst :', lst);
+    this.MasterList = lst;
+    this.DisplayMasterList = this.MasterList;
+  }
 
   getSiteListByCompanyRef = async () => {
     if (this.companyRef <= 0) {
@@ -252,8 +240,6 @@ export class InvoiceViewMobileAppComponent implements OnInit {
   };
 
   getSubLedgerListByLedgerRef = async (ledgerref: number) => {
-    console.log('ledgerref :', ledgerref);
-
     if (ledgerref <= 0) {
       await this.toastService.present('Ledger not selected', 1000, 'danger');
       await this.haptic.error();
@@ -291,7 +277,7 @@ export class InvoiceViewMobileAppComponent implements OnInit {
     await this.router.navigate(['/mobile-app/tabs/dashboard/accounting/invoice/edit']);
   };
 
-  async onDeleteClicked(item: Invoice) {
+  onDeleteClicked = async (item: Invoice) => {
     try {
       this.alertService.presentDynamicAlert({
         header: 'Delete',
@@ -329,7 +315,6 @@ export class InvoiceViewMobileAppComponent implements OnInit {
         ]
       });
     } catch (error) {
-      console.error('Error showing delete confirmation:', error);
       await this.toastService.present('Something went wrong', 1000, 'danger');
       await this.haptic.error();
     }
@@ -354,12 +339,12 @@ export class InvoiceViewMobileAppComponent implements OnInit {
     this.router.navigate(['mobile-app/tabs/dashboard/accounting/invoice/add']);
   }
 
-  openModal(Invoice: any) {
+  openModal = (Invoice: any) => {
     this.SelectedInvoice = Invoice;
     this.modalOpen = true;
   }
 
-  closeModal() {
+  closeModal = () => {
     this.modalOpen = false;
     this.SelectedInvoice = Invoice.CreateNewInstance();
   }

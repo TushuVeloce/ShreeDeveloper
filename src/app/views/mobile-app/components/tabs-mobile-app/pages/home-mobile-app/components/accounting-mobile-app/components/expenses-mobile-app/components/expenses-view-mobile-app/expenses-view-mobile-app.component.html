@@ -27,9 +27,6 @@
         <ion-button fill="clear" size="small" color="primary" (click)="onDeleteClicked(Expense)">
           <ion-icon name="trash-outline" slot="icon-only"></ion-icon>
         </ion-button>
-        <!-- <ion-button fill="clear" size="small" color="primary" (click)="navigateToPrint(Expense)">
-          <ion-icon name="print-outline" slot="icon-only"></ion-icon>
-        </ion-button> -->
       </div>
     </ion-item>
   </ion-list>
@@ -128,9 +125,6 @@
       <ion-fab-button color="primary" (click)="AddExpense()">
         <ion-icon name="add-outline"></ion-icon>
       </ion-fab-button>
-      <!-- <ion-fab-button color="tertiary" (click)="AddExpense()">
-        <ion-icon name="filter-outline"></ion-icon>
-      </ion-fab-button> -->
     </ion-fab-list>
   </ion-fab>
 
@@ -157,7 +151,6 @@
           <td Class="tbldata"> {{ Expense.p.RemainingAmount | currency : "INR" }}</td>
           <td Class="tbldata"> {{ Expense.p.ShreesBalance | currency : "INR" }}</td>
           <td Class="tbldata">{{ Expense.p.ModeOfPaymentName }}</td>
-          <!-- <td Class="tbldata">{{ Expense.p.Narration }}</td> -->
         </tr>
       </tbody>
     </table>

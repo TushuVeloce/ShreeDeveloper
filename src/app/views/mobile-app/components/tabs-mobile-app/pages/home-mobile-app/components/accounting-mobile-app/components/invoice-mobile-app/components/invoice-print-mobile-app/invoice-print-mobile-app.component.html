@@ -10,7 +10,7 @@
 
   <div #PrintContainer
     style="font-family: sans-serif; margin: 0; padding: 10px; font-size: 10px; color: #000; text-transform: capitalize;">
-
+  
     <div style="max-width: full; margin: auto; border: 2px solid black;">
       <!-- Header -->
       <div style="padding-bottom: 10px;">
@@ -23,13 +23,13 @@
           <tr>
             <td style="vertical-align: top; text-align: left; width: 40%; padding: 5px; border-width:  1px;">
               <strong>
-                <div><i class="fa-solid fa-file-lines" style="color: maroon; margin-right: 10px;"></i> पोहोच पावती</div>
+                <div><i class="fa-solid fa-file-lines" style="color: maroon; margin-right: 10px;"></i>पोहोच पावती</div>
                 <div> <i class="fa-solid fa-phone" style="color: maroon; margin-right: 10px;"></i> {{ Entity.p.Contacts
                   }}</div>
               </strong>
             </td>
             <td style="width: 20%; border-width:  1px; padding: 5px;">
-              <img src="/assets/logos/ShreeIcon.png" alt="Company Logo" width="100%" class="mb-2" />
+              <img src="/assets/logos/ShreeIcon.png" alt="Company Logo" height="80" class="mb-2" />
             </td>
             <td style="vertical-align: center; text-align: start; border-width:  1px; padding: 5px;">
               <strong>ऑफिस पत्ता <br>
@@ -44,9 +44,9 @@
       <!-- Bill To Section -->
 
       <!-- <div
-        style="background-color: maroon; color: white; font-weight: bold; padding: 5px 10px; width: fit-content; margin-left: 5%; width: 40%;">
-        BILL TO
-      </div> -->
+          style="background-color: maroon; color: white; font-weight: bold; padding: 5px 10px; width: fit-content; margin-left: 5%; width: 40%;">
+          BILL TO
+        </div> -->
       <div style="display: flex; justify-content: center;">
         <table style="width: 100%;">
           <tr>
@@ -65,7 +65,7 @@
             </td>
             <td style="text-align: left; vertical-align: top; padding: 5px; border-width: 1px;">
               <div>
-                <strong>Recipient Name - {{ Entity.p.RecipientName? Entity.p.RecipientName : Entity.p.VendorName
+                <strong>Recipient Name - {{ Entity.p.RecipientName ? Entity.p.RecipientName : Entity.p.VendorName
                   }}</strong>
               </div>
               <br>
@@ -99,8 +99,7 @@
             <tr style="background-color: maroon; color: white;">
               <th style="padding: 8px; border: none;">Sr.No</th>
               <th style="padding: 8px; border: none;">Labour Type</th>
-              <th style="padding: 8px; border: none;">From Time</th>
-              <th style="padding: 8px; border: none;">To Time</th>
+              <th style="padding: 8px; border: none;">Days</th>
               <th style="padding: 8px; border: none;">Qty.</th>
               <th style="padding: 8px; border: none;">Rate</th>
               <th style="padding: 8px; border: none;">Amount</th>
@@ -134,13 +133,13 @@
               <tr *ngFor="let time of Entity.p.LabourExpenseDetailsArray; let i = index">
                 <td style="padding: 8px; border: none;">{{ i + 1 }}</td>
                 <td style="padding: 8px; border: none;">{{ time.LabourTypeName }}</td>
-                <!-- <td style="padding: 8px; border: none;">{{ time.LabourFromTime }}</td>
-                <td style="padding: 8px; border: none;">{{ time.LabourToTime }}</td> -->
+                <td style="padding: 8px; border: none;">{{ time.Days }}</td>
                 <td style="padding: 8px; border: none;">{{ time.LabourQty}}</td>
                 <td style="padding: 8px; border: none;">{{ time.LabourRate}}</td>
                 <td style="padding: 8px; border: none;">{{ time.LabourAmount}}</td>
               </tr>
             </ng-container>
+
 
             <!-- Total -->
             <tr>
@@ -149,7 +148,7 @@
                 style="padding: 8px; border: none; text-align: center; font-weight: bold; background-color: #fef4d4;">
                 <strong>TOTAL</strong>
               </td>
-              <td colspan="6" *ngIf="Entity.p.ExpenseType == LabourExpenseRef"
+              <td colspan="5" *ngIf="Entity.p.ExpenseType == LabourExpenseRef"
                 style="padding: 8px; border: none; text-align: center; font-weight: bold; background-color: #fef4d4;">
                 <strong>TOTAL</strong>
               </td>
@@ -210,7 +209,6 @@
           </tr>
         </tbody>
       </table>
-
       <!-- Comments -->
       <div style="margin-top: 5px; ">
         <p style="background-color: #fef4d4; padding-left: 5%; padding-top: 10px; padding-bottom: 10px;"><strong>OTHER
@@ -227,7 +225,7 @@
       <!-- Footer Signature -->
       <div style="margin-top: 30px; display: flex; justify-content: space-between">
         <p style="margin-left: 5%;"><strong>Stamp : {{Entity.p.CompanyName}}</strong></p>
-        <p style="margin-right: 5%;"> <strong>Sign :{{Entity.p.CreatedByName}}</strong>
+        <p style="margin-right: 5%;"><strong>Sign : {{Entity.p.CreatedByName}}</strong>
         </p>
       </div>
 
@@ -237,6 +235,8 @@
       <blockquote style="text-align: center; line-height: 0.5; margin-top: 2%; font-size: 12px;">
         <i>Computer Generated Print</i>
       </blockquote>
+
     </div>
+
   </div>
 </ion-content>

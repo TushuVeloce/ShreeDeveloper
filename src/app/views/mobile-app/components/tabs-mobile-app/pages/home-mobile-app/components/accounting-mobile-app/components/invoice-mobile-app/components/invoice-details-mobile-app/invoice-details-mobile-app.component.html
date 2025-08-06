@@ -3,24 +3,21 @@
 <ion-content class="form-container" [scrollEvents]="true">
   <ion-list lines="none" class="ion-padding">
     <!--  Date -->
-    <!-- <ion-item class="input-item">
+    <ion-item class="input-item">
       <ion-label>Select Date</ion-label>
-      <ion-datetime-button datetime="FromDate" trigger="entry-date-modal"></ion-datetime-button>
+      <ion-datetime-button id="BillingDate-modal" datetime="Date" trigger="BillingDate-modal">
+      </ion-datetime-button>
+      <ion-checkbox slot="end" [(ngModel)]="BillingDate" name="BillingDateCheckBox" [disabled]="true">
+      </ion-checkbox>
     </ion-item>
-    <ion-modal keepContentsMounted="true" trigger="entry-date-modal">
+
+    <ion-modal keepContentsMounted="true" trigger="BillingDate-modal">
       <ng-template>
-        <ion-datetime id="FromDate" presentation="date" [(ngModel)]="Date" show-default-buttons="true"
-          (ionChange)="onDateChange($event.detail.value)"></ion-datetime>
+        <ion-datetime id="Date" name="BillingDate" presentation="date" [(ngModel)]="BillingDate"
+          show-default-buttons="true" (ionChange)="onBillingDateChange($event.detail.value)">
+        </ion-datetime>
       </ng-template>
-    </ion-modal> -->
-    <ion-item (click)="showBillingDatePicker = true" class="input-item">
-      <ion-label>Date</ion-label>
-      <ion-label slot="end">{{ DisplayBillingDate || 'Select Date' }}</ion-label>
-    </ion-item>
-    <app-date-picker [show]="showBillingDatePicker" [selectedDate]="BillingDate" [defaultToday]="true"
-      (dateChanged)="onBillingDateChange($event)"
-      (dateSelected)="DisplayBillingDate = $event; showBillingDatePicker = false"
-      (modalDismissed)="showBillingDatePicker = false" />
+    </ion-modal>
 
     <!-- Billing Number-->
     <ion-item class="input-item">
@@ -38,6 +35,17 @@
       </ion-text>
     </ion-item>
 
+    <!-- Vendor Name -->
+    <ion-item class="input-item" *ngIf="Entity.p.ExpenseType == StockExpenseRef">
+      <ion-input label="Vendor Name" labelPlacement="floating" placeholder="Enter Vendor Name"
+        [(ngModel)]="Entity.p.VendorName" clearInput="true"></ion-input>
+    </ion-item>
+    <!-- Vendor Trade Name -->
+    <ion-item class="input-item" *ngIf="Entity.p.ExpenseType == StockExpenseRef">
+      <ion-input label="Vendor Trade Name" labelPlacement="floating" placeholder="Enter Vendor Trade Name"
+        [(ngModel)]="Entity.p.VendorTradeName" clearInput="true"></ion-input>
+    </ion-item>
+
     <!-- Select Ledger -->
     <ion-item class="input-item" button detail (click)="selectLedgerBottomsheet()" [disabled]="LedgerList.length === 0">
       <ion-label>Ledger</ion-label>
@@ -49,7 +57,8 @@
     </ion-item>
 
     <!-- Select Sub Ledger -->
-    <ion-item class="input-item" button detail (click)="selectSubLedgerBottomsheet()" [disabled]="SubLedgerList.length === 0">
+    <ion-item class="input-item" button detail (click)="selectSubLedgerBottomsheet()"
+      [disabled]="SubLedgerList.length === 0">
       <ion-label>Sub Ledger</ion-label>
 
       <!-- Text showing the selected status -->
@@ -59,7 +68,8 @@
     </ion-item>
 
     <!-- Select Expense Type -->
-    <ion-item class="input-item" button detail (click)="selectExpenseTypeBottomsheet()" [disabled]="ExpenseTypeList.length === 0">
+    <ion-item class="input-item" button detail (click)="selectExpenseTypeBottomsheet()"
+      [disabled]="ExpenseTypeList.length === 0">
       <ion-label>Expense Type</ion-label>
 
       <!-- Text showing the selected status -->
@@ -87,8 +97,7 @@
 
 
     <!-- Select Recipient Name -->
-    <ion-item class="input-item" button detail
-      *ngIf="Entity.p.ExpenseType != MachinaryExpenseRef && Entity.p.ExpenseType != LabourExpenseRef && !RecipientNameInput">
+    <ion-item class="input-item" button detail *ngIf="Entity.p.ExpenseType == OtherExpenseRef && !RecipientNameInput">
       <ion-label (click)="selectRecipientNameBottomsheet()">Recipient Name</ion-label>
 
       <!-- Selected Text -->
@@ -144,7 +153,8 @@
 
     <!-- Select Vendor -->
     <ion-item class="input-item" button detail (click)="selectVendorBottomsheet()"
-      *ngIf="Entity.p.ExpenseType == MachinaryExpenseRef || Entity.p.ExpenseType == LabourExpenseRef" [disabled]="VendorList.length === 0">
+      *ngIf="Entity.p.ExpenseType == MachinaryExpenseRef || Entity.p.ExpenseType == LabourExpenseRef"
+      [disabled]="VendorList.length === 0">
       <ion-label>Vendor</ion-label>
 
       <!-- Text showing the selected status -->
@@ -156,7 +166,7 @@
     <!-- Vendor Service -->
     <ion-item class="input-item" button detail (click)="selectVendorServiceBottomsheet()"
       *ngIf="Entity.p.ExpenseType == MachinaryExpenseRef || Entity.p.ExpenseType == LabourExpenseRef"
-      [disabled]="!VendorName && VendorServiceList.length === 0">
+      [disabled]="!VendorName && VendorServiceListByVendor.length === 0">
       <ion-label>Vendor Service</ion-label>
 
       <!-- Text showing the selected status -->
@@ -256,7 +266,7 @@
     <ion-grid class="ion-margin-top" *ngIf="Entity.p.ExpenseType == LabourExpenseRef">
       <ion-row class="ion-align-items-center">
         <ion-col size="6">
-          <h5><strong>Labour Time Details</strong></h5>
+          <h5><strong>Labour Details</strong></h5>
         </ion-col>
         <ion-col size="6" class="ion-text-right">
           <ion-button fill="outline" size="small" (click)="isLabourTimeModalOpen = true">
@@ -285,14 +295,8 @@
                 <td>
                   {{ item.LabourTypeName || '-' }}
                 </td>
-                <!-- <td>
-                  {{ convertTo12HourFormat(item.LabourFromTime) || '-' }}
-                </td>
                 <td>
-                  {{ convertTo12HourFormat(item.LabourToTime) || '-' }}
-                </td> -->
-                <td>
-                  {{ convertHoursToReadableTime(item.LabourWorkedHours) || '-' }}
+                  {{ item.Days || '-' }}
                 </td>
                 <td>
                   {{ item.LabourQty || '-' }}
@@ -312,8 +316,7 @@
               </tr>
               <tr>
                 <td class="sticky-col" colspan="2"><b>Grand Total</b></td>
-                <td colspan="2"></td>
-                <td><b>{{ convertHoursToReadableTime(getTotalLabourWorkedHours()) }}</b></td>
+                <td colspan="1"></td>
                 <td><b>{{ getTotalLabourQuantity() }}</b></td>
                 <td></td>
                 <td><b>{{ getTotalLabourAmount() }}</b></td>
@@ -327,7 +330,7 @@
     <ng-container *ngIf="Entity.p.LabourExpenseDetailsArray.length === 0 && Entity.p.ExpenseType == LabourExpenseRef">
       <div class="ion-padding ion-text-center">
         <ion-text color="medium">
-          <p>No Labour Time Details data available</p>
+          <p>No Labour Details data available</p>
         </ion-text>
       </div>
     </ng-container>
@@ -338,12 +341,6 @@
         <ion-col size="6">
           <h5><strong>Material Details</strong></h5>
         </ion-col>
-        <!-- <ion-col size="6" class="ion-text-right">
-          <ion-button fill="outline" size="small" (click)="isLabourTimeModalOpen = true">
-            <ion-icon name="add-circle-outline" slot="start"></ion-icon>
-            Add
-          </ion-button>
-        </ion-col> -->
       </ion-row>
     </ion-grid>
 
@@ -356,7 +353,6 @@
               <tr>
                 <th class="sticky-col sticky-header">#</th>
                 <th *ngFor="let item of materialheaders" class="sticky-header">{{ item }}</th>
-                <!-- <th class="sticky-col sticky-header">Actions</th> -->
               </tr>
             </thead>
             <tbody>
@@ -378,17 +374,14 @@
                   {{ (item.DiscountedRate | currency : "INR") || '-' }}
                 </td>
                 <td>
+                  {{ item.Gst || '-' }}
+                </td>
+                <td>
                   {{ (item.DeliveryCharges | currency : "INR") || '-' }}
                 </td>
                 <td>
                   {{ (item.TotalAmount | currency : "INR") || '-' }}
                 </td>
-                <!-- <td>
-                  <ion-icon name="create-outline" color="warning" size="small"
-                    style="margin-right: 12px; cursor: pointer" (click)="EditLabourTime(i)"></ion-icon>
-                  <ion-icon name="trash-outline" color="danger" size="small" style="cursor: pointer"
-                    (click)="RemoveLabourTime(i)"></ion-icon>
-                </td> -->
               </tr>
             </tbody>
           </table>
@@ -406,7 +399,7 @@
 
     <!-- Quantity input-->
     <ion-item class="input-item"
-       *ngIf="Entity.p.ExpenseType != LabourExpenseRef && !(Entity.p.ExpenseType == MachinaryExpenseRef&& Entity.p.UnitRef == TimeUnitRef)">
+      *ngIf="Entity.p.ExpenseType != LabourExpenseRef && !(Entity.p.ExpenseType == MachinaryExpenseRef && Entity.p.UnitRef == TimeUnitRef)">
       <ion-input label="Quantity" labelPlacement="floating" placeholder="Enter Quantity" [(ngModel)]="Entity.p.Qty"
         (ngModelChange)="CalculateAmount()" clearInput="true" clearOnEdit="true" type="number"></ion-input>
     </ion-item>
@@ -459,7 +452,8 @@
     </ion-item>
 
     <!-- Unit -->
-    <ion-item class="input-item" button detail (click)="selectInvoiceModeOfPaymentBottomsheet()" [disabled]="ModeofPaymentList.length === 0">
+    <ion-item class="input-item" button detail (click)="selectInvoiceModeOfPaymentBottomsheet()"
+      [disabled]="ModeofPaymentList.length === 0">
       <ion-label>Mode of Payment</ion-label>
 
       <!-- Text showing the selected status -->
@@ -494,9 +488,6 @@
               <ion-label>From Time</ion-label>
               <ion-datetime-button datetime="machinestartTime"></ion-datetime-button>
             </ion-item>
-            <!-- <ion-datetime id="startTime" presentation="time" [(ngModel)]="StartTime"
-              (ngModelChange)="StartTimeChange($event)" show-default-buttons="true">
-            </ion-datetime> -->
             <ion-modal keepContentsMounted="true">
               <ng-template>
                 <ion-datetime id="machinestartTime" presentation="time" [(ngModel)]="MachineStartTime"
@@ -510,9 +501,6 @@
               <ion-label>To Time</ion-label>
               <ion-datetime-button datetime="machineendTime"></ion-datetime-button>
             </ion-item>
-            <!-- <ion-datetime id="endTime" presentation="time" [(ngModel)]="EndTime" (ngModelChange)="EndTimeChange($event)"
-              show-default-buttons="true">
-            </ion-datetime> -->
             <ion-modal keepContentsMounted="true">
               <ng-template>
                 <ion-datetime id="machineendTime" presentation="time" [(ngModel)]="MachineEndTime"
@@ -524,8 +512,6 @@
 
             <ion-item class="input-item">
               <ion-label color="primary">Total Working Hours</ion-label>
-              <!-- <ion-text color="dark"><strong>{{ convertHoursToReadableTime(MachineTimeEntity.WorkedHours) }}
-                </strong></ion-text> -->
               <ion-text color="dark"><strong>{{ MachineTimeEntity.DisplayWorkedHours }}
                 </strong></ion-text>
             </ion-item>
@@ -555,7 +541,7 @@
       <ng-template>
         <ion-header class="modal-toolbar-mobile-app">
           <ion-toolbar color="primary">
-            <ion-title>Add Labour Time Details</ion-title>
+            <ion-title>Add Labour Details</ion-title>
             <ion-buttons slot="end">
               <ion-button fill="clear" (click)="CloseLabourTimeModal(200)">
                 <ion-icon name="close-outline"></ion-icon>
@@ -567,50 +553,20 @@
         <ion-content scroll-y="true" class="ion-padding modal-content-mobile-app">
           <ion-list lines="none">
             <!-- Labour Type -->
-            <ion-item class="input-item" button detail (click)="selectLabourTypeBottomsheet()" [disabled]="LabourTypeList.length === 0">
+            <ion-item class="input-item" button detail (click)="selectLabourTypeBottomsheet()"
+              [disabled]="LabourTypeList.length === 0">
               <ion-label>Labour Type</ion-label>
               <ion-text slot="end" class="status-text">
                 {{ LabourTypeName || 'Select' }}
               </ion-text>
             </ion-item>
 
-
+            <!-- Number of Days -->
             <ion-item class="input-item">
-              <ion-label>From Time</ion-label>
-              <ion-datetime-button datetime="LabourstartTime"></ion-datetime-button>
-            </ion-item>
-            <!-- <ion-datetime id="startTime" presentation="time" [(ngModel)]="StartTime"
-                  (ngModelChange)="StartTimeChange($event)" show-default-buttons="true">
-                </ion-datetime> -->
-            <ion-modal keepContentsMounted="true">
-              <ng-template>
-                <ion-datetime id="LabourstartTime" presentation="time" [(ngModel)]="LabourStartTime"
-                  (ngModelChange)="LabourStartTimeChange($event)" hour-cycle="h12" prefer-wheel="true"
-                  show-default-buttons="true">
-                </ion-datetime>
-              </ng-template>
-            </ion-modal>
-
-            <ion-item class="input-item">
-              <ion-label>To Time</ion-label>
-              <ion-datetime-button datetime="LabourendTime"></ion-datetime-button>
-            </ion-item>
-            <!-- <ion-datetime id="endTime" presentation="time" [(ngModel)]="EndTime" (ngModelChange)="EndTimeChange($event)"
-                  show-default-buttons="true">
-                </ion-datetime> -->
-            <ion-modal keepContentsMounted="true">
-              <ng-template>
-                <ion-datetime id="LabourendTime" presentation="time" [(ngModel)]="LabourEndTime"
-                  (ngModelChange)="LabourEndTimeChange($event)" hour-cycle="h12" prefer-wheel="true"
-                  show-default-buttons="true">
-                </ion-datetime>
-              </ng-template>
-            </ion-modal>
-
-            <ion-item class="input-item">
-              <ion-label color="primary">Total Working Hours</ion-label>
-              <ion-text color="dark"><strong>{{ convertHoursToReadableTime(LabourTimeEntity.LabourWorkedHours) }}
-                </strong></ion-text>
+              <ion-input type="number" label="Number of Days" labelPlacement="floating"
+                placeholder="Enter Number of Days" [(ngModel)]="LabourTimeEntity.Days"
+                (ngModelChange)="CalculateLabourAmount()" clearInput="true" clearOnEdit="true">
+              </ion-input>
             </ion-item>
 
             <!-- Labour Quantity -->
@@ -621,9 +577,9 @@
               </ion-input>
             </ion-item>
 
-            <!-- Labour Rate -->
+            <!-- Labour Day Rate -->
             <ion-item class="input-item">
-              <ion-input type="number" label="Labour Rate" labelPlacement="floating" placeholder="Enter Labour Rate"
+              <ion-input type="number" label="Labour Day Rate" labelPlacement="floating" placeholder="Enter Labour Day Rate"
                 [(ngModel)]="LabourTimeEntity.LabourRate" (ngModelChange)="CalculateLabourAmount()" clearInput="true"
                 clearOnEdit="true">
               </ion-input>
@@ -661,12 +617,13 @@
     <ion-grid>
       <ion-row>
         <ion-col size="6">
-          <ion-button expand="block" color="medium" (click)="goBack()" class="submit-button cancel-button">
+          <ion-button expand="block" color="medium" shape="round" (click)="goBack()">
             Cancel
           </ion-button>
         </ion-col>
         <ion-col size="6" *ngIf="!Entity.p.IsInvoiceAutoGenerated">
-          <ion-button expand="block" color="primary" (click)="SaveInvoiceMaster()" class="submit-button primary-button" [disabled]="Entity.p.ExpenseType == StockExpenseRef">
+          <ion-button expand="block" shape="round" color="primary" (click)="SaveInvoiceMaster()"
+            [disabled]="Entity.p.ExpenseType == StockExpenseRef">
             Save
           </ion-button>
         </ion-col>

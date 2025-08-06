@@ -56,9 +56,7 @@ export class IncomeDetailsMobileAppComponent implements OnInit {
 
   Date: string = '';
 
-  showIncomeDatePicker = false;
-  IncomeDate = '';
-  DisplayIncomeDate = '';
+  IncomeDate: string | null = null;
 
   LedgerName: string = '';
   selectedLedger: any[] = [];
@@ -85,8 +83,6 @@ export class IncomeDetailsMobileAppComponent implements OnInit {
   selectedBank: any[] = [];
   PayerPlotNo: string = '';
 
-
-
   constructor(
     private router: Router,
     private appStateManage: AppStateManageService,
@@ -103,8 +99,7 @@ export class IncomeDetailsMobileAppComponent implements OnInit {
   ) { }
 
   ngOnInit = async () => {
-    await this.loadIncomeDetailsIfCompanyExists();
-
+    // await this.loadIncomeDetailsIfCompanyExists();
   }
   ionViewWillEnter = async () => {
     await this.loadIncomeDetailsIfCompanyExists();
@@ -128,12 +123,10 @@ export class IncomeDetailsMobileAppComponent implements OnInit {
           this.IsNewEntity = false;
           this.DetailsFormTitle = this.IsNewEntity ? 'New Income' : 'Edit Income';
           this.Entity = Income.GetCurrentInstance();
-          console.log('this.Entity :', this.Entity);
           this.Date = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.Date);
           if (this.Entity.p.Date != '') {
             this.Entity.p.Date = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.Date)
             this.IncomeDate = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.Date);
-            this.DisplayIncomeDate = this.datePipe.transform(this.IncomeDate, 'yyyy-MM-dd') ?? '';;
           }
           this.appStateManage.StorageKey.removeItem('Editable');
           await this.getSubLedgerListByLedgerRef(this.Entity.p.LedgerRef);
@@ -163,14 +156,11 @@ export class IncomeDetailsMobileAppComponent implements OnInit {
         } else {
           this.Entity = Income.CreateNewInstance();
           Income.SetCurrentInstance(this.Entity);
-          // let strCDT = await CurrentDateTimeRequest.GetCurrentDateTime();
-          // this.Date = strCDT.substring(0, 10);
           let strCDT = await CurrentDateTimeRequest.GetCurrentDateTime();
           let parts = strCDT.substring(0, 16).split('-');
           strCDT = `${parts[0]}-${parts[1]}-${parts[2]}-00-00-00-000`;
           this.Entity.p.Date = strCDT;
           this.IncomeDate = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.Date);
-          this.DisplayIncomeDate = this.datePipe.transform(this.IncomeDate, 'yyyy-MM-dd') ?? '';;
         }
 
         this.getPayerListBySiteAndPayerType()
@@ -180,11 +170,10 @@ export class IncomeDetailsMobileAppComponent implements OnInit {
           this.utils.DeepCopy(this.Entity)
         ) as Income;
       } else {
-        await this.toastService.present('company not selected', 1000, 'danger');
-        await this.haptic.error();
+        await this.toastService.present('company not selected', 1000, 'warning');
+        await this.haptic.warning();
       }
     } catch (error) {
-      console.error('Error loading Income details:', error);
       await this.toastService.present('Failed to load Income details', 1000, 'danger');
       await this.haptic.error();
     } finally {
@@ -193,11 +182,8 @@ export class IncomeDetailsMobileAppComponent implements OnInit {
   }
 
   public async onIncomeDateChange(date: any): Promise<void> {
-    console.log('this.IncomeDate :', this.IncomeDate);
-    this.IncomeDate = this.datePipe.transform(date, 'yyyy-MM-dd') ?? '';
-    this.Entity.p.Date = this.IncomeDate;
-    console.log('this.Entity.p.Date :', this.Entity.p.Date);
-    this.DisplayIncomeDate = this.IncomeDate;
+    this.IncomeDate = this.datePipe.transform(date, 'yyyy-MM-dd') ?? null;
+    this.Entity.p.Date = this.IncomeDate ?? '';
   }
 
   // Extracted from services date conversion //
@@ -216,8 +202,8 @@ export class IncomeDetailsMobileAppComponent implements OnInit {
 
   public FormulateBankList = async () => {
     if (this.companyRef <= 0) {
-      await this.toastService.present('company not selected', 1000, 'danger');
-      await this.haptic.error();
+      await this.toastService.present('company not selected', 1000, 'warning');
+      await this.haptic.warning();
       return;
     }
     let lst = await BankAccount.FetchEntireListByCompanyRef(this.companyRef, async (errMsg) => {
@@ -237,8 +223,8 @@ export class IncomeDetailsMobileAppComponent implements OnInit {
 
   getCurrentBalanceByCompanyRef = async () => {
     if (this.companyRef <= 0) {
-      await this.toastService.present('company not selected', 1000, 'danger');
-      await this.haptic.error();
+      await this.toastService.present('company not selected', 1000, 'warning');
+      await this.haptic.warning();
       return;
     }
     let lst = await Expense.FetchCurrentBalanceByCompanyRef(this.companyRef, async errMsg => {
@@ -262,22 +248,6 @@ export class IncomeDetailsMobileAppComponent implements OnInit {
 
     }
   }
-  // onPayerChange = () => {
-  //   console.log('this.PayerPlotNo :', this.PayerPlotNo);
-  //   try {
-  //     let SingleRecord = this.PayerList.find((data) => data.p.PlotName == this.PayerPlotNo);
-  //     console.log('SingleRecord :', SingleRecord);
-  //     if (SingleRecord?.p) {
-  //       this.Entity.p.IsRegisterCustomerRef = SingleRecord.p.IsRegisterCustomerRef;
-  //       this.Entity.p.PayerRef = SingleRecord.p.Ref;
-  //       if (this.Entity.p.PayerType == this.DealDoneCustomer) {
-  //         this.Entity.p.PlotName = SingleRecord.p.PlotName;
-  //       }
-  //     }
-  //   } catch (error) {
-  //   }
-  //   console.log('this.Entity.p.PayerRef :', this.Entity.p.PayerRef);
-  // }
 
   AddPayerName = () => {
     this.Entity.p.PayerRef = 0
@@ -292,9 +262,8 @@ export class IncomeDetailsMobileAppComponent implements OnInit {
 
   SaveNewPayerName = async () => {
     if (this.PayerEntity.p.Name == '') {
-      //  this.uiUtils.showErrorToster('Payer Name can not be Blank');
-      await this.toastService.present('Payer Name can not be Blank', 1000, 'danger');
-      await this.haptic.error();
+      await this.toastService.present('Payer Name can not be Blank', 1000, 'warning');
+      await this.haptic.warning();
       return
     }
     this.PayerEntity.p.CompanyRef = this.companyRef;
@@ -309,7 +278,7 @@ export class IncomeDetailsMobileAppComponent implements OnInit {
 
     if (!tr.Successful) {
       this.isSaveDisabled = false;
-      await this.toastService.present('Error ' + tr.Message, 1000, 'danger');
+      await this.toastService.present(tr.Message, 1000, 'danger');
       await this.haptic.error();
       return;
     } else {
@@ -331,36 +300,16 @@ export class IncomeDetailsMobileAppComponent implements OnInit {
     this.PayerNameInput = false
   }
 
-  // getPayerListByPayerType = async () => {
-  //   if (this.companyRef <= 0) {
-  //     await this.toastService.present('company not selected', 1000, 'danger');
-  //     await this.haptic.error();
-  //     return;
-  //   }
-  //   if (this.Entity.p.PayerType <= 0) {
-  //     // await this.uiUtils.showErrorToster('Payer Type not Selected');
-  //     return;
-  //   }
-  //   let lst = await Income.FetchPayerNameByPayerTypeRef(this.Entity.p.SiteRef, this.companyRef, this.Entity.p.PayerType, async errMsg => {
-  //     await this.toastService.present('Error ' + errMsg, 1000, 'danger');
-  //     await this.haptic.error();
-  //   });
-  //   this.PayerList = lst;
-  // }
-
   getPayerListBySiteAndPayerType = async () => {
     if (this.companyRef <= 0) {
-      // await this.uiUtils.showErrorToster('Company not Selected');
-      await this.toastService.present('Company not Selected', 1000, 'danger');
-      await this.haptic.error();
+      await this.toastService.present('Company not Selected', 1000, 'warning');
+      await this.haptic.warning();
       return;
     }
     if (this.Entity.p.PayerType <= 0) {
-      // await this.uiUtils.showErrorToster('Payer Type not Selected');
       return;
     }
     let lst = await Income.FetchPayerNameByPayerTypeRef(this.Entity.p.SiteRef, this.companyRef, this.Entity.p.PayerType, async errMsg => {
-      // await this.uiUtils.showErrorMessage('Error', errMsg)
       await this.toastService.present(errMsg, 1000, 'danger');
       await this.haptic.error();
     });
@@ -369,12 +318,12 @@ export class IncomeDetailsMobileAppComponent implements OnInit {
 
   getSiteListByCompanyRef = async () => {
     if (this.companyRef <= 0) {
-      await this.toastService.present('company not selected', 1000, 'danger');
-      await this.haptic.error();
+      await this.toastService.present('company not selected', 1000, 'warning');
+      await this.haptic.warning();
       return;
     }
     let lst = await Site.FetchEntireListByCompanyRef(this.companyRef, async errMsg => {
-      await this.toastService.present('Error ' + errMsg, 1000, 'danger');
+      await this.toastService.present(errMsg, 1000, 'danger');
       await this.haptic.error();
     });
     this.SiteList = lst;
@@ -382,29 +331,28 @@ export class IncomeDetailsMobileAppComponent implements OnInit {
 
   getLedgerListByCompanyRef = async () => {
     if (this.companyRef <= 0) {
-      await this.toastService.present('company not selected', 1000, 'danger');
-      await this.haptic.error();
+      await this.toastService.present('company not selected', 1000, 'warning');
+      await this.haptic.warning();
       return;
     }
     this.Entity.p.SubLedgerRef = 0
     let lst = await Ledger.FetchEntireListByCompanyRef(this.companyRef,
       async (errMsg) => {
-        await this.toastService.present('Error ' + errMsg, 1000, 'danger');
+        await this.toastService.present(errMsg, 1000, 'danger');
         await this.haptic.error();
       }
     );
     this.LedgerList = lst
   };
 
-  getSubLedgerListByLedgerRef = async (ledgerref: number) => {
-    if (ledgerref <= 0) {
-      //  await this.uiUtils.showErrorToster('Ledger not Selected');
-      await this.toastService.present('Ledger not Selected', 1000, 'danger');
-      await this.haptic.error();
+  getSubLedgerListByLedgerRef = async (ledgerRef: number) => {
+    if (ledgerRef <= 0) {
+      await this.toastService.present('Ledger not Selected', 1000, 'warning');
+      await this.haptic.warning();
       return;
     }
-    let lst = await SubLedger.FetchEntireListByLedgerRef(ledgerref, async errMsg => {
-      await this.toastService.present('Error ' + errMsg, 1000, 'danger');
+    let lst = await SubLedger.FetchEntireListByLedgerRef(ledgerRef, async errMsg => {
+      await this.toastService.present(errMsg, 1000, 'danger');
       await this.haptic.error();
     });
     this.SubLedgerList = lst;
@@ -419,28 +367,25 @@ export class IncomeDetailsMobileAppComponent implements OnInit {
         this.Entity.p.CreatedBy = Number(this.appStateManage.localStorage.getItem('LoginEmployeeRef'))
         this.Entity.p.UpdatedBy = Number(this.appStateManage.localStorage.getItem('LoginEmployeeRef'))
       }
-      this.Entity.p.Date = this.dtu.ConvertStringDateToFullFormat(this.IncomeDate);
+      this.Entity.p.Date = this.dtu.ConvertStringDateToFullFormat(this.IncomeDate ?? '');
       let entityToSave = this.Entity.GetEditableVersion();
       let entitiesToSave = [entityToSave];
       let tr = await this.utils.SavePersistableEntities(entitiesToSave);
 
       if (!tr.Successful) {
         this.isSaveDisabled = false;
-        // this.uiUtils.showErrorMessage('Error', tr.Message);
-        await this.toastService.present('Error ' + tr.Message, 1000, 'danger');
+        await this.toastService.present(tr.Message, 1000, 'danger');
         await this.haptic.error();
         return;
       } else {
         this.isSaveDisabled = false;
         if (this.IsNewEntity) {
-          // await this.uiUtils.showSuccessToster('Income saved successfully');
           await this.toastService.present('Income saved successfully', 1000, 'success');
           await this.haptic.success();
           this.Entity = Income.CreateNewInstance();
           this.getCurrentBalanceByCompanyRef();
           await this.router.navigate(['/mobile-app/tabs/dashboard/accounting/income']);
         } else {
-          // await this.uiUtils.showSuccessToster('Income saved successfully');
           await this.toastService.present('Income Update successfully', 1000, 'success');
           await this.haptic.success();
           await this.router.navigate(['/mobile-app/tabs/dashboard/accounting/income']);
@@ -468,13 +413,11 @@ export class IncomeDetailsMobileAppComponent implements OnInit {
         this.BankName = selected[0].p.Name;
       });
     } catch (error) {
-
     }
   }
 
   public async selectModeOfPaymentBottomsheet(): Promise<void> {
     try {
-      // const options = this.ModeofPaymentList;
       const options = this.ModeofPaymentList.map((item) => ({ p: item }));
       this.openSelectModal(options, this.selectedModeOfPayment, false, 'Select Mode of Payment', 1, (selected) => {
         this.selectedModeOfPayment = selected;
@@ -489,52 +432,55 @@ export class IncomeDetailsMobileAppComponent implements OnInit {
 
   public async selectPayerNameBottomsheet(): Promise<void> {
     try {
-      // const options = this.PayerList;
-      console.log('this.PayerList :', this.PayerList);
-      let options: any[] = [];
-      if (options) {
-        options = this.PayerList.map(item => ({
+      let options: any[] = this.PayerList.map(item => {
+        let name = this.Entity.p.PayerType === this.DealDoneCustomer
+          ? `${item.p.PayerName} - ${item.p.PlotName}`
+          : item.p.PayerName;
+
+        return {
           p: {
             Ref: item.p.Ref,
-            PlotName: item.p.PlotName||'',
-            Name: item.p.PayerType == this.DealDoneCustomer ? item.p.PayerName : item.p.PayerName + " " + item.p.PlotName
+            PlotName: item.p.PlotName || '',
+            Name: name,
+            PayerName: item.p.PayerName,
           }
-        }));
+        };
+      });
 
-      }
       this.openSelectModal(options, this.selectedPayer, false, 'Select Payer Name', 1, (selected) => {
+        if (!selected || selected.length === 0) return;
         this.selectedPayer = selected;
         this.Entity.p.PayerRef = selected[0].p.Ref;
         this.PayerName = selected[0].p.Name;
-        console.log('selected[0].p.PayerType == this.DealDoneCustomer :', selected[0].p.Ref, selected[0].p.PlotName, this.DealDoneCustomer);
-        if (selected[0].p.Ref != this.DealDoneCustomer) {
-        this.PayerPlotNo = selected[0].p.PlotName;
-        this.Entity.p.PlotName = selected[0].p.PlotName;
-      }
-        this.onPayerChange()
-      });
-    } catch (error) {
 
+        if (this.Entity.p.PayerType === this.DealDoneCustomer) {
+          this.PayerPlotNo = selected[0].p.PlotName;
+          this.Entity.p.PlotName = selected[0].p.PlotName;
+        }
+
+        this.onPayerChange();
+      });
+
+    } catch (error) {
     }
   }
 
   public async selectFromWhomTypeBottomsheet(): Promise<void> {
     try {
-      // const options = this.PayerTypesList;
       const options = this.PayerTypesList.map((item) => ({ p: item }));
       this.openSelectModal(options, this.selectedPayerType, false, 'Select From Whom Type', 1, (selected) => {
         this.selectedPayerType = selected;
         this.Entity.p.PayerType = selected[0].p.Ref;
         this.PayerTypeName = selected[0].p.Name;
-        // this.getPayerListByPayerType();
-        this.getPayerListBySiteAndPayerType(); 
+        this.getPayerListBySiteAndPayerType();
         this.onTypeChange();
         this.selectedPayer = [];
         this.PayerName = '';
 
       });
     } catch (error) {
-
+      await this.toastService.present('Error ' + error, 1000, 'danger');
+      await this.haptic.error();
     }
   }
 
@@ -576,7 +522,6 @@ export class IncomeDetailsMobileAppComponent implements OnInit {
         this.Entity.p.PayerRef = 0;
         this.selectedPayer = [];
         this.PayerName = '';
-        // this.PayerPlotNo = '';
         this.Entity.p.LedgerRef = 0;
         this.selectedLedger = [];
         this.LedgerName = '';
@@ -587,12 +532,13 @@ export class IncomeDetailsMobileAppComponent implements OnInit {
         this.selectedPayerType = [];
         this.PayerTypeName = '';
         this.Entity.p.PlotName = '';
-        this.PayerPlotNo = ''; 
+        this.PayerPlotNo = '';
         this.PayerList = []
         this.getPayerListBySiteAndPayerType()
       });
     } catch (error) {
-
+      await this.toastService.present('Error ' + error, 1000, 'danger');
+      await this.haptic.error();
     }
   }
 
@@ -609,8 +555,6 @@ export class IncomeDetailsMobileAppComponent implements OnInit {
   }
   isDataFilled(): boolean {
     const emptyEntity: Income = Income.CreateNewInstance();
-    console.log('emptyEntity :', emptyEntity);
-    console.log('this Entity :', this.Entity);
     return !this.deepEqualIgnoringKeys(this.Entity, emptyEntity, ['p.Date']);
   }
 
@@ -634,7 +578,6 @@ export class IncomeDetailsMobileAppComponent implements OnInit {
   }
 
   goBack = async () => {
-    // Replace this with your actual condition to check if data is filled
     const isDataFilled = this.isDataFilled(); // Implement this function based on your form
 
     if (isDataFilled) {

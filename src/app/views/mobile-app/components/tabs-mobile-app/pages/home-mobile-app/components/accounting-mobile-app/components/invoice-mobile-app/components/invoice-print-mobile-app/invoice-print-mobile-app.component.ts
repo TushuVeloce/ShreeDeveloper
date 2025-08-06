@@ -1,6 +1,7 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { ExpenseTypeRefs } from 'src/app/classes/domain/constants';
+import { ExpenseTypes } from 'src/app/classes/domain/domainenums/domainenums';
 import { Invoice } from 'src/app/classes/domain/entities/website/accounting/billing/invoice';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
@@ -18,22 +19,20 @@ import { PDFService } from 'src/app/views/mobile-app/components/core/pdf.service
 })
 export class InvoicePrintMobileAppComponent implements OnInit {
 
-  Entity: Invoice = Invoice.CreateNewInstance();
+Entity: Invoice = Invoice.CreateNewInstance();
   private IsNewEntity: boolean = true;
   isSaveDisabled: boolean = false;
   DetailsFormTitle = 'Receipt';
   IsDropdownDisabled: boolean = false
   InitialEntity: Invoice = null as any;
   isPrintButtonClicked: boolean = false;
-  MachinaryExpenseRef: number = ExpenseTypeRefs.MachinaryExpense;
-  LabourExpenseRef: number = ExpenseTypeRefs.LabourExpense;
-  OtherExpenseRef: number = ExpenseTypeRefs.OtherExpense;
-  StockExpenseRef: number = ExpenseTypeRefs.OtherExpense;
-  DisplayTotalWorkingHrs: string = '';
+  MachinaryExpenseRef: number = ExpenseTypeRefs.MachinaryExpense
+  LabourExpenseRef: number = ExpenseTypeRefs.LabourExpense
+  OtherExpenseRef: number = ExpenseTypeRefs.OtherExpense
+  DisplayTotalWorkingHrs: string = ''
+  StockExpenseRef: number = ExpenseTypes.StockExpense
 
   materialheaders: string[] = ['Sr.No.', 'Material', 'Unit', 'Order Quantity', 'Rate', 'Discount Rate', 'Delivery Charges', 'Total Amount'];
-
-
 
   @ViewChild('PrintContainer')
   PrintContainer!: ElementRef;

@@ -1,17 +1,8 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { DomSanitizer } from '@angular/platform-browser';
 import { Router } from '@angular/router';
-import { Share } from '@capacitor/share';
-import html2canvas from 'html2canvas';
-import jsPDF from 'jspdf';
-import { Directory, Filesystem } from '@capacitor/filesystem';
 import { Income } from 'src/app/classes/domain/entities/website/accounting/income/income';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
-import { BaseUrlService } from 'src/app/services/baseurl.service';
-import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
 import { DateconversionService } from 'src/app/services/dateconversion.service';
-import { DTU } from 'src/app/services/dtu.service';
-import { Utils } from 'src/app/services/utils.service';
 import { AlertService } from 'src/app/views/mobile-app/components/core/alert.service';
 import { HapticService } from 'src/app/views/mobile-app/components/core/haptic.service';
 import { LoadingService } from 'src/app/views/mobile-app/components/core/loading.service';
@@ -56,7 +47,6 @@ export class IncomeViewMobileAppComponent implements OnInit {
   constructor(
     private router: Router,
     private appStateManage: AppStateManageService,
-    private companystatemanagement: CompanyStateManagement,
     private DateconversionService: DateconversionService,
     private toastService: ToastService,
     private haptic: HapticService,
@@ -201,7 +191,6 @@ export class IncomeViewMobileAppComponent implements OnInit {
       await this.getSiteListByCompanyRef();
       await this.getLedgerListByCompanyRef();
     } catch (error) {
-      console.error('Error in loadIncomeIfEmployeeExists:', error);
       await this.toastService.present('Failed to load Stock Inward', 1000, 'danger');
       await this.haptic.error();
     } finally {
@@ -218,7 +207,6 @@ export class IncomeViewMobileAppComponent implements OnInit {
       return;
     }
     let lst = await Income.FetchEntireListByFilters(this.Entity.p.SiteRef, this.Entity.p.LedgerRef, this.Entity.p.SubLedgerRef, this.Entity.p.IncomeModeOfPayment, this.Entity.p.Ref, this.companyRef, async errMsg => {
-      // await this.uiUtils.showErrorMessage('Error', errMsg)
        await this.toastService.present('Error ' + errMsg, 1000, 'danger');
       await this.haptic.error();
     });
@@ -255,8 +243,6 @@ export class IncomeViewMobileAppComponent implements OnInit {
   };
 
   getSubLedgerListByLedgerRef = async (ledgerref: number) => {
-    console.log('ledgerref :', ledgerref);
-
     if (ledgerref <= 0) {
       await this.toastService.present('Ledger not selected', 1000, 'danger');
       await this.haptic.error();
@@ -275,17 +261,14 @@ export class IncomeViewMobileAppComponent implements OnInit {
     this.MasterList = [];
     this.DisplayMasterList = [];
     if (this.companyRef <= 0) {
-      // await this.uiUtils.showErrorToster('Company not Selected');
       await this.toastService.present('Company not Selected', 1000, 'warning');
       await this.haptic.warning();
       return;
     }
     let lst = await Income.FetchEntireListByCompanyRef(this.companyRef, async errMsg => {
-      // await this.uiUtils.showErrorMessage('Error', errMsg)
       await this.toastService.present('Error ' + errMsg, 1000, 'danger');
       await this.haptic.error();
     });
-    console.log('lst :', lst);
     this.ReasonList = lst.filter((item) => item.p.Reason != '');
     this.MasterList = lst;
     this.DisplayMasterList = this.MasterList;
@@ -315,7 +298,6 @@ export class IncomeViewMobileAppComponent implements OnInit {
             role: 'cancel',
             cssClass: 'custom-cancel',
             handler: () => {
-              console.log('Deletion cancelled.');
             }
           },
           {
@@ -333,7 +315,6 @@ export class IncomeViewMobileAppComponent implements OnInit {
                 });
                 await this.getIncomeListByCompanyRef();
               } catch (err) {
-                console.error('Error deleting Income:', err);
                 await this.toastService.present('Failed to delete Income', 1000, 'danger');
                 await this.haptic.error();
               }
@@ -342,7 +323,6 @@ export class IncomeViewMobileAppComponent implements OnInit {
         ]
       });
     } catch (error) {
-      console.error('Error showing delete confirmation:', error);
       await this.toastService.present('Something went wrong', 1000, 'danger');
       await this.haptic.error();
     }
@@ -350,7 +330,6 @@ export class IncomeViewMobileAppComponent implements OnInit {
 
   AddIncome = () => {
     if (this.companyRef <= 0) {
-      //  this.uiUtils.showWarningToster('Please select company');
       this.toastService.present('Please select company', 1000, 'warning');
       this.haptic.warning();
       return;
@@ -359,9 +338,7 @@ export class IncomeViewMobileAppComponent implements OnInit {
   }
 
   openModal(Income: any) {
-    // console.log('Income: any, IncomeItem: any :', Income, IncomeItem);
     this.SelectedIncome = Income;
-    // this.SelectedIncome = IncomeItem;
     this.modalOpen = true;
   }
 

@@ -65,18 +65,11 @@ export class OfficeViewMobileAppComponent implements OnInit {
 
 
   constructor(
-    private router: Router,
     private appStateManage: AppStateManageService,
-    private companystatemanagement: CompanyStateManagement,
     private DateconversionService: DateconversionService,
-    private dtu: DTU,
     private toastService: ToastService,
     private haptic: HapticService,
-    private alertService: AlertService,
     public loadingService: LoadingService,
-    private sanitizer: DomSanitizer,
-    private baseUrl: BaseUrlService,
-    private utils: Utils,
     private pdfService: PDFService
   ) { }
 
@@ -86,108 +79,13 @@ export class OfficeViewMobileAppComponent implements OnInit {
 
   ionViewWillEnter = async () => {
     await this.loadAccountingReportIfEmployeeExists();
-    await this.loadFilters();
+    this.loadFilters();
   };
 
   async handleRefresh(event: CustomEvent) {
     await this.loadAccountingReportIfEmployeeExists();
     (event.target as HTMLIonRefresherElement).complete();
   }
-
-  // loadFilters() {
-  //   this.filters = [
-  //     {
-  //       key: 'site',
-  //       label: 'Site',
-  //       multi: false,
-  //       options: this.SiteList.map(item => ({
-  //         Ref: item.p.Ref,
-  //         Name: item.p.Name,
-  //       })),
-  //       selected: this.selectedFilterValues['site'] > 0 ? this.selectedFilterValues['site'] : null,
-  //     },
-  //     {
-  //       key: 'modeOfPayment',
-  //       label: 'Mode of Payment',
-  //       multi: false,
-  //       options: this.ModeofPaymentList.map(item => ({
-  //         Ref: item.Ref,
-  //         Name: item.Name,
-  //       })),
-  //       selected: this.selectedFilterValues['modeOfPayment'] > 0 ? this.selectedFilterValues['modeOfPayment'] : null,
-  //     },
-  //     {
-  //       key: 'ledger',
-  //       label: 'Ledger',
-  //       multi: false,
-  //       options: this.LedgerList.map(item => ({
-  //         Ref: item.p.Ref,
-  //         Name: item.p.Name,
-  //       })),
-  //       selected: this.selectedFilterValues['ledger'] > 0 ? this.selectedFilterValues['ledger'] : null,
-  //     },
-  //     {
-  //       key: 'subledger',
-  //       label: 'Sub Ledger',
-  //       multi: false,
-  //       options: this.SubLedgerList.map(item => ({
-  //         Ref: item.p.Ref,
-  //         Name: item.p.Name,
-  //       })),
-  //       selected: this.selectedFilterValues['subledger'] > 0 ? this.selectedFilterValues['subledger'] : null,
-  //     },
-  //     {
-  //       key: 'payertype',
-  //       label: 'Payer Type',
-  //       multi: false,
-  //       options: this.PayerTypesList.map(item => ({
-  //         Ref: item.Ref,
-  //         Name: item.Name,
-  //       })),
-  //       selected: this.selectedFilterValues['payertype'] > 0 ? this.selectedFilterValues['payertype'] : null,
-  //     },
-  //     {
-  //       key: 'payertypelist',
-  //       label: 'Payer',
-  //       multi: false,
-  //       options: this.PayerList.map(item => ({
-  //         Ref: item.p.Ref,
-  //         Name: item.p.PayerName,
-  //       })),
-  //       selected: this.selectedFilterValues['payertypelist'] > 0 ? this.selectedFilterValues['payertypelist'] : null,
-  //     },
-  //     {
-  //       key: 'recipienttype',
-  //       label: 'Recipient Type',
-  //       multi: false,
-  //       options: this.RecipientTypesList.map(item => ({
-  //         Ref: item.Ref,
-  //         Name: item.Name,
-  //       })),
-  //       selected: this.selectedFilterValues['recipienttype'] > 0 ? this.selectedFilterValues['recipienttype'] : null,
-  //     },
-  //     {
-  //       key: 'recipienttypelist',
-  //       label: 'Recipient',
-  //       multi: false,
-  //       options: this.RecipientList.map(item => ({
-  //         Ref: item.p.Ref,
-  //         Name: item.p.RecipientName,
-  //       })),
-  //       selected: this.selectedFilterValues['recipienttypelist'] > 0 ? this.selectedFilterValues['recipienttypelist'] : null,
-  //     },
-  //     {
-  //       key: 'accountingReport',
-  //       label: 'Accounting Report',
-  //       multi: false,
-  //       options: this.AccountingReportList.map(item => ({
-  //         Ref: item.Ref,
-  //         Name: item.Name,
-  //       })),
-  //       selected: this.selectedFilterValues['accountingReport'] > 0 ? this.selectedFilterValues['accountingReport'] : 200,
-  //     }
-  //   ];
-  // }
 
   loadFilters() {
     this.filters = [
@@ -302,71 +200,7 @@ export class OfficeViewMobileAppComponent implements OnInit {
     ];
   }
 
-
-  // async onFiltersChanged(updatedFilters: any[]) {
-  //   // debugger
-  //   console.log('Updated Filters:', updatedFilters);
-
-  //   for (const filter of updatedFilters) {
-  //     const selected = filter.selected;
-  //     const selectedValue = (selected === null || selected === undefined) ? null : selected;
-
-  //     // Save selected value to preserve after reload
-  //     this.selectedFilterValues[filter.key] = selectedValue ?? null;
-
-  //     switch (filter.key) {
-  //       case 'site':
-  //         this.Entity.p.SiteRef = selectedValue ?? 0;
-  //         break;
-
-  //       case 'reason':
-  //         this.Entity.p.Reason = selectedValue ?? 0;
-  //         break;
-
-  //       case 'subledger':
-  //         this.Entity.p.SubLedgerRef = selectedValue ?? 0;
-  //         break;
-
-  //       case 'ledger':
-  //         this.Entity.p.LedgerRef = selectedValue ?? 0;
-  //         if (selectedValue != null) { this.SubLedgerList = [];await this.getSubLedgerListByLedgerRef(selectedValue);}else {this.SubLedgerList = []};  // Updates SubLedgerList
-  //         break;
-
-  //       case 'payertype':
-  //         this.Entity.p.PayerType = selectedValue ?? 0;
-  //         if (selectedValue != null) { this.PayerList = []; await this.getPayerListBySiteAndPayerType(); } else { this.PayerList = [] };   // Updates SubLedgerList
-  //         break;
-
-  //       case 'payertypelist':
-  //         this.Entity.p.PayerRef = selectedValue ?? 0;
-  //         break;
-
-  //       case 'recipienttype':
-  //         this.Entity.p.RecipientType = selectedValue ?? 0;
-  //         if (selectedValue != null) { this.RecipientList = []; await this.getRecipientListByRecipientTypeRef(); } else { this.RecipientList = [] };   // Updates SubLedgerList
-  //         break;
-
-  //       case 'recipienttypelist':
-  //         this.Entity.p.RecipientRef = selectedValue ?? 0;
-  //         break;
-  //       case 'accountingReport':
-  //         this.Entity.p.AccountingReport = selectedValue ?? 0;
-  //         break;
-
-  //       case 'modeOfPayment':
-  //         this.Entity.p.ModeOfPayment = selectedValue ?? 0;
-  //         break;
-  //     }
-  //   }
-  //   if (this.Entity.p.AccountingReport===0){
-  //     this.Entity.p.AccountingReport = AccountingReports.CurrentFinancialYear;
-  //   }
-  //   await this.FetchEntireListByFilters();
-  //   this.loadFilters(); // Reload filters with updated options & preserve selections
-  // }
   async onFiltersChanged(updatedFilters: any[]) {
-    console.log('Updated Filters:', updatedFilters);
-
     for (const filter of updatedFilters) {
       const selected = filter.selected;
       const selectedValue = (selected === null || selected === undefined) ? null : selected;
@@ -453,8 +287,6 @@ export class OfficeViewMobileAppComponent implements OnInit {
   }
 
 
-
-
     @ViewChild('PrintContainer')
     PrintContainer!: ElementRef;
 
@@ -481,7 +313,6 @@ export class OfficeViewMobileAppComponent implements OnInit {
         return;
       }
       this.Entity.p.AccountingReport = AccountingReports.CurrentFinancialYear
-      //  await this.getAccountingReportListByCompanyRef();
       await this.getOpeningBalanceListByCompanyRef();
       await this.getCurrentBalanceByCompanyRef();
       await this.getSiteListByCompanyRef();
@@ -490,7 +321,6 @@ export class OfficeViewMobileAppComponent implements OnInit {
       this.Entity.p.StartDate = ''
       this.Entity.p.EndDate = ''
     } catch (error) {
-      // console.error('Error in loadAccountingReportIfEmployeeExists:', error);
       await this.toastService.present('Failed to load Office', 1000, 'danger');
       await this.haptic.error();
     } finally {
@@ -517,7 +347,6 @@ export class OfficeViewMobileAppComponent implements OnInit {
       this.Entity.p.SubLedgerRef,
       this.Entity.p.RecipientRef,
       this.Entity.p.PayerRef,      async errMsg => {
-      // await this.uiUtils.showErrorMessage('Error', errMsg)
       await this.toastService.present('Error' + errMsg, 1000, 'danger');
       await this.haptic.error();
     });
@@ -615,8 +444,6 @@ export class OfficeViewMobileAppComponent implements OnInit {
   };
 
   getSubLedgerListByLedgerRef = async (ledgerref: number) => {
-    console.log('ledgerref :', ledgerref);
-
     if (ledgerref <= 0) {
       await this.toastService.present('Ledger not selected', 1000, 'danger');
       await this.haptic.error();
@@ -646,7 +473,6 @@ export class OfficeViewMobileAppComponent implements OnInit {
 
     getPayerListBySiteAndPayerType = async () => {
       if (this.companyRef <= 0) {
-        // await this.uiUtils.showErrorToster('Company not Selected');
         await this.toastService.present('Company not selected', 1000, 'warning');
         await this.haptic.warning();
         return;
@@ -655,24 +481,20 @@ export class OfficeViewMobileAppComponent implements OnInit {
         return;
       }
       let lst = await Income.FetchPayerNameByPayerTypeRef(this.Entity.p.SiteRef, this.companyRef, this.Entity.p.PayerType, async errMsg => {
-        // await this.uiUtils.showErrorMessage('Error', errMsg)
         await this.toastService.present('Error ' + errMsg, 1000, 'danger');
         await this.haptic.error();
       });
       this.PayerList = lst;
-      console.log('lPayerListst :', lst);
       this.loadFilters(); // Reload filters with updated options & preserve selections
     }
 
   getRecipientListByRecipientTypeRef = async () => {
     if (this.companyRef <= 0) {
-      // await this.uiUtils.showErrorToster('Company not Selected');
       await this.toastService.present('Company not selected', 1000, 'warning');
       await this.haptic.warning();
       return;
     }
     if (this.Entity.p.RecipientType <= 0) {
-      // await this.uiUtils.showErrorToster('To Whom not Selected');
       await this.toastService.present('To Whom not selected', 1000, 'warning');
       await this.haptic.warning();
       return;
@@ -680,7 +502,6 @@ export class OfficeViewMobileAppComponent implements OnInit {
 
     this.RecipientList = [];
     let lst = await Invoice.FetchRecipientByRecipientTypeRef(this.companyRef,this.Entity.p.SiteRef, this.Entity.p.RecipientType, async errMsg => {
-      // await this.uiUtils.showErrorMessage('Error', errMsg)
       await this.toastService.present('Error ' + errMsg, 1000, 'danger');
       await this.haptic.error();
     });
@@ -691,7 +512,6 @@ export class OfficeViewMobileAppComponent implements OnInit {
 
   getBalanceByBank = () => {
     let SingleRecord = this.OpeningBalanceList.find((data) => data.p.Ref == this.BankRef);
-    console.log('SingleRecord :', SingleRecord);
     if (SingleRecord) {
       this.NetBalance = SingleRecord?.p.NetBalance;
     }
@@ -727,9 +547,7 @@ export class OfficeViewMobileAppComponent implements OnInit {
   }
 
   openModal(AccountingReport: any) {
-    // console.log('AccountingReport: any, AccountingReportItem: any :', AccountingReport, AccountingReportItem);
     this.SelectedAccountingReport = AccountingReport;
-    // this.SelectedAccountingReport = AccountingReportItem;
     this.modalOpen = true;
   }
 

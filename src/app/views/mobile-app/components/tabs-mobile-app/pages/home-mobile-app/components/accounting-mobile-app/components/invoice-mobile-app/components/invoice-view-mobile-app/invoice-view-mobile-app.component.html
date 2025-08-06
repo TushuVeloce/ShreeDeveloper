@@ -118,7 +118,7 @@
           </div>
         </div>
         <div class="info-row-of-model-mobile-app" *ngIf="SelectedInvoice.p.LabourExpenseDetailsArray.length > 0">
-          <span class="label-mobile-app">Labour Time Details :</span>
+          <span class="label-mobile-app">Labour Details :</span>
         </div>
         <div class="table-container" *ngIf="SelectedInvoice.p.LabourExpenseDetailsArray.length > 0">
           <div class="table-scroll">
@@ -135,14 +135,8 @@
                   <td>
                     {{ item.LabourTypeName || '-' }}
                   </td>
-                  <!-- <td>
-                    {{ convertTo12HourFormat(item.LabourFromTime) || '-' }}
-                  </td>
                   <td>
-                    {{ convertTo12HourFormat(item.LabourToTime) || '-' }}
-                  </td> -->
-                  <td>
-                    {{ item.LabourWorkedHours || '-' }}
+                    {{ item.Days || '-' }}
                   </td>
                   <td>
                     {{ item.LabourQty || '-' }}

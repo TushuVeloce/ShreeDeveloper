@@ -2,24 +2,20 @@
 <ion-content class="form-container" [scrollEvents]="true">
   <ion-list lines="none" class="ion-padding">
     <!--  Date -->
-    <!-- <ion-item class="input-item">
+    <ion-item class="input-item">
       <ion-label>Select Date</ion-label>
-      <ion-datetime-button datetime="FromDate" trigger="entry-date-modal"></ion-datetime-button>
-    </ion-item> 
-    <ion-modal keepContentsMounted="true" trigger="entry-date-modal">
-      <ng-template>
-        <ion-datetime id="FromDate" presentation="date" [(ngModel)]="Date" show-default-buttons="true"
-          (ionChange)="onDateChange($event.detail.value)"></ion-datetime>
-      </ng-template>
-    </ion-modal> -->
-    <ion-item (click)="showIncomeDatePicker = true" class="input-item">
-      <ion-label>Date</ion-label>
-      <ion-label slot="end">{{ DisplayIncomeDate || 'Select Date' }}</ion-label>
+      <ion-datetime-button id="IncomeDate-trigger" datetime="IncomeDate"></ion-datetime-button>
+
+      <ion-checkbox slot="end" [(ngModel)]="IncomeDate" name="IncomeDateCheckBox" [disabled]="true"></ion-checkbox>
     </ion-item>
-    <app-date-picker [show]="showIncomeDatePicker" [selectedDate]="IncomeDate" [defaultToday]="true"
-      (dateChanged)="onIncomeDateChange($event)"
-      (dateSelected)="DisplayIncomeDate = $event; showIncomeDatePicker = false"
-      (modalDismissed)="showIncomeDatePicker = false" />
+    <ion-modal keepContentsMounted="true" trigger="IncomeDate-trigger">
+      <ng-template>
+        <ion-datetime id="IncomeDate" presentation="date" [(ngModel)]="IncomeDate" show-default-buttons="true"
+          (ionChange)="onIncomeDateChange($event.detail.value)">
+        </ion-datetime>
+      </ng-template>
+    </ion-modal>
+
 
     <!-- Select site -->
     <ion-item class="input-item" button detail (click)="selectSiteBottomsheet()" [disabled]="SiteList.length == 0">
@@ -42,7 +38,8 @@
     </ion-item>
 
     <!-- Select Sub Ledger -->
-    <ion-item class="input-item" button detail (click)="selectSubLedgerBottomsheet()" [disabled]="SubLedgerList.length == 0">
+    <ion-item class="input-item" button detail (click)="selectSubLedgerBottomsheet()"
+      [disabled]="SubLedgerList.length == 0">
       <ion-label>Sub Ledger</ion-label>
 
       <!-- Text showing the selected status -->
@@ -52,7 +49,8 @@
     </ion-item>
 
     <!-- Select To Whom Type -->
-    <ion-item class="input-item" button detail (click)="selectFromWhomTypeBottomsheet()" [disabled]="PayerTypesList.length == 0">
+    <ion-item class="input-item" button detail (click)="selectFromWhomTypeBottomsheet()"
+      [disabled]="PayerTypesList.length == 0">
       <ion-label>From Whom Type</ion-label>
 
       <!-- Text showing the selected status -->
@@ -63,18 +61,18 @@
 
     <!-- Select Payer Name -->
     <ion-item class="input-item" button detail *ngIf="!PayerNameInput && !PayerNameReadOnly">
-      <ion-label (click)="selectPayerNameBottomsheet()">Received by </ion-label>
+      <ion-label (click)="selectPayerNameBottomsheet()">Received by</ion-label>
 
       <!-- Selected Text -->
       <ion-text slot="end" class="status-text" (click)="selectPayerNameBottomsheet()">
         {{ PayerName || 'Select' }}
       </ion-text>
 
-     <!-- Inline Add Button -->
+      <!-- Inline Add Button -->
       <ion-button slot="end" fill="solid" size="small" (click)="AddPayerName()"
         style="--background: var(--ion-color-primary); --border-radius: 8px; --padding-start: 6px; --padding-end: 6px; margin-left: 6px;"
-        *ngIf="Entity.p.PayerType == payerTypeRecipient"
-        >
+        *ngIf="Entity.p.PayerType == payerTypeRecipient">
+        <!-- Entity.p.PayerType == DealDoneCustomer || -->
         <ion-icon slot="icon-only" name="add-outline" color="light"></ion-icon>
       </ion-button>
     </ion-item>
@@ -82,40 +80,40 @@
     <!-- Add New Recipient Name Input and Action Buttons -->
     <ion-grid *ngIf="PayerNameInput && !PayerNameReadOnly">
       <ion-row class="ion-align-items-center ion-justify-content-between" style="gap: 8px;">
-
         <!-- Input Field -->
-        <ion-col size="12" size-sm="12" size-md="12">
+        <ion-col size="12">
           <ion-item class="input-item">
-            <ion-input label="Payer Name Name" labelPlacement="floating" placeholder="Enter To Whom Name"
-              [(ngModel)]="PayerEntity.p.Name"></ion-input>
+            <ion-input label="Payer Name" labelPlacement="floating" placeholder="Enter Payer Name"
+              [(ngModel)]="PayerEntity.p.Name">
+            </ion-input>
           </ion-item>
         </ion-col>
-
       </ion-row>
+
       <ion-row class="ion-align-items-center ion-justify-content-between" style="gap: 8px;">
         <!-- Confirm Button -->
-        <ion-col size="4" size-sm="2" size-md="2" class="ion-text-start">
+        <ion-col size="6" class="ion-text-start">
           <ion-button expand="block" fill="solid" size="small" (click)="SaveNewPayerName()"
-            *ngIf="PayerNameInput && !PayerNameReadOnly"  style="--background: var(--ion-color-primary); --border-radius: 8px;">
+            style="--background: var(--ion-color-primary); --border-radius: 8px;">
             <ion-icon slot="icon-only" name="checkmark-outline" color="light"></ion-icon>
           </ion-button>
         </ion-col>
 
         <!-- Cancel Button -->
-        <ion-col size="4" size-sm="2" size-md="2" class="ion-text-end">
+        <ion-col size="6" class="ion-text-end">
           <ion-button expand="block" fill="solid" size="small" (click)="cancelPayerName()"
-            *ngIf="PayerNameInput && !PayerNameReadOnly"  style="--background: var(--ion-color-medium); --border-radius: 8px;">
+            style="--background: var(--ion-color-medium); --border-radius: 8px;">
             <ion-icon slot="icon-only" name="close-outline" color="light"></ion-icon>
           </ion-button>
         </ion-col>
-
       </ion-row>
     </ion-grid>
 
+
     <!-- Plot Name -->
     <ion-item class="input-item" *ngIf="Entity.p.PayerType == DealDoneCustomer && Entity.p.PayerRef != 0">
-      <ion-input label="Plot Name" labelPlacement="floating" placeholder="Enter Plot Name" [(ngModel)]="Entity.p.PlotName"
-        clearInput="true" [disabled]="'true'"></ion-input>
+      <ion-input label="Plot Name" labelPlacement="floating" placeholder="Enter Plot Name"
+        [(ngModel)]="Entity.p.PlotName" clearInput="true" [disabled]="'true'"></ion-input>
     </ion-item>
 
     <!-- Reason -->
@@ -137,7 +135,8 @@
     </ion-item>
 
     <!-- mode of payment -->
-    <ion-item class="input-item" button detail (click)="selectModeOfPaymentBottomsheet()" [disabled]="ModeofPaymentList.length == 0">
+    <ion-item class="input-item" button detail (click)="selectModeOfPaymentBottomsheet()"
+      [disabled]="ModeofPaymentList.length == 0">
       <ion-label>Mode of Payment</ion-label>
 
       <!-- Text showing the selected status -->
@@ -147,8 +146,8 @@
     </ion-item>
 
     <!-- Bank -->
-    <ion-item class="input-item" button (click)="selectBankBottomsheet()"
-     *ngIf="Entity.p.IncomeModeOfPayment != Cash && Entity.p.IncomeModeOfPayment" [disabled]="BankList.length == 0">
+    <ion-item class="input-item" button detail (click)="selectBankBottomsheet()"
+      *ngIf="Entity.p.IncomeModeOfPayment != Cash && Entity.p.IncomeModeOfPayment" [disabled]="BankList.length == 0">
       <ion-label>Bank</ion-label>
 
       <!-- Text showing the selected status -->
@@ -167,12 +166,12 @@
     <ion-grid>
       <ion-row>
         <ion-col size="6">
-          <ion-button expand="block" (click)="goBack()" class="submit-button cancel-button">
+          <ion-button expand="block" color="medium" shape="round" (click)="goBack()">
             Cancel
           </ion-button>
         </ion-col>
         <ion-col size="6">
-          <ion-button expand="block" (click)="SaveIncome()" class="submit-button primary-button">
+          <ion-button expand="block" color="primary" shape="round" (click)="SaveIncome()">
             Save
           </ion-button>
         </ion-col>
