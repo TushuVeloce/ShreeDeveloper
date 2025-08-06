@@ -180,6 +180,7 @@ export class Plot implements IPersistable<Plot> {
     return Plot.ListFromTransportData(tdResponse);
   }
 
+
   public static async FetchEntireListBySiteandBookingRemarkRef(siteref: number, bookingremarkref: number, errorHandler: (err: any) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let req = new PlotFetchRequest();
     req.SiteManagementRefs.push(siteref)

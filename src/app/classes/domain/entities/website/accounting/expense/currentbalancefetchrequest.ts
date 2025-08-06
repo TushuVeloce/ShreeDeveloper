@@ -14,6 +14,7 @@ export class CurrentBalanceFetchRequest {
 
   SiteRef: number = 0;
   SiteRefs: number[] = [];
+  PlotRefs: number[] = [];
   LedgerRefs: number[] = [];
   SubLedgerRefs: number[] = [];
   ModeOfPayments: number[] = [];

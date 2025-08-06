@@ -10,6 +10,7 @@ import { ScreenSizeService } from 'src/app/services/screensize.service';
 import { UIUtils } from 'src/app/services/uiutils.service';
 import { SharedFilterComponent } from "src/app/views/website/Helpers/shared-filter/shared-filter.component";
 import { NzSelectComponent } from "ng-zorro-antd/select";
+import { Plot } from 'src/app/classes/domain/entities/website/masters/plot/plot';
 
 @Component({
   selector: 'app-payment-history-report',
@@ -23,6 +24,7 @@ export class PaymentHistoryReportComponent  implements OnInit {
   DisplayMasterList: Income[] = [];
   list: [] = []
   SiteList: Site[] = [];
+  PlotList: Plot[] = [];
   SearchString: string = '';
   SelectedIncome: Income = Income.CreateNewInstance();
   CustomerRef: number = 0;
@@ -60,6 +62,13 @@ export class PaymentHistoryReportComponent  implements OnInit {
     // }
   }
 
+   getPlotListBySiteRef = async (siteref: number) => {
+      this.Entity.p.PlotRef = 0
+      this.PlotList = [];
+      let lst = await Plot.FetchEntireListBySiteRef(siteref, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+      this.PlotList = lst;
+    }
+
    // Extracted from services date conversion //
   formatDate = (date: string | Date): string => {
     return this.DateconversionService.formatDate(date);
@@ -86,7 +95,7 @@ export class PaymentHistoryReportComponent  implements OnInit {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
-    let lst = await Income.FetchEntireListBySiteRef(this.Entity.p.SiteRef,this.companyRef(),
+    let lst = await Income.FetchEntireListBySiteRef(this.Entity.p.SiteRef, this.Entity.p.PlotRef,this.companyRef(),
       async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
     );
     this.MasterList = lst;

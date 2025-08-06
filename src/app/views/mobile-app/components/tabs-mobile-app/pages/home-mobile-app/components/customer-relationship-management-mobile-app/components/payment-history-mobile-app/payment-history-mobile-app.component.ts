@@ -67,6 +67,16 @@ export class PaymentHistoryMobileAppComponent implements OnInit {
           Name: item.p.Name,
         })),
         selected: this.selectedFilterValues['site'] > 0 ? this.selectedFilterValues['site'] : null,
+      },
+       {
+        key: 'plot',
+        label: 'plot',
+        multi: false,
+        options: this.SiteList.map(item => ({
+          Ref: item.p.Ref,
+          Name: item.p.Name,
+        })),
+        selected: this.selectedFilterValues['site'] > 0 ? this.selectedFilterValues['site'] : null,
       }
     ];
   }
@@ -82,6 +92,9 @@ export class PaymentHistoryMobileAppComponent implements OnInit {
       switch (filter.key) {
         case 'site':
           this.Entity.p.SiteRef = selectedValue ?? 0;
+          break;
+        case 'plot':
+          this.Entity.p.PlotRef = selectedValue ?? 0;
           break;
       }
     }
@@ -162,7 +175,7 @@ export class PaymentHistoryMobileAppComponent implements OnInit {
   getCustomerVisitListBySiteRef = async () => {
     this.MasterList = [];
     this.DisplayMasterList = [];
-    let lst = await Income.FetchEntireListBySiteRef(this.Entity.p.SiteRef, this.companyRef,
+    let lst = await Income.FetchEntireListBySiteRef(this.Entity.p.SiteRef,this.Entity.p.PlotRef, this.companyRef,
       async (errMsg) => {
         await this.toastService.present(errMsg, 1000, 'danger');
         await this.haptic.error();
