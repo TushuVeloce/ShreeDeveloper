@@ -20,6 +20,15 @@
     </div>
   </ng-template>
   <div class="row" style="margin-top: 1rem;">
+    <!-- Month -->
+    <div class="col-12 col-md-4">
+      <label class="form-label" for="Month">Month</label>
+      <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear nzPlaceHolder="Select"
+        [nzSize]="'large'" [(ngModel)]="Month" name="Month" required id="Month" [disabled]="!EmployeeRef"
+        (ngModelChange)="getSalaryListByEmployeeAndMonth()">
+        <nz-option *ngFor="let Month of MonthList" [nzLabel]="Month.Name" [nzValue]="Month.Ref"></nz-option>
+      </nz-select>
+    </div>
     <!-- Employee Dropdown -->
     <div class="col-12 col-md-4">
       <label class="form-label">Employee</label>
@@ -28,15 +37,6 @@
         (ngModelChange)="getSalaryListByEmployeeAndMonth(); Month = 0" [nzNotFoundContent]="'No data'">
         <nz-option *ngFor=" let Employee of EmployeeList" [nzLabel]="Employee.p.Name"
           [nzValue]="Employee.p.Ref"></nz-option>
-      </nz-select>
-    </div>
-    <!-- Month -->
-    <div class="col-12 col-md-4">
-      <label class="form-label" for="Month">Month</label>
-      <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear nzPlaceHolder="Select"
-        [nzSize]="'large'" [(ngModel)]="Month" name="Month" required id="Month" [disabled]="!EmployeeRef"
-        (ngModelChange)="getSalaryListByEmployeeAndMonth()">
-        <nz-option *ngFor="let Month of MonthList" [nzLabel]="Month.Name" [nzValue]="Month.Ref"></nz-option>
       </nz-select>
     </div>
   </div>

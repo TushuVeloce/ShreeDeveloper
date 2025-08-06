@@ -209,10 +209,10 @@ export class SalaryGeneration implements IPersistable<SalaryGeneration> {
     let req = new SalaryGenerationCustomRequest();
     req.CompanyRef = CompanyRef;
     if (EmployeeRef > 0) {
-      req.EmployeeRef = EmployeeRef;
+      req.EmployeeRefs.push(EmployeeRef);
     }
     if (Month > 0) {
-      req.Month = Month;
+      req.Months.push(Month);
     }
     let tdResponse = await SalaryGeneration.FetchTransportData(req, errorHandler) as TransportData;
     return SalaryGeneration.ListFromTransportData(tdResponse);
