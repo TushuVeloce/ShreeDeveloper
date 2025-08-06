@@ -14,21 +14,21 @@ import { FilterItem } from 'src/app/views/mobile-app/components/shared/chip-filt
   selector: 'app-stock-transfer-view-mobile-app',
   templateUrl: './stock-transfer-view-mobile-app.component.html',
   styleUrls: ['./stock-transfer-view-mobile-app.component.scss'],
-  standalone:false
+  standalone: false
 })
-export class StockTransferViewMobileAppComponent  implements OnInit {
+export class StockTransferViewMobileAppComponent implements OnInit {
 
   Entity: StockTransfer = StockTransfer.CreateNewInstance();
   MasterList: StockTransfer[] = [];
   DisplayMasterList: StockTransfer[] = [];
   SiteList: Site[] = [];
+  FromSiteList: Site[] = [];
+  ToSiteList: Site[] = [];
   SelectedStockTransfer: StockTransfer = StockTransfer.CreateNewInstance();
 
   companyRef = 0;
   modalOpen = false;
   filters: FilterItem[] = [];
-
-  // Store current selected values here to preserve selections on filter reload
   selectedFilterValues: Record<string, any> = {};
 
   constructor(
@@ -41,66 +41,52 @@ export class StockTransferViewMobileAppComponent  implements OnInit {
     public loadingService: LoadingService,
   ) { }
 
-  ngOnInit = async () => {
-    // await this.loadStockTransferIfEmployeeExists();
-  };
+  ngOnInit = async () => { };
 
   ionViewWillEnter = async () => {
     await this.loadStockTransferIfEmployeeExists();
     this.loadFilters();
   };
 
-  handleRefresh = async (event: CustomEvent)=> {
+  handleRefresh = async (event: CustomEvent) => {
     await this.loadStockTransferIfEmployeeExists();
     this.loadFilters();
     (event.target as HTMLIonRefresherElement).complete();
   }
 
-   loadFilters=()=> {
+  loadFilters = () => {
+    this.FromSiteList = this.SiteList.filter(site => site.p.Ref !== this.Entity.p.ToSiteRef);
+    this.ToSiteList = this.SiteList.filter(site => site.p.Ref !== this.Entity.p.FromSiteRef);
+
     this.filters = [
       {
         key: 'fromsite',
         label: 'From Site',
         multi: false,
-        options: this.SiteList.map(item => ({
-          Ref: item.p.Ref,
-          Name: item.p.Name,
-        })),
+        options: this.FromSiteList.map(item => ({ Ref: item.p.Ref, Name: item.p.Name })),
         selected: this.selectedFilterValues['fromsite'] > 0 ? this.selectedFilterValues['fromsite'] : null,
       },
       {
         key: 'tosite',
         label: 'To Site',
         multi: false,
-        options: this.SiteList.map(item => ({
-          Ref: item.p.Ref,
-          Name: item.p.Name,
-        })),
+        options: this.ToSiteList.map(item => ({ Ref: item.p.Ref, Name: item.p.Name })),
         selected: this.selectedFilterValues['tosite'] > 0 ? this.selectedFilterValues['tosite'] : null,
       }
     ];
   }
 
-  onFiltersChanged = async (updatedFilters: any[])=> {
+  onFiltersChanged = async (updatedFilters: any[]) => {
     for (const filter of updatedFilters) {
       const selected = filter.selected;
       const selectedValue = (selected === null || selected === undefined) ? null : selected;
-
-      // Save selected value to preserve after reload
       this.selectedFilterValues[filter.key] = selectedValue ?? null;
 
       switch (filter.key) {
         case 'fromsite':
-          if (this.Entity.p.FromSiteRef == this.Entity.p.ToSiteRef) {
-            break;
-          }
           this.Entity.p.FromSiteRef = selectedValue ?? 0;
           break;
-
         case 'tosite':
-          if (this.Entity.p.FromSiteRef == this.Entity.p.ToSiteRef) {
-            break;
-          }
           this.Entity.p.ToSiteRef = selectedValue ?? 0;
           break;
       }
@@ -109,8 +95,7 @@ export class StockTransferViewMobileAppComponent  implements OnInit {
     this.loadFilters();
   }
 
-
-  private loadStockTransferIfEmployeeExists = async ()=> {
+  private loadStockTransferIfEmployeeExists = async () => {
     try {
       await this.loadingService.show();
       const company = this.appStateManage.localStorage.getItem('SelectedCompanyRef');
@@ -136,21 +121,20 @@ export class StockTransferViewMobileAppComponent  implements OnInit {
     try {
       if (this.companyRef <= 0) return;
       const lst = await Site.FetchEntireListByCompanyRef(this.companyRef, async (errMsg) => {
-        await this.toastService.present( errMsg, 1000, 'danger');
+        await this.toastService.present(errMsg, 1000, 'danger');
         await this.haptic.error();
       });
 
       this.SiteList = lst || [];
-
-      this.Entity.p.FromSiteRef = 0
-      this.Entity.p.ToSiteRef = 0
+      this.Entity.p.FromSiteRef = 0;
+      this.Entity.p.ToSiteRef = 0;
     } catch (err) {
-      await this.toastService.present('Error fetching site list:'+err, 1000, 'danger');
+      await this.toastService.present('Error fetching site list:' + err, 1000, 'danger');
       await this.haptic.error();
     }
   }
 
-  private getStockTransferListByCompanyRef = async ()=> {
+  private getStockTransferListByCompanyRef = async () => {
     try {
       this.MasterList = [];
       this.DisplayMasterList = [];
@@ -168,15 +152,20 @@ export class StockTransferViewMobileAppComponent  implements OnInit {
     }
   }
 
-  private getStockTransferListByCompanyRefAndSiteRef = async () =>{
+  private getStockTransferListByCompanyRefAndSiteRef = async () => {
     try {
       this.MasterList = [];
       this.DisplayMasterList = [];
 
-      const lst = await StockTransfer.FetchEntireListByCompanyRefAndSiteRef(this.companyRef, this.Entity.p.FromSiteRef, this.Entity.p.ToSiteRef, async (errMsg) => {
-        await this.toastService.present(errMsg, 1000, 'danger');
-        await this.haptic.error();
-      });
+      const lst = await StockTransfer.FetchEntireListByCompanyRefAndSiteRef(
+        this.companyRef,
+        this.Entity.p.FromSiteRef,
+        this.Entity.p.ToSiteRef,
+        async (errMsg) => {
+          await this.toastService.present(errMsg, 1000, 'danger');
+          await this.haptic.error();
+        }
+      );
 
       this.MasterList = lst || [];
       this.DisplayMasterList = [...this.MasterList];
@@ -186,12 +175,12 @@ export class StockTransferViewMobileAppComponent  implements OnInit {
     }
   }
 
-  openModal=(StockTransfer: StockTransfer) =>{
+  openModal = (StockTransfer: StockTransfer) => {
     this.SelectedStockTransfer = StockTransfer;
     this.modalOpen = true;
   }
 
-  closeModal=()=> {
+  closeModal = () => {
     this.modalOpen = false;
     this.SelectedStockTransfer = StockTransfer.CreateNewInstance();
   }
@@ -202,7 +191,6 @@ export class StockTransferViewMobileAppComponent  implements OnInit {
       await this.haptic.warning();
       return;
     }
-
     this.router.navigate(['/mobile-app/tabs/dashboard/stock-management/stock-transfer/add']);
   };
 
@@ -224,8 +212,7 @@ export class StockTransferViewMobileAppComponent  implements OnInit {
             text: 'Cancel',
             role: 'cancel',
             cssClass: 'custom-cancel',
-            handler: () => {
-            },
+            handler: () => { },
           },
           {
             text: 'Yes, Delete',

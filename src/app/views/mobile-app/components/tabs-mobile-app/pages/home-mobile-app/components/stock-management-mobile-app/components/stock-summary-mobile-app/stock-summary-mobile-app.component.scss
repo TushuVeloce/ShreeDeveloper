@@ -1,0 +1,54 @@
+.table-container {
+    width: 100%;
+    max-height: 75vh;
+    overflow: auto;
+    position: relative;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: #fff;
+}
+
+.table-scroll {
+    overflow-x: auto;
+}
+
+.custom-table {
+    border-collapse: separate;
+    border-spacing: 0;
+    width: max-content;
+    min-width: 100%;
+    font-size: 14px;
+}
+
+.custom-table th,
+.custom-table td {
+    padding: 10px 12px;
+    border: 1px solid #e0e0e0;
+    white-space: nowrap;
+    background-color: #fff;
+}
+
+.sticky-header {
+    position: sticky;
+    top: 0;
+    background-color: var(--ion-background-color-step-100);
+    z-index: 10;
+}
+
+.sticky-col {
+    position: sticky;
+    left: 0;
+    background-color: var(--ion-background-color-step-100);
+    z-index: 9;
+}
+
+.custom-table thead .sticky-col {
+    z-index: 11;
+    /* top-left cell */
+}
+
+ion-button {
+    --padding-start: 6px;
+    --padding-end: 6px;
+    font-size: 12px;
+}

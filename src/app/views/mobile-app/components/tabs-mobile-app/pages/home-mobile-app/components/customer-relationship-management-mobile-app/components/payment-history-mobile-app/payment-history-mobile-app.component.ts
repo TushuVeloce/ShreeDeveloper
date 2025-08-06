@@ -1,5 +1,6 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Income } from 'src/app/classes/domain/entities/website/accounting/income/income';
+import { Plot } from 'src/app/classes/domain/entities/website/masters/plot/plot';
 import { Site } from 'src/app/classes/domain/entities/website/masters/site/site';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { DateconversionService } from 'src/app/services/dateconversion.service';
@@ -21,12 +22,13 @@ export class PaymentHistoryMobileAppComponent implements OnInit {
   DisplayMasterList: Income[] = [];
   list: [] = []
   SiteList: Site[] = [];
+  PlotList: Plot[] = [];
   SearchString: string = '';
   SelectedIncome: Income = Income.CreateNewInstance();
   CustomerRef: number = 0;
   companyRef: number = 0;
   Printheaders: string[] = ['Sr.No.', 'Date', 'Site Name', 'Payer Name', 'Amount', 'Mode of Payment', 'Reason'];
-  headers: string[] = ['Sr.No.', 'Date', 'Site Name', 'Payer Name', 'Amount', 'Mode of Payment', 'Reason','Actions'];
+  headers: string[] = ['Sr.No.', 'Date', 'Site Name', 'Payer Name', 'Plot No.','Amount', 'Mode of Payment', 'Reason','Actions'];
   modalOpen = false;
 
   filters: FilterItem[] = [];
@@ -43,16 +45,17 @@ export class PaymentHistoryMobileAppComponent implements OnInit {
   ) { }
 
   ngOnInit = async () => {
-    // await this.loadCustomerVisitReportIfEmployeeExists();
+    // await this.loadPaymentHistoryReportIfEmployeeExists();
   };
 
   ionViewWillEnter = async () => {
-    await this.loadCustomerVisitReportIfEmployeeExists();
+    await this.loadPaymentHistoryReportIfEmployeeExists();
     this.loadFilters();
   };
 
   handleRefresh = async (event: CustomEvent) => {
-    await this.loadCustomerVisitReportIfEmployeeExists();
+    await this.loadPaymentHistoryReportIfEmployeeExists();
+    this.loadFilters();
     (event.target as HTMLIonRefresherElement).complete();
   }
 
@@ -66,18 +69,22 @@ export class PaymentHistoryMobileAppComponent implements OnInit {
           Ref: item.p.Ref,
           Name: item.p.Name,
         })),
-        selected: this.selectedFilterValues['site'] > 0 ? this.selectedFilterValues['site'] : null,
+        selected: this.SiteList.find(item => item.p.Ref === this.selectedFilterValues['site'])
+          ? this.selectedFilterValues['site']
+          : null,
       },
-       {
+      {
         key: 'plot',
-        label: 'plot',
+        label: 'Plot No.',
         multi: false,
-        options: this.SiteList.map(item => ({
+        options: this.PlotList.map(item => ({
           Ref: item.p.Ref,
-          Name: item.p.Name,
+          Name: item.p.PlotNo,
         })),
-        selected: this.selectedFilterValues['site'] > 0 ? this.selectedFilterValues['site'] : null,
-      }
+        selected: this.PlotList.find(item => item.p.Ref === this.selectedFilterValues['plot'])
+          ? this.selectedFilterValues['plot']
+          : null,
+      },
     ];
   }
 
@@ -92,6 +99,13 @@ export class PaymentHistoryMobileAppComponent implements OnInit {
       switch (filter.key) {
         case 'site':
           this.Entity.p.SiteRef = selectedValue ?? 0;
+          // Reset plot when Site changes
+          this.PlotList = [];
+          this.selectedFilterValues['plot'] = null;
+          this.Entity.p.SubLedgerRef = 0;
+          if (selectedValue != null) {
+            await this.getPlotListBySiteRef(selectedValue);
+          }
           break;
         case 'plot':
           this.Entity.p.PlotRef = selectedValue ?? 0;
@@ -99,9 +113,9 @@ export class PaymentHistoryMobileAppComponent implements OnInit {
       }
     }
     if (this.Entity.p.SiteRef > 0) {
-      await this.getCustomerVisitListBySiteRef();
+      await this.getPaymentHistoryListBySiteRefAndPlotRef();
     }else {
-      await this.getCustomerVisitListByCompanyRef();
+      await this.getPaymentHistoryListByCompanyRef();
     }
     this.loadFilters(); // Reload filters with updated options & preserve selections
   }
@@ -116,10 +130,10 @@ export class PaymentHistoryMobileAppComponent implements OnInit {
       return;
     }
     if (!this.PrintContainer) return;
-    await this.pdfService.generatePdfAndHandleAction(this.PrintContainer.nativeElement, `Receipt_${this.Entity.p.Ref}.pdf`);
+    await this.pdfService.generatePdfAndHandleAction(this.PrintContainer.nativeElement, `Payment-History-Report.pdf`);
   }
 
-  private loadCustomerVisitReportIfEmployeeExists = async () => {
+  private loadPaymentHistoryReportIfEmployeeExists = async () => {
     try {
       await this.loadingService.show();
 
@@ -132,7 +146,7 @@ export class PaymentHistoryMobileAppComponent implements OnInit {
         return;
       }
       await this.getSiteListByCompanyRef();
-      await this.getCustomerVisitListByCompanyRef();
+      await this.getPaymentHistoryListByCompanyRef();
     } catch (error) {
       await this.toastService.present('Failed to load Payment History Report', 1000, 'danger');
       await this.haptic.error();
@@ -153,8 +167,17 @@ export class PaymentHistoryMobileAppComponent implements OnInit {
     });
     this.SiteList = lst;
   }
+  getPlotListBySiteRef = async (siteref: number) => {
+        this.Entity.p.PlotRef = 0
+        this.PlotList = [];
+        let lst = await Plot.FetchEntireListBySiteRef(siteref, async errMsg =>{
+          await this.toastService.present(errMsg, 1000, 'danger');
+          await this.haptic.error();
+          });
+        this.PlotList = lst;
+      }
 
-  getCustomerVisitListByCompanyRef = async () => {
+  getPaymentHistoryListByCompanyRef = async () => {
     this.MasterList = [];
     this.DisplayMasterList = [];
     if (this.companyRef <= 0) {
@@ -172,7 +195,7 @@ export class PaymentHistoryMobileAppComponent implements OnInit {
     this.DisplayMasterList = this.MasterList;
   };
 
-  getCustomerVisitListBySiteRef = async () => {
+  getPaymentHistoryListBySiteRefAndPlotRef = async () => {
     this.MasterList = [];
     this.DisplayMasterList = [];
     let lst = await Income.FetchEntireListBySiteRef(this.Entity.p.SiteRef,this.Entity.p.PlotRef, this.companyRef,

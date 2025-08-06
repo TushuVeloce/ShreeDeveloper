@@ -1,11 +1,9 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { Router } from '@angular/router';
 import { Site } from 'src/app/classes/domain/entities/website/masters/site/site';
 import { StockSummary } from 'src/app/classes/domain/entities/website/stock_management/stock-summary/stoctsummary';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { BottomsheetMobileAppService } from 'src/app/services/bottomsheet-mobile-app.service';
 import { DateconversionService } from 'src/app/services/dateconversion.service';
-import { AlertService } from 'src/app/views/mobile-app/components/core/alert.service';
 import { HapticService } from 'src/app/views/mobile-app/components/core/haptic.service';
 import { LoadingService } from 'src/app/views/mobile-app/components/core/loading.service';
 import { PDFService } from 'src/app/views/mobile-app/components/core/pdf.service';
@@ -27,9 +25,7 @@ export class StockSummaryMobileAppComponent implements OnInit {
   SelectedStockSummary: StockSummary = StockSummary.CreateNewInstance();
   CustomerRef: number = 0;
   SiteList: Site[] = [];
-  // headers: string[] = ['Sr.No.', 'Site Name', 'Material', 'Total Order Qty Per Material', 'Total Extra Order Qty', 'Total Order Qty', 'Total Inward Qty ', 'Inward Remaining Qty', 'Total Consumed Qty ', 'Total Transferred In Qty ', 'Current Stock '];
-  // headers: string[] = ['Sr.No.', 'Site Name', 'Material', 'Ordered Qty', 'Extra Ordered Qty', 'Total Ordered Qty', 'Total Inward Qty ', 'Total Requisition Qty', 'Total Consumed Qty ', 'Transferred Qty ', 'Current Stock ', 'Inward Remaining Qty', 'Ordered Remaining Qty'];
-  headers: string[] = ['Sr.No.', 'Site Name', 'Material', 'Ordered Qty', 'Extra Ordered Qty', 'Total Inward Qty ', 'Inward Remaining Qty', 'Total Requisition Qty', 'Total Consumed Qty ', 'Transferred Qty ', 'Current Stock ', 'Ordered Remaining Qty'];
+  headers: string[] = ['Sr.No.', 'Site Name', 'Material', 'Total Requisition Qty', 'Ordered Qty', 'Extra Ordered Qty', 'Total Inward Qty ', 'Inward Remaining Qty', 'Total Consumed Qty ', 'Transferred Out Qty ', 'Current Stock ', 'Ordered Remaining Qty'];
 
 
   ModalOpen: boolean = false;
@@ -47,11 +43,9 @@ export class StockSummaryMobileAppComponent implements OnInit {
   selectedFilterValues: Record<string, any> = {};
 
   constructor(
-    private router: Router,
     private appStateManagement: AppStateManageService,
     private toastService: ToastService,
     private haptic: HapticService,
-    private alertService: AlertService,
     public loadingService: LoadingService,
     private bottomsheetMobileAppService: BottomsheetMobileAppService,
     private DateconversionService: DateconversionService,
@@ -59,17 +53,16 @@ export class StockSummaryMobileAppComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    // Optional: you can call loadCustomerSummaryReportIfCompanyExists here if needed
   }
 
   ionViewWillEnter = async () => {
     await this.loadStockSummaryReportIfCompanyExists();
+    this.loadFilters();
   };
 
   async handleRefresh(event: CustomEvent): Promise<void> {
     await this.loadStockSummaryReportIfCompanyExists();
-    // await this.filterCustomerList();
-    await this.loadFilters();
+    this.loadFilters();
     (event.target as HTMLIonRefresherElement).complete();
   }
 
@@ -101,9 +94,6 @@ export class StockSummaryMobileAppComponent implements OnInit {
   }
 
   async onFiltersChanged(updatedFilters: any[]) {
-    // debugger
-    console.log('Updated Filters:', updatedFilters);
-
     for (const filter of updatedFilters) {
       const selected = filter.selected;
       const selectedValue = (selected === null || selected === undefined) ? null : selected;
@@ -113,11 +103,15 @@ export class StockSummaryMobileAppComponent implements OnInit {
 
       switch (filter.key) {
         case 'site':
-          // this.Entity.p.SiteRef = selectedValue ?? 0;
+          this.Entity.p.SiteRef = selectedValue ?? 0;
           break;
       }
     }
-    //   await this.getCustomerReportByCompanyRef();
+    if (this.Entity.p.SiteRef > 0) {
+      await this.getStockSummaryListByCompanyRefAndSiteRef();
+    } else {
+      await this.getStockSummaryListByCompanyRef();
+    }
     this.loadFilters(); // Reload filters with updated options & preserve selections
   }
 
@@ -125,8 +119,8 @@ export class StockSummaryMobileAppComponent implements OnInit {
     try {
       this.loadingService.show();
 
-      this.companyRef = Number(await this.appStateManagement.localStorage.getItem('SelectedCompanyRef'));
-      this.companyName = await this.appStateManagement.localStorage.getItem('companyName') || '';
+      this.companyRef = Number(this.appStateManagement.localStorage.getItem('SelectedCompanyRef'));
+      this.companyName = this.appStateManagement.localStorage.getItem('companyName') || '';
 
       if (this.companyRef <= 0) {
         await this.toastService.present('Company not selected', 1000, 'danger');
@@ -135,8 +129,11 @@ export class StockSummaryMobileAppComponent implements OnInit {
       }
 
       await this.FormulateSiteListByCompanyRef();
+      await this.getStockSummaryListByCompanyRef();
+      this.loadFilters();
     } catch (error) {
-      console.error('Error in loadCustomerSummaryReportIfCompanyExists:', error);
+      await this.toastService.present('Error loading stock summary report', 1000, 'danger');
+      await this.haptic.error();
     } finally {
       this.loadingService.hide();
     }
@@ -146,15 +143,21 @@ export class StockSummaryMobileAppComponent implements OnInit {
     try {
       this.SiteList = [];
 
-      if (this.companyRef <= 0) return;
+      if (this.companyRef <= 0) {
+        await this.toastService.present('Company not selected', 1000, 'warning');
+        await this.haptic.warning();
+        return;
+      }
 
       const lst = await Site.FetchEntireListByCompanyRef(this.companyRef, async errMsg => {
-        console.error('Error fetching site list:', errMsg);
+        await this.toastService.present(errMsg, 1000, 'warning');
+        await this.haptic.warning();
       });
 
       this.SiteList = lst;
     } catch (error) {
-      console.error('Error in FormulateSiteListByCompanyRef:', error);
+      await this.toastService.present('Error in FormulateSiteListByCompanyRef:' + error, 1000, 'warning');
+      await this.haptic.warning();
     }
   }
 
@@ -167,7 +170,6 @@ export class StockSummaryMobileAppComponent implements OnInit {
       return;
     }
     let lst = await StockSummary.FetchEntireListByCompanyRef(this.companyRef, async errMsg => {
-      // await this.uiUtils.showErrorMessage('Error', errMsg)
       await this.toastService.present(errMsg, 1000, 'danger');
       await this.haptic.error();
     });
@@ -175,23 +177,39 @@ export class StockSummaryMobileAppComponent implements OnInit {
     this.DisplayMasterList = this.MasterList;
   }
 
+  getStockSummaryListByCompanyRefAndSiteRef = async () => {
+    this.MasterList = [];
+    this.DisplayMasterList = [];
+    if (this.Entity.p.SiteRef <= 0) {
+      this.getStockSummaryListByCompanyRef();
+      return;
+    }
+    let lst = await StockSummary.FetchEntireListByCompanyRefAndSiteRef(this.companyRef, this.Entity.p.SiteRef,
+      async (errMsg) => {
+        await this.toastService.present(errMsg, 1000, 'danger');
+        await this.haptic.error();
+      }
+    );
+    this.MasterList = lst;
+    this.DisplayMasterList = this.MasterList;
+  };
+
   // Extracted from services date conversion //
   formatDate = (date: string | Date): string => {
     return this.DateconversionService.formatDate(date);
   }
 
-  public async selectSiteBottomsheet(): Promise<void> {
+  public selectSiteBottomsheet = async (): Promise<void> => {
     try {
-
       const options = this.SiteList;
-
       this.openSelectModal(options, this.selectedSite, false, 'Select Site', 1, (selected) => {
         this.selectedSite = selected;
         this.SiteName = selected[0].p.Name;
         this.Entity.p.Ref = selected[0].p.Ref;
       });
     } catch (error) {
-
+      await this.toastService.present('Error in selectSiteBottomsheet:' + error, 1000, 'danger');
+      await this.haptic.error();
     }
   }
 
@@ -207,12 +225,12 @@ export class StockSummaryMobileAppComponent implements OnInit {
     if (selected) updateCallback(selected);
   }
 
-  onViewClicked(item: StockSummary) {
+  onViewClicked = (item: StockSummary) => {
     this.SelectedStockSummary = item;
     this.ModalOpen = true;
   }
 
-  closeModal() {
+  closeModal = () => {
     this.ModalOpen = false;
   }
 }
