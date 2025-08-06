@@ -95,6 +95,12 @@ export class PaymentHistoryReportComponent  implements OnInit {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
+    if(this.Entity.p.SiteRef == null){
+      this.Entity.p.SiteRef = 0
+    }else if(this.Entity.p.PlotRef == null){
+      this.Entity.p.PlotRef = 0
+    }
+    console.log('this.Entity.p.SiteRef, this.Entity.p.PlotRef :', this.Entity.p.SiteRef, this.Entity.p.PlotRef);
     let lst = await Income.FetchEntireListBySiteRef(this.Entity.p.SiteRef, this.Entity.p.PlotRef,this.companyRef(),
       async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
     );
