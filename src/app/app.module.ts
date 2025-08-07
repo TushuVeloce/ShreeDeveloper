@@ -16,7 +16,11 @@ import { ImageInterceptor } from './ImageInterceptor';
 
 @NgModule({
   declarations: [AppComponent,],
-  imports: [CommonModule, IonicModule.forRoot(), AppRoutingModule, FormsModule, BrowserAnimationsModule,
+  imports: [CommonModule, IonicModule.forRoot({
+    scrollAssist: true,
+    scrollPadding: false
+  }),
+ AppRoutingModule, FormsModule, BrowserAnimationsModule,
     NzTableModule,HttpClientModule
    ],
   providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }, DatePipe,

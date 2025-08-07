@@ -1,5 +1,4 @@
 import type { CapacitorConfig } from '@capacitor/cli';
-import { KeyboardResize } from '@capacitor/keyboard';
 
 const config: CapacitorConfig = {
   appId: 'com.shreedeveloper.app',
@@ -10,7 +9,7 @@ const config: CapacitorConfig = {
       presentationOptions: ['badge', 'sound', 'alert']
     },
     Keyboard: {
-      resize: KeyboardResize.Body // Valid values: 'none', 'native', 'body', 'ionic'
+     resize: 'body' // options: 'body', 'ionic', 'native', 'none'
     }
   }
 };
