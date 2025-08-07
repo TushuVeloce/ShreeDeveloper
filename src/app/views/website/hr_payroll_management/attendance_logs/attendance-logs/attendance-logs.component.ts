@@ -246,9 +246,8 @@ export class AttendanceLogsComponent implements OnInit {
     const employeeref = this.Entity.p.EmployeeRef;
 
     let MonthlyAttendanceLog = await WebAttendaneLog.FetchEntireListByCompanyRefAndAttendanceLogTypeAndMonth(this.companyRef(), AttendanceLogType.MonthlyAttendanceLog,
-    month, employeeref, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+      month, employeeref, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.DisplayMasterList = MonthlyAttendanceLog
-    console.log('this.DisplayMasterList :', this.DisplayMasterList);
     this.getAttendanceCount(AttendanceLogType.MonthlyAttendanceLog)
   }
 
@@ -278,6 +277,10 @@ export class AttendanceLogsComponent implements OnInit {
   }
 
   onEditClicked = async (item: WebAttendaneLog) => {
+    if (item.p.IsEntryNonEditable) {
+      this.uiUtils.showWarningToster("This Record Can't be Editable");
+      return;
+    }
     this.SelectedAttendance = item.GetEditableVersion();
     WebAttendaneLog.SetCurrentInstance(this.SelectedAttendance);
     this.appStateManage.StorageKey.setItem('Editable', 'Edit');
@@ -289,7 +292,7 @@ export class AttendanceLogsComponent implements OnInit {
     //   return [...this.baseHeaders, 'On Leave', 'Leave Type', 'Status', 'Action'];
     // }
     // return this.baseHeaders;
-    return [...this.baseHeaders, 'On Leave', 'Leave Type', 'Status', 'Action'];
+    return [...this.baseHeaders, 'On Leave', 'Absent', 'Leave Type', 'Status', 'Action'];
   }
 
   // Extracted from services date conversion //
