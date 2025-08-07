@@ -354,10 +354,11 @@ export class ExpenseDetailsComponent implements OnInit {
     } else {
       this.Entity.p.RemainingAmount = 0;
     }
-    // if (this.Entity.p.RecipientType == this.SiteType) {
-    //   this.getCurrentBalanceByCompanyRef()
-    //   return
-    // }
+
+    if (this.PaymentType == this.TypeofEmployeePayments.Advance) {
+      this.Entity.p.InvoiceAmount = this.Entity.p.GivenAmount;
+    }
+
     if (this.Entity.p.GivenAmount <= this.Entity.p.ShreesBalance) {
       this.Entity.p.ShreesBalance = Number((this.ShreeBalance - this.Entity.p.GivenAmount).toFixed(2));
     } else {
