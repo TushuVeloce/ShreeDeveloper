@@ -60,7 +60,8 @@ export class ExpenseDetailsComponent implements OnInit {
   Sites = RecipientTypes.Sites;
   Date: string = '';
   PayerPlotNo: string = '';
-  IncomeBankList: any = [];
+  IncomeBankList: BankAccount[] = [];
+
 
   RequiredFieldMsg: string = ValidationMessages.RequiredFieldMsg
 
@@ -82,6 +83,7 @@ export class ExpenseDetailsComponent implements OnInit {
     await this.getSiteListByCompanyRef();
     await this.getLedgerListByCompanyRef();
     this.FormulateBankList();
+    this.getBankListByCompanyRef();
     if (this.appStateManage.StorageKey.getItem('Editable') == 'Edit') {
       this.IsNewEntity = false;
       this.DetailsFormTitle = this.IsNewEntity ? 'New Expense' : 'Edit Expense';
@@ -135,8 +137,22 @@ export class ExpenseDetailsComponent implements OnInit {
       return;
     }
     let lst = await OpeningBalance.FetchEntireListByCompanyRef(this.companyRef(), async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg));
-    this.BankList = lst.filter((item) => item.p.BankAccountRef > 0 && item.p.OpeningBalanceAmount > 0)
+    this.BankList = lst.filter((item) => item.p.BankAccountRef > 0 && item.p.OpeningBalanceAmount > 0);
+    this.getBankListByCompanyRef()
   };
+
+  getBankListByCompanyRef = async () => {
+    if (this.companyRef() <= 0) {
+      await this.uiUtils.showErrorToster('Company not Selected');
+      return;
+    }
+    let lst = await BankAccount.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+
+    this.IncomeBankList = lst.filter(bank =>
+      !this.BankList.some(item => item.p.BankAccountRef === bank.p.Ref)
+    );
+    console.log('this.IncomeBankList :', this.IncomeBankList);
+  }
 
   onPaymentTypeSelection = () => {
     this.Entity.p.RecipientRef = 0;

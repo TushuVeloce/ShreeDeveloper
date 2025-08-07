@@ -130,6 +130,7 @@ export class IncomeDetailsComponent implements OnInit {
   }
 
   getPayerListBySiteAndPayerType = async () => {
+    this.PayerList = [];
     if (this.companyRef() <= 0) {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
@@ -225,6 +226,7 @@ export class IncomeDetailsComponent implements OnInit {
   };
 
   getSubLedgerListByLedgerRef = async (ledgerref: number) => {
+    this.Entity.p.SubLedgerRef = 0;
     if (ledgerref <= 0) {
       await this.uiUtils.showErrorToster('Ledger not Selected');
       return;
@@ -235,6 +237,7 @@ export class IncomeDetailsComponent implements OnInit {
 
   onTypeChange = () => {
     this.Entity.p.PayerRef = 0;
+    this.Entity.p.PayerName = '';
     this.PayerPlotNo = '';
     this.PayerNameInput = false
   }

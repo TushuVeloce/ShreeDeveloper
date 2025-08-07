@@ -61,96 +61,6 @@
             <nz-option *ngFor="let type of RecipientTypesList" [nzValue]="type.Ref" [nzLabel]="type.Name"></nz-option>
           </nz-select>
         </div>
-        <div class="col-md-4" style="margin-top: 1rem;" *ngIf="this.Entity.p.RecipientType == Sites">
-          <label>Income Ledger</label>
-          <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
-            nzPlaceHolder="Select" id="IncomeLedgerRef" name="IncomeLedgerRef" [nzSize]="'large'"
-            [(ngModel)]="Entity.p.IncomeLedgerRef"
-            (ngModelChange)="getSubIncomeLedgerListByIncomeLedgerRef(Entity.p.IncomeLedgerRef); onChangeIncomeLedger(); Entity.p.IncomeSubLedgerRef = 0;">
-            <nz-option *ngFor="let ledger of LedgerList" [nzValue]="ledger.p.Ref" [nzLabel]="ledger.p.Name"></nz-option>
-          </nz-select>
-        </div>
-        <div class="col-md-4" style="margin-top: 1rem;" *ngIf="this.Entity.p.RecipientType == Sites  ">
-          <label>Income Sub Ledger</label>
-          <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
-            nzPlaceHolder="Select" id="IncomeSubLedgerRef" name="IncomeSubLedgerRef" [nzSize]="'large'"
-            [(ngModel)]="Entity.p.IncomeSubLedgerRef">
-            <nz-option *ngFor="let sub of IncomeSubLedgerList" [nzValue]="sub.p.Ref" [nzLabel]="sub.p.Name"></nz-option>
-          </nz-select>
-        </div>
-        <div class="col-md-4" style="margin-top: 1rem;" *ngIf="this.Entity.p.RecipientType == Employee ">
-          <label>Payment Type</label>
-          <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
-            nzPlaceHolder="Select" id="PaymentType" name="PaymentType" [nzSize]="'large'" [(ngModel)]="PaymentType"
-            (ngModelChange)="onPaymentTypeSelection(); getTotalInvoiceAmountFromSiteAndRecipientRef();
-            onRecipientChange();">
-            <nz-option *ngFor="let type of TypeofEmployeePaymentList" [nzValue]="type.Ref"
-              [nzLabel]="type.Name"></nz-option>
-          </nz-select>
-        </div>
-        <div class="col-md-4" style="margin-top: 1rem">
-          <label>To Whom</label>
-          <div class="d-flex align-items-center">
-            <nz-select *ngIf="!RecipientNameInput && Entity.p.RecipientType == DealDoneCustomer" class="nzSelect-light"
-              [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="RecipientRef"
-              name="RecipientRef" [nzSize]="'large'" [(ngModel)]="PayerPlotNo"
-              (ngModelChange)="onRecipientChange(); getTotalInvoiceAmountFromSiteAndRecipientRef();">
-              <nz-option *ngFor="let recipient of RecipientList" [nzValue]="recipient.p.PlotName"
-                [nzLabel]="recipient.p.RecipientName + ' - ' + recipient.p.PlotName | titleCase">
-                <span *ngIf="Entity.p.RecipientType"
-                  [ngClass]="recipient.p.IsRegisterCustomerRef == 1 ? 'sitecus' : 'nonsitecus'">
-                  {{ recipient.p.RecipientName + ' - ' + recipient.p.PlotName| titleCase }}
-                </span>
-                <span *ngIf="Entity.p.RecipientType != DealDoneCustomer"
-                  [ngClass]="recipient.p.IsRegisterCustomerRef == 1 ? 'sitecus' : 'nonsitecus'">
-                  {{ recipient.p.RecipientName| titleCase }}
-                </span>
-              </nz-option>
-            </nz-select>
-            <nz-select *ngIf="!RecipientNameInput && Entity.p.RecipientType != DealDoneCustomer" class="nzSelect-light"
-              [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="PayerRef"
-              name="PayerRef" [nzSize]="'large'" [(ngModel)]="Entity.p.RecipientRef"
-              (ngModelChange)="getTotalInvoiceAmountFromSiteAndRecipientRef(); onRecipientChange();">
-              <nz-option *ngFor="let recipient of RecipientList" [nzValue]="recipient.p.Ref"
-                [nzLabel]="recipient.p.RecipientName">
-                <!-- <span *ngIf="Entity.p.RecipientType == DealDoneCustomer"
-                    [ngClass]="recipient.p.IsRegisterCustomerRef == 1 ? 'sitecus' : 'nonsitecus'">
-                    {{ recipient.p.RecipientName + ' - ' + recipient.p.PlotName| titleCase }}
-                  </span> -->
-                <span *ngIf="Entity.p.RecipientType != DealDoneCustomer"
-                  [ngClass]="recipient.p.IsRegisterCustomerRef == 1 ? 'sitecus' : 'nonsitecus'">
-                  {{ recipient.p.RecipientName| titleCase }}
-                </span>
-              </nz-option>
-            </nz-select>
-
-            <input *ngIf="RecipientNameInput" type="text" [(ngModel)]="RecipientEntity.p.Name" name="Name"
-              class="form-control" id="Name" required placeholder="Enter Recipient Name" />
-            <span *ngIf="!RecipientNameInput && Entity.p.RecipientType == RecipientType" (click)="AddRecipientName()"
-              class="ms-2 mb-0.5 d-flex justify-content-center align-items-center border rounded"
-              style="width: 36px; height: 36px; cursor: pointer">
-              <i class="fa-solid fa-plus" style="color: blue;"></i>
-            </span>
-            <span *ngIf="RecipientNameInput" (click)="SaveNewRecipientName()"
-              class="ms-2 d-flex justify-content-center align-items-center border rounded text-success"
-              style="width: 36px; height: 36px; cursor: pointer">
-              <i class="fa-solid fa-check"></i>
-            </span>
-            <span *ngIf="RecipientNameInput" (click)="cancelRecipientName()"
-              class="ms-2 d-flex justify-content-center align-items-center border rounded text-danger"
-              style="width: 36px; height: 36px; cursor: pointer">
-              <i class="fa-solid fa-xmark"></i>
-            </span>
-          </div>
-        </div>
-        <div class="col-md-4" style="margin-top: 1rem;"
-          *ngIf="Entity.p.RecipientType == DealDoneCustomer && Entity.p.RecipientRef != 0">
-          <div>
-            <label>Plot Name</label>
-            <input type="text" [(ngModel)]="Entity.p.PlotName" name="PlotName" class="form-control" id="PlotName"
-              disabled placeholder="Enter PlotName" />
-          </div>
-        </div>
         <div class="col-md-4" style="margin-top: 1rem;">
           <div>
             <label>Reason</label>
@@ -236,6 +146,127 @@
             </nz-select>
           </div>
         </div>
+        <div class="col-md-4" style="margin-top: 1rem;" *ngIf="this.Entity.p.RecipientType == Sites">
+          <label>Income Ledger</label>
+          <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
+            nzPlaceHolder="Select" id="IncomeLedgerRef" name="IncomeLedgerRef" [nzSize]="'large'"
+            [(ngModel)]="Entity.p.IncomeLedgerRef"
+            (ngModelChange)="getSubIncomeLedgerListByIncomeLedgerRef(Entity.p.IncomeLedgerRef); onChangeIncomeLedger(); Entity.p.IncomeSubLedgerRef = 0;">
+            <nz-option *ngFor="let ledger of LedgerList" [nzValue]="ledger.p.Ref" [nzLabel]="ledger.p.Name"></nz-option>
+          </nz-select>
+        </div>
+        <div class="col-md-4" style="margin-top: 1rem;" *ngIf="this.Entity.p.RecipientType == Sites  ">
+          <label>Income Sub Ledger</label>
+          <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
+            nzPlaceHolder="Select" id="IncomeSubLedgerRef" name="IncomeSubLedgerRef" [nzSize]="'large'"
+            [(ngModel)]="Entity.p.IncomeSubLedgerRef">
+            <nz-option *ngFor="let sub of IncomeSubLedgerList" [nzValue]="sub.p.Ref" [nzLabel]="sub.p.Name"></nz-option>
+          </nz-select>
+        </div>
+        <div class="col-md-4" style="margin-top: 1rem;" *ngIf="this.Entity.p.RecipientType == Employee ">
+          <label>Payment Type</label>
+          <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
+            nzPlaceHolder="Select" id="PaymentType" name="PaymentType" [nzSize]="'large'" [(ngModel)]="PaymentType"
+            (ngModelChange)="onPaymentTypeSelection(); getTotalInvoiceAmountFromSiteAndRecipientRef();
+            onRecipientChange();">
+            <nz-option *ngFor="let type of TypeofEmployeePaymentList" [nzValue]="type.Ref"
+              [nzLabel]="type.Name"></nz-option>
+          </nz-select>
+        </div>
+        <div class="col-md-4" style="margin-top: 1rem">
+          <label>To Whom</label>
+          <div class="d-flex align-items-center">
+            <nz-select *ngIf="!RecipientNameInput && Entity.p.RecipientType == DealDoneCustomer" class="nzSelect-light"
+              [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="RecipientRef"
+              name="RecipientRef" [nzSize]="'large'" [(ngModel)]="PayerPlotNo"
+              (ngModelChange)="onRecipientChange(); getTotalInvoiceAmountFromSiteAndRecipientRef();">
+              <nz-option *ngFor="let recipient of RecipientList" [nzValue]="recipient.p.PlotName"
+                [nzLabel]="recipient.p.RecipientName + ' - ' + recipient.p.PlotName | titleCase">
+                <span *ngIf="Entity.p.RecipientType"
+                  [ngClass]="recipient.p.IsRegisterCustomerRef == 1 ? 'sitecus' : 'nonsitecus'">
+                  {{ recipient.p.RecipientName + ' - ' + recipient.p.PlotName| titleCase }}
+                </span>
+                <span *ngIf="Entity.p.RecipientType != DealDoneCustomer"
+                  [ngClass]="recipient.p.IsRegisterCustomerRef == 1 ? 'sitecus' : 'nonsitecus'">
+                  {{ recipient.p.RecipientName| titleCase }}
+                </span>
+              </nz-option>
+            </nz-select>
+            <nz-select *ngIf="!RecipientNameInput && Entity.p.RecipientType != DealDoneCustomer" class="nzSelect-light"
+              [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="PayerRef"
+              name="PayerRef" [nzSize]="'large'" [(ngModel)]="Entity.p.RecipientRef"
+              (ngModelChange)="getTotalInvoiceAmountFromSiteAndRecipientRef(); onRecipientChange();">
+              <nz-option *ngFor="let recipient of RecipientList" [nzValue]="recipient.p.Ref"
+                [nzLabel]="recipient.p.RecipientName">
+                <span *ngIf="Entity.p.RecipientType != DealDoneCustomer"
+                  [ngClass]="recipient.p.IsRegisterCustomerRef == 1 ? 'sitecus' : 'nonsitecus'">
+                  {{ recipient.p.RecipientName| titleCase }}
+                </span>
+              </nz-option>
+            </nz-select>
+
+            <input *ngIf="RecipientNameInput" type="text" [(ngModel)]="RecipientEntity.p.Name" name="Name"
+              class="form-control" id="Name" required placeholder="Enter Recipient Name" />
+            <span *ngIf="!RecipientNameInput && Entity.p.RecipientType == RecipientType" (click)="AddRecipientName()"
+              class="ms-2 mb-0.5 d-flex justify-content-center align-items-center border rounded"
+              style="width: 36px; height: 36px; cursor: pointer">
+              <i class="fa-solid fa-plus" style="color: blue;"></i>
+            </span>
+            <span *ngIf="RecipientNameInput" (click)="SaveNewRecipientName()"
+              class="ms-2 d-flex justify-content-center align-items-center border rounded text-success"
+              style="width: 36px; height: 36px; cursor: pointer">
+              <i class="fa-solid fa-check"></i>
+            </span>
+            <span *ngIf="RecipientNameInput" (click)="cancelRecipientName()"
+              class="ms-2 d-flex justify-content-center align-items-center border rounded text-danger"
+              style="width: 36px; height: 36px; cursor: pointer">
+              <i class="fa-solid fa-xmark"></i>
+            </span>
+          </div>
+        </div>
+        <div class="col-md-4" style="margin-top: 1rem;"
+          *ngIf="Entity.p.RecipientType == DealDoneCustomer && Entity.p.RecipientRef != 0">
+          <div>
+            <label>Plot Name</label>
+            <input type="text" [(ngModel)]="Entity.p.PlotName" name="PlotName" class="form-control" id="PlotName"
+              disabled placeholder="Enter PlotName" />
+          </div>
+        </div>
+        <div class="col-md-4" style="margin-top: 1rem;" *ngIf="this.Entity.p.RecipientType == Sites">
+          <label>Mode of Payment</label>
+          <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
+            nzPlaceHolder="Select" id="ExpenseModeOfPayment" name="ExpenseModeOfPayment" [nzSize]="'large'"
+            [(ngModel)]="Entity.p.ExpenseModeOfPayment" (ngModelChange)="OnModeChange()">
+            <nz-option *ngFor="let mode of ModeofPaymentList" [nzValue]="mode.Ref" [nzLabel]="mode.Name"></nz-option>
+          </nz-select>
+        </div>
+        <div *ngIf="this.Entity.p.RecipientType == Sites"
+          class="col-md-4 d-flex align-items-center justify-content-center" style="margin-top: 1rem">
+          <div>
+            <label for="IsNewBankCreated"><b>New Bank Created</b></label>
+            <input type="checkbox" id="IsNewBankCreated" [(ngModel)]="Entity.p.IsNewBankCreated" name="IsNewBankCreated"
+              class="form-check-input me-4 large-dark-checkbox" style="width: 20px; height: 20px; margin-left: 1rem" />
+          </div>
+        </div>
+        <div class="col-md-4" style="margin-top: 1rem;">
+          <div *ngIf="Entity.p.IsNewBankCreated">
+            <label>Bank Name</label>
+            <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
+              nzPlaceHolder="Select" id="IncomeBankRef" name="IncomeBankRef" [nzSize]="'large'"
+              [(ngModel)]="Entity.p.IncomeBankRef">
+              <nz-option *ngFor="let bank of IncomeBankList" [nzValue]="bank.p.Ref" [nzLabel]="bank.p.Name"></nz-option>
+            </nz-select>
+          </div>
+          <div *ngIf="!Entity.p.IsNewBankCreated">
+            <label>Bank Name</label>
+            <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
+              nzPlaceHolder="Select" id="IncomeBankRef" name="IncomeBankRef" [nzSize]="'large'"
+              [(ngModel)]="Entity.p.IncomeBankRef">
+              <nz-option *ngFor="let bank of BankList" [nzValue]="bank.p.BankAccountRef"
+                [nzLabel]="bank.p.BankName"></nz-option>
+            </nz-select>
+          </div>
+        </div>
         <div class="col-md-4" style="margin-top: 1rem;">
           <div>
             <label>Narration</label>
@@ -249,25 +280,6 @@
             <input type="checkbox" id="IsAutoInvoiceEnabled" [(ngModel)]="Entity.p.IsAutoInvoiceEnabled"
               name="IsAutoInvoiceEnabled" class="form-check-input me-4 mb-2 large-dark-checkbox"
               style="width: 20px; height: 20px; margin-left: 1rem" />
-          </div>
-        </div>
-        <div class="" style="margin-top: 1rem">
-          <div class="d-flex align-items-center mb-2">
-            <label for="IsNewBankCreated"><b>New Bank Created</b></label>
-            <input type="checkbox" id="IsNewBankCreated" [(ngModel)]="Entity.p.IsNewBankCreated" name="IsNewBankCreated"
-              class="form-check-input me-4 mb-2 large-dark-checkbox"
-              style="width: 20px; height: 20px; margin-left: 1rem" />
-          </div>
-        </div>
-        <div class="col-md-4" *ngIf="Entity.p.IsNewBankCreated" style="margin-top: 1rem;">
-          <div>
-            <label>Bank Name</label>
-            <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
-              nzPlaceHolder="Select" id="IncomeBankRef" name="IncomeBankRef" [nzSize]="'large'"
-              [(ngModel)]="Entity.p.IncomeBankRef">
-              <nz-option *ngFor="let bank of IncomeBankList" [nzValue]="bank.p.BankAccountRef"
-                [nzLabel]="bank.p.BankName"></nz-option>
-            </nz-select>
           </div>
         </div>
       </div>

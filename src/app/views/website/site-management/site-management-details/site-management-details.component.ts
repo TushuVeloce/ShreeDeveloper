@@ -259,10 +259,6 @@ export class SiteManagementDetailsComponent implements OnInit {
 
 
   async addOwner() {
-    // if (!this.newOwner.Name || !this.newOwner.ContactNo || !this.newOwner.CountryRef || !this.newOwner.StateRef || !this.newOwner.CityRef || !this.newOwner.Address) {
-    //   await this.uiUtils.showErrorMessage('Error', 'Name, Contact No, Country, State, City, Adderss are Required!');
-    //   return;
-    // }
 
     if (!this.newOwner.Name) {
       return this.uiUtils.showWarningToster('Owner Name cannot be blank.');
@@ -273,10 +269,6 @@ export class SiteManagementDetailsComponent implements OnInit {
       return this.uiUtils.showWarningToster(ValidationMessages.INDPhoneNoMsg);
     }
 
-    // if (!new RegExp(ValidationPatterns.Email).test(this.newOwner.EmailId)) {
-    //   return this.uiUtils.showWarningToster(ValidationMessages.EmailMsg);
-    // }
-
     if (!this.newOwner.CountryRef) {
       return this.uiUtils.showWarningToster('Country cannot be blank.');
     }
@@ -286,9 +278,6 @@ export class SiteManagementDetailsComponent implements OnInit {
     if (!this.newOwner.CityRef) {
       return this.uiUtils.showWarningToster('City cannot be blank.');
     }
-    // if (!this.newOwner.Address) {
-    //   return this.uiUtils.showWarningToster('Address cannot be blank.');
-    // }
 
     if (this.editingIndex !== null && this.editingIndex !== undefined && this.editingIndex >= 0) {
       this.Entity.p.SiteManagementOwnerDetails[this.editingIndex] = { ...this.newOwner };
@@ -318,7 +307,6 @@ export class SiteManagementDetailsComponent implements OnInit {
   }
 
   async removeowner(index: number) {
-    // this.Entity.p.SiteManagementOwnerDetails.splice(index, 1); // Remove owner
     await this.uiUtils.showConfirmationMessage(
       'Delete',
       `This process is <strong>IRREVERSIBLE!</strong> <br/>
@@ -405,11 +393,10 @@ restrictToTwoDecimalsForSqm(event: any): void {
         this.localEstimatedStartingDate = '';
         this.localEstimatedEndDate = '';
         this.resetAllControls()
-        await this.router.navigate(['/homepage/Website/Site_Management']);
       } else {
         await this.uiUtils.showSuccessToster('Site Updated successfully');
-        await this.router.navigate(['/homepage/Website/Site_Management']);
       }
+      await this.router.navigate(['/homepage/Website/Site_Management']);
     }
   };
 
