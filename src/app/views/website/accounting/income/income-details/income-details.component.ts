@@ -1,11 +1,9 @@
-import { Component, effect, OnInit, ViewChild } from '@angular/core';
-import { NgModel } from '@angular/forms';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { ValidationMessages } from 'src/app/classes/domain/constants';
 import { DomainEnums, ModeOfPayments, PayerTypes, RecipientTypes, } from 'src/app/classes/domain/domainenums/domainenums';
 import { Expense } from 'src/app/classes/domain/entities/website/accounting/expense/expense';
 import { Income } from 'src/app/classes/domain/entities/website/accounting/income/income';
-import { BankAccount } from 'src/app/classes/domain/entities/website/masters/bankaccount/banckaccount';
 import { Ledger } from 'src/app/classes/domain/entities/website/masters/ledgermaster/ledger';
 import { OpeningBalance } from 'src/app/classes/domain/entities/website/masters/openingbalance/openingbalance';
 import { Payer } from 'src/app/classes/domain/entities/website/masters/payer/payer';

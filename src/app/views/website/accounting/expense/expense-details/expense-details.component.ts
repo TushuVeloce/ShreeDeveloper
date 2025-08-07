@@ -60,7 +60,7 @@ export class ExpenseDetailsComponent implements OnInit {
   Sites = RecipientTypes.Sites;
   Date: string = '';
   PayerPlotNo: string = '';
-  IncomeBankList:any=[];
+  IncomeBankList: any = [];
 
   RequiredFieldMsg: string = ValidationMessages.RequiredFieldMsg
 
