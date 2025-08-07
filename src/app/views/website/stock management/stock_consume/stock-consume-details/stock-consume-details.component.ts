@@ -40,10 +40,8 @@ export class StockConsumeDetailsComponent implements OnInit {
 
   strCDT: string = ''
 
-  NameWithNosAndSpace: string = ValidationPatterns.NameWithNosAndSpace;
 
   RequiredFieldMsg: string = ValidationMessages.RequiredFieldMsg;
-  NameWithNosAndSpaceMsg: string = ValidationMessages.NameWithNosAndSpaceMsg;
 
   @ViewChild('consumptionForm') consumptionForm!: NgForm;
   @ViewChild('ConsumptionDateCtrl') ConsumptionDateInputControl!: NgModel;

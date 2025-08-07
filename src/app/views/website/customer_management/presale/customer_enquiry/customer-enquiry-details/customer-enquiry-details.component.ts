@@ -60,11 +60,9 @@ export class CustomerEnquiryDetailsComponent implements OnInit {
   Date: string | null = null;
   DateWithTime: string | null = null;
 
-  NameWithNosAndSpace: string = ValidationPatterns.NameWithNosAndSpace;
   PinCode: string = ValidationPatterns.PinCode;
   INDPhoneNo: string = ValidationPatterns.INDPhoneNo;
 
-  NameWithoutNosMsg: string = ValidationMessages.NameWithNosAndSpaceAnd_Msg;
   RequiredFieldMsg: string = ValidationMessages.RequiredFieldMsg;
   INDPhoneNoMsg: string = ValidationMessages.INDPhoneNoMsg;
   PinCodeWithoutMsg: string = ValidationMessages.PinCodeMsg;

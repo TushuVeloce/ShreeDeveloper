@@ -85,9 +85,6 @@ export class MaterialStockOrder implements IPersistable<MaterialStockOrder> {
     if (this.p.MaterialName == '') {
       vra.add('Name', 'Name cannot be blank.');
     }
-    // else if (!new RegExp(ValidationPatterns.NameWithNosAndSpace).test(this.p.Name)) {
-    //   vra.add('Name', ValidationMessages.NameWithNosAndSpaceMsg + ' for Name');
-    // }
   }
 
   public MergeIntoTransportData(td: TransportData) {

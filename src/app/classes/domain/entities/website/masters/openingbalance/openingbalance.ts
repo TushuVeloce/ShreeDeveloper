@@ -27,6 +27,7 @@ export class OpeningBalanceProps {
   public Ref: number = 0;
   public ModeOfPayment: number = 0;
   public OpeningBalanceAmount: number = 0;
+  public InitialBalance: number = 0;
   public BankAccountRef: number = 0;
   public BankName: string = '';
   public FinancialYearRef: number = 0;

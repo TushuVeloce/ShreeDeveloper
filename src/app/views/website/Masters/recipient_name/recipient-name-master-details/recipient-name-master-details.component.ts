@@ -26,9 +26,7 @@ export class RecipientMasterDetailsComponent implements OnInit {
 
   companyRef = this.companystatemanagement.SelectedCompanyRef;
 
-  NameWithNosAndSpace: string = ValidationPatterns.NameWithNosAndSpace
 
-  NameWithNosAndSpaceMsg: string = ValidationMessages.NameWithNosAndSpaceMsg
   RequiredFieldMsg: string = ValidationMessages.RequiredFieldMsg
 
   @ViewChild('NameCtrl') NameInputControl!: NgModel;

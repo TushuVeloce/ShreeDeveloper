@@ -71,8 +71,6 @@ export class ExpenseType implements IPersistable<ExpenseType> {
     if (!this.AllowEdit) vra.add('', 'This object is not editable and hence cannot be saved.');
     if (this.p.Name == '') {
       vra.add('Name', 'Name cannot be blank.');
-    }  else if (!new RegExp(ValidationPatterns.NameWithNosAndSpace).test(this.p.Name)) {
-      vra.add('Name', ValidationMessages.NameWithNosAndSpaceMsg + ' for Name');
     }
   }
 

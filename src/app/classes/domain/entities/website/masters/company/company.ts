@@ -96,9 +96,8 @@ export class Company implements IPersistable<Company> {
     }
     if (this.p.OwnerName == '') {
       vra.add('OwnerName', 'Owner Name cannot be blank.');
-    } else if (!new RegExp(ValidationPatterns.NameWithNosAndSpace).test(this.p.OwnerName)) {
-      vra.add('OwnerName', ValidationMessages.NameWithNosAndSpaceMsg + ' for Owner Name');
     }
+    
     if (this.p.EmailId == '') {
       vra.add('EmailId', 'Email Id cannot be blank.');
     } else if (!new RegExp(ValidationPatterns.Email).test(this.p.EmailId)) {

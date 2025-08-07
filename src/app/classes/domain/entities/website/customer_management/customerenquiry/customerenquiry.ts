@@ -95,9 +95,7 @@ export class CustomerEnquiry implements IPersistable<CustomerEnquiry> {
     if (!this.AllowEdit)
       vra.add('', 'This object is not editable and hence cannot be saved.');
     if (this.p.Name == '') vra.add('Name', 'Name cannot be blank.');
-    else if (!new RegExp(ValidationPatterns.NameWithNosAndSpace).test(this.p.Name)) {
-      vra.add('Name', ValidationMessages.NameWithNosAndSpaceMsg);
-    }
+
      if (this.p.ContactNos == '') {
       vra.add('Contact No', 'Contact No cannot be blank.');
     } else if (!new RegExp(ValidationPatterns.INDPhoneNo).test(this.p.ContactNos)) {

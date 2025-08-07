@@ -474,7 +474,7 @@
         <div class="col-lg-4 col-md-6 col-sm-12 mb-3" style="margin-top: 1rem">
           <label><b>Sign</b></label>
           <input type="text" [(ngModel)]="Entity.p.CreatedByName" name="CreatedByName" class="form-control"
-            id="CreatedByName" placeholder="Enter Sign" disabled [pattern]="NameWithNosAndSpace"
+            id="CreatedByName" placeholder="Enter Sign" disabled
             #CreatedByNameCtrl="ngModel" (blur)="CreatedByNameCtrl.control.markAsTouched()" />
         </div>
       </div>

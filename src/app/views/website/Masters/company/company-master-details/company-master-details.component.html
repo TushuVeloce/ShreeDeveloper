@@ -23,11 +23,9 @@
         <div class="col-md-4 col-6">
           <label for="Name">Company Name</label>
           <input type="text" [(ngModel)]="Entity.p.Name" name="Name" class="form-control" id="Name"
-            placeholder="Enter Company Name" [pattern]="NameWithNosAndSpace" #NameCtrl="ngModel"
+            placeholder="Enter Company Name" #NameCtrl="ngModel"
             (blur)="NameCtrl.control.markAsTouched()" />
-          <div *ngIf="(NameCtrl.invalid && (NameCtrl.touched || NameCtrl.dirty))">
-            <span class="validation-text" *ngIf="NameCtrl.errors?.['pattern']">{{NameWithNosAndSpaceMsg}}</span>
-          </div>
+  
         </div>
         <div class="col-md-4 col-6">
           <label for="Contacts">Contact No</label>
@@ -59,11 +57,9 @@
         <div class="col-md-4 col-6">
           <label for="OwnerName">Owner Name</label>
           <input type="text" [(ngModel)]="Entity.p.OwnerName" name="OwnerName" class="form-control" id="OwnerName"
-            placeholder="Enter Owner Name" [pattern]="NameWithNosAndSpace" #OwnerNameCtrl="ngModel"
+            placeholder="Enter Owner Name" #OwnerNameCtrl="ngModel"
             (blur)="OwnerNameCtrl.control.markAsTouched()" />
-          <div *ngIf="(OwnerNameCtrl.invalid && (OwnerNameCtrl.touched || OwnerNameCtrl.dirty))">
-            <span class="validation-text" *ngIf="OwnerNameCtrl.errors?.['pattern']">{{NameWithNosAndSpaceMsg}}</span>
-          </div>
+
         </div>
         <div class="col-md-4 col-6">
           <label>Pin Code</label>

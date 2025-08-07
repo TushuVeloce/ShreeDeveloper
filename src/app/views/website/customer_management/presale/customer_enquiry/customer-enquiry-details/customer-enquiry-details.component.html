@@ -29,10 +29,9 @@
           <div>
             <label>Customer Name</label>
             <input type="text" name="Name" class="form-control" id="Name" [(ngModel)]="Entity.p.Name" required
-              placeholder="Enter Customer Name" (focus)="selectAll($event)" pattern="{{NameWithNosAndSpace}}"
+              placeholder="Enter Customer Name" (focus)="selectAll($event)"
               #NameCtrl="ngModel" required (blur)="NameCtrl.control.markAsTouched()" />
             <div *ngIf="(NameCtrl.invalid && (NameCtrl.touched || NameCtrl.dirty))">
-              <span class="validation-text" *ngIf="NameCtrl.errors?.['pattern']">{{NameWithoutNosMsg}}</span>
               <span class="validation-text" *ngIf="NameCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
             </div>
           </div>

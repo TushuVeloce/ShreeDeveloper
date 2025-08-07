@@ -71,10 +71,8 @@ export class SiteManagementActualStagesDetailsComponent implements OnInit {
   TimeUnitRef: number = UnitRefs.TimeUnitRef
   isDiselPaid: boolean = false
 
-  NameWithNosAndSpace: string = ValidationPatterns.NameWithNosAndSpace
 
   RequiredFieldMsg: string = ValidationMessages.RequiredFieldMsg
-  NameWithNosAndSpaceMsg: string = ValidationMessages.NameWithNosAndSpaceMsg
 
 
   @ViewChild('NameCtrl') NameInputControl!: NgModel;

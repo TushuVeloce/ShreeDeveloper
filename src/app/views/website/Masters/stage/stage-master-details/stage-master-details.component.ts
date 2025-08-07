@@ -24,10 +24,8 @@ export class StageMasterDetailsComponent implements OnInit {
   InitialEntity: Stage = null as any;
   StageTypeList = DomainEnums.StageTypeList(true, '-- Select Stage Type --');
 
-  NameWithNosAndSpace: string = ValidationPatterns.NameWithNosAndSpace
 
   RequiredFieldMsg: string = ValidationMessages.RequiredFieldMsg
-  NameWithNosAndSpaceMsg: string = ValidationMessages.NameWithNosAndSpaceMsg
 
   @ViewChild('stageForm') stageForm!: NgForm;
   @ViewChild('NameCtrl') NameInputControl!: NgModel;

@@ -34,10 +34,8 @@ export class StockTransferDetailsComponent implements OnInit {
   companyRef = this.companystatemanagement.SelectedCompanyRef;
   strCDT: string = ''
 
-  NameWithNosAndSpace: string = ValidationPatterns.NameWithNosAndSpace
 
   RequiredFieldMsg: string = ValidationMessages.RequiredFieldMsg
-  NameWithNosAndSpaceMsg: string = ValidationMessages.NameWithNosAndSpaceMsg
 
   @ViewChild('transferForm') transferForm!: NgForm;
   @ViewChild('DateCtrl') DateInputControl!: NgModel;

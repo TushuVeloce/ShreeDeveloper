@@ -30,10 +30,8 @@ export class EstimateStagesDetailsComponent implements OnInit {
   SubStageList: SubStage[] = [];
   companyRef = this.companystatemanagement.SelectedCompanyRef;
 
-  NameWithNosAndSpace: string = ValidationPatterns.NameWithNosAndSpace
 
   RequiredFieldMsg: string = ValidationMessages.RequiredFieldMsg
-  NameWithNosAndSpaceMsg: string = ValidationMessages.NameWithNosAndSpaceMsg
 
   @ViewChild('estimateForm') estimateForm!: NgForm;
   @ViewChild('NameCtrl') NameInputControl!: NgModel;

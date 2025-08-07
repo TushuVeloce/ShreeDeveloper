@@ -38,8 +38,6 @@ export class MarketingManagementMasterDetailsComponent implements OnInit {
   MarketingModesList = DomainEnums.MarketingModesList(true, '-- Select Modes Type --');
   MarketingType = MarketingModes
   companyRef = this.companystatemanagement.SelectedCompanyRef;
-  NameWithNosAndSpace: string = ValidationPatterns.NameWithNosAndSpace
-  NameWithNosAndSpaceMsg: string = ValidationMessages.NameWithNosAndSpaceMsg
   RequiredFieldMsg: string = ValidationMessages.RequiredFieldMsg
   serviceNamesString: string = '';
   strCDT: string = ''

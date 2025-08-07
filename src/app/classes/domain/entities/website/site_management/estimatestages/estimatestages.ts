@@ -80,11 +80,6 @@ export class EstimateStages implements IPersistable<EstimateStages> {
     if (this.p.CompanyRef == 0) vra.add('CompanyRef', 'Company Name cannot be blank.');
     if (this.p.SiteRef == 0) vra.add('SiteRef', 'Site Name cannot be blank.');
     if (this.p.StageRef == 0) vra.add('StageRef', 'Stage Name cannot be blank.');
-    // if (this.p.Description == '') {
-    //   vra.add('Description', 'Description cannot be blank.');
-    // } else if (!new RegExp(ValidationPatterns.NameWithNosAndSpace).test(this.p.Description)) {
-    //   vra.add('Description', ValidationMessages.NameWithNosAndSpaceMsg + ' for Description');
-    // }
     if (this.p.Amount == 0) {
       vra.add('Amount', 'Amount cannot be blank.');
     } else if (this.p.Amount < 0) {

@@ -27,9 +27,7 @@ export class SubStageMasterDetailsComponent implements OnInit {
   StageList: Stage[] = [];
   companyRef = this.companystatemanagement.SelectedCompanyRef;
   StageTypeList = DomainEnums.StageTypeList(true, 'select stage');
-  NameWithNosAndSpace: string = ValidationPatterns.NameWithNosAndSpace
 
-  NameWithNosAndSpaceMsg: string = ValidationMessages.NameWithNosAndSpaceMsg
   RequiredFieldMsg: string = ValidationMessages.RequiredFieldMsg
 
   @ViewChild('NameCtrl') NameInputControl!: NgModel;

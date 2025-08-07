@@ -22,9 +22,7 @@ export class VendorServicesMasterDetailsComponent implements OnInit {
   IsDropdownDisabled: boolean = false
   InitialEntity: VendorService = null as any;
 
-  NameWithNosAndSpace: string = ValidationPatterns.NameWithNosAndSpace
 
-  NameWithNosAndSpaceMsg: string = ValidationMessages.NameWithNosAndSpaceMsg
   RequiredFieldMsg: string = ValidationMessages.RequiredFieldMsg
 
 

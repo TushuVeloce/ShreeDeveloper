@@ -40,7 +40,6 @@ export class VendorMasterDetailsComponent implements OnInit {
 
   companyRef = this.companystatemanagement.SelectedCompanyRef;
 
-  NameWithNosAndSpace: string = ValidationPatterns.NameWithNosAndSpace
   PinCodePattern: string = ValidationPatterns.PinCode;
   IFSCPattern: string = ValidationPatterns.IFSC;
   PANPattern: string = ValidationPatterns.PAN;
@@ -50,7 +49,6 @@ export class VendorMasterDetailsComponent implements OnInit {
   INDPhoneNo: string = ValidationPatterns.INDPhoneNo;
 
 
-  NameWithNosAndSpaceMsg: string = ValidationMessages.NameWithNosAndSpaceMsg
   LargeInputNumberMsg: string = ValidationMessages.LargeInputNumberMsg;
   PinCodeMsg: string = ValidationMessages.PinCodeMsg;
   IFSCMsg: string = ValidationMessages.IFSCMsg;

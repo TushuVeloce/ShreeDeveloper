@@ -30,8 +30,9 @@
           <td Class="tbldata">{{OpeningBalance.p.ModeOfPayment == Cash ? 'Cash' : 'Bank'}}</td>
           <td Class="tbldata">{{OpeningBalance.p.BankName? OpeningBalance.p.BankName : '--'}}</td>
           <td Class="tbldata">{{OpeningBalance.p.OpeningBalanceAmount | currency : "INR" }}</td>
+          <td Class="tbldata">{{OpeningBalance.p.InitialBalance | currency : "INR" }}</td>
           <td class="tbldata">
-            <Edit-Icon (editClick)="onEditClicked(OpeningBalance)" />
+            <!-- <Edit-Icon (editClick)="onEditClicked(OpeningBalance)" /> -->
           </td>
         </tr>
         <tr *ngIf="paginatedList().length > 0">

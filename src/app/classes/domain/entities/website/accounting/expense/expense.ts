@@ -37,6 +37,8 @@ export class ExpenseProps {
   public RecipientName: string = ''
   public IsSiteRef: number = 0
   public Reason: string = ''
+  public IsNewBankCreated: boolean = false;
+  public IncomeBankRef: number = 0
   public InvoiceAmount: number = 0
   public Narration: string = ''
   public TransDateTime: string = ''

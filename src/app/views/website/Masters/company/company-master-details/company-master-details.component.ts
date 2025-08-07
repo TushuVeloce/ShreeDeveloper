@@ -44,7 +44,6 @@ export class CompanyMasterDetailsComponent implements OnInit {
   imagePreviewUrl: string | null = null;
   selectedFileName: string | null = null;
 
-  NameWithNosAndSpace: string = ValidationPatterns.NameWithNosAndSpace
   Email: string = ValidationPatterns.Email
   PinCode: string = ValidationPatterns.PinCode;
   GSTIN: string = ValidationPatterns.GSTIN;
@@ -52,7 +51,6 @@ export class CompanyMasterDetailsComponent implements OnInit {
   CIN: string = ValidationPatterns.CIN;
   INDPhoneNo: string = ValidationPatterns.INDPhoneNo;
 
-  NameWithNosAndSpaceMsg: string = ValidationMessages.NameWithNosAndSpaceMsg
   PinCodeMsg: string = ValidationMessages.PinCodeMsg;
   PANMsg: string = ValidationMessages.PANMsg;
   EmailMsg: string = ValidationMessages.EmailMsg

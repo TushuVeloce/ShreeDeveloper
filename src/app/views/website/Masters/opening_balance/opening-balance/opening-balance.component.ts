@@ -29,7 +29,7 @@ Entity: OpeningBalance = OpeningBalance.CreateNewInstance();
 
   companyRef = this.companystatemanagement.SelectedCompanyRef;
 
-  headers: string[] = ['Sr.No.', 'Mode of Payment', 'Bank Name','Opening Bal. Amount', 'Action'];
+  headers: string[] = ['Sr.No.', 'Mode of Payment', 'Bank Name','Opening Bal. Amount', 'Initial Balance'];
   constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private screenSizeService: ScreenSizeService,
     private companystatemanagement: CompanyStateManagement
   ) {
