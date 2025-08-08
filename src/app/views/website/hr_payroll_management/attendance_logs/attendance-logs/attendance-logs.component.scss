@@ -36,8 +36,8 @@
 }
 
 .btnglow {
-  background-color: maroon !important;
-  color: white !important;
+  background-color: White !important;
+  color: maroon !important;
   padding: 0.4rem 1.1rem !important;
   border: none !important;
   border-radius: 6px !important;
@@ -132,12 +132,12 @@
     background-color: rgb(252, 252, 213);
   }
 
-  &.rejected {
+  &.absent {
     border-color: red;
     background-color: #ffe6e6;
   }
 
-  &.completed {
+  &.leave {
     border-color: #007bff;
     background-color: #e6f0ff;
   }
@@ -151,4 +151,27 @@
     border-color: #800080;
     background-color: #f3e6f9;
   }
+}
+
+
+.day {
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-weight: 500;
+  font-size: 14px;
+  width: 100px;
+  border: 1px solid;
+  display: inline-block;
+  color: black;
+
+  &.full {
+    border-color: #007bff;
+    background-color: #e6f0ff;
+  }
+
+  &.half {
+    border-color: #ff9900;
+    background-color: #fff5e6;
+  }
+
 }

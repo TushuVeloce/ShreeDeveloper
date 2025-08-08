@@ -52,7 +52,7 @@
               <td class="tbldata">{{ detail.RequisitionQty }}</td>
               <!-- Optional: Requisition status -->
               <td class="tbldata">
-                <span class="status" style="cursor: pointer;"
+                <span class="status"
                   *ngIf="detail.MaterialStatus == MaterialRequisitionStatuses.Pending" ngClass="pending">
                   Pending
                 </span>

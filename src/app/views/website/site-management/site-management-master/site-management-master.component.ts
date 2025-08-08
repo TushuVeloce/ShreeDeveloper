@@ -6,6 +6,7 @@ import { CompanyStateManagement } from 'src/app/services/companystatemanagement'
 import { DateconversionService } from 'src/app/services/dateconversion.service';
 import { ScreenSizeService } from 'src/app/services/screensize.service';
 import { UIUtils } from 'src/app/services/uiutils.service';
+import { Utils } from 'src/app/services/utils.service';
 
 @Component({
   selector: 'app-site-management-master',
@@ -23,11 +24,18 @@ export class SiteManagementMasterComponent implements OnInit {
   CustomerRef: number = 0;
   pageSize = 10;
   currentPage = 1;
+  isApprovalDisabled: boolean = false;
   total = 0;
   companyRef = this.companystatemanagement.SelectedCompanyRef;
-  headers: string[] = ['Sr.No.', 'Site Name', 'No of Plots','Area in Sq/m', 'Area in Sq/ft','Starting Date', 'Estimated End Date', 'Site Location', 'Action'];
-  constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private screenSizeService: ScreenSizeService,
-    private companystatemanagement: CompanyStateManagement, private DateconversionService: DateconversionService,
+  headers: string[] = ['Sr.No.', 'Site Name', 'No of Plots', 'Area in Sq/m', 'Area in Sq/ft', 'Starting Date', 'Estimated End Date', 'Site Location', 'Status', 'Action'];
+  constructor(
+    private uiUtils: UIUtils,
+    private utils: Utils,
+    private router: Router,
+    private appStateManage: AppStateManageService,
+    private screenSizeService: ScreenSizeService,
+    private companystatemanagement: CompanyStateManagement,
+    private DateconversionService: DateconversionService,
   ) {
     effect(async () => {
       // this.getMaterialListByCompanyRef()
@@ -44,13 +52,13 @@ export class SiteManagementMasterComponent implements OnInit {
     return this.DateconversionService.formatDate(date);
   }
 
- formatToFixed(value: number): string {
-  if (value == null) return '0';
-  
-  const fixed = value.toFixed(2);
-  // Remove trailing .00 or .0 if not needed
-  return fixed.replace(/\.?0+$/, '');
-}
+  formatToFixed(value: number): string {
+    if (value == null) return '0';
+
+    const fixed = value.toFixed(2);
+    // Remove trailing .00 or .0 if not needed
+    return fixed.replace(/\.?0+$/, '');
+  }
 
   getSiteListByCompanyRef = async () => {
     this.MasterList = [];
@@ -65,6 +73,30 @@ export class SiteManagementMasterComponent implements OnInit {
     this.loadPaginationData();
   }
 
+  handleApproval = async (site: Site) => {
+    await this.uiUtils.showStatusConfirmationMessage(
+      'Approval',
+      `This process is <strong>IRREVERSIBLE!</strong> <br/>
+        Are you sure that you want to Change Site Complete Status?`, ['Approved'],
+      async () => {
+        this.Entity = site;
+        this.Entity.p.IsSiteCompleted = true;
+        let entityToSave = this.Entity.GetEditableVersion();
+        let entitiesToSave = [entityToSave];
+        let tr = await this.utils.SavePersistableEntities(entitiesToSave);
+
+        if (!tr.Successful) {
+          this.isApprovalDisabled = false;
+          this.uiUtils.showErrorMessage('Error', tr.Message);
+          return;
+        } else {
+          this.isApprovalDisabled = false;
+          await this.uiUtils.showSuccessToster('Status Changed Successfully');
+        }
+        this.getSiteListByCompanyRef();
+      }
+    );
+  }
 
   AddSite = async () => {
     if (this.companyRef() <= 0) {

@@ -32,6 +32,14 @@
           <td Class="tbldata">{{formatDate(site.p.EstimatedStartingDate)}}</td>
           <td Class="tbldata">{{formatDate(site.p.EstimatedEndDate)}}</td>
           <td Class="tbldata">{{site.p.AddressLine2}}</td>
+          <td Class="tbldata">
+            <button class="status" *ngIf="!site.p.IsSiteCompleted" (click)="handleApproval(site)" ngClass="pending">
+              Pending
+            </button>
+            <button class="status" *ngIf="site.p.IsSiteCompleted" ngClass="approved">
+              Approved
+            </button>
+          </td>
           <td class="tbldata">
             <span style="margin-left: 9px;" (click)="onEditClicked(site);">
               <img src="\assets\icons\edit.png" alt="logo" title="Edit" width="20px" height="20px" />

@@ -16,7 +16,7 @@
       <label for="SiteRef"><b>Site Name</b></label>
       <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear nzPlaceHolder="Select"
         id="SiteRef" name="SiteRef" [nzSize]="'large'" [(ngModel)]="Entity.p.SiteRef"
-        (ngModelChange)="getPlotListBySiteRef(Entity.p.SiteRef); OnSiteChange() ">
+        (ngModelChange)="getPlotListBySiteRef(); OnSiteChange() ">
         <nz-option *ngFor="let site of SiteList" [nzValue]="site.p.Ref" [nzLabel]="site.p.Name"></nz-option>
       </nz-select>
     </div>
@@ -43,6 +43,7 @@
         <tr *ngFor="let registraroffice of paginatedList; index as i">
           <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
           <td Class="tbldata">{{ registraroffice.p.CustomerName }}</td>
+          <td Class="tbldata">{{ registraroffice.p.PlotName }}</td>
           <td class="tbldata">
             <span class="status" [ngClass]="registraroffice.p.IsChequeSubmit ? 'completed' : 'pending' ">
               {{ registraroffice.p.IsChequeSubmit ? "Completed" : "Pending" }}

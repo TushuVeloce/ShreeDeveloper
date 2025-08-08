@@ -35,8 +35,10 @@
           nzPlaceHolder="Select" id="CurrentBookingRemark" name="CurrentBookingRemark" [nzSize]="'large'"
           [(ngModel)]="Entity.p.CurrentBookingRemark"
           (ngModelChange)="getPlotListBySiteandBookingRemarkRef(Entity.p.SiteManagementRef,Entity.p.CurrentBookingRemark)">
-          <nz-option *ngFor="let bookingremark of BookingRemarkList" [nzValue]="bookingremark.Ref"
-            [nzLabel]="bookingremark.Name"></nz-option>
+          <!-- <nz-option *ngFor="let bookingremark of BookingRemarkList" [nzValue]="bookingremark.Ref"
+            [nzLabel]="bookingremark.Name"></nz-option> -->
+          <nz-option [nzValue]="PlotofOwner" nzLabel="Plot Of Owner"></nz-option>
+          <nz-option [nzValue]="PlotofShree" nzLabel="Plot Of Shree"></nz-option>
         </nz-select>
       </div>
     </div>

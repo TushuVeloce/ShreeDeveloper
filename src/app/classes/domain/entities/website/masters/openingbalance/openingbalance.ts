@@ -34,7 +34,7 @@ export class OpeningBalanceProps {
   public NetBalance: number = 0;
   public FinancialYearName: string = '';
   public ShreesBalance: number = 0;
-  public readonly UnitName: string = '';
+  public TransDateTime: string = '';
 
   public readonly IsNewlyCreated: boolean = false;
   // public readonly AccountTypeName: string = '';

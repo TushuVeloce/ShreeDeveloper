@@ -24,14 +24,17 @@ export class PlotMasterComponent implements OnInit {
   pageSize = 8; // Items per page
   currentPage = 1; // Initialize current page
   total = 0;
-  headers: string[] = ['Sr.No.', 'Plot No','Area in Sq/m', 'Area in Sq/ft', 'Gov Rate/Sqm', 'Basic Rate/Sqft', 'Booking Remark', 'Action',];
+  headers: string[] = ['Sr.No.', 'Plot No', 'Area in Sq/m', 'Area in Sq/ft', 'Gov Rate/Sqm', 'Basic Rate/Sqft', 'Booking Remark', 'Action',];
   companyRef = this.companystatemanagement.SelectedCompanyRef;
   siteref: number = 0
   bookingremark: number = 0
   BookingRemarkEnum = BookingRemarks;
-  BookingRemarkList = DomainEnums.BookingRemarksList(true,) .filter(item =>
-      item.Ref != this.BookingRemarkEnum.Booked 
-    );
+  BookingRemarkList = DomainEnums.BookingRemarksList(true,).filter(item =>
+    item.Ref != this.BookingRemarkEnum.Booked
+  );
+  PlotofOwner = BookingRemarks.Plot_Of_Owner
+  PlotofShree = BookingRemarks.Plot_Of_Shree
+  
   shouldDestroy: boolean = true;
 
   constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private screenSizeService: ScreenSizeService,
@@ -76,8 +79,8 @@ export class PlotMasterComponent implements OnInit {
     this.SiteList = lst;
     if (this.siteref == 0 && lst.length > 0) {
       // this.getPlotList()
-     this.siteref = lst[0].p.Ref
-     this.Entity.p.SiteManagementRef = lst[0].p.Ref
+      this.siteref = lst[0].p.Ref
+      this.Entity.p.SiteManagementRef = lst[0].p.Ref
       this.onsitechange(this.siteref)
     }
     // else {
@@ -158,7 +161,7 @@ export class PlotMasterComponent implements OnInit {
           await this.uiUtils.showSuccessToster(
             `Plot ${plot.p.PlotNo} has been deleted!`
           );
-          await this.getPlotListBySiteandBookingRemarkRef(this.siteref,this.bookingremark);
+          await this.getPlotListBySiteandBookingRemarkRef(this.siteref, this.bookingremark);
           this.SearchString = '';
           this.loadPaginationData();
         });
@@ -189,13 +192,13 @@ export class PlotMasterComponent implements OnInit {
     }
   };
 
-formatToFixed(value: number): string {
-  if (value == null) return '0';
-  
-  const fixed = value.toFixed(2);
-  // Remove trailing .00 or .0 if not needed
-  return fixed.replace(/\.?0+$/, '');
-}
+  formatToFixed(value: number): string {
+    if (value == null) return '0';
+
+    const fixed = value.toFixed(2);
+    // Remove trailing .00 or .0 if not needed
+    return fixed.replace(/\.?0+$/, '');
+  }
 
   AddPlot = async () => {
     if (this.siteref > 0) {

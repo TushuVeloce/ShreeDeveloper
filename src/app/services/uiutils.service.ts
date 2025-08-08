@@ -176,7 +176,7 @@ export class UIUtils {
       const result = await Swal.fire({
         title: title,
         html: msg,
-        icon: 'question',
+        icon: 'success',
         showCancelButton: true,
         showDenyButton: statusOptions.length >= 2,
         confirmButtonText: statusOptions[0],

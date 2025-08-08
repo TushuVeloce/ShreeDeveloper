@@ -510,17 +510,17 @@ export class DomainEnums {
   public static BookingRemarksName(itemType: BookingRemarks) {
     switch (itemType) {
       case BookingRemarks.Plot_Of_Owner:
-        return 'Plot of Owner ';
+        return 'Plot of Owner';
       case BookingRemarks.Plot_Of_Shree:
         return 'Plot of Shree';
       case BookingRemarks.Owner_Booked:
         return 'Owner Booked';
       case BookingRemarks.Shree_Booked:
-        return 'Shree Booked ';
+        return 'Shree Booked';
       case BookingRemarks.Owner_Saledeed:
-        return 'Owner Saledeed ';
+        return 'Owner Saledeed';
       case BookingRemarks.Shree_Saledeed:
-        return 'Shree Saledeed ';
+        return 'Shree Saledeed';
       case BookingRemarks.Booked:
         return 'Booked';
       default:

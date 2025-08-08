@@ -44,6 +44,7 @@ export class SiteProps {
   public CompanyRef: number = 0;
   public CompanyName: string = '';
   public LoginEmployeeRef: number = 0;
+  public IsSiteCompleted: boolean = false;
 
   // public PlotDetailsList: PlotDetailProps[] = [];
   public SiteManagementOwnerDetails: OwnerDetailProps[] = [];

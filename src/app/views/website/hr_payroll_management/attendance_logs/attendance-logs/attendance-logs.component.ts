@@ -30,7 +30,7 @@ export class AttendanceLogsComponent implements OnInit {
   SelectedAttendance: WebAttendaneLog = WebAttendaneLog.CreateNewInstance();
 
   // headers as per required
-  baseHeaders: string[] = ['Sr. no', 'Employee Name', 'Date', 'First Check In Time', 'Last Check Out Time', 'Total Time'];
+  baseHeaders: string[] = ['Sr. no', 'Employee Name', 'Date', 'First Check In Time', 'Last Check Out Time', 'Total Time', 'Is Half Day'];
 
   pageSize = 10; // Items per page
   currentPage = 1; // Initialize current page
@@ -166,6 +166,9 @@ export class AttendanceLogsComponent implements OnInit {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
+    if (this.isTodayAttendanceView == false) {
+      return;
+    }
     let TodaysAttendanceLog = await WebAttendaneLog.FetchEntireListByCompanyRefAndAttendanceLogType(this.companyRef(), AttendanceLogType.TodaysAttendanceLog, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.DisplayMasterList = TodaysAttendanceLog
     this.getAttendanceCount(AttendanceLogType.TodaysAttendanceLog)
@@ -183,10 +186,10 @@ export class AttendanceLogsComponent implements OnInit {
   }
 
   ChangeAttendanceStatus = async (Entity: WebAttendaneLog) => {
-    await this.uiUtils.showConfirmationMessage(
+    await this.uiUtils.showStatusConfirmationMessage(
       'Approval',
       `This process is <strong>IRREVERSIBLE!</strong> <br/>
-      Are you sure that you want to Approve this Attendance?`,
+      Are you sure that you want to Approve this Attendance?`, ['Approval'],
       async () => {
         this.Entity = Entity;
         this.Entity.p.UpdatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
@@ -216,7 +219,12 @@ export class AttendanceLogsComponent implements OnInit {
   getWeekWiseAttendanceLogByAttendanceListType = async () => {
     this.resetSummaryStats();
 
-    let employeeref = this.Entity.p.EmployeeRef
+    let employeeref = this.Entity.p.EmployeeRef;
+
+    if (employeeref <= 0) {
+      await this.uiUtils.showErrorToster('Employee not Selected');
+      return;
+    }
 
     let WeeklyAttendanceLog = await WebAttendaneLog.FetchEntireListByCompanyRefAndAttendanceLogTypeAndEmployee(this.companyRef(), AttendanceLogType.WeeklyAttendanceLog, employeeref, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.DisplayMasterList = WeeklyAttendanceLog
@@ -292,7 +300,7 @@ export class AttendanceLogsComponent implements OnInit {
     //   return [...this.baseHeaders, 'On Leave', 'Leave Type', 'Status', 'Action'];
     // }
     // return this.baseHeaders;
-    return [...this.baseHeaders, 'On Leave', 'Absent', 'Leave Type', 'Status', 'Action'];
+    return [...this.baseHeaders, 'Leave Type', 'Status', 'Action'];
   }
 
   // Extracted from services date conversion //

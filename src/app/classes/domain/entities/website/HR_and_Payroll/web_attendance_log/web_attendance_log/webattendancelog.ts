@@ -46,7 +46,7 @@ export class WebAttendaneLogProps {
   public FirstCheckInTime: string = '';
   public LastCheckOutTime: string = '';
 
-  public IsAbsent: number = 0;
+  public IsAbsent: boolean = false;
   public IsEntryNonEditable: boolean = false;
 
   public IsLeave: boolean = false;

@@ -4,19 +4,19 @@
   <div class="row">
     <div class="col-12 col-md-2">
       <button type="button" [class]="isTodayAttendanceView ? 'btnglow' : 'mybtn'"
-        (click)="getTodayAttendanceLogByAttendanceListType(); setTodayViewStatus(); getViewStatus();">
+        (click)="setTodayViewStatus(); getViewStatus(); getTodayAttendanceLogByAttendanceListType();">
         MY TEAM TODAY
       </button>
     </div>
     <div class="col-12 col-md-2">
       <button type="button" [class]="isDaysShow ? 'btnglow' : 'mybtn'"
-        (click)="selectWeek(); setWeeklyViewStatus(); getViewStatus();">
+        (click)="setWeeklyViewStatus(); getViewStatus(); selectWeek();">
         MY TEAM WEEKLY
       </button>
     </div>
     <div class="col-12 col-md-3">
       <button type="button" [class]="ToDispayMonthlyRequirement ? 'btnglow' : 'mybtn'"
-        (click)="selectMonth(); setMonthlyViewStatus(); getViewStatus();">
+        (click)="setMonthlyViewStatus(); getViewStatus(); selectMonth();">
         MY TEAM MONTHLY
       </button>
     </div>
@@ -121,16 +121,18 @@
               "--"}}</td>
             <td Class="tbldata">{{attendancelog.p.TotalWorkingHrs?
               convertFractionTimeToHM(attendancelog.p.TotalWorkingHrs): "--"}}</td>
-            <td Class="tbldata">{{attendancelog.p.IsLeave ?
-              'Yes' :
-              '--'}}</td>
-            <td Class="tbldata">{{attendancelog.p.IsAbsent ?
-              'Yes' :
-              '--'}}</td>
-            <td Class="tbldata">{{attendancelog.p.LeaveType
-              ? attendancelog.p.LeaveTypeName :
-              '--'}}</td>
             <td Class="tbldata">
+              <!-- Half -->
+              <span class="day" ngClass="half" *ngIf="attendancelog.p.IsHalfDay">
+                Half
+              </span>
+              <!-- Full -->
+              <span class="" ngClass="" *ngIf="!attendancelog.p.IsHalfDay">
+                --
+              </span>
+            </td>
+            <td Class="tbldata">{{attendancelog.p.LeaveType ? attendancelog.p.LeaveTypeName : '--'}}</td>
+            <td Class="tbldata" *ngIf="attendancelog.p.IsAbsent == false && attendancelog.p.IsLeave == false">
               <!-- PENDING -->
               <span class="status" ngClass="pending" *ngIf="!attendancelog.p.IsAttendanceVerified"
                 style="cursor: pointer;" (click)="ChangeAttendanceStatus(attendancelog)">
@@ -140,6 +142,18 @@
               <!-- APPROVED -->
               <span class="status" *ngIf="attendancelog.p.IsAttendanceVerified" ngClass="approved">
                 Approved
+              </span>
+            </td>
+            <td Class="tbldata" *ngIf="attendancelog.p.IsLeave == true">
+              <!-- Leave -->
+              <span class="status" ngClass="leave">
+                Leave
+              </span>
+            </td>
+            <td Class="tbldata" *ngIf="attendancelog.p.IsAbsent == true">
+              <!-- Absent -->
+              <span class="status" ngClass="absent">
+                Absent
               </span>
             </td>
             <td Class="tbldata">

@@ -1,20 +1,40 @@
 .row {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    flex-wrap: wrap;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
 }
 
 
 .tblcardtitle {
-    width: auto;
-    vertical-align: text-top !important;
+  width: auto;
+  vertical-align: text-top !important;
 }
 
 /* Responsive styles */
 @media only screen and (max-width: 667px) {
-    .modalbtn {
-        text-align: left;
-    }
+  .modalbtn {
+    text-align: left;
+  }
 }
 
+.status {
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-weight: 500;
+  width: 100px;
+  font-size: 14px;
+  border: 1px solid;
+  display: inline-block;
+  color: black;
+
+  &.approved {
+    border-color: green;
+    background-color: #e6ffe6;
+  }
+
+  &.pending {
+    border-color: red;
+    background-color: #ffe6e6;
+  }
+}

@@ -22,7 +22,7 @@ export class SalarySlipApprovalComponent implements OnInit {
   SearchString: string = '';
   SelectedSalarySlipApproval: SalarySlipRequest = SalarySlipRequest.CreateNewInstance();
   CustomerRef: number = 0;
-  isSaveDisabled: boolean = false;
+  isApprovalDisabled: boolean = false;
   EmployeeList: Employee[] = [];
   pageSize = 10; // Items per page
   currentPage = 1; // Initialize current page
@@ -105,11 +105,11 @@ export class SalarySlipApprovalComponent implements OnInit {
         let tr = await this.utils.SavePersistableEntities(entitiesToSave);
 
         if (!tr.Successful) {
-          this.isSaveDisabled = false;
+          this.isApprovalDisabled = false;
           this.uiUtils.showErrorMessage('Error', tr.Message);
           return;
         } else {
-          this.isSaveDisabled = false;
+          this.isApprovalDisabled = false;
           await this.uiUtils.showSuccessToster('Leave Approval Successfully Approved');
           this.getSalarySlipApprovalListByEmployeeRef();
         }

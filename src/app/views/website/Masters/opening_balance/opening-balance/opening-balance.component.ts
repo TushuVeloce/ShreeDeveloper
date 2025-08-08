@@ -5,6 +5,7 @@ import { Expense } from 'src/app/classes/domain/entities/website/accounting/expe
 import { OpeningBalance } from 'src/app/classes/domain/entities/website/masters/openingbalance/openingbalance';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
+import { DateconversionService } from 'src/app/services/dateconversion.service';
 import { ScreenSizeService } from 'src/app/services/screensize.service';
 import { UIUtils } from 'src/app/services/uiutils.service';
 
@@ -14,8 +15,8 @@ import { UIUtils } from 'src/app/services/uiutils.service';
   templateUrl: './opening-balance.component.html',
   styleUrls: ['./opening-balance.component.scss'],
 })
-export class OpeningBalanceComponent  implements OnInit {
-Entity: OpeningBalance = OpeningBalance.CreateNewInstance();
+export class OpeningBalanceComponent implements OnInit {
+  Entity: OpeningBalance = OpeningBalance.CreateNewInstance();
   MasterList: OpeningBalance[] = [];
   DisplayMasterList: OpeningBalance[] = [];
   SearchString: string = '';
@@ -29,9 +30,9 @@ Entity: OpeningBalance = OpeningBalance.CreateNewInstance();
 
   companyRef = this.companystatemanagement.SelectedCompanyRef;
 
-  headers: string[] = ['Sr.No.', 'Mode of Payment', 'Bank Name','Opening Bal. Amount', 'Initial Balance'];
+  headers: string[] = ['Sr.No.', 'Opening Date', 'Mode of Payment', 'Bank Name', 'Opening Bal. Amount', 'Initial Balance'];
   constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private screenSizeService: ScreenSizeService,
-    private companystatemanagement: CompanyStateManagement
+    private companystatemanagement: CompanyStateManagement, private DateconversionService: DateconversionService,
   ) {
     effect(async () => {
       await this.getOpeningBalanceListByCompanyRef(); await this.getCurrentBalanceByCompanyRef();
@@ -57,6 +58,11 @@ Entity: OpeningBalance = OpeningBalance.CreateNewInstance();
     this.loadPaginationData();
   }
 
+  // Extracted from services date conversion //
+  formatDate = (date: string | Date): string => {
+    return this.DateconversionService.formatDate(date);
+  }
+
   onEditClicked = async (item: OpeningBalance) => {
     this.SelectedOpeningBalance = item.GetEditableVersion();
     OpeningBalance.SetCurrentInstance(this.SelectedOpeningBalance);
@@ -68,16 +74,20 @@ Entity: OpeningBalance = OpeningBalance.CreateNewInstance();
     return this.DisplayMasterList.reduce((sum, item) => sum + (item.p.OpeningBalanceAmount || 0), 0);
   }
 
-    getCurrentBalanceByCompanyRef = async () => {
-      if (this.companyRef() <= 0) {
-        await this.uiUtils.showErrorToster('Company not Selected');
-        return;
-      }
-      let lst = await Expense.FetchCurrentBalanceByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-      if (lst.length > 0) {
-        this.Entity.p.ShreesBalance = lst[0].p.ShreesBalance;
-      }
+  get totalInitailBalanceAmount(): number {
+    return this.DisplayMasterList.reduce((sum, item) => sum + (item.p.InitialBalance || 0), 0);
+  }
+
+  getCurrentBalanceByCompanyRef = async () => {
+    if (this.companyRef() <= 0) {
+      await this.uiUtils.showErrorToster('Company not Selected');
+      return;
     }
+    let lst = await Expense.FetchCurrentBalanceByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    if (lst.length > 0) {
+      this.Entity.p.ShreesBalance = lst[0].p.ShreesBalance;
+    }
+  }
 
   onDeleteClicked = async (OpeningBalance: OpeningBalance) => {
     await this.uiUtils.showConfirmationMessage(

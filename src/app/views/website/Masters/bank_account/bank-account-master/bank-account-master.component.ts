@@ -31,7 +31,7 @@ export class BankAccountMasterComponent implements OnInit {
   headers: string[] = ['Sr.No.', 'Bank Name', 'Branch Name', 'Account No', 'IFSC Code', 'Date of Opening', 'Action'];
 
   constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private companystatemanagement: CompanyStateManagement, private dtu: DTU,
-      private datePipe: DatePipe, private DateconversionService:DateconversionService,private screenSizeService: ScreenSizeService) {
+    private datePipe: DatePipe, private DateconversionService: DateconversionService, private screenSizeService: ScreenSizeService) {
     effect(() => {
       this.getBankListByCompanyRef()
     });
@@ -57,8 +57,8 @@ export class BankAccountMasterComponent implements OnInit {
     this.loadPaginationData();
   }
 
-   // Extracted from services date conversion //
-   formatDate = (date: string | Date): string => {
+  // Extracted from services date conversion //
+  formatDate = (date: string | Date): string => {
     return this.DateconversionService.formatDate(date);
   }
 
