@@ -251,7 +251,7 @@
           gap: 2rem;
           margin-top: 2rem;">
         <div>
-          <nz-button nz-button class="btn1" (click)="SaveOrder()">Save</nz-button>
+          <button type="submit" class="btn" (click)="SaveOrder()" [disabled]="isSaveDisabled">Save</button>
         </div>
         <div>
           <nz-button nz-button class="btn1" (click)="BackOrder()">
@@ -391,7 +391,7 @@
           gap: 2rem;
           margin-top: 1rem;">
         <div>
-          <nz-button nz-button class="btn1" (click)="addOrderMaterial()">Save</nz-button>
+          <button type="submit" class="btn" (click)="addOrderMaterial()">Save</button>
         </div>
         <div>
           <nz-button nz-button class="btn1" (click)="closeModal('OrderMaterial')">

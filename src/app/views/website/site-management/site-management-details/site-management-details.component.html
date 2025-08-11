@@ -22,8 +22,8 @@
       <div class="row" style="margin-top: 1rem">
         <div class="col-md-4 col-6">
           <label>Site Name</label>
-          <input type="text" name="Name" class="form-control" id="Name" [(ngModel)]="Entity.p.Name" #NameCtrl="ngModel" required (blur)="NameCtrl.control.markAsTouched()"
-            placeholder="Enter Site Name" />
+          <input type="text" name="Name" class="form-control" id="Name" [(ngModel)]="Entity.p.Name" #NameCtrl="ngModel"
+            required (blur)="NameCtrl.control.markAsTouched()" placeholder="Enter Site Name" />
           <div *ngIf="NameCtrl.invalid && (NameCtrl.touched || NameCtrl.dirty)">
             <span class="validation-text" *ngIf="NameCtrl.errors?.['required']">{{ RequiredFieldMsg }}</span>
           </div>
@@ -88,13 +88,13 @@
         <div class="col-md-4 col-6">
           <label>Starting Date</label>
           <input type="date" name="localEstimatedStartingDate" class="form-control date-input"
-            id="localEstimatedStartingDate" [(ngModel)]="localEstimatedStartingDate" placeholder="Select Date"/>
+            id="localEstimatedStartingDate" [(ngModel)]="localEstimatedStartingDate" placeholder="Select Date" />
         </div>
         <div class="col-md-4 col-6">
           <label>Estimated End Date</label>
           <input type="date" name="localEstimatedEndDate" class="form-control date-input" id="localEstimatedEndDate"
-            [(ngModel)]="localEstimatedEndDate" [min]="localEstimatedStartingDate" placeholder="Select Date" #EstimatedEndDateCtrl="ngModel"
-            (blur)="EstimatedEndDateCtrl.control.markAsTouched()" />
+            [(ngModel)]="localEstimatedEndDate" [min]="localEstimatedStartingDate" placeholder="Select Date"
+            #EstimatedEndDateCtrl="ngModel" (blur)="EstimatedEndDateCtrl.control.markAsTouched()" />
         </div>
         <div class="col-md-4 col-6">
           <label>Estimated Cost</label>
@@ -102,13 +102,13 @@
             [(ngModel)]="Entity.p.EstimatedCost" placeholder="Enter Estimated Cost" (click)="selectAllValue($event)"
             #EstimatedCostCtrl="ngModel" (blur)="EstimatedCostCtrl.control.markAsTouched()" />
         </div>
-         <div class="col-md-4 col-6">
+        <div class="col-md-4 col-6">
           <label for="TotalLandAreaInSqm">Total Land Area in Sqm</label>
           <input type="number" class="form-control" name="TotalLandAreaInSqm" id="TotalLandAreaInSqm"
             [(ngModel)]="Entity.p.TotalLandAreaInSqm" (input)="restrictToTwoDecimalsForSqm($event)"
             placeholder="Enter Total Land Area in Sqm" (click)="selectAllValue($event)" />
         </div>
-         <div class="col-md-4 col-6">
+        <div class="col-md-4 col-6">
           <label for="TotalLandAreaInSqft">Total Land Area in Sqft</label>
           <input type="number" class="form-control" name="TotalLandAreaInSqft" id="TotalLandAreaInSqft"
             [(ngModel)]="Entity.p.TotalLandAreaInSqft" (input)="restrictToTwoDecimalsForSqFt($event)"
@@ -190,7 +190,7 @@
           margin-top: 2rem;
         ">
         <div>
-          <nz-button nz-button class="btn1" (click)="SaveSite()">Save</nz-button>
+          <button type="submit" class="btn" (click)="SaveSite()" [disabled]="isSaveDisabled">Save</button>
         </div>
         <div>
           <nz-button nz-button class="btn1" (click)="BackSiteManagement()">
@@ -263,8 +263,7 @@
           <div class="col-6">
             <label for="CityRef"><b>City</b></label>
             <nz-select class="nzSelect-light" nzShowSearch [nzNotFoundContent]="noDataTpl" nzAllowClear
-              nzPlaceHolder="Select" id="CityRef" name="CityRef" [nzSize]="'large'"
-              [(ngModel)]="newOwner.CityRef">
+              nzPlaceHolder="Select" id="CityRef" name="CityRef" [nzSize]="'large'" [(ngModel)]="newOwner.CityRef">
               <nz-option *ngFor="let city of CityListforOwner" [nzValue]="city.p.Ref"
                 [nzLabel]="city.p.Name"></nz-option>
             </nz-select>
@@ -299,7 +298,7 @@
           margin-top: 2rem;
         ">
         <div>
-          <nz-button nz-button class="btn1" (click)="addOwner()">Save</nz-button>
+          <button type="submit" class="btn" (click)="addOwner()">Save</button>
         </div>
         <div>
           <nz-button nz-button class="btn1" (click)="closeModal('owner')">

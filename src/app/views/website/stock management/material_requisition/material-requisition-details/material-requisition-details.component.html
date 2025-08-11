@@ -94,7 +94,8 @@
           margin-top: 2rem;
         ">
         <div>
-          <nz-button nz-button class="btn1" (click)="SaveMaterialRequisition()">Save</nz-button>
+          <button type="submit" class="btn" (click)="SaveMaterialRequisition()"
+            [disabled]="isSaveDisabled">Save</button>
         </div>
         <div>
           <nz-button nz-button class="btn1" (click)="BackMaterialRequisition()">
@@ -133,8 +134,9 @@
           </div>
           <div class="col-md-4">
             <label>Required Quantity</label>
-            <input type="text" appCommaFormat name="EstimatedQty" class="form-control" [(ngModel)]="newRequisition.RequisitionQty"
-              required placeholder="Enter Estimated Qty" (click)="selectAllValue($event)" />
+            <input type="text" appCommaFormat name="EstimatedQty" class="form-control"
+              [(ngModel)]="newRequisition.RequisitionQty" required placeholder="Enter Estimated Qty"
+              (click)="selectAllValue($event)" />
           </div>
         </div>
       </form>
@@ -147,9 +149,8 @@
           margin-top: 2rem;
         ">
         <div>
-          <nz-button nz-button class="btn1" (click)="addMaterial()">{{
-            ModalEditable ? "Upadte" : "Save"
-            }}</nz-button>
+          <button type="submit" class="btn" (click)="addMaterial()">{{ModalEditable ?
+            "Upadte" : "Save"}}</button>
         </div>
         <div>
           <nz-button nz-button class="btn1" (click)="closeModal('material')">

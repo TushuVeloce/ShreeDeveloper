@@ -138,7 +138,7 @@
       </div>
       <div style="justify-content: center; display: flex; gap: 2rem; margin-top : 2rem">
         <div>
-          <button type="button" class="btn" (click)="SaveAttendence()" [disabled]="isSaveDisabled">Save</button>
+          <button type="submit" class="btn" (click)="SaveAttendence()" [disabled]="isSaveDisabled">Save</button>
         </div>
         <div>
           <button type="button" class="btn" (click)="BackAttendence()">Cancel</button>
@@ -203,7 +203,7 @@
           margin-top: 1rem;
         ">
         <div>
-          <nz-button nz-button class="btn1" (click)="addAttendance()">Save</nz-button>
+          <button type="submit" class="btn" (click)="addAttendance()">Save</button>
         </div>
         <div>
           <nz-button nz-button class="btn1" (click)="closeModal()">
