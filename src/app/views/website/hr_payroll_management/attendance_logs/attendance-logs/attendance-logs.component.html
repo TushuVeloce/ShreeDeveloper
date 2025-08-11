@@ -122,6 +122,16 @@
             <td Class="tbldata">{{attendancelog.p.TotalWorkingHrs?
               convertFractionTimeToHM(attendancelog.p.TotalWorkingHrs): "--"}}</td>
             <td Class="tbldata">
+              <!-- Late -->
+              <span class="day" ngClass="late" *ngIf="attendancelog.p.IsLateMark">
+                Late
+              </span>
+              <!-- Not Late -->
+              <span class="" ngClass="" *ngIf="!attendancelog.p.IsLateMark">
+                --
+              </span>
+            </td>
+            <td Class="tbldata">
               <!-- Half -->
               <span class="day" ngClass="half" *ngIf="attendancelog.p.IsHalfDay">
                 Half

@@ -1,88 +1,86 @@
-  <div class="row">
-     <div class="col-4 mb-2">
-      <h5 style="padding-top: 3px;" class="title title_light">Leave Approval</h5>
+<div class="row">
+  <div class="col-4 mb-2">
+    <h5 style="padding-top: 3px;" class="title title_light">Leave Approval</h5>
+  </div>
+  <div class="col-4 mb-2 search-container_light">
+    <app-shared-filter [masterList]="MasterList"
+      [filterFields]="['LeaveRequestName', 'Description', 'HalfDayDate', 'ToDate', 'HalfDayDate', 'Days']"
+      (filteredList)="DisplayMasterList = $event"></app-shared-filter>
+  </div>
+  <div class="col-4 mb-2">
+  </div>
+  <ng-template #noDataTpl>
+    <div style="text-align: center; color: rgba(0, 0, 0, 0.25);">
+      No Data
     </div>
-    <div class="col-4 mb-2 search-container_light">
-      <app-shared-filter [masterList]="MasterList" [filterFields]="['LeaveRequestName', 'Description', 'HalfDayDate', 'ToDate', 'HalfDayDate', 'Days']"
-        (filteredList)="DisplayMasterList = $event"></app-shared-filter>
-    </div>
-    <div class="col-4 mb-2">
-    </div>
-    <ng-template #noDataTpl>
-      <div style="text-align: center; color: rgba(0, 0, 0, 0.25);">
-        No Data
+  </ng-template>
+  <form autocomplete="off">
+    <div class="row">
+      <div class="col-md-4">
+        <label for="EmployeeRef"><b>Employee Name</b></label>
+        <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
+          nzPlaceHolder="Select" [nzSize]="'large'" [(ngModel)]="Entity.p.EmployeeRef" name="EmployeeRef" required
+          id="EmployeeRef" (ngModelChange)="getLeaveApprovalListByEmployeeRef()">
+          <nz-option [nzValue]="0" nzLabel="All"></nz-option>
+          <nz-option *ngFor="let Employee of EmployeeList" [nzLabel]="Employee.p.Name"
+            [nzValue]="Employee.p.Ref"></nz-option>
+        </nz-select>
       </div>
-    </ng-template>
-    <div class="card-body" style="margin-left: 14px;">
-      <form autocomplete="off">
-        <div class="row">
-          <div class="col-md-4">
-            <label for="EmployeeRef"><b>Employee Name</b></label>
-            <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
-              nzPlaceHolder="Select" [nzSize]="'large'" [(ngModel)]="Entity.p.EmployeeRef" name="EmployeeRef" required
-              id="EmployeeRef" (ngModelChange)="getLeaveApprovalListByEmployeeRef()">
-              <nz-option [nzValue]="0" nzLabel="All"></nz-option>
-              <nz-option *ngFor="let Employee of EmployeeList" [nzLabel]="Employee.p.Name"
-                [nzValue]="Employee.p.Ref"></nz-option>
-            </nz-select>
-          </div>
-        </div>
-      </form>
     </div>
-  </div>
-  <div class="table-wrapper tblcard_light" style="margin-top: 2rem" *ngIf="DisplayMasterList.length > 0">
-    <div class="table-container">
-      <nz-table #basicTable nzSize="small" class="no-hover-table bgtable_light" [nzData]="paginatedList()"
-        [nzScroll]="{x:'auto' }" nzFrontPagination="false" [nzShowSizeChanger]="false">
-        <thead>
-          <tr>
-            <th *ngFor="let header of headers" class="tblheader">{{ header }}</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let leaverequest of paginatedList(); index as i">
-            <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
-            <td Class="tbldata">{{leaverequest.p.EmployeeName}}</td>
-            <td Class="tbldata">{{leaverequest.p.LeaveRequestName}}</td>
-            <td Class="tbldata" style="cursor: pointer;" [nzTooltipTitle]="leaverequest.p.Description"
-              nzTooltipPlacement="top" nzTooltipColor="#A52A2A" nz-button nz-tooltip>{{leaverequest.p.Description}}</td>
-            <td class="tbldata" *ngIf="leaverequest.p.LeaveRequestType != LeaveRequesttype.HalfDay">
-              {{ formatDate(leaverequest.p.FromDate) }} - {{ formatDate(leaverequest.p.ToDate) }}</td>
+  </form>
+</div>
+<div class="table-wrapper tblcard_light" style="margin-top: 2rem" *ngIf="DisplayMasterList.length > 0">
+  <div class="table-container">
+    <nz-table #basicTable nzSize="small" class="no-hover-table bgtable_light" [nzData]="paginatedList()"
+      [nzScroll]="{x:'auto' }" nzFrontPagination="false" [nzShowSizeChanger]="false">
+      <thead>
+        <tr>
+          <th *ngFor="let header of headers" class="tblheader">{{ header }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let leaverequest of paginatedList(); index as i">
+          <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
+          <td Class="tbldata">{{leaverequest.p.EmployeeName}}</td>
+          <td Class="tbldata">{{leaverequest.p.LeaveRequestName}}</td>
+          <td Class="tbldata" style="cursor: pointer;" [nzTooltipTitle]="leaverequest.p.Description"
+            nzTooltipPlacement="top" nzTooltipColor="#A52A2A" nz-button nz-tooltip>{{leaverequest.p.Description}}</td>
+          <td class="tbldata" *ngIf="leaverequest.p.LeaveRequestType != LeaveRequesttype.HalfDay">
+            {{ formatDate(leaverequest.p.FromDate) }} - {{ formatDate(leaverequest.p.ToDate) }}</td>
 
-            <td class="tbldata" *ngIf="leaverequest.p.LeaveRequestType == LeaveRequesttype.HalfDay">
-              {{formatDate(leaverequest.p.HalfDayDate)}}</td>
-            <td Class="tbldata">{{leaverequest.p.LeaveRequestType == LeaveRequesttype.HalfDay? '0.5' : leaverequest.p.Days}}</td>
-            <td class="tbldata">
-              <!-- PENDING -->
-              <button class="status" *ngIf="!leaverequest.p.IsApproved && !leaverequest.p.IsCancelled"
-                [disabled]="isSaveDisabled" (click)="handleApproval(leaverequest)" ngClass="pending">
-                Pending
-              </button>
+          <td class="tbldata" *ngIf="leaverequest.p.LeaveRequestType == LeaveRequesttype.HalfDay">
+            {{formatDate(leaverequest.p.HalfDayDate)}}</td>
+          <td Class="tbldata">{{leaverequest.p.LeaveRequestType == LeaveRequesttype.HalfDay? '0.5' :
+            leaverequest.p.Days}}</td>
+          <td class="tbldata">
+            <!-- PENDING -->
+            <button class="status" *ngIf="!leaverequest.p.IsApproved && !leaverequest.p.IsCancelled"
+              [disabled]="isSaveDisabled" (click)="handleApproval(leaverequest)" ngClass="pending">
+              Pending
+            </button>
 
-              <!-- APPROVED -->
-              <button class="status" *ngIf="leaverequest.p.IsApproved && !leaverequest.p.IsCancelled"
-                ngClass="approved">
-                Approved
-              </button>
+            <!-- APPROVED -->
+            <button class="status" *ngIf="leaverequest.p.IsApproved && !leaverequest.p.IsCancelled" ngClass="approved">
+              Approved
+            </button>
 
-              <!-- REJECTED -->
-              <button class="status" *ngIf="!leaverequest.p.IsApproved && leaverequest.p.IsCancelled"
-                ngClass="rejected">
-                Rejected
-              </button>
-            </td>
-          </tr>
-        </tbody>
-      </nz-table>
-    </div>
-    <div class="fixed-pagination">
-      <nz-pagination class="try light-theme" [nzPageSize]="pageSize" [nzTotal]="total" [(nzPageIndex)]="currentPage"
-        (nzPageIndexChange)="onPageChange($event)" [nzShowSizeChanger]="false" [nzResponsive]="true">
-      </nz-pagination>
-    </div>
+            <!-- REJECTED -->
+            <button class="status" *ngIf="!leaverequest.p.IsApproved && leaverequest.p.IsCancelled" ngClass="rejected">
+              Rejected
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </nz-table>
   </div>
-  <div *ngIf="DisplayMasterList.length === 0" class="card-body_light">
-    <div style="height: 200px" class="d-flex align-items-center justify-content-center">
-      <span class="title_light"> Data Not Found</span>
-    </div>
+  <div class="fixed-pagination">
+    <nz-pagination class="try light-theme" [nzPageSize]="pageSize" [nzTotal]="total" [(nzPageIndex)]="currentPage"
+      (nzPageIndexChange)="onPageChange($event)" [nzShowSizeChanger]="false" [nzResponsive]="true">
+    </nz-pagination>
   </div>
+</div>
+<div *ngIf="DisplayMasterList.length === 0" class="card-body_light">
+  <div style="height: 200px" class="d-flex align-items-center justify-content-center">
+    <span class="title_light"> Data Not Found</span>
+  </div>
+</div>

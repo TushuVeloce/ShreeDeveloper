@@ -90,10 +90,10 @@ export class SalarySlipApprovalComponent implements OnInit {
 
 
   handleApproval = async (salaryslipapproval: SalarySlipRequest) => {
-    await this.uiUtils.showConfirmationMessage(
+    await this.uiUtils.showStatusConfirmationMessage(
       'Approval',
       `This process is <strong>IRREVERSIBLE!</strong> <br/>
-      Are you sure that you want to Approve this Salary Slip?`,
+      Are you sure that you want to Approve this Salary Slip?`, ['Approved'],
       async () => {
         this.Entity = salaryslipapproval;
         this.Entity.p.IsApproved = 1;
