@@ -21,7 +21,7 @@
         <div class="col-md-4 col-6">
           <label>Customer Id</label>
           <input type="text" [(ngModel)]="Entity.p.CustID" name="CustID" class="form-control" id="CustID"
-            placeholder="Enter Customer Id" #CusIdCtrl="ngModel" required (blur)="CusIdCtrl.control.markAsTouched()" />
+            placeholder="Enter Customer Id" disabled #CusIdCtrl="ngModel" required (blur)="CusIdCtrl.control.markAsTouched()" />
           <div *ngIf="(CusIdCtrl.invalid && (CusIdCtrl.touched || CusIdCtrl.dirty))">
             <span class="validation-text" *ngIf="CusIdCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
           </div>
@@ -82,7 +82,7 @@
         <div class="col-md-4">
           <div>
             <label>Deal convert Date</label>
-            <input type="text" name="SiteVisitDate" class="form-control" id="SiteVisitDate"
+            <input type="date" name="SiteVisitDate" class="form-control" id="SiteVisitDate"
               [(ngModel)]="Entity.p.SiteVisitDate" disabled placeholder="Enter Visited Date" />
           </div>
         </div>

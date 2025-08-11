@@ -19,7 +19,7 @@ import { Site } from 'src/app/classes/domain/entities/website/masters/site/site'
   templateUrl: './registered-customer.component.html',
   styleUrls: ['./registered-customer.component.scss'],
 })
-export class RegisteredCustomerComponent  implements OnInit {
+export class RegisteredCustomerComponent implements OnInit {
 
   Entity: RegisteredCustomer = RegisteredCustomer.CreateNewInstance();
   MasterList: RegisteredCustomer[] = [];
@@ -40,12 +40,13 @@ export class RegisteredCustomerComponent  implements OnInit {
     'Mobile No',
     'Address',
     'Action',
-  ];  constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private screenSizeService: ScreenSizeService,
+    'Deal Cancel'
+  ]; constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private screenSizeService: ScreenSizeService,
     private companystatemanagement: CompanyStateManagement, private payloadPacketFacade: PayloadPacketFacade,
-        private serverCommunicator: ServerCommunicatorService
+    private serverCommunicator: ServerCommunicatorService
   ) {
-    effect(async() => {
-     await this.getRegisterCustomerListByCompanyRef();  await this.getSiteListByCompanyRef();
+    effect(async () => {
+      await this.getRegisterCustomerListByCompanyRef(); await this.getSiteListByCompanyRef();
     });
   }
 
@@ -79,7 +80,7 @@ export class RegisteredCustomerComponent  implements OnInit {
     this.loadPaginationData();
   };
 
- getRegisterCustomerListByCompanyRefAndSiteRef = async () => {
+  getRegisterCustomerListByCompanyRefAndSiteRef = async () => {
     this.MasterList = [];
     this.DisplayMasterList = [];
     if (this.Entity.p.SiteRef <= 0) {
@@ -94,6 +95,14 @@ export class RegisteredCustomerComponent  implements OnInit {
     this.loadPaginationData();
   };
 
+  IsFilled = (registercustomer: RegisteredCustomer) => {
+    if (registercustomer.p.RegisterCustomerBookingRemark && registercustomer.p.RegisterDate && registercustomer.p.RegisterBy && registercustomer.p.ValueOfAgreement && registercustomer.p.LegalCharges) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   onEditClicked = async (item: RegisteredCustomer) => {
 
     this.SelectedRegisteredCustomer = item.GetEditableVersion();
@@ -103,8 +112,8 @@ export class RegisteredCustomerComponent  implements OnInit {
     await this.router.navigate(['/homepage/Website/Registered_Customer_Details']);
   };
 
-  CancelDeal = async (registercustomer:RegisteredCustomer) => {
-    let confirm = await this.uiUtils.showConfirmationMessage('Confirmation','Are you sure you want to cancel this Deal?',
+  CancelDeal = async (registercustomer: RegisteredCustomer) => {
+    let confirm = await this.uiUtils.showConfirmationMessage('Confirmation', 'Are you sure you want to cancel this Deal?',
       async () => {
         let req = new CancelDealCustomRequest();
         req.RegisterCustomerRef = registercustomer.p.Ref;
@@ -118,12 +127,12 @@ export class RegisteredCustomerComponent  implements OnInit {
           return;
         }
         await this.uiUtils.showSuccessToster('Deal canceled Successfully');
-       let tdResult = JSON.parse(tr.Tag) as TransportData;
+        let tdResult = JSON.parse(tr.Tag) as TransportData;
       }
     );
     this.getRegisterCustomerListByCompanyRefAndSiteRef()
     this.loadPaginationData()
-};
+  };
 
 
   // For Pagination  start ----

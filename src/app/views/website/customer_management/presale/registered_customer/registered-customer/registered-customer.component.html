@@ -48,13 +48,15 @@
             <td Class="tbldata">{{ registercustomer.p.CustomerMobileNo }}</td>
             <td Class="tbldata">{{ registercustomer.p.CustomerAddress }}</td>
             <td class="tbldata">
-              <span style="margin-left: 9px" (click)="onEditClicked(registercustomer)">
-                <img src="\assets\icons\edit.png" alt="logo" title="Edit" width="20px" height="20px" />
+              <span class="status" [ngClass]="IsFilled(registercustomer) ? 'filled' : 'unfilled'" style="margin-left: 9px"
+                (click)="onEditClicked(registercustomer)">
+                <!-- <img src="\assets\icons\edit.png" alt="logo" title="Edit" width="20px" height="20px" /> -->
+                Edit
               </span>
+            </td>
+            <td class="tbldata">
               <span style="margin-left: 9px" (click)="CancelDeal(registercustomer)">
-                <img
-                  [src]="registercustomer.p.ValueOfAgreement ? '/assets/icons/greencross.png' : '/assets/icons/Cancel.png'"
-                  alt="logo" title="Edit" width="20px" height="20px" />
+                <img src="/assets/icons/Cancel.png" alt="logo" title="Edit" width="20px" height="20px" />
               </span>
             </td>
           </tr>

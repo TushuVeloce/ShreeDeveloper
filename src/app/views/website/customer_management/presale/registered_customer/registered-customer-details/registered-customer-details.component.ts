@@ -13,6 +13,7 @@ import { CurrentDateTimeRequest } from 'src/app/classes/infrastructure/request_r
 import { DTU } from 'src/app/services/dtu.service';
 import { ValidationMessages, ValidationPatterns } from 'src/app/classes/domain/constants';
 import { NgModel } from '@angular/forms';
+import { DateconversionService } from 'src/app/services/dateconversion.service';
 
 
 @Component({
@@ -61,14 +62,23 @@ export class RegisteredCustomerDetailsComponent implements OnInit {
   @ViewChild('AadharCtrl') AadharInputControl!: NgModel;
 
 
-  constructor(private router: Router, private uiUtils: UIUtils, private appStateManage: AppStateManageService, private utils: Utils, private companystatemanagement: CompanyStateManagement, private servicecommunicator: ServerCommunicatorService, private dtu: DTU,) { }
+  constructor(
+    private router: Router,
+    private dateService: DateconversionService,
+    private uiUtils: UIUtils,
+    private appStateManage: AppStateManageService,
+    private utils: Utils,
+    private companystatemanagement: CompanyStateManagement,
+    private dtu: DTU) { }
 
   async ngOnInit() {
     this.appStateManage.setDropdownDisabled(true);
     if (this.appStateManage.StorageKey.getItem('Editable') == 'Edit') {
       this.IsNewEntity = false;
       this.Entity = RegisteredCustomer.GetCurrentInstance();
-      this.Entity.p.SiteVisitDate = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.SiteVisitDate)
+      this.Entity.p.SiteVisitDate = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.SiteVisitDate);
+      // this.Date = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.Date);
+
       if (this.Entity.p.RegisterDate != '') {
         this.localRegisterDate = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.RegisterDate)
       }
@@ -129,9 +139,9 @@ export class RegisteredCustomerDetailsComponent implements OnInit {
     const RegTaxValuesInPercentage = Number(this.Entity.p.RegTaxValuesInPercentage);
     const RegistrationFees = Math.ceil(ValueOfAgreement * (RegTaxValuesInPercentage / 100));
 
-    if(RegistrationFees > 30000){
+    if (RegistrationFees > 30000) {
       this.Entity.p.RegistrationFees = 30000
-    }else{
+    } else {
       this.Entity.p.RegistrationFees = RegistrationFees
     }
     this.calculateExtraCharges()

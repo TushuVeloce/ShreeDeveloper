@@ -44,9 +44,9 @@ export class RegisteredCustomerProps {
   public PANNo: string = '';
   public AdharNo: string = '';
   public CustID: string = '';
-  public RegisterCustomerBookingRemark: string = '';
+  public RegisterCustomerBookingRemark: number = 0;
 
-  public  SiteRef: number = 0;
+  public SiteRef: number = 0;
   public readonly SiteName: string = '';
   public readonly CustomerName: string = '';
   public readonly CustomerAddress: string = '';
@@ -228,13 +228,13 @@ export class RegisteredCustomer implements IPersistable<RegisteredCustomer> {
     return RegisteredCustomer.ListFromTransportData(tdResponse);
   }
 
-    public static async FetchEntireListByCompanyRefAndSiteRef(CompanyRef: number, SiteRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-      let req = new RegisteredCustomerFetchRequest();
-      req.CompanyRefs.push(CompanyRef)
-      req.SiteRefs.push(SiteRef)
-      let tdResponse = await RegisteredCustomer.FetchTransportData(req, errorHandler) as TransportData;
-      return RegisteredCustomer.ListFromTransportData(tdResponse);
-    }
+  public static async FetchEntireListByCompanyRefAndSiteRef(CompanyRef: number, SiteRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+    let req = new RegisteredCustomerFetchRequest();
+    req.CompanyRefs.push(CompanyRef)
+    req.SiteRefs.push(SiteRef)
+    let tdResponse = await RegisteredCustomer.FetchTransportData(req, errorHandler) as TransportData;
+    return RegisteredCustomer.ListFromTransportData(tdResponse);
+  }
 
   public async DeleteInstance(successHandler: () => Promise<void> = null!, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let tdRequest = new TransportData();
