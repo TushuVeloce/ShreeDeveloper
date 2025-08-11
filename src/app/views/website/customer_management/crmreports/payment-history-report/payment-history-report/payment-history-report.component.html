@@ -24,7 +24,7 @@
       <label for="SiteRef"><b>Site</b></label>
       <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear nzPlaceHolder="Select"
         [nzSize]="'large'" name="SiteRef" [(ngModel)]="Entity.p.SiteRef" required id="SiteRef"
-        (ngModelChange)="getPaymentHistoryListBySiteRef(); getPlotListBySiteRef(Entity.p.SiteRef)">
+        (ngModelChange)="getPaymentHistoryListBySiteandPlotRef(); getPlotListBySiteRef(Entity.p.SiteRef)">
         <nz-option nzLabel="All" [nzValue]="0"></nz-option>
          <nz-option *ngFor="let Site of SiteList" [nzValue]="Site.p.Ref" [nzLabel]="Site.p.Name"></nz-option>
       </nz-select>
@@ -35,7 +35,7 @@
       <label for="PlotRef"><b>Plot</b></label>
       <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear nzPlaceHolder="Select"
         [nzSize]="'large'" name="PlotRef" [(ngModel)]="Entity.p.PlotRef" required id="PlotRef"
-        (ngModelChange)="getPaymentHistoryListBySiteRef()">
+        (ngModelChange)="getPaymentHistoryListBySiteandPlotRef()">
         <nz-option nzLabel="All" [nzValue]="0"></nz-option>
          <nz-option *ngFor="let plot of PlotList" [nzValue]="plot.p.Ref" [nzLabel]="plot.p.PlotNo"></nz-option>
       </nz-select>

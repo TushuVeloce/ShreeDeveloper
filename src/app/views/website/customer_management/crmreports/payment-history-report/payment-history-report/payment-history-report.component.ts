@@ -11,6 +11,7 @@ import { UIUtils } from 'src/app/services/uiutils.service';
 import { SharedFilterComponent } from "src/app/views/website/Helpers/shared-filter/shared-filter.component";
 import { NzSelectComponent } from "ng-zorro-antd/select";
 import { Plot } from 'src/app/classes/domain/entities/website/masters/plot/plot';
+import { BookingRemarks, DomainEnums } from 'src/app/classes/domain/domainenums/domainenums';
 
 @Component({
   selector: 'app-payment-history-report',
@@ -30,9 +31,11 @@ export class PaymentHistoryReportComponent implements OnInit {
   CustomerRef: number = 0;
   pageSize = 10;
   currentPage = 1;
+  BookingRemarks = BookingRemarks
+
   total = 0;
   companyRef = this.companystatemanagement.SelectedCompanyRef;
-  headers: string[] = ['Sr.No.', 'Date', 'Site','Plot', 'Payer Name', 'Amount', 'Mode of Payment', 'Reason'];
+  headers: string[] = ['Sr.No.', 'Date', 'Site', 'Plot', 'Payer Name', 'Amount', 'Mode of Payment', 'Reason'];
 
   constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private screenSizeService: ScreenSizeService, private companystatemanagement: CompanyStateManagement, private DateconversionService: DateconversionService, private dtu: DTU,
   ) {
@@ -56,17 +59,13 @@ export class PaymentHistoryReportComponent implements OnInit {
     this.Entity.p.SiteRef = 0
     let lst = await Site.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.SiteList = lst;
-    // if (this.SiteList.length > 0) {
-    //   this.Entity.p.SiteRef = this.SiteList[0].p.Ref
-    //   this.getCustomerVisitListBySiteRef()
-    // }
   }
 
   getPlotListBySiteRef = async (siteref: number) => {
     this.Entity.p.PlotRef = 0
     this.PlotList = [];
     let lst = await Plot.FetchEntireListBySiteRef(siteref, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-    this.PlotList = lst;
+    this.PlotList = lst.filter(data => data.p.CurrentBookingRemark != BookingRemarks.Plot_Of_Owner && data.p.CurrentBookingRemark != BookingRemarks.Plot_Of_Shree);
   }
 
   // Extracted from services date conversion //
@@ -85,11 +84,10 @@ export class PaymentHistoryReportComponent implements OnInit {
     );
     this.MasterList = lst;
     this.DisplayMasterList = this.MasterList;
-    console.log('this.DisplayMasterList :', this.DisplayMasterList);
     this.loadPaginationData();
   };
 
-  getPaymentHistoryListBySiteRef = async () => {
+  getPaymentHistoryListBySiteandPlotRef = async () => {
     this.MasterList = [];
     this.DisplayMasterList = [];
     if (this.companyRef() <= 0) {
@@ -102,7 +100,6 @@ export class PaymentHistoryReportComponent implements OnInit {
     } else if (this.Entity.p.PlotRef == null) {
       this.Entity.p.PlotRef = 0
     }
-    console.log('this.Entity.p.SiteRef, this.Entity.p.PlotRef :', this.Entity.p.SiteRef, this.Entity.p.PlotRef);
     let lst = await Income.FetchEntireListBySiteRef(this.Entity.p.SiteRef, this.Entity.p.PlotRef, this.companyRef(),
       async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
     );

@@ -98,7 +98,7 @@ export class RegistrarOfficeComponent implements OnInit {
     let lst = await RegistrarOffice.FetchEntireListBySiteRef(SiteRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.MasterList = lst;
     this.DisplayMasterList = this.MasterList;
-    console.log(' this.DisplayMasterList  :',  this.DisplayMasterList );
+    console.log(' this.DisplayMasterList  :', this.DisplayMasterList);
     this.loadPaginationData();
   }
 
@@ -128,6 +128,9 @@ export class RegistrarOfficeComponent implements OnInit {
 
   isAgreementCompleted(office: any): boolean {
     const p = office.p;
+    if (!this.Entity.p.IsAgreementToSaleYes) {
+      return true;
+    }
     return p.AgreementDocumentNo && p.AgreementDate;
   }
 
