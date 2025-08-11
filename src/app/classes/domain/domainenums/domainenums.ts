@@ -48,6 +48,7 @@ export enum MarketingModes {
   Outdoor = 30,
   PrintingMedia = 40,
   AgentBoker = 50,
+  Self = 60,
 }
 
 export enum Company {
@@ -284,6 +285,8 @@ export class DomainEnums {
         return 'Printing Media';
       case MarketingModes.AgentBoker:
         return 'Agent/Broker';
+      case MarketingModes.Self:
+        return 'Self';
       default:
         return '';
     }
@@ -313,6 +316,10 @@ export class DomainEnums {
       {
         Ref: MarketingModes.AgentBoker,
         Name: DomainEnums.MarketingModeName(MarketingModes.AgentBoker),
+      },
+      {
+        Ref: MarketingModes.Self,
+        Name: DomainEnums.MarketingModeName(MarketingModes.Self),
       },
     ];
     if (withAllOption) {
