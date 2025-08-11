@@ -3,6 +3,7 @@ import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 import { LoginPageComponent } from './views/login-page/login-page.component';
 import { ForgotPasswordComponent } from './views/sidebarlayout/forgot_password/forgot-password/forgot-password.component';
 import { CreatePasswordComponent } from './views/sidebarlayout/create_password/create-password/create-password.component';
+import { AuthGuard } from './services/auth-guard.service';
 
 const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -11,6 +12,7 @@ const routes: Routes = [
   { path: 'forgot_password', component: ForgotPasswordComponent },
   {
     path: 'homepage',
+    canActivate: [AuthGuard],
     loadChildren: () => import('./views/sidebarlayout/sidebarlayout.routes').then(m => m.SidebarLayout_ROUTES)
   },
   {

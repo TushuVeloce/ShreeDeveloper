@@ -72,20 +72,22 @@ export class AuthGuard implements CanActivate {
 
   canActivate(route: ActivatedRouteSnapshot): boolean {
     const isLoggedIn = !!this.appStateManage.StorageKey.getItem('CurrentLoginToken'); // or your logic
+    console.log('isLoggedIn :', isLoggedIn);
     if (isLoggedIn) {
       // return true;
       const featureName = route.data['featureName'];
       const validMenuItems = JSON.parse(this.appStateManage.StorageKey.getItem('ValidMenuItems') || '[]');
 
       const matchedFeature = validMenuItems.find((item: any) => item.FeatureName === featureName);
+      return true;
 
-      if (matchedFeature && matchedFeature.CanView) {
-        return true;
+      // if (matchedFeature && matchedFeature.CanView) {
+      //   return true;
 
-      } else {
-        this.router.navigate(['/login']); // or show access denied page
-        return false;
-      }
+      // } else {
+      //   this.router.navigate(['/login']); // or show access denied page
+      //   return false;
+      // }
     } else {
       this.router.navigate(['/login']); // redirect if not logged in
       return false;
