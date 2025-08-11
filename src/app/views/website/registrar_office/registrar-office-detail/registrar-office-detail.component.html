@@ -81,7 +81,7 @@
 
             <ng-container *ngIf="selectedFileNames['CustomerAadharFile']; else NoFile">
               <span style="cursor: pointer;"
-                (click)="fileNavigation(this.Entity.p.CustomerAadharPath, 'CustomerAadharFile')">
+                (click)="fileNavigation(Entity.p.CustomerAadharPath, 'CustomerAadharFile')">
                 {{ selectedFileNames['CustomerAadharFile']}}
               </span>
             </ng-container>
@@ -91,12 +91,12 @@
               (change)="onFileUpload($event, 'CustomerAadharFile', 'CustomerAadharPath');" />
 
             <!-- Customer Aadhar Image Display -->
-            <ng-container *ngIf="this.Entity.p.CustomerAadharPath; else AddDocImage">
+            <ng-container *ngIf="Entity.p.CustomerAadharPath; else AddDocImage">
               <img
-                [src]="isImageFile(this.Entity.p.CustomerAadharPath) ? filePostViews['CustomerAadharFile'] : '/assets/icons/doc-placeholder.png'"
+                [src]="isImageFile(Entity.p.CustomerAadharPath) ? filePostViews['CustomerAadharFile'] : '/assets/icons/doc-placeholder.png'"
                 alt="Customer Aadhar" title="Customer Aadhar"
-                (click)="fileNavigation(this.Entity.p.CustomerAadharPath, 'CustomerAadharFile')"
-                [class]="isImageFile(this.Entity.p.CustomerAadharPath) ?  'img-preview' : 'file-preview'" />
+                (click)="fileNavigation(Entity.p.CustomerAadharPath, 'CustomerAadharFile')"
+                [class]="isImageFile(Entity.p.CustomerAadharPath) ?  'img-preview' : 'file-preview'" />
             </ng-container>
 
             <ng-template #AddDocImage>
@@ -104,7 +104,7 @@
                 <img
                   [src]="isImageFile(selectedFileNames['CustomerAadharFile']) ? filePrevViews['CustomerAadharFile'] : '/assets/icons/doc-placeholder.png'"
                   alt="Customer Aadhar" title="Customer Aadhar"
-                  (click)="fileNavigation(this.Entity.p.CustomerAadharPath, 'CustomerAadharFile')"
+                  (click)="fileNavigation(Entity.p.CustomerAadharPath, 'CustomerAadharFile')"
                   [class]="isImageFile(selectedFileNames['CustomerAadharFile']) ? 'img-preview' : 'file-preview'" />
               </ng-container>
             </ng-template>
@@ -130,7 +130,7 @@
               (click)="CustomerPanFileInputRef.nativeElement.click()" />
 
             <ng-container *ngIf="selectedFileNames['CustomerPanFile']; else NoFile">
-              <span style="cursor: pointer;" (click)="fileNavigation(this.Entity.p.CustomerPanPath, 'CustomerPanFile')">
+              <span style="cursor: pointer;" (click)="fileNavigation(Entity.p.CustomerPanPath, 'CustomerPanFile')">
                 {{ selectedFileNames['CustomerPanFile']}}
               </span>
             </ng-container>
@@ -138,12 +138,12 @@
             <input type="file" #CustomerPanFileInput accept=".jpg,.jpeg,.png,.gif,.pdf" style="display: none"
               (change)="onFileUpload($event, 'CustomerPanFile', 'CustomerPanPath');" />
 
-            <ng-container *ngIf="this.Entity.p.CustomerPanPath; else CustomerPanAddDocImage">
+            <ng-container *ngIf="Entity.p.CustomerPanPath; else CustomerPanAddDocImage">
               <img
-                [src]="isImageFile(this.Entity.p.CustomerPanPath) ? filePostViews['CustomerPanFile'] : '/assets/icons/doc-placeholder.png'"
+                [src]="isImageFile(Entity.p.CustomerPanPath) ? filePostViews['CustomerPanFile'] : '/assets/icons/doc-placeholder.png'"
                 alt="Customer Pan" title="Customer Pan"
-                (click)="fileNavigation(this.Entity.p.CustomerPanPath, 'CustomerPanFile')"
-                [class]="isImageFile(this.Entity.p.CustomerPanPath) ? 'img-preview' : 'file-preview'" />
+                (click)="fileNavigation(Entity.p.CustomerPanPath, 'CustomerPanFile')"
+                [class]="isImageFile(Entity.p.CustomerPanPath) ? 'img-preview' : 'file-preview'" />
             </ng-container>
 
             <ng-template #CustomerPanAddDocImage>
@@ -151,7 +151,7 @@
                 <img
                   [src]="isImageFile(selectedFileNames['CustomerPanFile']) ? filePrevViews['CustomerPanFile'] : '/assets/icons/doc-placeholder.png'"
                   alt="Customer Pan" title="Customer Pan"
-                  (click)="fileNavigation(this.Entity.p.CustomerPanPath, 'CustomerPanFile')"
+                  (click)="fileNavigation(Entity.p.CustomerPanPath, 'CustomerPanFile')"
                   [class]="isImageFile(selectedFileNames['CustomerPanFile']) ? 'img-preview' : 'file-preview'" />
               </ng-container>
             </ng-template>
@@ -215,7 +215,7 @@
 
             <ng-container *ngIf="selectedFileNames['Witness1AadharFile']; else NoFile">
               <span style="cursor: pointer;"
-                (click)="fileNavigation(this.Entity.p.Witness1AadharPath, 'Witness1AadharFile')">
+                (click)="fileNavigation(Entity.p.Witness1AadharPath, 'Witness1AadharFile')">
                 {{ selectedFileNames['Witness1AadharFile']}}
               </span>
             </ng-container>
@@ -223,12 +223,12 @@
             <input type="file" #Witness1IsAadharSubmit accept=".jpg,.jpeg,.png,.gif,.pdf" style="display: none"
               (change)="onFileUpload($event, 'Witness1AadharFile', 'Witness1AadharPath');" />
 
-            <ng-container *ngIf="this.Entity.p.Witness1AadharPath; else Witness1AadharAddDocImage">
+            <ng-container *ngIf="Entity.p.Witness1AadharPath; else Witness1AadharAddDocImage">
               <img
-                [src]="isImageFile(this.Entity.p.Witness1AadharPath) ? filePostViews['Witness1AadharFile'] : '/assets/icons/doc-placeholder.png'"
+                [src]="isImageFile(Entity.p.Witness1AadharPath) ? filePostViews['Witness1AadharFile'] : '/assets/icons/doc-placeholder.png'"
                 alt="Witness 1 Aadhar" title="Witness 1 Aadhar"
-                (click)="fileNavigation(this.Entity.p.Witness1AadharPath, 'Witness1AadharFile')"
-                [class]="isImageFile(this.Entity.p.Witness1AadharPath) ?  'img-preview' : 'file-preview'" />
+                (click)="fileNavigation(Entity.p.Witness1AadharPath, 'Witness1AadharFile')"
+                [class]="isImageFile(Entity.p.Witness1AadharPath) ?  'img-preview' : 'file-preview'" />
             </ng-container>
 
             <ng-template #Witness1AadharAddDocImage>
@@ -236,7 +236,7 @@
                 <img
                   [src]="isImageFile(selectedFileNames['Witness1AadharFile']) ? filePrevViews['Witness1AadharFile'] : '/assets/icons/doc-placeholder.png'"
                   alt="Witness 1 Aadhar" title="Witness 1 Aadhar"
-                  (click)="fileNavigation(this.Entity.p.Witness1AadharPath, 'Witness1AadharFile')"
+                  (click)="fileNavigation(Entity.p.Witness1AadharPath, 'Witness1AadharFile')"
                   [class]="isImageFile(selectedFileNames['Witness1AadharFile']) ? 'img-preview' : 'file-preview'" />
               </ng-container>
             </ng-template>
@@ -261,7 +261,7 @@
               (click)="Witness1IsPanSubmitRef.nativeElement.click()" />
 
             <ng-container *ngIf="selectedFileNames['Witness1PanFile']; else NoFile">
-              <span style="cursor: pointer;" (click)="fileNavigation(this.Entity.p.Witness1PanPath, 'Witness1PanFile')">
+              <span style="cursor: pointer;" (click)="fileNavigation(Entity.p.Witness1PanPath, 'Witness1PanFile')">
                 {{ selectedFileNames['Witness1PanFile']}}
               </span>
             </ng-container>
@@ -269,12 +269,12 @@
             <input type="file" #Witness1IsPanSubmit accept=".jpg,.jpeg,.png,.gif,.pdf" style="display: none"
               (change)="onFileUpload($event, 'Witness1PanFile', 'Witness1PanPath')" />
 
-            <ng-container *ngIf="this.Entity.p.Witness1PanPath; else Witness1PanAddDocImage">
+            <ng-container *ngIf="Entity.p.Witness1PanPath; else Witness1PanAddDocImage">
               <img
-                [src]="isImageFile(this.Entity.p.Witness1PanPath) ? filePostViews['Witness1PanFile'] : '/assets/icons/doc-placeholder.png'"
+                [src]="isImageFile(Entity.p.Witness1PanPath) ? filePostViews['Witness1PanFile'] : '/assets/icons/doc-placeholder.png'"
                 alt="Witness 1 Pan" title="Witness 1 Pan"
-                (click)="fileNavigation(this.Entity.p.Witness1PanPath, 'Witness1PanFile')"
-                [class]="isImageFile(this.Entity.p.Witness1PanPath) ? 'img-preview' : 'file-preview'" />
+                (click)="fileNavigation(Entity.p.Witness1PanPath, 'Witness1PanFile')"
+                [class]="isImageFile(Entity.p.Witness1PanPath) ? 'img-preview' : 'file-preview'" />
             </ng-container>
 
             <ng-template #Witness1PanAddDocImage>
@@ -282,7 +282,7 @@
                 <img
                   [src]="isImageFile(selectedFileNames['Witness1PanFile']) ? filePrevViews['Witness1PanFile'] : '/assets/icons/doc-placeholder.png'"
                   alt="Witness 1 Pan" title="Witness 1 Pan"
-                  (click)="fileNavigation(this.Entity.p.Witness1PanPath, 'Witness1PanFile')"
+                  (click)="fileNavigation(Entity.p.Witness1PanPath, 'Witness1PanFile')"
                   [class]="isImageFile(selectedFileNames['Witness1PanFile']) ? 'img-preview' : 'file-preview'" />
               </ng-container>
             </ng-template>
@@ -343,7 +343,7 @@
 
             <ng-container *ngIf="selectedFileNames['Witness2AadharFile']; else NoFile">
               <span style="cursor: pointer;"
-                (click)="fileNavigation(this.Entity.p.Witness2AadharPath, 'Witness2AadharFile')">
+                (click)="fileNavigation(Entity.p.Witness2AadharPath, 'Witness2AadharFile')">
                 {{ selectedFileNames['Witness2AadharFile']}}
               </span>
             </ng-container>
@@ -351,12 +351,12 @@
             <input type="file" #Witness2IsAadharSubmit accept=".jpg,.jpeg,.png,.gif,.pdf" style="display: none"
               (change)="onFileUpload($event, 'Witness2AadharFile', 'Witness2AadharPath')" />
 
-            <ng-container *ngIf="this.Entity.p.Witness2AadharPath; else Witness2AadharAddDocImage">
+            <ng-container *ngIf="Entity.p.Witness2AadharPath; else Witness2AadharAddDocImage">
               <img
-                [src]="isImageFile(this.Entity.p.Witness2AadharPath) ? filePostViews['Witness2AadharFile'] : '/assets/icons/doc-placeholder.png'"
+                [src]="isImageFile(Entity.p.Witness2AadharPath) ? filePostViews['Witness2AadharFile'] : '/assets/icons/doc-placeholder.png'"
                 alt="Witness 2 Aadhar" title="Witness 2 Aadhar"
-                (click)="fileNavigation(this.Entity.p.Witness2AadharPath, 'Witness2AadharFile')"
-                [class]="isImageFile(this.Entity.p.Witness2AadharPath) ?  'img-preview' : 'file-preview'" />
+                (click)="fileNavigation(Entity.p.Witness2AadharPath, 'Witness2AadharFile')"
+                [class]="isImageFile(Entity.p.Witness2AadharPath) ?  'img-preview' : 'file-preview'" />
             </ng-container>
 
             <ng-template #Witness2AadharAddDocImage>
@@ -364,7 +364,7 @@
                 <img
                   [src]="isImageFile(selectedFileNames['Witness2AadharFile']) ? filePrevViews['Witness2AadharFile'] : '/assets/icons/doc-placeholder.png'"
                   alt="Witness 2 Aadhar" title="Witness 2 Aadhar"
-                  (click)="fileNavigation(this.Entity.p.Witness2AadharPath, 'Witness2AadharFile')"
+                  (click)="fileNavigation(Entity.p.Witness2AadharPath, 'Witness2AadharFile')"
                   [class]="isImageFile(selectedFileNames['Witness2AadharFile']) ? 'img-preview' : 'file-preview'" />
               </ng-container>
             </ng-template>
@@ -389,7 +389,7 @@
               (click)="Witness2IsPanSubmitRef.nativeElement.click()" />
 
             <ng-container *ngIf="selectedFileNames['Witness2PanFile']; else NoFile">
-              <span style="cursor: pointer;" (click)="fileNavigation(this.Entity.p.Witness2PanPath, 'Witness2PanFile')">
+              <span style="cursor: pointer;" (click)="fileNavigation(Entity.p.Witness2PanPath, 'Witness2PanFile')">
                 {{ selectedFileNames['Witness2PanFile']}}
               </span>
             </ng-container>
@@ -397,12 +397,12 @@
             <input type="file" #Witness2IsPanSubmit accept=".jpg,.jpeg,.png,.gif,.pdf" style="display: none"
               (change)="onFileUpload($event, 'Witness2PanFile', 'Witness2PanPath')" />
 
-            <ng-container *ngIf="this.Entity.p.Witness2PanPath; else Witness2PanAddDocImage">
+            <ng-container *ngIf="Entity.p.Witness2PanPath; else Witness2PanAddDocImage">
               <img
-                [src]="isImageFile(this.Entity.p.Witness2PanPath) ? filePostViews['Witness2PanFile'] : '/assets/icons/doc-placeholder.png'"
+                [src]="isImageFile(Entity.p.Witness2PanPath) ? filePostViews['Witness2PanFile'] : '/assets/icons/doc-placeholder.png'"
                 alt="Witness 2 Pan" title="Witness 2 Pan"
-                (click)="fileNavigation(this.Entity.p.Witness2PanPath, 'Witness2PanFile')"
-                [class]="isImageFile(this.Entity.p.Witness2PanPath) ?  'img-preview' : 'file-preview'" />
+                (click)="fileNavigation(Entity.p.Witness2PanPath, 'Witness2PanFile')"
+                [class]="isImageFile(Entity.p.Witness2PanPath) ?  'img-preview' : 'file-preview'" />
             </ng-container>
 
             <ng-template #Witness2PanAddDocImage>
@@ -410,7 +410,7 @@
                 <img
                   [src]="isImageFile(selectedFileNames['Witness2PanFile']) ? filePrevViews['Witness2PanFile'] : '/assets/icons/doc-placeholder.png'"
                   alt="Witness 2 Pan" title="Witness 2 Pan"
-                  (click)="fileNavigation(this.Entity.p.Witness2PanPath, 'Witness2PanFile')"
+                  (click)="fileNavigation(Entity.p.Witness2PanPath, 'Witness2PanFile')"
                   [class]="isImageFile(selectedFileNames['Witness2PanFile']) ? 'img-preview' : 'file-preview'" />
               </ng-container>
             </ng-template>
@@ -449,7 +449,7 @@
 
             <ng-container *ngIf="selectedFileNames['AgreementDocumentFile']; else NoFile">
               <span style="cursor: pointer;"
-                (click)="fileNavigation(this.Entity.p.AgreementDocumentPath, 'AgreementDocumentFile')">
+                (click)="fileNavigation(Entity.p.AgreementDocumentPath, 'AgreementDocumentFile')">
                 {{ selectedFileNames['AgreementDocumentFile']}}
               </span>
             </ng-container>
@@ -457,9 +457,16 @@
             <input type="file" #AgreementDocument accept=".jpg,.jpeg,.png,.gif,.pdf" style="display: none"
               (change)="onFileUpload($event, 'AgreementDocumentFile', 'AgreementDocumentPath')" />
           </div>
+
+          <div class="col-3 d-flex justify-content-end align-items-center">
+            <label for="IsAgreementToSaleYes">Yes</label>
+            <input type="checkbox" id="IsAgreementToSaleYes" [(ngModel)]="Entity.p.IsAgreementToSaleYes"
+              name="IsAgreementToSaleYes" class="custom-checkbox"
+              (ngModelChange)="Entity.p.AgreementDocumentNo = ''; localagreementdate = ''; Entity.p.AgreementDate = '';" />
+          </div>
         </div>
 
-        <div class="row mb-2" style="margin-top: 1rem">
+        <div class="row mb-2" *ngIf="Entity.p.IsAgreementToSaleYes" style="margin-top: 1rem">
           <div class="col-md-6">
             <label>Document</label>
             <input type="text" [(ngModel)]="Entity.p.AgreementDocumentNo" name="AgreementDocumentNo"
@@ -508,7 +515,7 @@
 
             <ng-container *ngIf="selectedFileNames['SaleDeedDocumentFile']; else NoFile">
               <span style="cursor: pointer;"
-                (click)="fileNavigation(this.Entity.p.SaleDeedDocumentPath, 'SaleDeedDocumentFile')">
+                (click)="fileNavigation(Entity.p.SaleDeedDocumentPath, 'SaleDeedDocumentFile')">
                 {{ selectedFileNames['SaleDeedDocumentFile']}}
               </span>
             </ng-container>
@@ -575,7 +582,7 @@
 
             <ng-container *ngIf="selectedFileNames['IndexOriginalDocumentFile']; else NoFile">
               <span style="cursor: pointer;"
-                (click)="fileNavigation(this.Entity.p.IndexOriginalDocumentPath, 'IndexOriginalDocumentFile')">
+                (click)="fileNavigation(Entity.p.IndexOriginalDocumentPath, 'IndexOriginalDocumentFile')">
                 {{ selectedFileNames['IndexOriginalDocumentFile']}}
               </span>
             </ng-container>
@@ -583,12 +590,12 @@
             <input type="file" #IndexOriginalDocument accept=".jpg,.jpeg,.png,.gif,.pdf" style="display: none"
               (change)="onFileUpload($event, 'IndexOriginalDocumentFile', 'IndexOriginalDocumentPath')" />
 
-            <ng-container *ngIf="this.Entity.p.IndexOriginalDocumentPath; else IndexOriginalDocumentAddDocImage">
+            <ng-container *ngIf="Entity.p.IndexOriginalDocumentPath; else IndexOriginalDocumentAddDocImage">
               <img
-                [src]="isImageFile(this.Entity.p.IndexOriginalDocumentPath) ? filePostViews['IndexOriginalDocumentFile'] : '/assets/icons/doc-placeholder.png'"
+                [src]="isImageFile(Entity.p.IndexOriginalDocumentPath) ? filePostViews['IndexOriginalDocumentFile'] : '/assets/icons/doc-placeholder.png'"
                 alt="Index Original Document" title="Index Original Document"
-                (click)="fileNavigation(this.Entity.p.IndexOriginalDocumentPath, 'IndexOriginalDocumentFile')"
-                [class]="isImageFile(this.Entity.p.IndexOriginalDocumentPath) ?  'img-preview' : 'file-preview'" />
+                (click)="fileNavigation(Entity.p.IndexOriginalDocumentPath, 'IndexOriginalDocumentFile')"
+                [class]="isImageFile(Entity.p.IndexOriginalDocumentPath) ?  'img-preview' : 'file-preview'" />
             </ng-container>
 
             <ng-template #IndexOriginalDocumentAddDocImage>
@@ -596,7 +603,7 @@
                 <img
                   [src]="isImageFile(selectedFileNames['IndexOriginalDocumentFile']) ? filePrevViews['IndexOriginalDocumentFile'] : '/assets/icons/doc-placeholder.png'"
                   alt="Index Original Document" title="Index Original Document"
-                  (click)="fileNavigation(this.Entity.p.IndexOriginalDocumentPath, 'IndexOriginalDocumentFile')"
+                  (click)="fileNavigation(Entity.p.IndexOriginalDocumentPath, 'IndexOriginalDocumentFile')"
                   [class]="isImageFile(selectedFileNames['IndexOriginalDocumentFile']) ? 'img-preview' : 'file-preview'" />
               </ng-container>
             </ng-template>
@@ -622,7 +629,7 @@
 
             <ng-container *ngIf="selectedFileNames['DastZeroxDocumentFile']; else NoFile">
               <span style="cursor: pointer;"
-                (click)="fileNavigation(this.Entity.p.DastZeroxDocumentPath, 'DastZeroxDocumentFile')">
+                (click)="fileNavigation(Entity.p.DastZeroxDocumentPath, 'DastZeroxDocumentFile')">
                 {{ selectedFileNames['DastZeroxDocumentFile']}}
               </span>
             </ng-container>
@@ -630,12 +637,12 @@
             <input type="file" #DastZeroxDocument accept=".jpg,.jpeg,.png,.gif,.pdf" style="display: none"
               (change)="onFileUpload($event, 'DastZeroxDocumentFile', 'DastZeroxDocumentPath')" />
 
-            <ng-container *ngIf="this.Entity.p.DastZeroxDocumentPath; else DastZeroxDocumentAddDocImage">
+            <ng-container *ngIf="Entity.p.DastZeroxDocumentPath; else DastZeroxDocumentAddDocImage">
               <img
-                [src]="isImageFile(this.Entity.p.DastZeroxDocumentPath) ? filePostViews['DastZeroxDocumentFile'] : '/assets/icons/doc-placeholder.png'"
+                [src]="isImageFile(Entity.p.DastZeroxDocumentPath) ? filePostViews['DastZeroxDocumentFile'] : '/assets/icons/doc-placeholder.png'"
                 alt="Dast Zerox Document" title="Dast Zerox Document"
-                (click)="fileNavigation(this.Entity.p.DastZeroxDocumentPath, 'DastZeroxDocumentFile')"
-                [class]="isImageFile(this.Entity.p.DastZeroxDocumentPath) ?  'img-preview' : 'file-preview'" />
+                (click)="fileNavigation(Entity.p.DastZeroxDocumentPath, 'DastZeroxDocumentFile')"
+                [class]="isImageFile(Entity.p.DastZeroxDocumentPath) ?  'img-preview' : 'file-preview'" />
             </ng-container>
 
             <ng-template #DastZeroxDocumentAddDocImage>
@@ -643,7 +650,7 @@
                 <img
                   [src]="isImageFile(selectedFileNames['DastZeroxDocumentFile']) ? filePrevViews['DastZeroxDocumentFile'] : '/assets/icons/doc-placeholder.png'"
                   alt="Dast Zerox Document" title="Dast Zerox Document"
-                  (click)="fileNavigation(this.Entity.p.DastZeroxDocumentPath, 'DastZeroxDocumentFile')"
+                  (click)="fileNavigation(Entity.p.DastZeroxDocumentPath, 'DastZeroxDocumentFile')"
                   [class]="isImageFile(selectedFileNames['DastZeroxDocumentFile']) ? 'img-preview' : 'file-preview'" />
               </ng-container>
             </ng-template>
@@ -659,7 +666,7 @@
 
         <!-- Inward No: -->
         <div class="row mb-2" style="margin-top: 1rem">
-          <div class="col-md-6">
+          <!-- <div class="col-md-6">
             <label>Inward No</label>
             <input type="text" [(ngModel)]="Entity.p.TalathiInwardNo" name="TalathiInwardNo" class="form-control"
               id="TalathiInwardNo" required placeholder="Enter Inward No" pattern="{{ NameWithNos }}"
@@ -671,7 +678,7 @@
               <span class="validation-text" *ngIf="TalathiInwardNoCtrl.errors?.['pattern']">{{ NameWithNosMsg
                 }}</span>
             </div>
-          </div>
+          </div> -->
           <div class="col-md-6">
             <label>Date</label>
             <input type="date" [(ngModel)]="localtalathidate" name="TalathiDate" class="form-control" id="TalathiDate"
@@ -692,7 +699,7 @@
 
             <ng-container *ngIf="selectedFileNames['FerfarNoticeDocumentFile']; else NoFile">
               <span style="cursor: pointer;"
-                (click)="fileNavigation(this.Entity.p.FerfarNoticeDocumentPath, 'FerfarNoticeDocumentFile')">
+                (click)="fileNavigation(Entity.p.FerfarNoticeDocumentPath, 'FerfarNoticeDocumentFile')">
                 {{ selectedFileNames['FerfarNoticeDocumentFile']}}
               </span>
             </ng-container>
@@ -700,12 +707,12 @@
             <input type="file" #FerfarNoticeDocument accept=".jpg,.jpeg,.png,.gif,.pdf" style="display: none"
               (change)="onFileUpload($event, 'FerfarNoticeDocumentFile', 'FerfarNoticeDocumentPath')" />
 
-            <ng-container *ngIf="this.Entity.p.FerfarNoticeDocumentPath; else FerfarNoticeDocumentAddDocImage">
+            <ng-container *ngIf="Entity.p.FerfarNoticeDocumentPath; else FerfarNoticeDocumentAddDocImage">
               <img
-                [src]="isImageFile(this.Entity.p.FerfarNoticeDocumentPath) ? filePostViews['FerfarNoticeDocumentFile'] : '/assets/icons/doc-placeholder.png'"
+                [src]="isImageFile(Entity.p.FerfarNoticeDocumentPath) ? filePostViews['FerfarNoticeDocumentFile'] : '/assets/icons/doc-placeholder.png'"
                 alt="Ferfar Notice" title="Ferfar Notice"
-                (click)="fileNavigation(this.Entity.p.FerfarNoticeDocumentPath, 'FerfarNoticeDocumentFile')"
-                [class]="isImageFile(this.Entity.p.FerfarNoticeDocumentPath) ?  'img-preview' : 'file-preview'" />
+                (click)="fileNavigation(Entity.p.FerfarNoticeDocumentPath, 'FerfarNoticeDocumentFile')"
+                [class]="isImageFile(Entity.p.FerfarNoticeDocumentPath) ?  'img-preview' : 'file-preview'" />
             </ng-container>
 
             <ng-template #FerfarNoticeDocumentAddDocImage>
@@ -713,7 +720,7 @@
                 <img
                   [src]="isImageFile(selectedFileNames['FerfarNoticeDocumentFile']) ? filePrevViews['FerfarNoticeDocumentFile'] : '/assets/icons/doc-placeholder.png'"
                   alt="Ferfar Notice" title="Ferfar Notice"
-                  (click)="fileNavigation(this.Entity.p.FerfarNoticeDocumentPath, 'FerfarNoticeDocumentFile')"
+                  (click)="fileNavigation(Entity.p.FerfarNoticeDocumentPath, 'FerfarNoticeDocumentFile')"
                   [class]="isImageFile(selectedFileNames['FerfarNoticeDocumentFile']) ? 'img-preview' : 'file-preview'" />
               </ng-container>
             </ng-template>
@@ -740,7 +747,7 @@
 
             <ng-container *ngIf="selectedFileNames['FinalCustomer712DocumentFile']; else NoFile">
               <span style="cursor: pointer;"
-                (click)="fileNavigation(this.Entity.p.FinalCustomer712DocumentPath, 'FinalCustomer712DocumentFile')">
+                (click)="fileNavigation(Entity.p.FinalCustomer712DocumentPath, 'FinalCustomer712DocumentFile')">
                 {{ selectedFileNames['FinalCustomer712DocumentFile']}}
               </span>
             </ng-container>
@@ -748,12 +755,12 @@
             <input type="file" #FinalCustomer712Document accept=".jpg,.jpeg,.png,.gif,.pdf" style="display: none"
               (change)="onFileUpload($event, 'FinalCustomer712DocumentFile', 'FinalCustomer712DocumentPath')" />
 
-            <ng-container *ngIf="this.Entity.p.FinalCustomer712DocumentPath; else FinalCustomer712DocumentAddDocImage">
+            <ng-container *ngIf="Entity.p.FinalCustomer712DocumentPath; else FinalCustomer712DocumentAddDocImage">
               <img
-                [src]="isImageFile(this.Entity.p.FinalCustomer712DocumentPath) ? filePostViews['FinalCustomer712DocumentFile'] : '/assets/icons/doc-placeholder.png'"
+                [src]="isImageFile(Entity.p.FinalCustomer712DocumentPath) ? filePostViews['FinalCustomer712DocumentFile'] : '/assets/icons/doc-placeholder.png'"
                 alt="Final Customer 7/12" title="Final Customer 7/12"
-                (click)="fileNavigation(this.Entity.p.FinalCustomer712DocumentPath, 'FinalCustomer712DocumentFile')"
-                [class]="isImageFile(this.Entity.p.FinalCustomer712DocumentPath) ?  'img-preview' : 'file-preview'" />
+                (click)="fileNavigation(Entity.p.FinalCustomer712DocumentPath, 'FinalCustomer712DocumentFile')"
+                [class]="isImageFile(Entity.p.FinalCustomer712DocumentPath) ?  'img-preview' : 'file-preview'" />
             </ng-container>
 
             <ng-template #FinalCustomer712DocumentAddDocImage>
@@ -761,7 +768,7 @@
                 <img
                   [src]="isImageFile(selectedFileNames['FinalCustomer712DocumentFile']) ? filePrevViews['FinalCustomer712DocumentFile'] : '/assets/icons/doc-placeholder.png'"
                   alt="Final Customer 7/12" title="Final Customer 7/12"
-                  (click)="fileNavigation(this.Entity.p.FinalCustomer712DocumentPath, 'FinalCustomer712DocumentFile')"
+                  (click)="fileNavigation(Entity.p.FinalCustomer712DocumentPath, 'FinalCustomer712DocumentFile')"
                   [class]="isImageFile(selectedFileNames['FinalCustomer712DocumentFile']) ? 'img-preview' : 'file-preview'" />
               </ng-container>
             </ng-template>

@@ -60,6 +60,7 @@ export class RegistrarOfficeProps {
   public Witness2PanFile: File = null as any
 
   public AgreementDocumentNo: string = '';
+  public IsAgreementToSaleYes: boolean = false;
   public AgreementDate: string = '';
   public AgreementDocumentPath: string = '';
   public AgreementDocumentFile: File = null as any

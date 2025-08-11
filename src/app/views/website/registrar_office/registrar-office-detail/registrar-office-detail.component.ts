@@ -217,6 +217,7 @@ export class RegistrarOfficeDetailComponent implements OnInit {
     }
   }
 
+
   isWitness1Complete(): boolean {
     const p = this.Entity.p;
     return (
@@ -226,6 +227,7 @@ export class RegistrarOfficeDetailComponent implements OnInit {
       p.Witness1IsPanSubmit
     );
   }
+
   isWitness2Complete(): boolean {
     const p = this.Entity.p;
     return (
@@ -238,6 +240,9 @@ export class RegistrarOfficeDetailComponent implements OnInit {
 
   isAgreementtoSaleComplete(): boolean {
     const p = this.Entity.p;
+    if (!this.Entity.p.IsAgreementToSaleYes) {
+      return true;
+    }
     return (
       p.AgreementDocumentNo?.trim() !== '' &&
       this.localagreementdate?.trim() !== ''
@@ -255,7 +260,7 @@ export class RegistrarOfficeDetailComponent implements OnInit {
   isTalathiComplete(): boolean {
     const p = this.Entity.p;
     return (
-      p.TalathiInwardNo?.trim() !== '' &&
+      // p.TalathiInwardNo?.trim() !== '' &&
       this.localtalathidate?.trim() !== '' &&
       p.IsIndexOriginalSubmit &&
       p.IsDastZeroxSubmit &&
