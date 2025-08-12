@@ -298,22 +298,22 @@ export class StockOrderDetailsComponent implements OnInit {
       this.uiUtils.showErrorToster('Vendor not Selected');
       return;
     }
-    // if (this.Entity.p.LedgerRef <= 0) {
-    //   this.uiUtils.showErrorToster('Ledger not Selected');
-    //   return;
-    // }
-    // if (this.Entity.p.SubLedgerRef <= 0) {
-    //   this.uiUtils.showErrorToster('Sub Ledger not Selected');
-    //   return;
-    // }
-    // if (this.Entity.p.Description == '') {
-    //   this.uiUtils.showErrorToster('Description not Selected');
-    //   return;
-    // }
-    // if (this.Entity.p.Reason == '') {
-    //   this.uiUtils.showErrorToster('Reason not Selected');
-    //   return;
-    // }
+    if (this.Entity.p.LedgerRef <= 0) {
+      this.uiUtils.showErrorToster('Ledger not Selected');
+      return;
+    }
+    if (this.Entity.p.SubLedgerRef <= 0) {
+      this.uiUtils.showErrorToster('Sub Ledger not Selected');
+      return;
+    }
+    if (this.Entity.p.Description == '') {
+      this.uiUtils.showErrorToster('Description not Selected');
+      return;
+    }
+    if (this.Entity.p.Reason == '') {
+      this.uiUtils.showErrorToster('Reason not Selected');
+      return;
+    }
     this.ModalEditable = false;
     this.getOrderedMaterialList();
     if (type === 'OrderMaterial') this.isOrderMaterialModalOpen = true;

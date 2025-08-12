@@ -57,14 +57,14 @@
               <td class="tbldata" *ngIf="j === 0" [attr.rowspan]="Inward.p.MaterialInwardDetailsArray.length">
                 {{ (currentPage - 1) * pageSize + i + 1 }}
               </td>
-              <td class="tbldata" *ngIf="j === 0 && !Entity.p.SiteRef"
+              <td class="tbldata" *ngIf="j === 0 "
                 [attr.rowspan]="Inward.p.MaterialInwardDetailsArray.length">
                 {{ Inward.p.ChalanNo }}
               </td>
                 <td class="tbldata" *ngIf="j === 0" [attr.rowspan]="Inward.p.MaterialInwardDetailsArray.length">
                 {{ Inward.p.DisplayPurchaseOrderId }}
               </td>
-              <td class="tbldata" *ngIf="j === 0 && !Entity.p.SiteRef"
+              <td class="tbldata" *ngIf="j === 0 "
                 [attr.rowspan]="Inward.p.MaterialInwardDetailsArray.length">
                 {{ Inward.p.SiteName }}
               </td>

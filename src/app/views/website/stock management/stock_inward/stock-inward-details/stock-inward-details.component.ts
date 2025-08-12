@@ -174,7 +174,7 @@ export class StockInwardDetailsComponent implements OnInit {
       return;
     }
     let lst = await Vendor.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-    this.VendorList = lst;
+    this.VendorList = lst.filter(data => data.p.MaterialListSuppliedByVendor.length > 0);
   }
 
   onVendorSelection = (VendorRef: number) => {
@@ -252,6 +252,7 @@ export class StockInwardDetailsComponent implements OnInit {
       return;
     }
     const lst = await MaterialFromOrder.FetchOrderedMaterials(this.Entity.p.MaterialPurchaseOrderRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    this.Entity.p.MaterialInwardDetailsArray = [];
     this.MaterialListOriginal = lst?.filter(item => item.p.IsMaterialExist == 1);
     this.MaterialListOriginal?.forEach((item, index) => {
       item.p.InternalRef = index + 1;
@@ -290,6 +291,15 @@ export class StockInwardDetailsComponent implements OnInit {
 
       this.newInward.InternalRef = UnitData.p.InternalRef;
       this.NewRemainingQty = UnitData.p.RemainingQty;
+
+      this.newInward.InwardQty = 0;
+      this.newInward.Rate = 0;
+      this.newInward.DiscountedRate = 0;
+      this.newInward.DiscountOnNetAmount = 0;
+      this.newInward.NetAmount = 0;
+      this.newInward.Gst = 0;
+      this.newInward.DeliveryCharges = 0;
+      this.newInward.TotalAmount = 0;
     } else {
       await this.uiUtils.showErrorToster('Material not found');
     }
@@ -461,6 +471,7 @@ export class StockInwardDetailsComponent implements OnInit {
       this.shouldFilterDropdown = true;
       this.filterMaterialList();
 
+      console.log('this.Entity.p.GrandTotal :', this.Entity.p.GrandTotal);
       await this.uiUtils.showSuccessToster('Material added successfully');
     }
 
@@ -497,6 +508,12 @@ export class StockInwardDetailsComponent implements OnInit {
         this.filterMaterialList();
       }
     );
+  }
+
+  getGrandTotal(): number {
+    return this.Entity.p.MaterialInwardDetailsArray.reduce((total: number, item: any) => {
+      return this.Entity.p.GrandTotal = total + Number(item.TotalAmount || 0);
+    }, 0);
   }
 
   SaveStockInward = async () => {
