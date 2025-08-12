@@ -64,6 +64,10 @@
                 <strong>Address - {{ Entity.p.SiteAddressLine1 }}</strong>
               </div>
               <br>
+              <div>
+                <strong>Date - {{formatDate(Entity.p.InwardDate )}}</strong>
+              </div>
+              <br>
             </td>
             <td style="text-align: left; vertical-align: top; padding: 5px; border-width: 1px;">
               <div>
@@ -75,7 +79,7 @@
               </div>
               <br>
               <div>
-                <strong>Address No - {{Entity.p.VendorAddressLine1}}</strong>
+                <strong>Address - {{Entity.p.VendorAddressLine1}}</strong>
               </div>
             </td>
           </tr>
@@ -87,12 +91,17 @@
         <thead>
           <tr style="background-color: maroon; color: white">
             <th style="padding: 8px; border: none">Sr.No</th>
-            <th style="padding: 8px; border: none">Inward Date</th>
             <th style="padding: 8px; border: none">Material Name</th>
             <th style="padding: 8px; border: none">Unit</th>
             <th style="padding: 8px; border: none">Ordered Qty.</th>
+            <th style="padding: 8px; border: none">Rate</th>
             <th style="padding: 8px; border: none">Inward Qty.</th>
             <th style="padding: 8px; border: none">Remaining Qty.</th>
+            <th style="padding: 8px; border: none">Net Discount</th>
+            <th style="padding: 8px; border: none">Net Amount</th>
+            <th style="padding: 8px; border: none">GSt</th>
+            <th style="padding: 8px; border: none">Delivery Charges</th>
+            <th style="padding: 8px; border: none">Total Amount</th>
           </tr>
         </thead>
         <tbody>
@@ -101,9 +110,6 @@
               let i = index
             ">
             <td style="padding: 8px; border: none">{{ i + 1 }}</td>
-            <td style="padding: 8px; border: none">
-              {{formatDate(Entity.p.InwardDate )}}
-            </td>
             <td style="padding: 8px; border: none">
               {{ material.MaterialName }}
             </td>
@@ -114,11 +120,47 @@
               {{ material.PurchaseOrderQty }}
             </td>
             <td style="padding: 8px; border: none">
+              {{ !material.DiscountedRate ? (material.Rate | currency : "INR") : (material.DiscountedRate
+              | currency : "INR")}}
+            </td>
+            <td style="padding: 8px; border: none">
               {{ material.InwardQty }}
             </td>
             <td style="padding: 8px; border: none">
               {{ material.PurchaseOrderRemainingQty }}
             </td>
+            <td style="padding: 8px; border: none">
+              {{ material.DiscountOnNetAmount }}
+            </td>
+            <td style="padding: 8px; border: none">
+              {{ material.NetAmount }}
+            </td>
+            <td style="padding: 8px; border: none">
+              {{ material.Gst }}
+            </td>
+            <td style="padding: 8px; border: none">
+              {{ material.DeliveryCharges }}
+            </td>
+            <td style="padding: 8px; border: none">
+              {{ material.TotalAmount }}
+            </td>
+          </tr>
+          <!-- Total -->
+          <tr>
+            <td colspan="11"
+              style="padding: 8px; border: none; text-align: center; font-weight: bold; background-color: #fef4d4;">
+              <strong>TOTAL</strong>
+            </td>
+            <td style="padding: 8px; border: none; font-weight: bold; background-color: #fef4d4;"><strong>
+                {{Entity.p.GrandTotal | currency : "INR" }}</strong>
+            </td>
+          </tr>
+          <tr>
+            <td style="border: none;"></td>
+            <td style="border: none;"></td>
+            <td style="border: none;"></td>
+            <td colspan="10" style="padding: 8px; border: none; text-align: center;"><strong>Inwords - {{
+                this.totalAmountInWords(Entity.p.GrandTotal) }}</strong></td>
           </tr>
         </tbody>
       </table>

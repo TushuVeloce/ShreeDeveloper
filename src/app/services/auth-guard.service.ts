@@ -72,7 +72,6 @@ export class AuthGuard implements CanActivate {
 
   canActivate(route: ActivatedRouteSnapshot): boolean {
     const isLoggedIn = !!this.appStateManage.StorageKey.getItem('CurrentLoginToken'); // or your logic
-    console.log('isLoggedIn :', isLoggedIn);
     if (isLoggedIn) {
       // return true;
       const featureName = route.data['featureName'];

@@ -41,7 +41,7 @@ export class StockOrderDetailsComponent implements OnInit {
   CurrentDate: string = '';
   ModalEditable: boolean = false;
   ExpectedDeliveryDate: string = '';
-  OrderMaterialheaders: string[] = ['Sr.No.', 'Material ', 'Unit', 'Requisition Quantity', 'Ordered Quantity', 'Requisition Remaining Quantity', 'Rate', 'Discount Rate', 'GST', 'Delivery Charges', 'Expected Delivery Date', 'Net Amount', 'Total Amount', 'Action'];
+  OrderMaterialheaders: string[] = ['Sr.No.', 'Material ', 'Unit', 'Requisition Quantity', 'Ordered Quantity', 'Requisition Remaining Quantity', 'Rate', 'Discount Rate', 'GST', 'Delivery Charges', 'Expected Delivery Date', 'Net Discount', 'Net Amount', 'Total Amount', 'Action'];
   isOrderMaterialModalOpen: boolean = false;
   newOrderMaterial: OrderMaterialDetailProps = OrderMaterialDetailProps.Blank();
   editingIndex: null | undefined | number

@@ -45,7 +45,7 @@ export class StockInwardDetailsComponent implements OnInit {
   localEstimatedStartingDate: string = '';
   localEstimatedEndDate: string = '';
   ModalEditable: boolean = false;
-  materialheaders: string[] = ['Sr.No.', 'Date', 'Material Name ', 'Unit', 'Ordered Qty.', 'Inward Qty.', 'Remaining Qty.', 'Action'];
+  materialheaders: string[] = ['Sr.No.', 'Date', 'Material Name ', 'Unit', 'Ordered Qty.', 'Inward Qty.', 'Remaining Qty.', 'Rate', 'Discount Rate', 'GST', 'Delivery Charges', 'Expected Delivery Date', 'Net Discount', 'Net Amount', 'Total Amount', 'Action'];
   ismaterialModalOpen: boolean = false;
   newInward: InwardMaterialDetailProps = InwardMaterialDetailProps.Blank();
   editingIndex: null | undefined | number
@@ -222,6 +222,7 @@ export class StockInwardDetailsComponent implements OnInit {
     );
 
     this.PurchaseOrderIdList = lst.filter((data) => data.p.MaterialPurchaseOrderStatus == this.Incomplete || data.p.MaterialPurchaseOrderStatus == this.Ordered);
+    console.log('PurchaseOrderIdList :', this.PurchaseOrderIdList);
 
   };
 
@@ -277,20 +278,23 @@ export class StockInwardDetailsComponent implements OnInit {
     this.newInward = InwardMaterialDetailProps.Blank();
     this.NewRemainingQty = 0;
 
-    const UnitData = this.MaterialList.find((data) => data.p.InternalRef === internalRef);
+    let SinglePurchaseOrderId = this.PurchaseOrderIdList.find(data => data.p.Ref == this.Entity.p.MaterialPurchaseOrderRef);
+
+    const SingleRecord = SinglePurchaseOrderId?.p.MaterialPurchaseOrderDetailsArray.find((data) => data.MaterialRef === internalRef);
+    console.log('SingleRecord :', SingleRecord);
     this.newInward.Date = Date;
 
-    if (UnitData) {
-      this.newInward.UnitRef = UnitData.p.UnitRef;
-      this.newInward.UnitName = UnitData.p.UnitName;
-      this.newInward.MaterialRef = UnitData.p.MaterialRef;
-      this.newInward.MaterialName = UnitData.p.MaterialName;
-      this.newInward.PurchaseOrderQty = UnitData.p.OrderQty;
-      this.newInward.PurchaseOrderRemainingQty = UnitData.p.RemainingQty;
-      this.newInward.MaterialStockOrderDetailsRef = UnitData.p.Ref;
+    if (SingleRecord) {
+      this.newInward.UnitRef = SingleRecord.UnitRef;
+      this.newInward.UnitName = SingleRecord.UnitName;
+      this.newInward.MaterialRef = SingleRecord.MaterialRef;
+      this.newInward.MaterialName = SingleRecord.MaterialName;
+      // this.newInward.PurchaseOrderQty = SingleRecord.OrderQty;
+      // this.newInward.PurchaseOrderRemainingQty = SingleRecord.RemainingQty;
+      this.newInward.MaterialStockOrderDetailsRef = SingleRecord.Ref;
 
-      this.newInward.InternalRef = UnitData.p.InternalRef;
-      this.NewRemainingQty = UnitData.p.RemainingQty;
+      // this.newInward.InternalRef = SingleRecord.InternalRef;
+      // this.NewRemainingQty = SingleRecord.RemainingQty;
 
       this.newInward.InwardQty = 0;
       this.newInward.Rate = 0;
