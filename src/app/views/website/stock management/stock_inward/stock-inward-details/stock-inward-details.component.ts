@@ -273,14 +273,15 @@ export class StockInwardDetailsComponent implements OnInit {
     );
   }
 
-  OnMaterialSelection = async (internalRef: number) => {
+  OnMaterialSelection = async () => {
     let Date = this.newInward.Date;
     this.newInward = InwardMaterialDetailProps.Blank();
     this.NewRemainingQty = 0;
 
     let SinglePurchaseOrderId = this.PurchaseOrderIdList.find(data => data.p.Ref == this.Entity.p.MaterialPurchaseOrderRef);
+    console.log('SinglePurchaseOrderId :', SinglePurchaseOrderId);
 
-    const SingleRecord = SinglePurchaseOrderId?.p.MaterialPurchaseOrderDetailsArray.find((data) => data.MaterialRef === internalRef);
+    const SingleRecord = SinglePurchaseOrderId?.p.MaterialPurchaseOrderDetailsArray.find((data) => data.MaterialRef === this.newInward.MaterialRef);
     console.log('SingleRecord :', SingleRecord);
     this.newInward.Date = Date;
 

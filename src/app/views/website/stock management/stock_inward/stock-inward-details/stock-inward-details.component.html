@@ -238,7 +238,7 @@
             <label>Material Name</label>
             <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
               nzPlaceHolder="Select" id="MaterialInternalRef" [nzSize]="'large'" name="MaterialInternalRef"
-              [(ngModel)]="newInward.InternalRef" (ngModelChange)="OnMaterialSelection($event)"
+              [(ngModel)]="newInward.InternalRef" (ngModelChange)="OnMaterialSelection()"
               [nzDisabled]="ModalEditable" placeholder="Select Material">
 
               <nz-option *ngFor="let material of MaterialList" [nzValue]="material.p.InternalRef"
