@@ -214,12 +214,12 @@
     <div class="custom-modal-body">
       <form autocomplete="off">
         <div class="row">
-          <div class="col-6" style="margin-top: 1rem">
+          <div class="col-md-4 col-6 mb-1">
             <label>Date</label>
             <input type="date" name="Date" class="form-control" id="Date" [(ngModel)]="newInward.Date"
               placeholder="Ordered Date" disabled />
           </div>
-          <div class="col-6" style="margin-top: 1rem">
+          <div class="col-md-4 col-6 mb-1">
             <label>Material Name</label>
             <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
               nzPlaceHolder="Select" id="MaterialInternalRef" [nzSize]="'large'" name="MaterialInternalRef"
@@ -233,17 +233,17 @@
             <input *ngIf="ModalEditable" type="text" name="MaterialName" class="form-control" disabled
               [(ngModel)]="newInward.MaterialName" />
           </div>
-          <div class="col-6" style="margin-top: 1rem">
+          <div class="col-md-4 col-6 mb-1">
             <label>Unit</label>
             <input type="text" name="UnitRef" class="form-control" [(ngModel)]="newInward.UnitName" disabled />
           </div>
-          <div class="col-6" style="margin-top: 1rem">
+          <div class="col-md-4 col-6 mb-1">
             <label>Ordered Quantity</label>
             <input type="text" appCommaFormat name="PurchaseOrderQty" class="form-control"
               [(ngModel)]="newInward.PurchaseOrderQty" required placeholder="Ordered Quantity"
               (click)="selectAllValue($event)" />
           </div>
-          <div class="col-6" style="margin-top: 1rem">
+          <div class="col-md-4 col-6 mb-1">
             <label>Inward Quantity</label>
             <input type="text" appCommaFormat name="InwardQty" class="form-control" [(ngModel)]="newInward.InwardQty"
               required placeholder="Inward Quantity" (click)="selectAllValue($event)" (ngModelChange)="
@@ -252,10 +252,66 @@
                   newInward.PurchaseOrderRemainingQty
                 )" />
           </div>
-          <div class="col-6" style="margin-top: 1rem">
+          <div class="col-md-4 col-6 mb-1">
             <label>Remaining Quantity</label>
             <input type="text" appCommaFormat name="RemainingQty" class="form-control" [(ngModel)]="NewRemainingQty"
               required placeholder="Remaining Quantity" (click)="selectAllValue($event)" disabled />
+          </div>
+          <div class="col-md-4 col-6 mb-1">
+            <label>Rate</label>
+            <input type="text" appCommaFormat name="Rate" class="form-control" [(ngModel)]="newInward.Rate"
+              #RateCtrl="ngModel" required (blur)="RateCtrl.control.markAsTouched()" placeholder="Enter Rate"
+              (click)="selectAllValue($event)" (ngModelChange)="CalculateNetAmountAndTotalAmount()" />
+            <div *ngIf="RateCtrl.invalid && (RateCtrl.touched || RateCtrl.dirty)">
+              <span class="validation-text" *ngIf="RateCtrl.errors?.['required']">{{ RequiredFieldMsg }}</span>
+            </div>
+          </div>
+          <div class="col-md-4 col-6 mb-1">
+            <label>Discount Rate</label>
+            <input type="text" appCommaFormat name="DiscountedRate" class="form-control"
+              [(ngModel)]="newInward.DiscountedRate" (ngModelChange)="CalculateNetAmountAndTotalAmount()"
+              #DiscountedRateCtrl="ngModel" required (blur)="DiscountedRateCtrl.control.markAsTouched()"
+              placeholder="Enter Discount Rate" (click)="selectAllValue($event)" />
+            <div *ngIf="
+                DiscountedRateCtrl.invalid &&
+                (DiscountedRateCtrl.touched || DiscountedRateCtrl.dirty)">
+            </div>
+          </div>
+          <div class="col-md-4 col-6 mb-1">
+            <label>Net Discount</label>
+            <input type="text" appCommaFormat name="DiscountOnNetAmount" class="form-control"
+              [(ngModel)]="newInward.DiscountOnNetAmount" placeholder="Enter Delivery Charges"
+              (click)="selectAllValue($event)" (ngModelChange)="CalculateNetAmountAndTotalAmount()" />
+          </div>
+          <div class="col-md-4 col-6 mb-1">
+            <label>Net Amount</label>
+            <input type="text" appCommaFormat name="NetAmount" class="form-control" [(ngModel)]="newInward.NetAmount"
+              disabled />
+          </div>
+          <div class="col-md-4 col-6 mb-1">
+            <div>
+              <label for="Gst"><b>GST</b></label>
+              <nz-select class="nzSelect-light" nzShowSearch nzAllowClear [nzNotFoundContent]="noDataTpl"
+                nzPlaceHolder="Select" [nzSize]="'large'" name="Gst" required id="Gst" [(ngModel)]="newInward.Gst"
+                (ngModelChange)="CalculateNetAmountAndTotalAmount()">
+                <nz-option nzLabel="None" [nzValue]="0"></nz-option>
+                <nz-option nzLabel="5%" [nzValue]="5"></nz-option>
+                <nz-option nzLabel="9%" [nzValue]="9"></nz-option>
+                <nz-option nzLabel="18%" [nzValue]="18"></nz-option>
+                <nz-option nzLabel="27%" [nzValue]="27"></nz-option>
+              </nz-select>
+            </div>
+          </div>
+          <div class="col-md-4 col-6 mb-1">
+            <label>Delivery Charges</label>
+            <input type="text" appCommaFormat name="DeliveryCharges" class="form-control"
+              [(ngModel)]="newInward.DeliveryCharges" placeholder="Enter Delivery Charges"
+              (click)="selectAllValue($event)" (ngModelChange)="CalculateNetAmountAndTotalAmount()" />
+          </div>
+          <div class="col-md-4 col-6 mb-1">
+            <label>Total Amount</label>
+            <input type="text" appCommaFormat name="TotalAmount" class="form-control"
+              [(ngModel)]="newInward.TotalAmount" disabled />
           </div>
         </div>
       </form>

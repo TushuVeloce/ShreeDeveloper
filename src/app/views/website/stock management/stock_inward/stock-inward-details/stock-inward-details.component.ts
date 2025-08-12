@@ -183,6 +183,28 @@ export class StockInwardDetailsComponent implements OnInit {
     this.Entity.p.VendorPhoneNo = SingleRecord[0].p.MobileNo;
   }
 
+
+  CalculateNetAmountAndTotalAmount = async () => {
+    // this.newInward.TotalOrderedQty = 0;
+    // this.newInward.TotalOrderedQty = this.TotalOrderedQty + this.newInward.OrderedQty;
+
+    // if (this.newInward.InwardQty > this.newInward.PurchaseOrderQty) {
+    //   this.NewRemainingQty = 0;
+    //   this.newInward.ExtraOrderedQty = this.newInward.TotalOrderedQty - this.newInward.RequisitionQty;
+    // } else {
+    //   this.newInward.RequisitionRemainingQty = this.newInward.RequisitionQty - this.newInward.TotalOrderedQty;
+    //   this.newInward.ExtraOrderedQty = 0;
+    // }
+
+    if (this.newInward.DiscountedRate == 0) {
+      this.newInward.NetAmount = (this.newInward.Rate * this.newInward.InwardQty) - this.newInward.DiscountOnNetAmount;
+    } else {
+      this.newInward.NetAmount = (this.newInward.DiscountedRate * this.newInward.InwardQty) - this.newInward.DiscountOnNetAmount;
+    }
+    let GstAmount = (this.newInward.NetAmount / 100) * this.newInward.Gst;
+    this.newInward.TotalAmount = this.newInward.NetAmount + GstAmount + this.newInward.DeliveryCharges;
+  }
+
   getOrderIdListByCompanySiteAndVendorRef = async () => {
 
     if (this.companyRef() <= 0) {
@@ -282,6 +304,7 @@ export class StockInwardDetailsComponent implements OnInit {
       this.newInward.InwardQty = 0;
       this.NewRemainingQty = RemainingQty;
     }
+    this.CalculateNetAmountAndTotalAmount()
   }
 
   triggerFileInput(): void {

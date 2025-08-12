@@ -23,7 +23,7 @@ export class InwardMaterialDetailProps {
   public Ref: number = 0;
   public MaterialRef: number = 0;
   public Date: string = '';
-  public MaterialStockOrderDetailsRef:number=0
+  public MaterialStockOrderDetailsRef: number = 0
   public MaterialName: string = '';
   public InwardDate: string = '';
   public UnitRef: number = 0;
@@ -33,6 +33,14 @@ export class InwardMaterialDetailProps {
   public PurchaseOrderRemainingQty: number = 0;
   public MaterialInwardRef: number = 0;
   public InternalRef: number = 0; // ✅ Add this field
+
+  public DeliveryCharges: number = 0;
+  public DiscountedRate: number = 0;
+  public DiscountOnNetAmount: number = 0;
+  public Gst: number = 0;
+  public NetAmount: number = 0;
+  public Rate: number = 0;
+  public TotalAmount: number = 0;
 
   public readonly IsNewlyCreated: boolean = false;
   // public readonly AccountTypeName: string = '';
@@ -186,10 +194,10 @@ export class InwardMaterial implements IPersistable<InwardMaterial> {
     return InwardMaterial.ListFromTransportData(tdResponse);
   }
 
-     public static async FetchInwardMaterials(SiteRef:number, CompanyRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+  public static async FetchInwardMaterials(SiteRef: number, CompanyRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let req = new InwardMaterialFetchRequest();
-     req.CompanyRefs.push(CompanyRef)
-     req.SiteRefs.push(SiteRef)
+    req.CompanyRefs.push(CompanyRef)
+    req.SiteRefs.push(SiteRef)
     let tdResponse = await InwardMaterial.FetchTransportData(req, errorHandler) as TransportData;
     return InwardMaterial.ListFromTransportData(tdResponse);
   }
