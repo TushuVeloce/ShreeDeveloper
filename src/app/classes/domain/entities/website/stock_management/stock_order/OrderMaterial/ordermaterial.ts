@@ -41,6 +41,7 @@ export class OrderMaterialDetailProps {
   public Gst: number = 0;
   public DeliveryCharges: number = 0;
   public ExpectedDeliveryDate: string = '';
+  public DiscountOnNetAmount: number = 0;
   public NetAmount: number = 0;
   public TotalAmount: number = 0;
 

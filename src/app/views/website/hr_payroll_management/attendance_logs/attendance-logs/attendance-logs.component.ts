@@ -30,7 +30,7 @@ export class AttendanceLogsComponent implements OnInit {
   SelectedAttendance: WebAttendaneLog = WebAttendaneLog.CreateNewInstance();
 
   // headers as per required
-  baseHeaders: string[] = ['Sr. no', 'Employee Name', 'Date', 'First Check In Time', 'Last Check Out Time', 'Total Time', 'Is Half Day'];
+  baseHeaders: string[] = ['Sr. no', 'Employee Name', 'Date', 'First Check In', 'Last Check Out', 'Total Time', 'Is Late', 'Is Half Day'];
 
   pageSize = 10; // Items per page
   currentPage = 1; // Initialize current page
@@ -256,6 +256,7 @@ export class AttendanceLogsComponent implements OnInit {
     let MonthlyAttendanceLog = await WebAttendaneLog.FetchEntireListByCompanyRefAndAttendanceLogTypeAndMonth(this.companyRef(), AttendanceLogType.MonthlyAttendanceLog,
       month, employeeref, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.DisplayMasterList = MonthlyAttendanceLog
+    console.log('this.DisplayMasterList :', this.DisplayMasterList);
     this.getAttendanceCount(AttendanceLogType.MonthlyAttendanceLog)
   }
 

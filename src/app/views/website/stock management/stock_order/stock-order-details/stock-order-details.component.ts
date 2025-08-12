@@ -133,7 +133,7 @@ export class StockOrderDetailsComponent implements OnInit {
       return;
     }
     let lst = await Vendor.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-    this.VendorList = lst;
+    this.VendorList = lst.filter(data => data.p.MaterialListSuppliedByVendor.length > 0);
   }
 
   getOrderedMaterialList = async () => {
@@ -200,6 +200,18 @@ export class StockOrderDetailsComponent implements OnInit {
     this.newOrderMaterial.MaterialQuotationDetailRef = SingleRecord[0].p.Ref
     this.TotalOrderedQty = SingleRecord[0].p.TotalOrderedQty
     this.newOrderMaterial.TotalOrderedQty = SingleRecord[0].p.TotalOrderedQty;
+
+    this.newOrderMaterial.OrderedQty = 0;
+    this.newOrderMaterial.ExtraOrderedQty = 0;
+    this.newOrderMaterial.Rate = 0;
+    this.newOrderMaterial.DiscountedRate = 0;
+    this.newOrderMaterial.DiscountOnNetAmount = 0;
+    this.newOrderMaterial.NetAmount = 0;
+    this.newOrderMaterial.Gst = 0;
+    this.newOrderMaterial.DeliveryCharges = 0;
+    this.newOrderMaterial.ExpectedDeliveryDate = '';
+    this.ExpectedDeliveryDate = '';
+    this.newOrderMaterial.TotalAmount = 0;
   }
 
   // Trigger file input when clicking the image
@@ -286,22 +298,22 @@ export class StockOrderDetailsComponent implements OnInit {
       this.uiUtils.showErrorToster('Vendor not Selected');
       return;
     }
-    if (this.Entity.p.LedgerRef <= 0) {
-      this.uiUtils.showErrorToster('Ledger not Selected');
-      return;
-    }
-    if (this.Entity.p.SubLedgerRef <= 0) {
-      this.uiUtils.showErrorToster('Sub Ledger not Selected');
-      return;
-    }
-    if (this.Entity.p.Description == '') {
-      this.uiUtils.showErrorToster('Description not Selected');
-      return;
-    }
-    if (this.Entity.p.Reason == '') {
-      this.uiUtils.showErrorToster('Reason not Selected');
-      return;
-    }
+    // if (this.Entity.p.LedgerRef <= 0) {
+    //   this.uiUtils.showErrorToster('Ledger not Selected');
+    //   return;
+    // }
+    // if (this.Entity.p.SubLedgerRef <= 0) {
+    //   this.uiUtils.showErrorToster('Sub Ledger not Selected');
+    //   return;
+    // }
+    // if (this.Entity.p.Description == '') {
+    //   this.uiUtils.showErrorToster('Description not Selected');
+    //   return;
+    // }
+    // if (this.Entity.p.Reason == '') {
+    //   this.uiUtils.showErrorToster('Reason not Selected');
+    //   return;
+    // }
     this.ModalEditable = false;
     this.getOrderedMaterialList();
     if (type === 'OrderMaterial') this.isOrderMaterialModalOpen = true;
@@ -440,9 +452,9 @@ export class StockOrderDetailsComponent implements OnInit {
     }
 
     if (this.newOrderMaterial.DiscountedRate == 0) {
-      this.newOrderMaterial.NetAmount = (this.newOrderMaterial.Rate * this.newOrderMaterial.OrderedQty);
+      this.newOrderMaterial.NetAmount = (this.newOrderMaterial.Rate * this.newOrderMaterial.OrderedQty) - this.newOrderMaterial.DiscountOnNetAmount;
     } else {
-      this.newOrderMaterial.NetAmount = (this.newOrderMaterial.DiscountedRate * this.newOrderMaterial.OrderedQty);
+      this.newOrderMaterial.NetAmount = (this.newOrderMaterial.DiscountedRate * this.newOrderMaterial.OrderedQty) - this.newOrderMaterial.DiscountOnNetAmount;
     }
     let GstAmount = (this.newOrderMaterial.NetAmount / 100) * this.newOrderMaterial.Gst;
     this.newOrderMaterial.TotalAmount = this.newOrderMaterial.NetAmount + GstAmount + this.newOrderMaterial.DeliveryCharges;
