@@ -36,7 +36,6 @@ export class InvoiceDetailsComponent implements OnInit {
   RecipientEntity: Recipient = Recipient.CreateNewInstance();
   IsNewEntity: boolean = true;
   SiteList: Site[] = [];
-  // RecipientList: Recipient[] = [];
   RecipientList: Invoice[] = [];
   RecipientNameInput: boolean = false
   SubLedgerList: SubLedger[] = [];
