@@ -96,7 +96,6 @@ export class RegistrarOfficeDetailComponent implements OnInit {
     this.ImageBaseUrl = this.baseUrl.GenerateImageBaseUrl();
     this.LoginToken = this.appStateManage.getLoginToken();
     this.Entity = RegistrarOffice.GetCurrentInstance();
-    console.log('this.Entity :', this.Entity);
 
     // this.Entity = history.state.printData;
 

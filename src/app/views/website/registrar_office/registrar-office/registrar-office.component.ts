@@ -98,7 +98,6 @@ export class RegistrarOfficeComponent implements OnInit {
     let lst = await RegistrarOffice.FetchEntireListBySiteRef(SiteRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.MasterList = lst;
     this.DisplayMasterList = this.MasterList;
-    console.log(' this.DisplayMasterList  :', this.DisplayMasterList);
     this.loadPaginationData();
   }
 

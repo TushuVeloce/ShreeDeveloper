@@ -151,7 +151,6 @@ export class ExpenseDetailsComponent implements OnInit {
     this.IncomeBankList = lst.filter(bank =>
       !this.BankList.some(item => item.p.BankAccountRef === bank.p.Ref)
     );
-    console.log('this.IncomeBankList :', this.IncomeBankList);
   }
 
   onPaymentTypeSelection = () => {

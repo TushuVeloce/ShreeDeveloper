@@ -34,7 +34,7 @@ export class PlotMasterComponent implements OnInit {
   );
   PlotofOwner = BookingRemarks.Plot_Of_Owner
   PlotofShree = BookingRemarks.Plot_Of_Shree
-  
+
   shouldDestroy: boolean = true;
 
   constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private screenSizeService: ScreenSizeService,
@@ -62,6 +62,14 @@ export class PlotMasterComponent implements OnInit {
         await this.getPlotListBySiteandBookingRemarkRef(storedSiteRef, bookingRemarkeRef);
       });
     }
+  }
+
+  checkBookingRemarkStatus = (BookingRemark: number): any => {
+    if (BookingRemark == this.BookingRemarkEnum.Owner_Booked || BookingRemark == this.BookingRemarkEnum.Shree_Booked) {
+      return 'plotbooked';
+    } else if (BookingRemark == this.BookingRemarkEnum.Shree_Saledeed || BookingRemark == this.BookingRemarkEnum.Owner_Saledeed) {
+      return 'plotsold';
+    } else '';
   }
 
   FormulateSiteListByCompanyRef = async () => {
