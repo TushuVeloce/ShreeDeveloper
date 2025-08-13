@@ -170,13 +170,13 @@
                 <td Class="tbldata">{{ material.PurchaseOrderQty }}</td>
                 <td Class="tbldata">{{ material.InwardQty }}</td>
                 <td Class="tbldata">{{ material.PurchaseOrderRemainingQty}}</td>
-                <td Class="tbldata">{{ material.Rate }}</td>
-                <td Class="tbldata">{{ material.DiscountedRate }}</td>
-                <td Class="tbldata">{{ material.Gst }}</td>
-                <td Class="tbldata">{{ material.DeliveryCharges }}</td>
-                <td Class="tbldata">{{ material.DiscountOnNetAmount }}</td>
-                <td Class="tbldata">{{ material.NetAmount }}</td>
-                <td Class="tbldata">{{ material.TotalAmount }}</td>
+                <td Class="tbldata">{{ material.Rate | currency : "INR"}}</td>
+                <td Class="tbldata">{{ material.DiscountedRate | currency : "INR"}}</td>
+                <td Class="tbldata">{{ material.Gst | currency : "INR"}}</td>
+                <td Class="tbldata">{{ material.DeliveryCharges | currency : "INR"}}</td>
+                <td Class="tbldata">{{ material.DiscountOnNetAmount | currency : "INR"}}</td>
+                <td Class="tbldata">{{ material.NetAmount | currency : "INR"}}</td>
+                <td Class="tbldata">{{ material.TotalAmount | currency : "INR"}}</td>
                 <td class="tbldata">
                   <span style="margin-left: 9px" (click)="removeMaterial(i)">
                     <img src="\assets\icons\delete.png" alt="logo" title="Delete" width="20px" height="20px" /></span>
@@ -184,9 +184,9 @@
               </tr>
               <tr>
                 <td class="tbldata" colspan="2"><b>Grand Total</b></td>
-                <td class="tbldata" colspan="4"></td>
+                <td class="tbldata" colspan="11"></td>
                 <td class="tbldata">
-                  <b>{{ getGrandTotal() }}</b>
+                  <b>{{ getGrandTotal() | currency : "INR"}}</b>
                 </td>
                 <td class="tbldata"><b></b></td>
               </tr>
@@ -237,12 +237,12 @@
           <div class="col-md-4 col-6 mb-1">
             <label>Material Name</label>
             <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
-              nzPlaceHolder="Select" id="MaterialInternalRef" [nzSize]="'large'" name="MaterialInternalRef"
-              [(ngModel)]="newInward.InternalRef" (ngModelChange)="OnMaterialSelection()"
-              [nzDisabled]="ModalEditable" placeholder="Select Material">
+              nzPlaceHolder="Select" id="MaterialRef" [nzSize]="'large'" name="MaterialRef"
+              [(ngModel)]="newInward.MaterialRef" (ngModelChange)="OnMaterialSelection()" [nzDisabled]="ModalEditable"
+              placeholder="Select Material">
 
-              <nz-option *ngFor="let material of MaterialList" [nzValue]="material.p.InternalRef"
-                [nzLabel]="material.p.MaterialName + ' - Qty: ' + material.p.OrderQty">
+              <nz-option *ngFor="let material of MaterialList" [nzValue]="material.p.MaterialRef"
+                [nzLabel]="material.p.MaterialName">
               </nz-option>
             </nz-select>
             <input *ngIf="ModalEditable" type="text" name="MaterialName" class="form-control" disabled

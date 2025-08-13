@@ -194,10 +194,10 @@
                 <td Class="tbldata">
                   {{ material.RequisitionRemainingQty }}
                 </td>
-                <td Class="tbldata">{{ material.Rate }}</td>
-                <td Class="tbldata">{{ material.DiscountedRate }}</td>
+                <td Class="tbldata">{{ material.Rate | currency : "INR"}}</td>
+                <td Class="tbldata">{{ material.DiscountedRate | currency : "INR"}}</td>
                 <td Class="tbldata">{{ material.Gst }}</td>
-                <td Class="tbldata">{{ material.DeliveryCharges }}</td>
+                <td Class="tbldata">{{ material.DeliveryCharges | currency : "INR"}}</td>
                 <td Class="tbldata">
                   {{
                   material.ExpectedDeliveryDate
@@ -205,9 +205,9 @@
                   : "--"
                   }}
                 </td>
-                <td Class="tbldata">{{ material.DiscountOnNetAmount }}</td>
-                <td Class="tbldata">{{ material.NetAmount }}</td>
-                <td Class="tbldata">{{ material.TotalAmount }}</td>
+                <td Class="tbldata">{{ material.DiscountOnNetAmount | currency : "INR"}}</td>
+                <td Class="tbldata">{{ material.NetAmount | currency : "INR"}}</td>
+                <td Class="tbldata">{{ material.TotalAmount | currency : "INR"}}</td>
                 <td class="tbldata">
                   <span *ngIf="material.MaterialPurchaseDetailStatus != MaterialOrderStatus.Ordered"
                     style="margin-left: 9px" (click)="editOrderMaterial(i)">

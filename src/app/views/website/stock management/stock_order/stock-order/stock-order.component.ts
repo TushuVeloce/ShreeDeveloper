@@ -31,8 +31,8 @@ export class StockOrderComponent implements OnInit {
 
   companyRef = this.companystatemanagement.SelectedCompanyRef;
 
-  headers: string[] = ['Sr.No.', 'Site', 'Date', 'Vendor', 'Material', 'Unit', 'Requisition Qty', 'Ordered Qty', 'Extra Ordered Qty', 'Requisition Remaining Qty', 'Discount Rate', 'Delivery Date', 'Total Amount', 'Grand Total', 'Status', 'Action & Print'];
-  headerswithoutsite: string[] = ['Sr.No.', 'Date', 'Vendor', 'Material', 'Unit', 'Requisition Qty', 'Ordered Qty', 'Extra Ordered Qty', 'Requisition Remaining Qty', 'Discount Rate', 'Delivery Date', 'Total Amount', 'Grand Total', 'Status', 'Action & Print'];
+  headers: string[] = ['Sr.No.', 'Site', 'PO ID', 'Date', 'Vendor', 'Material', 'Unit', 'Requisition Qty', 'Ordered Qty', 'Extra Ordered Qty', 'Requisition Remaining Qty', 'Discount Rate', 'Delivery Date', 'Total Amount', 'Grand Total', 'Status', 'Action & Print'];
+  headerswithoutsite: string[] = ['Sr.No.', 'PO ID', 'Date', 'Vendor', 'Material', 'Unit', 'Requisition Qty', 'Ordered Qty', 'Extra Ordered Qty', 'Requisition Remaining Qty', 'Discount Rate', 'Delivery Date', 'Total Amount', 'Grand Total', 'Status', 'Action & Print'];
 
   constructor(
     private uiUtils: UIUtils,

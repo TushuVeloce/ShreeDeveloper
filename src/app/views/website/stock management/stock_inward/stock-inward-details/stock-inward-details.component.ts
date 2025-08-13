@@ -45,7 +45,7 @@ export class StockInwardDetailsComponent implements OnInit {
   localEstimatedStartingDate: string = '';
   localEstimatedEndDate: string = '';
   ModalEditable: boolean = false;
-  materialheaders: string[] = ['Sr.No.', 'Date', 'Material Name ', 'Unit', 'Ordered Qty.', 'Inward Qty.', 'Remaining Qty.', 'Rate', 'Discount Rate', 'GST', 'Delivery Charges', 'Expected Delivery Date', 'Net Discount', 'Net Amount', 'Total Amount', 'Action'];
+  materialheaders: string[] = ['Sr.No.', 'Date', 'Material Name ', 'Unit', 'Ordered Qty.', 'Inward Qty.', 'Remaining Qty.', 'Rate', 'Discount Rate', 'GST', 'Delivery Charges', 'Net Discount', 'Net Amount', 'Total Amount', 'Action'];
   ismaterialModalOpen: boolean = false;
   newInward: InwardMaterialDetailProps = InwardMaterialDetailProps.Blank();
   editingIndex: null | undefined | number
@@ -183,28 +183,6 @@ export class StockInwardDetailsComponent implements OnInit {
     this.Entity.p.VendorPhoneNo = SingleRecord[0].p.MobileNo;
   }
 
-
-  CalculateNetAmountAndTotalAmount = async () => {
-    // this.newInward.TotalOrderedQty = 0;
-    // this.newInward.TotalOrderedQty = this.TotalOrderedQty + this.newInward.OrderedQty;
-
-    // if (this.newInward.InwardQty > this.newInward.PurchaseOrderQty) {
-    //   this.NewRemainingQty = 0;
-    //   this.newInward.ExtraOrderedQty = this.newInward.TotalOrderedQty - this.newInward.RequisitionQty;
-    // } else {
-    //   this.newInward.RequisitionRemainingQty = this.newInward.RequisitionQty - this.newInward.TotalOrderedQty;
-    //   this.newInward.ExtraOrderedQty = 0;
-    // }
-
-    if (this.newInward.DiscountedRate == 0) {
-      this.newInward.NetAmount = (this.newInward.Rate * this.newInward.InwardQty) - this.newInward.DiscountOnNetAmount;
-    } else {
-      this.newInward.NetAmount = (this.newInward.DiscountedRate * this.newInward.InwardQty) - this.newInward.DiscountOnNetAmount;
-    }
-    let GstAmount = (this.newInward.NetAmount / 100) * this.newInward.Gst;
-    this.newInward.TotalAmount = this.newInward.NetAmount + GstAmount + this.newInward.DeliveryCharges;
-  }
-
   getOrderIdListByCompanySiteAndVendorRef = async () => {
 
     if (this.companyRef() <= 0) {
@@ -222,25 +200,8 @@ export class StockInwardDetailsComponent implements OnInit {
     );
 
     this.PurchaseOrderIdList = lst.filter((data) => data.p.MaterialPurchaseOrderStatus == this.Incomplete || data.p.MaterialPurchaseOrderStatus == this.Ordered);
-    console.log('PurchaseOrderIdList :', this.PurchaseOrderIdList);
-
   };
 
-  // getInwardSingleInstanceByInwardRef = async (InwardRef: number) => {
-  //   if (this.companyRef() <= 0) {
-  //     await this.uiUtils.showErrorToster('Company not Selected');
-  //     return;
-  //   }
-  //   let lst = await StockInward.FetchInstance(InwardRef, this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-  //   this.Entity = lst;
-
-  //   this.PurchaseOrderDate = this.dtu.ConvertStringDateToShortFormat(lst.p.PurchaseOrderDate);
-  //   if (lst.p.InwardDate) {
-  //     this.InwardDate = lst.p.InwardDate
-  //   }
-
-  //   await this.getMaterialListByCompanySiteVendorRefAndPurchaseOrderDate()
-  // }
 
   // Extracted from services date conversion //
   formatDate = (date: string | Date): string => {
@@ -253,36 +214,49 @@ export class StockInwardDetailsComponent implements OnInit {
       return;
     }
     const lst = await MaterialFromOrder.FetchOrderedMaterials(this.Entity.p.MaterialPurchaseOrderRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-    this.Entity.p.MaterialInwardDetailsArray = [];
     this.MaterialListOriginal = lst?.filter(item => item.p.IsMaterialExist == 1);
-    this.MaterialListOriginal?.forEach((item, index) => {
-      item.p.InternalRef = index + 1;
-    });
-    const allMatched = lst.every(item => item.p.RemainingQty == 0);
-    this.isSaveDisabled = allMatched;
-    if (!this.shouldFilterDropdown) {
-      this.MaterialList = [...this.MaterialListOriginal];
-    } else {
-      this.filterMaterialList();
-    }
+    console.log('this.MaterialListOriginal :', this.MaterialListOriginal);
+    // this.Entity.p.MaterialInwardDetailsArray = [];
+    // this.MaterialListOriginal = lst?.filter(item => item.p.IsMaterialExist == 1);
+    // this.MaterialListOriginal?.forEach((item, index) => {
+    //   item.p.InternalRef = index + 1;
+    // });
+    // const allMatched = lst.every(item => item.p.RemainingQty == 0);
+    // this.isSaveDisabled = allMatched;
+    // if (!this.shouldFilterDropdown) {
+    //   this.MaterialList = [...this.MaterialListOriginal];
+    // } else {
+    this.filterMaterialList();
+    // }
   };
 
   filterMaterialList() {
-    this.MaterialList = this.MaterialListOriginal.filter(item =>
-      !this.SessionAddedRefs.includes(item.p.InternalRef)
+    // this.MaterialList = this.MaterialListOriginal.filter(item =>
+    //   !this.SessionAddedRefs.includes(item.p.InternalRef)
+    // );
+    const usedRefs = this.Entity.p.MaterialInwardDetailsArray.map(item => item.MaterialRef);
+    this.MaterialList = this.MaterialListOriginal.filter(
+      material => !usedRefs.includes(material.p.MaterialRef)
     );
   }
 
   OnMaterialSelection = async () => {
     let Date = this.newInward.Date;
+    let tempId = this.newInward.MaterialRef;
     this.newInward = InwardMaterialDetailProps.Blank();
     this.NewRemainingQty = 0;
+    this.newInward.MaterialRef = tempId;
+
+    let SingleMaterial = this.MaterialListOriginal.find(data => data.p.MaterialRef == this.newInward.MaterialRef);
+    if (SingleMaterial) {
+      this.NewRemainingQty = SingleMaterial.p.RemainingQty;
+      this.newInward.PurchaseOrderRemainingQty = SingleMaterial.p.RemainingQty;
+    }
 
     let SinglePurchaseOrderId = this.PurchaseOrderIdList.find(data => data.p.Ref == this.Entity.p.MaterialPurchaseOrderRef);
-    console.log('SinglePurchaseOrderId :', SinglePurchaseOrderId);
 
-    const SingleRecord = SinglePurchaseOrderId?.p.MaterialPurchaseOrderDetailsArray.find((data) => data.MaterialRef === this.newInward.MaterialRef);
-    console.log('SingleRecord :', SingleRecord);
+    const SingleRecord = SinglePurchaseOrderId?.p.MaterialPurchaseOrderDetailsArray.find((data) => data.MaterialRef == this.newInward.MaterialRef);
+
     this.newInward.Date = Date;
 
     if (SingleRecord) {
@@ -290,21 +264,16 @@ export class StockInwardDetailsComponent implements OnInit {
       this.newInward.UnitName = SingleRecord.UnitName;
       this.newInward.MaterialRef = SingleRecord.MaterialRef;
       this.newInward.MaterialName = SingleRecord.MaterialName;
-      // this.newInward.PurchaseOrderQty = SingleRecord.OrderQty;
-      // this.newInward.PurchaseOrderRemainingQty = SingleRecord.RemainingQty;
+      this.newInward.PurchaseOrderQty = SingleRecord.OrderedQty;
       this.newInward.MaterialStockOrderDetailsRef = SingleRecord.Ref;
-
-      // this.newInward.InternalRef = SingleRecord.InternalRef;
-      // this.NewRemainingQty = SingleRecord.RemainingQty;
-
       this.newInward.InwardQty = 0;
-      this.newInward.Rate = 0;
-      this.newInward.DiscountedRate = 0;
-      this.newInward.DiscountOnNetAmount = 0;
-      this.newInward.NetAmount = 0;
-      this.newInward.Gst = 0;
-      this.newInward.DeliveryCharges = 0;
-      this.newInward.TotalAmount = 0;
+      this.newInward.Rate = SingleRecord.Rate;
+      this.newInward.DiscountedRate = SingleRecord.DiscountedRate;
+      this.newInward.DiscountOnNetAmount = SingleRecord.DiscountOnNetAmount;
+      this.newInward.NetAmount = SingleRecord.NetAmount;
+      this.newInward.Gst = SingleRecord.Gst;
+      this.newInward.DeliveryCharges = SingleRecord.DeliveryCharges;
+      this.newInward.TotalAmount = SingleRecord.TotalAmount;
     } else {
       await this.uiUtils.showErrorToster('Material not found');
     }
@@ -320,6 +289,16 @@ export class StockInwardDetailsComponent implements OnInit {
       this.NewRemainingQty = RemainingQty;
     }
     this.CalculateNetAmountAndTotalAmount()
+  }
+
+  CalculateNetAmountAndTotalAmount = async () => {
+    if (this.newInward.DiscountedRate == 0) {
+      this.newInward.NetAmount = (this.newInward.Rate * this.newInward.InwardQty) - this.newInward.DiscountOnNetAmount;
+    } else {
+      this.newInward.NetAmount = (this.newInward.DiscountedRate * this.newInward.InwardQty) - this.newInward.DiscountOnNetAmount;
+    }
+    let GstAmount = (this.newInward.NetAmount / 100) * this.newInward.Gst;
+    this.newInward.TotalAmount = this.newInward.NetAmount + GstAmount + this.newInward.DeliveryCharges;
   }
 
   triggerFileInput(): void {
@@ -443,7 +422,7 @@ export class StockInwardDetailsComponent implements OnInit {
 
   async addMaterial() {
     if (
-      this.newInward.InternalRef <= 0 ||
+      this.newInward.MaterialRef <= 0 ||
       this.newInward.InwardQty <= 0
     ) {
       await this.uiUtils.showErrorMessage('Error', 'Inward Quantity must be greater than 0 and material must be selected');
@@ -475,11 +454,8 @@ export class StockInwardDetailsComponent implements OnInit {
 
       this.shouldFilterDropdown = true;
       this.filterMaterialList();
-
-      console.log('this.Entity.p.GrandTotal :', this.Entity.p.GrandTotal);
       await this.uiUtils.showSuccessToster('Material added successfully');
     }
-
     this.newInward = InwardMaterialDetailProps.Blank();
     this.newInward.Date = this.InwardDate;
     this.NewRemainingQty = 0;

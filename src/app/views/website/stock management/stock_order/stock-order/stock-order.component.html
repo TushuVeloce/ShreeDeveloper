@@ -51,6 +51,10 @@
                 [attr.rowspan]="Order.p.MaterialPurchaseOrderDetailsArray.length">
                 {{ Order.p.SiteName }}
               </td>
+              <td class="tbldata" *ngIf="j === 0"
+                [attr.rowspan]="Order.p.MaterialPurchaseOrderDetailsArray.length">
+                {{ Order.p.DisplayPurchaseOrderId }}
+              </td>
               <td class="tbldata" *ngIf="j === 0" [attr.rowspan]="Order.p.MaterialPurchaseOrderDetailsArray.length"
                 width="9%">
                 {{ formatDate(Order.p.PurchaseOrderDate ) }}
@@ -79,14 +83,14 @@
               <!-- Optional: Requisition status -->
               <td class="tbldata" *ngIf="j === 0" [attr.rowspan]="Order.p.MaterialPurchaseOrderDetailsArray.length">
                 <!-- PENDING -->
-                <span class="status" style="cursor: pointer;" *ngIf="Order.p.MaterialPurchaseOrderStatus == MaterialPurchaseOrderStatus.Pending"
-                  ngClass="pending" (click)="NavigateOrderstatus(Order)">
+                <span class="status" style="cursor: pointer;"
+                  *ngIf="Order.p.MaterialPurchaseOrderStatus == MaterialPurchaseOrderStatus.Pending" ngClass="pending"
+                  (click)="NavigateOrderstatus(Order)">
                   Pending
                 </span>
 
                 <!-- APPROVED -->
-                <span class="status"
-                  *ngIf="Order.p.MaterialPurchaseOrderStatus == MaterialPurchaseOrderStatus.Approved"
+                <span class="status" *ngIf="Order.p.MaterialPurchaseOrderStatus == MaterialPurchaseOrderStatus.Approved"
                   ngClass="approved">
                   Approved
                 </span>
