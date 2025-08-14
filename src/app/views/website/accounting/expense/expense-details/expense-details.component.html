@@ -282,7 +282,13 @@
             </nz-select>
           </div>
         </div>
-
+        <div class="col-md-4" style="margin-top: 1rem;" *ngIf="this.Entity.p.RecipientType == Sites">
+          <div>
+            <label>Reason</label>
+            <input type="text" [(ngModel)]="Entity.p.ReasonForIncome" name="ReasonForIncome" class="form-control" id="ReasonForIncome" required
+              placeholder="Enter Reason" />
+          </div>
+        </div>
         <div class="" style="margin-top: 1rem">
           <div class="d-flex align-items-center mb-2">
             <label for="IsAutoInvoiceEnabled"><b>Invoice Enabled</b></label>

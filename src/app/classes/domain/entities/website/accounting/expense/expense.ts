@@ -67,6 +67,7 @@ export class ExpenseProps {
   public ModeOfPaymentName: string = ''
   public BankAccountRef: number = 0
   public IsRegisterCustomerRef: number = 0
+  public ReasonForIncome: string = ''
 
 
   public readonly IsNewlyCreated: boolean = false;
