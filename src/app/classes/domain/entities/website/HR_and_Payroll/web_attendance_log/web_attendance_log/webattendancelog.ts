@@ -26,6 +26,8 @@ export class WebAttendaneLogProps {
 
   public Months: number = 0;
 
+  public AttendanceLogPath1: string = '';
+  public AttendanceLogPath2: string = '';
 
   public Ref: number = 0;
   public EmployeeRef: number = 0;

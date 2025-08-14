@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { NgModel } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ValidationMessages, ValidationPatterns, AttendanceHandleByRefs } from 'src/app/classes/domain/constants';
@@ -10,6 +10,7 @@ import { Employee } from 'src/app/classes/domain/entities/website/masters/employ
 import { Site } from 'src/app/classes/domain/entities/website/masters/site/site';
 import { CurrentDateTimeRequest } from 'src/app/classes/infrastructure/request_response/currentdatetimerequest';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
+import { BaseUrlService } from 'src/app/services/baseurl.service';
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
 import { DTU } from 'src/app/services/dtu.service';
 import { UIUtils } from 'src/app/services/uiutils.service';
@@ -51,6 +52,15 @@ export class AttendanceDetailsComponent implements OnInit {
   ToTime: string = '';
   OvertimeGraceTimeInMins: string = '';
 
+  ImageBaseUrl: string = "";
+  TimeStamp = Date.now()
+  LoginToken = '';
+
+  imagePostSelfieView: string = '';
+  imagePostSiteView: string = '';
+
+  imagePostSelfiViewUrl: string = '';
+  imagePostSiteViewUrl: string = '';
 
   CheckInTime: Date | null = null;
   CheckOutTime: Date | null = null;
@@ -67,12 +77,24 @@ export class AttendanceDetailsComponent implements OnInit {
 
   @ViewChild('FromDateCtrl') FromDateInputControl!: NgModel;
 
-  constructor(private router: Router, private uiUtils: UIUtils, private dtu: DTU, private appStateManage: AppStateManageService, private utils: Utils, private companystatemanagement: CompanyStateManagement) { }
+  @ViewChild('fileInput') fileInputRef!: ElementRef<HTMLInputElement>;
+
+  constructor(
+    private router: Router,
+    private uiUtils: UIUtils,
+    private dtu: DTU,
+    private appStateManage: AppStateManageService,
+    private utils: Utils,
+    private companystatemanagement: CompanyStateManagement,
+    private baseUrl: BaseUrlService,
+  ) { }
 
   async ngOnInit() {
     this.appStateManage.setDropdownDisabled(true);
     this.getEmployeeListByCompanyRef();
     this.getSiteListByCompanyRef();
+    this.ImageBaseUrl = this.baseUrl.GenerateImageBaseUrl();
+    this.LoginToken = this.appStateManage.getLoginToken();
 
     if (this.appStateManage.StorageKey.getItem('Editable') == 'Edit') {
       this.IsNewEntity = false;
@@ -80,6 +102,15 @@ export class AttendanceDetailsComponent implements OnInit {
       this.Entity = WebAttendaneLog.GetCurrentInstance();
       this.appStateManage.StorageKey.removeItem('Editable')
       this.Date = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.TransDateTime);
+
+      if (this.Entity.p.AttendanceLogDetailsArray.length > 0) {
+        this.imagePostSelfieView = `${this.ImageBaseUrl}${this.Entity.p.AttendanceLogDetailsArray[0].AttendanceLogPath1}/${this.LoginToken}?${this.TimeStamp}`;
+        this.Entity.p.AttendanceLogPath1 = this.Entity.p.AttendanceLogDetailsArray[0].AttendanceLogPath1;
+
+        this.imagePostSiteView = `${this.ImageBaseUrl}${this.Entity.p.AttendanceLogDetailsArray[0].AttendanceLogPath2}/${this.LoginToken}?${this.TimeStamp}`;
+        this.Entity.p.AttendanceLogPath2 = this.Entity.p.AttendanceLogDetailsArray[this.Entity.p.AttendanceLogDetailsArray.length - 1].AttendanceLogPath2;
+      }
+
       this.FirstCheckInTime = this.convertTo12Hour(this.Entity.p.FirstCheckInTime);
       this.LastCheckOutTime = this.convertTo12Hour(this.Entity.p.LastCheckOutTime);
       this.getDefaultWorkingHrsByEmployeeRef();
@@ -139,6 +170,30 @@ export class AttendanceDetailsComponent implements OnInit {
         this.newAttendance.SiteName = SingleRecord.p.Name
     }
   }
+
+  isImageFile(filePath: string): boolean {
+    if (!filePath) return false;
+    const imageExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.bmp', '.webp'];
+    const ext = filePath.substring(filePath.lastIndexOf('.')).toLowerCase();
+    return imageExtensions.includes(ext);
+  }
+
+  SelfiFileNavigation = (File: string) => {
+    if (File) {
+      window.open(this.imagePostSelfieView, '_blank');
+    } else {
+      window.open(this.imagePostSelfiViewUrl, '_blank');
+    }
+  }
+
+  SiteFileNavigation = (File: string) => {
+    if (File) {
+      window.open(this.imagePostSelfieView, '_blank');
+    } else {
+      window.open(this.imagePostSiteViewUrl, '_blank');
+    }
+  }
+
 
   openModal = () => {
     if (this.Entity.p.EmployeeRef <= 0) {
@@ -201,6 +256,9 @@ export class AttendanceDetailsComponent implements OnInit {
   }
 
   convertTo12Hour = (time24: string): string => {
+    if (!time24) {
+      return '';
+    }
     const [hourStr, minute] = time24.split(":");
     let hour = parseInt(hourStr, 10);
     const ampm = hour >= 12 ? "PM" : "AM";

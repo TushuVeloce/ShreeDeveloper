@@ -172,6 +172,11 @@ export class ExpenseDetailsComponent implements OnInit {
     this.Entity.p.BankAccountRef = 0
   }
 
+  OnToModeChange = () => {
+    this.Entity.p.IncomeBankRef = 0;
+    this.Entity.p.IsNewBankCreated = false;
+  }
+
   getSiteListByCompanyRef = async () => {
     if (this.companyRef() <= 0) {
       await this.uiUtils.showErrorToster('Company not Selected');
@@ -226,51 +231,58 @@ export class ExpenseDetailsComponent implements OnInit {
   }
 
   onSitechange = () => {
-    this.Entity.p.RecipientType = 0;
     this.Entity.p.LedgerRef = 0;
     this.Entity.p.SubLedgerRef = 0;
+    this.Entity.p.RecipientType = 0;
     this.RecipientList = [];
-
-    this.Entity.p.IncomeLedgerRef = 0;
-    this.Entity.p.IncomeSubLedgerRef = 0;
-    this.PaymentType = 0;
-    this.Entity.p.RecipientRef = 0;
     this.Entity.p.Reason = '';
-    this.PayerPlotNo = '';
-    this.Entity.p.PlotName = '';
+    this.Entity.p.ExpenseModeOfPayment = 0;
+    this.Entity.p.BankAccountRef = 0
+    this.PaymentType = 0;
     this.Entity.p.IsAdvancePayment = 0;
     this.Entity.p.IsSalaryExpense = false;
+
+    this.Entity.p.RecipientRef = 0;
+    this.Entity.p.IncomeLedgerRef = 0;
+    this.Entity.p.IncomeSubLedgerRef = 0;
+    this.PayerPlotNo = '';
+    this.Entity.p.PlotName = '';
     this.Entity.p.TotalAdvance = 0;
     this.Entity.p.RemainingAdvance = 0;
     this.Entity.p.InvoiceAmount = 0;
     this.Entity.p.RemainingAmount = 0;
     this.Entity.p.GivenAmount = 0
-    this.Entity.p.BankAccountRef = 0
     this.Entity.p.Narration = '';
-    this.Entity.p.ExpenseModeOfPayment = 0;
+    this.Entity.p.ModeOfPaymentForIncome = 0;
+    this.Entity.p.IsNewBankCreated = false;
+    this.Entity.p.IncomeBankRef = 0;
     this.Entity.p.IsAutoInvoiceEnabled = 0;
     this.RecipientNameInput = false;
     this.getCurrentBalanceByCompanyRef()
   }
 
   onTypeChange = async () => {
-    this.Entity.p.IncomeLedgerRef = 0;
-    this.Entity.p.IncomeSubLedgerRef = 0;
-    this.PaymentType = 0;
-    this.Entity.p.RecipientRef = 0;
     this.Entity.p.Reason = '';
-    this.PayerPlotNo = '';
-    this.Entity.p.PlotName = '';
+    this.Entity.p.ExpenseModeOfPayment = 0;
+    this.Entity.p.BankAccountRef = 0
+    this.PaymentType = 0;
     this.Entity.p.IsAdvancePayment = 0;
     this.Entity.p.IsSalaryExpense = false;
+
+    this.Entity.p.RecipientRef = 0;
+    this.Entity.p.IncomeLedgerRef = 0;
+    this.Entity.p.IncomeSubLedgerRef = 0;
+    this.PayerPlotNo = '';
+    this.Entity.p.PlotName = '';
     this.Entity.p.TotalAdvance = 0;
     this.Entity.p.RemainingAdvance = 0;
     this.Entity.p.InvoiceAmount = 0;
     this.Entity.p.RemainingAmount = 0;
     this.Entity.p.GivenAmount = 0
-    this.Entity.p.BankAccountRef = 0
     this.Entity.p.Narration = '';
-    this.Entity.p.ExpenseModeOfPayment = 0;
+    this.Entity.p.ModeOfPaymentForIncome = 0;
+    this.Entity.p.IsNewBankCreated = false;
+    this.Entity.p.IncomeBankRef = 0;
     this.Entity.p.IsAutoInvoiceEnabled = 0;
     this.RecipientNameInput = false;
     this.getCurrentBalanceByCompanyRef()
@@ -332,15 +344,17 @@ export class ExpenseDetailsComponent implements OnInit {
 
   onRecipientChange = () => {
     this.PaymentType = 0;
-    this.Entity.p.Reason = '';
     this.Entity.p.TotalAdvance = 0;
     this.Entity.p.RemainingAdvance = 0;
     this.Entity.p.InvoiceAmount = 0;
     this.Entity.p.RemainingAmount = 0;
-    this.Entity.p.GivenAmount = 0
-    this.Entity.p.BankAccountRef = 0
+    this.Entity.p.IncomeLedgerRef = 0;
+    this.Entity.p.IncomeSubLedgerRef = 0;
+    this.Entity.p.GivenAmount = 0;
+    this.Entity.p.IncomeBankRef = 0;
+    this.Entity.p.ModeOfPaymentForIncome = 0;
+    this.Entity.p.IsNewBankCreated = false;
     this.Entity.p.Narration = '';
-    this.Entity.p.ExpenseModeOfPayment = 0;
     this.Entity.p.IsAutoInvoiceEnabled = 0;
     this.RecipientNameInput = false;
     this.getCurrentBalanceByCompanyRef()

@@ -63,6 +63,7 @@ export class ExpenseProps {
   public RemainingAmount: number = 0
   public ShreesBalance: number = 0
   public ExpenseModeOfPayment: number = 0
+  public ModeOfPaymentForIncome: number = 0
   public ModeOfPaymentName: string = ''
   public BankAccountRef: number = 0
   public IsRegisterCustomerRef: number = 0
