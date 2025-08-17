@@ -71,6 +71,16 @@ export class StockInwardDetailsMobileAppComponent implements OnInit {
   TotalOrderedQty: number = 0;
   MaterialName: string = '';
 
+  selectedGST: any[] = [];
+  GstName: string = '';
+  GSTList: any[] = [
+    { Name: "None", Ref: 0 },
+    { Name: "5%", Ref: 5 },
+    { Name: "9%", Ref: 9 },
+    { Name: "18%", Ref: 18 },
+    { Name: "27%", Ref: 27 }
+  ];
+
   errors: string = "";
   InvoiceFile: File = null as any
   ImageBaseUrl: string = "";
@@ -475,28 +485,42 @@ export class StockInwardDetailsMobileAppComponent implements OnInit {
     );
   }
 
-  OnMaterialSelection = async (internalRef: number) => {
+  OnMaterialSelection = async () => {
     let Date = this.newInward.Date;
+    let tempId = this.newInward.MaterialRef;
     this.newInward = InwardMaterialDetailProps.Blank();
     this.NewRemainingQty = 0;
+    this.newInward.MaterialRef = tempId;
 
-    const UnitData = this.MaterialList.find((data) => data.p.InternalRef === internalRef);
+    let SingleMaterial = this.MaterialListOriginal.find(data => data.p.MaterialRef == this.newInward.MaterialRef);
+    if (SingleMaterial) {
+      this.NewRemainingQty = SingleMaterial.p.RemainingQty;
+      this.newInward.PurchaseOrderRemainingQty = SingleMaterial.p.RemainingQty;
+    }
+
+    let SinglePurchaseOrderId = this.PurchaseOrderIdList.find(data => data.p.Ref == this.Entity.p.MaterialPurchaseOrderRef);
+
+    const SingleRecord = SinglePurchaseOrderId?.p.MaterialPurchaseOrderDetailsArray.find((data) => data.MaterialRef == this.newInward.MaterialRef);
+
     this.newInward.Date = Date;
 
-    if (UnitData) {
-      this.newInward.UnitRef = UnitData.p.UnitRef;
-      this.newInward.UnitName = UnitData.p.UnitName;
-      this.newInward.MaterialRef = UnitData.p.MaterialRef;
-      this.newInward.MaterialName = UnitData.p.MaterialName;
-      this.newInward.PurchaseOrderQty = UnitData.p.OrderQty;
-      this.newInward.PurchaseOrderRemainingQty = UnitData.p.RemainingQty;
-      this.newInward.MaterialStockOrderDetailsRef = UnitData.p.Ref;
-
-      this.newInward.InternalRef = UnitData.p.InternalRef;
-      this.NewRemainingQty = UnitData.p.RemainingQty;
+    if (SingleRecord) {
+      this.newInward.UnitRef = SingleRecord.UnitRef;
+      this.newInward.UnitName = SingleRecord.UnitName;
+      this.newInward.MaterialRef = SingleRecord.MaterialRef;
+      this.newInward.MaterialName = SingleRecord.MaterialName;
+      this.newInward.PurchaseOrderQty = SingleRecord.OrderedQty;
+      this.newInward.MaterialStockOrderDetailsRef = SingleRecord.Ref;
+      this.newInward.InwardQty = 0;
+      this.newInward.Rate = SingleRecord.Rate;
+      this.newInward.DiscountedRate = SingleRecord.DiscountedRate;
+      this.newInward.DiscountOnNetAmount = SingleRecord.DiscountOnNetAmount;
+      this.newInward.NetAmount = SingleRecord.NetAmount;
+      this.newInward.Gst = SingleRecord.Gst;
+      this.newInward.DeliveryCharges = SingleRecord.DeliveryCharges;
+      this.newInward.TotalAmount = SingleRecord.TotalAmount;
     } else {
-      await this.toastService.present('Material not found', 1000, 'warning');
-      await this.haptic.warning()
+      await this.toastService.present('Material not found',1000,'danger');
     }
   };
 
@@ -507,6 +531,15 @@ export class StockInwardDetailsMobileAppComponent implements OnInit {
     } else {
       this.NewRemainingQty = 0;
     }
+  }
+  CalculateNetAmountAndTotalAmount = async () => {
+    if (this.newInward.DiscountedRate == 0) {
+      this.newInward.NetAmount = (this.newInward.Rate * this.newInward.InwardQty) - this.newInward.DiscountOnNetAmount;
+    } else {
+      this.newInward.NetAmount = (this.newInward.DiscountedRate * this.newInward.InwardQty) - this.newInward.DiscountOnNetAmount;
+    }
+    let GstAmount = (this.newInward.NetAmount / 100) * this.newInward.Gst;
+    this.newInward.TotalAmount = this.newInward.NetAmount + GstAmount + this.newInward.DeliveryCharges;
   }
   openModal = async (type: number) => {
     if (this.PurchaseIDName === ''){
@@ -668,6 +701,12 @@ export class StockInwardDetailsMobileAppComponent implements OnInit {
     });
   }
 
+  getGrandTotal(): number {
+    return this.Entity.p.MaterialInwardDetailsArray.reduce((total: number, item: any) => {
+      return this.Entity.p.GrandTotal = total + Number(item.TotalAmount || 0);
+    }, 0);
+  }
+
   SaveStockInward = async () => {
 
     let lstFTO: FileTransferObject[] = [];
@@ -739,25 +778,44 @@ export class StockInwardDetailsMobileAppComponent implements OnInit {
     }
   }
 
+  public async selectGSTBottomsheet(): Promise<void> {
+    try {
+      const options = this.GSTList.map((item) => ({ p: item }));
+      this.openSelectModal(options, this.selectedGST, false, 'Select GST', 1, (selected) => {
+        this.selectedGST = selected;
+        this.newInward.Gst = selected[0].p.Ref;
+        this.GstName = selected[0].p.Name;
+        this.CalculateNetAmountAndTotalAmount()
+      });
+    } catch (error) {
+      await this.toastService.present('Error ' + error, 1000, 'danger');
+      await this.haptic.error();
+    }
+  }
   public async selectMaterialBottomsheet(): Promise<void> {
     try {
       // Reformat the options with Name and Ref
+      // const options = this.MaterialList.map(item => ({
+      //   ...item,
+      //   p: {
+      //     ...item.p,
+      //     Name: item.p.MaterialName + "-QTY:" + item.p.OrderQty, // Add 'Name'
+      //     Ref: item.p.InternalRef   // Add 'Ref'
+      //   }
+      // }));
       const options = this.MaterialList.map(item => ({
-        ...item,
-        p: {
-          ...item.p,
-          Name: item.p.MaterialName + "-QTY:" + item.p.OrderQty, // Add 'Name'
-          Ref: item.p.InternalRef   // Add 'Ref'
-        }
+        Ref: item.p.MaterialRef,
+        Name: item.p.MaterialName
       }));
+
 
       this.openSelectModal(options, this.selectedMaterial, false, 'Select Material', 1, (selected) => {
         this.selectedMaterial = selected;
 
         this.MaterialName = selected[0].p.Name;
         this.newInward.MaterialName = selected[0].p.Name;
-        this.newInward.InternalRef = selected[0].p.Ref;
-        this.OnMaterialSelection(this.newInward.InternalRef)
+        this.newInward.MaterialRef = selected[0].p.Ref;
+        this.OnMaterialSelection()
       });
     } catch (error) {
       await this.toastService.present('Error in selectMaterialBottomsheet', 1000, 'danger');

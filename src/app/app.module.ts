@@ -16,10 +16,7 @@ import { ImageInterceptor } from './ImageInterceptor';
 
 @NgModule({
   declarations: [AppComponent,],
-  imports: [CommonModule, IonicModule.forRoot({
-    scrollAssist: true,
-    scrollPadding: false
-  }),
+  imports: [CommonModule, IonicModule.forRoot(),
  AppRoutingModule, FormsModule, BrowserAnimationsModule,
     NzTableModule,HttpClientModule
    ],

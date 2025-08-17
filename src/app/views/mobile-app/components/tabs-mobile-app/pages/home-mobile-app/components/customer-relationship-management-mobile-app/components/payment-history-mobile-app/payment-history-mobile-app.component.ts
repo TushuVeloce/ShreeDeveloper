@@ -1,4 +1,5 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { BookingRemarks } from 'src/app/classes/domain/domainenums/domainenums';
 import { Income } from 'src/app/classes/domain/entities/website/accounting/income/income';
 import { Plot } from 'src/app/classes/domain/entities/website/masters/plot/plot';
 import { Site } from 'src/app/classes/domain/entities/website/masters/site/site';
@@ -27,8 +28,8 @@ export class PaymentHistoryMobileAppComponent implements OnInit {
   SelectedIncome: Income = Income.CreateNewInstance();
   CustomerRef: number = 0;
   companyRef: number = 0;
-  Printheaders: string[] = ['Sr.No.', 'Date', 'Site Name', 'Payer Name', 'Amount', 'Mode of Payment', 'Reason'];
-  headers: string[] = ['Sr.No.', 'Date', 'Site Name', 'Payer Name', 'Plot No.','Amount', 'Mode of Payment', 'Reason','Actions'];
+  Printheaders: string[] = ['Sr.No.', 'Date', 'Site', 'Plot', 'Payer Name', 'Amount', 'Mode of Payment', 'Reason'];
+  headers: string[] = ['Sr.No.', 'Date', 'Site', 'Plot', 'Payer Name', 'Amount', 'Mode of Payment', 'Reason'];
   modalOpen = false;
 
   filters: FilterItem[] = [];
@@ -174,7 +175,9 @@ export class PaymentHistoryMobileAppComponent implements OnInit {
           await this.toastService.present(errMsg, 1000, 'danger');
           await this.haptic.error();
           });
-        this.PlotList = lst;
+        // this.PlotList = lst;
+        this.PlotList = lst.filter(data => data.p.CurrentBookingRemark != BookingRemarks.Plot_Of_Owner && data.p.CurrentBookingRemark != BookingRemarks.Plot_Of_Shree);
+        
       }
 
   getPaymentHistoryListByCompanyRef = async () => {
@@ -198,6 +201,12 @@ export class PaymentHistoryMobileAppComponent implements OnInit {
   getPaymentHistoryListBySiteRefAndPlotRef = async () => {
     this.MasterList = [];
     this.DisplayMasterList = [];
+    if (this.Entity.p.SiteRef == null) {
+      this.Entity.p.SiteRef = 0
+      this.Entity.p.PlotRef = 0
+    } else if (this.Entity.p.PlotRef == null) {
+      this.Entity.p.PlotRef = 0
+    }
     let lst = await Income.FetchEntireListBySiteRef(this.Entity.p.SiteRef,this.Entity.p.PlotRef, this.companyRef,
       async (errMsg) => {
         await this.toastService.present(errMsg, 1000, 'danger');
