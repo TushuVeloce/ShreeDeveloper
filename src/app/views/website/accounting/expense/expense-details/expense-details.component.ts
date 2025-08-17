@@ -445,6 +445,21 @@ export class ExpenseDetailsComponent implements OnInit {
   SaveExpense = async () => {
     this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef();
     this.Entity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName();
+
+    if (this.Entity.p.RecipientType == this.Sites) {
+      if (this.Entity.p.SiteRef == this.Entity.p.RecipientRef) {
+        if (this.Entity.p.ExpenseModeOfPayment == this.Cash && this.Entity.p.ModeOfPaymentForIncome == this.Cash) {
+          await this.uiUtils.showWarningToster("Cash trasanction in Same Sites not allowed");
+          return;
+        } else if (this.Entity.p.ExpenseModeOfPayment == this.Entity.p.ModeOfPaymentForIncome) {
+          if (this.Entity.p.BankAccountRef == this.Entity.p.IncomeBankRef) {
+            await this.uiUtils.showWarningToster("Same Sites & Same Banks not allowed");
+            return;
+          }
+        }
+      }
+    }
+
     if (this.Entity.p.CreatedBy == 0) {
       this.Entity.p.CreatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
     }

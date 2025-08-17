@@ -44,8 +44,6 @@ export class RegistrarOfficeComponent implements OnInit {
     this.appStateManage.setDropdownDisabled();
     this.loadPaginationData();
     this.pageSize = this.screenSizeService.getPageSize('withDropdown');
-    this.Entity.p.SiteRef = Number(this.appStateManage.StorageKey.getItem('registartsiteRef'));
-    this.Entity.p.PlotRef = Number(this.appStateManage.StorageKey.getItem('registartplotRef'));
     if (this.Entity.p.SiteRef) {
       this.getPlotListBySiteRef();
     }
@@ -67,6 +65,7 @@ export class RegistrarOfficeComponent implements OnInit {
     if (this.SiteList.length > 0) {
       this.Entity.p.SiteRef = this.SiteList[0].p.Ref;
       this.getPlotListBySiteRef();
+      this.getRegistrarOfficeListBySiteAndPlotRef();
     }
 
 
@@ -81,35 +80,23 @@ export class RegistrarOfficeComponent implements OnInit {
     this.DisplayMasterList = [];
     this.PlotNoList = [];
     // this.Entity.p.PlotRef = 0;
-    this.appStateManage.StorageKey.setItem('registartsiteRef', String(this.Entity.p.SiteRef));
     if (this.Entity.p.SiteRef <= 0) {
       await this.uiUtils.showWarningToster(`Please Select Site`);
       return
     }
     let lst = await Plot.FetchEntireListBySiteRef(this.Entity.p.SiteRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.PlotNoList = lst.filter(plot => plot.p.CurrentBookingRemark != BookingRemarks.Plot_Of_Owner && plot.p.CurrentBookingRemark != BookingRemarks.Plot_Of_Shree);
-    this.getRegistrarOfficeListBySiteRef(this.Entity.p.SiteRef)
     this.loadPaginationData();
   }
 
-  // get CustomerList With Plot Ref //
-  getRegistrarOfficeListBySiteRef = async (SiteRef: number) => {
+  // get CustomerList By Site & Plot Ref //
+  getRegistrarOfficeListBySiteAndPlotRef = async () => {
     this.DisplayMasterList = [];
-    let lst = await RegistrarOffice.FetchEntireListBySiteRef(SiteRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-    this.MasterList = lst;
-    this.DisplayMasterList = this.MasterList;
-    this.loadPaginationData();
-  }
-
-  // get CustomerList With Plot Ref //
-  getRegistrarOfficeListByPlotRef = async (PlotRef: number) => {
-    this.DisplayMasterList = [];
-    if (PlotRef <= 0) {
-      await this.uiUtils.showWarningToster(`Please Select Plot`);
+    if (this.Entity.p.SiteRef <= 0) {
+      await this.uiUtils.showWarningToster(`Please Select Site`);
       return
     }
-    this.appStateManage.StorageKey.setItem('registartplotRef', String(PlotRef));
-    let lst = await RegistrarOffice.FetchEntireListByPlotRef(PlotRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    let lst = await RegistrarOffice.FetchEntireListBySiteAndPlotRef(this.Entity.p.SiteRef, this.Entity.p.PlotRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.MasterList = lst;
     this.DisplayMasterList = this.MasterList;
     this.loadPaginationData();
@@ -117,7 +104,6 @@ export class RegistrarOfficeComponent implements OnInit {
 
   OnSiteChange = () => {
     this.Entity.p.PlotRef = 0;
-    this.appStateManage.StorageKey.setItem('registartplotRef', String(this.Entity.p.PlotRef));
   }
 
   isWitness1Completed(office: any): boolean {

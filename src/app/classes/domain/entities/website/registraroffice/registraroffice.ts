@@ -240,9 +240,10 @@ export class RegistrarOffice implements IPersistable<RegistrarOffice> {
     return RegistrarOffice.ListFromTransportData(tdResponse);
   }
 
-  public static async FetchEntireListByPlotRef(PlotRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+  public static async FetchEntireListBySiteAndPlotRef(SiteRef: number, PlotRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let req = new RegistrarOfficeFetchRequest();
-    req.PlotRefs.push(PlotRef)
+    req.SiteRefs.push(SiteRef);
+    PlotRef && req.PlotRefs.push(PlotRef);
     let tdResponse = await RegistrarOffice.FetchTransportData(req, errorHandler) as TransportData;
     return RegistrarOffice.ListFromTransportData(tdResponse);
   }

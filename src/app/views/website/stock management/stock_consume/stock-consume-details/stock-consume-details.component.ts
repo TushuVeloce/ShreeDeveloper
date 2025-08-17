@@ -39,6 +39,7 @@ export class StockConsumeDetailsComponent implements OnInit {
   companyRef = this.companystatemanagement.SelectedCompanyRef;
 
   strCDT: string = ''
+  Date: string = ''
 
 
   RequiredFieldMsg: string = ValidationMessages.RequiredFieldMsg;
@@ -84,6 +85,7 @@ export class StockConsumeDetailsComponent implements OnInit {
       let parts = this.strCDT.substring(0, 16).split('-');
       // Construct the new date format
       this.Entity.p.ConsumptionDate = `${parts[0]}-${parts[1]}-${parts[2]}`;
+      this.Date = `${parts[0]}-${parts[1]}-${parts[2]}`;
 
       this.Entity.p.CreatedBy = Number(
         this.appStateManage.StorageKey.getItem('LoginEmployeeRef')
@@ -202,6 +204,7 @@ export class StockConsumeDetailsComponent implements OnInit {
         );
         this.Entity = StockConsume.CreateNewInstance();
         this.resetAllControls();
+        this.Entity.p.ConsumptionDate = this.Date;
       } else {
         await this.uiUtils.showSuccessToster(
           'Stock Consume Updated successfully'

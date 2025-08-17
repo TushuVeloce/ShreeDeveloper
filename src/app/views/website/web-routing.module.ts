@@ -171,7 +171,7 @@ const routes: Routes = [
       // { path: 'Unit_Master', component: UnitMasterComponent, canActivate: [AuthGuard], data: { featureName: 'UnitMaster' } },
       // { path: 'Unit_Master_Details', component: UnitMasterDetailsComponent, canActivate: [AuthGuard], data: { featureName: 'UnitMaster' } },
 
-      { path: 'Dashboard', component: DashboardComponent },
+      { path: '', component: DashboardComponent },
       { path: 'Unit_Master', component: UnitMasterComponent },
       { path: 'Unit_Master_Details', component: UnitMasterDetailsComponent },
 

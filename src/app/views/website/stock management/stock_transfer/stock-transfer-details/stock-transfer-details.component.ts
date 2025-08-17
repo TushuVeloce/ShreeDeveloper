@@ -32,7 +32,8 @@ export class StockTransferDetailsComponent implements OnInit {
   MaterialList: StockConsume[] = [];
   GSTList = DomainEnums.GoodsAndServicesTaxList(true, '--Select GST --');
   companyRef = this.companystatemanagement.SelectedCompanyRef;
-  strCDT: string = ''
+  strCDT: string = '';
+  Date: string = ''
 
 
   RequiredFieldMsg: string = ValidationMessages.RequiredFieldMsg
@@ -66,7 +67,7 @@ export class StockTransferDetailsComponent implements OnInit {
       let parts = this.strCDT.substring(0, 16).split('-');
       // Construct the new date format
       this.Entity.p.Date = `${parts[0]}-${parts[1]}-${parts[2]}`;
-      
+      this.Date = `${parts[0]}-${parts[1]}-${parts[2]}`;
       this.Entity.p.CreatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
     }
     this.InitialEntity = Object.assign(StockTransfer.CreateNewInstance(), this.utils.DeepCopy(this.Entity)) as StockTransfer;
@@ -182,6 +183,7 @@ export class StockTransferDetailsComponent implements OnInit {
         await this.uiUtils.showSuccessToster('Stock Transfer saved successfully');
         this.Entity = StockTransfer.CreateNewInstance();
         this.resetAllControls();
+        this.Entity.p.Date = this.Date;
       } else {
         await this.uiUtils.showSuccessToster('Stock Transfer Updated successfully');
         await this.router.navigate(['/homepage/Website/Stock_Transfer']);
