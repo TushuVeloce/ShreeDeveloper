@@ -1,19 +1,20 @@
 <app-header-with-back-handler title={{DetailsFormTitle}}></app-header-with-back-handler>
 
-<ion-content class="form-container" scrollY="true" [scrollEvents]="true">
+<ion-content class="form-container" scrollY="true" [scrollEvents]="true" [fullscreen]="true">
   <form>
     <ion-list lines="none" class="ion-padding">
       <!--  Date -->
       <ion-item class="input-item">
         <ion-label>Select Date</ion-label>
-        <ion-datetime-button datetime="PurchaseOrderDate"
-          trigger="PurchaseOrderDate-modal"></ion-datetime-button>
-        <ion-checkbox slot="end" name = "PurchaseOrderDateCheckBox" [(ngModel)]="PurchaseOrderDate" name="TransDate" [disabled]="true"></ion-checkbox>
+        <ion-datetime-button datetime="PurchaseOrderDate" trigger="PurchaseOrderDate-modal"></ion-datetime-button>
+        <ion-checkbox slot="end" name="PurchaseOrderDateCheckBox" [(ngModel)]="PurchaseOrderDate" name="TransDate"
+          [disabled]="true"></ion-checkbox>
       </ion-item>
       <ion-modal keepContentsMounted="true" trigger="PurchaseOrderDate-modal">
         <ng-template>
-          <ion-datetime id="PurchaseOrderDate" name="PurchaseOrderDate" presentation="date" [(ngModel)]="PurchaseOrderDate"
-            show-default-buttons="true" (ionChange)="onPurchaseOrderDateChange($event.detail.value)"></ion-datetime>
+          <ion-datetime id="PurchaseOrderDate" name="PurchaseOrderDate" presentation="date"
+            [(ngModel)]="PurchaseOrderDate" show-default-buttons="true"
+            (ionChange)="onPurchaseOrderDateChange($event.detail.value)"></ion-datetime>
         </ng-template>
       </ion-modal>
 
@@ -81,8 +82,8 @@
 
       <!-- Vendor Trade Name input-->
       <ion-item class="input-item">
-        <ion-input label="Vendor Trade" name="VendorTradeName" labelPlacement="floating" placeholder="Enter Vendor Trade"
-          [(ngModel)]="Entity.p.VendorTradeName" [disabled]="'true'"></ion-input>
+        <ion-input label="Vendor Trade" name="VendorTradeName" labelPlacement="floating"
+          placeholder="Enter Vendor Trade" [(ngModel)]="Entity.p.VendorTradeName" [disabled]="'true'"></ion-input>
       </ion-item>
 
       <!-- Address input-->
@@ -296,8 +297,9 @@
 
               <!-- Material input-->
               <ion-item class="input-item" *ngIf="ModalEditable">
-                <ion-input label="Material Name" name="MaterialName" labelPlacement="floating" placeholder="Enter Material Name"
-                  [(ngModel)]="newOrderMaterial.MaterialName" [disabled]="'true'"></ion-input>
+                <ion-input label="Material Name" name="MaterialName" labelPlacement="floating"
+                  placeholder="Enter Material Name" [(ngModel)]="newOrderMaterial.MaterialName"
+                  [disabled]="'true'"></ion-input>
               </ion-item>
 
               <!-- Unit -->
@@ -308,9 +310,9 @@
 
               <!--Requisition Quantity -->
               <ion-item class="input-item">
-                <ion-input label="Requisition Qty" name="RequisitionQty" labelPlacement="floating" type="number" placeholder="Enter Quantity"
-                  [(ngModel)]="newOrderMaterial.RequisitionQty" clearInput="true" clearOnEdit="true"
-                  [disabled]="'true'"></ion-input>
+                <ion-input label="Requisition Qty" name="RequisitionQty" labelPlacement="floating" type="number"
+                  placeholder="Enter Quantity" [(ngModel)]="newOrderMaterial.RequisitionQty" clearInput="true"
+                  clearOnEdit="true" [disabled]="'true'"></ion-input>
               </ion-item>
 
               <!--Total Ordered Quantity -->
@@ -334,8 +336,9 @@
 
               <!-- Extra Ordered Quantity -->
               <ion-item class="input-item">
-                <ion-input label="Extra Ordered Qty" name="ExtraOrderedQty" labelPlacement="floating" placeholder="Enter Extra Ordered Qty"
-                  [(ngModel)]="newOrderMaterial.ExtraOrderedQty" [disabled]="'true'"></ion-input> </ion-item>
+                <ion-input label="Extra Ordered Qty" name="ExtraOrderedQty" labelPlacement="floating"
+                  placeholder="Enter Extra Ordered Qty" [(ngModel)]="newOrderMaterial.ExtraOrderedQty"
+                  [disabled]="'true'"></ion-input> </ion-item>
 
               <!-- Rate -->
               <ion-item class="input-item">
@@ -348,6 +351,13 @@
               <ion-item class="input-item">
                 <ion-input label="Discount Rate" name="DiscountedRate" labelPlacement="floating" type="number"
                   placeholder="Enter Discount Rate" [(ngModel)]="newOrderMaterial.DiscountedRate" clearInput="true"
+                  clearOnEdit="true" (ngModelChange)="CalculateNetAmountAndTotalAmount()"></ion-input>
+              </ion-item>
+
+              <!-- Net Discount -->
+              <ion-item class="input-item">
+                <ion-input label="Net Discount" name="NetDiscount" labelPlacement="floating" type="number"
+                  placeholder="Enter Net Discount" [(ngModel)]="newOrderMaterial.DiscountOnNetAmount" clearInput="true"
                   clearOnEdit="true" (ngModelChange)="CalculateNetAmountAndTotalAmount()"></ion-input>
               </ion-item>
 
@@ -379,24 +389,24 @@
                 <ion-label>Expected Delivery Date</ion-label>
                 <ion-datetime-button datetime="ExpectedDeliveryDate"
                   trigger="ExpectedDeliveryDate-modal"></ion-datetime-button>
-                <ion-checkbox slot="end" name="ExpectedDeliveryDateCheckBox" [(ngModel)]="ExpectedDeliveryDate" name="TransDate"
-                  [disabled]="true"></ion-checkbox>
+                <ion-checkbox slot="end" name="ExpectedDeliveryDateCheckBox" [(ngModel)]="ExpectedDeliveryDate"
+                  name="TransDate" [disabled]="true"></ion-checkbox>
 
               </ion-item>
 
               <ion-modal keepContentsMounted="true" trigger="ExpectedDeliveryDate-modal">
                 <ng-template>
-                  <ion-datetime id="ExpectedDeliveryDate" name="ExpectedDeliveryDate" presentation="date" [(ngModel)]="ExpectedDeliveryDate"
-                    show-default-buttons="true"
+                  <ion-datetime id="ExpectedDeliveryDate" name="ExpectedDeliveryDate" presentation="date"
+                    [(ngModel)]="ExpectedDeliveryDate" show-default-buttons="true"
                     (ionChange)="onExpectedDeliveryDateChange($event.detail.value)"></ion-datetime>
                 </ng-template>
               </ion-modal>
 
               <!--Total Amount -->
               <ion-item class="input-item">
-                <ion-input label="Total Amount" name="TotalAmount" labelPlacement="floating" type="number" placeholder="Enter Total Amount"
-                  [(ngModel)]="newOrderMaterial.TotalAmount" clearInput="true" clearOnEdit="true"
-                  [disabled]="'true'"></ion-input>
+                <ion-input label="Total Amount" name="TotalAmount" labelPlacement="floating" type="number"
+                  placeholder="Enter Total Amount" [(ngModel)]="newOrderMaterial.TotalAmount" clearInput="true"
+                  clearOnEdit="true" [disabled]="'true'"></ion-input>
               </ion-item>
             </ion-list>
           </ion-content>

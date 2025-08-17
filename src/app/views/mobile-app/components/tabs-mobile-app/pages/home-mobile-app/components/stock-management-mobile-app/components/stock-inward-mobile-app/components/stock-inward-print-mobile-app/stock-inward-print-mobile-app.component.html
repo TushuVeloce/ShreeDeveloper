@@ -46,11 +46,6 @@
       </div>
 
       <!-- Bill To Section -->
-
-      <!-- <div
-        style="background-color: maroon; color: white; font-weight: bold; padding: 5px 10px; width: fit-content; margin-left: 5%; width: 40%;">
-        BILL TO
-      </div> -->
       <div style="display: flex; justify-content: center;">
         <table style="width: 100%;">
           <tr>
@@ -64,8 +59,9 @@
               </div>
               <br>
               <div>
-                <strong>Chalan No - {{Entity.p.ChalanNo}}</strong>
+                <strong>Date - {{formatDate(Entity.p.InwardDate )}}</strong>
               </div>
+              <br>
             </td>
             <td style="text-align: left; vertical-align: top; padding: 5px; border-width: 1px;">
               <div>
@@ -77,7 +73,7 @@
               </div>
               <br>
               <div>
-                <strong>Vendor Address - {{Entity.p.VendorAddressLine1 + " " + Entity.p.VendorAddressLine2}}</strong>
+                <strong>Address - {{Entity.p.VendorAddressLine1}}</strong>
               </div>
             </td>
           </tr>
@@ -85,41 +81,56 @@
       </div>
 
       <!-- Table Header -->
-      <table style="width: 100%; border-collapse: collapse; text-align: center">
-        <thead>
-          <tr style="background-color: maroon; color: white">
-            <th style="padding: 8px; border: none">Sr.No</th>
-            <th style="padding: 8px; border: none">Material Name</th>
-            <th style="padding: 8px; border: none">Unit</th>
-            <th style="padding: 8px; border: none">Ordered Qty.</th>
-            <th style="padding: 8px; border: none">Inward Qty.</th>
-            <th style="padding: 8px; border: none">Remaining Qty.</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="
-              let material of Entity.p.MaterialInwardDetailsArray;
-              let i = index
-            ">
-            <td style="padding: 8px; border: none">{{ i + 1 }}</td>
-            <td style="padding: 8px; border: none">
-              {{ material.MaterialName }}
-            </td>
-            <td style="padding: 8px; border: none">
-              {{ material.UnitName }}
-            </td>
-            <td style="padding: 8px; border: none">
-              {{ material.PurchaseOrderQty }}
-            </td>
-            <td style="padding: 8px; border: none">
-              {{ material.InwardQty }}
-            </td>
-            <td style="padding: 8px; border: none">
-              {{ material.PurchaseOrderRemainingQty }}
-            </td>
-          </tr>
-        </tbody>
-      </table>
+      <div style="width:100%;overflow-x:auto;margin-top:10px;">
+        <table style="width:100%;border-collapse:collapse;text-align:center;min-width:600px;">
+          <thead>
+            <tr style="background-color:maroon;color:white;">
+              <th style="padding:4px;font-size:11px;">Sr.No</th>
+              <th style="padding:4px;font-size:11px;">Material Name</th>
+              <th style="padding:4px;font-size:11px;">Unit</th>
+              <th style="padding:4px;font-size:11px;">Ordered Qty.</th>
+              <th style="padding:4px;font-size:11px;">Rate</th>
+              <th style="padding:4px;font-size:11px;">Inward Qty.</th>
+              <th style="padding:4px;font-size:11px;">Remaining Qty.</th>
+              <th style="padding:4px;font-size:11px;">Net Discount</th>
+              <th style="padding:4px;font-size:11px;">Net Amount</th>
+              <th style="padding:4px;font-size:11px;">GST</th>
+              <th style="padding:4px;font-size:11px;">Delivery Charges</th>
+              <th style="padding:4px;font-size:11px;">Total Amount</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let material of Entity.p.MaterialInwardDetailsArray; let i = index">
+              <td style="padding:4px;font-size:10px;border:1px solid #ddd;">{{ i + 1 }}</td>
+              <td style="padding:4px;font-size:10px;border:1px solid #ddd;">{{ material.MaterialName }}</td>
+              <td style="padding:4px;font-size:10px;border:1px solid #ddd;">{{ material.UnitName }}</td>
+              <td style="padding:4px;font-size:10px;border:1px solid #ddd;">{{ material.PurchaseOrderQty }}</td>
+              <td style="padding:4px;font-size:10px;border:1px solid #ddd;">{{ !material.DiscountedRate ? (material.Rate
+                |
+                currency:'INR') : (material.DiscountedRate | currency:'INR') }}</td>
+              <td style="padding:4px;font-size:10px;border:1px solid #ddd;">{{ material.InwardQty }}</td>
+              <td style="padding:4px;font-size:10px;border:1px solid #ddd;">{{ material.PurchaseOrderRemainingQty }}
+              </td>
+              <td style="padding:4px;font-size:10px;border:1px solid #ddd;">{{ material.DiscountOnNetAmount }}</td>
+              <td style="padding:4px;font-size:10px;border:1px solid #ddd;">{{ material.NetAmount }}</td>
+              <td style="padding:4px;font-size:10px;border:1px solid #ddd;">{{ material.Gst }}</td>
+              <td style="padding:4px;font-size:10px;border:1px solid #ddd;">{{ material.DeliveryCharges }}</td>
+              <td style="padding:4px;font-size:10px;border:1px solid #ddd;">{{ material.TotalAmount }}</td>
+            </tr>
+
+            <!-- Total -->
+            <tr style="background:#fef4d4;font-weight:bold;">
+              <td colspan="11" style="padding:4px;font-size:11px;text-align:center;">TOTAL</td>
+              <td style="padding:4px;font-size:11px;">{{ Entity.p.GrandTotal | currency : 'INR' }}</td>
+            </tr>
+            <tr>
+              <td colspan="12" style="padding:4px;font-size:10px;text-align:center;font-style:italic;">
+                Inwords - {{ this.totalAmountInWords(Entity.p.GrandTotal) }}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
 
       <!-- Comments -->
       <div style="margin-top: 5px">

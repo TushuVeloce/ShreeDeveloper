@@ -9,7 +9,8 @@ const config: CapacitorConfig = {
       presentationOptions: ['badge', 'sound', 'alert']
     },
     Keyboard: {
-     resize: 'body' // options: 'body', 'ionic', 'native', 'none'
+      resize: 'body', // options: 'body', 'ionic', 'native', 'none'
+      resizeOnFullScreen: true
     }
   }
 };

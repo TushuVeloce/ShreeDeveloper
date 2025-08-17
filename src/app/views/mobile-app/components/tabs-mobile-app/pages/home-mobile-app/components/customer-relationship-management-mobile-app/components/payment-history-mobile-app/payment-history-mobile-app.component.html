@@ -30,8 +30,8 @@
               <td class="sticky-col">{{ i + 1 }}</td>
               <td>{{ formatDate(item.p.Date) || '-' }}</td>
               <td>{{ item.p.SiteName || '-' }}</td>
-              <td>{{ item.p.PayerName || '-' }}</td>
               <td>{{ item.p.PlotName || '-' }}</td>
+              <td>{{ item.p.PayerName || '-' }}</td>
               <td>₹{{ item.p.IncomeAmount || '0' }}</td>
               <td>{{ item.p.ModeOfPaymentName || '-' }}</td>
               <td>{{ item.p.Reason || '-' }}</td>
@@ -71,8 +71,8 @@
         <div class="info-row-of-model-mobile-app" *ngFor="let field of [
           { label: 'Date', value: formatDate(SelectedIncome.p.Date) },
           { label: 'Site Name', value: SelectedIncome.p.SiteName },
-          { label: 'Payer Name', value: SelectedIncome.p.PayerName },
           { label: 'Plot Name', value: SelectedIncome.p.PlotName},
+          { label: 'Payer Name', value: SelectedIncome.p.PayerName },
           { label: 'Mode Of Payment', value: SelectedIncome.p.ModeOfPaymentName},
           { label: 'Amount', value: '₹' + (SelectedIncome.p.IncomeAmount || '0') },
           { label: 'Reason', value: SelectedIncome.p.Reason}
@@ -103,12 +103,14 @@
     <table class="table table-bordered print-table" style="width: 100%; border-collapse: collapse;">
       <thead>
         <tr>
-          <th style="background-color: maroon; color: white;">#</th>
+          <th style="background-color: maroon; color: white;">Sr.No.</th>
           <th style="background-color: maroon; color: white;">Date</th>
           <th style="background-color: maroon; color: white;">Site</th>
-          <th style="background-color: maroon; color: white;">Plot No</th>
-          <th style="background-color: maroon; color: white;">Payer Ref</th>
+          <th style="background-color: maroon; color: white;">Plot</th>
+          <th style="background-color: maroon; color: white;">Payer Name</th>
           <th style="background-color: maroon; color: white;">Amount</th>
+          <th style="background-color: maroon; color: white;">Mode of Payment</th>
+          <th style="background-color: maroon; color: white;">Reason</th>
         </tr>
       </thead>
       <tbody>
@@ -117,8 +119,10 @@
           <td class="tbldata">{{ formatDate(item.p.Date) }}</td>
           <td class="tbldata">{{ item.p.SiteName }}</td>
           <td class="tbldata">{{ item.p.PlotName }}</td>
-          <td class="tbldata">{{ item.p.PayerRef }}</td>
+          <td class="tbldata">{{ item.p.PayerName }}</td>
           <td class="tbldata">₹{{ item.p.IncomeAmount }}</td>
+          <td class="tbldata">{{ item.p.ModeOfPaymentName }}</td>
+          <td class="tbldata">{{ item.p.Reason }}</td>
         </tr>
       </tbody>
     </table>
