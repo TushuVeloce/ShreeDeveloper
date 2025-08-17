@@ -18,7 +18,7 @@
 
   padding: 1rem;
   border-radius: 10px;
-  border: 1px solid rgba(128, 0, 0, 0.3);
+  border: 1px solid #7a1e1e;
   font-family: "Segoe UI", sans-serif;
   text-align: center;
   box-sizing: border-box;
@@ -104,4 +104,96 @@
     color: #7a3a3a;
     margin-top: 0.3rem;
   }
+}
+
+// ================================ Chart =======================================
+
+.chart-container {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-top: 10px;
+  /* allow wrapping on small screens */
+}
+
+.chart-card {
+  flex: 1 1 calc(50% - 1rem);
+  max-width: calc(50% - 1rem);
+  padding: 1rem;
+  border: 1px solid #7a1e1e;
+  border-radius: 10px;
+  background: #fff;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center; // keep chart centered
+}
+
+.chart-card canvas {
+  width: 100% !important;
+  height: 280px !important; // fixed height for ALL charts
+}
+
+.doughnut {
+  max-width: 450px; // don’t let doughnut blow up horizontally
+  max-height: 300px; // don’t let doughnut blow up horizontally
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.chart-card h4 {
+  position: absolute;
+  top: 0.8rem;
+  left: 1rem;
+  font-size: 1rem;
+  color: #7a1e1e;
+  font-weight: 600;
+  margin: 0;
+}
+
+.chart-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.chart-header select {
+  padding: 0.4rem;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  background: #fdf2f2;
+  color: #7a1e1e;
+}
+
+/* Brown theme styling */
+.border-brown {
+  border: 2px solid #a0522d !important;
+  border-radius: 12px;
+}
+
+.text-brown {
+  color: #5a2d0c !important;
+}
+
+.inner-card {
+  background: #fff;
+  border: 2px solid #d2a679;
+  border-radius: 10px;
+  transition: transform 0.2s;
+}
+
+.inner-card:hover {
+  transform: scale(1.03);
+}
+
+/* Table adjustments */
+.table th {
+  font-weight: 600;
+  background-color: #f9f9f9 !important;
+}
+
+.table td {
+  color: #333;
 }
