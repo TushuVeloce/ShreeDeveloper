@@ -1,4 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, effect, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { AppStateManageService } from 'src/app/services/app-state-manage.service';
+import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
+import { DateconversionService } from 'src/app/services/dateconversion.service';
+import { ScreenSizeService } from 'src/app/services/screensize.service';
+import { UIUtils } from 'src/app/services/uiutils.service';
+
 import {
   Chart,
   ChartConfiguration,
@@ -12,12 +19,32 @@ Chart.register(...registerables);
 
 @Component({
   selector: 'app-dashboard',
+  standalone: false,
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss'],
 })
 export class DashboardComponent implements OnInit {
 
-  constructor() { }
+  // Animated values
+  shreeBalance: number = 0;
+  cashBalance: number = 0;
+  bankBalance: number = 0;
+
+  // Target values
+  private shreeTarget: number = 800000;
+  private cashTarget: number = 300000;
+  private bankTarget: number = 400000;
+
+  private duration: number = 2000; // total duration in ms
+
+  constructor(
+    private uiUtils: UIUtils,
+    private router: Router,
+    private DateconversionService: DateconversionService,
+    private appStateManage: AppStateManageService,
+    private screenSizeService: ScreenSizeService,
+    private companystatemanagement: CompanyStateManagement
+  ) { }
 
   ngAfterViewInit(): void {
     const labels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'Jul', 'Aug', 'Spet', 'Oct', 'Nov', 'Dec'];
@@ -74,6 +101,10 @@ export class DashboardComponent implements OnInit {
 
 
   ngOnInit() {
+    this.animateValue('shreeBalance', this.shreeTarget);
+    this.animateValue('cashBalance', this.cashTarget);
+    this.animateValue('bankBalance', this.bankTarget);
+
     new Chart("doughnutChart", {
       type: 'doughnut',
       data: {
@@ -112,6 +143,27 @@ export class DashboardComponent implements OnInit {
         }
       }
     });
+  }
+
+
+  private animateValue(property: keyof DashboardComponent, target: number) {
+    const startTime = performance.now();
+    const startValue = 0;
+
+    const animate = (currentTime: number) => {
+      const elapsed = currentTime - startTime;
+      const progress = Math.min(elapsed / this.duration, 1);
+
+      // Ease-out cubic
+      const easedProgress = 1 - Math.pow(1 - progress, 3);
+      (this as any)[property] = Math.floor(startValue + (target - startValue) * easedProgress);
+
+      if (progress < 1) {
+        requestAnimationFrame(animate);
+      }
+    };
+
+    requestAnimationFrame(animate);
   }
 
 }
