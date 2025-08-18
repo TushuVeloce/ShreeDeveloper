@@ -128,6 +128,7 @@ ClearRef = () =>{
     this.AllList = lst.filter((item) => item.p.Reason != '');
     this.MasterList = lst;
     this.DisplayMasterList = this.MasterList;
+    console.log('this.DisplayMasterList :', this.DisplayMasterList);
     this.loadPaginationData();
   }
 

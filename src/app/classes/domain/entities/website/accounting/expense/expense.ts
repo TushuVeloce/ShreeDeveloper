@@ -40,6 +40,9 @@ export class ExpenseProps {
   public IsNewBankCreated: boolean = false;
   public IncomeBankRef: number = 0
   public InvoiceAmount: number = 0
+  public TotalInvoiceAmount: number = 0
+  public TotalGivenAmount: number = 0
+  public RemainingAmountOfGrandTotal: number = 0
   public Narration: string = ''
   public TransDateTime: string = ''
   public CreatedDate: string = ''
