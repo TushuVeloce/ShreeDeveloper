@@ -86,9 +86,9 @@
           <td Class="tbldata">{{ Expense.p.SubLedgerName }}</td>
           <td Class="tbldata">{{ Expense.p.RecipientName | titleCase}}</td>
           <td Class="tbldata">{{ Expense.p.Reason }}</td>
-          <td Class="tbldata">{{ Expense.p.TotalInvoiceAmount | currency : "INR" }}</td>
-          <td Class="tbldata"> {{ Expense.p.TotalGivenAmount | currency : "INR" }}</td>
-          <td Class="tbldata"> {{ Expense.p.RemainingAmountOfGrandTotal | currency : "INR" }}</td>
+          <td Class="tbldata">{{ Expense.p.InvoiceAmount| currency : "INR" }}</td>
+          <td Class="tbldata"> {{ Expense.p.GivenAmount | currency : "INR" }}</td>
+          <td Class="tbldata"> {{ Expense.p.RemainingAmount | currency : "INR" }}</td>
           <td Class="tbldata"> {{ Expense.p.ShreesBalance | currency : "INR" }}</td>
           <td Class="tbldata">{{ Expense.p.ModeOfPaymentName }}</td>
           <td class="tbldata">
@@ -100,12 +100,15 @@
           <td class="tbldata" colspan="2"><b>Total Expense</b></td>
           <td class="tbldata" colspan="5"></td>
           <td class="tbldata">
-            <b>{{ getTotalInvoice() | currency : "INR" }}</b>
+            <b>{{TotalInvoiceAmount| currency : "INR" }}</b>
           </td>
           <td class="tbldata">
-            <b>{{ getTotalGiven() | currency : "INR" }}</b>
+            <b>{{ TotalGivenAmount | currency : "INR" }}</b>
           </td>
-          <td class="tbldata" colspan="4"></td>
+          <td class="tbldata">
+            <b>{{ RemainingAmountOfGrandTotal | currency : "INR" }}</b>
+          </td>
+          <td class="tbldata" colspan="3"></td>
         </tr>
       </tbody>
     </nz-table>

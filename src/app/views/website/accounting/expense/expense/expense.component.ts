@@ -33,6 +33,9 @@ export class ExpenseComponent implements OnInit {
   pageSize = 10; // Items per page
   currentPage = 1; // Initialize current page
   total = 0;
+  TotalInvoiceAmount: number = 0
+  TotalGivenAmount: number = 0
+  RemainingAmountOfGrandTotal: number = 0
 
   companyRef = this.companystatemanagement.SelectedCompanyRef;
 
@@ -51,7 +54,6 @@ export class ExpenseComponent implements OnInit {
       this.Entity.p.Ref = 0
       await this.getSiteListByCompanyRef();
       await this.getLedgerListByCompanyRef();
-      await this.getExpenseListByCompanyRef();
       await this.FetchEntireListByFilters();
     });
   }
@@ -63,7 +65,7 @@ export class ExpenseComponent implements OnInit {
     this.pageSize = pageSize - 6
   }
 
-    getSiteListByCompanyRef = async () => {
+  getSiteListByCompanyRef = async () => {
     this.Entity.p.SiteRef = 0
     this.Entity.p.Ref = 0
     if (this.companyRef() <= 0) {
@@ -99,36 +101,25 @@ export class ExpenseComponent implements OnInit {
     this.SubLedgerList = lst;
   }
 
-ClearRef = () =>{
- this.Entity.p.Ref = 0
-}
-
- FetchEntireListByFilters = async () => {
-    this.MasterList = [];
-    this.DisplayMasterList = [];
-    if (this.companyRef() <= 0) {
-      await this.uiUtils.showErrorToster('Company not Selected');
-      return;
-    }
-    let lst = await Expense.FetchEntireListByFilters(this.Entity.p.SiteRef, this.Entity.p.LedgerRef, this.Entity.p.SubLedgerRef,this.Entity.p.ExpenseModeOfPayment,this.Entity.p.Ref,  this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-    // this.AllList = lst.filter((item)=>item.p.Reason != '');
-    this.MasterList = lst;
-    this.DisplayMasterList = this.MasterList;
-    this.loadPaginationData();
+  ClearRef = () => {
+    this.Entity.p.Ref = 0
   }
 
-  getExpenseListByCompanyRef = async () => {
+  FetchEntireListByFilters = async () => {
     this.MasterList = [];
     this.DisplayMasterList = [];
     if (this.companyRef() <= 0) {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
-    let lst = await Expense.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-    this.AllList = lst.filter((item) => item.p.Reason != '');
+    let lst = await Expense.FetchEntireListByFilters(this.Entity.p.SiteRef, this.Entity.p.LedgerRef, this.Entity.p.SubLedgerRef, this.Entity.p.ExpenseModeOfPayment, this.Entity.p.Ref, this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.MasterList = lst;
     this.DisplayMasterList = this.MasterList;
-    console.log('this.DisplayMasterList :', this.DisplayMasterList);
+    if(this.DisplayMasterList.length > 0){
+      this.TotalInvoiceAmount = this.DisplayMasterList[0].p.TotalInvoiceAmount;
+      this.TotalGivenAmount = this.DisplayMasterList[0].p.TotalGivenAmount;
+      this.RemainingAmountOfGrandTotal = this.DisplayMasterList[0].p.RemainingAmountOfGrandTotal;
+    }
     this.loadPaginationData();
   }
 
