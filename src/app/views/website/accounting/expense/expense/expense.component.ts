@@ -1,7 +1,9 @@
 import { Component, effect, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { DomainEnums } from 'src/app/classes/domain/domainenums/domainenums';
+import { DomainEnums, OpeningBalanceModeOfPayments, PayerTypes } from 'src/app/classes/domain/domainenums/domainenums';
+import { Invoice } from 'src/app/classes/domain/entities/website/accounting/billing/invoice';
 import { Expense } from 'src/app/classes/domain/entities/website/accounting/expense/expense';
+import { Income } from 'src/app/classes/domain/entities/website/accounting/income/income';
 import { Ledger } from 'src/app/classes/domain/entities/website/masters/ledgermaster/ledger';
 import { Site } from 'src/app/classes/domain/entities/website/masters/site/site';
 import { SubLedger } from 'src/app/classes/domain/entities/website/masters/subledgermaster/subledger';
@@ -39,6 +41,15 @@ export class ExpenseComponent implements OnInit {
 
   companyRef = this.companystatemanagement.SelectedCompanyRef;
 
+  Cash = OpeningBalanceModeOfPayments.Cash
+  RecipientList: Invoice[] = [];
+  RecipientTypesList = DomainEnums.RecipientTypesList();
+
+  PayerList: Income[] = [];
+  PayerTypesList = DomainEnums.PayerTypesList();
+  DealDoneCustomer = PayerTypes.DealDoneCustomer;
+  PayerPlotNo: string = '';
+
   headers: string[] = ['Sr.No.', 'Date', 'Site Name', 'Ledger', 'Sub Ledger', 'Recipient Name', 'Reason', 'Bill Amount', 'Given Amount', 'Remaining Amount', 'Shree Balance', 'Mode of Payment', 'Action'];
   printheaders: string[] = ['Sr.No.', 'Date', 'Site Name', 'Ledger', 'Sub Ledger', 'Recipient Name', 'Reason', 'Bill Amount', 'Given Amount', 'Remaining Amount', 'Shree Balance', 'Mode of Payment'];
   constructor(
@@ -63,6 +74,53 @@ export class ExpenseComponent implements OnInit {
     this.loadPaginationData();
     const pageSize = this.screenSizeService.getPageSize('withDropdown');
     this.pageSize = pageSize - 6
+  }
+
+  onPayerChange = () => {
+    let SingleRecord;
+    try {
+      if (this.Entity.p.PayerType == this.DealDoneCustomer) {
+        SingleRecord = this.PayerList.find((data) => data.p.PlotName == this.PayerPlotNo);
+      } else {
+        SingleRecord = this.PayerList.find((data) => data.p.Ref == this.Entity.p.PayerRef);
+      }
+      if (SingleRecord?.p) {
+        this.Entity.p.IsRegisterCustomerRef = SingleRecord.p.IsRegisterCustomerRef;
+        this.Entity.p.PayerRef = SingleRecord.p.Ref;
+        if (this.Entity.p.PayerType == this.DealDoneCustomer) {
+          this.Entity.p.PlotName = SingleRecord.p.PlotName;
+        }
+      }
+      this.FetchEntireListByFilters();
+    } catch (error) {
+    }
+  }
+
+  getRecipientListByRecipientTypeRef = async () => {
+    if (this.companyRef() <= 0) {
+      await this.uiUtils.showErrorToster('Company not Selected');
+      return;
+    }
+    if (this.Entity.p.RecipientType <= 0) {
+      await this.uiUtils.showErrorToster('To Whom not Selected');
+      return;
+    }
+
+    this.RecipientList = [];
+    let lst = await Invoice.FetchRecipientByRecipientTypeRef(this.companyRef(), this.Entity.p.SiteRef, this.Entity.p.RecipientType, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    this.RecipientList = lst;
+  }
+
+  getPayerListBySiteAndPayerType = async () => {
+    if (this.companyRef() <= 0) {
+      await this.uiUtils.showErrorToster('Company not Selected');
+      return;
+    }
+    if (this.Entity.p.PayerType <= 0) {
+      return;
+    }
+    let lst = await Income.FetchPayerNameByPayerTypeRef(this.Entity.p.SiteRef, this.companyRef(), this.Entity.p.PayerType, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    this.PayerList = lst;
   }
 
   getSiteListByCompanyRef = async () => {
@@ -112,10 +170,22 @@ export class ExpenseComponent implements OnInit {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
-    let lst = await Expense.FetchEntireListByFilters(this.Entity.p.SiteRef, this.Entity.p.LedgerRef, this.Entity.p.SubLedgerRef, this.Entity.p.ExpenseModeOfPayment, this.Entity.p.Ref, this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    let lst = await Expense.FetchEntireListByFilters(
+      this.companyRef(),
+      this.Entity.p.StartDate,
+      this.Entity.p.EndDate,
+      this.Entity.p.SiteRef,
+      this.Entity.p.LedgerRef,
+      this.Entity.p.SubLedgerRef,
+      this.Entity.p.ExpenseModeOfPayment,
+      this.Entity.p.Ref,
+      this.Entity.p.RecipientRef,
+      this.Entity.p.PayerRef,
+      async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+
     this.MasterList = lst;
     this.DisplayMasterList = this.MasterList;
-    if(this.DisplayMasterList.length > 0){
+    if (this.DisplayMasterList.length > 0) {
       this.TotalInvoiceAmount = this.DisplayMasterList[0].p.TotalInvoiceAmount;
       this.TotalGivenAmount = this.DisplayMasterList[0].p.TotalGivenAmount;
       this.RemainingAmountOfGrandTotal = this.DisplayMasterList[0].p.RemainingAmountOfGrandTotal;

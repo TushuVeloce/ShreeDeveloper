@@ -11,7 +11,11 @@ export class CurrentBalanceFetchRequest {
   ExpenseRefs: number[] = [];
   IncomeRefs: number[] = [];
   CompanyRef: number = 0;
+  RecipientRef: number = 0;
+  PayerRef: number = 0;
 
+  StartDate: string = '';
+  EndDate: string = '';
   SiteRef: number = 0;
   SiteRefs: number[] = [];
   PlotRefs: number[] = [];

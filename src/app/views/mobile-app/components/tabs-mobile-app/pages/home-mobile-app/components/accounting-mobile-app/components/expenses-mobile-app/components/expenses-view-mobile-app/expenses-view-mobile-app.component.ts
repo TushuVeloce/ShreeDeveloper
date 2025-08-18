@@ -38,7 +38,7 @@ export class ExpensesViewMobileAppComponent implements OnInit {
   ReasonList: Expense[] = [];
   LedgerList: Ledger[] = [];
   SubLedgerList: SubLedger[] = [];
- 
+
   // Store current selected values here to preserve selections on filter reload
   selectedFilterValues: Record<string, any> = {};
 
@@ -191,11 +191,11 @@ export class ExpensesViewMobileAppComponent implements OnInit {
         await this.haptic.warning();
         return;
       }
-      let lst = await Expense.FetchEntireListByFilters(this.Entity.p.SiteRef, this.Entity.p.LedgerRef, this.Entity.p.SubLedgerRef,this.Entity.p.ExpenseModeOfPayment, this.Entity.p.Ref, this.companyRef, async errMsg => {
-        await this.toastService.present(errMsg, 1000, 'danger');
-        await this.haptic.error();
-      });
-      this.MasterList = lst;
+      // let lst = await Expense.FetchEntireListByFilters(this.Entity.p.SiteRef, this.Entity.p.LedgerRef, this.Entity.p.SubLedgerRef,this.Entity.p.ExpenseModeOfPayment, this.Entity.p.Ref, this.companyRef, async errMsg => {
+      //   await this.toastService.present(errMsg, 1000, 'danger');
+      //   await this.haptic.error();
+      // });
+      // this.MasterList = lst;
       this.DisplayMasterList = this.MasterList;
     }
 

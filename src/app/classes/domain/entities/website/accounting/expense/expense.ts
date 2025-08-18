@@ -58,8 +58,16 @@ export class ExpenseProps {
   public IncomeSubLedgerName: string = ''
   public RemainingAdvance: number = 0;
   public IsSalaryExpense: boolean = false;
-  public PlotRef: number = 0
-  public PlotName: string = ''
+  public PlotRef: number = 0;
+  public PlotName: string = '';
+
+  public StartDate: string = ''
+  public EndDate: string = ''
+
+  public PayerName: string = ''
+  public PayerRef: number = 0
+  public PayerTypeName: string = ''
+  public PayerType: number = 0
 
   public GivenAmount: number = 0
   public TotalAdvance: number = 0
@@ -69,8 +77,8 @@ export class ExpenseProps {
   public ModeOfPaymentForIncome: number = 0
   public ModeOfPaymentName: string = ''
   public BankAccountRef: number = 0
-  public IsRegisterCustomerRef: number = 0
-  public ReasonForIncome: string = ''
+  public IsRegisterCustomerRef: number = 0;
+  public ReasonForIncome: string = '';
 
 
   public readonly IsNewlyCreated: boolean = false;
@@ -252,9 +260,26 @@ export class Expense implements IPersistable<Expense> {
     return Expense.ListFromTransportData(tdResponse);
   }
 
-  public static async FetchEntireListByFilters(SiteRef: number, LedgerRef: number, SubLedgerRef: number, ModeOfPayment: number, Ref: number, CompanyRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+  public static async FetchEntireListByFilters(
+    CompanyRef: number,
+    StartDate: string,
+    EndDate: string,
+    SiteRef: number,
+    LedgerRef: number,
+    SubLedgerRef: number,
+    ModeOfPayment: number,
+    Ref: number,
+    RecipientRef: number,
+    PayerRef: number,
+    errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let req = new ExpenseFetchRequest();
-    req.CompanyRefs.push(CompanyRef)
+    req.CompanyRefs.push(CompanyRef);
+    if (StartDate) {
+      req.StartDate = StartDate;
+    }
+    if (EndDate) {
+      req.EndDate = EndDate;
+    }
     if (LedgerRef) {
       req.LedgerRefs.push(LedgerRef)
     }
@@ -266,6 +291,12 @@ export class Expense implements IPersistable<Expense> {
     }
     if (ModeOfPayment) {
       req.ModeOfPayments.push(ModeOfPayment)
+    }
+    if (RecipientRef) {
+      req.RecipientRef = RecipientRef;
+    }
+    if (PayerRef) {
+      req.PayerRef = PayerRef;
     }
     if (Ref) {
       req.Refs.push(Ref)

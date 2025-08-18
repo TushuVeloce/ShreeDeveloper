@@ -7,6 +7,8 @@ import { DataCollection } from 'src/app/classes/infrastructure/datacollection';
 export class TotalExpenseFetchRequest {
   public static readonly FetchRequestType: string = "GetTotalInvoiceAmountFromSiteAndRecipientRefFetchRequest";
 
+  StartDate: string = '';
+  EndDate: string = '';
   CompanyRef: number = 0;
   ExpenseRef: number = 0;
   RecipientRef: number = 0;
@@ -18,6 +20,7 @@ export class TotalExpenseFetchRequest {
   SubLedgerRefs: number[] = [];
   ModeOfPayments: number[] = [];
   Refs: number[] = [];
+  PayerRef: number = 0;
 
   ExpenseRefs: number[] = [];
   CompanyRefs: number[] = [];

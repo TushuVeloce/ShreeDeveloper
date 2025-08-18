@@ -24,7 +24,17 @@
 <ng-template #noDataTpl>
   <div style="text-align: center; color: rgba(0, 0, 0, 0.25)">No Data</div>
 </ng-template>
-<div class="row row-cols-5 g-3">
+<div class="row row-cols-6 g-1">
+  <div class="col">
+    <label for="StartDate"><b>From Date</b></label>
+    <input type="date" [(ngModel)]="Entity.p.StartDate" name="StartDate" class="form-control" id="StartDate"
+      placeholder="Enter Start Date" (ngModelChange)="FetchEntireListByFilters()" />
+  </div>
+  <div class="col">
+    <label for="EndDate"><b>To Date</b></label>
+    <input type="date" [(ngModel)]="Entity.p.EndDate" name="EndDate" class="form-control" id="EndDate"
+      placeholder="Enter End Date" (ngModelChange)="FetchEntireListByFilters()" />
+  </div>
   <div class="col">
     <label for="SiteRef"><b>Site</b></label>
     <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear nzPlaceHolder="Select"
@@ -58,6 +68,72 @@
       [(ngModel)]="Entity.p.ExpenseModeOfPayment" (ngModelChange)="FetchEntireListByFilters(); ClearRef()">
       <nz-option *ngFor="let mode of ModeofPaymentList" [nzValue]="mode.Ref" [nzLabel]="mode.Name"></nz-option>
     </nz-select>
+  </div>
+  <div class="col">
+    <label><b>To Whom Type</b></label>
+    <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear nzPlaceHolder="Select"
+      id="RecipientType" name="RecipientType" [nzSize]="'large'" [(ngModel)]="Entity.p.RecipientType"
+      (ngModelChange)="getRecipientListByRecipientTypeRef(); Entity.p.RecipientRef = 0">
+      <nz-option *ngFor=" let type of RecipientTypesList" [nzValue]="type.Ref" [nzLabel]="type.Name"></nz-option>
+    </nz-select>
+  </div>
+  <div class="col">
+    <label><b>To Whom</b></label>
+    <div class="d-flex align-items-center">
+      <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear nzPlaceHolder="Select"
+        id="RecipientRef" name="RecipientRef" [nzSize]="'large'" [(ngModel)]="Entity.p.RecipientRef"
+        (ngModelChange)="FetchEntireListByFilters(); ">
+        <nz-option *ngFor="let recipient of RecipientList" [nzValue]="recipient.p.Ref"
+          [nzLabel]="recipient.p.RecipientName | titleCase" nzCustomContent>
+          <span [ngClass]="recipient.p.IsSiteRef == 1 ? 'site' : 'nonsite'">
+            {{ recipient.p.RecipientName | titleCase }}
+          </span>
+        </nz-option>
+      </nz-select>
+    </div>
+  </div>
+  <div class="col">
+    <label><b>From Whom Type</b> </label>
+    <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear nzPlaceHolder="Select"
+      id="PayerType" name="PayerType" [nzSize]="'large'" [(ngModel)]="Entity.p.PayerType"
+      (ngModelChange)="getPayerListBySiteAndPayerType(); this.Entity.p.PayerRef = 0; this.PayerPlotNo = '';">
+      <nz-option *ngFor="let type of PayerTypesList" [nzValue]="type.Ref" [nzLabel]="type.Name"></nz-option>
+    </nz-select>
+  </div>
+  <div class="col">
+    <label><b>Received By</b></label>
+    <div class="d-flex align-items-center">
+      <nz-select *ngIf="Entity.p.PayerType == DealDoneCustomer" class="nzSelect-light" [nzNotFoundContent]="noDataTpl"
+        nzShowSearch nzAllowClear nzPlaceHolder="Select" id="PayerRef" name="PayerRef" [nzSize]="'large'"
+        [(ngModel)]="PayerPlotNo" (ngModelChange)="onPayerChange()">
+        <nz-option *ngFor="let payer of PayerList" [nzValue]="payer.p.PlotName"
+          [nzLabel]="payer.p.PayerName + ' - ' + payer.p.PlotName | titleCase">
+          <span *ngIf="Entity.p.PayerType == DealDoneCustomer"
+            [ngClass]="payer.p.IsRegisterCustomerRef == 1 ? 'sitecus' : 'nonsitecus'">
+            {{ payer.p.PayerName + ' - ' + payer.p.PlotName| titleCase }}
+          </span>
+          <span *ngIf="Entity.p.PayerType != DealDoneCustomer"
+            [ngClass]="payer.p.IsRegisterCustomerRef == 1 ? 'sitecus' : 'nonsitecus'">
+            {{ payer.p.PayerName| titleCase }}
+          </span>
+        </nz-option>
+      </nz-select>
+      <nz-select *ngIf="Entity.p.PayerType != DealDoneCustomer" class="nzSelect-light" [nzNotFoundContent]="noDataTpl"
+        nzShowSearch nzAllowClear nzPlaceHolder="Select" id="PayerRef" name="PayerRef" [nzSize]="'large'"
+        [(ngModel)]="Entity.p.PayerRef" (ngModelChange)="onPayerChange()">
+        <nz-option *ngFor="let payer of PayerList" [nzValue]="payer.p.Ref"
+          [nzLabel]="payer.p.PayerName + ' - ' + payer.p.PlotName | titleCase">
+          <span *ngIf="Entity.p.PayerType == DealDoneCustomer"
+            [ngClass]="payer.p.IsRegisterCustomerRef == 1 ? 'sitecus' : 'nonsitecus'">
+            {{ payer.p.PayerName + ' - ' + payer.p.PlotName| titleCase }}
+          </span>
+          <span *ngIf="Entity.p.PayerType != DealDoneCustomer"
+            [ngClass]="payer.p.IsRegisterCustomerRef == 1 ? 'sitecus' : 'nonsitecus'">
+            {{ payer.p.PayerName| titleCase }}
+          </span>
+        </nz-option>
+      </nz-select>
+    </div>
   </div>
   <div class="col">
     <label><b>Reason</b></label>
