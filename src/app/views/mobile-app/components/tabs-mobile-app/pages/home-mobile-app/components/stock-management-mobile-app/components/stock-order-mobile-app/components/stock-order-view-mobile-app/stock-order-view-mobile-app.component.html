@@ -153,7 +153,7 @@
         <!-- Summary -->
         <div class="info-row-of-model-mobile-app">
           <span class="label-mobile-app">Grand Total:</span>
-          <span class="value-mobile-app">{{ SelectedOrder.p.GrandTotal || '-' }}</span>
+          <span class="value-mobile-app">{{ (SelectedOrder.p.GrandTotal | currency : "INR") || '-' }}</span>
         </div>
         <div class="info-row-of-model-mobile-app">
           <span class="label-mobile-app">Status:</span>

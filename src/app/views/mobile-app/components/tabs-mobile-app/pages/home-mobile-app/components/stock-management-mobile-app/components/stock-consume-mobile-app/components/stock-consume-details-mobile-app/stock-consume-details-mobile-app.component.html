@@ -11,7 +11,7 @@
         <ion-checkbox slot="end" [(ngModel)]="ConsumptionDate" name="ConsumptionDateCheckBox" [disabled]="true">
         </ion-checkbox>
       </ion-item>
-      
+
       <ion-modal keepContentsMounted="true" trigger="ConsumptionDate-modal">
         <ng-template>
           <ion-datetime id="Date" name="ConsumptionDate" presentation="date" [(ngModel)]="ConsumptionDate"
@@ -76,6 +76,18 @@
         <ion-input label="Remaining Quantity" name="RemainingQuantity" labelPlacement="floating"
           placeholder="Enter Remaining Quantity" [(ngModel)]="Entity.p.RemainingQuantity"
           [disabled]="'true'"></ion-input>
+      </ion-item>
+
+      <!-- Description -->
+      <ion-item class="input-item">
+        <ion-input label="Description" name="Description" labelPlacement="floating" placeholder="Enter Description"
+          [(ngModel)]="Entity.p.Description"></ion-input>
+      </ion-item>
+
+      <!-- Remark -->
+      <ion-item class="input-item">
+        <ion-input label="Remark" name="Remark" labelPlacement="floating" placeholder="Enter Remark"
+          [(ngModel)]="Entity.p.Remark"></ion-input>
       </ion-item>
 
       <!-- Main Buttons -->

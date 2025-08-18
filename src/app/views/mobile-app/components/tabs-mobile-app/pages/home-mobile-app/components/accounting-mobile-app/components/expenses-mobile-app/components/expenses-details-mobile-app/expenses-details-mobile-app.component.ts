@@ -103,6 +103,8 @@ export class ExpensesDetailsMobileAppComponent implements OnInit {
   PaymentTypeName: string = '';
   selectedPaymentType: any[] = [];
 
+  PayerPlotNo: string = '';
+
   constructor(
     private router: Router,
     private appStateManage: AppStateManageService,
@@ -363,7 +365,6 @@ export class ExpensesDetailsMobileAppComponent implements OnInit {
       // await this.haptic.warning();
       return;
     }
-    this.Entity.p.RecipientRef = 0;
     this.RecipientList = [];
     let lst = await Invoice.FetchRecipientByRecipientTypeRef(this.companyRef, this.Entity.p.SiteRef, this.Entity.p.RecipientType, async errMsg => {
       await this.toastService.present(errMsg, 1000, 'danger');
@@ -402,6 +403,13 @@ export class ExpensesDetailsMobileAppComponent implements OnInit {
     this.selectedModeOfPayment = [];
     this.Entity.p.IsAutoInvoiceEnabled = 0;
     this.RecipientNameInput = false
+    this.PayerPlotNo = '';
+    this.Entity.p.PlotName = '';
+    this.Entity.p.ModeOfPaymentForIncome = 0;
+    this.Entity.p.IsNewBankCreated = false;
+    this.Entity.p.IncomeBankRef = 0;
+    this.BankNameForIncome = '';
+    this.selectedBankForIncome = [];
   }
 
   onChangeIncomeLedger = () => {
@@ -434,12 +442,27 @@ export class ExpensesDetailsMobileAppComponent implements OnInit {
     if (this.Entity.p.RecipientRef <= 0) {
       return;
     }
+    if (this.PaymentType <= 0 && this.Entity.p.ExpenseModeOfPayment == this.Employee) {
+      await this.toastService.present('Payment Type not Selected',1000, 'warning');
+      await this.haptic.warning();
+      return;
+    }
     let lst = await Expense.FetchTotalInvoiceAmountFromSiteAndRecipient(this.companyRef, this.Entity.p.SiteRef, this.Entity.p.RecipientType, this.Entity.p.RecipientRef, this.Entity.p.IsSalaryExpense, async errMsg => {
       await this.toastService.present(errMsg, 1000, 'danger');
       await this.haptic.error();
     });
+    // if (lst.length > 0) {
+    //   this.Entity.p.InvoiceAmount = lst[0].p.InvoiceAmount;
+    //   this.Entity.p.RemainingAdvance = lst[0].p.RemainingAdvance;
+    // }
     if (lst.length > 0) {
-      this.Entity.p.InvoiceAmount = lst[0].p.InvoiceAmount;
+      if (lst[0].p.InvoiceAmount < 0) {
+        this.Entity.p.InvoiceAmount = 0;
+      } else {
+        if (this.PaymentType != this.TypeofEmployeePayments.Advance) {
+          this.Entity.p.InvoiceAmount = lst[0].p.InvoiceAmount;
+        }
+      }
       this.Entity.p.RemainingAdvance = lst[0].p.RemainingAdvance;
     }
   }
@@ -460,18 +483,54 @@ export class ExpensesDetailsMobileAppComponent implements OnInit {
     }
   }
 
+  // onRecipientChange = () => {
+  //   try {
+  //     let SingleRecord = this.RecipientList.find((data) => data.p.Ref == this.Entity.p.RecipientRef);;
+  //     if (SingleRecord?.p) {
+  //       this.Entity.p.IsSiteRef = SingleRecord.p.IsSiteRef;
+  //     }
+  //   } catch (error) {
+
+  //   }
+  // }
+
   onRecipientChange = () => {
+    this.PaymentType = 0;
+    this.Entity.p.TotalAdvance = 0;
+    this.Entity.p.RemainingAdvance = 0;
+    this.Entity.p.InvoiceAmount = 0;
+    this.Entity.p.RemainingAmount = 0;
+    this.Entity.p.IncomeLedgerRef = 0;
+    this.Entity.p.IncomeSubLedgerRef = 0;
+    this.Entity.p.GivenAmount = 0;
+    this.Entity.p.IncomeBankRef = 0;
+    this.Entity.p.ModeOfPaymentForIncome = 0;
+    this.Entity.p.IsNewBankCreated = false;
+    this.Entity.p.Narration = '';
+    this.Entity.p.IsAutoInvoiceEnabled = 0;
+    this.RecipientNameInput = false;
+    this.getCurrentBalanceByCompanyRef()
+
+    let SingleRecord;
     try {
-      let SingleRecord = this.RecipientList.find((data) => data.p.Ref == this.Entity.p.RecipientRef);;
+      if (this.Entity.p.RecipientType == this.DealDoneCustomer) {
+        SingleRecord = this.RecipientList.find((data) => data.p.PlotName == this.PayerPlotNo);
+      } else {
+        SingleRecord = this.RecipientList.find((data) => data.p.Ref == this.Entity.p.RecipientRef);
+      }
       if (SingleRecord?.p) {
-        this.Entity.p.IsSiteRef = SingleRecord.p.IsSiteRef;
+        this.Entity.p.IsRegisterCustomerRef = SingleRecord.p.IsRegisterCustomerRef;
+        this.Entity.p.RecipientRef = SingleRecord.p.Ref;
+        if (this.Entity.p.RecipientType == this.DealDoneCustomer) {
+          this.Entity.p.PlotRef = SingleRecord.p.PlotRef;
+          this.Entity.p.PlotName = SingleRecord.p.PlotName;
+        }
       }
     } catch (error) {
-
     }
   }
+
   onSitechange = () => {
-    this.Entity.p.RecipientType = 0;
     this.selectedToWhomType = [];
     this.ToWhomTypeName = '';
     this.Entity.p.LedgerRef = 0;
@@ -480,7 +539,10 @@ export class ExpensesDetailsMobileAppComponent implements OnInit {
     this.Entity.p.SubLedgerRef = 0;
     this.SubLedgerName = '';
     this.selectedSubLedger = [];
+    this.Entity.p.RecipientType = 0;
     this.RecipientList = [];
+    this.selectedToWhomType=[];   
+    this.ToWhomTypeName=''; 
 
     this.Entity.p.IncomeLedgerRef = 0;
     this.selectedIncomeLedger = [];
@@ -491,7 +553,7 @@ export class ExpensesDetailsMobileAppComponent implements OnInit {
     this.PaymentType = 0;
     this.Entity.p.RecipientRef = 0;
     this.Entity.p.Reason = '';
-    // this.PayerPlotNo = '';
+    this.PayerPlotNo = '';
     this.Entity.p.PlotName = '';
     this.Entity.p.IsAdvancePayment = 0;
     this.Entity.p.IsSalaryExpense = false;
@@ -501,8 +563,19 @@ export class ExpensesDetailsMobileAppComponent implements OnInit {
     this.Entity.p.RemainingAmount = 0;
     this.Entity.p.GivenAmount = 0
     this.Entity.p.BankAccountRef = 0
+    this.BankName = '';
+    this.selectedBank = [];
     this.Entity.p.Narration = '';
     this.Entity.p.ExpenseModeOfPayment = 0;
+    this.selectedModeOfPayment = [];
+    this.ModeOfPaymentName = '';
+    this.Entity.p.ModeOfPaymentForIncome = 0;
+    this.selectedModeOfPaymentForIncome = [];
+    this.ModeOfPaymentNameForIncome = '';
+    this.Entity.p.IsNewBankCreated = false;
+    this.Entity.p.IncomeBankRef = 0;
+    this.selectedBankForIncome = [];
+    this.BankNameForIncome = '';
     this.Entity.p.IsAutoInvoiceEnabled = 0;
     this.RecipientNameInput = false;
     this.getCurrentBalanceByCompanyRef()

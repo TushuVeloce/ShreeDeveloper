@@ -1,6 +1,7 @@
 import { DatePipe } from '@angular/common';
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
+import { MaterialRequisitionStatuses } from 'src/app/classes/domain/domainenums/domainenums';
 import { MaterialFromOrder } from 'src/app/classes/domain/entities/website/masters/material/orderedmaterial/materialfromorder';
 import { Site } from 'src/app/classes/domain/entities/website/masters/site/site';
 import { Vendor } from 'src/app/classes/domain/entities/website/masters/vendor/vendor';
@@ -97,6 +98,9 @@ export class StockInwardDetailsMobileAppComponent implements OnInit {
   InwardDate: string | null = null;
   DisplayOrderDate: string = ''
   filesToUpload: FileTransferObject[] = [];
+
+  Ordered = MaterialRequisitionStatuses.Ordered;
+  Incomplete = MaterialRequisitionStatuses.Incomplete;
 
   constructor(
     private router: Router,
@@ -368,7 +372,7 @@ export class StockInwardDetailsMobileAppComponent implements OnInit {
     let tr = await this.serverCommunicator.sendHttpRequest(pkt);
 
     if (!tr.Successful) {
-      await this.toastService.present( tr.Message, 1000, 'danger');
+      await this.toastService.present(tr.Message, 1000, 'danger');
       await this.haptic.error();
       return;
     }
@@ -417,7 +421,7 @@ export class StockInwardDetailsMobileAppComponent implements OnInit {
       await this.toastService.present(errMsg, 1000, 'danger');
       await this.haptic.error();
     });
-    this.VendorList = lst;
+    this.VendorList = lst.filter(data => data.p.MaterialListSuppliedByVendor.length > 0);
   }
 
   onVendorSelection = (VendorRef: number) => {
@@ -448,7 +452,7 @@ export class StockInwardDetailsMobileAppComponent implements OnInit {
         await this.haptic.error();
       }
     );
-    this.PurchaseOrderIdList = lst;
+    this.PurchaseOrderIdList = lst.filter((data) => data.p.MaterialPurchaseOrderStatus == this.Incomplete || data.p.MaterialPurchaseOrderStatus == this.Ordered);
   };
 
   // Extracted from services date conversion //
@@ -520,7 +524,7 @@ export class StockInwardDetailsMobileAppComponent implements OnInit {
       this.newInward.DeliveryCharges = SingleRecord.DeliveryCharges;
       this.newInward.TotalAmount = SingleRecord.TotalAmount;
     } else {
-      await this.toastService.present('Material not found',1000,'danger');
+      await this.toastService.present('Material not found', 1000, 'danger');
     }
   };
 
@@ -542,7 +546,7 @@ export class StockInwardDetailsMobileAppComponent implements OnInit {
     this.newInward.TotalAmount = this.newInward.NetAmount + GstAmount + this.newInward.DeliveryCharges;
   }
   openModal = async (type: number) => {
-    if (this.PurchaseIDName === ''){
+    if (this.PurchaseIDName === '') {
       await this.toastService.present('Purchase ID is not Selected', 1000, 'warning');
       await this.haptic.warning();
       return;
@@ -623,7 +627,7 @@ export class StockInwardDetailsMobileAppComponent implements OnInit {
 
       this.ChildInwardDate = this.newInward.Date;
       this.ChildInwardDate = this.dtu.ConvertStringDateToShortFormat(this.ChildInwardDate);
-  
+
       this.ismaterialModalOpen = false;
       await this.toastService.present('Material details updated successfully', 1000, 'success');
       await this.haptic.success();
@@ -631,7 +635,7 @@ export class StockInwardDetailsMobileAppComponent implements OnInit {
       this.newInward.Date = this.dtu.ConvertStringDateToFullFormat(this.newInward.Date);
       this.ChildInwardDate = this.newInward.Date;
       this.ChildInwardDate = this.dtu.ConvertStringDateToShortFormat(this.ChildInwardDate);
-     
+
       this.newInward.MaterialInwardRef = this.Entity.p.Ref;
       this.newInward.PurchaseOrderRemainingQty = this.NewRemainingQty;
       this.Entity.p.MaterialInwardDetailsArray.push({ ...this.newInward });
@@ -896,7 +900,7 @@ export class StockInwardDetailsMobileAppComponent implements OnInit {
   }
   isDataFilled(): boolean {
     const emptyEntity = StockInward.CreateNewInstance();
-    return !this.deepEqualIgnoringKeys(this.Entity, emptyEntity, ['p.InwardDate','p.ChalanNo']);
+    return !this.deepEqualIgnoringKeys(this.Entity, emptyEntity, ['p.InwardDate', 'p.ChalanNo']);
   }
 
   deepEqualIgnoringKeys(obj1: any, obj2: any, ignorePaths: string[]): boolean {
@@ -919,7 +923,7 @@ export class StockInwardDetailsMobileAppComponent implements OnInit {
   }
 
   goBack = async () => {
-    const isDataFilled = this.isDataFilled(); 
+    const isDataFilled = this.isDataFilled();
 
     if (isDataFilled) {
       this.alertService.presentDynamicAlert({

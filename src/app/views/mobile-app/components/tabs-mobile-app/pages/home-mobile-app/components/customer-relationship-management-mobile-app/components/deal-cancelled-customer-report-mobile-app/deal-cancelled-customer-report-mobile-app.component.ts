@@ -125,8 +125,8 @@ export class DealCancelledCustomerReportMobileAppComponent implements OnInit {
     }
     this.Entity.p.SiteRef = 0
     let lst = await Site.FetchEntireListByCompanyRef(this.companyRef, async errMsg => {
-      await this.toastService.present(errMsg, 1000, 'danger');
-      await this.haptic.error();
+        await this.toastService.present(errMsg, 1000, 'danger');
+        await this.haptic.error();
     });
     this.SiteList = lst;
   }
