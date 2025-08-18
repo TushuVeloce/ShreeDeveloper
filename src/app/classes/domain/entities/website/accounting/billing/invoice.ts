@@ -41,8 +41,10 @@ export class InvoiceProps {
   public SubLedgerRef: number = 0
   public readonly SubLedgerName: string = ''
   public ExpenseType: number = 0
-  public VendorRef: number = 0
-  public readonly VendorName: string = ''
+  // public VendorRef: number = 0
+  // public readonly VendorName: string = ''
+  // public RecipientRef: number = 0
+  public RecipientName: string = ''
   public VendorServiceRef: number = 0
   public readonly VendorServiceName: string = ''
   public VehicleNo: string = ''
@@ -51,7 +53,6 @@ export class InvoiceProps {
   public InvoiceRecipientType: number = 0
   public DisplayPurchaseOrderId: string = '';
   public RecipientMasterRef: number = 0
-  public RecipientName: string = ''
   public IsSiteRef: number = 0
   public Reason: string = ''
   public IsDieselPaid: number = 0

@@ -71,7 +71,7 @@
             </td>
             <td style="text-align: left; vertical-align: top; padding: 5px; border-width: 1px;">
               <div>
-                <strong>Recipient Name - {{ Entity.p.RecipientName ? Entity.p.RecipientName : Entity.p.VendorName
+                <strong>Recipient Name - {{ Entity.p.RecipientName ? Entity.p.RecipientName : Entity.p.RecipientName
                   }}</strong>
               </div>
               <br>
@@ -174,8 +174,9 @@
         </table>
       </div>
 
-      <table *ngIf="Entity.p.ExpenseType == StockExpenseRef" style="width: 100%; border-collapse: collapse; text-align: center;">
-        <thead >
+      <table *ngIf="Entity.p.ExpenseType == StockExpenseRef"
+        style="width: 100%; border-collapse: collapse; text-align: center;">
+        <thead>
           <tr style="background-color: maroon; color: white;">
             <th *ngFor="let header of materialheaders" style="padding: 8px; border: none;">
               {{ header }}

@@ -43,7 +43,7 @@
         </div>
         <div *ngIf="Entity.p.ExpenseType == StockExpenseRef" class="col-md-4" style="margin-top: 1rem">
           <label>Vendor Name</label>
-          <input type="text" [(ngModel)]="Entity.p.VendorName" name="VendorName" class="form-control" id="VendorName"
+          <input type="text" [(ngModel)]="Entity.p.RecipientName" name="RecipientName" class="form-control" id="RecipientName"
             placeholder="Enter Vendor Name" disabled />
         </div>
         <div *ngIf="Entity.p.ExpenseType == StockExpenseRef" class="col-md-4" style="margin-top: 1rem">
@@ -143,8 +143,8 @@
           *ngIf="Entity.p.ExpenseType == MachinaryExpenseRef || Entity.p.ExpenseType == LabourExpenseRef">
           <label>Vendor</label>
           <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
-            nzPlaceHolder="Select" id="VendorRef" name="VendorRef" [nzSize]="'large'" [(ngModel)]="Entity.p.VendorRef"
-            (ngModelChange)="getVendorServiceListByVendorRef(Entity.p.VendorRef)">
+            nzPlaceHolder="Select" id="RecipientMasterRef" name="RecipientMasterRef" [nzSize]="'large'" [(ngModel)]="Entity.p.RecipientMasterRef"
+            (ngModelChange)="getVendorServiceListByVendorRef(Entity.p.RecipientMasterRef)">
             <nz-option *ngFor="let Vendor of VendorList" [nzValue]="Vendor.p.Ref" [nzLabel]="Vendor.p.Name"></nz-option>
           </nz-select>
         </div>

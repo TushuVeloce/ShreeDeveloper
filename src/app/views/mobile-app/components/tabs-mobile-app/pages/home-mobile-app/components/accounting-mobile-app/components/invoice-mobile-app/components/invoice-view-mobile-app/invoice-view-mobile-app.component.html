@@ -14,7 +14,7 @@
         <h3>Site : {{ Invoice.p.SiteName || 'Unknown Site' }}</h3>
         <p class="date-label">Billing Date : {{ formatDate(Invoice.p.Date) || '-' }}</p>
         <p class="date-label">Recipient Name : {{ Invoice.p.RecipientName? Invoice.p.RecipientName :
-          Invoice.p.VendorName || '-' }}</p>
+          Invoice.p.RecipientName || '-' }}</p>
         <p class="date-label">Billing Amount : {{ Invoice.p.InvoiceAmount | currency : "INR" }}
         </p>
       </ion-label>
@@ -86,7 +86,7 @@
         <div class="info-row-of-model-mobile-app">
           <span class="label-mobile-app">Recipient Name :</span>
           <span class="value-mobile-app">{{SelectedInvoice.p.RecipientName? SelectedInvoice.p.RecipientName :
-            SelectedInvoice.p.VendorName || '-' }}</span>
+            SelectedInvoice.p.RecipientName || '-' }}</span>
         </div>
         <div class="info-row-of-model-mobile-app" *ngIf="SelectedInvoice.p.MachineUsageDetailsArray.length > 0">
           <span class="label-mobile-app">Machine Time Details :</span>

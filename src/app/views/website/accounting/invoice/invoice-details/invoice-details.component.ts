@@ -129,7 +129,7 @@ export class InvoiceDetailsComponent implements OnInit {
       if (this.Entity.p.IsDieselPaid == 1) {
         this.isDieselPaid = true
       }
-      this.getVendorServiceListByVendorRef(this.Entity.p.VendorRef);
+      this.getVendorServiceListByVendorRef(this.Entity.p.RecipientMasterRef);
       this.getTotalWorkedHours();
       // this.RecipientNameReadOnly = true
     } else {
@@ -161,7 +161,7 @@ export class InvoiceDetailsComponent implements OnInit {
 
   onRecipientTypeVendor = () => {
     if (this.Entity.p.InvoiceRecipientType == this.TypeRecipientVendor) {
-      this.Entity.p.VendorRef = this.Entity.p.RecipientMasterRef;
+      this.Entity.p.RecipientMasterRef = this.Entity.p.RecipientMasterRef;
     }
   }
 
@@ -594,7 +594,7 @@ export class InvoiceDetailsComponent implements OnInit {
     this.Entity.p.InvoiceRecipientType = 0
     this.Entity.p.RecipientMasterRef = 0
     this.RecipientNameInput = false
-    this.Entity.p.VendorRef = 0
+    this.Entity.p.RecipientMasterRef = 0
     this.Entity.p.VendorServiceRef = 0
     this.Entity.p.VehicleNo = ''
     this.Entity.p.Qty = 0

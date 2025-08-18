@@ -118,6 +118,7 @@ export class InvoiceComponent implements OnInit {
     this.AllList = lst;
     this.MasterList = lst;
     this.DisplayMasterList = this.MasterList;
+    console.log(' this.DisplayMasterList  :',  this.DisplayMasterList );
     this.loadPaginationData();
   }
 

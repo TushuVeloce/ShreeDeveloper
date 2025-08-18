@@ -191,8 +191,8 @@ export class InvoiceDetailsMobileAppComponent implements OnInit {
           this.selectedSite = [{ p: { Ref: this.Entity.p.SiteRef, Name: this.Entity.p.SiteName } }];
           this.SiteName = this.Entity.p.SiteName;
 
-          this.selectedVendor = [{ p: { Ref: this.Entity.p.VendorRef, Name: this.Entity.p.VendorName } }];
-          this.VendorName = this.Entity.p.VendorName;
+          this.selectedVendor = [{ p: { Ref: this.Entity.p.RecipientMasterRef, Name: this.Entity.p.RecipientName } }];
+          this.VendorName = this.Entity.p.RecipientName;
 
           this.selectedLedger = [{ p: { Ref: this.Entity.p.LedgerRef, Name: this.Entity.p.LedgerName } }];
           this.LedgerName = this.Entity.p.LedgerName;
@@ -227,7 +227,7 @@ export class InvoiceDetailsMobileAppComponent implements OnInit {
           if (this.Entity.p.IsDieselPaid == 1) {
             this.isDieselPaid = true
           }
-          await this.getVendorServiceListByVendorRef(this.Entity.p.VendorRef);
+          await this.getVendorServiceListByVendorRef(this.Entity.p.RecipientMasterRef);
           this.getTotalWorkedHours()
           this.selectedVendorService = [{ p: { Ref: this.Entity.p.VendorServiceRef, Name: this.Entity.p.VendorServiceName } }];
           this.VendorServiceName = this.Entity.p.VendorServiceName;
@@ -745,7 +745,7 @@ export class InvoiceDetailsMobileAppComponent implements OnInit {
     this.RecipientName = '';
     this.selectedRecipientName = [];
     this.RecipientNameInput = false;
-    this.Entity.p.VendorRef = 0;
+    this.Entity.p.RecipientMasterRef = 0;
     this.selectedVendor = [];
     this.VendorName = '';
     this.Entity.p.VendorServiceRef = 0;
@@ -1012,9 +1012,9 @@ export class InvoiceDetailsMobileAppComponent implements OnInit {
       const options = this.VendorList;
       this.openSelectModal(options, this.selectedVendor, false, 'Select Vendor Name', 1, (selected) => {
         this.selectedVendor = selected;
-        this.Entity.p.VendorRef = selected[0].p.Ref;
+        this.Entity.p.RecipientMasterRef = selected[0].p.Ref;
         this.VendorName = selected[0].p.Name;
-        this.getVendorServiceListByVendorRef(this.Entity.p.VendorRef)
+        this.getVendorServiceListByVendorRef(this.Entity.p.RecipientMasterRef)
       });
     } catch (error) {
       await this.toastService.present('Error ' + error, 1000, 'danger');
