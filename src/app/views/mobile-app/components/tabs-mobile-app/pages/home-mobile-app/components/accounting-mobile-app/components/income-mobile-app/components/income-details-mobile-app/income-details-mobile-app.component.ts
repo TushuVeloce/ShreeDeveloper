@@ -384,17 +384,17 @@ export class IncomeDetailsMobileAppComponent implements OnInit {
           await this.haptic.success();
           this.Entity = Income.CreateNewInstance();
           this.getCurrentBalanceByCompanyRef();
-          await this.router.navigate(['/mobile-app/tabs/dashboard/accounting/income']);
+          await this.router.navigate(['/mobile-app/tabs/dashboard/accounting/income'], { replaceUrl: true });
         } else {
           await this.toastService.present('Income Update successfully', 1000, 'success');
           await this.haptic.success();
-          await this.router.navigate(['/mobile-app/tabs/dashboard/accounting/income']);
+          await this.router.navigate(['/mobile-app/tabs/dashboard/accounting/income'], { replaceUrl: true });
         }
       }
     } catch (error) {
 
     } finally {
-      await this.router.navigate(['/mobile-app/tabs/dashboard/accounting/income']);
+      await this.router.navigate(['/mobile-app/tabs/dashboard/accounting/income'], { replaceUrl: true });
       await this.loadingService.hide()
     }
   };

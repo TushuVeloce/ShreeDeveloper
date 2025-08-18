@@ -191,14 +191,14 @@ export class StockTransferViewMobileAppComponent implements OnInit {
       await this.haptic.warning();
       return;
     }
-    this.router.navigate(['/mobile-app/tabs/dashboard/stock-management/stock-transfer/add']);
+    this.router.navigate(['/mobile-app/tabs/dashboard/stock-management/stock-transfer/add'], { replaceUrl: true });
   };
 
   onEditClicked = async (item: StockTransfer) => {
     this.SelectedStockTransfer = item.GetEditableVersion();
     StockTransfer.SetCurrentInstance(this.SelectedStockTransfer);
     this.appStateManage.StorageKey.setItem('Editable', 'Edit');
-    await this.router.navigate(['/mobile-app/tabs/dashboard/stock-management/stock-transfer/edit']);
+    await this.router.navigate(['/mobile-app/tabs/dashboard/stock-management/stock-transfer/edit'], { replaceUrl: true });
   };
 
   onDeleteClicked = async (StockTransfer: StockTransfer) => {

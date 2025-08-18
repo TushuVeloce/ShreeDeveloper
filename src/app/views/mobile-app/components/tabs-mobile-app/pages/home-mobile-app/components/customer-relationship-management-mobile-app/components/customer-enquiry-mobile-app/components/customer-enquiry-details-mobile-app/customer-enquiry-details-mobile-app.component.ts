@@ -625,12 +625,12 @@ export class CustomerEnquiryDetailsMobileAppComponent implements OnInit {
     } else {
       if (this.IsNewEntity) {
         await this.toastService.present('Customer Enquiry saved successfully', 1000, 'success');
-        this.router.navigate(['/mobile-app/tabs/dashboard/customer-relationship-management/customer-enquiry']);
+        this.router.navigate(['/mobile-app/tabs/dashboard/customer-relationship-management/customer-enquiry'], { replaceUrl: true });
         this.Entity = CustomerEnquiry.CreateNewInstance();
         await this.haptic.success();
       } else {
         await this.toastService.present('Customer Enquiry Updated successfully', 1000, 'success');
-        this.router.navigate(['/mobile-app/tabs/dashboard/customer-relationship-management/customer-enquiry']);
+        this.router.navigate(['/mobile-app/tabs/dashboard/customer-relationship-management/customer-enquiry'], { replaceUrl: true });
         await this.haptic.success();
       }
     }

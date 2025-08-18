@@ -1,11 +1,12 @@
 import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { DomainEnums, ModeOfPayments, RecipientTypes, TypeOfEmployeePayments } from 'src/app/classes/domain/domainenums/domainenums';
+import { DomainEnums, ModeOfPayments, PayerTypes, RecipientTypes, TypeOfEmployeePayments } from 'src/app/classes/domain/domainenums/domainenums';
 import { Invoice } from 'src/app/classes/domain/entities/website/accounting/billing/invoice';
 import { Expense } from 'src/app/classes/domain/entities/website/accounting/expense/expense';
 import { BankAccount } from 'src/app/classes/domain/entities/website/masters/bankaccount/banckaccount';
 import { Ledger } from 'src/app/classes/domain/entities/website/masters/ledgermaster/ledger';
+import { OpeningBalance } from 'src/app/classes/domain/entities/website/masters/openingbalance/openingbalance';
 import { Recipient } from 'src/app/classes/domain/entities/website/masters/recipientname/recipientname';
 import { Site } from 'src/app/classes/domain/entities/website/masters/site/site';
 import { SubLedger } from 'src/app/classes/domain/entities/website/masters/subledgermaster/subledger';
@@ -45,7 +46,8 @@ export class ExpensesDetailsMobileAppComponent implements OnInit {
   InitialEntity: Expense = null as any;
   LedgerList: Ledger[] = [];
   companyRef = 0;
-  BankList: BankAccount[] = [];
+  BankList: OpeningBalance[] = [];
+  IncomeBankList: BankAccount[] = [];
   Cash = ModeOfPayments.Cash
   Bill = ModeOfPayments.Bill
   ModeofPaymentList = DomainEnums.ModeOfPaymentsList().filter(item => item.Ref !== this.Bill);
@@ -58,6 +60,7 @@ export class ExpensesDetailsMobileAppComponent implements OnInit {
   TypeofEmployeePaymentList = DomainEnums.TypeOfEmployeePaymentsList();
   TypeofEmployeePayments = TypeOfEmployeePayments;
   EmployeeType = RecipientTypes.Employee
+  DealDoneCustomer = PayerTypes.DealDoneCustomer;
 
   ExpenseDate: string | null = null;
 
@@ -85,8 +88,17 @@ export class ExpensesDetailsMobileAppComponent implements OnInit {
   ModeOfPaymentName: string = '';
   selectedModeOfPayment: any[] = [];
 
+  ModeOfPaymentNameForIncome: string = '';
+  selectedModeOfPaymentForIncome: any[] = [];
+
   BankName: string = '';
   selectedBank: any[] = [];
+
+  BankNameForIncome: string = '';
+  selectedBankForIncome: any[] = [];
+
+  BankNameForNewBank: string = '';
+  selectedBankForNewBank: any[] = [];
 
   PaymentTypeName: string = '';
   selectedPaymentType: any[] = [];
@@ -152,6 +164,9 @@ export class ExpensesDetailsMobileAppComponent implements OnInit {
           this.ModeOfPaymentName = this.ModeofPaymentList.find(item => item.Ref == this.Entity.p.ExpenseModeOfPayment)?.Name ?? '';
           this.selectedModeOfPayment = [{ p: { Ref: this.Entity.p.ExpenseModeOfPayment, Name: this.ModeOfPaymentName } }];
 
+          this.ModeOfPaymentNameForIncome = this.ModeofPaymentList.find(item => item.Ref == this.Entity.p.ModeOfPaymentForIncome)?.Name ?? '';
+          this.selectedModeOfPaymentForIncome = [{ p: { Ref: this.Entity.p.ModeOfPaymentForIncome, Name: this.ModeOfPaymentNameForIncome } }];
+
           if (this.Entity.p.IsAdvancePayment && this.Entity.p.IsSalaryExpense) {
             this.PaymentType = this.TypeofEmployeePayments.Advance;
           } else if (!this.Entity.p.IsAdvancePayment && this.Entity.p.IsSalaryExpense) {
@@ -183,7 +198,7 @@ export class ExpensesDetailsMobileAppComponent implements OnInit {
           this.PaymentTypeName = this.TypeofEmployeePaymentList.find(item => item.Ref == this.PaymentType)?.Name ?? '';
           this.selectedPaymentType = [{ p: { Ref: this.Entity.p.RecipientType, Name: this.PaymentTypeName } }];
 
-          this.BankName = this.BankList.find(item => item.p.Ref == this.Entity.p.BankAccountRef)?.p.Name ?? '';
+          this.BankName = this.BankList.find(item => item.p.Ref == this.Entity.p.BankAccountRef)?.p.BankName ?? '';
           this.selectedBank = [{ p: { Ref: this.Entity.p.BankAccountRef, Name: this.BankName } }];
 
         } else {
@@ -231,22 +246,56 @@ export class ExpensesDetailsMobileAppComponent implements OnInit {
     this.UnitList = lst;
   }
 
+  // public FormulateBankList = async () => {
+  //   if (this.companyRef <= 0) {
+  //     await this.toastService.present('company not selected', 1000, 'warning');
+  //     await this.haptic.warning();
+  //     return;
+  //   }
+  //   let lst = await OpeningBalance.FetchEntireListByCompanyRef(this.companyRef, async (errMsg) => {
+  //     await this.toastService.present(errMsg, 1000, 'danger');
+  //     await this.haptic.error();
+  //   });
+  //   this.BankList = lst
+  // };
   public FormulateBankList = async () => {
     if (this.companyRef <= 0) {
       await this.toastService.present('company not selected', 1000, 'warning');
       await this.haptic.warning();
       return;
     }
-    let lst = await BankAccount.FetchEntireListByCompanyRef(this.companyRef, async (errMsg) => {
+    let lst = await OpeningBalance.FetchEntireListByCompanyRef(this.companyRef, async (errMsg) => {
       await this.toastService.present(errMsg, 1000, 'danger');
       await this.haptic.error();
     });
-    this.BankList = lst
+    this.BankList = lst.filter((item) => item.p.BankAccountRef > 0 && item.p.OpeningBalanceAmount > 0);
+    this.getBankListByCompanyRef()
   };
+
+  getBankListByCompanyRef = async () => {
+    if (this.companyRef <= 0) {
+      await this.toastService.present('company not selected', 1000, 'warning');
+      await this.haptic.warning();
+      return;
+    }
+    let lst = await BankAccount.FetchEntireListByCompanyRef(this.companyRef, async errMsg => {
+      await this.toastService.present(errMsg, 1000, 'danger');
+      await this.haptic.error();
+    });
+
+    this.IncomeBankList = lst.filter(bank =>
+      !this.BankList.some(item => item.p.BankAccountRef === bank.p.Ref)
+    );
+  }
 
   OnModeChange = () => {
     this.Entity.p.BankAccountRef = 0
   }
+  OnToModeChange = () => {
+    this.Entity.p.IncomeBankRef = 0;
+    this.Entity.p.IsNewBankCreated = false;
+  }
+
 
   getSiteListByCompanyRef = async () => {
     if (this.companyRef <= 0) {
@@ -541,11 +590,11 @@ export class ExpensesDetailsMobileAppComponent implements OnInit {
         this.isSaveDisabled = false;
         if (this.IsNewEntity) {
           await this.toastService.present('Expense saved successfully', 1000, 'success');
-          await this.router.navigate(['/mobile-app/tabs/dashboard/accounting/expenses']);
+          await this.router.navigate(['/mobile-app/tabs/dashboard/accounting/expenses'], { replaceUrl: true });
           await this.haptic.success();
         } else {
           await this.toastService.present('Expense Updated successfully', 1000, 'success');
-          await this.router.navigate(['/mobile-app/tabs/dashboard/accounting/expenses']);
+          await this.router.navigate(['/mobile-app/tabs/dashboard/accounting/expenses'], { replaceUrl: true });
           await this.haptic.success();
         }
       }
@@ -565,10 +614,61 @@ export class ExpensesDetailsMobileAppComponent implements OnInit {
     input.select();
   }
 
+  public async selectBankBottomsheetNewBank(): Promise<void> {
+    try {
+      // Format BankList into the structure openSelectModal expects
+      const options = this.BankList.map(bank => ({
+        p: {
+          Ref: bank.p.BankAccountRef,
+          Name: bank.p.BankName
+        }
+      }));
+
+      this.openSelectModal(options, this.selectedBankForNewBank, false, 'Select Bank', 1, (selected) => {
+        if (!selected || selected.length === 0) return;
+
+        this.selectedBankForNewBank = selected;
+        this.Entity.p.IncomeBankRef = selected[0].p.Ref;
+        this.BankNameForNewBank = selected[0].p.Name;
+      });
+    } catch (error) {
+      console.error('Error selecting bank:', error);
+    }
+  }
+
+  public async selectBankBottomsheetForIncome(): Promise<void> {
+    try {
+      // Format BankList into the structure openSelectModal expects
+      // const options = this.BankList.map(bank => ({
+      //   p: {
+      //     Ref: bank.p.Ref,
+      //     Name: bank.p.BankName
+      //   }
+      // }));
+      const options = this.IncomeBankList;
+
+      this.openSelectModal(options, this.selectedBankForIncome, false, 'Select Bank', 1, (selected) => {
+        if (!selected || selected.length === 0) return;
+
+        this.selectedBankForIncome = selected;
+        this.Entity.p.IncomeBankRef = selected[0].p.Ref;
+        this.BankNameForIncome = selected[0].p.Name;
+      });
+    } catch (error) {
+      console.error('Error selecting bank:', error);
+    }
+  }
+
+
   public async selectBankBottomsheet(): Promise<void> {
     try {
-      const options = this.BankList;
-      this.openSelectModal(options, this.selectedBank, false, 'Select Mode of Payment', 1, (selected) => {
+      const options = this.BankList.map(bank => ({
+        p: {
+          Ref: bank.p.BankAccountRef,
+          Name: bank.p.BankName
+        }
+      }));
+      this.openSelectModal(options, this.selectedBank, false, 'Select Bank', 1, (selected) => {
         this.selectedBank = selected;
         this.Entity.p.BankAccountRef = selected[0].p.Ref;
         this.BankName = selected[0].p.Name;
@@ -578,6 +678,19 @@ export class ExpensesDetailsMobileAppComponent implements OnInit {
     }
   }
 
+  public async selectModeOfPaymentForIncomeBottomsheet(): Promise<void> {
+    try {
+      const options = this.ModeofPaymentList.map((item) => ({ p: item }));
+      this.openSelectModal(options, this.selectedModeOfPaymentForIncome, false, 'Select Mode of Payment', 1, (selected) => {
+        this.selectedModeOfPaymentForIncome = selected;
+        this.Entity.p.ModeOfPaymentForIncome = selected[0].p.Ref;
+        this.ModeOfPaymentNameForIncome = selected[0].p.Name;
+        this.OnToModeChange()
+      });
+    } catch (error) {
+
+    }
+  }
   public async selectModeOfPaymentBottomsheet(): Promise<void> {
     try {
       const options = this.ModeofPaymentList.map((item) => ({ p: item }));
@@ -607,14 +720,42 @@ export class ExpensesDetailsMobileAppComponent implements OnInit {
     }
   }
 
+  // public async selectRecipientNameBottomsheet(): Promise<void> {
+  //   try {
+  //     let options = this.RecipientList.map(item => ({
+  //       p: {
+  //         Ref: item.p.Ref,
+  //         Name: item.p.RecipientName + (item.p.PlotName ? ' - ' + item.p.PlotName : '')
+  //       }
+  //     }));
+
+  //     this.openSelectModal(options, this.selectedRecipientName, false, 'Select Recipient Name', 1, (selected) => {
+  //       if (!selected || selected.length === 0) return;
+
+  //       this.selectedRecipientName = selected;
+  //       this.Entity.p.RecipientRef = selected[0].p.Ref;
+  //       this.RecipientName = selected[0].p.Name;
+
+  //       this.getTotalInvoiceAmountFromSiteAndRecipientRef();
+  //       this.onRecipientChange();
+  //     });
+  //   } catch (error) {
+  //   }
+  // }
   public async selectRecipientNameBottomsheet(): Promise<void> {
     try {
-      let options = this.RecipientList.map(item => ({
-        p: {
-          Ref: item.p.Ref,
-          Name: item.p.RecipientName + (item.p.PlotName ? ' - ' + item.p.PlotName : '')
-        }
-      }));
+      let options = this.RecipientList.map(item => {
+        let displayName = this.Entity.p.RecipientType === this.DealDoneCustomer
+          ? `${item.p.RecipientName} - ${item.p.PlotName || ''}`.trim()
+          : item.p.RecipientName;
+
+        return {
+          p: {
+            Ref: item.p.Ref,
+            Name: displayName
+          }
+        };
+      });
 
       this.openSelectModal(options, this.selectedRecipientName, false, 'Select Recipient Name', 1, (selected) => {
         if (!selected || selected.length === 0) return;
@@ -627,8 +768,10 @@ export class ExpensesDetailsMobileAppComponent implements OnInit {
         this.onRecipientChange();
       });
     } catch (error) {
+      console.error('Error selecting recipient:', error);
     }
   }
+
 
   public async selectIncomeSubLedgerBottomsheet(): Promise<void> {
     try {

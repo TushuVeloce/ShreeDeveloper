@@ -944,7 +944,7 @@ export class InvoiceDetailsMobileAppComponent implements OnInit {
       this.Entity = Invoice.CreateNewInstance();
       this.strCDT = await CurrentDateTimeRequest.GetCurrentDateTime();
       await this.loadingService.hide();
-      await this.router.navigate(['/mobile-app/tabs/dashboard/accounting/invoice']);
+      await this.router.navigate(['/mobile-app/tabs/dashboard/accounting/invoice'], { replaceUrl: true });
     }
   };
 

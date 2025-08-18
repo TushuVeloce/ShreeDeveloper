@@ -248,7 +248,7 @@ export class StockTransferDetailsMobileAppComponent implements OnInit, OnDestroy
         'success'
       );
       await this.haptic.success();
-      await this.router.navigate(['/mobile-app/tabs/dashboard/stock-management/stock-transfer']);
+      await this.router.navigate(['/mobile-app/tabs/dashboard/stock-management/stock-transfer'], { replaceUrl: true });
     } catch (error) {
       console.error('Save Error:', error);
     } finally {

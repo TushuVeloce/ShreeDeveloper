@@ -699,7 +699,7 @@ export class StockOrderDetailsMobileAppComponent implements OnInit {
         await this.toastService.present('Order Updated successfully', 1000, 'success');
         await this.haptic.success();
       }
-      await this.router.navigate(['/mobile-app/tabs/dashboard/stock-management/stock-order']);
+      await this.router.navigate(['/mobile-app/tabs/dashboard/stock-management/stock-order'], { replaceUrl: true });
     }
   };
 

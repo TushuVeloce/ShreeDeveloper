@@ -283,7 +283,7 @@ export class IncomeViewMobileAppComponent implements OnInit {
     this.SelectedIncome = item.GetEditableVersion();
     Income.SetCurrentInstance(this.SelectedIncome);
     this.appStateManage.StorageKey.setItem('Editable', 'Edit');
-    await this.router.navigate(['/mobile-app/tabs/dashboard/accounting/income/edit']);
+    await this.router.navigate(['/mobile-app/tabs/dashboard/accounting/income/edit'], { replaceUrl: true });
   };
 
   async onDeleteClicked(item: Income) {
@@ -334,7 +334,7 @@ export class IncomeViewMobileAppComponent implements OnInit {
       this.haptic.warning();
       return;
     }
-    this.router.navigate(['/mobile-app/tabs/dashboard/accounting/income/add']);
+    this.router.navigate(['/mobile-app/tabs/dashboard/accounting/income/add'], { replaceUrl: true });
   }
 
   openModal(Income: any) {

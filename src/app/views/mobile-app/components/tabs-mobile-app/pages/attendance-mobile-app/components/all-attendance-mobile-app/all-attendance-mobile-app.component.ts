@@ -20,7 +20,7 @@ import { ToastService } from 'src/app/views/mobile-app/components/core/toast.ser
 })
 export class AllAttendanceMobileAppComponent implements OnInit, OnDestroy {
   selectedMonth: number = 0;
-  months: any[] = [];
+  months: any[] = DomainEnums.MonthList();
   companyRef: number = 0;
 
   attendanceLogFilter: AttendanceLogs = AttendanceLogs.CreateNewInstance();
@@ -80,7 +80,7 @@ export class AllAttendanceMobileAppComponent implements OnInit, OnDestroy {
 
       if (employeeRef > 0) {
         this.months = DomainEnums.MonthList();
-        await this.fetchAttendanceByMonth(new Date().getMonth());
+        await this.fetchAttendanceByMonth(new Date().getMonth()+1);
       } else {
         await this.toastService.present('Employee not selected', 1000, 'danger');
         await this.haptic.error();
@@ -124,9 +124,23 @@ export class AllAttendanceMobileAppComponent implements OnInit, OnDestroy {
     }
   }
 
-  async fetchAttendanceByMonth(value: SegmentValue | undefined): Promise<void> {
+  // async fetchAttendanceByMonth(value: SegmentValue | undefined): Promise<void> {
+  //   try {
+  //     const SelectedMonth = Number(value)+1;
+  //     if (isNaN(SelectedMonth)) return;
+
+  //     this.selectedMonth = SelectedMonth;
+  //     this.attendanceLogFilter.p.Months = SelectedMonth;
+
+  //     await this.fetchMonthlyLogs();
+  //   } catch (error) {
+  //     this.handleError(error, 'Fetching attendance for selected month');
+  //   }
+  // }
+  async fetchAttendanceByMonth(value: number | undefined): Promise<void> {
     try {
-      const SelectedMonth = Number(value)+1;
+      await this.loadingService.show();
+      const SelectedMonth = Number(value);
       if (isNaN(SelectedMonth)) return;
 
       this.selectedMonth = SelectedMonth;
@@ -135,8 +149,11 @@ export class AllAttendanceMobileAppComponent implements OnInit, OnDestroy {
       await this.fetchMonthlyLogs();
     } catch (error) {
       this.handleError(error, 'Fetching attendance for selected month');
+    }finally{
+      await this.loadingService.hide();
     }
   }
+
 
   async fetchMonthlyLogs(): Promise<void> {
     try {
