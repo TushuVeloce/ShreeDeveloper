@@ -115,7 +115,16 @@ export class InvoiceComponent implements OnInit {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
-    let lst = await Invoice.FetchEntireListByFilters(this.Entity.p.SiteRef, this.Entity.p.LedgerRef, this.Entity.p.SubLedgerRef, this.Entity.p.Ref, this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    let lst = await Invoice.FetchEntireListByFilters(
+      this.Entity.p.StartDate,
+      this.Entity.p.EndDate,
+      this.Entity.p.SiteRef,
+      this.Entity.p.LedgerRef,
+      this.Entity.p.SubLedgerRef,
+      this.Entity.p.RecipientRef,
+      this.Entity.p.Ref,
+      this.companyRef(),
+      async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     // this.AllList = lst.filter((item)=>item.p.Reason != '');
     this.MasterList = lst;
     this.DisplayMasterList = this.MasterList;

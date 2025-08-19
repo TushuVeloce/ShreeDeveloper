@@ -293,7 +293,7 @@ export class Expense implements IPersistable<Expense> {
       req.ModeOfPayments.push(ModeOfPayment)
     }
     if (RecipientRef) {
-      req.RecipientRef = RecipientRef;
+      req.RecipientRefs.push(RecipientRef);;
     }
     if (PayerRef) {
       req.PayerRef = PayerRef;

@@ -12,6 +12,7 @@ export class CurrentBalanceFetchRequest {
   IncomeRefs: number[] = [];
   CompanyRef: number = 0;
   RecipientRef: number = 0;
+  RecipientRefs: number[] = [];
   PayerRef: number = 0;
 
   StartDate: string = '';

@@ -129,7 +129,7 @@ export class InvoiceDetailsComponent implements OnInit {
       if (this.Entity.p.IsDieselPaid == 1) {
         this.isDieselPaid = true
       }
-      this.getVendorServiceListByVendorRef(this.Entity.p.RecipientMasterRef);
+      this.getVendorServiceListByVendorRef(this.Entity.p.RecipientRef);
       this.getTotalWorkedHours();
       // this.RecipientNameReadOnly = true
     } else {
@@ -161,7 +161,7 @@ export class InvoiceDetailsComponent implements OnInit {
 
   onRecipientTypeVendor = () => {
     if (this.Entity.p.InvoiceRecipientType == this.TypeRecipientVendor) {
-      this.Entity.p.RecipientMasterRef = this.Entity.p.RecipientMasterRef;
+      this.Entity.p.RecipientRef = this.Entity.p.RecipientRef;
     }
   }
 
@@ -274,7 +274,7 @@ export class InvoiceDetailsComponent implements OnInit {
   }
 
   AddRecipientName = () => {
-    this.Entity.p.RecipientMasterRef = 0
+    this.Entity.p.RecipientRef = 0
     this.RecipientEntity.p.Name = ''
     this.RecipientNameInput = true
   }
@@ -285,7 +285,7 @@ export class InvoiceDetailsComponent implements OnInit {
   }
 
   onTypeChange = async () => {
-    this.Entity.p.RecipientMasterRef = 0;
+    this.Entity.p.RecipientRef = 0;
     this.RecipientNameInput = false
   }
 
@@ -592,9 +592,9 @@ export class InvoiceDetailsComponent implements OnInit {
     this.Entity.p.MachineUsageDetailsArray = []
     this.Entity.p.LabourExpenseDetailsArray = []
     this.Entity.p.InvoiceRecipientType = 0
-    this.Entity.p.RecipientMasterRef = 0
+    this.Entity.p.RecipientRef = 0
     this.RecipientNameInput = false
-    this.Entity.p.RecipientMasterRef = 0
+    this.Entity.p.RecipientRef = 0
     this.Entity.p.VendorServiceRef = 0
     this.Entity.p.VehicleNo = ''
     this.Entity.p.Qty = 0

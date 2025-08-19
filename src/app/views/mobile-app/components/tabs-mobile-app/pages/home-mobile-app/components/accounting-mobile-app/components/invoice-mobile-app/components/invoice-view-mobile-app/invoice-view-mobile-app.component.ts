@@ -202,10 +202,19 @@ export class InvoiceViewMobileAppComponent implements OnInit {
       await this.haptic.error();
       return;
     }
-    let lst = await Invoice.FetchEntireListByFilters(this.Entity.p.SiteRef, this.Entity.p.LedgerRef, this.Entity.p.SubLedgerRef, this.Entity.p.Ref, this.companyRef, async errMsg => {
-      await this.toastService.present(errMsg, 1000, 'danger');
-      await this.haptic.error();
-    });
+    let lst = await Invoice.FetchEntireListByFilters(
+      this.Entity.p.StartDate,
+      this.Entity.p.EndDate,
+      this.Entity.p.SiteRef,
+      this.Entity.p.LedgerRef,
+      this.Entity.p.SubLedgerRef,
+      this.Entity.p.RecipientRef,
+      this.Entity.p.Ref,
+      this.companyRef,
+      async errMsg => {
+        await this.toastService.present(errMsg, 1000, 'danger');
+        await this.haptic.error();
+      });
     console.log('lst :', lst);
     this.MasterList = lst;
     this.DisplayMasterList = this.MasterList;

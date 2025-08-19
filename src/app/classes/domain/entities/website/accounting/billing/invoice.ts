@@ -55,7 +55,7 @@ export class InvoiceProps {
   public RecipientType: number = 0
   public InvoiceRecipientType: number = 0
   public DisplayPurchaseOrderId: string = '';
-  public RecipientMasterRef: number = 0
+  public RecipientRef: number = 0
   public IsSiteRef: number = 0
   public Reason: string = ''
   public IsDieselPaid: number = 0
@@ -253,17 +253,35 @@ export class Invoice implements IPersistable<Invoice> {
     return Invoice.ListFromTransportData(tdResponse);
   }
 
-  public static async FetchEntireListByFilters(SiteRef: number, LedgerRef: number, SubLedgerRef: number, Ref: number, CompanyRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+  public static async FetchEntireListByFilters(
+    StartDate: string,
+    EndDate: string,
+    SiteRef: number,
+    LedgerRef: number,
+    SubLedgerRef: number,
+    RecipientRef: number,
+    Ref: number,
+    CompanyRef: number,
+    errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let req = new InvoiceFetchRequest();
-    req.CompanyRefs.push(CompanyRef)
+    req.CompanyRefs.push(CompanyRef);
+    if (StartDate) {
+      req.StartDate = StartDate;
+    }
+    if (EndDate) {
+      req.EndDate = EndDate;
+    }
+    if (SiteRef) {
+      req.SiteRefs.push(SiteRef)
+    }
     if (LedgerRef) {
       req.LedgerRefs.push(LedgerRef)
     }
     if (SubLedgerRef) {
       req.SubLedgerRefs.push(SubLedgerRef)
     }
-    if (SiteRef) {
-      req.SiteRefs.push(SiteRef)
+    if (RecipientRef) {
+      req.RecipientRef = RecipientRef;
     }
     if (Ref) {
       req.Refs.push(Ref)

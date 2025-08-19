@@ -101,8 +101,8 @@
           <label>Recipient Name</label>
           <div class="d-flex align-items-center">
             <nz-select *ngIf="!RecipientNameInput && !RecipientNameReadOnly" class="nzSelect-light"
-              [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="RecipientMasterRef"
-              name="RecipientName" [nzSize]="'large'" [(ngModel)]="Entity.p.RecipientMasterRef"
+              [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="RecipientRef"
+              name="RecipientName" [nzSize]="'large'" [(ngModel)]="Entity.p.RecipientRef"
               (ngModelChange)="onRecipientTypeVendor()">
               <nz-option *ngFor="let name of RecipientList" [nzValue]="name.p.Ref"
                 [nzLabel]="name.p.RecipientName | titleCase"></nz-option>
@@ -143,8 +143,8 @@
           *ngIf="Entity.p.ExpenseType == MachinaryExpenseRef || Entity.p.ExpenseType == LabourExpenseRef">
           <label>Vendor</label>
           <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
-            nzPlaceHolder="Select" id="RecipientMasterRef" name="RecipientMasterRef" [nzSize]="'large'" [(ngModel)]="Entity.p.RecipientMasterRef"
-            (ngModelChange)="getVendorServiceListByVendorRef(Entity.p.RecipientMasterRef)">
+            nzPlaceHolder="Select" id="RecipientRef" name="RecipientRef" [nzSize]="'large'" [(ngModel)]="Entity.p.RecipientRef"
+            (ngModelChange)="getVendorServiceListByVendorRef(Entity.p.RecipientRef)">
             <nz-option *ngFor="let Vendor of VendorList" [nzValue]="Vendor.p.Ref" [nzLabel]="Vendor.p.Name"></nz-option>
           </nz-select>
         </div>

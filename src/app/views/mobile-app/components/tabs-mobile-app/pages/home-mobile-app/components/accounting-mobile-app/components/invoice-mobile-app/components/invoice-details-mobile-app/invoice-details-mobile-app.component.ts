@@ -192,7 +192,7 @@ export class InvoiceDetailsMobileAppComponent implements OnInit {
           this.selectedSite = [{ p: { Ref: this.Entity.p.SiteRef, Name: this.Entity.p.SiteName } }];
           this.SiteName = this.Entity.p.SiteName;
 
-          this.selectedVendor = [{ p: { Ref: this.Entity.p.RecipientMasterRef, Name: this.Entity.p.RecipientName } }];
+          this.selectedVendor = [{ p: { Ref: this.Entity.p.RecipientRef, Name: this.Entity.p.RecipientName } }];
           this.VendorName = this.Entity.p.RecipientName;
 
           this.selectedLedger = [{ p: { Ref: this.Entity.p.LedgerRef, Name: this.Entity.p.LedgerName } }];
@@ -204,7 +204,7 @@ export class InvoiceDetailsMobileAppComponent implements OnInit {
           this.RecipientTypeName = this.RecipientTypesList.find(item => item.Ref == this.Entity.p.InvoiceRecipientType)?.Name ?? '';
           this.selectedRecipientType = [{ p: { Ref: this.Entity.p.InvoiceRecipientType, Name: this.RecipientTypeName } }];
 
-          this.selectedRecipientName = [{ p: { Ref: this.Entity.p.RecipientMasterRef, Name: this.Entity.p.RecipientName } }];
+          this.selectedRecipientName = [{ p: { Ref: this.Entity.p.RecipientRef, Name: this.Entity.p.RecipientName } }];
           this.RecipientName = this.Entity.p.RecipientName;
 
           this.selectedUnit = [{ p: { Ref: this.Entity.p.UnitRef, Name: this.Entity.p.UnitName } }];
@@ -228,7 +228,7 @@ export class InvoiceDetailsMobileAppComponent implements OnInit {
           if (this.Entity.p.IsDieselPaid == 1) {
             this.isDieselPaid = true
           }
-          await this.getVendorServiceListByVendorRef(this.Entity.p.RecipientMasterRef);
+          await this.getVendorServiceListByVendorRef(this.Entity.p.RecipientRef);
           this.getTotalWorkedHours()
           this.selectedVendorService = [{ p: { Ref: this.Entity.p.VendorServiceRef, Name: this.Entity.p.VendorServiceName } }];
           this.VendorServiceName = this.Entity.p.VendorServiceName;
@@ -354,7 +354,7 @@ export class InvoiceDetailsMobileAppComponent implements OnInit {
 
   AddRecipientName = () => {
     this.RecipientNameInput = true
-    this.Entity.p.RecipientMasterRef = 0
+    this.Entity.p.RecipientRef = 0
     this.RecipientEntity.p.Name = ''
   }
 
@@ -742,11 +742,11 @@ export class InvoiceDetailsMobileAppComponent implements OnInit {
     this.Entity.p.InvoiceRecipientType = 0;
     this.RecipientTypeName = '';
     this.selectedRecipientType = [];
-    this.Entity.p.RecipientMasterRef = 0;
+    this.Entity.p.RecipientRef = 0;
     this.RecipientName = '';
     this.selectedRecipientName = [];
     this.RecipientNameInput = false;
-    this.Entity.p.RecipientMasterRef = 0;
+    this.Entity.p.RecipientRef = 0;
     this.selectedVendor = [];
     this.VendorName = '';
     this.Entity.p.VendorServiceRef = 0;
@@ -836,7 +836,7 @@ export class InvoiceDetailsMobileAppComponent implements OnInit {
   }
 
   onTypeChange = async () => {
-    this.Entity.p.RecipientMasterRef = 0;
+    this.Entity.p.RecipientRef = 0;
     this.RecipientNameInput = false
   }
   getRecipientListByRecipientTypeRef = async () => {
@@ -951,10 +951,10 @@ export class InvoiceDetailsMobileAppComponent implements OnInit {
 
   onRecipientTypeVendor = () => {
     if (this.Entity.p.InvoiceRecipientType == this.TypeRecipientVendor) {
-      this.Entity.p.RecipientMasterRef = this.Entity.p.RecipientMasterRef;
+      this.Entity.p.RecipientRef = this.Entity.p.RecipientRef;
     }
   }
-  
+
   public selectLabourTypeBottomsheet = async (): Promise<void> => {
     try {
       const options = this.LabourTypeList.map((item) => ({ p: item }));
@@ -1019,9 +1019,9 @@ export class InvoiceDetailsMobileAppComponent implements OnInit {
       const options = this.VendorList;
       this.openSelectModal(options, this.selectedVendor, false, 'Select Vendor Name', 1, (selected) => {
         this.selectedVendor = selected;
-        this.Entity.p.RecipientMasterRef = selected[0].p.Ref;
+        this.Entity.p.RecipientRef = selected[0].p.Ref;
         this.VendorName = selected[0].p.Name;
-        this.getVendorServiceListByVendorRef(this.Entity.p.RecipientMasterRef)
+        this.getVendorServiceListByVendorRef(this.Entity.p.RecipientRef)
       });
     } catch (error) {
       await this.toastService.present('Error ' + error, 1000, 'danger');
@@ -1060,7 +1060,7 @@ export class InvoiceDetailsMobileAppComponent implements OnInit {
       }
       this.openSelectModal(options, this.selectedRecipientName, false, 'Select Recipient Name', 1, (selected) => {
         this.selectedRecipientName = selected;
-        this.Entity.p.RecipientMasterRef = selected[0].p.Ref;
+        this.Entity.p.RecipientRef = selected[0].p.Ref;
         this.RecipientName = selected[0].p.Name;
         this.onRecipientTypeVendor()
       });
