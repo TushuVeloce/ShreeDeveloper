@@ -32,6 +32,9 @@ export class InvoiceProps {
   public CompanyRef: number = 0
   public CompanyName: string = ''
 
+  public StartDate: string = ''
+  public EndDate: string = ''
+
   public Date: string = ''
   public InvoiceNo: number = 0
   public SiteRef: number = 0

@@ -16,7 +16,7 @@
 <ng-template #noDataTpl>
   <div style="text-align: center; color: rgba(0, 0, 0, 0.25)">No Data</div>
 </ng-template>
-<div class="row" style="margin-top: 1rem">
+<!-- <div class="row" style="margin-top: 1rem">
   <div class="col-md-3">
     <label for="SiteRef"><b>Site</b></label>
     <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear nzPlaceHolder="Select"
@@ -51,7 +51,78 @@
       </nz-option>
     </nz-select>
   </div>
+</div> -->
+
+<div class="row row-cols-4 g-1">
+  <div class="col">
+    <label for="StartDate"><b>From Date</b></label>
+    <input type="date" [(ngModel)]="Entity.p.StartDate" name="StartDate" class="form-control" id="StartDate"
+      placeholder="Enter Start Date" (ngModelChange)="FetchEntireListByFilters()" />
+  </div>
+  <div class="col">
+    <label for="EndDate"><b>To Date</b></label>
+    <input type="date" [(ngModel)]="Entity.p.EndDate" name="EndDate" class="form-control" id="EndDate"
+      placeholder="Enter End Date" (ngModelChange)="FetchEntireListByFilters()" />
+  </div>
+  <div class="col">
+    <label for="SiteRef"><b>Site</b></label>
+    <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear nzPlaceHolder="Select"
+      [nzSize]="'large'" name="SiteRef" [(ngModel)]="Entity.p.SiteRef" required id="SiteRef"
+      (ngModelChange)="FetchEntireListByFilters(); ClearRef()">
+      <nz-option nzLabel="All" [nzValue]="0"></nz-option>
+      <nz-option *ngFor="let Site of SiteList" [nzValue]="Site.p.Ref" [nzLabel]="Site.p.Name"></nz-option>
+    </nz-select>
+  </div>
+  <div class="col">
+    <label><b>Ledger</b></label>
+    <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear nzPlaceHolder="Select"
+      id="LedgerRef" name="LedgerRef" [nzSize]="'large'" [(ngModel)]="Entity.p.LedgerRef"
+      (ngModelChange)="getSubLedgerListByLedgerRef(Entity.p.LedgerRef)"
+      (ngModelChange)="FetchEntireListByFilters(); ClearRef()">
+      <nz-option *ngFor="let ledger of LedgerList" [nzValue]="ledger.p.Ref" [nzLabel]="ledger.p.Name"></nz-option>
+    </nz-select>
+  </div>
+  <div class="col">
+    <label><b>Sub Ledger</b></label>
+    <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear nzPlaceHolder="Select"
+      id="SubLedgerRef" name="SubLedgerRef" [nzSize]="'large'" [(ngModel)]="Entity.p.SubLedgerRef"
+      (ngModelChange)="FetchEntireListByFilters(); ClearRef()">
+      <nz-option *ngFor="let sub of SubLedgerList" [nzValue]="sub.p.Ref" [nzLabel]="sub.p.Name"></nz-option>
+    </nz-select>
+  </div>
+  <div class="col">
+    <label><b>To Whom Type</b></label>
+    <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear nzPlaceHolder="Select"
+      id="RecipientType" name="RecipientType" [nzSize]="'large'" [(ngModel)]="Entity.p.RecipientType"
+      (ngModelChange)="getRecipientListByRecipientTypeRef(); Entity.p.RecipientMasterRef = 0">
+      <nz-option *ngFor=" let type of RecipientTypesList" [nzValue]="type.Ref" [nzLabel]="type.Name"></nz-option>
+    </nz-select>
+  </div>
+  <div class="col">
+    <label><b>To Whom</b></label>
+    <div class="d-flex align-items-center">
+      <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear nzPlaceHolder="Select"
+        id="RecipientRef" name="RecipientRef" [nzSize]="'large'" [(ngModel)]="Entity.p.RecipientMasterRef"
+        (ngModelChange)="FetchEntireListByFilters(); ">
+        <nz-option *ngFor="let recipient of RecipientList" [nzValue]="recipient.p.Ref"
+          [nzLabel]="recipient.p.RecipientName | titleCase" nzCustomContent>
+          <span [ngClass]="recipient.p.IsSiteRef == 1 ? 'site' : 'nonsite'">
+            {{ recipient.p.RecipientName | titleCase }}
+          </span>
+        </nz-option>
+      </nz-select>
+    </div>
+  </div>
+  <div class="col">
+    <label><b>Reason</b></label>
+    <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear nzPlaceHolder="Select"
+      id="Ref" name="Ref" [nzSize]="'large'" [(ngModel)]="Entity.p.Ref" (ngModelChange)="FetchEntireListByFilters()">
+      <nz-option *ngFor="let sub of AllList" [nzValue]="sub.p.Ref" [nzLabel]="sub.p.Reason">
+      </nz-option>
+    </nz-select>
+  </div>
 </div>
+
 <div class="table-wrapper" class="tblcard_light" style="margin-top: 2rem" *ngIf="DisplayMasterList.length > 0">
   <div class="table-container">
     <nz-table #basicTable nzSize="small" class="no-hover-table bgtable_light" [nzData]="paginatedList()"

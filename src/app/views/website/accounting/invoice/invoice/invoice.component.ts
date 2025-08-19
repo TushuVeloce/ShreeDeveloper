@@ -1,5 +1,6 @@
 import { Component, effect, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { DomainEnums } from 'src/app/classes/domain/domainenums/domainenums';
 import { Invoice } from 'src/app/classes/domain/entities/website/accounting/billing/invoice';
 import { Ledger } from 'src/app/classes/domain/entities/website/masters/ledgermaster/ledger';
 import { Site } from 'src/app/classes/domain/entities/website/masters/site/site';
@@ -26,7 +27,9 @@ export class InvoiceComponent implements OnInit {
   LedgerList: Ledger[] = [];
   SubLedgerList: SubLedger[] = [];
   TotalInvoice: number = 0;
+  RecipientList: Invoice[] = [];
   SelectedInvoice: Invoice = Invoice.CreateNewInstance();
+  RecipientTypesList = DomainEnums.RecipientTypesList();
   CustomerRef: number = 0;
   pageSize = 10; // Items per page
   currentPage = 1; // Initialize current page
@@ -55,7 +58,7 @@ export class InvoiceComponent implements OnInit {
 
   getSiteListByCompanyRef = async () => {
     this.Entity.p.SiteRef = 0
-     this.Entity.p.Ref = 0
+    this.Entity.p.Ref = 0
     if (this.companyRef() <= 0) {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
@@ -64,23 +67,39 @@ export class InvoiceComponent implements OnInit {
     this.SiteList = lst;
   }
 
+
+  getRecipientListByRecipientTypeRef = async () => {
+    if (this.companyRef() <= 0) {
+      await this.uiUtils.showErrorToster('Company not Selected');
+      return;
+    }
+    if (this.Entity.p.RecipientType <= 0) {
+      await this.uiUtils.showErrorToster('To Whom not Selected');
+      return;
+    }
+
+    this.RecipientList = [];
+    let lst = await Invoice.FetchRecipientByRecipientTypeRef(this.companyRef(), this.Entity.p.SiteRef, this.Entity.p.RecipientType, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    this.RecipientList = lst;
+  }
+
   getLedgerListByCompanyRef = async () => {
-     this.Entity.p.LedgerRef = 0
+    this.Entity.p.LedgerRef = 0
     this.Entity.p.SubLedgerRef = 0
-     this.Entity.p.Ref = 0
+    this.Entity.p.Ref = 0
     if (this.companyRef() <= 0) {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
     let lst = await Ledger.FetchEntireListByCompanyRef(this.companyRef(),
-    async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
-  );
+      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+    );
     this.LedgerList = lst
   };
 
   getSubLedgerListByLedgerRef = async (ledgerref: number) => {
     this.Entity.p.SubLedgerRef = 0
-     this.Entity.p.Ref = 0
+    this.Entity.p.Ref = 0
     if (ledgerref <= 0) {
       await this.uiUtils.showErrorToster('Ledger not Selected');
       return;
@@ -96,14 +115,14 @@ export class InvoiceComponent implements OnInit {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
-    let lst = await Invoice.FetchEntireListByFilters(this.Entity.p.SiteRef, this.Entity.p.LedgerRef, this.Entity.p.SubLedgerRef,this.Entity.p.Ref, this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    let lst = await Invoice.FetchEntireListByFilters(this.Entity.p.SiteRef, this.Entity.p.LedgerRef, this.Entity.p.SubLedgerRef, this.Entity.p.Ref, this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     // this.AllList = lst.filter((item)=>item.p.Reason != '');
     this.MasterList = lst;
     this.DisplayMasterList = this.MasterList;
     this.loadPaginationData();
   }
 
-   ClearRef = () => {
+  ClearRef = () => {
     this.Entity.p.Ref = 0
   }
 
@@ -118,7 +137,7 @@ export class InvoiceComponent implements OnInit {
     this.AllList = lst;
     this.MasterList = lst;
     this.DisplayMasterList = this.MasterList;
-    console.log(' this.DisplayMasterList  :',  this.DisplayMasterList );
+    console.log(' this.DisplayMasterList  :', this.DisplayMasterList);
     this.loadPaginationData();
   }
 
