@@ -234,9 +234,10 @@ export class StockInwardDetailsComponent implements OnInit {
     //   !this.SessionAddedRefs.includes(item.p.InternalRef)
     // );
     const usedRefs = this.Entity.p.MaterialInwardDetailsArray.map(item => item.MaterialRef);
-    this.MaterialList = this.MaterialListOriginal.filter(
+    let list = this.MaterialListOriginal.filter(
       material => !usedRefs.includes(material.p.MaterialRef)
     );
+    this.MaterialList = list.filter(data => data.p.RemainingQty > 0);
   }
 
   OnMaterialSelection = async () => {
