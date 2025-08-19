@@ -158,10 +158,8 @@ export class CustomerSummaryReportMobileAppComponent implements OnInit {
           this.Entity.p.Ref = selected[0].p.Ref;
           this.selectedCustomerID=[];
           this.CustomerIDName='';
+          this.getCustomerReportByCompanyAndSiteRef();
         });
-        if (this.SiteRef){
-          await this.getCustomerReportByCompanyAndSiteRef();
-        }
       } catch (error) {
   
       }

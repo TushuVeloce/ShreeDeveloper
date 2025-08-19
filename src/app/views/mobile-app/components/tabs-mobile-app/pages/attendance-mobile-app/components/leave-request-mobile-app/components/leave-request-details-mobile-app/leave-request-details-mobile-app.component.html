@@ -1,75 +1,91 @@
 <app-header-with-back-handler [title]="DetailsFormTitle"></app-header-with-back-handler>
 
-<ion-content class="form-container" scrollY="true" [scrollEvents]="true">
+<ion-content class="form-container" [fullscreen]="true">
   <ion-list lines="none" class="ion-padding">
 
-    <!-- Name -->
+    <!-- Employee Name -->
     <ion-item class="input-item">
-      <ion-input label="Employee Name" labelPlacement="floating" placeholder="Enter Employee Name"
-        [(ngModel)]="Entity.p.EmployeeName" readonly></ion-input>
+      <ion-label position="floating">Employee Name</ion-label>
+      <ion-input [(ngModel)]="Entity.p.EmployeeName" readonly></ion-input>
     </ion-item>
 
     <!-- Request Type -->
     <app-chip-selector [items]="LeaveRequestTypeList" [selected]="preselectedRefs" [disabledItems]="disabledRefs"
       [singleSelection]="true" [maxSelection]="1" [label]="'Select Request Type'" [showClear]="true"
-      (selectedChanged)="handleLeaveTypeSelection($event)"
-      (validationError)="handleChipError($event)"></app-chip-selector>
+      (selectedChanged)="handleLeaveTypeSelection($event)" (validationError)="handleChipError($event)">
+    </app-chip-selector>
 
     <!-- From Date -->
-    <ion-item (click)="showFromPicker = true" class="input-item" *ngIf="!isHalfDay">
+    <ion-item class="input-item" *ngIf="!isHalfDay">
       <ion-label>From Date</ion-label>
-      <ion-label slot="end">{{ fromDisplayDate || 'Please select...' }}</ion-label>
+      <ion-datetime-button datetime="fromDate" id="fromDate-modal"></ion-datetime-button>
+      <ion-checkbox slot="end" [(ngModel)]="fromDate" name="fromDateCheckBox" [disabled]="true"> </ion-checkbox>
     </ion-item>
-    <app-date-picker [show]="showFromPicker" [selectedDate]="fromDate" [defaultToday]="true"
-      (dateChanged)="onFromDateChange($event)" (dateSelected)="fromDisplayDate = $event; showFromPicker = false"
-      (modalDismissed)="showFromPicker = false" />
+    <ion-modal trigger="fromDate-modal" keepContentsMounted="true">
+      <ng-template>
+        <ion-datetime id="fromDate" presentation="date" [(ngModel)]="fromDate" show-default-buttons="true"
+          (ionChange)="onFromDateChange($event.detail.value)">
+        </ion-datetime>
+      </ng-template>
+    </ion-modal>
 
     <!-- To Date -->
-    <ion-item (click)="showToPicker = true" class="input-item" *ngIf="!isHalfDay">
+    <ion-item class="input-item" *ngIf="!isHalfDay">
       <ion-label>To Date</ion-label>
-      <ion-label slot="end">{{ toDisplayDate || 'Please select...' }}</ion-label>
+      <ion-datetime-button datetime="toDate" id="toDate-modal"></ion-datetime-button>
+      <ion-checkbox slot="end" [(ngModel)]="toDate" name="toDateCheckBox" [disabled]="true"> </ion-checkbox>
     </ion-item>
-    <app-date-picker [show]="showToPicker" [selectedDate]="toDate" [defaultToday]="true"
-      (dateChanged)="onToDateChange($event)" (dateSelected)="toDisplayDate = $event; showToPicker = false"
-      (modalDismissed)="showToPicker = false" />
+    <ion-modal trigger="toDate-modal" keepContentsMounted="true">
+      <ng-template>
+        <ion-datetime id="toDate" presentation="date" [(ngModel)]="toDate" show-default-buttons="true"
+          (ionChange)="onToDateChange($event.detail.value)">
+        </ion-datetime>
+      </ng-template>
+    </ion-modal>
 
     <!-- Half Day Date -->
-    <ion-item (click)="showHalfPicker = true" class="input-item" *ngIf="isHalfDay">
+    <ion-item class="input-item" *ngIf="isHalfDay">
       <ion-label>Half Day Date</ion-label>
-      <ion-label slot="end">{{ halfDisplayDate || 'Please select...' }}</ion-label>
+      <ion-datetime-button datetime="halfDayDate" id="halfDayDate-modal"></ion-datetime-button>
+      <ion-checkbox slot="end" [(ngModel)]="halfDayDate" name="halfDayDateCheckBox" [disabled]="true"> </ion-checkbox>
     </ion-item>
-    <app-date-picker [show]="showHalfPicker" [selectedDate]="halfDayDate" [defaultToday]="true"
-      (dateChanged)="onHalfDateChange($event)" (dateSelected)="halfDisplayDate = $event; showHalfPicker = false"
-      (modalDismissed)="showHalfPicker = false" />
-
+    <ion-modal trigger="halfDayDate-modal" keepContentsMounted="true">
+      <ng-template>
+        <ion-datetime id="halfDayDate" presentation="date" [(ngModel)]="halfDayDate" show-default-buttons="true"
+          (ionChange)="onHalfDateChange($event.detail.value)">
+        </ion-datetime>
+      </ng-template>
+    </ion-modal>
 
     <!-- Days -->
     <ion-item class="input-item" *ngIf="!isHalfDay">
-      <ion-input label="Days" labelPlacement="floating" placeholder="Enter Days" [(ngModel)]="Entity.p.Days"
-        readonly></ion-input>
+      <ion-label position="floating">Days</ion-label>
+      <ion-input [(ngModel)]="Entity.p.Days" readonly></ion-input>
     </ion-item>
 
     <!-- Leave Hours -->
     <ion-item class="input-item">
-      <ion-input label="Leave Hours" labelPlacement="floating" placeholder="Enter Leave Hours"
-        [(ngModel)]="Entity.p.LeaveHours" readonly></ion-input>
+      <ion-label position="floating">Leave Hours</ion-label>
+      <ion-input [(ngModel)]="Entity.p.LeaveHours" readonly></ion-input>
     </ion-item>
 
     <!-- Description -->
     <ion-item class="input-item">
-      <ion-input label="Description" labelPlacement="floating" placeholder="Enter Description"
-        [(ngModel)]="Entity.p.Description"></ion-input>
+      <ion-label position="floating">Description</ion-label>
+      <ion-input [(ngModel)]="Entity.p.Description"></ion-input>
     </ion-item>
 
     <!-- Buttons -->
-    <div class="button-row">
-      <ion-button expand="block" (click)="goBack()" class="submit-button cancel-button">
-        Cancel
-      </ion-button>
-      <ion-button expand="block" (click)="SaveLeaveRequest()" class="submit-button primary-button">
-        Apply
-      </ion-button>
-    </div>
+    <ion-grid>
+      <ion-row>
+        <ion-col size="6">
+          <ion-button expand="block" color="medium" shape="round" (click)="goBack()">Cancel</ion-button>
+        </ion-col>
+        <ion-col size="6">
+          <ion-button expand="block" color="primary" shape="round" (click)="SaveLeaveRequest()">Apply</ion-button>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
 
   </ion-list>
 </ion-content>

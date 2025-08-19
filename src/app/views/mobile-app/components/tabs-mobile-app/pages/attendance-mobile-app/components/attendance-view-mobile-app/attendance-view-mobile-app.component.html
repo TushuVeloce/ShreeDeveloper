@@ -8,11 +8,11 @@
     <div class="btn-group">
       <div>
         <p class="label">Check In</p>
-        <h1>{{ checkInTime || '--' }}</h1>
+        <h1>{{checkInTime ? convertTo12HourFormat(checkInTime) : '--' }}</h1>
       </div>
       <div>
         <p class="label">Check Out</p>
-        <h1>{{ checkOutTime || '--' }}</h1>
+        <h1>{{ checkOutTime ? convertTo12HourFormat(checkOutTime) : '--' }}</h1>
       </div>
     </div>
 
@@ -87,18 +87,20 @@
             <ion-col size="4">
               <div class="date-cell">{{ formatDate(day.p.TransDateTime) || '--' }}</div>
             </ion-col>
-            <ion-col size="2" class="text-center">{{ day.p.FirstCheckInTime || '--' }}</ion-col>
-            <ion-col size="2" class="text-center">{{ day.p.LastCheckOutTime || '--' }}</ion-col>
+            <ion-col size="2" class="text-center">{{ day.p.FirstCheckInTime ?
+              convertTo12HourFormat(day.p.FirstCheckInTime) : '--' }}</ion-col>
+            <ion-col size="2" class="text-center">{{ day.p.LastCheckOutTime ?
+              convertTo12HourFormat(day.p.LastCheckOutTime) : '--' }}</ion-col>
             <ion-col size="4" class="text-center">{{ day.p.DisplayTotalWorkingHrs || '--' }}</ion-col>
           </ion-row>
         </ion-grid>
       </ng-container>
 
       <!-- Fallback -->
-        <div class="no-data-box"  *ngIf="filteredWeeklyAttendanceLogs.length == 0 && !loadingService.isLoaderActive()">
-          <ion-icon name="alert-circle-outline"></ion-icon>
-          <p>No attendance data found</p>
-        </div>
+      <div class="no-data-box" *ngIf="filteredWeeklyAttendanceLogs.length == 0 && !loadingService.isLoaderActive()">
+        <ion-icon name="alert-circle-outline"></ion-icon>
+        <p>No attendance data found</p>
+      </div>
     </ion-card-content>
   </ion-card>
 

@@ -221,14 +221,14 @@ export class StockInwardViewMobileAppComponent implements OnInit {
       await this.haptic.warning();
       return;
     }
-    await this.router.navigate(['mobile-app/tabs/dashboard/stock-management/stock-inward/add']);
+    await this.router.navigate(['mobile-app/tabs/dashboard/stock-management/stock-inward/add'], { replaceUrl: true });
   }
 
   onEditClicked = async (item: StockInward) => {
     this.SelectedStockInward = item.GetEditableVersion();
     StockInward.SetCurrentInstance(this.SelectedStockInward);
     this.appStateManage.StorageKey.setItem('Editable', 'Edit');
-    await this.router.navigate(['mobile-app/tabs/dashboard/stock-management/stock-inward/edit']);
+    await this.router.navigate(['mobile-app/tabs/dashboard/stock-management/stock-inward/edit'], { replaceUrl: true });
   };
 
   navigateToPrint = async (item: StockInward) => {

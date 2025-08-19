@@ -81,6 +81,7 @@ export class InvoiceDetailsMobileAppComponent implements OnInit {
   LabourEditingIndex: null | undefined | number
   isLabourTimeModalOpen: boolean = false;
 
+  TypeRecipientVendor = RecipientTypes.Vendor
   TypeRecipient = RecipientTypes.Recipient
   RecipientTypesList = DomainEnums.RecipientTypesList();
   timeheaders: string[] = ['Start Time ', 'End Time', 'Worked Hours'];
@@ -844,7 +845,7 @@ export class InvoiceDetailsMobileAppComponent implements OnInit {
       await this.haptic.warning();
       return;
     }
-    if (this.Entity.p.RecipientType <= 0) {
+    if (this.Entity.p.InvoiceRecipientType <= 0) {
       return;
     }
     if (this.Entity.p.ExpenseType != ExpenseTypes.OtherExpense) {
@@ -852,7 +853,7 @@ export class InvoiceDetailsMobileAppComponent implements OnInit {
     }
 
     this.RecipientList = [];
-    let lst = await Invoice.FetchRecipientByRecipientTypeRef(this.companyRef, this.Entity.p.SiteRef, this.Entity.p.RecipientType, async errMsg => {
+    let lst = await Invoice.FetchRecipientByRecipientTypeRef(this.companyRef, this.Entity.p.SiteRef, this.Entity.p.InvoiceRecipientType, async errMsg => {
       await this.toastService.present(errMsg, 1000, 'danger');
       await this.haptic.warning();
     });
@@ -944,10 +945,16 @@ export class InvoiceDetailsMobileAppComponent implements OnInit {
       this.Entity = Invoice.CreateNewInstance();
       this.strCDT = await CurrentDateTimeRequest.GetCurrentDateTime();
       await this.loadingService.hide();
-      await this.router.navigate(['/mobile-app/tabs/dashboard/accounting/invoice']);
+      await this.router.navigate(['/mobile-app/tabs/dashboard/accounting/invoice'], { replaceUrl: true });
     }
   };
 
+  onRecipientTypeVendor = () => {
+    if (this.Entity.p.InvoiceRecipientType == this.TypeRecipientVendor) {
+      this.Entity.p.RecipientMasterRef = this.Entity.p.RecipientMasterRef;
+    }
+  }
+  
   public selectLabourTypeBottomsheet = async (): Promise<void> => {
     try {
       const options = this.LabourTypeList.map((item) => ({ p: item }));
@@ -1055,6 +1062,7 @@ export class InvoiceDetailsMobileAppComponent implements OnInit {
         this.selectedRecipientName = selected;
         this.Entity.p.RecipientMasterRef = selected[0].p.Ref;
         this.RecipientName = selected[0].p.Name;
+        this.onRecipientTypeVendor()
       });
     } catch (error) {
       await this.toastService.present('Error ' + error, 1000, 'danger');

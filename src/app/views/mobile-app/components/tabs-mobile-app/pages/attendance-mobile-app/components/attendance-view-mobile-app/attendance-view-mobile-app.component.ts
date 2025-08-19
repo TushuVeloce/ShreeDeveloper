@@ -86,10 +86,7 @@ export class AttendanceViewMobileAppComponent  implements OnInit {
   months: any[] = [];
 
   constructor(
-    private router: Router,
-    private companyState: CompanyStateManagement,
     private appStateManage: AppStateManageService,
-    private utils: Utils,
     private dtu: DTU,
     private payloadPacketFacade: PayloadPacketFacade,
     private serverCommunicator: ServerCommunicatorService,
@@ -97,7 +94,6 @@ export class AttendanceViewMobileAppComponent  implements OnInit {
     private bottomsheetMobileAppService: BottomsheetMobileAppService,
     private toastService: ToastService,
     private haptic: HapticService,
-    private alertService: AlertService,
     public loadingService: LoadingService,
     public locationMobileAppService:LocationMobileAppService,
   ) { }
@@ -260,6 +256,17 @@ export class AttendanceViewMobileAppComponent  implements OnInit {
       this.SiteName = selected[0].p.Name;
     }
   }
+  convertTo12HourFormat = (time: string): string => {
+    const [hourStr, minuteStr] = time.split(':');
+    let hour = parseInt(hourStr, 10);
+    const minute = parseInt(minuteStr, 10);
+
+    const ampm = hour >= 12 ? 'PM' : 'AM';
+    hour = hour % 12;
+    hour = hour === 0 ? 12 : hour;
+
+    return `${hour}:${minute.toString().padStart(2, '0')} ${ampm}`;
+  }
 
   openPunchModal = async () => {
     if (!this.isCheckInEnabled) return;
@@ -278,23 +285,49 @@ export class AttendanceViewMobileAppComponent  implements OnInit {
     }
   }
 
-  takePhoto = async (type: 'before' | 'after') => {
-    try {
-      const image = await Camera.getPhoto({ quality: 80, allowEditing: false, resultType: CameraResultType.Uri, source: CameraSource.Camera });
-      const uri = image.path ?? image.webPath;
+  // takePhoto = async (type: 'before' | 'after') => {
+  //   try {
+  //     const image = await Camera.getPhoto({ quality: 80, allowEditing: false, resultType: CameraResultType.Uri, source: CameraSource.Camera });
+  //     const uri = image.path ?? image.webPath;
 
-      if (type === 'before') {
-        this.rawCapturedSelfPhoto = uri ?? null;
-        this.capturedSelfPhoto = image.webPath ?? null;
-      } else {
-        this.rawCapturedWorkLocationPhoto = uri ?? null;
-        this.capturedWorkLocationPhoto = image.webPath ?? null;
-      }
-    } catch (error) {
-      this.toastService.present(`Error capturing ${type} photo`, 1000, 'danger');
-      await this.haptic.error();
+  //     if (type === 'before') {
+  //       this.rawCapturedSelfPhoto = uri ?? null;
+  //       this.capturedSelfPhoto = image.webPath ?? null;
+  //     } else {
+  //       this.rawCapturedWorkLocationPhoto = uri ?? null;
+  //       this.capturedWorkLocationPhoto = image.webPath ?? null;
+  //     }
+  //   } catch (error) {
+  //     this.toastService.present(`Error capturing ${type} photo`, 1000, 'danger');
+  //     await this.haptic.error();
+  //   }
+  // }
+  takePhoto = async (type: 'before' | 'after') => {
+  try {
+    const image = await Camera.getPhoto({
+      quality: 80,
+      allowEditing: false,
+      resultType: CameraResultType.Uri,
+      source: CameraSource.Camera
+    });
+
+    // Always prefer webPath
+    const uri = image.webPath;
+
+    if (type === 'before') {
+      this.rawCapturedSelfPhoto = uri || null;
+      this.capturedSelfPhoto = uri || null;
+    } else {
+      this.rawCapturedWorkLocationPhoto = uri || null;
+      this.capturedWorkLocationPhoto = uri || null;
     }
+
+  } catch (error) {
+    this.toastService.present(`Error capturing ${type} photo`, 1000, 'danger');
+    await this.haptic.error();
   }
+};
+
 
   uriToFile = async (uri: string, fileName: string, mimeType = 'image/jpeg') => {
     const response = await fetch(uri);

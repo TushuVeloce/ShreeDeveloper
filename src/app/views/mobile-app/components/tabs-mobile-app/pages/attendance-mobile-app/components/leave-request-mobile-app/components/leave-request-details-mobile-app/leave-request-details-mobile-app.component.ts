@@ -14,7 +14,6 @@ import { AlertService } from 'src/app/views/mobile-app/components/core/alert.ser
 import { HapticService } from 'src/app/views/mobile-app/components/core/haptic.service';
 import { LoadingService } from 'src/app/views/mobile-app/components/core/loading.service';
 import { ToastService } from 'src/app/views/mobile-app/components/core/toast.service';
-import { IonInput } from "@ionic/angular/standalone";
 
 @Component({
   selector: 'app-leave-request-details-mobile-app',
@@ -37,17 +36,17 @@ export class LeaveRequestDetailsMobileAppComponent  implements OnInit {
   preselectedRefs: any[] = [];
   disabledRefs: any[] = [];
 
-  showFromPicker = false;
-  fromDate = '';
-  fromDisplayDate = '';
+  // showFromPicker = false;
+  fromDate: string|null= null;
+  // fromDisplayDate = '';
 
-  showToPicker = false;
-  toDate = '';
-  toDisplayDate = '';
+  // showToPicker = false;
+  toDate: string | null = null;
+  // toDisplayDate = '';
 
-  showHalfPicker = false;
-  halfDayDate = '';
-  halfDisplayDate = '';
+  // showHalfPicker = false;
+  halfDayDate: string | null = null;
+  // halfDisplayDate = '';
 
   public LeaveRequestType = LeaveRequestType;
   private IsNewEntity = true;
@@ -93,9 +92,9 @@ export class LeaveRequestDetailsMobileAppComponent  implements OnInit {
         this.fromDate = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.FromDate);
         this.toDate = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.ToDate);
         this.halfDayDate = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.HalfDayDate);
-        this.fromDisplayDate = this.fromDate;
-        this.toDisplayDate = this.toDate;
-        this.halfDisplayDate = this.halfDayDate;
+        // this.fromDisplayDate = this.fromDate;
+        // this.toDisplayDate = this.toDate;
+        // this.halfDisplayDate = this.halfDayDate;
         this.Entity.p.UpdatedBy = this.Entity.p.EmployeeRef;
         this.appStateManage.localStorage.removeItem('Editable');
       } else {
@@ -164,14 +163,14 @@ export class LeaveRequestDetailsMobileAppComponent  implements OnInit {
 
   public async onFromDateChange(date: any): Promise<void> {
     this.fromDate = this.datePipe.transform(date, 'yyyy-MM-dd') ?? '';
-    this.fromDisplayDate = this.fromDate;
+    // this.fromDisplayDate = this.fromDate;
     this.Entity.p.FromDate = this.fromDate;
     this.onDateChangeSetDaysandLeaveHours();
   }
 
   public async onToDateChange(date: any): Promise<void> {
     this.toDate = this.datePipe.transform(date, 'yyyy-MM-dd') ?? '';
-    this.toDisplayDate = this.toDate;
+    // this.toDisplayDate = this.toDate;
     this.Entity.p.ToDate = this.toDate;
 
     if (!this.fromDate) {
@@ -182,7 +181,7 @@ export class LeaveRequestDetailsMobileAppComponent  implements OnInit {
 
   public async onHalfDateChange(date: any): Promise<void> {
     this.halfDayDate = this.datePipe.transform(date, 'yyyy-MM-dd') ?? '';
-    this.halfDisplayDate = this.halfDayDate;
+    // this.halfDisplayDate = this.halfDayDate;
     this.Entity.p.HalfDayDate = this.halfDayDate;
   }
 
@@ -243,7 +242,7 @@ export class LeaveRequestDetailsMobileAppComponent  implements OnInit {
 
   private resetForm(): void {
     this.fromDate = this.toDate = this.halfDayDate = '';
-    this.fromDisplayDate = this.toDisplayDate = this.halfDisplayDate = '';
+    // this.fromDisplayDate = this.toDisplayDate = this.halfDisplayDate = '';
     this.isHalfDay = false;
     this.Entity = LeaveRequest.CreateNewInstance();
     this.SelectedLeaveType = [];

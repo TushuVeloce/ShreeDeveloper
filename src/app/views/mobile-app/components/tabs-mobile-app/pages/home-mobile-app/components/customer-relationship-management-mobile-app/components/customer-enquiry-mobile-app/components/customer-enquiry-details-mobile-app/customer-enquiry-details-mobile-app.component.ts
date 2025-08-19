@@ -376,11 +376,11 @@ export class CustomerEnquiryDetailsMobileAppComponent implements OnInit {
         this.SelectedCustomerStatus = selected;
         this.Entity.p.CustomerFollowUps[0].CustomerStatusName = selected[0].p.Name;
         this.Entity.p.CustomerFollowUps[0].CustomerStatus = selected[0].p.Ref;
+        if (this.Entity.p.CustomerFollowUps[0].CustomerStatus) {
+           this.onStatusChange(this.Entity.p.CustomerFollowUps[0].CustomerStatus);
+        }
       });
-      if (this.Entity.p.CustomerFollowUps[0].CustomerStatus){
-        await this.onStatusChange(this.Entity.p.CustomerFollowUps[0].CustomerStatus);
-      }
-    } catch (error) {}
+    } catch (error) { }
   }
 
   private async openSelectModal(
@@ -492,8 +492,8 @@ export class CustomerEnquiryDetailsMobileAppComponent implements OnInit {
         (plot) => plot.p.CurrentBookingRemark !== BookingRemark.Booked
       );
     } catch (error) {
-      
-    }finally{
+
+    } finally {
       await this.loadingService.hide();
     }
   };
@@ -558,7 +558,7 @@ export class CustomerEnquiryDetailsMobileAppComponent implements OnInit {
   // On lead source broker selected
   showAgentBrokerInput: boolean = false;
 
-  onLeadSourceChange = (selectedValue: number)=> {
+  onLeadSourceChange = (selectedValue: number) => {
     // Check if the selected value is AgentBroker (50)
     if (selectedValue === 50) {
       this.showAgentBrokerInput = true;
@@ -571,7 +571,7 @@ export class CustomerEnquiryDetailsMobileAppComponent implements OnInit {
   isReminderRequired: boolean = false;
   reminderMessage: string = '';
 
-  onStatusChange=(selectedStatus: number)=> {
+  onStatusChange = (selectedStatus: number) => {
     this.selectedCustomerStatus = selectedStatus;
 
     // Reminder is required unless status is 30 (Lead Closed) or 40 (Convert To Deal)
@@ -625,12 +625,12 @@ export class CustomerEnquiryDetailsMobileAppComponent implements OnInit {
     } else {
       if (this.IsNewEntity) {
         await this.toastService.present('Customer Enquiry saved successfully', 1000, 'success');
-        this.router.navigate(['/mobile-app/tabs/dashboard/customer-relationship-management/customer-enquiry']);
+        this.router.navigate(['/mobile-app/tabs/dashboard/customer-relationship-management/customer-enquiry'], { replaceUrl: true });
         this.Entity = CustomerEnquiry.CreateNewInstance();
         await this.haptic.success();
       } else {
         await this.toastService.present('Customer Enquiry Updated successfully', 1000, 'success');
-        this.router.navigate(['/mobile-app/tabs/dashboard/customer-relationship-management/customer-enquiry']);
+        this.router.navigate(['/mobile-app/tabs/dashboard/customer-relationship-management/customer-enquiry'], { replaceUrl: true });
         await this.haptic.success();
       }
     }

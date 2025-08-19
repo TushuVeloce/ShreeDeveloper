@@ -22,8 +22,6 @@ import { ToastService } from 'src/app/views/mobile-app/components/core/toast.ser
   standalone:false
 })
 export class SalarySlipRequestDetailsMobileAppComponent  implements OnInit {
-
-
   public Entity: SalarySlipRequest = SalarySlipRequest.CreateNewInstance();
   public InitialEntity: SalarySlipRequest = null as any;
   public DetailsFormTitle: 'New Salary Slip Request' | 'Edit Salary Slip Request' = 'New Salary Slip Request';

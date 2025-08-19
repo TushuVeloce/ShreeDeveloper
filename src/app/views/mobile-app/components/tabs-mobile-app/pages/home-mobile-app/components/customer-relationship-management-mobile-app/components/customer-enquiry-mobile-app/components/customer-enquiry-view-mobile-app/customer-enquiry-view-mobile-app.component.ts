@@ -152,7 +152,7 @@ export class CustomerEnquiryViewMobileAppComponent implements OnInit {
       this.SelectedCustomerEnquiry = item.GetEditableVersion();
       CustomerEnquiry.SetCurrentInstance(this.SelectedCustomerEnquiry);
       this.appStateManagement.StorageKey.setItem('Editable', 'Edit');
-      this.router.navigate(['mobile-app/tabs/dashboard/customer-relationship-management/customer-enquiry/edit']);
+      this.router.navigate(['mobile-app/tabs/dashboard/customer-relationship-management/customer-enquiry/edit'], { replaceUrl: true });
     } catch (error: any) {
     }
   };
@@ -211,7 +211,7 @@ export class CustomerEnquiryViewMobileAppComponent implements OnInit {
         await this.haptic.error();
         return;
       }
-      this.router.navigate(['mobile-app/tabs/dashboard/customer-relationship-management/customer-enquiry/add']);
+      this.router.navigate(['mobile-app/tabs/dashboard/customer-relationship-management/customer-enquiry/add'], { replaceUrl: true });
     } catch (error: any) {
     }
   }

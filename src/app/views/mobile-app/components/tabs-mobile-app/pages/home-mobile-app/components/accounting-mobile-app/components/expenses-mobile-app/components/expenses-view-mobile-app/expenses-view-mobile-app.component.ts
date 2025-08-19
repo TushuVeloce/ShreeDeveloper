@@ -262,7 +262,7 @@ export class ExpensesViewMobileAppComponent implements OnInit {
     this.SelectedExpense = item.GetEditableVersion();
     Expense.SetCurrentInstance(this.SelectedExpense);
     this.appStateManage.StorageKey.setItem('Editable', 'Edit');
-    await this.router.navigate(['/mobile-app/tabs/dashboard/accounting/expenses/edit']);
+    await this.router.navigate(['/mobile-app/tabs/dashboard/accounting/expenses/edit'], { replaceUrl: true });
   };
 
   async onDeleteClicked(item: Expense) {
@@ -323,7 +323,7 @@ export class ExpensesViewMobileAppComponent implements OnInit {
       this.haptic.warning();
       return;
     }
-    this.router.navigate(['/mobile-app/tabs/dashboard/accounting/expenses/add']);
+    this.router.navigate(['/mobile-app/tabs/dashboard/accounting/expenses/add'], { replaceUrl: true });
   }
 
   @ViewChild('PrintContainer')

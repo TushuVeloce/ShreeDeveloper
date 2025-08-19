@@ -371,7 +371,7 @@ export class MaterialRequisitionDetailsMobileAppComponent implements OnInit {
           await this.haptic.success();
 
         }
-        await this.router.navigate(['/mobile-app/tabs/dashboard/stock-management/material-requisition']);
+        await this.router.navigate(['/mobile-app/tabs/dashboard/stock-management/material-requisition'], { replaceUrl: true });
       }
     } catch (error) {
       await this.toastService.present('Failed to save Material Requisition', 1000, 'danger')

@@ -7,18 +7,26 @@
   </ion-refresher>
 
   <!-- Year Select -->
-  <!-- <ion-select class="year-select" mode="ios" interface="popover" [(ngModel)]="SelectedYear"
-    (ionChange)="onYearChange()">
-    <ion-select-option *ngFor="let year of FinancialYearList" [value]="year">{{ year }}</ion-select-option>
-  </ion-select> -->
+  <!-- Uncomment if needed -->
+  <!--
+  <ion-select class="year-select" mode="ios" interface="popover"
+    [(ngModel)]="SelectedYear" (ionChange)="onYearChange()">
+    <ion-select-option *ngFor="let year of FinancialYearList" [value]="year">
+      {{ year }}
+    </ion-select-option>
+  </ion-select>
+  -->
 
-  <!-- Month Tabs -->
-  <ion-segment scrollable [(ngModel)]="selectedMonth" (ionChange)="fetchAttendanceByMonth($event.detail.value)"
-    class="month-segment">
-    <ion-segment-button *ngFor="let month of months" [value]="month.Ref">
-      {{ month.Name }}
-    </ion-segment-button>
-  </ion-segment>
+  <!-- Month Dropdown -->
+  <ion-item lines="none" class="month-dropdown">
+    <ion-label>Month</ion-label>
+    <ion-select [(ngModel)]="selectedMonth" [mode]="'ios'" (ionChange)="fetchAttendanceByMonth($event.detail.value)"
+      interface="popover">
+      <ion-select-option *ngFor="let month of months" [value]="month.Ref">
+        {{ month.Name }}
+      </ion-select-option>
+    </ion-select>
+  </ion-item>
 
   <!-- Present/Absent Summary -->
   <ion-card class="attendance-dashboard-card">

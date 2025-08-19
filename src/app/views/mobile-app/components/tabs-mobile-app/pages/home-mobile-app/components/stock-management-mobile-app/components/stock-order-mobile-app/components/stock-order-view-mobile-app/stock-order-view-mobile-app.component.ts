@@ -273,7 +273,7 @@ export class StockOrderViewMobileAppComponent implements OnInit {
     this.SelectedOrder = item.GetEditableVersion();
     Order.SetCurrentInstance(this.SelectedOrder);
     this.appStateManage.StorageKey.setItem('Editable', 'Edit');
-    await this.router.navigate(['/mobile-app/tabs/dashboard/stock-management/stock-order/edit']);
+    await this.router.navigate(['/mobile-app/tabs/dashboard/stock-management/stock-order/edit'], { replaceUrl: true });
   };
 
   onDeleteClicked = async (Order: Order) => {
@@ -340,7 +340,7 @@ export class StockOrderViewMobileAppComponent implements OnInit {
       await this.haptic.error();
       return;
     }
-    await this.router.navigate(['/mobile-app/tabs/dashboard/stock-management/stock-order/add']);
+    await this.router.navigate(['/mobile-app/tabs/dashboard/stock-management/stock-order/add'], { replaceUrl: true });
   }
 
   openModal = (requisition: any) => {
