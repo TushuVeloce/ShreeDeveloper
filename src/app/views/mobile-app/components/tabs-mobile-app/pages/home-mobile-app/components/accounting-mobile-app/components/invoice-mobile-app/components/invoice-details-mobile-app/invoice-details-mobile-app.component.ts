@@ -393,6 +393,8 @@ export class InvoiceDetailsMobileAppComponent implements OnInit {
 
   OnLedgerChange = () => {
     this.Entity.p.SubLedgerRef = 0
+    this.selectedSubLedger = [];
+    this.SubLedgerName = '';
   }
 
   DiselPaid = (DiselPaid: number) => {

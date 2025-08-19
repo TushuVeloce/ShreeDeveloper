@@ -110,7 +110,7 @@
                     {{ convertTo12HourFormat(item.EndTime) || '-' }}
                   </td>
                   <td>
-                    {{ item.DisplayWorkedHours }}
+                    {{ item.DisplayWorkedHours || '-' }}
                   </td>
                 </tr>
               </tbody>
@@ -142,10 +142,10 @@
                     {{ item.LabourQty || '-' }}
                   </td>
                   <td>
-                    {{ item.LabourRate || '-' }}
+                    {{ (item.LabourRate| currency : "INR") || '-' }}
                   </td>
                   <td>
-                    {{ item.LabourAmount || '-' }}
+                    {{ (item.LabourAmount| currency : "INR") || '-' }}
                   </td>
                 </tr>
               </tbody>

@@ -116,6 +116,18 @@
         [(ngModel)]="Entity.p.PlotName" clearInput="true" [disabled]="'true'"></ion-input>
     </ion-item>
 
+    <!-- Total Plot Amount -->
+    <ion-item class="input-item" *ngIf="Entity.p.PayerType == DealDoneCustomer && Entity.p.PayerRef != 0">
+      <ion-input label="Total Plot Amount" labelPlacement="floating" placeholder="Enter Total Plot Amount"
+        [(ngModel)]="Entity.p.TotalPlotAmount" clearInput="true" [disabled]="'true'"></ion-input>
+    </ion-item>
+
+    <!-- Plot Grand Total -->
+    <ion-item class="input-item" *ngIf="Entity.p.PayerType == DealDoneCustomer && Entity.p.PayerRef != 0">
+      <ion-input label="Plot Grand Total" labelPlacement="floating" placeholder="Enter Plot Grand Total"
+        [(ngModel)]="Entity.p.PlotGrandTotal" clearInput="true" [disabled]="'true'"></ion-input>
+    </ion-item>
+
     <!-- Reason -->
     <ion-item class="input-item">
       <ion-input label="Reason" labelPlacement="floating" placeholder="Enter Reason" [(ngModel)]="Entity.p.Reason"
@@ -126,6 +138,12 @@
     <ion-item class="input-item">
       <ion-input label="Income Amount" labelPlacement="floating" placeholder="Enter Income Amount"
         [(ngModel)]="Entity.p.IncomeAmount" (ngModelChange)="CalculateShreeBalance()" type="number"></ion-input>
+    </ion-item>
+
+    <!-- Remaining Plot Amount -->
+    <ion-item class="input-item" *ngIf="Entity.p.PayerType == DealDoneCustomer && Entity.p.PayerRef != 0">
+      <ion-input label="Remaining Plot Amount" labelPlacement="floating" placeholder="Enter Remaining Plot Amount"
+        [(ngModel)]="Entity.p.RemainingPlotAmount" clearInput="true" [disabled]="'true'"></ion-input>
     </ion-item>
 
     <!-- Shree Balance -->

@@ -322,12 +322,18 @@ export class IncomeDetailsMobileAppComponent implements OnInit {
     }
   };
 
+
   onTypeChange = () => {
     this.Entity.p.PayerRef = 0;
+    this.Entity.p.PayerName = '';
     this.selectedPayer = [];
     this.PayerName = '';
     this.PayerPlotNo = '';
-    this.PayerNameInput = false
+    this.PayerNameInput = false;
+    this.Entity.p.TotalPlotAmount = 0;
+    this.Entity.p.RemainingPlotAmount = 0;
+    this.RemainingPlotAmount = 0;
+    this.Entity.p.PlotGrandTotal = 0;
   }
 
   getPayerListBySiteAndPayerType = async () => {
@@ -436,7 +442,7 @@ export class IncomeDetailsMobileAppComponent implements OnInit {
 
   public async selectBankBottomsheet(): Promise<void> {
     try {
-      const options = this.BankList;
+      const options = this.BankList.map((item) => ({ Ref: item.p.BankAccountRef, Name: item.p.BankName }));
       this.openSelectModal(options, this.selectedBank, false, 'Select Bank', 1, (selected) => {
         this.selectedBank = selected;
         this.Entity.p.BankAccountRef = selected[0].p.Ref;
@@ -548,28 +554,37 @@ export class IncomeDetailsMobileAppComponent implements OnInit {
         this.selectedSite = selected;
         this.Entity.p.SiteRef = selected[0].p.Ref;
         this.SiteName = selected[0].p.Name;
-        this.getPayerListBySiteAndPayerType();
-        this.Entity.p.PayerRef = 0;
-        this.selectedPayer = [];
-        this.PayerName = '';
-        this.Entity.p.LedgerRef = 0;
-        this.selectedLedger = [];
-        this.LedgerName = '';
-        this.Entity.p.SubLedgerRef = 0;
-        this.selectedSubLedger = [];
-        this.SubLedgerName = '';
-        this.Entity.p.PayerType = 0;
-        this.selectedPayerType = [];
-        this.PayerTypeName = '';
-        this.Entity.p.PlotName = '';
-        this.PayerPlotNo = '';
-        this.PayerList = []
+        this.onSiteChange()
         this.getPayerListBySiteAndPayerType()
       });
     } catch (error) {
       await this.toastService.present('Error ' + error, 1000, 'danger');
       await this.haptic.error();
     }
+  }
+  onSiteChange = () => {
+    this.Entity.p.TotalPlotAmount = 0;
+    this.Entity.p.RemainingPlotAmount = 0;
+    this.RemainingPlotAmount = 0;
+    this.Entity.p.PlotGrandTotal = 0;
+    this.PayerPlotNo = '';
+    this.Entity.p.PlotName = '';
+    
+    this.Entity.p.PayerRef = 0;
+    this.selectedPayer = [];
+    this.PayerName = '';
+    this.Entity.p.LedgerRef = 0;
+    this.selectedLedger = [];
+    this.LedgerName = '';
+    this.Entity.p.SubLedgerRef = 0;
+    this.selectedSubLedger = [];
+    this.SubLedgerName = '';
+    this.Entity.p.PayerType = 0;
+    this.selectedPayerType = [];
+    this.PayerTypeName = '';
+    this.Entity.p.PlotName = '';
+    this.PayerPlotNo = '';
+    this.PayerList = []
   }
 
   private async openSelectModal(

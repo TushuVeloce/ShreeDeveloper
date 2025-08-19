@@ -41,10 +41,10 @@
         [(ngModel)]="Entity.p.RecipientName" clearInput="true"></ion-input>
     </ion-item>
     <!-- Vendor Trade Name -->
-    <ion-item class="input-item" *ngIf="Entity.p.ExpenseType == StockExpenseRef">
+    <!-- <ion-item class="input-item" *ngIf="Entity.p.ExpenseType == StockExpenseRef">
       <ion-input label="Vendor Trade Name" labelPlacement="floating" placeholder="Enter Vendor Trade Name"
         [(ngModel)]="Entity.p.VendorTradeName" clearInput="true"></ion-input>
-    </ion-item>
+    </ion-item> -->
 
     <!-- Select Ledger -->
     <ion-item class="input-item" button detail (click)="selectLedgerBottomsheet()" [disabled]="LedgerList.length === 0">
