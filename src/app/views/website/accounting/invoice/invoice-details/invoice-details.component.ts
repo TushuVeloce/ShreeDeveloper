@@ -117,7 +117,7 @@ export class InvoiceDetailsComponent implements OnInit {
       this.IsNewEntity = false;
       this.DetailsFormTitle = this.IsNewEntity ? 'New Bill' : 'Edit Bill';
       this.Entity = Invoice.GetCurrentInstance();
-      console.log(' this.Entity :',  this.Entity);
+      console.log('this.Entity :', this.Entity);
       this.appStateManage.StorageKey.removeItem('Editable');
       this.Entity.p.UpdatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
       if (this.Entity.p.LedgerRef) {
@@ -129,7 +129,7 @@ export class InvoiceDetailsComponent implements OnInit {
       if (this.Entity.p.IsDieselPaid == 1) {
         this.isDieselPaid = true
       }
-      this.getVendorServiceListByVendorRef(this.Entity.p.RecipientRef);
+      // this.getVendorServiceListByVendorRef(this.Entity.p.RecipientRef);
       this.getTotalWorkedHours();
       // this.RecipientNameReadOnly = true
     } else {
@@ -245,15 +245,6 @@ export class InvoiceDetailsComponent implements OnInit {
     let lst = await Site.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.SiteList = lst;
   }
-
-  // getRecipientListByCompanyRef = async () => {
-  //   if (this.companyRef() <= 0) {
-  //     await this.uiUtils.showErrorToster('Company not Selected');
-  //     return;
-  //   }
-  //   let lst = await Recipient.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-  //   this.RecipientList = lst;
-  // }
 
   getRecipientListByRecipientTypeRef = async () => {
     if (this.companyRef() <= 0) {

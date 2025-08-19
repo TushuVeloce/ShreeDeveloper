@@ -46,11 +46,6 @@
           <input type="text" [(ngModel)]="Entity.p.RecipientName" name="RecipientName" class="form-control" id="RecipientName"
             placeholder="Enter Vendor Name" disabled />
         </div>
-        <div *ngIf="Entity.p.ExpenseType == StockExpenseRef" class="col-md-4" style="margin-top: 1rem">
-          <label>Vendor Trade Name</label>
-          <input type="text" [(ngModel)]="Entity.p.VendorTradeName" name="VendorTradeName" class="form-control"
-            id="VendorTradeName" placeholder="Enter Vendor Trade Name" disabled />
-        </div>
         <div class="col-md-4" style="margin-top: 1rem">
           <label>Ledger</label>
           <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
@@ -135,7 +130,7 @@
           </div>
         </div>
       </div>
-      <div style="width: 100%" class="d-flex justify-content-center">
+      <div *ngIf="" style="width: 100%" class="d-flex justify-content-center">
         <hr style="border: 2px solid brown" width="20%" />
       </div>
       <div class="row">
