@@ -45,8 +45,6 @@ export class ExpenseComponent implements OnInit {
   RecipientList: Invoice[] = [];
   RecipientTypesList = DomainEnums.RecipientTypesList();
 
-  PayerList: Income[] = [];
-  PayerTypesList = DomainEnums.PayerTypesList();
   DealDoneCustomer = PayerTypes.DealDoneCustomer;
   PayerPlotNo: string = '';
 
@@ -76,26 +74,6 @@ export class ExpenseComponent implements OnInit {
     this.pageSize = pageSize - 6
   }
 
-  onPayerChange = () => {
-    let SingleRecord;
-    try {
-      if (this.Entity.p.PayerType == this.DealDoneCustomer) {
-        SingleRecord = this.PayerList.find((data) => data.p.PlotName == this.PayerPlotNo);
-      } else {
-        SingleRecord = this.PayerList.find((data) => data.p.Ref == this.Entity.p.PayerRef);
-      }
-      if (SingleRecord?.p) {
-        this.Entity.p.IsRegisterCustomerRef = SingleRecord.p.IsRegisterCustomerRef;
-        this.Entity.p.PayerRef = SingleRecord.p.Ref;
-        if (this.Entity.p.PayerType == this.DealDoneCustomer) {
-          this.Entity.p.PlotName = SingleRecord.p.PlotName;
-        }
-      }
-      this.FetchEntireListByFilters();
-    } catch (error) {
-    }
-  }
-
   getRecipientListByRecipientTypeRef = async () => {
     if (this.companyRef() <= 0) {
       await this.uiUtils.showErrorToster('Company not Selected');
@@ -109,18 +87,6 @@ export class ExpenseComponent implements OnInit {
     this.RecipientList = [];
     let lst = await Invoice.FetchRecipientByRecipientTypeRef(this.companyRef(), this.Entity.p.SiteRef, this.Entity.p.RecipientType, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.RecipientList = lst;
-  }
-
-  getPayerListBySiteAndPayerType = async () => {
-    if (this.companyRef() <= 0) {
-      await this.uiUtils.showErrorToster('Company not Selected');
-      return;
-    }
-    if (this.Entity.p.PayerType <= 0) {
-      return;
-    }
-    let lst = await Income.FetchPayerNameByPayerTypeRef(this.Entity.p.SiteRef, this.companyRef(), this.Entity.p.PayerType, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-    this.PayerList = lst;
   }
 
   getSiteListByCompanyRef = async () => {
@@ -180,7 +146,6 @@ export class ExpenseComponent implements OnInit {
       this.Entity.p.ExpenseModeOfPayment,
       this.Entity.p.Ref,
       this.Entity.p.RecipientRef,
-      this.Entity.p.PayerRef,
       async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
 
     this.MasterList = lst;

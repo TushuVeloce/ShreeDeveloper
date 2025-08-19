@@ -17,7 +17,6 @@ export class ExpenseFetchRequest {
   ModeOfPayments: number[] = [];
   Refs: number[] = [];
   RecipientRefs: number[] = [];
-  PayerRef: number = 0;
   RecipientRef: number = 0;
 
   public MergeIntoTransportData = (td: TransportData) => {
