@@ -171,10 +171,16 @@ export class ExpensesDetailsMobileAppComponent implements OnInit {
 
           if (this.Entity.p.IsAdvancePayment && this.Entity.p.IsSalaryExpense) {
             this.PaymentType = this.TypeofEmployeePayments.Advance;
+            this.PaymentTypeName = this.TypeofEmployeePaymentList.find(item => item.Ref == this.PaymentType)?.Name ?? '';
+            this.selectedPaymentType = [{ p: { Ref: this.Entity.p.ModeOfPaymentForIncome, Name: this.PaymentTypeName } }];
           } else if (!this.Entity.p.IsAdvancePayment && this.Entity.p.IsSalaryExpense) {
             this.PaymentType = this.TypeofEmployeePayments.Salary;
+            this.PaymentTypeName = this.TypeofEmployeePaymentList.find(item => item.Ref == this.PaymentType)?.Name ?? '';
+            this.selectedPaymentType = [{ p: { Ref: this.Entity.p.ModeOfPaymentForIncome, Name: this.PaymentTypeName } }];
           } else {
             this.PaymentType = this.TypeofEmployeePayments.Other;
+            this.PaymentTypeName = this.TypeofEmployeePaymentList.find(item => item.Ref == this.PaymentType)?.Name ?? '';
+            this.selectedPaymentType = [{ p: { Ref: this.Entity.p.ModeOfPaymentForIncome, Name: this.PaymentTypeName } }];
           }
 
           if (this.Entity.p.IncomeLedgerRef != 0) {
@@ -202,6 +208,12 @@ export class ExpensesDetailsMobileAppComponent implements OnInit {
 
           this.BankName = this.BankList.find(item => item.p.Ref == this.Entity.p.BankAccountRef)?.p.BankName ?? '';
           this.selectedBank = [{ p: { Ref: this.Entity.p.BankAccountRef, Name: this.BankName } }];
+
+          this.BankNameForIncome = this.IncomeBankList.find(item => item.p.Ref == this.Entity.p.IncomeBankRef)?.p.Name ?? '';
+          this.selectedBankForIncome = [{ p: { Ref: this.Entity.p.IncomeBankRef, Name: this.BankNameForIncome } }];
+
+          this.BankNameForNewBank = this.BankList.find(item => item.p.Ref == this.Entity.p.BankAccountRef)?.p.BankName ?? '';
+          this.selectedBankForNewBank = [{ p: { Ref: this.Entity.p.BankAccountRef, Name: this.BankNameForNewBank } }];
 
         } else {
           this.Entity = Expense.CreateNewInstance();
@@ -270,7 +282,7 @@ export class ExpensesDetailsMobileAppComponent implements OnInit {
       await this.toastService.present(errMsg, 1000, 'danger');
       await this.haptic.error();
     });
-    this.BankList = lst.filter((item) => item.p.BankAccountRef > 0 && item.p.OpeningBalanceAmount > 0);
+    this.BankList = lst.filter((item) => item.p.BankAccountRef > 0 && (item.p.OpeningBalanceAmount > 0 || item.p.InitialBalance > 0));
     this.getBankListByCompanyRef()
   };
 
@@ -292,9 +304,13 @@ export class ExpensesDetailsMobileAppComponent implements OnInit {
 
   OnModeChange = () => {
     this.Entity.p.BankAccountRef = 0
+    this.selectedBank=[];
+    this.BankName = '';
   }
   OnToModeChange = () => {
     this.Entity.p.IncomeBankRef = 0;
+    this.selectedBankForIncome = [];
+    this.BankNameForIncome = '';
     this.Entity.p.IsNewBankCreated = false;
   }
 
@@ -414,6 +430,8 @@ export class ExpensesDetailsMobileAppComponent implements OnInit {
 
   onChangeIncomeLedger = () => {
     this.Entity.p.IncomeSubLedgerRef = 0;
+    this.selectedIncomeSubLedger = [];
+    this.IncomeSubLedgerName = '';
   }
 
   onPaymentTypeSelection = () => {
@@ -431,6 +449,8 @@ export class ExpensesDetailsMobileAppComponent implements OnInit {
 
   getTotalInvoiceAmountFromSiteAndRecipientRef = async () => {
     if (this.companyRef <= 0) {
+      await this.toastService.present('company not selected', 1000, 'warning');
+      await this.haptic.warning();
       return;
     }
     if (this.Entity.p.SiteRef <= 0) {
@@ -496,15 +516,25 @@ export class ExpensesDetailsMobileAppComponent implements OnInit {
 
   onRecipientChange = () => {
     this.PaymentType = 0;
+    this.selectedPaymentType = [];
+    this.PaymentTypeName = '';
     this.Entity.p.TotalAdvance = 0;
     this.Entity.p.RemainingAdvance = 0;
     this.Entity.p.InvoiceAmount = 0;
     this.Entity.p.RemainingAmount = 0;
     this.Entity.p.IncomeLedgerRef = 0;
+    this.selectedIncomeLedger = [];
+    this.IncomeLedgerName = '';
     this.Entity.p.IncomeSubLedgerRef = 0;
+    this.selectedIncomeSubLedger = [];
+    this.IncomeSubLedgerName = '';
     this.Entity.p.GivenAmount = 0;
     this.Entity.p.IncomeBankRef = 0;
+    this.BankNameForIncome = '';
+    this.selectedBankForIncome = [];
     this.Entity.p.ModeOfPaymentForIncome = 0;
+    this.selectedModeOfPaymentForIncome = [];
+    this.ModeOfPaymentNameForIncome = '';
     this.Entity.p.IsNewBankCreated = false;
     this.Entity.p.Narration = '';
     this.Entity.p.IsAutoInvoiceEnabled = 0;
@@ -526,6 +556,7 @@ export class ExpensesDetailsMobileAppComponent implements OnInit {
           this.Entity.p.PlotName = SingleRecord.p.PlotName;
         }
       }
+      this.getTotalInvoiceAmountFromSiteAndRecipientRef();
     } catch (error) {
     }
   }
@@ -583,15 +614,22 @@ export class ExpensesDetailsMobileAppComponent implements OnInit {
 
   CalculateRemainingAmountandBalance = () => {
     if (this.Entity.p.GivenAmount <= this.Entity.p.InvoiceAmount) {
-      this.Entity.p.RemainingAmount = this.Entity.p.InvoiceAmount - this.Entity.p.GivenAmount;
+      this.Entity.p.RemainingAmount = Number((this.Entity.p.InvoiceAmount - this.Entity.p.GivenAmount).toFixed(2));
     } else {
       this.Entity.p.RemainingAmount = 0;
     }
 
+    if (this.PaymentType == this.TypeofEmployeePayments.Advance) {
+      this.Entity.p.InvoiceAmount = this.Entity.p.GivenAmount;
+    }
+
     if (this.Entity.p.GivenAmount <= this.Entity.p.ShreesBalance) {
-      this.Entity.p.ShreesBalance = (Number(((this.ShreeBalance - this.Entity.p.GivenAmount)).toFixed(2)));
+      this.Entity.p.ShreesBalance = Number((this.ShreeBalance - this.Entity.p.GivenAmount).toFixed(2));
     } else {
-      this.Entity.p.ShreesBalance = - (Number((this.Entity.p.GivenAmount - this.ShreeBalance).toFixed(2)));
+      this.Entity.p.ShreesBalance = -Number((this.Entity.p.GivenAmount - this.ShreeBalance).toFixed(2));
+    }
+    if (this.Entity.p.IsAdvancePayment) {
+      this.Entity.p.TotalAdvance = this.Entity.p.RemainingAdvance + this.Entity.p.GivenAmount
     }
   }
 
@@ -645,10 +683,30 @@ export class ExpensesDetailsMobileAppComponent implements OnInit {
       await this.loadingService.show();
       this.Entity.p.CompanyRef = this.companyRef;
       this.Entity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName();
+    
+      if (this.Entity.p.RecipientType == this.Sites) {
+        if (this.Entity.p.SiteRef == this.Entity.p.RecipientRef) {
+          if (this.Entity.p.ExpenseModeOfPayment == this.Cash && this.Entity.p.ModeOfPaymentForIncome == this.Cash) {
+            // await this.uiUtils.showWarningToster("Cash trasanction in Same Sites not allowed");
+            await this.toastService.present("Cash trasanction in Same Sites not allowed", 1000, 'warning');
+            await this.haptic.warning();
+            return;
+          } else if (this.Entity.p.ExpenseModeOfPayment == this.Entity.p.ModeOfPaymentForIncome) {
+            if (this.Entity.p.BankAccountRef == this.Entity.p.IncomeBankRef) {
+              // await this.uiUtils.showWarningToster("Same Sites & Same Banks not allowed");
+              await this.toastService.present("Same Sites & Same Banks not allowed", 1000, 'warning');
+              await this.haptic.warning();
+              return;
+            }
+          }
+        }
+      }
+      
       if (this.Entity.p.CreatedBy == 0) {
         this.Entity.p.CreatedBy = Number(this.appStateManage.localStorage.getItem('LoginEmployeeRef'))
-        this.Entity.p.UpdatedBy = Number(this.appStateManage.localStorage.getItem('LoginEmployeeRef'))
       }
+      this.Entity.p.UpdatedBy = Number(this.appStateManage.localStorage.getItem('LoginEmployeeRef'))
+      
       this.Entity.p.Date = this.dtu.ConvertStringDateToFullFormat(this.ExpenseDate ?? '');
       let entityToSave = this.Entity.GetEditableVersion();
       let entitiesToSave = [entityToSave];
@@ -675,12 +733,22 @@ export class ExpensesDetailsMobileAppComponent implements OnInit {
 
     } finally {
       this.Entity = Expense.CreateNewInstance();
+      this.PaymentType = 0
+      this.selectedPaymentType=[];
       await this.getCurrentBalanceByCompanyRef()
       await this.loadingService.hide();
     }
   };
 
-
+  IsAdvancePayment = async () => {
+    if (this.Entity.p.IsAdvancePayment == 1) {
+      this.Entity.p.InvoiceAmount = 0
+    } else {
+      await this.getTotalInvoiceAmountFromSiteAndRecipientRef()
+    }
+    this.Entity.p.GivenAmount = 0
+    this.Entity.p.TotalAdvance = 0
+  }
 
   selectAllValue(event: MouseEvent): void {
     const input = event.target as HTMLInputElement;

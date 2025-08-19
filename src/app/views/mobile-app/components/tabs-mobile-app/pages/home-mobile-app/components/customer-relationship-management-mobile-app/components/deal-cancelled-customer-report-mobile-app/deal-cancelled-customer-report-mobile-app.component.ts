@@ -18,20 +18,21 @@ export class DealCancelledCustomerReportMobileAppComponent implements OnInit {
   Entity: DealCancelledCustomer = DealCancelledCustomer.CreateNewInstance();
   MasterList: DealCancelledCustomer[] = [];
   DisplayMasterList: DealCancelledCustomer[] = [];
-  list: [] = []
+  list: any[] = [];
   SiteList: Site[] = [];
-  SearchString: string = '';
-  SelectedDealCancelledCustomer: DealCancelledCustomer = DealCancelledCustomer.CreateNewInstance();
-  CustomerRef: number = 0;
-  companyRef: number = 0;
-  ModalOpen: boolean = false;
 
-  headers: string[] = ['Sr.No.', 'Site Name', 'Plot No', 'Customer Name', 'Address', 'City', 'Contact No', 'Reason '];
+  SearchString = '';
+  SelectedDealCancelledCustomer: DealCancelledCustomer = DealCancelledCustomer.CreateNewInstance();
+  CustomerRef = 0;
+  companyRef = 0;
+  ModalOpen = false;
+
+  headers = ['Sr.No.', 'Site Name', 'Plot No', 'Customer Name', 'Address', 'City', 'Contact No', 'Reason'];
 
   filters: FilterItem[] = [];
-  // Store current selected values here to preserve selections on filter reload
   selectedFilterValues: Record<string, any> = {};
 
+  @ViewChild('PrintContainer') PrintContainer?: ElementRef<HTMLElement>;
 
   constructor(
     private appStateManagement: AppStateManageService,
@@ -41,35 +42,37 @@ export class DealCancelledCustomerReportMobileAppComponent implements OnInit {
     private pdfService: PDFService
   ) { }
 
-  ngOnInit = (): void => {
-    // this.loadDealCancelledCustomerReportIfCompanyExists();
+  ngOnInit(): void {
+    // if needed for web support, otherwise rely on ionViewWillEnter
   }
 
-  ionViewWillEnter = async () => {
+  ionViewWillEnter = async (): Promise<void> => {
     await this.loadDealCancelledCustomerReportIfCompanyExists();
     this.loadFilters();
   };
 
-  async handleRefresh(event: CustomEvent): Promise<void> {
+  handleRefresh = async (event: CustomEvent): Promise<void> => {
     await this.loadDealCancelledCustomerReportIfCompanyExists();
     this.loadFilters();
     (event.target as HTMLIonRefresherElement).complete();
-  }
+  };
 
-  @ViewChild('PrintContainer')
-  PrintContainer!: ElementRef;
-
-  handlePrintOrShare = async () => {
-    if (this.DisplayMasterList.length == 0) {
+  handlePrintOrShare = async (): Promise<void> => {
+    if (this.DisplayMasterList.length === 0) {
       await this.toastService.present('No Customer Info Records Found', 1000, 'warning');
       await this.haptic.warning();
       return;
     }
-    if (!this.PrintContainer) return;
-    await this.pdfService.generatePdfAndHandleAction(this.PrintContainer.nativeElement, `Receipt_${this.Entity.p.CustomerName}.pdf`);
-  }
+    if (!this.PrintContainer?.nativeElement) return;
 
-  loadFilters = () => {
+    const fileName = this.Entity.p.CustomerName
+      ? `Receipt_${this.Entity.p.CustomerName}.pdf`
+      : `DealCancelledCustomers.pdf`;
+
+    await this.pdfService.generatePdfAndHandleAction(this.PrintContainer.nativeElement, fileName);
+  };
+
+  loadFilters = (): void => {
     this.filters = [
       {
         key: 'site',
@@ -79,18 +82,15 @@ export class DealCancelledCustomerReportMobileAppComponent implements OnInit {
           Ref: item.p.Ref,
           Name: item.p.Name,
         })),
-        selected: this.selectedFilterValues['site'] > 0 ? this.selectedFilterValues['site'] : null,
-      }
+        selected: this.selectedFilterValues['site'] ?? null,
+      },
     ];
-  }
+  };
 
-  onFiltersChanged = async (updatedFilters: any[]) => {
+  onFiltersChanged = async (updatedFilters: FilterItem[]): Promise<void> => {
     for (const filter of updatedFilters) {
-      const selected = filter.selected;
-      const selectedValue = (selected === null || selected === undefined) ? null : selected;
-
-      // Save selected value to preserve after reload
-      this.selectedFilterValues[filter.key] = selectedValue ?? null;
+      const selectedValue = filter.selected ?? null;
+      this.selectedFilterValues[filter.key] = selectedValue;
 
       switch (filter.key) {
         case 'site':
@@ -98,82 +98,70 @@ export class DealCancelledCustomerReportMobileAppComponent implements OnInit {
           break;
       }
     }
-    if (this.Entity.p.SiteRef > 0) {
-      await this.getDealCancelledCustomerListBySiteRef();
-    } else {
-      await this.getDealCancelledCustomerListByCompanyRef();
+
+    this.getDealCancelledCustomerListBySiteRef()
+    this.loadFilters();
+  };
+
+  private validateCompanySelected = async (): Promise<boolean> => {
+    if (this.companyRef <= 0) {
+      await this.toastService.present('Company not selected', 1000, 'danger');
+      await this.haptic.error();
+      return false;
     }
-    this.loadFilters(); // Reload filters with updated options & preserve selections
-  }
+    return true;
+  };
+
   private loadDealCancelledCustomerReportIfCompanyExists = async (): Promise<void> => {
-
     this.companyRef = Number(this.appStateManagement.localStorage.getItem('SelectedCompanyRef'));
-    if (this.companyRef <= 0) {
-      await this.toastService.present('company not selected', 1000, 'danger');
-      await this.haptic.error();
-      return;
-    }
-    await this.getSiteListByCompanyRef()
-    await this.getDealCancelledCustomerListByCompanyRef();
-  }
+    if (!(await this.validateCompanySelected())) return;
 
-  getSiteListByCompanyRef = async () => {
-    if (this.companyRef <= 0) {
-      await this.toastService.present('company not selected', 1000, 'danger');
+    await this.getSiteListByCompanyRef();
+    await this.getDealCancelledCustomerListBySiteRef();
+  };
+
+  getSiteListByCompanyRef = async (): Promise<void> => {
+    if (!(await this.validateCompanySelected())) return;
+
+    this.Entity.p.SiteRef = 0;
+    this.SiteList = await Site.FetchEntireListByCompanyRef(this.companyRef, async errMsg => {
+      await this.toastService.present(errMsg, 1000, 'danger');
       await this.haptic.error();
-      return;
-    }
-    this.Entity.p.SiteRef = 0
-    let lst = await Site.FetchEntireListByCompanyRef(this.companyRef, async errMsg => {
-        await this.toastService.present(errMsg, 1000, 'danger');
-        await this.haptic.error();
     });
-    this.SiteList = lst;
-  }
+  };
 
-  // Extracted from services date conversion //
-  // formatDate = (date: string | Date): string => {
-  //   return this.DateconversionService.formatDate(date);
-  // }
-
-  getDealCancelledCustomerListByCompanyRef = async () => {
+  getDealCancelledCustomerListByCompanyRef = async (): Promise<void> => {
     this.MasterList = [];
     this.DisplayMasterList = [];
-    if (this.companyRef <= 0) {
-      await this.toastService.present('company not selected', 1000, 'danger');
+
+    if (!(await this.validateCompanySelected())) return;
+
+    this.MasterList = await DealCancelledCustomer.FetchEntireListByCompanyRef(this.companyRef, async errMsg => {
+      await this.toastService.present(errMsg, 1000, 'danger');
       await this.haptic.error();
-      return;
-    }
-    let lst = await DealCancelledCustomer.FetchEntireListByCompanyRef(this.companyRef,
-      async (errMsg) => {
-        await this.toastService.present(errMsg, 1000, 'danger');
-        await this.haptic.error();
-      }
-    );
-    this.MasterList = lst;
-    this.DisplayMasterList = this.MasterList;
+    });
+
+    this.DisplayMasterList = [...this.MasterList];
   };
 
-  getDealCancelledCustomerListBySiteRef = async () => {
+  getDealCancelledCustomerListBySiteRef = async (): Promise<void> => {
     this.MasterList = [];
     this.DisplayMasterList = [];
 
-    let lst = await DealCancelledCustomer.FetchEntireListBySiteRef(this.Entity.p.SiteRef, this.companyRef,
-      async (errMsg) => {
-        await this.toastService.present(errMsg, 1000, 'danger');
-        await this.haptic.error();
-      }
-    );
-    this.MasterList = lst;
-    this.DisplayMasterList = this.MasterList;
+    this.MasterList = await DealCancelledCustomer.FetchEntireListBySiteRef(this.Entity.p.SiteRef, this.companyRef, async errMsg => {
+      await this.toastService.present(errMsg, 1000, 'danger');
+      await this.haptic.error();
+    });
+
+    this.DisplayMasterList = [...this.MasterList];
   };
 
-  onViewClicked = async (item: DealCancelledCustomer) => {
+  onViewClicked = (item: DealCancelledCustomer): void => {
     this.SelectedDealCancelledCustomer = item;
     this.ModalOpen = true;
-  }
+  };
 
-  closeModal = () => {
+  closeModal = (): void => {
     this.ModalOpen = false;
-  }
+  };
 }

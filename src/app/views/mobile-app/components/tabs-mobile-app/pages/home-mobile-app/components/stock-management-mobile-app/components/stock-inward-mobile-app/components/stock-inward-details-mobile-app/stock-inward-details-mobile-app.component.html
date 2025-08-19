@@ -135,6 +135,9 @@
                     {{ (item.Rate| currency : "INR") || '-' }}
                   </td>
                   <td>
+                    {{ (item.DiscountedRate| currency : "INR") || '-' }}
+                  </td>
+                  <td>
                     {{ item.Gst || '-' }}
                   </td>
                   <td>
@@ -151,7 +154,7 @@
                   </td>
                   <td>
                     <!-- <ion-icon name="create-outline" color="warning" size="small"
-                    style="margin-right: 12px; cursor: pointer" (click)="editOrderMaterial(i)"></ion-icon> -->
+                    style="margin-right: 12px; cursor: pointer" (click)="editMaterial(i)"></ion-icon> -->
                     <ion-icon name="trash-outline" color="danger" size="small" style="cursor: pointer"
                       (click)="removeMaterial(i)"></ion-icon>
                   </td>
@@ -376,7 +379,7 @@
               <!-- GST Dropdown -->
               <ion-item class="input-item" button detail (click)="selectGSTBottomsheet()">
                 <ion-label>GST</ion-label>
-              
+
                 <!-- Text showing the selected status -->
                 <ion-text slot="end" class="status-text">
                   {{ GstName|| 'Select' }}
@@ -386,15 +389,15 @@
               <!--Delivery Charges -->
               <ion-item class="input-item">
                 <ion-input label="Delivery Charges" name="DeliveryCharges" labelPlacement="floating" type="number"
-                  placeholder="Enter Delivery Charges" [(ngModel)]="newInward.DeliveryCharges" clearInput="true" clearOnEdit="true"
-                  (ngModelChange)="CalculateNetAmountAndTotalAmount()">
+                  placeholder="Enter Delivery Charges" [(ngModel)]="newInward.DeliveryCharges" clearInput="true"
+                  clearOnEdit="true" (ngModelChange)="CalculateNetAmountAndTotalAmount()">
                 </ion-input>
               </ion-item>
               <!--Total Amount -->
               <ion-item class="input-item">
                 <ion-input label="Total Amount" name="TotalAmount" labelPlacement="floating" type="number"
-                  placeholder="Enter Total Amount" [(ngModel)]="newInward.TotalAmount" clearInput="true" clearOnEdit="true"
-                  [disabled]="'true'">
+                  placeholder="Enter Total Amount" [(ngModel)]="newInward.TotalAmount" clearInput="true"
+                  clearOnEdit="true" [disabled]="'true'">
                 </ion-input>
               </ion-item>
             </ion-list>

@@ -363,7 +363,7 @@ export class MaterialRequisitionDetailsMobileAppComponent implements OnInit {
       } else {
         this.isSaveDisabled = false;
         if (this.IsNewEntity) {
-          await this.toastService.present('MaterialRequisition saved successfully', 1000, 'success')
+          await this.toastService.present('Material Requisition saved successfully', 1000, 'success')
           this.Entity = MaterialRequisition.CreateNewInstance();
           await this.haptic.success();
         } else {

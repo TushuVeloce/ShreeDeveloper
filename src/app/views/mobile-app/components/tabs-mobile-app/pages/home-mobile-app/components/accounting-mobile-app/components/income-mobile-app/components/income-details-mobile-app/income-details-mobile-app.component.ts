@@ -6,6 +6,7 @@ import { Expense } from 'src/app/classes/domain/entities/website/accounting/expe
 import { Income } from 'src/app/classes/domain/entities/website/accounting/income/income';
 import { BankAccount } from 'src/app/classes/domain/entities/website/masters/bankaccount/banckaccount';
 import { Ledger } from 'src/app/classes/domain/entities/website/masters/ledgermaster/ledger';
+import { OpeningBalance } from 'src/app/classes/domain/entities/website/masters/openingbalance/openingbalance';
 import { Payer } from 'src/app/classes/domain/entities/website/masters/payer/payer';
 import { Site } from 'src/app/classes/domain/entities/website/masters/site/site';
 import { SubLedger } from 'src/app/classes/domain/entities/website/masters/subledgermaster/subledger';
@@ -46,7 +47,7 @@ export class IncomeDetailsMobileAppComponent implements OnInit {
   InitialEntity: Income = null as any;
   LedgerList: Ledger[] = [];
   companyRef: number = 0;
-  BankList: BankAccount[] = [];
+  BankList: OpeningBalance[] = [];
   Cash = ModeOfPayments.Cash
   Bill = ModeOfPayments.Bill
   ModeofPaymentList = DomainEnums.ModeOfPaymentsList().filter(item => item.Ref !== this.Bill);
@@ -82,6 +83,7 @@ export class IncomeDetailsMobileAppComponent implements OnInit {
   BankName: string = '';
   selectedBank: any[] = [];
   PayerPlotNo: string = '';
+  RemainingPlotAmount: number = 0;
 
   constructor(
     private router: Router,
@@ -150,7 +152,7 @@ export class IncomeDetailsMobileAppComponent implements OnInit {
           this.ModeOfPaymentName = this.ModeofPaymentList.find(item => item.Ref == this.Entity.p.IncomeModeOfPayment)?.Name ?? '';
           this.selectedModeOfPayment = [{ p: { Ref: this.Entity.p.IncomeModeOfPayment, Name: this.ModeOfPaymentName } }];
 
-          this.BankName = this.BankList.find(item => item.p.Ref == this.Entity.p.BankAccountRef)?.p.Name ?? '';
+          this.BankName = this.BankList.find(item => item.p.Ref == this.Entity.p.BankAccountRef)?.p.BankName ?? '';
           this.selectedBank = [{ p: { Ref: this.Entity.p.BankAccountRef, Name: this.BankName } }];
 
         } else {
@@ -206,19 +208,23 @@ export class IncomeDetailsMobileAppComponent implements OnInit {
       await this.haptic.warning();
       return;
     }
-    let lst = await BankAccount.FetchEntireListByCompanyRef(this.companyRef, async (errMsg) => {
+    let lst = await OpeningBalance.FetchEntireListByCompanyRef(this.companyRef, async (errMsg) => {
       await this.toastService.present('Error ' + errMsg, 1000, 'danger');
       await this.haptic.error();
     });
-    this.BankList = lst
+    this.BankList = lst.filter((item) => item.p.BankAccountRef > 0 && item.p.OpeningBalanceAmount > 0)
+
   };
 
   OnModeChange = () => {
     this.Entity.p.BankAccountRef = 0
+    this.selectedBank=[];
+    this.BankName='';
   }
 
   CalculateShreeBalance = () => {
     this.Entity.p.ShreesBalance = this.ShreeBalance + this.Entity.p.IncomeAmount;
+    this.RemainingPlotAmount = this.Entity.p.RemainingPlotAmount - this.Entity.p.IncomeAmount;
   }
 
   getCurrentBalanceByCompanyRef = async () => {
@@ -235,17 +241,41 @@ export class IncomeDetailsMobileAppComponent implements OnInit {
     this.ShreeBalance = lst[0].p.ShreesBalance;
   }
 
-  onPayerChange = () => {
+  onPayerChange = async () => {
+    let SingleRecord;
     try {
-      let SingleRecord = this.PayerList.find((data) => data.p.Ref == this.Entity.p.PayerRef);
+      if (this.Entity.p.PayerType == this.DealDoneCustomer) {
+        SingleRecord = this.PayerList.find((data) => data.p.PlotName == this.PayerPlotNo);
+      } else {
+        SingleRecord = this.PayerList.find((data) => data.p.Ref == this.Entity.p.PayerRef);
+      }
+
       if (SingleRecord?.p) {
         this.Entity.p.IsRegisterCustomerRef = SingleRecord.p.IsRegisterCustomerRef;
+        this.Entity.p.PayerRef = SingleRecord.p.Ref;
         if (this.Entity.p.PayerType == this.DealDoneCustomer) {
+          this.Entity.p.PlotRef = SingleRecord.p.PlotRef;
           this.Entity.p.PlotName = SingleRecord.p.PlotName;
+          let lst = await Income.FetchToalAmountByCompanyAndPlotRef(this.companyRef, this.Entity.p.PlotRef, async errMsg => {
+            await this.toastService.present('Error ' + errMsg, 1000, 'danger');
+            await this.haptic.error();
+          });
+          if (lst.length > 0) {
+            this.Entity.p.TotalPlotAmount = lst[0].p.TotalPlotAmount;
+            this.Entity.p.RemainingPlotAmount = lst[0].p.RemainingPlotAmount;
+            this.RemainingPlotAmount = lst[0].p.RemainingPlotAmount;
+            this.Entity.p.PlotGrandTotal = lst[0].p.PlotGrandTotal;
+          }
+        } else {
+          this.Entity.p.TotalPlotAmount = 0;
+          this.Entity.p.RemainingPlotAmount = 0;
+          this.RemainingPlotAmount = 0;
+          this.Entity.p.PlotGrandTotal = 0;
+          this.Entity.p.PlotRef = 0;
+          this.Entity.p.PlotName = '';
         }
       }
     } catch (error) {
-
     }
   }
 

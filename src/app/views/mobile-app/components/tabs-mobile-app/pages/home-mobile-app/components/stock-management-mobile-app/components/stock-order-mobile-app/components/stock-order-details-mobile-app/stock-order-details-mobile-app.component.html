@@ -7,7 +7,7 @@
       <ion-item class="input-item">
         <ion-label>Select Date</ion-label>
         <ion-datetime-button datetime="PurchaseOrderDate" trigger="PurchaseOrderDate-modal"></ion-datetime-button>
-        <ion-checkbox slot="end" name="PurchaseOrderDateCheckBox" [(ngModel)]="PurchaseOrderDate" name="TransDate"
+        <ion-checkbox slot="end" name="PurchaseOrderDateCheckBox" [(ngModel)]="PurchaseOrderDate" name="PurchaseOrderDate"
           [disabled]="true"></ion-checkbox>
       </ion-item>
       <ion-modal keepContentsMounted="true" trigger="PurchaseOrderDate-modal">
@@ -391,7 +391,6 @@
                   trigger="ExpectedDeliveryDate-modal"></ion-datetime-button>
                 <ion-checkbox slot="end" name="ExpectedDeliveryDateCheckBox" [(ngModel)]="ExpectedDeliveryDate"
                   name="TransDate" [disabled]="true"></ion-checkbox>
-
               </ion-item>
 
               <ion-modal keepContentsMounted="true" trigger="ExpectedDeliveryDate-modal">

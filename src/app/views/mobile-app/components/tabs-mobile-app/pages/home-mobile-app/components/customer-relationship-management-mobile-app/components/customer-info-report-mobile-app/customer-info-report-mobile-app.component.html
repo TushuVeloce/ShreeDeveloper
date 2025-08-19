@@ -46,7 +46,7 @@
               <td>{{ (item.p.GovernmentRecknor| currency : "INR") || '-' }}</td>
               <td>{{ (item.p.GovernmentValue | currency : "INR") || '-' }}</td>
               <td>{{ (item.p.ValueOfAgreement | currency : "INR") || '-' }}</td>
-              <td>{{ item.p.RegTaxValueInPercentage != null ? item.p.RegTaxValueInPercentage + '%' : '-' }}</td>
+              <td>{{  '1%'  }}</td>
               <td>{{ (item.p.RegistrationFees| currency : "INR") || '-' }}</td>
               <td>{{ item.p.TaxValueInPercentage != null ? item.p.TaxValueInPercentage + '%' : '-' }}</td>
               <td>{{ (item.p.StampDuties | currency : "INR") || '-' }}</td>
@@ -114,7 +114,7 @@
     { label: 'Government Rate per Sqm', value: SelectedCRMReports.p.GovernmentRecknor | currency : 'INR' },
     { label: 'Government Value', value: SelectedCRMReports.p.GovernmentValue | currency : 'INR' },
     { label: 'Value of Agreement', value: SelectedCRMReports.p.ValueOfAgreement | currency : 'INR' },
-    { label: 'Reg Tax Value (%)', value: SelectedCRMReports.p.RegTaxValueInPercentage != null ? SelectedCRMReports.p.RegTaxValueInPercentage + '%' : '-' },
+    { label: 'Reg Tax Value (%)', value: '1%'},
     { label: 'Registration Fees', value: SelectedCRMReports.p.RegistrationFees | currency : 'INR' },
     { label: 'Tax Value (%)', value: SelectedCRMReports.p.TaxValueInPercentage != null ? SelectedCRMReports.p.TaxValueInPercentage + '%' : '-' },
     { label: 'Stamp Duties', value: SelectedCRMReports.p.StampDuties | currency : 'INR' },

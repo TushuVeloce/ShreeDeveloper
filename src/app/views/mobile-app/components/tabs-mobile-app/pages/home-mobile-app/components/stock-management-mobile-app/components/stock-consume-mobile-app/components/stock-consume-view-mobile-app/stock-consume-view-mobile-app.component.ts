@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { Site } from 'src/app/classes/domain/entities/website/masters/site/site';
+import { Stage } from 'src/app/classes/domain/entities/website/masters/stage/stage';
 import { StockConsume } from 'src/app/classes/domain/entities/website/stock_management/stock_consume/stockconsume';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { BaseUrlService } from 'src/app/services/baseurl.service';
@@ -27,6 +28,7 @@ export class StockConsumeViewMobileAppComponent implements OnInit {
   MasterList: StockConsume[] = [];
   DisplayMasterList: StockConsume[] = [];
   SiteList: Site[] = [];
+  StageList: Stage[] = [];
   SelectedStockConsume: StockConsume = StockConsume.CreateNewInstance();
 
   companyRef = 0;
@@ -72,6 +74,16 @@ export class StockConsumeViewMobileAppComponent implements OnInit {
           Name: item.p.Name,
         })),
         selected: this.selectedFilterValues['site'] > 0 ? this.selectedFilterValues['site'] : null,
+      },
+      {
+        key: 'stage',
+        label: 'Stage',
+        multi: false,
+        options: this.StageList.map(item => ({
+          Ref: item.p.Ref,
+          Name: item.p.Name,
+        })),
+        selected: this.selectedFilterValues['stage'] > 0 ? this.selectedFilterValues['stage'] : null,
       }
     ];
   }
@@ -88,9 +100,12 @@ export class StockConsumeViewMobileAppComponent implements OnInit {
         case 'site':
           this.Entity.p.SiteRef = selectedValue ?? 0;
           break;
+        case 'stage':
+          this.Entity.p.StageRef = selectedValue ?? 0;
+          break;
       }
     }
-    await this.getInwardListByCompanyRefAndSiteRef();
+    await this.getStockConsumeListByCompanyRefAndStageRef();
     this.loadFilters();
   }
 
@@ -108,12 +123,29 @@ export class StockConsumeViewMobileAppComponent implements OnInit {
       }
 
       await this.getSiteListByCompanyRef();
-      await this.getStockConsumeListByCompanyRef();
+      await this.getStageListByCompanyRef();
+      await this.getStockConsumeListByCompanyRefAndStageRef();
     } catch (error) {
       await this.toastService.present('Failed to load Stock Inward', 1000, 'danger');
       await this.haptic.error();
     } finally {
       await this.loadingService.hide();
+    }
+  }
+
+  private getStageListByCompanyRef = async () => {
+    try {
+      if (this.companyRef <= 0) return;
+
+      const lst = await Stage.FetchEntireListByCompanyRef(this.companyRef, async (errMsg) => {
+        await this.toastService.present(errMsg, 1000, 'danger');
+        await this.haptic.error();
+      });
+
+      this.StageList = lst || [];
+    } catch (err) {
+      await this.toastService.present('Error fetching Stage list:' + err, 1000, 'danger');
+      await this.haptic.error();
     }
   }
 
@@ -135,12 +167,12 @@ export class StockConsumeViewMobileAppComponent implements OnInit {
     }
   }
 
-  private getStockConsumeListByCompanyRef = async () => {
+  private getStockConsumeListByCompanyRefAndStageRef = async () => {
     try {
       this.MasterList = [];
       this.DisplayMasterList = [];
 
-      const lst = await StockConsume.FetchEntireListByCompanyRef(this.companyRef, async (errMsg) => {
+      const lst = await StockConsume.FetchEntireListByCompanySiteAndVendorRef(this.companyRef, this.Entity.p.SiteRef, this.Entity.p.StageRef , async (errMsg) => {
         await this.toastService.present(errMsg, 1000, 'danger');
         await this.haptic.error();
       });
@@ -153,7 +185,7 @@ export class StockConsumeViewMobileAppComponent implements OnInit {
     }
   }
 
-  private getInwardListByCompanyRefAndSiteRef = async () => {
+  private getConsumeListByCompanyRefAndSiteRef = async () => {
     try {
       this.MasterList = [];
       this.DisplayMasterList = [];
@@ -223,11 +255,7 @@ export class StockConsumeViewMobileAppComponent implements OnInit {
                     'success'
                   );
                   await this.haptic.success();
-                  if (this.Entity.p.SiteRef <= 0) {
-                    this.getStockConsumeListByCompanyRef();
-                  } else {
-                    this.getInwardListByCompanyRefAndSiteRef();
-                  }
+                  await this.getStockConsumeListByCompanyRefAndStageRef()
                 });
               } catch (err) {
                 await this.toastService.present('Failed to delete Stock Inward', 1000, 'danger');

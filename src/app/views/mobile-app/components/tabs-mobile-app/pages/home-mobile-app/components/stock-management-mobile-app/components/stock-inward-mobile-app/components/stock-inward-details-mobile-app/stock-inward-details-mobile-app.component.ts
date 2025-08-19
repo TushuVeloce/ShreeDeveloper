@@ -47,7 +47,9 @@ export class StockInwardDetailsMobileAppComponent implements OnInit {
   localEstimatedStartingDate: string = '';
   localEstimatedEndDate: string = '';
   ModalEditable: boolean = false;
-  materialheaders: string[] = ['Date', 'Material Name ', 'Unit', 'Ordered Qty.', 'Inward Qty.', 'Remaining Qty.'];
+  // materialheaders: string[] = ['Date', 'Material Name ', 'Unit', 'Ordered Qty.', 'Inward Qty.', 'Remaining Qty.'];
+  materialheaders: string[] = ['Date', 'Material Name ', 'Unit', 'Ordered Qty.', 'Inward Qty.', 'Remaining Qty.', 'Rate', 'Discount Rate', 'GST', 'Delivery Charges', 'Net Discount', 'Net Amount', 'Total Amount'];
+
   ismaterialModalOpen: boolean = false;
   newInward: InwardMaterialDetailProps = InwardMaterialDetailProps.Blank();
   editingIndex: null | undefined | number
@@ -432,8 +434,8 @@ export class StockInwardDetailsMobileAppComponent implements OnInit {
 
   getOrderIdListByCompanySiteAndVendorRef = async () => {
     if (this.companyRef <= 0) {
-      // await this.toastService.present('company not selected', 1000, 'warning');
-      // await this.haptic.warning();
+      await this.toastService.present('company not selected', 1000, 'warning');
+      await this.haptic.warning();
       return;
     }
     if (this.Entity.p.SiteRef <= 0) {
@@ -466,21 +468,28 @@ export class StockInwardDetailsMobileAppComponent implements OnInit {
       await this.haptic.warning();
       return;
     }
+    // const lst = await MaterialFromOrder.FetchOrderedMaterials(this.Entity.p.MaterialPurchaseOrderRef, async errMsg => {
+    //   await this.toastService.present(errMsg, 1000, 'danger');
+    //   await this.haptic.error();
+    // });
+    // this.MaterialListOriginal = lst?.filter(item => item.p.IsMaterialExist == 1);
+    // this.MaterialListOriginal?.forEach((item, index) => {
+    //   item.p.InternalRef = index + 1;
+    // });
+    // const allMatched = lst.every(item => item.p.RemainingQty == 0);
+    // this.isSaveDisabled = allMatched;
+    // if (!this.shouldFilterDropdown) {
+    //   this.MaterialList = [...this.MaterialListOriginal];
+    // } else {
+    //   this.filterMaterialList();
+    // }
     const lst = await MaterialFromOrder.FetchOrderedMaterials(this.Entity.p.MaterialPurchaseOrderRef, async errMsg => {
       await this.toastService.present(errMsg, 1000, 'danger');
       await this.haptic.error();
     });
     this.MaterialListOriginal = lst?.filter(item => item.p.IsMaterialExist == 1);
-    this.MaterialListOriginal?.forEach((item, index) => {
-      item.p.InternalRef = index + 1;
-    });
-    const allMatched = lst.every(item => item.p.RemainingQty == 0);
-    this.isSaveDisabled = allMatched;
-    if (!this.shouldFilterDropdown) {
-      this.MaterialList = [...this.MaterialListOriginal];
-    } else {
-      this.filterMaterialList();
-    }
+    this.filterMaterialList();
+
   };
 
   filterMaterialList() {
@@ -520,6 +529,8 @@ export class StockInwardDetailsMobileAppComponent implements OnInit {
       this.newInward.DiscountedRate = SingleRecord.DiscountedRate;
       this.newInward.DiscountOnNetAmount = SingleRecord.DiscountOnNetAmount;
       this.newInward.NetAmount = SingleRecord.NetAmount;
+      this.GstName = this.GSTList.find(item => item.Ref == this.GSTList[0].Ref)?.Name ?? '';
+      this.selectedGST = [{ p: { Ref: SingleRecord.Gst, Name: this.GstName } }];
       this.newInward.Gst = SingleRecord.Gst;
       this.newInward.DeliveryCharges = SingleRecord.DeliveryCharges;
       this.newInward.TotalAmount = SingleRecord.TotalAmount;
@@ -611,9 +622,10 @@ export class StockInwardDetailsMobileAppComponent implements OnInit {
 
   async addMaterial() {
     if (
-      this.newInward.InternalRef <= 0 ||
+      this.newInward.MaterialRef <= 0 ||
       this.newInward.InwardQty <= 0
     ) {
+      console.log('is.newInward :', this.newInward);
       await this.toastService.present('Inward Quantity must be greater than 0 and material must be selected', 1000, 'warning');
       await this.haptic.warning();
       return;
@@ -807,9 +819,13 @@ export class StockInwardDetailsMobileAppComponent implements OnInit {
       //     Ref: item.p.InternalRef   // Add 'Ref'
       //   }
       // }));
-      const options = this.MaterialList.map(item => ({
-        Ref: item.p.MaterialRef,
-        Name: item.p.MaterialName
+      const filteredOptions = this.MaterialList.filter(item => item.p.RemainingQty > 0);
+
+      const options = filteredOptions.map(item => ({
+        p: {
+          Name: item.p.MaterialName,
+          Ref: item.p.MaterialRef
+        }
       }));
 
 

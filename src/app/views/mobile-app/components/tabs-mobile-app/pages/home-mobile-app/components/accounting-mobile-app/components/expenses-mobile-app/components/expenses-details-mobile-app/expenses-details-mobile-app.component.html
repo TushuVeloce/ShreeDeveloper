@@ -197,13 +197,6 @@
         [(ngModel)]="Entity.p.PlotName" clearInput="true"></ion-input>
     </ion-item>
 
-
-
-
- <!-- Remaining  check -->
-
-
-
     <!-- Select Income Ledger -->
     <ion-item class="input-item" button detail (click)="selectIncomeLedgerBottomsheet()"
       *ngIf="this.Entity.p.RecipientType == Sites" [disabled]="LedgerList.length==0">

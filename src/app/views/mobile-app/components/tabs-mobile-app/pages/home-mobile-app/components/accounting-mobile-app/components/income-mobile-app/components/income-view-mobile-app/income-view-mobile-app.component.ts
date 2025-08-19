@@ -31,7 +31,7 @@ export class IncomeViewMobileAppComponent implements OnInit {
 
   companyRef = 0;
   modalOpen = false;
-  printheaders: string[] = ['Sr.No.', 'Date', 'Site Name', 'Ledger', 'Sub Ledger', 'Reason', 'Income Amount', 'Shree Balance', 'Mode of Payment'];
+  printheaders: string[] = ['Sr.No.', 'Date', 'Site Name', 'Ledger', 'Sub Ledger', 'Received By', 'Reason', 'Income Amount', 'Shree Balance', 'Mode of Payment'];
 
   filters: FilterItem[] = [];
   SiteList: Site[] = [];

@@ -462,7 +462,7 @@ export class StockOrderDetailsMobileAppComponent implements OnInit {
     this.newOrderMaterial.Gst = 0;
     this.newOrderMaterial.DeliveryCharges = 0;
     this.newOrderMaterial.ExpectedDeliveryDate = '';
-    this.ExpectedDeliveryDate = '';
+    this.ExpectedDeliveryDate = null;
     this.newOrderMaterial.TotalAmount = 0;
   }
 
@@ -576,57 +576,66 @@ export class StockOrderDetailsMobileAppComponent implements OnInit {
 
 
   async addOrderMaterial() {
-    if (this.newOrderMaterial.MaterialQuotationDetailRef == 0) {
-      this.toastService.present('Material Name cannot be blank.', 1000, 'warning');
-      this.haptic.warning();
-      return;
-    }
-    if (this.newOrderMaterial.OrderedQty == 0) {
-      this.toastService.present('Ordered Quantity cannot be blank.', 1000, 'warning');
-      this.haptic.warning();
-      return;
-    }
-    if (this.newOrderMaterial.Rate == 0) {
-      this.toastService.present('Rate cannot be blank.', 1000, 'warning');
-      this.haptic.warning();
-      return;
-    }
+    try {
+      console.log("this.ExpectedDeliveryDate", this.ExpectedDeliveryDate);
+      if (this.newOrderMaterial.MaterialQuotationDetailRef == 0) {
+        this.toastService.present('Material Name cannot be blank.', 1000, 'warning');
+        this.haptic.warning();
+        return;
+      }
+      if (this.newOrderMaterial.OrderedQty == 0) {
+        this.toastService.present('Ordered Quantity cannot be blank.', 1000, 'warning');
+        this.haptic.warning();
+        return;
+      }
+      if (this.newOrderMaterial.Rate == 0) {
+        this.toastService.present('Rate cannot be blank.', 1000, 'warning');
+        this.haptic.warning();
+        return;
+      }
 
-    if (this.editingIndex !== null && this.editingIndex !== undefined && this.editingIndex >= 0) {
-      this.Entity.p.MaterialPurchaseOrderDetailsArray[this.editingIndex] = { ...this.newOrderMaterial };
-      this.newOrderMaterial.ExpectedDeliveryDate = this.dtu.ConvertStringDateToFullFormat(this.ExpectedDeliveryDate ? this.ExpectedDeliveryDate : '');
+      await this.loadingService.show();
+      if (this.editingIndex !== null && this.editingIndex !== undefined && this.editingIndex >= 0) {
+        this.Entity.p.MaterialPurchaseOrderDetailsArray[this.editingIndex] = { ...this.newOrderMaterial };
+        this.newOrderMaterial.ExpectedDeliveryDate = this.dtu.ConvertStringDateToFullFormat(this.ExpectedDeliveryDate ? this.ExpectedDeliveryDate : '');
 
-      await this.toastService.present('Material updated successfully', 1000, 'success');
-      this.newOrderMaterial = OrderMaterialDetailProps.Blank();
-      this.editingIndex = null;
-      this.isOrderMaterialModalOpen = false;
-      this.selectedMaterial = [];
-      this.selectedGST = [];
-      this.MaterialName = '';
-      this.gstName = '';
-      this.ExpectedDeliveryDate = null;
-      await this.haptic.success();
+        await this.toastService.present('Material updated successfully', 1000, 'success');
+        this.newOrderMaterial = OrderMaterialDetailProps.Blank();
+        this.editingIndex = null;
+        this.isOrderMaterialModalOpen = false;
+        this.selectedMaterial = [];
+        this.selectedGST = [];
+        this.MaterialName = '';
+        this.gstName = '';
+        this.ExpectedDeliveryDate = null;
+        await this.haptic.success();
 
-    } else {
-      let OrderMaterialInstance = new OrderMaterial(this.newOrderMaterial, true);
-      let OrderInstance = new Order(this.Entity.p, true);
-      await OrderMaterialInstance.EnsurePrimaryKeysWithValidValues();
-      await OrderInstance.EnsurePrimaryKeysWithValidValues();
+      } else {
+        let OrderMaterialInstance = new OrderMaterial(this.newOrderMaterial, true);
+        let OrderInstance = new Order(this.Entity.p, true);
+        await OrderMaterialInstance.EnsurePrimaryKeysWithValidValues();
+        await OrderInstance.EnsurePrimaryKeysWithValidValues();
 
-      this.newOrderMaterial.MaterialPurchaseOrderRef = this.Entity.p.Ref;
-      this.Entity.p.MaterialPurchaseOrderDetailsArray.push({ ...OrderMaterialInstance.p });
-      this.selectedGST = [{ p: { Ref: this.newOrderMaterial.Gst, Name: this.newOrderMaterial.Gst } }];
+        this.newOrderMaterial.MaterialPurchaseOrderRef = this.Entity.p.Ref;
+        this.Entity.p.MaterialPurchaseOrderDetailsArray.push({ ...OrderMaterialInstance.p });
+        this.selectedGST = [{ p: { Ref: this.newOrderMaterial.Gst, Name: this.newOrderMaterial.Gst } }];
 
-      await this.toastService.present('Material added successfully', 1000, 'success');
-      this.newOrderMaterial = OrderMaterialDetailProps.Blank();
-      this.editingIndex = null;
-      this.isOrderMaterialModalOpen = false;
-      this.selectedMaterial = [];
-      this.selectedGST = [];
-      this.MaterialName = '';
-      this.gstName = '';
-      this.ExpectedDeliveryDate = null;
-      await this.haptic.success();
+        await this.toastService.present('Material added successfully', 1000, 'success');
+        this.newOrderMaterial = OrderMaterialDetailProps.Blank();
+        this.editingIndex = null;
+        this.isOrderMaterialModalOpen = false;
+        this.selectedMaterial = [];
+        this.selectedGST = [];
+        this.MaterialName = '';
+        this.gstName = '';
+        this.ExpectedDeliveryDate = null;
+        await this.haptic.success();
+      }
+    } catch (error) {
+      await this.toastService.present('Error ' + error, 1000, 'danger');
+      await this.haptic.error();
+    }finally{
+      await this.loadingService.hide();
     }
   }
 
@@ -638,7 +647,7 @@ export class StockOrderDetailsMobileAppComponent implements OnInit {
     }
     this.editingIndex = index;
     this.ModalEditable = true;
-    this.ExpectedDeliveryDate = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.MaterialPurchaseOrderDetailsArray[index].ExpectedDeliveryDate);
+    this.ExpectedDeliveryDate = this.Entity.p.MaterialPurchaseOrderDetailsArray[index].ExpectedDeliveryDate? this.dtu.ConvertStringDateToShortFormat(this.Entity.p.MaterialPurchaseOrderDetailsArray[index].ExpectedDeliveryDate):null;
   }
 
   async removeOrderMaterial(index: number) {
