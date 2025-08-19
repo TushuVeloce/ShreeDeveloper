@@ -14,6 +14,9 @@ import {
   ChartType,
   registerables
 } from 'chart.js';
+import { Expense } from 'src/app/classes/domain/entities/website/accounting/expense/expense';
+import { OpeningBalance } from 'src/app/classes/domain/entities/website/masters/openingbalance/openingbalance';
+import { BankAccount } from 'src/app/classes/domain/entities/website/masters/bankaccount/banckaccount';
 
 Chart.register(...registerables);
 
@@ -29,11 +32,16 @@ export class DashboardComponent implements OnInit {
   shreeBalance: number = 0;
   cashBalance: number = 0;
   bankBalance: number = 0;
+  companyRef = this.companystatemanagement.SelectedCompanyRef;
+  BankList: OpeningBalance[] = [];
+  IncomeBankList: BankAccount[] = [];
 
   // Target values
-  private shreeTarget: number = 800000;
-  private cashTarget: number = 300000;
-  private bankTarget: number = 400000;
+  private shreeTarget: number = 0;
+  private cashTarget: number = 0;
+  private bankTarget: number = 0;
+
+  BankAccountRef: number = 0;
 
   private duration: number = 2000; // total duration in ms
 
@@ -101,7 +109,8 @@ export class DashboardComponent implements OnInit {
 
 
   ngOnInit() {
-    this.animateValue('shreeBalance', this.shreeTarget);
+    this.getCurrentBalanceByCompanyRef();
+    this.FormulateBankList();
     this.animateValue('cashBalance', this.cashTarget);
     this.animateValue('bankBalance', this.bankTarget);
 
@@ -165,5 +174,29 @@ export class DashboardComponent implements OnInit {
 
     requestAnimationFrame(animate);
   }
+
+  getCurrentBalanceByCompanyRef = async () => {
+    if (this.companyRef() <= 0) {
+      await this.uiUtils.showErrorToster('Company not Selected');
+      return;
+    }
+    let lst = await Expense.FetchCurrentBalanceByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    console.log('lst :', lst);
+    this.shreeTarget = lst[0].p.ShreesBalance;
+    this.animateValue('shreeBalance', this.shreeTarget);
+
+  }
+
+  public FormulateBankList = async () => {
+    if (this.companyRef() <= 0) {
+      await this.uiUtils.showErrorToster('Company not Selected');
+      return;
+    }
+    let lst = await OpeningBalance.FetchEntireListByCompanyRef(this.companyRef(), async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg));
+    this.BankList = lst.filter((item) => item.p.BankAccountRef > 0 && item.p.OpeningBalanceAmount > 0);
+    if (this.BankList.length > 0) {
+      this.BankAccountRef = this.BankList[0].p.Ref;
+    }
+  };
 
 }

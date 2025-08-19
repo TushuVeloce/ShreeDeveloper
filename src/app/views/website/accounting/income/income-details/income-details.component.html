@@ -32,7 +32,7 @@
           <label>Site Name</label>
           <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
             nzPlaceHolder="Select" id="SiteRef" name="SiteRef" [nzSize]="'large'" [(ngModel)]="Entity.p.SiteRef"
-            (ngModelChange)="getPayerListBySiteAndPayerType(); Entity.p.PayerRef = 0; PayerPlotNo = ''; Entity.p.LedgerRef = 0; Entity.p.SubLedgerRef = 0; Entity.p.PayerType = 0; Entity.p.PlotName = ''; PayerList = []">
+            (ngModelChange)="onSiteChange(); getPayerListBySiteAndPayerType();">
             <nz-option *ngFor="let site of SiteList" [nzValue]="site.p.Ref" [nzLabel]="site.p.Name"></nz-option>
           </nz-select>
         </div>
@@ -63,127 +63,151 @@
         <div class="col-md-4" style="margin-top: 1rem">
           <label>Received By</label>
           <div class="d-flex align-items-center">
-              <nz-select *ngIf="!PayerNameInput && !PayerNameReadOnly && Entity.p.PayerType == DealDoneCustomer"
-                class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear nzPlaceHolder="Select"
-                id="PayerRef" name="PayerRef" [nzSize]="'large'" [(ngModel)]="PayerPlotNo"
-                (ngModelChange)="onPayerChange()">
-                <nz-option *ngFor="let payer of PayerList" [nzValue]="payer.p.PlotName"
-                  [nzLabel]="payer.p.PayerName + ' - ' + payer.p.PlotName | titleCase">
-                  <span *ngIf="Entity.p.PayerType == DealDoneCustomer"
-                    [ngClass]="payer.p.IsRegisterCustomerRef == 1 ? 'sitecus' : 'nonsitecus'">
-                    {{ payer.p.PayerName + ' - ' + payer.p.PlotName| titleCase }}
-                  </span>
-                  <span *ngIf="Entity.p.PayerType != DealDoneCustomer"
-                    [ngClass]="payer.p.IsRegisterCustomerRef == 1 ? 'sitecus' : 'nonsitecus'">
-                    {{ payer.p.PayerName| titleCase }}
-                  </span>
-                </nz-option>
-              </nz-select>
-              <nz-select *ngIf="!PayerNameInput && !PayerNameReadOnly && Entity.p.PayerType != DealDoneCustomer"
-                class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear nzPlaceHolder="Select"
-                id="PayerRef" name="PayerRef" [nzSize]="'large'" [(ngModel)]="Entity.p.PayerRef"
-                (ngModelChange)="onPayerChange()">
-                <nz-option *ngFor="let payer of PayerList" [nzValue]="payer.p.Ref"
-                  [nzLabel]="payer.p.PayerName | titleCase">
-                  <span *ngIf="Entity.p.PayerType != DealDoneCustomer"
-                    [ngClass]="payer.p.IsRegisterCustomerRef == 1 ? 'sitecus' : 'nonsitecus'">
-                    {{ payer.p.PayerName| titleCase }}
-                  </span>
-                </nz-option>
-              </nz-select>
+            <nz-select *ngIf="!PayerNameInput && !PayerNameReadOnly && Entity.p.PayerType == DealDoneCustomer"
+              class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear nzPlaceHolder="Select"
+              id="PayerRef" name="PayerRef" [nzSize]="'large'" [(ngModel)]="PayerPlotNo"
+              (ngModelChange)="onPayerChange()">
+              <nz-option *ngFor="let payer of PayerList" [nzValue]="payer.p.PlotName"
+                [nzLabel]="payer.p.PayerName + ' - ' + payer.p.PlotName | titleCase">
+                <span *ngIf="Entity.p.PayerType == DealDoneCustomer"
+                  [ngClass]="payer.p.IsRegisterCustomerRef == 1 ? 'sitecus' : 'nonsitecus'">
+                  {{ payer.p.PayerName + ' - ' + payer.p.PlotName| titleCase }}
+                </span>
+                <span *ngIf="Entity.p.PayerType != DealDoneCustomer"
+                  [ngClass]="payer.p.IsRegisterCustomerRef == 1 ? 'sitecus' : 'nonsitecus'">
+                  {{ payer.p.PayerName| titleCase }}
+                </span>
+              </nz-option>
+            </nz-select>
+            <nz-select *ngIf="!PayerNameInput && !PayerNameReadOnly && Entity.p.PayerType != DealDoneCustomer"
+              class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear nzPlaceHolder="Select"
+              id="PayerRef" name="PayerRef" [nzSize]="'large'" [(ngModel)]="Entity.p.PayerRef"
+              (ngModelChange)="onPayerChange()">
+              <nz-option *ngFor="let payer of PayerList" [nzValue]="payer.p.Ref"
+                [nzLabel]="payer.p.PayerName | titleCase">
+                <span *ngIf="Entity.p.PayerType != DealDoneCustomer"
+                  [ngClass]="payer.p.IsRegisterCustomerRef == 1 ? 'sitecus' : 'nonsitecus'">
+                  {{ payer.p.PayerName| titleCase }}
+                </span>
+              </nz-option>
+            </nz-select>
 
-              <input *ngIf="PayerNameInput && !PayerNameReadOnly" type="text" [(ngModel)]="PayerEntity.p.Name"
-                name="Name" class="form-control" id="Name" required placeholder="Enter Payer Name" />
-              <span *ngIf="!PayerNameInput && !PayerNameReadOnly && Entity.p.PayerType == RecipientType"
-                (click)="AddPayerName()"
-                class="ms-2 mb-0.5 d-flex justify-content-center align-items-center border rounded"
-                style="width: 36px; height: 36px; cursor: pointer">
-                <i class="fa-solid fa-plus" style="color: blue;"></i>
-              </span>
-              <span *ngIf="PayerNameInput && !PayerNameReadOnly" (click)="SaveNewPayerName()"
-                class="ms-2 d-flex justify-content-center align-items-center border rounded text-success"
-                style="width: 36px; height: 36px; cursor: pointer">
-                <i class="fa-solid fa-check"></i>
-              </span>
-              <span *ngIf="PayerNameInput && !PayerNameReadOnly" (click)="cancelPayerName()"
-                class="ms-2 d-flex justify-content-center align-items-center border rounded text-danger"
-                style="width: 36px; height: 36px; cursor: pointer">
-                <i class="fa-solid fa-xmark"></i>
-              </span>
+            <input *ngIf="PayerNameInput && !PayerNameReadOnly" type="text" [(ngModel)]="PayerEntity.p.Name" name="Name"
+              class="form-control" id="Name" required placeholder="Enter Payer Name" />
+            <span *ngIf="!PayerNameInput && !PayerNameReadOnly && Entity.p.PayerType == RecipientType"
+              (click)="AddPayerName()"
+              class="ms-2 mb-0.5 d-flex justify-content-center align-items-center border rounded"
+              style="width: 36px; height: 36px; cursor: pointer">
+              <i class="fa-solid fa-plus" style="color: blue;"></i>
+            </span>
+            <span *ngIf="PayerNameInput && !PayerNameReadOnly" (click)="SaveNewPayerName()"
+              class="ms-2 d-flex justify-content-center align-items-center border rounded text-success"
+              style="width: 36px; height: 36px; cursor: pointer">
+              <i class="fa-solid fa-check"></i>
+            </span>
+            <span *ngIf="PayerNameInput && !PayerNameReadOnly" (click)="cancelPayerName()"
+              class="ms-2 d-flex justify-content-center align-items-center border rounded text-danger"
+              style="width: 36px; height: 36px; cursor: pointer">
+              <i class="fa-solid fa-xmark"></i>
+            </span>
+          </div>
+        </div>
+        <div class="col-md-4" style="margin-top: 1rem;"
+          *ngIf="Entity.p.PayerType == DealDoneCustomer && Entity.p.PayerRef != 0">
+          <div>
+            <label>Plot Name</label>
+            <input type="text" [(ngModel)]="Entity.p.PlotName" name="PlotName" class="form-control" id="PlotName"
+              disabled placeholder="Enter PlotName" />
+          </div>
+        </div>
+        <div class="col-md-4" style="margin-top: 1rem;"
+          *ngIf="Entity.p.PayerType == DealDoneCustomer && Entity.p.PayerRef != 0">
+          <div>
+            <label>Total Plot Amount</label>
+            <input type="text" [(ngModel)]="Entity.p.TotalPlotAmount" name="Total Plot Amount" class="form-control"
+              id="Total Plot Amount" disabled placeholder="Enter Total Plot Amount" />
+          </div>
+        </div>
+        <div class="col-md-4" style="margin-top: 1rem;"
+          *ngIf="Entity.p.PayerType == DealDoneCustomer && Entity.p.PayerRef != 0">
+          <div>
+            <label>Plot Grand Total</label>
+            <input type="text" [(ngModel)]="Entity.p.PlotGrandTotal" name="PlotGrandTotal" class="form-control"
+              id="PlotGrandTotal" disabled placeholder="Enter Plot Grand Total" />
+          </div>
+        </div>
+        <div class="col-md-4" style="margin-top: 1rem;">
+          <div>
+            <label>Reason</label>
+            <input type="text" [(ngModel)]="Entity.p.Reason" name="Reason" class="form-control" id="Reason" required
+              placeholder="Enter Reason" />
+          </div>
+        </div>
+        <div class="col-md-4" style="margin-top: 1rem;">
+          <div>
+            <label>Income Amount</label>
+            <input type="text" appCommaFormat [(ngModel)]="Entity.p.IncomeAmount" name="IncomeAmount"
+              class="form-control" id="IncomeAmount" required placeholder="Enter Income Amount"
+              #IncomeAmountCtrl="ngModel" (blur)="IncomeAmountCtrl.control.markAsTouched()"
+              (click)="selectAllValue($event)" (ngModelChange)="CalculateShreeBalance()" />
+            <div *ngIf="(IncomeAmountCtrl.invalid && (IncomeAmountCtrl.touched || IncomeAmountCtrl.dirty))">
+              <span class="validation-text" *ngIf="IncomeAmountCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
             </div>
           </div>
-          <div class="col-md-4" style="margin-top: 1rem;"
-            *ngIf="Entity.p.PayerType == DealDoneCustomer && Entity.p.PayerRef != 0">
-            <div>
-              <label>Plot Name</label>
-              <input type="text" [(ngModel)]="Entity.p.PlotName" name="PlotName" class="form-control" id="PlotName"
-                disabled placeholder="Enter PlotName" />
-            </div>
+        </div>
+        <div class="col-md-4" style="margin-top: 1rem;"
+          *ngIf="Entity.p.PayerType == DealDoneCustomer && Entity.p.PayerRef != 0">
+          <div>
+            <label>Remaining Plot Amount</label>
+            <input type="text" [(ngModel)]="RemainingPlotAmount" name="RemainingPlotAmount" class="form-control"
+              id="RemainingPlotAmount" disabled placeholder="Enter RemainingPlotAmount" />
           </div>
-          <div class="col-md-4" style="margin-top: 1rem;">
-            <div>
-              <label>Reason</label>
-              <input type="text" [(ngModel)]="Entity.p.Reason" name="Reason" class="form-control" id="Reason" required
-                placeholder="Enter Reason" />
-            </div>
+        </div>
+        <div class="col-md-4" style="margin-top: 1rem;">
+          <div>
+            <label>Shree Balance</label>
+            <input type="text" appCommaFormat [(ngModel)]="Entity.p.ShreesBalance" disabled name="ShreesBalance"
+              class="form-control" id="ShreesBalance" required placeholder="Enter Shrees Balance" />
           </div>
-          <div class="col-md-4" style="margin-top: 1rem;">
-            <div>
-              <label>Income Amount</label>
-              <input type="text" appCommaFormat [(ngModel)]="Entity.p.IncomeAmount" name="IncomeAmount" class="form-control"
-                id="IncomeAmount" required placeholder="Enter Income Amount" #IncomeAmountCtrl="ngModel"
-                (blur)="IncomeAmountCtrl.control.markAsTouched()" (click)="selectAllValue($event)"
-                (ngModelChange)="CalculateShreeBalance()" />
-              <div *ngIf="(IncomeAmountCtrl.invalid && (IncomeAmountCtrl.touched || IncomeAmountCtrl.dirty))">
-                <span class="validation-text" *ngIf="IncomeAmountCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-4" style="margin-top: 1rem;">
-            <div>
-              <label>Shree Balance</label>
-              <input type="text" appCommaFormat [(ngModel)]="Entity.p.ShreesBalance" disabled name="ShreesBalance"
-                class="form-control" id="ShreesBalance" required placeholder="Enter Shrees Balance" />
-            </div>
-          </div>
-          <div class="col-md-4" style="margin-top: 1rem;">
-            <label>Mode of Payment</label>
+        </div>
+        <div class="col-md-4" style="margin-top: 1rem;">
+          <label>Mode of Payment</label>
+          <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
+            nzPlaceHolder="Select" id="IncomeModeOfPayment" name="IncomeModeOfPayment" [nzSize]="'large'"
+            [(ngModel)]="Entity.p.IncomeModeOfPayment">
+            <nz-option *ngFor="let mode of ModeofPaymentList" [nzValue]="mode.Ref" [nzLabel]="mode.Name"></nz-option>
+          </nz-select>
+        </div>
+        <div class="col-md-4" style="margin-top: 1rem;"
+          *ngIf="Entity.p.IncomeModeOfPayment != Cash && Entity.p.IncomeModeOfPayment">
+          <div>
+            <label>Bank Name</label>
             <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
-              nzPlaceHolder="Select" id="IncomeModeOfPayment" name="IncomeModeOfPayment" [nzSize]="'large'"
-              [(ngModel)]="Entity.p.IncomeModeOfPayment">
-              <nz-option *ngFor="let mode of ModeofPaymentList" [nzValue]="mode.Ref" [nzLabel]="mode.Name"></nz-option>
+              nzPlaceHolder="Select" id="BankAccountRef" name="BankAccountRef" [nzSize]="'large'"
+              [(ngModel)]="Entity.p.BankAccountRef">
+              <nz-option *ngFor="let bank of BankList" [nzValue]="bank.p.BankAccountRef"
+                [nzLabel]="bank.p.BankName"></nz-option>
             </nz-select>
           </div>
-          <div class="col-md-4" style="margin-top: 1rem;"
-            *ngIf="Entity.p.IncomeModeOfPayment != Cash && Entity.p.IncomeModeOfPayment">
-            <div>
-              <label>Bank Name</label>
-              <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
-                nzPlaceHolder="Select" id="BankAccountRef" name="BankAccountRef" [nzSize]="'large'"
-                [(ngModel)]="Entity.p.BankAccountRef">
-                <nz-option *ngFor="let bank of BankList" [nzValue]="bank.p.BankAccountRef"
-                  [nzLabel]="bank.p.BankName"></nz-option>
-              </nz-select>
-            </div>
-          </div>
-          <div class="col-md-4" style="margin-top: 1rem;">
-            <div>
-              <label>Narration</label>
-              <input type="text" [(ngModel)]="Entity.p.Narration" name="Narration" class="form-control" id="Narration"
-                required placeholder="Enter Narration" />
-            </div>
+        </div>
+        <div class="col-md-4" style="margin-top: 1rem;">
+          <div>
+            <label>Narration</label>
+            <input type="text" [(ngModel)]="Entity.p.Narration" name="Narration" class="form-control" id="Narration"
+              required placeholder="Enter Narration" />
           </div>
         </div>
-        <div style="justify-content: center; display: flex; gap: 2rem; margin-top : 2rem">
-          <div>
-            <button type="submit" class="btn" (click)="SaveIncome()">Save</button>
-          </div>
-          <div>
-            <button type="button" class="btn" (click)="BackIncome()">
-              Cancel
-            </button>
-          </div>
+      </div>
+      <div style="justify-content: center; display: flex; gap: 2rem; margin-top : 2rem">
+        <div>
+          <button type="submit" class="btn" (click)="SaveIncome()">Save</button>
         </div>
+        <div>
+          <button type="button" class="btn" (click)="BackIncome()">
+            Cancel
+          </button>
+        </div>
+      </div>
     </form>
   </div>
 </div>

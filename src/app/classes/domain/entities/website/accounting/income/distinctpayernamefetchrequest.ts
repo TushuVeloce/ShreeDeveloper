@@ -19,6 +19,9 @@ export class DistinctPayerNameFetchRequest {
   SubLedgerRefs: number[] = [];
   ModeOfPayments: number[] = [];
   Refs: number[] = [];
+  PlotRef = 0;
+  RecipientRefs: number[] = [];
+
 
 
   public MergeIntoTransportData = (td: TransportData) => {

@@ -18,6 +18,8 @@ export class IncomeFetchRequest {
   SubLedgerRefs: number[] = [];
   ModeOfPayments: number[] = [];
   Refs: number[] = [];
+  RecipientRefs: number[] = [];
+  PlotRef = 0;
 
 
   public MergeIntoTransportData = (td: TransportData) => {

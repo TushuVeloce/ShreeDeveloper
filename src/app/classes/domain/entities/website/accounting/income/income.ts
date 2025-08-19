@@ -15,6 +15,7 @@ import { ValidationMessages, ValidationPatterns } from "src/app/classes/domain/c
 import { CurrentBalanceFetchRequest } from "../expense/currentbalancefetchrequest";
 import { TotalIncomeFetchRequest } from "./totalincomefetchrequest";
 import { DistinctPayerNameFetchRequest } from "./distinctpayernamefetchrequest";
+import { TotalAmountFetchRequest } from "./gettotalamountonpayerfetchrequest";
 
 
 export class IncomeProps {
@@ -33,6 +34,9 @@ export class IncomeProps {
   public PlotRef: number = 0
   public PlotName: string = ''
   public PayerType: number = 0
+  public TotalPlotAmount: number = 0
+  public RemainingPlotAmount: number = 0
+  public PlotGrandTotal: number = 0
   public IsRegisterCustomerRef: number = 0
   public Date: string = ''
   public SiteRef: number = 0
@@ -211,7 +215,7 @@ export class Income implements IPersistable<Income> {
     return Income.ListFromTransportData(tdResponse);
   }
 
-  public static async FetchDistinctPayerNameByCompanyRef(SiteRef:number,CompanyRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+  public static async FetchDistinctPayerNameByCompanyRef(SiteRef: number, CompanyRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let req = new DistinctPayerNameFetchRequest();
     req.CompanyRefs.push(CompanyRef)
     req.SiteRef = SiteRef
@@ -219,7 +223,7 @@ export class Income implements IPersistable<Income> {
     return Income.ListFromTransportData(tdResponse);
   }
 
-  public static async FetchPayerNameByPayerTypeRef(SiteRef:number,CompanyRef: number, PayerType: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+  public static async FetchPayerNameByPayerTypeRef(SiteRef: number, CompanyRef: number, PayerType: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let req = new DistinctPayerNameFetchRequest();
     req.CompanyRef = CompanyRef;
     req.SiteRef = SiteRef
@@ -228,37 +232,45 @@ export class Income implements IPersistable<Income> {
     return Income.ListFromTransportData(tdResponse);
   }
 
-  public static async FetchEntireListBySiteRef(SiteRef:number,PlotRef:number, CompanyRef: number,  errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-    let req = new IncomeFetchRequest();
-   req.CompanyRefs.push(CompanyRef)
-    if (SiteRef) {
-         req.SiteRefs.push(SiteRef)
-      }
-    if (PlotRef) {
-         req.PlotRefs.push(PlotRef)
-      }
+  public static async FetchToalAmountByCompanyAndPlotRef(CompanyRef: number, PlotRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+    let req = new TotalAmountFetchRequest();
+    req.CompanyRef = CompanyRef;
+    req.PlotRef = PlotRef;
     let tdResponse = await Income.FetchTransportData(req, errorHandler) as TransportData;
     return Income.ListFromTransportData(tdResponse);
   }
 
-  public static async FetchEntireListByFilters(SiteRef: number, LedgerRef: number, SubLedgerRef: number,ModeOfPayment:number,Ref:number, CompanyRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+  public static async FetchEntireListBySiteRef(SiteRef: number, PlotRef: number, CompanyRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let req = new IncomeFetchRequest();
-      req.CompanyRefs.push(CompanyRef)
-      if (LedgerRef) {
-        req.LedgerRefs.push(LedgerRef)
-      }
-      if (SubLedgerRef) {
-         req.SubLedgerRefs.push(SubLedgerRef)
-      }
-      if (SiteRef) {
-         req.SiteRefs.push(SiteRef)
-      }
-      if (ModeOfPayment) {
-         req.ModeOfPayments.push(ModeOfPayment)
-      }
-      if (Ref) {
-         req.Refs.push(Ref)
-      }
+    req.CompanyRefs.push(CompanyRef)
+    if (SiteRef) {
+      req.SiteRefs.push(SiteRef)
+    }
+    if (PlotRef) {
+      req.PlotRefs.push(PlotRef)
+    }
+    let tdResponse = await Income.FetchTransportData(req, errorHandler) as TransportData;
+    return Income.ListFromTransportData(tdResponse);
+  }
+
+  public static async FetchEntireListByFilters(SiteRef: number, LedgerRef: number, SubLedgerRef: number, ModeOfPayment: number, Ref: number, CompanyRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+    let req = new IncomeFetchRequest();
+    req.CompanyRefs.push(CompanyRef)
+    if (LedgerRef) {
+      req.LedgerRefs.push(LedgerRef)
+    }
+    if (SubLedgerRef) {
+      req.SubLedgerRefs.push(SubLedgerRef)
+    }
+    if (SiteRef) {
+      req.SiteRefs.push(SiteRef)
+    }
+    if (ModeOfPayment) {
+      req.ModeOfPayments.push(ModeOfPayment)
+    }
+    if (Ref) {
+      req.Refs.push(Ref)
+    }
     let tdResponse = await Income.FetchTransportData(req, errorHandler) as TransportData;
     return Income.ListFromTransportData(tdResponse);
   }

@@ -1,26 +1,45 @@
 <div>
+  <ng-template #noDataTpl>
+    <div style="text-align: center; color: rgba(0, 0, 0, 0.25);">
+      No Data
+    </div>
+  </ng-template>
   <div class="card-container">
     <!-- Shree Balance -->
     <div class="balance-card shree">
       <h4>Shree Balance</h4>
-      <h2><span>{{ shreeBalance | currency : "INR"  }}</span></h2>
+      <h2><span>{{ shreeBalance | currency : "INR" }}</span></h2>
       <p>Cash Balance + Bank Balance</p>
     </div>
 
     <!-- Cash Balance -->
     <div class="balance-card cash">
       <h4>Cash Balance</h4>
-      <h2><span>{{ cashBalance | currency : "INR"  }}</span></h2>
+      <h2><span>{{ cashBalance | currency : "INR" }}</span></h2>
     </div>
 
     <!-- All Bank -->
     <div class="balance-card bank">
-      <select>
+      <!-- <select>
         <option>All Bank</option>
         <option>HDFC Bank</option>
         <option>SBI Bank</option>
-      </select>
-      <h2><span>{{ bankBalance | currency : "INR"  }}</span></h2>
+      </select> -->
+      <!-- <select [(ngModel)]="BankAccountRef">
+        <option *ngFor="let bank of BankList" [value]="bank.p.Ref">
+          {{ bank.p.BankName }}
+        </option>
+      </select> -->
+
+      <!-- <div> -->
+      <label>Bank Name</label>
+      <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear nzPlaceHolder="Select"
+        id="BankAccountRef" name="BankAccountRef" [nzSize]="'large'" [(ngModel)]="BankAccountRef">
+        <nz-option *ngFor="let bank of BankList" [nzValue]="bank.p.BankAccountRef"
+          [nzLabel]="bank.p.BankName"></nz-option>
+      </nz-select>
+      <!-- </div> -->
+      <h2><span>{{ bankBalance | currency : "INR" }}</span></h2>
     </div>
   </div>
 

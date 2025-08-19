@@ -48,6 +48,7 @@ export class IncomeDetailsComponent implements OnInit {
   PayerTypesList = DomainEnums.PayerTypesList();
   DealDoneCustomer = PayerTypes.DealDoneCustomer;
   PayerPlotNo: string = '';
+  RemainingPlotAmount: number = 0;
 
   Date: string = '';
 
@@ -117,6 +118,7 @@ export class IncomeDetailsComponent implements OnInit {
 
   CalculateShreeBalance = () => {
     this.Entity.p.ShreesBalance = this.ShreeBalance + this.Entity.p.IncomeAmount;
+    this.RemainingPlotAmount = this.Entity.p.RemainingPlotAmount - this.Entity.p.IncomeAmount;
   }
 
   getCurrentBalanceByCompanyRef = async () => {
@@ -143,7 +145,7 @@ export class IncomeDetailsComponent implements OnInit {
     this.PayerList = lst;
   }
 
-  onPayerChange = () => {
+  onPayerChange = async () => {
     let SingleRecord;
     try {
       if (this.Entity.p.PayerType == this.DealDoneCustomer) {
@@ -151,12 +153,27 @@ export class IncomeDetailsComponent implements OnInit {
       } else {
         SingleRecord = this.PayerList.find((data) => data.p.Ref == this.Entity.p.PayerRef);
       }
+
       if (SingleRecord?.p) {
         this.Entity.p.IsRegisterCustomerRef = SingleRecord.p.IsRegisterCustomerRef;
         this.Entity.p.PayerRef = SingleRecord.p.Ref;
         if (this.Entity.p.PayerType == this.DealDoneCustomer) {
           this.Entity.p.PlotRef = SingleRecord.p.PlotRef;
           this.Entity.p.PlotName = SingleRecord.p.PlotName;
+          let lst = await Income.FetchToalAmountByCompanyAndPlotRef(this.companyRef(), this.Entity.p.PlotRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+          if (lst.length > 0) {
+            this.Entity.p.TotalPlotAmount = lst[0].p.TotalPlotAmount;
+            this.Entity.p.RemainingPlotAmount = lst[0].p.RemainingPlotAmount;
+            this.RemainingPlotAmount = lst[0].p.RemainingPlotAmount;
+            this.Entity.p.PlotGrandTotal = lst[0].p.PlotGrandTotal;
+          }
+        } else {
+          this.Entity.p.TotalPlotAmount = 0;
+          this.Entity.p.RemainingPlotAmount = 0;
+          this.RemainingPlotAmount = 0;
+          this.Entity.p.PlotGrandTotal = 0;
+          this.Entity.p.PlotRef = 0;
+          this.Entity.p.PlotName = '';
         }
       }
     } catch (error) {
@@ -213,6 +230,19 @@ export class IncomeDetailsComponent implements OnInit {
     this.SiteList = lst;
   }
 
+  onSiteChange = () => {
+    this.Entity.p.TotalPlotAmount = 0;
+    this.Entity.p.RemainingPlotAmount = 0;
+    this.RemainingPlotAmount = 0;
+    this.Entity.p.PlotGrandTotal = 0;
+    this.Entity.p.PayerRef = 0;
+    this.PayerPlotNo = '';
+    this.Entity.p.LedgerRef = 0;
+    this.Entity.p.SubLedgerRef = 0;
+    this.Entity.p.PayerType = 0;
+    this.Entity.p.PlotName = '';
+  }
+
   getLedgerListByCompanyRef = async () => {
     if (this.companyRef() <= 0) {
       await this.uiUtils.showErrorToster('Company not Selected');
@@ -239,7 +269,11 @@ export class IncomeDetailsComponent implements OnInit {
     this.Entity.p.PayerRef = 0;
     this.Entity.p.PayerName = '';
     this.PayerPlotNo = '';
-    this.PayerNameInput = false
+    this.PayerNameInput = false;
+    this.Entity.p.TotalPlotAmount = 0;
+    this.Entity.p.RemainingPlotAmount = 0;
+    this.RemainingPlotAmount = 0;
+    this.Entity.p.PlotGrandTotal = 0;
   }
 
   SaveIncome = async () => {
