@@ -91,21 +91,29 @@ export class StockInwardPrintComponent implements OnInit {
           <title>Recipt</title>
           <style>
          * {
-            -webkit-print-color-adjust: exact !important;
-            print-color-adjust: exact !important;
-            font-family: sans-serif;
-           }
-            table {
+              -webkit-print-color-adjust: exact !important;
+              print-color-adjust: exact !important;
+              font-family: sans-serif;
+         }
+         table {
               border-collapse: collapse;
-              width: 100%;
-            }
-
-            th, td {
-              border: 1px solid  rgb(169, 167, 167);
+              width: 100%; /* fix: match template */
+              
+              word-wrap: break-word;
+         }
+         th, td {
+              border: 1px solid rgb(169, 167, 167);
               text-align: center;
-              padding: 15px;
-            }
-          </style>
+              padding: 8px; /* reduce padding to fit */
+              font-size: 12px; /* shrink text to avoid overflow */
+         }
+         thead {
+                  display: table-header-group; /* repeat header if multi-page */
+         }
+         tfoot {
+                  display: table-footer-group; /* keep total inside */
+         }
+        </style>
         </head>
         <body onload="window.print(); window.close();">${printContent}</body>
       </html>

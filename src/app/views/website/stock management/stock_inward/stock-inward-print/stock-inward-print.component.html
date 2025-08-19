@@ -8,7 +8,7 @@
     <div class="col-md-9"></div>
     <div class="col-md-1">
       <div (click)="printSection()">
-        <img src="/assets/icons/printer.png" alt="" width="34px" height="34px" />
+        <img src="/assets/icons/printer.png" alt="" style="cursor: pointer;" width="34px" height="34px" />
       </div>
     </div>
   </div>
@@ -99,7 +99,7 @@
             <th style="padding: 8px; border: none">Remaining Qty.</th>
             <th style="padding: 8px; border: none">Net Discount</th>
             <th style="padding: 8px; border: none">Net Amount</th>
-            <th style="padding: 8px; border: none">GSt</th>
+            <th style="padding: 8px; border: none">GST</th>
             <th style="padding: 8px; border: none">Delivery Charges</th>
             <th style="padding: 8px; border: none">Total Amount</th>
           </tr>
@@ -130,19 +130,19 @@
               {{ material.PurchaseOrderRemainingQty }}
             </td>
             <td style="padding: 8px; border: none">
-              {{ material.DiscountOnNetAmount }}
+              {{ material.DiscountOnNetAmount | currency : "INR"}}
             </td>
             <td style="padding: 8px; border: none">
-              {{ material.NetAmount }}
+              {{ material.NetAmount | currency : "INR"}}
             </td>
             <td style="padding: 8px; border: none">
               {{ material.Gst }}
             </td>
             <td style="padding: 8px; border: none">
-              {{ material.DeliveryCharges }}
+              {{ material.DeliveryCharges| currency : "INR" }}
             </td>
             <td style="padding: 8px; border: none">
-              {{ material.TotalAmount }}
+              {{ material.TotalAmount | currency : "INR"}}
             </td>
           </tr>
           <!-- Total -->
