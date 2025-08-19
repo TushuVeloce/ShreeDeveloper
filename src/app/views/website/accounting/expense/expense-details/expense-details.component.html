@@ -109,9 +109,8 @@
           <div class="d-flex align-items-center">
             <nz-select *ngIf="!RecipientNameInput && Entity.p.RecipientType == DealDoneCustomer" class="nzSelect-light"
               [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="RecipientRef"
-              name="RecipientRef" [nzSize]="'large'" [(ngModel)]="PayerPlotNo"
-              (ngModelChange)="onRecipientChange(); getTotalInvoiceAmountFromSiteAndRecipientRef();">
-              <nz-option *ngFor="let recipient of RecipientList" [nzValue]="recipient.p.PlotName"
+              name="RecipientRef" [nzSize]="'large'" [(ngModel)]="PayerPlotNo" (ngModelChange)="onRecipientChange();">
+              <nz-option *ngFor="let recipient of RecipientList index as i" [nzValue]="i + 1"
                 [nzLabel]="recipient.p.RecipientName + ' - ' + recipient.p.PlotName | titleCase">
                 <span *ngIf="Entity.p.RecipientType"
                   [ngClass]="recipient.p.IsRegisterCustomerRef == 1 ? 'sitecus' : 'nonsitecus'">
@@ -126,7 +125,7 @@
             <nz-select *ngIf="!RecipientNameInput && Entity.p.RecipientType != DealDoneCustomer" class="nzSelect-light"
               [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="PayerRef"
               name="PayerRef" [nzSize]="'large'" [(ngModel)]="Entity.p.RecipientRef"
-              (ngModelChange)="getTotalInvoiceAmountFromSiteAndRecipientRef(); onRecipientChange();">
+              (ngModelChange)="onRecipientChange();">
               <nz-option *ngFor="let recipient of RecipientList" [nzValue]="recipient.p.Ref"
                 [nzLabel]="recipient.p.RecipientName">
                 <span *ngIf="Entity.p.RecipientType != DealDoneCustomer"
@@ -285,8 +284,8 @@
         <div class="col-md-4" style="margin-top: 1rem;" *ngIf="this.Entity.p.RecipientType == Sites">
           <div>
             <label>Reason</label>
-            <input type="text" [(ngModel)]="Entity.p.ReasonForIncome" name="ReasonForIncome" class="form-control" id="ReasonForIncome" required
-              placeholder="Enter Reason" />
+            <input type="text" [(ngModel)]="Entity.p.ReasonForIncome" name="ReasonForIncome" class="form-control"
+              id="ReasonForIncome" required placeholder="Enter Reason" />
           </div>
         </div>
         <div class="" style="margin-top: 1rem">

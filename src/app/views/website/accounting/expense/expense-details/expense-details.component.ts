@@ -59,7 +59,7 @@ export class ExpenseDetailsComponent implements OnInit {
   Employee = RecipientTypes.Employee;
   Sites = RecipientTypes.Sites;
   Date: string = '';
-  PayerPlotNo: string = '';
+  PayerPlotNo: number = 0;
   IncomeBankList: BankAccount[] = [];
 
 
@@ -137,7 +137,7 @@ export class ExpenseDetailsComponent implements OnInit {
       return;
     }
     let lst = await OpeningBalance.FetchEntireListByCompanyRef(this.companyRef(), async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg));
-    this.BankList = lst.filter((item) => item.p.BankAccountRef > 0 && item.p.OpeningBalanceAmount > 0);
+    this.BankList = lst.filter((item) => item.p.BankAccountRef > 0 && (item.p.OpeningBalanceAmount > 0 || item.p.InitialBalance > 0));
     this.getBankListByCompanyRef()
   };
 
@@ -245,7 +245,7 @@ export class ExpenseDetailsComponent implements OnInit {
     this.Entity.p.RecipientRef = 0;
     this.Entity.p.IncomeLedgerRef = 0;
     this.Entity.p.IncomeSubLedgerRef = 0;
-    this.PayerPlotNo = '';
+    this.PayerPlotNo = 0;
     this.Entity.p.PlotName = '';
     this.Entity.p.TotalAdvance = 0;
     this.Entity.p.RemainingAdvance = 0;
@@ -272,7 +272,7 @@ export class ExpenseDetailsComponent implements OnInit {
     this.Entity.p.RecipientRef = 0;
     this.Entity.p.IncomeLedgerRef = 0;
     this.Entity.p.IncomeSubLedgerRef = 0;
-    this.PayerPlotNo = '';
+    this.PayerPlotNo = 0;
     this.Entity.p.PlotName = '';
     this.Entity.p.TotalAdvance = 0;
     this.Entity.p.RemainingAdvance = 0;
@@ -315,8 +315,8 @@ export class ExpenseDetailsComponent implements OnInit {
       return;
     }
 
-
     let lst = await Expense.FetchTotalInvoiceAmountFromSiteAndRecipient(this.companyRef(), this.Entity.p.SiteRef, this.Entity.p.RecipientType, this.Entity.p.RecipientRef, this.Entity.p.IsSalaryExpense, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+
     if (lst.length > 0) {
       if (lst[0].p.InvoiceAmount < 0) {
         this.Entity.p.InvoiceAmount = 0;
@@ -362,7 +362,7 @@ export class ExpenseDetailsComponent implements OnInit {
     let SingleRecord;
     try {
       if (this.Entity.p.RecipientType == this.DealDoneCustomer) {
-        SingleRecord = this.RecipientList.find((data) => data.p.PlotName == this.PayerPlotNo);
+        SingleRecord = this.RecipientList.find((data, i) => (i + 1) == this.PayerPlotNo);
       } else {
         SingleRecord = this.RecipientList.find((data) => data.p.Ref == this.Entity.p.RecipientRef);
       }
@@ -374,6 +374,7 @@ export class ExpenseDetailsComponent implements OnInit {
           this.Entity.p.PlotName = SingleRecord.p.PlotName;
         }
       }
+      this.getTotalInvoiceAmountFromSiteAndRecipientRef();
     } catch (error) {
     }
   }
