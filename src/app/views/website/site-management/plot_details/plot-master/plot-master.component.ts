@@ -69,7 +69,7 @@ export class PlotMasterComponent implements OnInit {
       return 'plotbooked';
     } else if (BookingRemark == this.BookingRemarkEnum.Shree_Saledeed || BookingRemark == this.BookingRemarkEnum.Owner_Saledeed) {
       return 'plotsold';
-    } else '';
+    } else return 'plot';
   }
 
   FormulateSiteListByCompanyRef = async () => {
