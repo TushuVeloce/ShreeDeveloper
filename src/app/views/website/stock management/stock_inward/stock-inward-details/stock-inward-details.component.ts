@@ -237,7 +237,7 @@ export class StockInwardDetailsComponent implements OnInit {
     let list = this.MaterialListOriginal.filter(
       material => !usedRefs.includes(material.p.MaterialRef)
     );
-    this.MaterialList = list.filter(data => data.p.RemainingQty > 0);
+    this.MaterialList = list.filter(data => data.p.RemainingQty > 0); 
   }
 
   OnMaterialSelection = async () => {
