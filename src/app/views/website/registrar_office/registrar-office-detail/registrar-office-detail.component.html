@@ -464,6 +464,12 @@
               name="IsAgreementToSaleYes" class="custom-checkbox"
               (ngModelChange)="Entity.p.AgreementDocumentNo = ''; localagreementdate = ''; Entity.p.AgreementDate = '';" />
           </div>
+          <div class="col-3 d-flex justify-content-end align-items-center">
+            <label for="IsAgreementToSaleYes">No</label>
+            <input type="checkbox" id="IsAgreementToSaleYes" [(ngModel)]="Entity.p.IsAgreementToSaleYes"
+              name="IsAgreementToSaleYes" class="custom-checkbox"
+              (ngModelChange)="Entity.p.AgreementDocumentNo = ''; localagreementdate = ''; Entity.p.AgreementDate = '';" />
+          </div>
         </div>
 
         <div class="row mb-2" *ngIf="Entity.p.IsAgreementToSaleYes" style="margin-top: 1rem">
