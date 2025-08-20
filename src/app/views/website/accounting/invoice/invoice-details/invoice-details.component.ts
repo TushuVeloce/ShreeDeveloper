@@ -129,7 +129,9 @@ export class InvoiceDetailsComponent implements OnInit {
       if (this.Entity.p.IsDieselPaid == 1) {
         this.isDieselPaid = true
       }
-      // this.getVendorServiceListByVendorRef(this.Entity.p.RecipientRef);
+      if (this.Entity.p.ExpenseType == this.MachinaryExpenseRef || this.Entity.p.ExpenseType == this.LabourExpenseRef) {
+        this.getVendorServiceListByVendorRef(this.Entity.p.RecipientRef);
+      }
       this.getTotalWorkedHours();
       // this.RecipientNameReadOnly = true
     } else {

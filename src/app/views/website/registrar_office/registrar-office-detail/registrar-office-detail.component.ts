@@ -33,6 +33,8 @@ export class RegistrarOfficeDetailComponent implements OnInit {
   localtalathidate: string = '';
   TimeStamp = Date.now()
   LoginToken = '';
+  IsAgreementToSaleYes: boolean = false;
+  IsAgreementToSaleNo: boolean = true;
 
   ImageBaseUrl: string = "";
 
@@ -148,6 +150,35 @@ export class RegistrarOfficeDetailComponent implements OnInit {
     }
     this.InitialEntity = Object.assign(RegistrarOffice.CreateNewInstance(),
       this.utils.DeepCopy(this.Entity)) as RegistrarOffice;
+
+    if (this.localagreementdate != '' || this.Entity.p.AgreementDocumentNo != '') {
+      this.IsAgreementToSaleYes = true;
+      this.IsAgreementToSaleNo = false;
+    } else {
+      this.IsAgreementToSaleNo = true;
+      this.IsAgreementToSaleYes = false;
+    }
+  }
+
+  onAgreementToSaleYes = () => {
+    this.Entity.p.AgreementDocumentNo = '';
+    this.localagreementdate = '';
+    this.Entity.p.AgreementDate = '';
+
+    if (this.IsAgreementToSaleYes) {
+      this.IsAgreementToSaleNo = false;
+    }
+  }
+
+  onAgreementToSaleNo = () => {
+    this.Entity.p.AgreementDocumentNo = '';
+    this.localagreementdate = '';
+    this.Entity.p.AgreementDate = '';
+
+    if (this.IsAgreementToSaleNo) {
+      this.Entity.p.IsAgreementToSaleYes = false;
+      this.IsAgreementToSaleYes = false;
+    }
   }
 
   isImageFile(filePath: string): boolean {
@@ -240,13 +271,15 @@ export class RegistrarOfficeDetailComponent implements OnInit {
 
   isAgreementtoSaleComplete(): boolean {
     const p = this.Entity.p;
-    if (!this.Entity.p.IsAgreementToSaleYes) {
-      return true;
-    }
-    return (
+    if (
       p.AgreementDocumentNo?.trim() !== '' &&
       this.localagreementdate?.trim() !== ''
-    );
+    ) {
+      this.Entity.p.IsAgreementToSaleYes = true;
+    } else {
+      this.Entity.p.IsAgreementToSaleYes = false;
+    }
+    return this.Entity.p.IsAgreementToSaleYes
   }
 
   isSaleDeedComplete(): boolean {

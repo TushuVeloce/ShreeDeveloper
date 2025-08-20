@@ -111,6 +111,7 @@ export class StockInwardDetailsComponent implements OnInit {
       this.IsNewEntity = false;
       this.DetailsFormTitle = this.IsNewEntity ? 'New Stock Inward' : 'Edit Stock Inward';
       this.Entity = StockInward.GetCurrentInstance();
+      console.log('this.Entity :', this.Entity);
       this.imagePostView = `${this.ImageBaseUrl}${this.Entity.p.MaterialInwardInvoicePath}/${this.LoginToken}?${this.TimeStamp}`;
       this.selectedFileName = this.Entity.p.MaterialInwardInvoicePath;
       this.InwardDate = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.InwardDate);
@@ -237,7 +238,7 @@ export class StockInwardDetailsComponent implements OnInit {
     let list = this.MaterialListOriginal.filter(
       material => !usedRefs.includes(material.p.MaterialRef)
     );
-    this.MaterialList = list.filter(data => data.p.RemainingQty > 0); 
+    this.MaterialList = list.filter(data => data.p.RemainingQty > 0);
   }
 
   OnMaterialSelection = async () => {

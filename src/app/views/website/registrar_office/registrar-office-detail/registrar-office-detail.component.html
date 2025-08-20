@@ -443,7 +443,7 @@
             </div>
           </div>
 
-          <div class="col-md-5 d-flex align-items-center justify-content-between mb-2">
+          <div class="col-md-6 d-flex align-items-center justify-content-around mb-2">
             <img src="/assets/icons/upload.png" alt="Agreement Document" class="Upload-Icon"
               title="Upload Agreement Document" (click)="AgreementDocumentRef.nativeElement.click()" />
 
@@ -458,21 +458,19 @@
               (change)="onFileUpload($event, 'AgreementDocumentFile', 'AgreementDocumentPath')" />
           </div>
 
-          <div class="col-3 d-flex justify-content-end align-items-center">
+          <div class="col-1 d-flex justify-content-end align-items-center">
             <label for="IsAgreementToSaleYes">Yes</label>
-            <input type="checkbox" id="IsAgreementToSaleYes" [(ngModel)]="Entity.p.IsAgreementToSaleYes"
-              name="IsAgreementToSaleYes" class="custom-checkbox"
-              (ngModelChange)="Entity.p.AgreementDocumentNo = ''; localagreementdate = ''; Entity.p.AgreementDate = '';" />
+            <input type="checkbox" id="IsAgreementToSaleYes" [(ngModel)]="IsAgreementToSaleYes"
+              (ngModelChange)="onAgreementToSaleYes()" name="IsAgreementToSaleYes" class="custom-checkbox" />
           </div>
-          <div class="col-3 d-flex justify-content-end align-items-center">
-            <label for="IsAgreementToSaleYes">No</label>
-            <input type="checkbox" id="IsAgreementToSaleYes" [(ngModel)]="Entity.p.IsAgreementToSaleYes"
-              name="IsAgreementToSaleYes" class="custom-checkbox"
-              (ngModelChange)="Entity.p.AgreementDocumentNo = ''; localagreementdate = ''; Entity.p.AgreementDate = '';" />
+          <div class="col-1 d-flex justify-content-end align-items-center">
+            <label for="IsAgreementToSaleNo">No</label>
+            <input type="checkbox" id="IsAgreementToSaleNo" [(ngModel)]="IsAgreementToSaleNo"
+              (ngModelChange)="onAgreementToSaleNo()" name="IsAgreementToSaleNo" class="custom-checkbox" />
           </div>
         </div>
 
-        <div class="row mb-2" *ngIf="Entity.p.IsAgreementToSaleYes" style="margin-top: 1rem">
+        <div class="row mb-2" *ngIf="IsAgreementToSaleYes" style="margin-top: 1rem">
           <div class="col-md-6">
             <label>Document</label>
             <input type="text" [(ngModel)]="Entity.p.AgreementDocumentNo" name="AgreementDocumentNo"
@@ -515,7 +513,7 @@
             </div>
           </div>
 
-          <div class="col-md-5 d-flex align-items-center justify-content-between mb-2">
+          <div class="col-md-6 d-flex align-items-center justify-content-around mb-2">
             <img src="/assets/icons/upload.png" alt="Sale Deed Document" class="Upload-Icon"
               title="Upload Sale Deed Document" (click)="SaleDeedDocumentRef.nativeElement.click()" />
 

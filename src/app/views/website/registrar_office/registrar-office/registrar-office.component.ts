@@ -113,9 +113,6 @@ export class RegistrarOfficeComponent implements OnInit {
 
   isAgreementCompleted(office: any): boolean {
     const p = office.p;
-    if (!this.Entity.p.IsAgreementToSaleYes) {
-      return true;
-    }
     return p.AgreementDocumentNo && p.AgreementDate;
   }
 
