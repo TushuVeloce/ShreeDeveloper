@@ -302,10 +302,10 @@
                   {{ item.LabourQty || '-' }}
                 </td>
                 <td>
-                  {{ item.LabourRate || '-' }}
+                  {{ (item.LabourRate | currency : "INR") || '-' }}
                 </td>
                 <td>
-                  {{ item.LabourAmount || '-' }}
+                  {{ (item.LabourAmount | currency : "INR") || '-' }}
                 </td>
                 <td>
                   <ion-icon name="create-outline" color="warning" size="small"

@@ -11,11 +11,11 @@
     <ion-item *ngFor="let StockTransfer of DisplayMasterList" class="requisition-item" button detail
       (click)="openModal(StockTransfer)">
       <ion-label>
-        <h2>Date : {{ formatDate(StockTransfer.p.Date) || '-' }}</h2>
+        <h3>Date : {{ formatDate(StockTransfer.p.Date) || '-' }}</h3>
         <p class="date-label">From Site : {{ StockTransfer.p.FromSiteName || '-' }}</p>
         <p class="date-label">To Site : {{ StockTransfer.p.ToSiteName || '-' }}</p>
         <p class="date-label">Material : {{ StockTransfer.p.MaterialName || '-' }}</p>
-        <p class="date-label">Transfer Qty. : {{ StockTransfer.p.TransferredQuantity + " " + StockTransfer.p.UnitName
+        <p class="date-label">QTY. : {{ StockTransfer.p.TransferredQuantity + " " + StockTransfer.p.UnitName
           }}
         </p>
         </ion-label>

@@ -276,7 +276,7 @@
 
     <!-- Bank -->
     <ion-item class="input-item" button (click)="selectBankBottomsheetForIncome()"
-      *ngIf="Entity.p.ModeOfPaymentForIncome != Cash && Entity.p.ModeOfPaymentForIncome"
+      *ngIf="(Entity.p.ModeOfPaymentForIncome != Cash && Entity.p.ModeOfPaymentForIncome) && Entity.p.IsNewBankCreated"
       [disabled]="IncomeBankList.length==0">
       <ion-label>Bank</ion-label>
 
@@ -287,7 +287,7 @@
     </ion-item>
 
     <!-- Bank -->
-    <ion-item class="input-item" button (click)="selectBankBottomsheetNewBank()" *ngIf="!Entity.p.IsNewBankCreated"
+    <ion-item class="input-item" button (click)="selectBankBottomsheetNewBank()"  *ngIf="(Entity.p.ModeOfPaymentForIncome != Cash && Entity.p.ModeOfPaymentForIncome) && !Entity.p.IsNewBankCreated"
       [disabled]="BankList.length==0">
       <ion-label>Bank</ion-label>
 

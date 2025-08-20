@@ -141,22 +141,22 @@
                     {{ item.Rate || '-' }}
                   </td>
                   <td>
-                    {{ item.DiscountedRate || '-' }}
+                    {{ (item.DiscountedRate| currency : "INR") || '-' }}
                   </td>
                   <td>
                     {{ item.Gst || '-' }}
                   </td>
                   <td>
-                    {{ item.DeliveryCharges || '-' }}
+                    {{ (item.DeliveryCharges| currency : "INR") || '-' }}
                   </td>
                   <td>
                     {{ formatDate(item.ExpectedDeliveryDate) || '-' }}
                   </td>
                   <td>
-                    {{ item.NetAmount || '-' }}
+                    {{ (item.NetAmount | currency : "INR") || '-' }}
                   </td>
                   <td>
-                    {{ item.TotalAmount || '-' }}
+                    {{ (item.TotalAmount | currency : "INR") || '-' }}
                   </td>
                   <td>
                     <ion-icon name="create-outline" color="warning" size="small"
@@ -165,10 +165,10 @@
                       (click)="removeOrderMaterial(i)"></ion-icon>
                   </td>
                 </tr>
-                <tr>
-                  <td class="sticky-col" colspan="2"><b>Grand Total</b></td>
-                  <td colspan="10"></td>
-                  <td><b>{{ getGrandTotal() | currency : "INR" }}</b></td>
+                <tr> 
+                  <td class="sticky-col" colspan="3"><b>Grand Total : {{ getGrandTotal() | currency : "INR" }}</b></td>
+                  <!-- <td colspan="10"></td> -->
+                  <!-- <td colspan="2"><b>{{ getGrandTotal() | currency : "INR" }}</b></td> -->
                 </tr>
               </tbody>
             </table>

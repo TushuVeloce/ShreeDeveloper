@@ -36,6 +36,8 @@ export class InvoiceViewMobileAppComponent implements OnInit {
   SubLedgerList: SubLedger[] = [];
   MachineTableHeaderData = ['Machine Start Time', 'Machine End Time', 'Machine Worked Hours'];
   LabourTableHeaderData = ['Labour Type', 'Days', 'Labour Rate', 'Labour Amount'];
+  MaterialTableHeaderData: string[] = ['Material', 'Unit', 'Order Quantity', 'Rate', 'Discount Rate', 'GST', 'Delivery Charges', 'Total Amount'];
+
 
   // Store current selected values here to preserve selections on filter reload
   selectedFilterValues: Record<string, any> = {};
@@ -350,6 +352,7 @@ export class InvoiceViewMobileAppComponent implements OnInit {
 
   openModal = (Invoice: any) => {
     this.SelectedInvoice = Invoice;
+    console.log('this.SelectedInvoice :', this.SelectedInvoice);
     this.modalOpen = true;
   }
 

@@ -442,7 +442,15 @@ export class IncomeDetailsMobileAppComponent implements OnInit {
 
   public async selectBankBottomsheet(): Promise<void> {
     try {
-      const options = this.BankList.map((item) => ({ Ref: item.p.BankAccountRef, Name: item.p.BankName }));
+      // const options = this.BankList.map((item) => ({ Ref: item.p.BankAccountRef, Name: item.p.BankName }));
+      const options = this.BankList.map(bank => ({
+        p: {
+          Ref: bank.p.BankAccountRef,
+          Name: bank.p.BankName
+        }
+      }));
+      console.log('this.BankList :', this.BankList);
+      console.log('options :', options);
       this.openSelectModal(options, this.selectedBank, false, 'Select Bank', 1, (selected) => {
         this.selectedBank = selected;
         this.Entity.p.BankAccountRef = selected[0].p.Ref;

@@ -49,6 +49,11 @@ export class CustomerFollowUpProps {
   public CompanyRef: number = 0;
   public LoginEmployeeRef: number = 0;
 
+  public LeadSourceName: string = '';
+  public LeadHandleByName: string = '';
+  public ContactModeName: string = '';
+
+
   public CustomerFollowUpPlotDetails: CustomerFollowUpPlotDetailsProps[] = [];
 
   public IsNewlyCreated: boolean = false;

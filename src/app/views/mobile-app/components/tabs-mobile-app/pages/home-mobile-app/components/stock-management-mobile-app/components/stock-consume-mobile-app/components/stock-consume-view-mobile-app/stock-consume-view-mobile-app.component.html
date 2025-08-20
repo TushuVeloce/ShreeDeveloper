@@ -13,10 +13,10 @@
     <ion-item *ngFor="let stockConsume of DisplayMasterList" class="requisition-item" button detail
       (click)="openModal(stockConsume)">
       <ion-label>
-        <h2>Site : {{ stockConsume.p.SiteName || 'Unknown Site' }}</h2>
+        <h3>Site : {{ stockConsume.p.SiteName || 'Unknown Site' }}</h3>
         <p class="date-label">Date : {{ formatDate(stockConsume.p.ConsumptionDate) || '-' }}</p>
         <p class="date-label">Material : {{ stockConsume.p.MaterialName || '-' }}</p>
-        <p class="date-label">Consumption Qty. : {{ stockConsume.p.ConsumedQuantity + " " + stockConsume.p.UnitName }}
+        <p class="date-label">QTY. : {{ stockConsume.p.ConsumedQuantity + " " + stockConsume.p.UnitName }}
         </p>
       </ion-label>
 

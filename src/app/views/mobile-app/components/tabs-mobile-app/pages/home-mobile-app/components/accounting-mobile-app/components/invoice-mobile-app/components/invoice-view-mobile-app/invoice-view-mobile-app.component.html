@@ -152,6 +152,51 @@
             </table>
           </div>
         </div>
+
+        <div class="info-row-of-model-mobile-app" *ngIf="SelectedInvoice.p.MaterialInvoiceDetailsArray.length > 0">
+          <span class="label-mobile-app">Material Inward Details :</span>
+        </div>
+        <div class="table-container" *ngIf="SelectedInvoice.p.MaterialInvoiceDetailsArray.length > 0">
+          <div class="table-scroll">
+            <table class="custom-table">
+              <thead>
+                <tr>
+                  <th class="sticky-col sticky-header">#</th>
+                  <th *ngFor="let item of MaterialTableHeaderData" class="sticky-header">{{ item }}</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let item of SelectedInvoice.p.MaterialInvoiceDetailsArray; let i = index">
+                  <td class="sticky-col">{{i + 1 }}</td>
+                  <td>
+                    {{ item.MaterialName || '-' }}
+                  </td>
+                  <td>
+                    {{ item.UnitName || '-' }}
+                  </td>
+                  <td>
+                    {{ item.TotalOrderedQty || '-' }}
+                  </td>
+                  <td>
+                    {{ (item.Rate| currency : "INR") || '-' }}
+                  </td>
+                  <td>
+                    {{ (item.DiscountedRate| currency : "INR") || '-' }}
+                  </td>
+                  <td>
+                    {{ item.Gst || '-' }}
+                  </td>
+                  <td>
+                    {{ (item.DeliveryCharges | currency : "INR") || '-' }}
+                  </td>
+                  <td>
+                    {{ (item.TotalAmount | currency : "INR") || '-' }}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
         <div class="info-row-of-model-mobile-app">
           <span class="label-mobile-app">Billing Amount :</span>
           <span class="value-mobile-app">{{ (SelectedInvoice.p.InvoiceAmount | currency : "INR") || '-' }}</span>
