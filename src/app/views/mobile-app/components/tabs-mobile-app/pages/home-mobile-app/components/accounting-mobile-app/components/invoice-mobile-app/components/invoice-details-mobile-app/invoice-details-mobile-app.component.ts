@@ -228,7 +228,9 @@ export class InvoiceDetailsMobileAppComponent implements OnInit {
           if (this.Entity.p.IsDieselPaid == 1) {
             this.isDieselPaid = true
           }
-          await this.getVendorServiceListByVendorRef(this.Entity.p.RecipientRef);
+          if (this.Entity.p.ExpenseType == this.MachinaryExpenseRef || this.Entity.p.ExpenseType == this.LabourExpenseRef) {
+            await this.getVendorServiceListByVendorRef(this.Entity.p.RecipientRef);
+          }
           this.getTotalWorkedHours()
           this.selectedVendorService = [{ p: { Ref: this.Entity.p.VendorServiceRef, Name: this.Entity.p.VendorServiceName } }];
           this.VendorServiceName = this.Entity.p.VendorServiceName;
