@@ -212,14 +212,14 @@ export class IncomeDetailsMobileAppComponent implements OnInit {
       await this.toastService.present('Error ' + errMsg, 1000, 'danger');
       await this.haptic.error();
     });
-    this.BankList = lst.filter((item) => item.p.BankAccountRef > 0 && item.p.OpeningBalanceAmount > 0)
+    this.BankList = lst.filter((item) => item.p.BankAccountRef > 0 && (item.p.OpeningBalanceAmount > 0 || item.p.InitialBalance > 0));
 
   };
 
   OnModeChange = () => {
     this.Entity.p.BankAccountRef = 0
-    this.selectedBank=[];
-    this.BankName='';
+    this.selectedBank = [];
+    this.BankName = '';
   }
 
   CalculateShreeBalance = () => {
@@ -577,7 +577,7 @@ export class IncomeDetailsMobileAppComponent implements OnInit {
     this.Entity.p.PlotGrandTotal = 0;
     this.PayerPlotNo = '';
     this.Entity.p.PlotName = '';
-    
+
     this.Entity.p.PayerRef = 0;
     this.selectedPayer = [];
     this.PayerName = '';

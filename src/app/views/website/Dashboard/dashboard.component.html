@@ -21,9 +21,9 @@
     <!-- All Bank -->
     <div class="bank-card bank">
       <div>
-        <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
-           id="BankAccountRef" name="BankAccountRef" [nzSize]="'large'"
-          [(ngModel)]="BankAccountRef">
+        <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear id="BankAccountRef"
+          name="BankAccountRef" [nzSize]="'large'" [(ngModel)]="BankAccountRef"
+          (ngModelChange)="getBankCurrentBalance()">
           <nz-option [nzValue]="0" [nzLabel]="'All Banks'">
           </nz-option>
           <nz-option *ngFor="let bank of BankList" [nzValue]="bank.p.BankAccountRef" [nzLabel]="bank.p.BankName">

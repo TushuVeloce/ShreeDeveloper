@@ -76,6 +76,8 @@ export class ExpenseProps {
   public ExpenseModeOfPayment: number = 0
   public ModeOfPaymentForIncome: number = 0
   public ModeOfPaymentName: string = ''
+  public ModeOfPayment: string = ''
+  public NetBalance: number = 0
   public BankAccountRef: number = 0
   public IsRegisterCustomerRef: number = 0;
   public ReasonForIncome: string = '';

@@ -38,6 +38,7 @@ export class DashboardComponent implements OnInit {
   IncomeBankList: BankAccount[] = [];
   LedgerList: any = [];
   LedgerColorShadesList: any = [];
+  BalanceList: Expense[] = [];
 
 
   // Target values
@@ -63,8 +64,6 @@ export class DashboardComponent implements OnInit {
     this.getLedgerListByCompanyRef();
     this.setIncomeExpenseChart();
     this.FormulateBankList();
-    this.animateValue('cashBalance', this.cashTarget);
-    this.animateValue('bankBalance', this.bankTarget);
   }
 
   setIncomeExpenseChart = () => {
@@ -160,11 +159,40 @@ export class DashboardComponent implements OnInit {
       return;
     }
     let lst = await Expense.FetchCurrentBalanceByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-    console.log('lst :', lst);
+    this.BalanceList = lst;
     if (lst.length > 0) {
       this.shreeTarget = lst[0].p.ShreesBalance;
     }
+
+    let cash = lst.find((data) => data.p.ModeOfPayment == 'Cash');
+    if (cash) {
+      this.cashTarget = cash.p.NetBalance
+    }
+
+    // let bankTarget = lst.filter(item => item.p.ModeOfPayment.trim() === 'Bank').reduce((sum, item) => sum + (item.p.NetBalance || 0), 0);
+    // if (bankTarget) {
+    //   this.bankTarget = bankTarget
+    // }
+    this.getBankCurrentBalance();
+
     this.animateValue('shreeBalance', this.shreeTarget);
+    this.animateValue('cashBalance', this.cashTarget);
+    // this.animateValue('bankBalance', this.bankTarget);
+  }
+
+  getBankCurrentBalance = () => {
+    if (this.BankAccountRef != 0) {
+      let bankTarget = this.BalanceList.find((data) => data.p.BankAccountRef == this.BankAccountRef);
+      if (bankTarget) {
+        this.bankTarget = bankTarget.p.NetBalance;
+      }
+    } else {
+      let allbankTarget = this.BalanceList.filter(item => item.p.ModeOfPayment.trim() === 'Bank').reduce((sum, item) => sum + (item.p.NetBalance || 0), 0);
+      if (allbankTarget) {
+        this.bankTarget = allbankTarget
+      }
+    }
+    this.animateValue('bankBalance', this.bankTarget);
   }
 
   setDoughnutChart = () => {
@@ -208,7 +236,6 @@ export class DashboardComponent implements OnInit {
     if (this.LedgerList.length > 0) {
       this.setDoughnutChart();
     }
-
   }
 
   public FormulateBankList = async () => {
@@ -217,10 +244,7 @@ export class DashboardComponent implements OnInit {
       return;
     }
     let lst = await OpeningBalance.FetchEntireListByCompanyRef(this.companyRef(), async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg));
-    this.BankList = lst.filter((item) => item.p.BankAccountRef > 0 && item.p.OpeningBalanceAmount > 0);
-    // if (this.BankList.length > 0) {
-    //   this.BankAccountRef = this.BankList[0].p.BankAccountRef;
-    // }
+    this.BankList = lst.filter((item) => item.p.BankAccountRef > 0 && (item.p.OpeningBalanceAmount > 0 || item.p.InitialBalance > 0));
   };
 
 }
