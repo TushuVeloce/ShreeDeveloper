@@ -70,12 +70,14 @@ export class ExpenseComponent implements OnInit {
       await this.getSiteListByCompanyRef();
       await this.getLedgerListByCompanyRef();
       await this.FetchEntireListByFilters();
+      await this.FormulateBankList();
     });
   }
 
   async ngOnInit() {
     this.appStateManage.setDropdownDisabled();
     this.loadPaginationData();
+
     const pageSize = this.screenSizeService.getPageSize('withDropdown');
     this.pageSize = pageSize - 6
   }

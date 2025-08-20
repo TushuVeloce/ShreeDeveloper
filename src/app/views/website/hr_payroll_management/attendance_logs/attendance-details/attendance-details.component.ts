@@ -465,7 +465,11 @@ export class AttendanceDetailsComponent implements OnInit {
       if (this.IsNewEntity) {
         await this.uiUtils.showSuccessToster('Attendance saved successfully');
         this.Entity = WebAttendaneLog.CreateNewInstance();
-        this.resetAllControls()
+        this.resetAllControls();
+        let parts = this.strCDT.substring(0, 16).split('-');
+        // Construct the new date format
+        this.Date = `${parts[0]}-${parts[1]}-${parts[2]}`;
+
       } else {
         await this.uiUtils.showSuccessToster('Attendance Updated successfully');
       }

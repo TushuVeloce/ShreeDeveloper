@@ -17,6 +17,7 @@ import {
 import { Expense } from 'src/app/classes/domain/entities/website/accounting/expense/expense';
 import { OpeningBalance } from 'src/app/classes/domain/entities/website/masters/openingbalance/openingbalance';
 import { BankAccount } from 'src/app/classes/domain/entities/website/masters/bankaccount/banckaccount';
+import { Ledger } from 'src/app/classes/domain/entities/website/masters/ledgermaster/ledger';
 
 Chart.register(...registerables);
 
@@ -35,6 +36,8 @@ export class DashboardComponent implements OnInit {
   companyRef = this.companystatemanagement.SelectedCompanyRef;
   BankList: OpeningBalance[] = [];
   IncomeBankList: BankAccount[] = [];
+  LedgerList: any = [];
+
 
   // Target values
   private shreeTarget: number = 0;
@@ -110,14 +113,52 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit() {
     this.getCurrentBalanceByCompanyRef();
+    this.getLedgerListByCompanyRef();
     this.FormulateBankList();
     this.animateValue('cashBalance', this.cashTarget);
     this.animateValue('bankBalance', this.bankTarget);
 
+
+  }
+
+
+  private animateValue(property: keyof DashboardComponent, target: number) {
+    const startTime = performance.now();
+    const startValue = 0;
+
+    const animate = (currentTime: number) => {
+      const elapsed = currentTime - startTime;
+      const progress = Math.min(elapsed / this.duration, 1);
+
+      // Ease-out cubic
+      const easedProgress = 1 - Math.pow(1 - progress, 3);
+      (this as any)[property] = Math.floor(startValue + (target - startValue) * easedProgress);
+
+      if (progress < 1) {
+        requestAnimationFrame(animate);
+      }
+    };
+
+    requestAnimationFrame(animate);
+  }
+
+  getCurrentBalanceByCompanyRef = async () => {
+    if (this.companyRef() <= 0) {
+      await this.uiUtils.showErrorToster('Company not Selected');
+      return;
+    }
+    let lst = await Expense.FetchCurrentBalanceByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    if (lst.length > 0) {
+      this.shreeTarget = lst[0].p.ShreesBalance;
+    }
+    this.animateValue('shreeBalance', this.shreeTarget);
+  }
+
+  setDoughnutChart = () => {
     new Chart("doughnutChart", {
       type: 'doughnut',
       data: {
-        labels: ['Main Ledger 1', 'Main Ledger 2', 'Main Ledger 3', 'JCB', 'Contractor', 'Main Ledger 1', 'Main Ledger 2', 'Main Ledger 3', 'JCB', 'Contractor',],
+        labels: this.LedgerList,
         datasets: [{
           label: 'Expenses',
           data: [300, 50, 100, 70, 120, 300, 50, 100, 70, 120],
@@ -154,36 +195,17 @@ export class DashboardComponent implements OnInit {
     });
   }
 
-
-  private animateValue(property: keyof DashboardComponent, target: number) {
-    const startTime = performance.now();
-    const startValue = 0;
-
-    const animate = (currentTime: number) => {
-      const elapsed = currentTime - startTime;
-      const progress = Math.min(elapsed / this.duration, 1);
-
-      // Ease-out cubic
-      const easedProgress = 1 - Math.pow(1 - progress, 3);
-      (this as any)[property] = Math.floor(startValue + (target - startValue) * easedProgress);
-
-      if (progress < 1) {
-        requestAnimationFrame(animate);
-      }
-    };
-
-    requestAnimationFrame(animate);
-  }
-
-  getCurrentBalanceByCompanyRef = async () => {
+  getLedgerListByCompanyRef = async () => {
     if (this.companyRef() <= 0) {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
-    let lst = await Expense.FetchCurrentBalanceByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-    console.log('lst :', lst);
-    this.shreeTarget = lst[0].p.ShreesBalance;
-    this.animateValue('shreeBalance', this.shreeTarget);
+    let lst = await Ledger.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    this.LedgerList = lst.map(item => item.p.Name);
+    console.log('this.LedgerList :', this.LedgerList);
+    if (this.LedgerList.length > 0) {
+      this.setDoughnutChart();
+    }
 
   }
 
