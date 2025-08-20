@@ -15,16 +15,17 @@
     background-color: #e6ffe6;
   }
 
-  &.unfilled {
-    border-color: rgb(180, 180, 2);
-    background-color: rgb(252, 252, 213);
-  }
-
   &.halffilled {
     border-color: #ff9900;
     background-color: #fff5e6;
   }
   
+  &.unfilled {
+    border-color: rgb(180, 180, 2);
+    background-color: rgb(252, 252, 213);
+  }
+
+
   &.rejected {
     border-color: red;
     background-color: #ffe6e6;

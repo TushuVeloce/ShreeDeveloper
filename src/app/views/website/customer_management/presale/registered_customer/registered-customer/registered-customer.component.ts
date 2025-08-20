@@ -97,9 +97,11 @@ export class RegisteredCustomerComponent implements OnInit {
 
   IsFilled = (registercustomer: RegisteredCustomer) => {
     if (registercustomer.p.RegisterCustomerBookingRemark && registercustomer.p.RegisterDate && registercustomer.p.RegisterBy && registercustomer.p.ValueOfAgreement && registercustomer.p.LegalCharges) {
-      return true;
+      return 'filled';
+    } else if (registercustomer.p.DiscountedRateOnArea && registercustomer.p.DiscountOnTotalPlotAmount) {
+      return 'halffilled';
     } else {
-      return false;
+      return 'unfilled';
     }
   }
 

@@ -48,7 +48,7 @@
             <td Class="tbldata">{{ registercustomer.p.CustomerMobileNo }}</td>
             <td Class="tbldata">{{ registercustomer.p.CustomerAddress }}</td>
             <td class="tbldata">
-              <span class="status" [ngClass]="IsFilled(registercustomer) ? 'filled' : 'unfilled'" style="margin-left: 9px"
+              <span class="status" [ngClass]="IsFilled(registercustomer)" style="margin-left: 9px"
                 (click)="onEditClicked(registercustomer)">
                 <!-- <img src="\assets\icons\edit.png" alt="logo" title="Edit" width="20px" height="20px" /> -->
                 Edit
