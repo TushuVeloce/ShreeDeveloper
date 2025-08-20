@@ -17,6 +17,7 @@ import {
 import { Expense } from 'src/app/classes/domain/entities/website/accounting/expense/expense';
 import { OpeningBalance } from 'src/app/classes/domain/entities/website/masters/openingbalance/openingbalance';
 import { BankAccount } from 'src/app/classes/domain/entities/website/masters/bankaccount/banckaccount';
+import { Ledger } from 'src/app/classes/domain/entities/website/masters/ledgermaster/ledger';
 
 Chart.register(...registerables);
 
@@ -35,6 +36,9 @@ export class DashboardComponent implements OnInit {
   companyRef = this.companystatemanagement.SelectedCompanyRef;
   BankList: OpeningBalance[] = [];
   IncomeBankList: BankAccount[] = [];
+  LedgerList: any = [];
+  LedgerColorShadesList: any = [];
+
 
   // Target values
   private shreeTarget: number = 0;
@@ -54,7 +58,16 @@ export class DashboardComponent implements OnInit {
     private companystatemanagement: CompanyStateManagement
   ) { }
 
-  ngAfterViewInit(): void {
+  ngOnInit() {
+    this.getCurrentBalanceByCompanyRef();
+    this.getLedgerListByCompanyRef();
+    this.setIncomeExpenseChart();
+    this.FormulateBankList();
+    this.animateValue('cashBalance', this.cashTarget);
+    this.animateValue('bankBalance', this.bankTarget);
+  }
+
+  setIncomeExpenseChart = () => {
     const labels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'Jul', 'Aug', 'Spet', 'Oct', 'Nov', 'Dec'];
 
     const data: ChartData<'bar'> = {
@@ -108,50 +121,16 @@ export class DashboardComponent implements OnInit {
   }
 
 
-  ngOnInit() {
-    this.getCurrentBalanceByCompanyRef();
-    this.FormulateBankList();
-    this.animateValue('cashBalance', this.cashTarget);
-    this.animateValue('bankBalance', this.bankTarget);
+  generateShades = (count: number): string[] => {
+    const colors: string[] = [];
+    const hueStep = 360 / count; // spread evenly on color wheel
 
-    new Chart("doughnutChart", {
-      type: 'doughnut',
-      data: {
-        labels: ['Main Ledger 1', 'Main Ledger 2', 'Main Ledger 3', 'JCB', 'Contractor', 'Main Ledger 1', 'Main Ledger 2', 'Main Ledger 3', 'JCB', 'Contractor',],
-        datasets: [{
-          label: 'Expenses',
-          data: [300, 50, 100, 70, 120, 300, 50, 100, 70, 120],
-          backgroundColor: [
-            'rgb(247, 133, 150)',   // Ledger 1
-            'rgb(128, 0, 0)',       // Ledger 2
-            'rgb(255, 182, 193)',   // Ledger 3 (light pink)
-            'rgb(165, 42, 42)',     // JCB
-            'rgb(205, 133, 63)',   // Contractor
-            'rgb(247, 133, 150)',   // Ledger 1
-            'rgb(128, 0, 0)',       // Ledger 2
-            'rgb(255, 182, 193)',   // Ledger 3 (light pink)
-            'rgb(165, 42, 42)',     // JCB
-            'rgb(205, 133, 63)',   // Contractor
-          ],
-          hoverOffset: 4
-        }]
-      },
+    for (let i = 0; i < count; i++) {
+      const hue = Math.round(i * hueStep);
+      colors.push(`hsl(${hue}, 70%, 50%)`);
+    }
 
-      options: {
-        responsive: true,
-        maintainAspectRatio: true,   // keeps it circular
-        aspectRatio: 1,              // force square shape
-        plugins: {
-          legend: {
-            position: 'right',       // as in your screenshot
-            labels: {
-              boxWidth: 15,
-              padding: 10
-            }
-          }
-        }
-      }
-    });
+    return colors;
   }
 
 
@@ -182,8 +161,53 @@ export class DashboardComponent implements OnInit {
     }
     let lst = await Expense.FetchCurrentBalanceByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     console.log('lst :', lst);
-    this.shreeTarget = lst[0].p.ShreesBalance;
+    if (lst.length > 0) {
+      this.shreeTarget = lst[0].p.ShreesBalance;
+    }
     this.animateValue('shreeBalance', this.shreeTarget);
+  }
+
+  setDoughnutChart = () => {
+    new Chart("doughnutChart", {
+      type: 'doughnut',
+      data: {
+        labels: this.LedgerList,
+        datasets: [{
+          label: 'Expenses',
+          data: [300, 50, 100, 70, 120, 300, 50, 100, 70, 120],
+          backgroundColor: this.LedgerColorShadesList,
+          hoverOffset: 4
+        }]
+      },
+
+      options: {
+        responsive: true,
+        maintainAspectRatio: true,   // keeps it circular
+        aspectRatio: 1,              // force square shape
+        plugins: {
+          legend: {
+            position: 'right',       // as in your screenshot
+            labels: {
+              boxWidth: 15,
+              padding: 10
+            }
+          }
+        }
+      }
+    });
+  }
+
+  getLedgerListByCompanyRef = async () => {
+    if (this.companyRef() <= 0) {
+      await this.uiUtils.showErrorToster('Company not Selected');
+      return;
+    }
+    let lst = await Ledger.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    this.LedgerList = lst.map(item => item.p.Name);
+    this.LedgerColorShadesList = this.generateShades(this.LedgerList.length);
+    if (this.LedgerList.length > 0) {
+      this.setDoughnutChart();
+    }
 
   }
 
@@ -194,9 +218,9 @@ export class DashboardComponent implements OnInit {
     }
     let lst = await OpeningBalance.FetchEntireListByCompanyRef(this.companyRef(), async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.BankList = lst.filter((item) => item.p.BankAccountRef > 0 && item.p.OpeningBalanceAmount > 0);
-    if (this.BankList.length > 0) {
-      this.BankAccountRef = this.BankList[0].p.Ref;
-    }
+    // if (this.BankList.length > 0) {
+    //   this.BankAccountRef = this.BankList[0].p.BankAccountRef;
+    // }
   };
 
 }

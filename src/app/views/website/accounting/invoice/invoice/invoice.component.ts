@@ -8,6 +8,7 @@ import { SubLedger } from 'src/app/classes/domain/entities/website/masters/suble
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
 import { DateconversionService } from 'src/app/services/dateconversion.service';
+import { DTU } from 'src/app/services/dtu.service';
 import { ScreenSizeService } from 'src/app/services/screensize.service';
 import { UIUtils } from 'src/app/services/uiutils.service';
 
@@ -38,8 +39,14 @@ export class InvoiceComponent implements OnInit {
   companyRef = this.companystatemanagement.SelectedCompanyRef;
 
   headers: string[] = ['Sr.No.', 'Date', 'Bill No', 'Site Name', 'Ledger', 'Sub Ledger', 'Description', 'Recipient Name', 'Bill Amount', 'Action'];
-  constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private screenSizeService: ScreenSizeService,
-    private companystatemanagement: CompanyStateManagement, private DateconversionService: DateconversionService,
+  constructor(
+    private uiUtils: UIUtils,
+    private router: Router,
+    private appStateManage: AppStateManageService,
+    private screenSizeService: ScreenSizeService,
+    private companystatemanagement: CompanyStateManagement,
+    private DateconversionService: DateconversionService,
+    private dtu: DTU,
   ) {
     effect(async () => {
       this.Entity.p.Ref = 0
@@ -115,6 +122,9 @@ export class InvoiceComponent implements OnInit {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
+    this.Entity.p.StartDate = this.dtu.ConvertStringDateToFullFormat(this.Entity.p.StartDate);
+    this.Entity.p.EndDate = this.dtu.ConvertStringDateToFullFormat(this.Entity.p.EndDate);
+
     let lst = await Invoice.FetchEntireListByFilters(
       this.Entity.p.StartDate,
       this.Entity.p.EndDate,

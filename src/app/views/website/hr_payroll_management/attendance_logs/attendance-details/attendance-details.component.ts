@@ -40,6 +40,7 @@ export class AttendanceDetailsComponent implements OnInit {
   companyRef = this.companystatemanagement.SelectedCompanyRef;
   strCDT: string = ''
   Date: string = ''
+  CurrentDate: string = ''
   OfficeDutyandTime: OfficeDutyandTime[] = [];
 
   FirstOvertimeHrs: number = 0;
@@ -121,6 +122,7 @@ export class AttendanceDetailsComponent implements OnInit {
       let parts = this.strCDT.substring(0, 16).split('-');
       // Construct the new date format
       this.Date = `${parts[0]}-${parts[1]}-${parts[2]}`;
+      this.CurrentDate = `${parts[0]}-${parts[1]}-${parts[2]}`;
     }
     this.InitialEntity = Object.assign(WebAttendaneLog.CreateNewInstance(), this.utils.DeepCopy(this.Entity)) as WebAttendaneLog;
   }
@@ -465,7 +467,7 @@ export class AttendanceDetailsComponent implements OnInit {
       if (this.IsNewEntity) {
         await this.uiUtils.showSuccessToster('Attendance saved successfully');
         this.Entity = WebAttendaneLog.CreateNewInstance();
-        this.resetAllControls()
+        this.resetAllControls();
       } else {
         await this.uiUtils.showSuccessToster('Attendance Updated successfully');
       }

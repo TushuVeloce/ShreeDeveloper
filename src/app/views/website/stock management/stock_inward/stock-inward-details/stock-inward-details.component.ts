@@ -17,6 +17,7 @@ import { PayloadPacketFacade } from 'src/app/classes/infrastructure/payloadpacke
 import { CurrentDateTimeRequest } from 'src/app/classes/infrastructure/request_response/currentdatetimerequest';
 import { TransportData } from 'src/app/classes/infrastructure/transportdata';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
+import { BaseUrlService } from 'src/app/services/baseurl.service';
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
 import { DateconversionService } from 'src/app/services/dateconversion.service';
 import { DTU } from 'src/app/services/dtu.service';
@@ -99,6 +100,8 @@ export class StockInwardDetailsComponent implements OnInit {
     private DateconversionService: DateconversionService,
     private payloadPacketFacade: PayloadPacketFacade,
     private serverCommunicator: ServerCommunicatorService,
+    private baseUrl: BaseUrlService,
+
   ) { }
 
   async ngOnInit() {
@@ -106,6 +109,8 @@ export class StockInwardDetailsComponent implements OnInit {
     this.appStateManage.setDropdownDisabled(true);
     await this.getSiteListByCompanyRef();
     await this.getVendorListByCompanyRef();
+    this.ImageBaseUrl = this.baseUrl.GenerateImageBaseUrl();
+    this.LoginToken = this.appStateManage.getLoginToken();
 
     if (this.appStateManage.StorageKey.getItem('Editable') == 'Edit') {
       this.IsNewEntity = false;

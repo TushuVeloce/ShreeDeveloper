@@ -26,56 +26,6 @@
   /* Smooth shadow */
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
 
-  /* Text responsiveness with clamp() */
-  h4 {
-    font-size: clamp(1rem, 2vw, 1rem);
-    margin: 0 0 0.5rem 0;
-    color: #5a2a2a;
-    font-weight: 500;
-    display: flex;
-    align-self: s;
-  }
-
-  h2 {
-    font-size: clamp(1.2rem, 3vw, 2rem);
-    font-weight: bold;
-    color: #7a1e1e;
-    margin: 0.3rem 0;
-  }
-
-  p {
-    font-size: clamp(0.7rem, 1.5vw, 0.9rem);
-    color: #7a3a3a;
-    margin-top: 0.3rem;
-  }
-
-  select {
-    width: 100%;
-    padding: 0.5rem;
-    margin-bottom: 0.8rem;
-    border: none;
-    border-radius: 6px;
-    background: #f8efe2;
-    font-size: clamp(0.8rem, 2vw, 1rem);
-    color: #6b2c2c;
-    text-align: center;
-  }
-}
-
-/* Background colors */
-.shree {
-  background: #f4c5bb;
-}
-
-.cash {
-  background: #fde7e7;
-}
-
-.bank {
-  background: #f5e5d6;
-}
-
-.balance-card {
   position: relative;
   /* parent needs to be relative */
 
@@ -105,6 +55,52 @@
     margin-top: 0.3rem;
   }
 }
+
+/* Background colors */
+.shree {
+  background: #f4c5bb;
+}
+
+.cash {
+  background: #fde7e7;
+}
+
+.bank {
+  background: #f5e5d6;
+}
+
+.bank-card {
+  flex: 1 1 300px;
+  max-width: 390px;
+  min-height: 180px;
+  display: flex;
+  flex-direction: column;
+  padding: 0.5rem;
+  border-radius: 10px;
+  border: 1px solid #7a1e1e;
+  font-family: "Segoe UI", sans-serif;
+  box-sizing: border-box;
+  text-align: center;
+
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  position: relative;
+}
+
+.bank-card .center {
+  flex: 1;
+  /* take remaining space */
+  display: flex;
+  justify-content: center;
+  align-items: start;
+}
+
+.bank-card h2 {
+  margin-top: 25px;
+  font-size: clamp(1.4rem, 3vw, 2rem);
+  font-weight: 500;
+  color: #7a1e1e;
+}
+
 
 // ================================ Chart =======================================
 
@@ -197,3 +193,52 @@
 .table td {
   color: #333;
 }
+
+
+// ====================================== NZ Dropdown Input CSS ======================= //
+
+.nzSelect-light {
+  .ant-select-selector {
+    background-color: #f8efe2;
+    /* White background */
+    color: #000000;
+    border: 0.2px solid rgb(133, 130, 130);
+    border-radius: 7px !important;
+  }
+
+  &:hover .ant-select-selector {
+    border-color: var(--ion-color-primary-tint) !important;
+  }
+
+  .ant-select-focused .ant-select-selector,
+  .ant-select-selector:focus-within {
+    border-color: var(--ion-color-primary-tint) !important;
+  }
+
+  .ant-select-clear {
+    color: black !important;
+  }
+
+  .anticon {
+    color: black !important;
+  }
+}
+
+.ant-select-item-option-selected:not(.ant-select-item-option-disabled) {
+  background-color: #f8efe2 !important;
+}
+
+.ant-empty-description {
+  color: black !important;
+}
+
+::ng-deep .ant-dropdown {
+  font-family: "Poppins" !important;
+  font-size: 16px !important;
+}
+
+::ng-deep .ant-dropdown-menu-item {
+  font-family: "Poppins" !important;
+}
+
+// ====================================== NZ Dropdown Input CSS End ======================= //
