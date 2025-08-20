@@ -377,7 +377,7 @@ export class CustomerEnquiryDetailsMobileAppComponent implements OnInit {
         this.Entity.p.CustomerFollowUps[0].CustomerStatusName = selected[0].p.Name;
         this.Entity.p.CustomerFollowUps[0].CustomerStatus = selected[0].p.Ref;
         if (this.Entity.p.CustomerFollowUps[0].CustomerStatus) {
-           this.onStatusChange(this.Entity.p.CustomerFollowUps[0].CustomerStatus);
+          this.onStatusChange(this.Entity.p.CustomerFollowUps[0].CustomerStatus);
         }
       });
     } catch (error) { }
@@ -590,6 +590,7 @@ export class CustomerEnquiryDetailsMobileAppComponent implements OnInit {
   }
 
   SaveCustomerEnquiry = async () => {
+    console.log('this.Entity :', this.Entity);
     this.Entity.p.CompanyRef = this.companyRef;
     this.Entity.p.CustomerFollowUps[0].Ref =
       await CustomerFollowUp.getPrimaryKeysWithValidValues();
@@ -613,6 +614,7 @@ export class CustomerEnquiryDetailsMobileAppComponent implements OnInit {
       this.dtu.ConvertStringDateToFullFormat(this.localOfficeVisitDate ? this.localOfficeVisitDate : '');
     this.Entity.p.CustomerFollowUps[0].ReminderDate =
       this.dtu.ConvertStringDateToFullFormat(this.localReminderDate ? this.localReminderDate : '');
+    this.Entity.p.CustomerFollowUps[0].CompanyRef = this.companyRef;
 
     let entityToSave = this.Entity.GetEditableVersion();
     let entitiesToSave = [entityToSave];
