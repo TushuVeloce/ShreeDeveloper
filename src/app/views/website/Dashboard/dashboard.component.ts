@@ -57,7 +57,16 @@ export class DashboardComponent implements OnInit {
     private companystatemanagement: CompanyStateManagement
   ) { }
 
-  ngAfterViewInit(): void {
+  ngOnInit() {
+    this.getCurrentBalanceByCompanyRef();
+    this.getLedgerListByCompanyRef();
+    this.setIncomeExpenseChart();
+    this.FormulateBankList();
+    this.animateValue('cashBalance', this.cashTarget);
+    this.animateValue('bankBalance', this.bankTarget);
+  }
+
+  setIncomeExpenseChart = () => {
     const labels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'Jul', 'Aug', 'Spet', 'Oct', 'Nov', 'Dec'];
 
     const data: ChartData<'bar'> = {
@@ -111,15 +120,6 @@ export class DashboardComponent implements OnInit {
   }
 
 
-  ngOnInit() {
-    this.getCurrentBalanceByCompanyRef();
-    this.getLedgerListByCompanyRef();
-    this.FormulateBankList();
-    this.animateValue('cashBalance', this.cashTarget);
-    this.animateValue('bankBalance', this.bankTarget);
-
-
-  }
 
 
   private animateValue(property: keyof DashboardComponent, target: number) {
