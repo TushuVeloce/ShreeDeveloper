@@ -37,6 +37,7 @@ export class DashboardComponent implements OnInit {
   BankList: OpeningBalance[] = [];
   IncomeBankList: BankAccount[] = [];
   LedgerList: any = [];
+  LedgerColorShadesList: any = [];
 
 
   // Target values
@@ -120,6 +121,17 @@ export class DashboardComponent implements OnInit {
   }
 
 
+  generateShades = (count: number): string[] => {
+    const colors: string[] = [];
+    const hueStep = 360 / count; // spread evenly on color wheel
+
+    for (let i = 0; i < count; i++) {
+      const hue = Math.round(i * hueStep);
+      colors.push(`hsl(${hue}, 70%, 50%)`);
+    }
+
+    return colors;
+  }
 
 
   private animateValue(property: keyof DashboardComponent, target: number) {
@@ -148,6 +160,7 @@ export class DashboardComponent implements OnInit {
       return;
     }
     let lst = await Expense.FetchCurrentBalanceByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    console.log('lst :', lst);
     if (lst.length > 0) {
       this.shreeTarget = lst[0].p.ShreesBalance;
     }
@@ -162,18 +175,7 @@ export class DashboardComponent implements OnInit {
         datasets: [{
           label: 'Expenses',
           data: [300, 50, 100, 70, 120, 300, 50, 100, 70, 120],
-          backgroundColor: [
-            'rgb(247, 133, 150)',   // Ledger 1
-            'rgb(128, 0, 0)',       // Ledger 2
-            'rgb(255, 182, 193)',   // Ledger 3 (light pink)
-            'rgb(165, 42, 42)',     // JCB
-            'rgb(205, 133, 63)',   // Contractor
-            'rgb(247, 133, 150)',   // Ledger 1
-            'rgb(128, 0, 0)',       // Ledger 2
-            'rgb(255, 182, 193)',   // Ledger 3 (light pink)
-            'rgb(165, 42, 42)',     // JCB
-            'rgb(205, 133, 63)',   // Contractor
-          ],
+          backgroundColor: this.LedgerColorShadesList,
           hoverOffset: 4
         }]
       },
@@ -202,7 +204,7 @@ export class DashboardComponent implements OnInit {
     }
     let lst = await Ledger.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.LedgerList = lst.map(item => item.p.Name);
-    console.log('this.LedgerList :', this.LedgerList);
+    this.LedgerColorShadesList = this.generateShades(this.LedgerList.length);
     if (this.LedgerList.length > 0) {
       this.setDoughnutChart();
     }
@@ -216,9 +218,9 @@ export class DashboardComponent implements OnInit {
     }
     let lst = await OpeningBalance.FetchEntireListByCompanyRef(this.companyRef(), async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.BankList = lst.filter((item) => item.p.BankAccountRef > 0 && item.p.OpeningBalanceAmount > 0);
-    if (this.BankList.length > 0) {
-      this.BankAccountRef = this.BankList[0].p.Ref;
-    }
+    // if (this.BankList.length > 0) {
+    //   this.BankAccountRef = this.BankList[0].p.BankAccountRef;
+    // }
   };
 
 }
