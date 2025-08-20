@@ -61,6 +61,7 @@ export class RegistrarOfficeProps {
 
   public AgreementDocumentNo: string = '';
   public IsAgreementToSaleYes: boolean = false;
+  public IsAgreementToSaleNo: boolean = false;
   public AgreementDate: string = '';
   public AgreementDocumentPath: string = '';
   public AgreementDocumentFile: File = null as any

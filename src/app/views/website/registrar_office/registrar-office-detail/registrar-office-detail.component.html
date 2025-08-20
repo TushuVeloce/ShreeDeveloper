@@ -460,17 +460,17 @@
 
           <div class="col-1 d-flex justify-content-end align-items-center">
             <label for="IsAgreementToSaleYes">Yes</label>
-            <input type="checkbox" id="IsAgreementToSaleYes" [(ngModel)]="IsAgreementToSaleYes"
+            <input type="checkbox" id="IsAgreementToSaleYes" [(ngModel)]="Entity.p.IsAgreementToSaleYes"
               (ngModelChange)="onAgreementToSaleYes()" name="IsAgreementToSaleYes" class="custom-checkbox" />
           </div>
           <div class="col-1 d-flex justify-content-end align-items-center">
             <label for="IsAgreementToSaleNo">No</label>
-            <input type="checkbox" id="IsAgreementToSaleNo" [(ngModel)]="IsAgreementToSaleNo"
+            <input type="checkbox" id="IsAgreementToSaleNo" [(ngModel)]="Entity.p.IsAgreementToSaleNo"
               (ngModelChange)="onAgreementToSaleNo()" name="IsAgreementToSaleNo" class="custom-checkbox" />
           </div>
         </div>
 
-        <div class="row mb-2" *ngIf="IsAgreementToSaleYes" style="margin-top: 1rem">
+        <div class="row mb-2" *ngIf="Entity.p.IsAgreementToSaleYes" style="margin-top: 1rem">
           <div class="col-md-6">
             <label>Document</label>
             <input type="text" [(ngModel)]="Entity.p.AgreementDocumentNo" name="AgreementDocumentNo"

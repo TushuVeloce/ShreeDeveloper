@@ -33,8 +33,8 @@ export class RegistrarOfficeDetailComponent implements OnInit {
   localtalathidate: string = '';
   TimeStamp = Date.now()
   LoginToken = '';
-  IsAgreementToSaleYes: boolean = false;
-  IsAgreementToSaleNo: boolean = true;
+  // IsAgreementToSaleYes: boolean = false;
+  // IsAgreementToSaleNo: boolean = false;
 
   ImageBaseUrl: string = "";
 
@@ -151,13 +151,13 @@ export class RegistrarOfficeDetailComponent implements OnInit {
     this.InitialEntity = Object.assign(RegistrarOffice.CreateNewInstance(),
       this.utils.DeepCopy(this.Entity)) as RegistrarOffice;
 
-    if (this.localagreementdate != '' || this.Entity.p.AgreementDocumentNo != '') {
-      this.IsAgreementToSaleYes = true;
-      this.IsAgreementToSaleNo = false;
-    } else {
-      this.IsAgreementToSaleNo = true;
-      this.IsAgreementToSaleYes = false;
-    }
+    // if (this.localagreementdate != '' || this.Entity.p.AgreementDocumentNo != '') {
+    //   this.IsAgreementToSaleYes = true;
+    //   this.IsAgreementToSaleNo = false;
+    // } else {
+    //   this.IsAgreementToSaleNo = true;
+    //   this.IsAgreementToSaleYes = false;
+    // }
   }
 
   onAgreementToSaleYes = () => {
@@ -165,8 +165,8 @@ export class RegistrarOfficeDetailComponent implements OnInit {
     this.localagreementdate = '';
     this.Entity.p.AgreementDate = '';
 
-    if (this.IsAgreementToSaleYes) {
-      this.IsAgreementToSaleNo = false;
+    if (this.Entity.p.IsAgreementToSaleYes) {
+      this.Entity.p.IsAgreementToSaleNo = false;
     }
   }
 
@@ -175,9 +175,8 @@ export class RegistrarOfficeDetailComponent implements OnInit {
     this.localagreementdate = '';
     this.Entity.p.AgreementDate = '';
 
-    if (this.IsAgreementToSaleNo) {
+    if (this.Entity.p.IsAgreementToSaleNo) {
       this.Entity.p.IsAgreementToSaleYes = false;
-      this.IsAgreementToSaleYes = false;
     }
   }
 
@@ -271,15 +270,18 @@ export class RegistrarOfficeDetailComponent implements OnInit {
 
   isAgreementtoSaleComplete(): boolean {
     const p = this.Entity.p;
-    if (
-      p.AgreementDocumentNo?.trim() !== '' &&
-      this.localagreementdate?.trim() !== ''
-    ) {
-      this.Entity.p.IsAgreementToSaleYes = true;
-    } else {
+    if (this.Entity.p.IsAgreementToSaleNo) {
       this.Entity.p.IsAgreementToSaleYes = false;
+      return true;
+    } else if (
+      p.AgreementDocumentNo?.trim() != '' &&
+      this.localagreementdate?.trim() != ''
+    ) {
+      return true;
+    } else {
+      return false;
     }
-    return this.Entity.p.IsAgreementToSaleYes
+    // return this.Entity.p.IsAgreementToSaleYes
   }
 
   isSaleDeedComplete(): boolean {
