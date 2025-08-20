@@ -14,7 +14,7 @@ export class CurrentBalanceFetchRequest {
   RecipientRef: number = 0;
   RecipientRefs: number[] = [];
   PayerRef: number = 0;
-
+  BankAccountRefs: number[] = [];
   StartDate: string = '';
   EndDate: string = '';
   SiteRef: number = 0;

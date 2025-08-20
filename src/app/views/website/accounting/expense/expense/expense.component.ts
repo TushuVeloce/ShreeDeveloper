@@ -5,11 +5,13 @@ import { Invoice } from 'src/app/classes/domain/entities/website/accounting/bill
 import { Expense } from 'src/app/classes/domain/entities/website/accounting/expense/expense';
 import { Income } from 'src/app/classes/domain/entities/website/accounting/income/income';
 import { Ledger } from 'src/app/classes/domain/entities/website/masters/ledgermaster/ledger';
+import { OpeningBalance } from 'src/app/classes/domain/entities/website/masters/openingbalance/openingbalance';
 import { Site } from 'src/app/classes/domain/entities/website/masters/site/site';
 import { SubLedger } from 'src/app/classes/domain/entities/website/masters/subledgermaster/subledger';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
 import { DateconversionService } from 'src/app/services/dateconversion.service';
+import { DTU } from 'src/app/services/dtu.service';
 import { ScreenSizeService } from 'src/app/services/screensize.service';
 import { UIUtils } from 'src/app/services/uiutils.service';
 
@@ -32,6 +34,7 @@ export class ExpenseComponent implements OnInit {
   SelectedExpense: Expense = Expense.CreateNewInstance();
   CustomerRef: number = 0;
   TotalInvoice: number = 0;
+  BankList: OpeningBalance[] = [];
   pageSize = 10; // Items per page
   currentPage = 1; // Initialize current page
   total = 0;
@@ -56,7 +59,8 @@ export class ExpenseComponent implements OnInit {
     private DateconversionService: DateconversionService,
     private appStateManage: AppStateManageService,
     private screenSizeService: ScreenSizeService,
-    private companystatemanagement: CompanyStateManagement
+    private companystatemanagement: CompanyStateManagement,
+    private dtu: DTU,
   ) {
     effect(async () => {
       this.Entity.p.ExpenseModeOfPayment = 0
@@ -88,6 +92,16 @@ export class ExpenseComponent implements OnInit {
     let lst = await Invoice.FetchRecipientByRecipientTypeRef(this.companyRef(), this.Entity.p.SiteRef, this.Entity.p.RecipientType, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.RecipientList = lst;
   }
+
+
+  public FormulateBankList = async () => {
+    if (this.companyRef() <= 0) {
+      await this.uiUtils.showErrorToster('Company not Selected');
+      return;
+    }
+    let lst = await OpeningBalance.FetchEntireListByCompanyRef(this.companyRef(), async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg));
+    this.BankList = lst.filter((item) => item.p.BankAccountRef > 0 && (item.p.OpeningBalanceAmount > 0 || item.p.InitialBalance > 0));
+  };
 
   getSiteListByCompanyRef = async () => {
     this.Entity.p.SiteRef = 0
@@ -136,6 +150,10 @@ export class ExpenseComponent implements OnInit {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
+
+    this.Entity.p.StartDate = this.dtu.ConvertStringDateToFullFormat(this.Entity.p.StartDate);
+    this.Entity.p.EndDate = this.dtu.ConvertStringDateToFullFormat(this.Entity.p.EndDate);
+
     let lst = await Expense.FetchEntireListByFilters(
       this.companyRef(),
       this.Entity.p.StartDate,
@@ -145,6 +163,7 @@ export class ExpenseComponent implements OnInit {
       this.Entity.p.SubLedgerRef,
       this.Entity.p.ExpenseModeOfPayment,
       this.Entity.p.Ref,
+      this.Entity.p.BankAccountRef,
       this.Entity.p.RecipientRef,
       async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
 

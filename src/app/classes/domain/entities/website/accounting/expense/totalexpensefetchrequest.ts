@@ -12,6 +12,7 @@ export class TotalExpenseFetchRequest {
   CompanyRef: number = 0;
   ExpenseRef: number = 0;
   RecipientRef: number = 0;
+  BankAccountRefs: number[] = [];
   RecipientRefs: number[] = [];
   IsSalaryExpense: boolean = false;
   RecipientType: number = 0;

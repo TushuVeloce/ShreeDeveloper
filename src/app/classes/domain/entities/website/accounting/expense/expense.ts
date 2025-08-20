@@ -269,6 +269,7 @@ export class Expense implements IPersistable<Expense> {
     SubLedgerRef: number,
     ModeOfPayment: number,
     Ref: number,
+    BankAccountRef: number,
     RecipientRef: number,
     errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let req = new ExpenseFetchRequest();
@@ -290,6 +291,9 @@ export class Expense implements IPersistable<Expense> {
     }
     if (ModeOfPayment) {
       req.ModeOfPayments.push(ModeOfPayment)
+    }
+    if (BankAccountRef) {
+      req.BankAccountRefs.push(BankAccountRef)
     }
     if (RecipientRef) {
       req.RecipientRefs.push(RecipientRef);;
