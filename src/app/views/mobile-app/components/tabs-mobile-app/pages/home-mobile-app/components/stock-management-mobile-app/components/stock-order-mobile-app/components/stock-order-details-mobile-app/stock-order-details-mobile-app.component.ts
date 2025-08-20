@@ -371,7 +371,8 @@ export class StockOrderDetailsMobileAppComponent implements OnInit {
       await this.toastService.present(errMsg, 1000, 'danger');
       await this.haptic.error();
     });
-    this.VendorList = lst;
+    // this.VendorList = lst;
+    this.VendorList = lst.filter(data => data.p.MaterialListSuppliedByVendor.length > 0);
   }
 
   getOrderedMaterialList = async () => {

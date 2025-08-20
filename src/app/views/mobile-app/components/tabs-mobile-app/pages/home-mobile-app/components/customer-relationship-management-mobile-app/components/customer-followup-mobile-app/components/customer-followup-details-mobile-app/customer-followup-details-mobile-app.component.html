@@ -82,7 +82,7 @@
         </ion-item>
 
         <ion-button expand="block" class="submit-button primary-button" (click)="addDataToCustomerFollowUpPlotDetail()"
-          [disabled]="!SiteManagementName || !InterestedPlotNo">
+          [disabled]="InterestedPlotRef==0 || SiteManagementRef == 0">
           Add Plots
         </ion-button>
       </ion-list>
@@ -90,13 +90,21 @@
       <!-- Plot Details Cards -->
       <ion-list *ngIf="Entity.p.CustomerFollowUpPlotDetails.length > 0" class="plot-details-list">
         <ion-item lines="none">
-          <ion-label class="ion-text-center title-line">Follow‑Up Plots</ion-label>
+          <ion-label class="ion-text-center title-line">Follow-Up Plots</ion-label>
         </ion-item>
+
         <ion-card *ngFor="let plot of Entity.p.CustomerFollowUpPlotDetails; let i = index">
           <ion-card-header>
             <ion-card-title>{{ plot.SiteName }}</ion-card-title>
             <ion-card-subtitle>Plot #{{ (currentPage - 1) * pageSize + i + 1 }}</ion-card-subtitle>
+
+            <!-- Delete button (top-right corner) -->
+            <ion-button fill="clear" color="secondary" size="small" (click)="deletePlot(i)"
+              style="position: absolute; top: 8px; right: 8px;">
+              <ion-icon name="trash-outline" color="secondary"></ion-icon>
+            </ion-button>
           </ion-card-header>
+
           <ion-card-content>
             <ion-item>
               <ion-label>Plot No</ion-label>
@@ -130,6 +138,7 @@
           </ion-card-content>
         </ion-card>
       </ion-list>
+
 
       <!-- Lead Source, Agent, Handled By, Status -->
       <ion-item class="input-item" button detail (click)="selectLeadSourceBottomsheet()"
@@ -168,7 +177,8 @@
         <ion-item class="input-item">
           <ion-label>Next Site Visit Date</ion-label>
           <ion-datetime-button datetime="siteVisitDate" trigger="siteVisitModal"></ion-datetime-button>
-                  <ion-checkbox slot="end" [(ngModel)]="localSiteVisitDate" name="SiteVisitDateCheckBox" [disabled]="true"></ion-checkbox>
+          <ion-checkbox slot="end" [(ngModel)]="localSiteVisitDate" name="SiteVisitDateCheckBox"
+            [disabled]="true"></ion-checkbox>
         </ion-item>
         <ion-modal keepContentsMounted="true" trigger="siteVisitModal">
           <ng-template>
@@ -180,7 +190,8 @@
         <ion-item class="input-item">
           <ion-label>Next Office Visit Date</ion-label>
           <ion-datetime-button datetime="officeVisitDate" trigger="officeVisitModal"></ion-datetime-button>
-          <ion-checkbox slot="end" [(ngModel)]="localOfficeVisitDate" name="officeVisitDateCheckbox" [disabled]="true"></ion-checkbox>
+          <ion-checkbox slot="end" [(ngModel)]="localOfficeVisitDate" name="officeVisitDateCheckbox"
+            [disabled]="true"></ion-checkbox>
         </ion-item>
         <ion-modal keepContentsMounted="true" trigger="officeVisitModal">
           <ng-template>
@@ -192,7 +203,8 @@
         <ion-item class="input-item">
           <ion-label>Reminder Date</ion-label>
           <ion-datetime-button datetime="reminderDate" trigger="reminderDateModal"></ion-datetime-button>
-          <ion-checkbox slot="end" [(ngModel)]="localReminderDate" name="reminderDateCheckBox" [disabled]="true"></ion-checkbox>
+          <ion-checkbox slot="end" [(ngModel)]="localReminderDate" name="reminderDateCheckBox"
+            [disabled]="true"></ion-checkbox>
         </ion-item>
         <ion-modal keepContentsMounted="true" trigger="reminderDateModal">
           <ng-template>

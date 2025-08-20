@@ -498,6 +498,10 @@ export class CustomerEnquiryDetailsMobileAppComponent implements OnInit {
     }
   };
 
+  deletePlot(index: number) {
+    this.Entity.p.CustomerFollowUps[0].CustomerFollowUpPlotDetails.splice(index, 1);
+  }
+
   addDataToTable = () => {
     if (this.SiteManagementRef <= 0) {
       // this.uiUtils.showWarningToster(`Please Select a Site`);
@@ -554,6 +558,7 @@ export class CustomerEnquiryDetailsMobileAppComponent implements OnInit {
       this.SelectedInterestedSite = [];
     }
   }
+  
 
   // On lead source broker selected
   showAgentBrokerInput: boolean = false;

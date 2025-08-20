@@ -241,15 +241,35 @@ export class CustomerFollowupDetailsMobileAppComponent implements OnInit {
 
     }
   }
+
+  // public selectInterestedPlotsBottomsheet = async (): Promise<void> => {
+  //   try {
+  //     // const options = this.PlotList;
+  //     const options = this.PlotList.filter((plot) => plot.p.CurrentBookingRemark == BookingRemarks.Plot_Of_Owner || plot.p.CurrentBookingRemark == BookingRemarks.Plot_Of_Shree);
+  //     this.openSelectModal(options, this.selectedPlot, false, 'Select Interested Plots', 1, (selected) => {
+  //       this.selectedPlot = selected;
+  //       this.InterestedPlotRef = selected[0].p.Ref;
+  //       this.InterestedPlotNo = selected[0].p.Name;
+  //       this.plotName = selected[0].p.Name;
+  //     });
+  //   } catch (error) {
+
+  //   }
+  // }
+
   public selectInterestedPlotsBottomsheet = async (): Promise<void> => {
     try {
+      if (this.SiteManagementRef <= 0) {
+        await this.toastService.present('Please Select a Plot', 1000, 'danger');
+        await this.haptic.error();
+        return;
+      }
       // const options = this.PlotList;
       const options = this.PlotList.filter((plot) => plot.p.CurrentBookingRemark == BookingRemarks.Plot_Of_Owner || plot.p.CurrentBookingRemark == BookingRemarks.Plot_Of_Shree);
       this.openSelectModal(options, this.selectedPlot, false, 'Select Interested Plots', 1, (selected) => {
         this.selectedPlot = selected;
         this.InterestedPlotRef = selected[0].p.Ref;
-        this.InterestedPlotNo = selected[0].p.Name;
-        this.plotName = selected[0].p.Name;
+        this.InterestedPlotNo = selected[0].p.PlotNo;
       });
     } catch (error) {
 
@@ -428,6 +448,9 @@ export class CustomerFollowupDetailsMobileAppComponent implements OnInit {
     }
   };
 
+  deletePlot(index: number) {
+    this.Entity.p.CustomerFollowUpPlotDetails.splice(index, 1);
+  }
   addDataToCustomerFollowUpPlotDetail = () => {
     if (this.SiteManagementRef <= 0) {
       this.toastService.present('Please Select a Site', 1000, 'danger');
@@ -471,6 +494,17 @@ export class CustomerFollowupDetailsMobileAppComponent implements OnInit {
       this.IsPlotDetails = true;
       this.SiteManagementRef = 0;
       this.InterestedPlotRef = 0;
+
+      this.selectedPlot = [];
+      this.InterestedPlotRef = 0;
+      this.InterestedPlotNo = '';
+      this.PlotList = [];
+      this.plotName = '';
+
+      this.selectedSite = [];
+      this.SiteManagementRef = 0;
+      this.SiteManagementName = '';
+      this.SiteName = '';
     }
   };
   GenerateCustomerFollowUpPlotDetailsRef = async () => {
