@@ -40,7 +40,9 @@ export class ExpenseComponent implements OnInit {
   total = 0;
   TotalInvoiceAmount: number = 0
   TotalGivenAmount: number = 0
-  RemainingAmountOfGrandTotal: number = 0
+  RemainingAmountOfGrandTotal: number = 0;
+  StartDate = '';
+  EndDate = '';
 
   companyRef = this.companystatemanagement.SelectedCompanyRef;
 
@@ -151,8 +153,8 @@ export class ExpenseComponent implements OnInit {
       return;
     }
 
-    this.Entity.p.StartDate = this.dtu.ConvertStringDateToFullFormat(this.Entity.p.StartDate);
-    this.Entity.p.EndDate = this.dtu.ConvertStringDateToFullFormat(this.Entity.p.EndDate);
+    this.Entity.p.StartDate = this.dtu.ConvertStringDateToFullFormat(this.StartDate);
+    this.Entity.p.EndDate = this.dtu.ConvertStringDateToFullFormat(this.EndDate);
 
     let lst = await Expense.FetchEntireListByFilters(
       this.companyRef(),

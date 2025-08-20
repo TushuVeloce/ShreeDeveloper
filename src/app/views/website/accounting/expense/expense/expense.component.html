@@ -27,12 +27,12 @@
 <div class="row row-cols-5 g-1">
   <div class="col">
     <label for="StartDate"><b>From Date</b></label>
-    <input type="date" [(ngModel)]="Entity.p.StartDate" name="StartDate" class="form-control" id="StartDate"
+    <input type="date" [(ngModel)]="StartDate" name="StartDate" class="form-control" id="StartDate"
       placeholder="Enter Start Date" (ngModelChange)="FetchEntireListByFilters()" />
   </div>
   <div class="col">
     <label for="EndDate"><b>To Date</b></label>
-    <input type="date" [(ngModel)]="Entity.p.EndDate" name="EndDate" class="form-control" id="EndDate"
+    <input type="date" [(ngModel)]="EndDate" name="EndDate" class="form-control" id="EndDate"
       placeholder="Enter End Date" (ngModelChange)="FetchEntireListByFilters()" />
   </div>
   <div class="col">
