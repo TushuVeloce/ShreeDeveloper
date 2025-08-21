@@ -79,20 +79,25 @@
           <strong class="label-mobile-app">{{ field.label }}:</strong>
           <span class="value-mobile-app">{{ field.value ? field.value : '-' }}</span>
         </div>
-        <ion-label>follow Up</ion-label>
-        <div class="info-row-of-model-mobile-app" *ngFor="let field of [
+        <div class="info-row-of-model-mobile-app" *ngIf="(SelectedCustomerEnquiry.p.CustomerFollowUps).length > 1">
+          <ion-text class="ion-text-center">
+            <strong>Customer Follow Up Details</strong></ion-text>
+        </div>
+        <div *ngIf="(SelectedCustomerEnquiry.p.CustomerFollowUps).length > 1">
+          <div class="info-row-of-model-mobile-app" *ngFor="let field of [
                           { label: 'Contact Mode', value: SelectedCustomerEnquiry.p.CustomerFollowUps[0].ContactModeName },
                           { label: 'Customer Requirement', value: SelectedCustomerEnquiry.p.CustomerFollowUps[0].CustomerRequirement },
                           { label: 'Customer Status', value: SelectedCustomerEnquiry.p.CustomerFollowUps[0].CustomerStatusName },
                           { label: 'Lead Handle By', value: SelectedCustomerEnquiry.p.CustomerFollowUps[0].LeadHandleByName },
                           { label: 'Lead Source', value: SelectedCustomerEnquiry.p.CustomerFollowUps[0].LeadSourceName },
                           { label: 'Remark', value: SelectedCustomerEnquiry.p.CustomerFollowUps[0].Remark },
-                          { label: 'Reminder Date', value: SelectedCustomerEnquiry.p.CustomerFollowUps[0].ReminderDate },
-                          { label: 'Site Visit Date', value: SelectedCustomerEnquiry.p.CustomerFollowUps[0].SiteVisitDate },
-                          { label: 'Office Visit Date', value: SelectedCustomerEnquiry.p.CustomerFollowUps[0].OfficeVisitDate },
+                          { label: 'Reminder Date', value:formatDate(SelectedCustomerEnquiry.p.CustomerFollowUps[0].ReminderDate) },
+                          { label: 'Site Visit Date', value: formatDate(SelectedCustomerEnquiry.p.CustomerFollowUps[0].SiteVisitDate) },
+                          { label: 'Office Visit Date', value: formatDate(SelectedCustomerEnquiry.p.CustomerFollowUps[0].OfficeVisitDate) },
                         ]">
-          <strong class="label-mobile-app">{{ field.label }}:</strong>
-          <span class="value-mobile-app">{{ field.value ? field.value : '-' }}</span>
+            <strong class="label-mobile-app">{{ field.label }}:</strong>
+            <span class="value-mobile-app">{{ field.value ? field.value : '-' }}</span>
+          </div>
         </div>
       </ion-content>
       <ion-footer class="modal-footer-mobile-app">

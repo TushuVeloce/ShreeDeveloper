@@ -212,14 +212,14 @@ export class MaterialRequisitionViewMobileAppComponent implements OnInit, OnDest
       await this.haptic.error();
       return;
     }
-    await this.router.navigate(['/mobile-app/tabs/dashboard/stock-management/material-requisition/add'], { replaceUrl: true });
+    await this.router.navigate(['/mobile-app/tabs/dashboard/stock-management/material-requisition/add']);
   }
 
   onEditClicked = async (item: MaterialRequisition) => {
     this.SelectedMaterialRequisition = item.GetEditableVersion();
     MaterialRequisition.SetCurrentInstance(this.SelectedMaterialRequisition);
     this.appStateManage.StorageKey.setItem('Editable', 'Edit');
-    await this.router.navigate(['/mobile-app/tabs/dashboard/stock-management/material-requisition/edit'], { replaceUrl: true });
+    await this.router.navigate(['/mobile-app/tabs/dashboard/stock-management/material-requisition/edit']);
   }
 
   onDeleteClicked = async (item: MaterialRequisition) => {

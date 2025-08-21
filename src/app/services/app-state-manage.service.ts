@@ -78,6 +78,11 @@ export class AppStateManageService {
     this.StorageKey.setItem('siteName', Name)
   }
 
+  setSiteRefForMobile(value: number, Name: string) {
+    this.localStorage.setItem('siteRf', value.toString())
+    this.localStorage.setItem('siteName', Name)
+  }
+
   resetSiteRef(): void {
     this.StorageKey.setItem('siteRf', '0');
     this.StorageKey.setItem('siteName', '');

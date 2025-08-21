@@ -69,7 +69,7 @@ export class SiteManagementViewMobileAppComponent implements OnInit {
         await this.haptic.error();
         return;
       }
-      this.appStateManagement.setSiteRef(0, '');
+      this.appStateManagement.setSiteRefForMobile(0, '');
       await this.getSiteListByCompanyRef();
     } catch (error) {
       console.error('Error loading site data:', error);
@@ -122,4 +122,9 @@ export class SiteManagementViewMobileAppComponent implements OnInit {
       await this.loadingService.hide();
     }
   };
+  async OpenActualStage(site:Site){
+  console.log('site :', site);
+    await this.appStateManagement.setSiteRefForMobile(site.p.Ref,site.p.Name)
+    this.router.navigate(['mobile-app/tabs/dashboard/site-management/site-details']);
+  }
 }

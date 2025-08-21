@@ -285,7 +285,7 @@ export class InvoiceViewMobileAppComponent implements OnInit {
     this.SelectedInvoice = item.GetEditableVersion();
     Invoice.SetCurrentInstance(this.SelectedInvoice);
     this.appStateManage.StorageKey.setItem('Editable', 'Edit');
-    await this.router.navigate(['/mobile-app/tabs/dashboard/accounting/invoice/edit'], { replaceUrl: true });
+    await this.router.navigate(['/mobile-app/tabs/dashboard/accounting/invoice/edit']);
   };
 
   onDeleteClicked = async (item: Invoice) => {
@@ -347,7 +347,7 @@ export class InvoiceViewMobileAppComponent implements OnInit {
       this.haptic.warning();
       return;
     }
-    this.router.navigate(['mobile-app/tabs/dashboard/accounting/invoice/add'], { replaceUrl: true });
+    this.router.navigate(['mobile-app/tabs/dashboard/accounting/invoice/add']);
   }
 
   openModal = (Invoice: any) => {
