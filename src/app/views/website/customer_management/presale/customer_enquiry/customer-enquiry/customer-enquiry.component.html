@@ -28,7 +28,7 @@
         <tr *ngFor="let customerenquiry of paginatedList; index as i">
           <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
           <td Class="tbldata">
-            {{formatDate(customerenquiry.p.CustomerFollowUps[0].SiteVisitDate)}}
+            {{formatDate(customerenquiry.p.CustomerFollowUps[0].TransDateTime)}}
           </td>
           <td Class="tbldata">{{customerenquiry.p.Name}}</td>
           <td Class="tbldata">{{customerenquiry.p.ContactNos}}</td>

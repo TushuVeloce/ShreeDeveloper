@@ -76,8 +76,9 @@ export class RegisteredCustomerDetailsComponent implements OnInit {
     if (this.appStateManage.StorageKey.getItem('Editable') == 'Edit') {
       this.IsNewEntity = false;
       this.Entity = RegisteredCustomer.GetCurrentInstance();
-      this.Entity.p.SiteVisitDate = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.SiteVisitDate);
-      // this.Date = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.Date);
+      if (this.Entity.p.CreatedDate != '') {
+        this.Entity.p.SiteVisitDate = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.CreatedDate);
+      }
 
       if (this.Entity.p.RegisterDate != '') {
         this.localRegisterDate = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.RegisterDate)

@@ -208,8 +208,8 @@
           <tbody *ngIf="InvoiceSumExpenseSumList.length > 0">
             <tr *ngFor="let rec of InvoiceSumExpenseSumList">
               <td>{{ rec.p.RecipientName }}</td>
-              <td>₹ {{ rec.p.GivenAmount | number }}</td>
-              <td>₹ {{ rec.p.InvoiceAmount | number }}</td>
+              <td> {{ rec.p.InvoiceAmount | currency : "INR" }}</td>
+              <td> {{ rec.p.GivenAmount | currency : "INR" }}</td>
             </tr>
           </tbody>
         </table>
