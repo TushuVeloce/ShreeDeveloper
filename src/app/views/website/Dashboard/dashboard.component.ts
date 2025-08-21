@@ -24,6 +24,7 @@ import { ExpenseBreakdown } from 'src/app/classes/domain/entities/website/Dashbo
 import { CRMFunnel } from 'src/app/classes/domain/entities/website/Dashboard/crmfunnel/crmfunnel';
 import { ExpenseGraph } from 'src/app/classes/domain/entities/website/Dashboard/expensegraph/expensegraph';
 import { IncomeGraph } from 'src/app/classes/domain/entities/website/Dashboard/incomegraph/incomegraph';
+import { InvoiceSumExpenseSum } from 'src/app/classes/domain/entities/website/Dashboard/invoicesumexpensesum/invoicesumexpensesum';
 
 Chart.register(...registerables);
 
@@ -96,8 +97,8 @@ export class DashboardComponent implements OnInit {
     this.getSiteListByCompanyRef();
     this.FormulateBankList();
     this.getIncomeExpenseGraphList();
-    // this.getIncomeGraphListByCompanySiteMonthFilterType();
     this.getCRMFunnelListByCompanySiteMonthFilterType();
+    this.getInvoiceSumExpenseSumListByCompanySiteMonthFilterType();
   }
 
   setIncomeExpenseChart = () => {
@@ -224,36 +225,6 @@ export class DashboardComponent implements OnInit {
     this.animateValue('bankBalance', this.bankTarget);
   }
 
-  // setDoughnutChart = () => {
-  //   new Chart("doughnutChart", {
-  //     type: 'doughnut',
-  //     data: {
-  //       labels: this.LedgerList,
-  //       datasets: [{
-  //         label: 'Expenses',
-  //         data: this.ExpenseBreakdownList,
-  //         backgroundColor: this.LedgerColorShadesList,
-  //         hoverOffset: 4
-  //       }]
-  //     },
-
-  //     options: {
-  //       responsive: true,
-  //       maintainAspectRatio: true,   // keeps it circular
-  //       aspectRatio: 1,              // force square shape
-  //       plugins: {
-  //         legend: {
-  //           position: 'right',       // as in your screenshot
-  //           labels: {
-  //             boxWidth: 15,
-  //             padding: 10
-  //           }
-  //         }
-  //       }
-  //     }
-  //   });
-  // }
-
   setDoughnutChart = () => {
     // 🔑 Destroy old chart if exists
     if (this.doughnutChart) {
@@ -303,20 +274,18 @@ export class DashboardComponent implements OnInit {
       return;
     }
     let lst = await ExpenseBreakdown.FetchEntireListByCompanySiteMonthFilterType(this.companyRef(), this.DoughnutSiteRef, this.SelectedDoughnutMonths, this.DoughnutFilterType, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-    console.log('breakdown :', lst);
     // debugger
     if (lst.length > 0) {
       this.LedgerList = lst.map(item => item.p.LedgerName);
       this.ExpenseBreakdownList = lst.map(item => item.p.TotalGivenAmount);
       this.setDoughnutChart();
-    } else {
-      this.LedgerList = []
-      this.ExpenseBreakdownList = []
-      this.setDoughnutChart();
     }
-    // console.log('this.LedgerList.length :', this.LedgerList.length);
-    this.LedgerColorShadesList = this.generateShades(this.LedgerList.length);
-    console.log('this.LedgerColorShadesList :', this.LedgerColorShadesList);
+    // else {
+    //   this.LedgerList = []
+    //   this.ExpenseBreakdownList = []
+    //   this.setDoughnutChart();
+    // }
+    this.LedgerColorShadesList = this.generateShades(lst.length);
   }
 
   getIncomeExpenseGraphList = async () => {
@@ -333,22 +302,15 @@ export class DashboardComponent implements OnInit {
     let lst = await ExpenseGraph.FetchEntireListByCompanySiteMonthFilterType(this.companyRef(), this.BarSiteRef, this.SelectedBarMonths, this.BarFilterType, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.ExpenseGraphList = lst.map(item => item.p.TotalGivenAmount);
     this.TotalExpense = lst.reduce((sum, item) => sum + (item.p.TotalGivenAmount || 0), 0);
-    console.log('TotalExpense :', this.TotalExpense);
-
-    // this.LedgerColorShadesList = this.generateShades(this.LedgerList.length);
-    // if (this.LedgerList.length > 0) {
-      //   this.setDoughnutChart();
-      // }
-    }
+  }
 
 
-    getIncomeGraphListByCompanySiteMonthFilterType = async () => {
-      if (this.companyRef() <= 0) {
-        await this.uiUtils.showErrorToster('Company not Selected');
+  getIncomeGraphListByCompanySiteMonthFilterType = async () => {
+    if (this.companyRef() <= 0) {
+      await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
     let lst = await IncomeGraph.FetchEntireListByCompanySiteMonthFilterType(this.companyRef(), this.BarSiteRef, this.SelectedBarMonths, this.BarFilterType, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-    console.log('this.TotalIncome :', this.TotalIncome);
     this.TotalIncome = lst.reduce((sum, item) => sum + (item.p.TotalGivenAmount || 0), 0);
     this.IncomeGraphList = lst.map(item => item.p.TotalGivenAmount);
   }
@@ -363,6 +325,20 @@ export class DashboardComponent implements OnInit {
       this.TotalNoOfPlots = lst[0].p.TotalNoOfPlots
       this.TotalNoOfSoldPlots = lst[0].p.TotalNoOfSoldPlots
       this.TotalRevenueGenerated = lst[0].p.TotalRevenueGenerated
+    }
+  }
+
+  getInvoiceSumExpenseSumListByCompanySiteMonthFilterType = async () => {
+    if (this.companyRef() <= 0) {
+      await this.uiUtils.showErrorToster('Company not Selected');
+      return;
+    }
+    let lst = await InvoiceSumExpenseSum.FetchEntireListByCompanySiteMonthFilterType(this.companyRef(), this.CRMSiteRef, this.SelectedCRMMonths, this.CRMFilterType, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    console.log('lst :', lst);
+    if (lst.length > 0) {
+      // this.TotalNoOfPlots = lst[0].p.TotalNoOfPlots
+      // this.TotalNoOfSoldPlots = lst[0].p.TotalNoOfSoldPlots
+      // this.TotalRevenueGenerated = lst[0].p.TotalRevenueGenerated
     }
   }
 

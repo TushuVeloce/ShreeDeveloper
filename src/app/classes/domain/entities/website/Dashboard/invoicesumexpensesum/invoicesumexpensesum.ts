@@ -10,12 +10,12 @@ import { Utils } from "src/app/services/utils.service";
 import { isNullOrUndefined } from "src/tools";
 import { UIUtils } from "src/app/services/uiutils.service";
 import { RequestTypes } from "src/app/classes/infrastructure/enums";
-import { IncomeGraphFetchRequest } from "./incomegraphfetchrequest";
 import { ValidationMessages, ValidationPatterns } from "src/app/classes/domain/constants";
+import { InvoiceSumExpenseSumFetchRequest } from "./invoicesumexpensesumfetchrequest";
 
 
-export class IncomeGraphProps {
-  public readonly Db_Table_Name = "DashboardIncomeForGraph";
+export class InvoiceSumExpenseSumProps {
+  public readonly Db_Table_Name = "InvoiceSumExpenseSum";
   public CreatedBy: number = 0;
   public CreatedByName: string = '';
   public UpdatedBy: number = 0;
@@ -38,14 +38,14 @@ export class IncomeGraphProps {
   }
 
   public static Blank() {
-    return new IncomeGraphProps(true);
+    return new InvoiceSumExpenseSumProps(true);
   }
 }
 
-export class IncomeGraph implements IPersistable<IncomeGraph> {
-  public static readonly Db_Table_Name: string = 'DashboardIncomeForGraph';
+export class InvoiceSumExpenseSum implements IPersistable<InvoiceSumExpenseSum> {
+  public static readonly Db_Table_Name: string = 'InvoiceSumExpenseSum';
 
-  private constructor(public readonly p: IncomeGraphProps, public readonly AllowEdit: boolean) {
+  private constructor(public readonly p: InvoiceSumExpenseSumProps, public readonly AllowEdit: boolean) {
 
   }
 
@@ -58,17 +58,17 @@ export class IncomeGraph implements IPersistable<IncomeGraph> {
     }
   }
 
-  public GetEditableVersion(): IncomeGraph {
-    let newState: IncomeGraphProps = Utils.GetInstance().DeepCopy(this.p);
-    return IncomeGraph.CreateInstance(newState, true);
+  public GetEditableVersion(): InvoiceSumExpenseSum {
+    let newState: InvoiceSumExpenseSumProps = Utils.GetInstance().DeepCopy(this.p);
+    return InvoiceSumExpenseSum.CreateInstance(newState, true);
   }
 
   public static CreateNewInstance() {
-    return new IncomeGraph(IncomeGraphProps.Blank(), true);
+    return new InvoiceSumExpenseSum(InvoiceSumExpenseSumProps.Blank(), true);
   }
 
   public static CreateInstance(data: any, allowEdit: boolean) {
-    return new IncomeGraph(data as IncomeGraphProps, allowEdit);
+    return new InvoiceSumExpenseSum(data as InvoiceSumExpenseSumProps, allowEdit);
   }
 
   public CheckSaveValidity(_td: TransportData, vra: ValidationResultAccumulator): void {
@@ -77,28 +77,28 @@ export class IncomeGraph implements IPersistable<IncomeGraph> {
   }
 
   public MergeIntoTransportData(td: TransportData) {
-    DataContainerService.GetInstance().MergeIntoContainer(td.MainData, IncomeGraph.Db_Table_Name, this.p);
+    DataContainerService.GetInstance().MergeIntoContainer(td.MainData, InvoiceSumExpenseSum.Db_Table_Name, this.p);
   }
 
-  private static m_currentInstance: IncomeGraph = IncomeGraph.CreateNewInstance();
+  private static m_currentInstance: InvoiceSumExpenseSum = InvoiceSumExpenseSum.CreateNewInstance();
 
   public static GetCurrentInstance() {
-    return IncomeGraph.m_currentInstance;
+    return InvoiceSumExpenseSum.m_currentInstance;
   }
 
-  public static SetCurrentInstance(value: IncomeGraph) {
-    IncomeGraph.m_currentInstance = value;
+  public static SetCurrentInstance(value: InvoiceSumExpenseSum) {
+    InvoiceSumExpenseSum.m_currentInstance = value;
   }
 
 
   // ********************************************
   public static cacheDataChangeLevel: number = -1;
 
-  public static SingleInstanceFromTransportData(td: TransportData): IncomeGraph {
+  public static SingleInstanceFromTransportData(td: TransportData): InvoiceSumExpenseSum {
     let dcs = DataContainerService.GetInstance();
-    if (dcs.CollectionExists(td.MainData, IncomeGraph.Db_Table_Name)) {
-      for (let data of dcs.GetCollection(td.MainData, IncomeGraph.Db_Table_Name)!.Entries) {
-        return IncomeGraph.CreateInstance(data, false);
+    if (dcs.CollectionExists(td.MainData, InvoiceSumExpenseSum.Db_Table_Name)) {
+      for (let data of dcs.GetCollection(td.MainData, InvoiceSumExpenseSum.Db_Table_Name)!.Entries) {
+        return InvoiceSumExpenseSum.CreateInstance(data, false);
       }
     }
 
@@ -107,13 +107,13 @@ export class IncomeGraph implements IPersistable<IncomeGraph> {
 
   public static ListFromDataContainer(cont: DataContainer,
     filterPredicate: (arg0: any) => boolean = null as any,
-    sortPropertyName: string = ""): IncomeGraph[] {
-    let result: IncomeGraph[] = [];
+    sortPropertyName: string = ""): InvoiceSumExpenseSum[] {
+    let result: InvoiceSumExpenseSum[] = [];
 
     let dcs = DataContainerService.GetInstance();
 
-    if (dcs.CollectionExists(cont, IncomeGraph.Db_Table_Name)) {
-      let coll = dcs.GetCollection(cont, IncomeGraph.Db_Table_Name)!;
+    if (dcs.CollectionExists(cont, InvoiceSumExpenseSum.Db_Table_Name)) {
+      let coll = dcs.GetCollection(cont, InvoiceSumExpenseSum.Db_Table_Name)!;
       let entries = coll.Entries;
 
       if (!isNullOrUndefined(filterPredicate)) entries = entries.filter(filterPredicate);
@@ -123,18 +123,18 @@ export class IncomeGraph implements IPersistable<IncomeGraph> {
       }
 
       for (let data of entries) {
-        result.push(IncomeGraph.CreateInstance(data, false));
+        result.push(InvoiceSumExpenseSum.CreateInstance(data, false));
       }
     }
 
     return result;
   }
 
-  public static ListFromTransportData(td: TransportData): IncomeGraph[] {
-    return IncomeGraph.ListFromDataContainer(td.MainData);
+  public static ListFromTransportData(td: TransportData): InvoiceSumExpenseSum[] {
+    return InvoiceSumExpenseSum.ListFromDataContainer(td.MainData);
   }
 
-  public static async FetchTransportData(req: IncomeGraphFetchRequest, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+  public static async FetchTransportData(req: InvoiceSumExpenseSumFetchRequest, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let tdRequest = req.FormulateTransportData();
     let pktRequest = PayloadPacketFacade.GetInstance().CreateNewPayloadPacket2(tdRequest);
 
@@ -149,34 +149,34 @@ export class IncomeGraph implements IPersistable<IncomeGraph> {
   }
 
   public static async FetchInstance(ref: number, companyRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-    let req = new IncomeGraphFetchRequest();
-    req.IncomeGraphRefs.push(ref);
+    let req = new InvoiceSumExpenseSumFetchRequest();
+    req.InvoiceSumExpenseSumRefs.push(ref);
     req.CompanyRefs.push(companyRef);
 
-    let tdResponse = await IncomeGraph.FetchTransportData(req, errorHandler) as TransportData;
-    return IncomeGraph.SingleInstanceFromTransportData(tdResponse);
+    let tdResponse = await InvoiceSumExpenseSum.FetchTransportData(req, errorHandler) as TransportData;
+    return InvoiceSumExpenseSum.SingleInstanceFromTransportData(tdResponse);
   }
 
-  public static async FetchList(req: IncomeGraphFetchRequest, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-    let tdResponse = await IncomeGraph.FetchTransportData(req, errorHandler) as TransportData;
-    return IncomeGraph.ListFromTransportData(tdResponse);
+  public static async FetchList(req: InvoiceSumExpenseSumFetchRequest, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+    let tdResponse = await InvoiceSumExpenseSum.FetchTransportData(req, errorHandler) as TransportData;
+    return InvoiceSumExpenseSum.ListFromTransportData(tdResponse);
   }
 
   public static async FetchEntireList(errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-    let req = new IncomeGraphFetchRequest();
-    let tdResponse = await IncomeGraph.FetchTransportData(req, errorHandler) as TransportData;
-    return IncomeGraph.ListFromTransportData(tdResponse);
+    let req = new InvoiceSumExpenseSumFetchRequest();
+    let tdResponse = await InvoiceSumExpenseSum.FetchTransportData(req, errorHandler) as TransportData;
+    return InvoiceSumExpenseSum.ListFromTransportData(tdResponse);
   }
 
   public static async FetchEntireListByCompanyRef(CompanyRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-    let req = new IncomeGraphFetchRequest();
+    let req = new InvoiceSumExpenseSumFetchRequest();
     req.CompanyRefs.push(CompanyRef)
-    let tdResponse = await IncomeGraph.FetchTransportData(req, errorHandler) as TransportData;
-    return IncomeGraph.ListFromTransportData(tdResponse);
+    let tdResponse = await InvoiceSumExpenseSum.FetchTransportData(req, errorHandler) as TransportData;
+    return InvoiceSumExpenseSum.ListFromTransportData(tdResponse);
   }
 
   public static async FetchEntireListByCompanySiteMonthFilterType(CompanyRef: number, SiteRef: number, Month: number, FilterType: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-    let req = new IncomeGraphFetchRequest();
+    let req = new InvoiceSumExpenseSumFetchRequest();
     req.CompanyRef = CompanyRef;
     if (SiteRef) {
       req.SiteRef = SiteRef;
@@ -187,8 +187,8 @@ export class IncomeGraph implements IPersistable<IncomeGraph> {
     if (FilterType) {
       req.FilterType = FilterType;
     }
-    let tdResponse = await IncomeGraph.FetchTransportData(req, errorHandler) as TransportData;
-    return IncomeGraph.ListFromTransportData(tdResponse);
+    let tdResponse = await InvoiceSumExpenseSum.FetchTransportData(req, errorHandler) as TransportData;
+    return InvoiceSumExpenseSum.ListFromTransportData(tdResponse);
   }
 
   public async DeleteInstance(successHandler: () => Promise<void> = null!, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
