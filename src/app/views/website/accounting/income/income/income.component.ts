@@ -1,6 +1,6 @@
 import { Component, effect, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { DomainEnums, OpeningBalanceModeOfPayments, PayerTypes } from 'src/app/classes/domain/domainenums/domainenums';
+import { DomainEnums, ModeOfPayments, OpeningBalanceModeOfPayments, PayerTypes } from 'src/app/classes/domain/domainenums/domainenums';
 import { Income } from 'src/app/classes/domain/entities/website/accounting/income/income';
 import { Ledger } from 'src/app/classes/domain/entities/website/masters/ledgermaster/ledger';
 import { OpeningBalance } from 'src/app/classes/domain/entities/website/masters/openingbalance/openingbalance';
@@ -29,7 +29,8 @@ export class IncomeComponent implements OnInit {
   BankList: OpeningBalance[] = [];
   LedgerList: Ledger[] = [];
   SubLedgerList: SubLedger[] = [];
-  ModeofPaymentList = DomainEnums.ModeOfPaymentsList();
+  Bill = ModeOfPayments.Bill;
+  ModeofPaymentList = DomainEnums.ModeOfPaymentsList().filter(item => item.Ref != this.Bill);
   SearchString: string = '';
   TotalIncome: number = 0;
   SelectedIncome: Income = Income.CreateNewInstance();

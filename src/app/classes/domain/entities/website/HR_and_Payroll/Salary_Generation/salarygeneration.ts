@@ -27,6 +27,7 @@ export class SalaryGenerationProps {
 
   public CompanyRef: number = 0;
   public CompanyName: string = '';
+  public TransDateTime: string = ''
 
 
   public EmployeeRef: number = 0;
