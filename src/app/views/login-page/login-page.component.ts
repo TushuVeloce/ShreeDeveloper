@@ -86,7 +86,7 @@ export class LoginPageComponent implements OnInit {
       } else if (response.LoginForFirstTime == 0) {
         this.router.navigate(['/create_password']);
       } else {
-        await this.router.navigate(['/homepage']);  // Navigate to web
+        await this.router.navigate(['/homepage/Website']);  // Navigate to web
         this.appStateManage.triggerCompanyInit();
       }
     }
