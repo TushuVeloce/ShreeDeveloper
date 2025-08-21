@@ -3,6 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { SiteManagementMobileAppPage } from './site-management-mobile-app.page';
 import { SiteManagementViewMobileAppComponent } from './components/site-management-view-mobile-app/site-management-view-mobile-app.component';
+import { SiteDetailsComponent } from './components/site-details/site-details.component';
 
 const routes: Routes = [
   {
@@ -11,6 +12,7 @@ const routes: Routes = [
     children: [
       // { path: '', redirectTo: 'home', pathMatch: 'full' },
       { path: '', component: SiteManagementViewMobileAppComponent },
+      { path: 'site-details', component: SiteDetailsComponent },
     ]
   },
 ];

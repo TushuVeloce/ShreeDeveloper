@@ -4,6 +4,7 @@ import { CustomerStatus, DomainEnums } from 'src/app/classes/domain/domainenums/
 import { CustomerEnquiry } from 'src/app/classes/domain/entities/website/customer_management/customerenquiry/customerenquiry';
 import { CustomerFollowUpProps } from 'src/app/classes/domain/entities/website/customer_management/customerfollowup/customerfollowup';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
+import { DateconversionService } from 'src/app/services/dateconversion.service';
 import { FilterService } from 'src/app/services/filter.service';
 import { AlertService } from 'src/app/views/mobile-app/components/core/alert.service';
 import { HapticService } from 'src/app/views/mobile-app/components/core/haptic.service';
@@ -49,7 +50,8 @@ export class CustomerEnquiryViewMobileAppComponent implements OnInit {
     private toastService: ToastService,
     private haptic: HapticService,
     private alertService: AlertService,
-    public loadingService: LoadingService
+    public loadingService: LoadingService,
+    private DateconversionService: DateconversionService,
   ) { }
 
   ngOnInit = (): void => {
@@ -153,7 +155,7 @@ export class CustomerEnquiryViewMobileAppComponent implements OnInit {
       this.SelectedCustomerEnquiry = item.GetEditableVersion();
       CustomerEnquiry.SetCurrentInstance(this.SelectedCustomerEnquiry);
       this.appStateManagement.StorageKey.setItem('Editable', 'Edit');
-      this.router.navigate(['mobile-app/tabs/dashboard/customer-relationship-management/customer-enquiry/edit'], { replaceUrl: true });
+      this.router.navigate(['mobile-app/tabs/dashboard/customer-relationship-management/customer-enquiry/edit']);
     } catch (error: any) {
     }
   };
@@ -213,7 +215,7 @@ export class CustomerEnquiryViewMobileAppComponent implements OnInit {
         await this.haptic.error();
         return;
       }
-      this.router.navigate(['mobile-app/tabs/dashboard/customer-relationship-management/customer-enquiry/add'], { replaceUrl: true });
+      this.router.navigate(['mobile-app/tabs/dashboard/customer-relationship-management/customer-enquiry/add']);
     } catch (error: any) {
     }
   }
@@ -224,4 +226,9 @@ export class CustomerEnquiryViewMobileAppComponent implements OnInit {
       Name: item.p.Name
     }));
   };
+
+  formatDate = (date: string | Date): string => {
+    return this.DateconversionService.formatDate(date);
+  }
+
 }

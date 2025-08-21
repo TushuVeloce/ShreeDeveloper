@@ -10,6 +10,7 @@ import { SiteManagementMobileAppPage } from './site-management-mobile-app.page';
 import { SiteManagementViewMobileAppComponent } from './components/site-management-view-mobile-app/site-management-view-mobile-app.component';
 import { LoaderComponent } from "src/app/views/mobile-app/components/shared/loader/loader.component";
 import { SharedModule } from "src/app/views/mobile-app/components/shared/shared.module";
+import { SiteDetailsComponent } from './components/site-details/site-details.component';
 
 @NgModule({
   imports: [
@@ -20,6 +21,6 @@ import { SharedModule } from "src/app/views/mobile-app/components/shared/shared.
     LoaderComponent,
     SharedModule
 ],
-  declarations: [SiteManagementMobileAppPage,SiteManagementViewMobileAppComponent]
+  declarations: [SiteManagementMobileAppPage,SiteManagementViewMobileAppComponent,SiteDetailsComponent]
 })
 export class SiteManagementMobileAppPageModule {}

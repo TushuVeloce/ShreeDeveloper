@@ -184,7 +184,7 @@ export class CustomerFollowupViewMobileAppComponent implements OnInit, OnDestroy
     this.SelectedFollowUp = followup.GetEditableVersion();
     CustomerFollowUp.SetCurrentInstance(this.SelectedFollowUp);
     this.appStateManagement.StorageKey.setItem('Editable', 'Edit');
-    await this.router.navigate(['/mobile-app/tabs/dashboard/customer-relationship-management/customer-followup/edit'], { replaceUrl: true });
+    await this.router.navigate(['/mobile-app/tabs/dashboard/customer-relationship-management/customer-followup/edit']);
   };
 
   formatData(list: any[]): { Ref: any; Name: any }[] {
