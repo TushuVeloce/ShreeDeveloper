@@ -175,12 +175,9 @@ export class InvoiceSumExpenseSum implements IPersistable<InvoiceSumExpenseSum> 
     return InvoiceSumExpenseSum.ListFromTransportData(tdResponse);
   }
 
-  public static async FetchEntireListByCompanySiteMonthFilterType(CompanyRef: number, SiteRef: number, Month: number, FilterType: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+  public static async FetchEntireListByCompanySiteMonthFilterType(CompanyRef: number, Month: number, FilterType: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let req = new InvoiceSumExpenseSumFetchRequest();
     req.CompanyRef = CompanyRef;
-    if (SiteRef) {
-      req.SiteRef = SiteRef;
-    }
     if (Month) {
       req.Month = Month;
     }

@@ -68,10 +68,12 @@ export class DashboardComponent implements OnInit {
   BarFilterType: number = 57
   DoughnutFilterType: number = 57
   CRMFilterType: number = 57
+  BillPayableFilterType: number = 57
 
   SelectedBarMonths: number = 0;
   SelectedDoughnutMonths: number = 0;
   SelectedCRMMonths: number = 0;
+  SelectedBillPayableMonths: number = 0;
 
   MonthList = DomainEnums.MonthList(true, '--Select Month Type--');
 
@@ -107,59 +109,6 @@ export class DashboardComponent implements OnInit {
       this.WeekMonthList = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'Jul', 'Aug', 'Spet', 'Oct', 'Nov', 'Dec']
     }
   }
-
-  // setIncomeExpenseChart = () => {
-  //   const labels = this.WeekMonthList;
-
-  //   const data: ChartData<'bar'> = {
-  //     labels: labels,
-  //     datasets: [
-  //       {
-  //         label: `Income :- ${this.TotalIncome}`,
-  //         data: this.IncomeGraphList,
-  //         backgroundColor: 'rgba(122, 30, 30, 0.8)',
-  //         borderRadius: 6
-  //       },
-  //       {
-  //         label: `Expense :- ${this.TotalExpense}`,
-  //         data: this.ExpenseGraphList,
-  //         backgroundColor: 'rgba(122, 30, 30, 0.2)',
-  //         borderColor: 'rgba(122, 30, 30, 1)',
-  //         borderWidth: 1,
-  //         borderRadius: 6
-  //       }
-  //     ]
-  //   };
-
-  //   const config: ChartConfiguration<'bar'> = {
-  //     type: 'bar',
-  //     data: data,
-  //     options: {
-  //       responsive: true,
-  //       plugins: {
-  //         legend: {
-  //           position: 'bottom',
-  //           labels: {
-  //             color: '#7a1e1e',
-  //             // font: { weight: '600' }
-  //           }
-  //         }
-  //       },
-  //       scales: {
-  //         x: {
-  //           ticks: { color: '#7a1e1e' },
-  //           grid: { drawTicks: false }
-  //         },
-  //         y: {
-  //           ticks: { color: '#7a1e1e' },
-  //           beginAtZero: true
-  //         }
-  //       }
-  //     }
-  //   };
-
-  //   new Chart('barChart', config);
-  // }
 
   setIncomeExpenseChart = () => {
     const labels = this.WeekMonthList;
@@ -343,9 +292,7 @@ export class DashboardComponent implements OnInit {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
-    console.log(' this.SelectedDoughnutMonths :', this.SelectedDoughnutMonths);
     let lst = await ExpenseBreakdown.FetchEntireListByCompanySiteMonthFilterType(this.companyRef(), this.DoughnutSiteRef, this.SelectedDoughnutMonths, this.DoughnutFilterType, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-    console.log('lst :', lst);
     this.LedgerColorShadesList = this.generateShades(lst.length);
     // debugger
     if (lst.length > 0) {
@@ -363,7 +310,6 @@ export class DashboardComponent implements OnInit {
   getIncomeExpenseGraphList = async () => {
     await this.getExpenseGraphListByCompanySiteMonthFilterType();
     await this.getIncomeGraphListByCompanySiteMonthFilterType();
-    console.log('this.BarFilterType :', this.BarFilterType);
     if (this.BarFilterType == 63) {
       this.WeekMonthList = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'Jul', 'Aug', 'Spet', 'Oct', 'Nov', 'Dec']
     } else {
@@ -378,10 +324,8 @@ export class DashboardComponent implements OnInit {
       return;
     }
     let lst = await ExpenseGraph.FetchEntireListByCompanySiteMonthFilterType(this.companyRef(), this.BarSiteRef, this.SelectedBarMonths, this.BarFilterType, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-    console.log('lst :', lst);
     this.ExpenseGraphList = lst.map(item => item.p.TotalGivenAmount);
     this.TotalExpense = lst.reduce((sum, item) => sum + (item.p.TotalGivenAmount || 0), 0);
-    console.log('this.TotalExpense  :', this.TotalExpense);
     this.setIncomeExpenseChart();
   }
 
@@ -415,8 +359,8 @@ export class DashboardComponent implements OnInit {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
-    let lst = await InvoiceSumExpenseSum.FetchEntireListByCompanySiteMonthFilterType(this.companyRef(), this.CRMSiteRef, this.SelectedCRMMonths, this.CRMFilterType, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-    console.log('lst :', lst);
+    let lst = await InvoiceSumExpenseSum.FetchEntireListByCompanySiteMonthFilterType(this.companyRef(), this.SelectedBillPayableMonths, this.BillPayableFilterType, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    console.log('getInvoiceSumExpense :', lst);
   }
 
   getSiteListByCompanyRef = async () => {
