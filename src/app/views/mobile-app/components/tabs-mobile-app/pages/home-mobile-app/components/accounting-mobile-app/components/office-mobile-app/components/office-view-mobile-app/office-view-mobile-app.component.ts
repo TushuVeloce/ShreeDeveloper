@@ -313,7 +313,7 @@ export class OfficeViewMobileAppComponent implements OnInit {
       (m.p.Narration && m.p.Narration != '') ? (m.p.Narration) : '--'
     ]);
 
-    await this.pdfService.generatePdfAndHandleAction(null, 'Office-Report.pdf', { headers, data },true);
+    await this.pdfService.generatePdfAndHandleAction(null, 'Office-Report.pdf', { headers, data },false,'l',[6,7],'Office Report');
   }
 
 
