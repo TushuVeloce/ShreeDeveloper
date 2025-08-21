@@ -78,8 +78,9 @@ export class SalaryGenerationDetailsComponent implements OnInit {
     const pf = Number(this.Entity.p.PF) || 0;
     const advance = Number(this.Entity.p.AdvanceDeduction) || 0;
     const advancepayment = Number(this.Entity.p.AdvancePayment) || 0;
+    const totalleavededuction = Number(this.Entity.p.TotalLeaveDeduction) || 0;
 
-    const TotalDeduction = tds + pf + advance;
+    const TotalDeduction = tds + pf + advance + totalleavededuction;
     const RemainingAdvance = advancepayment - advance
 
     this.Entity.p.RemainingAdvance = parseFloat(RemainingAdvance.toFixed(2));
@@ -144,6 +145,7 @@ export class SalaryGenerationDetailsComponent implements OnInit {
       this.Entity.p.HalfDaysIncludingLateMarks = Number(lst[0].p.HalfDaysIncludingLateMarks)
       this.Entity.p.TotalHalfDaysAndLateMarkDaysSalary = Number(lst[0].p.TotalHalfDaysAndLateMarkDaysSalary)
       this.Entity.p.RemainingAdvance = Number(lst[0].p.RemainingAdvance)
+      this.Entity.p.TotalDeduction = Number(lst[0].p.TotalLeaveDeduction)
       this.Entity.p.GrossTotal = Number(lst[0].p.GrossTotal)
       this.GrossTotal = Number(lst[0].p.GrossTotal)
 

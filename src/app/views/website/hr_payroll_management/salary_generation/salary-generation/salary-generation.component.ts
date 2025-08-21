@@ -8,6 +8,7 @@ import { ScreenSizeService } from 'src/app/services/screensize.service';
 import { UIUtils } from 'src/app/services/uiutils.service';
 import { Employee } from 'src/app/classes/domain/entities/website/masters/employee/employee';
 import { DomainEnums } from 'src/app/classes/domain/domainenums/domainenums';
+import { DateconversionService } from 'src/app/services/dateconversion.service';
 
 @Component({
   selector: 'app-salary-generation',
@@ -47,7 +48,12 @@ export class SalaryGenerationComponent implements OnInit {
 
   headers: string[] = ['Sr.No.', 'Employee Name', 'Month', 'Total Working Days', 'Basic Salary', 'Gross Total', 'Total Deduction', 'Net Salary', 'Action'];
 
-  constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private screenSizeService: ScreenSizeService,
+  constructor(
+    private uiUtils: UIUtils,
+    private dateService: DateconversionService,
+    private router: Router,
+    private appStateManage: AppStateManageService,
+    private screenSizeService: ScreenSizeService,
     private companystatemanagement: CompanyStateManagement
   ) {
     effect(async () => {
@@ -111,6 +117,14 @@ export class SalaryGenerationComponent implements OnInit {
     this.loadPaginationData();
   }
 
+  formatDate = (date: string | Date): string => this.dateService.formatDate(date);
+
+  getTotalSalary = () => {
+    return this.DisplayMasterList.reduce((total: number, item: any) => {
+      return total + Number(item.p?.NetSalary || 0);
+    }, 0);
+  }
+
   getSalaryListByCompanyRef = async () => {
     this.MasterList = [];
     this.DisplayMasterList = [];
@@ -120,6 +134,7 @@ export class SalaryGenerationComponent implements OnInit {
     }
     let lst = await SalaryGeneration.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.MasterList = lst;
+    console.log('this.MasterList :', this.MasterList);
     this.DisplayMasterList = this.MasterList;
     this.loadPaginationData();
   }

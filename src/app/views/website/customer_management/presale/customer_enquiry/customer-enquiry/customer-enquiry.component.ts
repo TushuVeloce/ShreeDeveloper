@@ -4,6 +4,7 @@ import { CustomerEnquiry } from 'src/app/classes/domain/entities/website/custome
 import { CustomerFollowUp, CustomerFollowUpProps } from 'src/app/classes/domain/entities/website/customer_management/customerfollowup/customerfollowup';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
+import { DateconversionService } from 'src/app/services/dateconversion.service';
 import { ScreenSizeService } from 'src/app/services/screensize.service';
 import { UIUtils } from 'src/app/services/uiutils.service';
 
@@ -29,10 +30,12 @@ export class CustomerEnquiryComponent implements OnInit {
 
   headers: string[] = [
     'Sr.No.',
+    'Visit Date',
     'Name',
     'Contact No',
-    // 'Date',
     'City',
+    'Pincode',
+    'Contact',
     'Action',
   ];
 
@@ -41,7 +44,8 @@ export class CustomerEnquiryComponent implements OnInit {
     private router: Router,
     private appStateManage: AppStateManageService,
     private screenSizeService: ScreenSizeService,
-    private companystatemanagement: CompanyStateManagement
+    private companystatemanagement: CompanyStateManagement,
+    private DateconversionService: DateconversionService
   ) {
     effect(() => {
       this.getCustomerEnquiryListByCompanyRef();
@@ -52,6 +56,11 @@ export class CustomerEnquiryComponent implements OnInit {
     this.appStateManage.setDropdownDisabled();
     this.loadPaginationData();
     this.pageSize = this.screenSizeService.getPageSize('withoutDropdown');
+  }
+
+  // Extracted from services date conversion //
+  formatDate = (date: string | Date): string => {
+    return this.DateconversionService.formatDate(date);
   }
 
   getCustomerEnquiryListByCompanyRef = async () => {
@@ -68,6 +77,19 @@ export class CustomerEnquiryComponent implements OnInit {
     this.MasterList = lst;
     this.MasterList.forEach(e => e.p.CustomerFollowUps.push(CustomerFollowUpProps.Blank()))
     this.DisplayMasterList = this.MasterList;
+    console.log(' this.DisplayMasterList :', this.DisplayMasterList);
+    // CustomerStatusName
+    // :
+    // "Interested"
+    // PlotAreaInSqft
+    // :
+    // 1000
+    // PlotAreaInSqm
+    // :
+    // 92.9
+    // PlotName
+    // :
+    // "06"
     this.loadPaginationData();
   };
 
