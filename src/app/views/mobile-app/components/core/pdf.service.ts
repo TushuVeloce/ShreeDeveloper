@@ -29,7 +29,10 @@ export class PDFService {
     element: HTMLElement | null,
     fileName = 'Receipt.pdf',
     reportData?: { headers: string[], data: any[][] },
-    useMultiPageHtml = false
+    useMultiPageHtml = false,
+    pageOfOrientation: 'p' | 'l' = 'p',
+    totalColumnIndices?: number[],
+    title?: string
   ): Promise<void> {
 
     // Show a loading indicator to the user
@@ -40,13 +43,13 @@ export class PDFService {
     try {
       if (element && useMultiPageHtml) {
         // If an element is provided and multi-page is requested, generate from HTML with multi-page support
-        pdf = await this.generateMultiPagePdfFromHtml(element);
+        pdf = await this.generateMultiPagePdfFromHtml(element, pageOfOrientation);
       } else if (element) {
         // Fallback to the original HTML-to-PDF method
-        pdf = await this.generatePdfFromHtml(element);
+        pdf = await this.generatePdfFromHtml(element, pageOfOrientation);
       } else if (reportData) {
         // If report data is provided, generate a tabular PDF
-        pdf = this.generateReportPdf(reportData.headers, reportData.data);
+        pdf = this.generateReportPdf(reportData.headers, reportData.data, pageOfOrientation, totalColumnIndices, title);
       } else {
         // Handle the case where no valid input is provided
         console.error('Error: No valid content or data provided for PDF generation.');
@@ -76,7 +79,7 @@ export class PDFService {
    * @param element The HTMLElement to convert to PDF.
    * @returns A Promise that resolves with the generated jsPDF document.
    */
-  private async generatePdfFromHtml(element: HTMLElement): Promise<jsPDF> {
+  private async generatePdfFromHtml(element: HTMLElement, pageOfOrientation: 'p' | 'l' = 'p'): Promise<jsPDF> {
     const NewElement = element.cloneNode(true) as HTMLElement;
     const originalDisplay = NewElement.style.display;
     NewElement.style.display = 'block';
@@ -105,7 +108,7 @@ export class PDFService {
       document.body.removeChild(clonedElement);
 
       const imgData = canvas.toDataURL('image/jpeg', 1.0);
-      const pdf = new jsPDF('p', 'mm', 'a4');
+      const pdf = new jsPDF(pageOfOrientation, 'mm', 'a4');
       const imgWidth = 210;
       const pageHeight = 297;
       const imgHeight = (canvas.height * imgWidth) / canvas.width;
@@ -134,7 +137,7 @@ export class PDFService {
    * @param element The HTMLElement to convert to PDF.
    * @returns A Promise that resolves with the generated jsPDF document.
    */
-  private async generateMultiPagePdfFromHtml(element: HTMLElement): Promise<jsPDF> {
+  private async generateMultiPagePdfFromHtml(element: HTMLElement, pageOfOrientation: 'p' | 'l' = 'p'): Promise<jsPDF> {
     const originalDisplay = element.style.display;
     element.style.display = 'block';
 
@@ -171,7 +174,7 @@ export class PDFService {
       const pagesVertically = Math.ceil(scaledHeight / a4Height);
       const pagesHorizontally = Math.ceil(elementWidth / a4PixelWidth);
 
-      const pdf = new jsPDF('p', 'mm', 'a4');
+      const pdf = new jsPDF(pageOfOrientation, 'mm', 'a4');
       let firstPage = true;
 
       for (let x = 0; x < pagesHorizontally; x++) {
@@ -206,29 +209,63 @@ export class PDFService {
    * @param data The table data.
    * @returns The generated jsPDF document.
    */
-  private generateReportPdf(headers: string[], data: any[][]): jsPDF {
-    const doc = new jsPDF();
+  private generateReportPdf(headers: string[], data: any[][], pageOfOrientation: 'p' | 'l' = 'p', totalColumnIndices?: number[], title?: string): jsPDF {
+    const doc = new jsPDF(pageOfOrientation);
+    // Add title if provided
+    if (title) {
+      doc.setFontSize(16);
+      doc.text(title, doc.internal.pageSize.width / 2, 20, { align: 'center' });
+    }
+
+    // Determine the columns to sum, defaulting to the last column if none are specified
+    const colsToSum = totalColumnIndices && totalColumnIndices.length > 0 ? totalColumnIndices : [headers.length - 1];
+
+    // Calculate the grand total for each specified column
+    const totals = colsToSum.map(index => {
+      return data.reduce((sum, row) => {
+        const value = row[index] as number;
+        // Ensure the value is a number before adding
+        return sum + (typeof value === 'number' ? value : 0);
+      }, 0);
+    });
+
+    // Create the grand total row
+    const totalRow = new Array(headers.length).fill(' ');
+    // Place the totals in their respective columns
+    colsToSum.forEach((colIndex, i) => {
+      totalRow[colIndex] = `Total: ${totals[i]}`;
+    });
+
     autoTable(doc, {
       head: [headers],
       body: data,
-      styles: { // General styles for the whole table
+      headStyles: {
+        fillColor: '#832828',
+        textColor: '#ffffff',
+        fontStyle: 'bold',
+        halign: 'center'
+      },
+      styles: {
         font: 'helvetica',
         fontSize: 10,
         cellPadding: 3,
+        lineWidth: 0.1, // Add border to all cells
+        lineColor: '#000000',
       },
-      headStyles: { // Styles for the header row
-        fillColor: '#701f1f', // Dark blue background
-        textColor: '#ffffff', // White text
-        fontStyle: 'bold',
-        halign: 'center' // Horizontal alignment for header text
-      },
-      bodyStyles: { // Styles for the body rows
-        fillColor: '#ecf0f1', // Light gray background
-        textColor: '#34495e', // Dark gray text
-      },
-      alternateRowStyles: { // Optional: for zebra stripes
+      // bodyStyles: {
+      //   fillColor: '#ecf0f1',
+      //   textColor: '#34495e',
+      // },
+      alternateRowStyles: {
         fillColor: '#ffffff'
-      }
+      },
+      footStyles: {
+        fillColor: '#ffffff',
+        textColor: '#000',
+        fontStyle: 'bold',
+        halign: 'center'
+      },
+       foot: [totalRow],
     });
     return doc;
   }
