@@ -22,7 +22,7 @@ export class IncomeGraphProps {
   public UpdatedByName: number = 0;
   public Ref: number = 0;
   public TotalIncomeAmount: number = 0;
-  public readonly UnitName: string = '';
+  public WeekName: string = '';
   public CompanyRef: number = 0;
   public CompanyName: string = '';
 
@@ -181,9 +181,9 @@ export class IncomeGraph implements IPersistable<IncomeGraph> {
     if (SiteRef) {
       req.SiteRef = SiteRef;
     }
-    // if (Month) {
-    //   req.Month = Month;
-    // }
+    if (Month) {
+      req.Month = Month;
+    }
     if (FilterType) {
       req.FilterType = FilterType;
     }

@@ -103,7 +103,7 @@
               style="width: 40px; height: 40px; margin-right: 10px;">
             <h4 class="mb-0" style="color: #7F2525;">{{ Entity.p.CompanyName }}</h4>
           </div>
-          <h6 class="text-muted mb-0">Date: 17/04/2025</h6>
+          <h6 class="text-muted mb-0">Date: {{formatDate(Entity.p.CreatedDate)}}</h6>
         </div>
         <h6 class="mt-2">{{ CompanyAddress }}</h6>
         <h6>{{ CompanyEmail }}</h6>
