@@ -274,18 +274,19 @@ export class DashboardComponent implements OnInit {
       return;
     }
     let lst = await ExpenseBreakdown.FetchEntireListByCompanySiteMonthFilterType(this.companyRef(), this.DoughnutSiteRef, this.SelectedDoughnutMonths, this.DoughnutFilterType, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    console.log('lst :', lst);
+    this.LedgerColorShadesList = this.generateShades(lst.length);
     // debugger
     if (lst.length > 0) {
       this.LedgerList = lst.map(item => item.p.LedgerName);
       this.ExpenseBreakdownList = lst.map(item => item.p.TotalGivenAmount);
       this.setDoughnutChart();
     }
-    // else {
-    //   this.LedgerList = []
-    //   this.ExpenseBreakdownList = []
-    //   this.setDoughnutChart();
-    // }
-    this.LedgerColorShadesList = this.generateShades(lst.length);
+    else {
+      this.LedgerList = []
+      this.ExpenseBreakdownList = []
+      this.setDoughnutChart();
+    }
   }
 
   getIncomeExpenseGraphList = async () => {
