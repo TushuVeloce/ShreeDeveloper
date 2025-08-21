@@ -221,6 +221,7 @@ export class ExpenseDetailsComponent implements OnInit {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
+    console.log('this.Entity.p.RecipientType :', this.Entity.p.RecipientType);
     if (this.Entity.p.RecipientType <= 0) {
       return;
     }
@@ -310,7 +311,7 @@ export class ExpenseDetailsComponent implements OnInit {
       return;
     }
 
-    if (this.PaymentType <= 0 && this.Entity.p.ExpenseModeOfPayment == this.Employee) {
+    if (this.PaymentType <= 0 && this.Entity.p.RecipientType == this.Employee) {
       await this.uiUtils.showErrorToster('Payment Type not Selected');
       return;
     }
