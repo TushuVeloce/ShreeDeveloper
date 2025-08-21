@@ -177,7 +177,7 @@ export class IncomeComponent implements OnInit {
       this.Entity.p.BankAccountRef,
       this.Entity.p.PayerRef,
       async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-    // this.AllList = lst.filter((item) => item.p.Reason != '');
+    this.AllList = lst.filter((item) => item.p.Reason != '');
     this.MasterList = lst;
     this.DisplayMasterList = this.MasterList;
     this.loadPaginationData();
@@ -230,6 +230,10 @@ export class IncomeComponent implements OnInit {
       }
     );
   };
+
+  filterByReason = () => {
+    this.DisplayMasterList = this.MasterList.filter((data) => data.p.Ref == this.Entity.p.Ref)
+  }
 
   getTotalIncome = () => {
     this.TotalIncome = this.DisplayMasterList.reduce((total: number, item: any) => {

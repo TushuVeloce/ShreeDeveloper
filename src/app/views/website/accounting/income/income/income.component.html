@@ -126,7 +126,7 @@
   <div class="col">
     <label><b>Reason</b></label>
     <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear nzPlaceHolder="Select"
-      id="Ref" name="Ref" [nzSize]="'large'" [(ngModel)]="Entity.p.Ref" (ngModelChange)="FetchEntireListByFilters()">
+      id="Ref" name="Ref" [nzSize]="'large'" [(ngModel)]="Entity.p.Ref" (ngModelChange)="filterByReason()">
       <nz-option *ngFor="let sub of AllList" [nzValue]="sub.p.Ref" [nzLabel]="sub.p.Reason">
       </nz-option>
     </nz-select>
