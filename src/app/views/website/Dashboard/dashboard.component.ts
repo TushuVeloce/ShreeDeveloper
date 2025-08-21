@@ -56,6 +56,7 @@ export class DashboardComponent implements OnInit {
   TotalRevenueGenerated: number = 0;
   TotalExpense: number = 0;
   TotalIncome: number = 0;
+  InvoiceSumExpenseSumList: InvoiceSumExpenseSum[] = []
 
   private doughnutChart: Chart | null = null;
   private barChart: Chart | null = null;
@@ -346,11 +347,16 @@ export class DashboardComponent implements OnInit {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
+
     let lst = await CRMFunnel.FetchEntireListByCompanySiteMonthFilterType(this.companyRef(), this.CRMSiteRef, this.SelectedCRMMonths, this.CRMFilterType, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     if (lst.length > 0) {
       this.TotalNoOfPlots = lst[0].p.TotalNoOfPlots
       this.TotalNoOfSoldPlots = lst[0].p.TotalNoOfSoldPlots
       this.TotalRevenueGenerated = lst[0].p.TotalRevenueGenerated
+    } else {
+      this.TotalNoOfPlots = 0;
+      this.TotalNoOfSoldPlots = 0;
+      this.TotalRevenueGenerated = 0;
     }
   }
 
@@ -361,6 +367,7 @@ export class DashboardComponent implements OnInit {
     }
     let lst = await InvoiceSumExpenseSum.FetchEntireListByCompanySiteMonthFilterType(this.companyRef(), this.SelectedBillPayableMonths, this.BillPayableFilterType, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     console.log('getInvoiceSumExpense :', lst);
+    this.InvoiceSumExpenseSumList = lst;
   }
 
   getSiteListByCompanyRef = async () => {

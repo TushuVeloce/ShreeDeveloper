@@ -129,7 +129,7 @@
             <nz-option [nzValue]="63" [nzLabel]="'Monthly'"> </nz-option>
           </nz-select>
         </div>
-        <div *ngIf="DoughnutFilterType == 63" style="width: 20%;">
+        <div *ngIf="CRMFilterType == 63" style="width: 20%;">
           <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
             id="SelectedCRMMonths" name="SelectedCRMMonths" [nzSize]="'large'" [(ngModel)]="SelectedCRMMonths"
             (ngModelChange)="getCRMFunnelListByCompanySiteMonthFilterType()">
@@ -170,15 +170,17 @@
         <div style="width: 25%;">
           <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
             id="BillPayableFilterType" name="BillPayableFilterType" [nzSize]="'large'"
-            [(ngModel)]="BillPayableFilterType" (ngModelChange)="getInvoiceSumExpenseSumListByCompanySiteMonthFilterType()">
+            [(ngModel)]="BillPayableFilterType"
+            (ngModelChange)="getInvoiceSumExpenseSumListByCompanySiteMonthFilterType()">
             <nz-option [nzValue]="57" [nzLabel]="'Weekly'"> </nz-option>
             <nz-option [nzValue]="63" [nzLabel]="'Monthly'"> </nz-option>
           </nz-select>
         </div>
-        <div *ngIf="BillPayableFilterType == 57" style="width: 20%;">
+        <div *ngIf="BillPayableFilterType == 63" style="width: 20%;">
           <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
             id="SelectedBillPayableMonths" name="SelectedBillPayableMonths" [nzSize]="'large'"
-            [(ngModel)]="SelectedBillPayableMonths" (ngModelChange)="getInvoiceSumExpenseSumListByCompanySiteMonthFilterType()">
+            [(ngModel)]="SelectedBillPayableMonths"
+            (ngModelChange)="getInvoiceSumExpenseSumListByCompanySiteMonthFilterType()">
             <nz-option *ngFor="let SelectedBillPayableMonths of MonthList" [nzValue]="SelectedBillPayableMonths.Ref"
               [nzLabel]="SelectedBillPayableMonths.Name">
             </nz-option>
@@ -195,29 +197,19 @@
               <th>Given Amount</th>
             </tr>
           </thead>
-          <tbody>
-            <tr>
-              <td>Pranav Patil</td>
-              <td>₹ 15,00,000</td>
-              <td>₹ 10,00,000</td>
-            </tr>
-            <tr>
-              <td>Ram Patil</td>
-              <td>₹ 15,00,000</td>
-              <td>₹ 10,00,000</td>
-            </tr>
-            <tr>
-              <td>Ramesh Sutar</td>
-              <td>₹ 15,00,000</td>
-              <td>₹ 10,00,000</td>
-            </tr>
-            <tr>
-              <td>Rahul Joshi</td>
-              <td>₹ 15,00,000</td>
-              <td>₹ 10,00,000</td>
+          <tbody *ngIf="InvoiceSumExpenseSumList.length > 0">
+            <tr *ngFor="let rec of InvoiceSumExpenseSumList">
+              <td>{{ rec.p.RecipientName }}</td>
+              <td>₹ {{ rec.p.GivenAmount | number }}</td>
+              <td>₹ {{ rec.p.InvoiceAmount | number }}</td>
             </tr>
           </tbody>
         </table>
+        <div *ngIf="InvoiceSumExpenseSumList.length === 0" class="card-body_light">
+          <div style="height: 200px" class="d-flex align-items-center justify-content-center">
+            <span class="title_light"> Data Not Found</span>
+          </div>
+        </div>
       </div>
     </div>
   </div>
