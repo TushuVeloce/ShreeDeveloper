@@ -19,6 +19,10 @@ export class TotalIncomeFetchRequest {
   LedgerRefs: number[] = [];
   SubLedgerRefs: number[] = [];
   ModeOfPayments: number[] = [];
+  StartDate: string = '';
+  EndDate: string = '';
+  BankAccountRefs: number[] = [];
+  PayerRefs: number[] = [];
 
   public MergeIntoTransportData = (td: TransportData) => {
     let coll = DataContainerService.GetInstance().GetOrCreateCollection(td.MainData, TotalIncomeFetchRequest.FetchRequestType) as DataCollection;

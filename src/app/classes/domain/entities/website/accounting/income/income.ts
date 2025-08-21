@@ -28,6 +28,9 @@ export class IncomeProps {
   public CompanyRef: number = 0
   public CompanyName: string = ''
 
+  public StartDate: string = ''
+  public EndDate: string = ''
+
   public PayerName: string = ''
   public PayerRef: number = 0
   public PayerTypeName: string = ''
@@ -39,9 +42,11 @@ export class IncomeProps {
   public PlotGrandTotal: number = 0
   public IsRegisterCustomerRef: number = 0
   public Date: string = ''
-  public SiteRef: number = 0
+  public SiteRef: number = 0;
+  public BankAccountRef: number = 0
   public readonly SiteName: string = ''
   public LedgerRef: number = 0
+  public ExpenseModeOfPayment: number = 0
   public readonly LedgerName: string = ''
   public SubLedgerRef: number = 0
   public readonly SubLedgerName: string = ''
@@ -56,7 +61,6 @@ export class IncomeProps {
   public ShreesBalance: number = 0
   public IncomeModeOfPayment: number = 0
   public ModeOfPaymentName: string = ''
-  public BankAccountRef: number = 0
 
   public readonly IsNewlyCreated: boolean = false;
   // public readonly AccountTypeName: string = '';
@@ -253,10 +257,25 @@ export class Income implements IPersistable<Income> {
     return Income.ListFromTransportData(tdResponse);
   }
 
-  public static async FetchEntireListByFilters(SiteRef: number, LedgerRef: number, SubLedgerRef: number, ModeOfPayment: number, Ref: number, CompanyRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+  public static async FetchEntireListByFilters(
+    CompanyRef: number,
+    StartDate: string,
+    EndDate: string,
+    SiteRef: number,
+    LedgerRef: number,
+    SubLedgerRef: number,
+    ModeOfPayment: number,
+    BankAccountRef: number,
+    PayerRef: number,
+    errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let req = new IncomeFetchRequest();
-    req.CompanyRefs.push(CompanyRef)
-    if (LedgerRef) {
+    req.CompanyRefs.push(CompanyRef);
+    if (StartDate) {
+      req.StartDate = StartDate;
+    }
+    if (EndDate) {
+      req.EndDate = EndDate;
+    } if (LedgerRef) {
       req.LedgerRefs.push(LedgerRef)
     }
     if (SubLedgerRef) {
@@ -268,8 +287,11 @@ export class Income implements IPersistable<Income> {
     if (ModeOfPayment) {
       req.ModeOfPayments.push(ModeOfPayment)
     }
-    if (Ref) {
-      req.Refs.push(Ref)
+    if (BankAccountRef) {
+      req.BankAccountRefs.push(BankAccountRef)
+    }
+    if (PayerRef) {
+      req.PayerRefs.push(PayerRef);;
     }
     let tdResponse = await Income.FetchTransportData(req, errorHandler) as TransportData;
     return Income.ListFromTransportData(tdResponse);

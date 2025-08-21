@@ -9,7 +9,10 @@ export class IncomeFetchRequest {
 
   IncomeRefs: number[] = [];
   CompanyRefs: number[] = [];
-
+  StartDate: string = '';
+  EndDate: string = '';
+  BankAccountRefs: number[] = [];
+  PayerRefs: number[] = [];
   CompanyRef: number = 0;
   SiteRef: number = 0;
   SiteRefs: number[] = [];
@@ -18,7 +21,6 @@ export class IncomeFetchRequest {
   SubLedgerRefs: number[] = [];
   ModeOfPayments: number[] = [];
   Refs: number[] = [];
-  RecipientRefs: number[] = [];
   PlotRef = 0;
 
 

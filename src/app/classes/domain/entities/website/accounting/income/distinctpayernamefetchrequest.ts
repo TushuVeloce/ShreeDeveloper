@@ -21,7 +21,10 @@ export class DistinctPayerNameFetchRequest {
   Refs: number[] = [];
   PlotRef = 0;
   RecipientRefs: number[] = [];
-
+  StartDate: string = '';
+  EndDate: string = '';
+  BankAccountRefs: number[] = [];
+  PayerRefs: number[] = [];
 
 
   public MergeIntoTransportData = (td: TransportData) => {

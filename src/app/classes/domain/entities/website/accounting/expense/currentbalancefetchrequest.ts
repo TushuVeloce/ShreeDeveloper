@@ -25,6 +25,7 @@ export class CurrentBalanceFetchRequest {
   ModeOfPayments: number[] = [];
   Refs: number[] = [];
   PlotRef = 0;
+  PayerRefs: number[] = [];
 
   public MergeIntoTransportData = (td: TransportData) => {
     let coll = DataContainerService.GetInstance().GetOrCreateCollection(td.MainData, CurrentBalanceFetchRequest.FetchRequestType) as DataCollection;

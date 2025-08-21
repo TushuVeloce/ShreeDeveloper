@@ -1,13 +1,15 @@
 import { Component, effect, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { DomainEnums } from 'src/app/classes/domain/domainenums/domainenums';
+import { DomainEnums, OpeningBalanceModeOfPayments, PayerTypes } from 'src/app/classes/domain/domainenums/domainenums';
 import { Income } from 'src/app/classes/domain/entities/website/accounting/income/income';
 import { Ledger } from 'src/app/classes/domain/entities/website/masters/ledgermaster/ledger';
+import { OpeningBalance } from 'src/app/classes/domain/entities/website/masters/openingbalance/openingbalance';
 import { Site } from 'src/app/classes/domain/entities/website/masters/site/site';
 import { SubLedger } from 'src/app/classes/domain/entities/website/masters/subledgermaster/subledger';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
 import { DateconversionService } from 'src/app/services/dateconversion.service';
+import { DTU } from 'src/app/services/dtu.service';
 import { ScreenSizeService } from 'src/app/services/screensize.service';
 import { UIUtils } from 'src/app/services/uiutils.service';
 
@@ -23,6 +25,8 @@ export class IncomeComponent implements OnInit {
   AllList: Income[] = [];
   DisplayMasterList: Income[] = [];
   SiteList: Site[] = [];
+  Cash = OpeningBalanceModeOfPayments.Cash
+  BankList: OpeningBalance[] = [];
   LedgerList: Ledger[] = [];
   SubLedgerList: SubLedger[] = [];
   ModeofPaymentList = DomainEnums.ModeOfPaymentsList();
@@ -34,6 +38,14 @@ export class IncomeComponent implements OnInit {
   currentPage = 1; // Initialize current page
   total = 0;
 
+  PayerList: Income[] = [];
+  PayerTypesList = DomainEnums.PayerTypesList();
+  DealDoneCustomer = PayerTypes.DealDoneCustomer;
+  PayerPlotNo: string = '';
+
+  StartDate = '';
+  EndDate = '';
+
   companyRef = this.companystatemanagement.SelectedCompanyRef;
 
   headers: string[] = ['Sr.No.', 'Date', 'Site Name', 'Ledger', 'Sub Ledger', 'Received By', 'Reason', 'Income Amount', 'Shree Balance', 'Mode of Payment', 'Action'];
@@ -44,7 +56,8 @@ export class IncomeComponent implements OnInit {
     private DateconversionService: DateconversionService,
     private appStateManage: AppStateManageService,
     private screenSizeService: ScreenSizeService,
-    private companystatemanagement: CompanyStateManagement
+    private companystatemanagement: CompanyStateManagement,
+    private dtu: DTU,
   ) {
     effect(async () => {
       this.Entity.p.IncomeModeOfPayment = 0
@@ -53,6 +66,7 @@ export class IncomeComponent implements OnInit {
       await this.getLedgerListByCompanyRef();
       await this.getIncomeListByCompanyRef();
       await this.FetchEntireListByFilters();
+      await this.FormulateBankList();
     });
   }
 
@@ -72,6 +86,48 @@ export class IncomeComponent implements OnInit {
     }
     let lst = await Site.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.SiteList = lst;
+  }
+
+  public FormulateBankList = async () => {
+    if (this.companyRef() <= 0) {
+      await this.uiUtils.showErrorToster('Company not Selected');
+      return;
+    }
+    let lst = await OpeningBalance.FetchEntireListByCompanyRef(this.companyRef(), async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg));
+    this.BankList = lst.filter((item) => item.p.BankAccountRef > 0 && (item.p.OpeningBalanceAmount > 0 || item.p.InitialBalance > 0));
+  };
+
+
+  onPayerChange = () => {
+    let SingleRecord;
+    try {
+      if (this.Entity.p.PayerType == this.DealDoneCustomer) {
+        SingleRecord = this.PayerList.find((data) => data.p.PlotName == this.PayerPlotNo);
+      } else {
+        SingleRecord = this.PayerList.find((data) => data.p.Ref == this.Entity.p.PayerRef);
+      }
+      if (SingleRecord?.p) {
+        this.Entity.p.IsRegisterCustomerRef = SingleRecord.p.IsRegisterCustomerRef;
+        this.Entity.p.PayerRef = SingleRecord.p.Ref;
+        if (this.Entity.p.PayerType == this.DealDoneCustomer) {
+          this.Entity.p.PlotName = SingleRecord.p.PlotName;
+        }
+      }
+      this.FetchEntireListByFilters();
+    } catch (error) {
+    }
+  }
+
+  getPayerListBySiteAndPayerType = async () => {
+    if (this.companyRef() <= 0) {
+      await this.uiUtils.showErrorToster('Company not Selected');
+      return;
+    }
+    if (this.Entity.p.PayerType <= 0) {
+      return;
+    }
+    let lst = await Income.FetchPayerNameByPayerTypeRef(this.Entity.p.SiteRef, this.companyRef(), this.Entity.p.PayerType, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    this.PayerList = lst;
   }
 
   getLedgerListByCompanyRef = async () => {
@@ -106,8 +162,22 @@ export class IncomeComponent implements OnInit {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
-    let lst = await Income.FetchEntireListByFilters(this.Entity.p.SiteRef, this.Entity.p.LedgerRef, this.Entity.p.SubLedgerRef, this.Entity.p.IncomeModeOfPayment, this.Entity.p.Ref, this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-    // this.AllList = lst.filter((item) => item.p.Reason != '');
+
+    this.Entity.p.StartDate = this.dtu.ConvertStringDateToFullFormat(this.StartDate);
+    this.Entity.p.EndDate = this.dtu.ConvertStringDateToFullFormat(this.EndDate);
+
+    let lst = await Income.FetchEntireListByFilters(
+      this.companyRef(),
+      this.Entity.p.StartDate,
+      this.Entity.p.EndDate,
+      this.Entity.p.SiteRef,
+      this.Entity.p.LedgerRef,
+      this.Entity.p.SubLedgerRef,
+      this.Entity.p.ExpenseModeOfPayment,
+      this.Entity.p.BankAccountRef,
+      this.Entity.p.PayerRef,
+      async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    this.AllList = lst.filter((item) => item.p.Reason != '');
     this.MasterList = lst;
     this.DisplayMasterList = this.MasterList;
     this.loadPaginationData();
@@ -160,6 +230,10 @@ export class IncomeComponent implements OnInit {
       }
     );
   };
+
+  filterByReason = () => {
+    this.DisplayMasterList = this.MasterList.filter((data) => data.p.Ref == this.Entity.p.Ref)
+  }
 
   getTotalIncome = () => {
     this.TotalIncome = this.DisplayMasterList.reduce((total: number, item: any) => {

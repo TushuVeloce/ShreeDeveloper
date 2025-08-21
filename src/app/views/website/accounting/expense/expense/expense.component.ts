@@ -147,6 +147,10 @@ export class ExpenseComponent implements OnInit {
     this.Entity.p.Ref = 0
   }
 
+  filterByReason = () => {
+    this.DisplayMasterList = this.MasterList.filter((data) => data.p.Ref == this.Entity.p.Ref)
+  }
+
   FetchEntireListByFilters = async () => {
     this.MasterList = [];
     this.DisplayMasterList = [];
@@ -173,6 +177,8 @@ export class ExpenseComponent implements OnInit {
 
     this.MasterList = lst;
     this.DisplayMasterList = this.MasterList;
+    this.AllList = lst.filter((item) => item.p.Reason != '');
+
     if (this.DisplayMasterList.length > 0) {
       this.TotalInvoiceAmount = this.DisplayMasterList[0].p.TotalInvoiceAmount;
       this.TotalGivenAmount = this.DisplayMasterList[0].p.TotalGivenAmount;
