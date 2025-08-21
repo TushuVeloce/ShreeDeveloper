@@ -19,23 +19,23 @@ import { PDFService } from 'src/app/views/mobile-app/components/core/pdf.service
 })
 export class InvoicePrintMobileAppComponent implements OnInit {
 
-Entity: Invoice = Invoice.CreateNewInstance();
+  Entity: Invoice = Invoice.CreateNewInstance();
+  isDataLoaded: boolean = false; // New flag to ensure data is loaded
   private IsNewEntity: boolean = true;
   isSaveDisabled: boolean = false;
   DetailsFormTitle = 'Receipt';
-  IsDropdownDisabled: boolean = false
+  IsDropdownDisabled: boolean = false;
   InitialEntity: Invoice = null as any;
   isPrintButtonClicked: boolean = false;
-  MachinaryExpenseRef: number = ExpenseTypeRefs.MachinaryExpense
-  LabourExpenseRef: number = ExpenseTypeRefs.LabourExpense
-  OtherExpenseRef: number = ExpenseTypeRefs.OtherExpense
-  DisplayTotalWorkingHrs: string = ''
-  StockExpenseRef: number = ExpenseTypes.StockExpense
+  MachinaryExpenseRef: number = ExpenseTypeRefs.MachinaryExpense;
+  LabourExpenseRef: number = ExpenseTypeRefs.LabourExpense;
+  OtherExpenseRef: number = ExpenseTypeRefs.OtherExpense;
+  DisplayTotalWorkingHrs: string = '';
+  StockExpenseRef: number = ExpenseTypes.StockExpense;
 
   materialheaders: string[] = ['Sr.No.', 'Material', 'Unit', 'Order Quantity', 'Rate', 'Discount Rate', 'Delivery Charges', 'Total Amount'];
 
-  @ViewChild('PrintContainer')
-  PrintContainer!: ElementRef;
+  @ViewChild('PrintContainer') printContainer!: ElementRef;
 
   constructor(
     private router: Router,
@@ -50,16 +50,15 @@ Entity: Invoice = Invoice.CreateNewInstance();
 
   ngOnInit() {
     this.appStateManage.setDropdownDisabled(true);
-    // history.state.myData;
-
     this.Entity = history.state.printData;
     console.log('this.Entity :', this.Entity);
     this.Entity.p.Date = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.CreatedDate);
     this.getTotalWorkedHours();
     this.InitialEntity = Object.assign(Invoice.CreateNewInstance(), this.utils.DeepCopy(this.Entity)) as Invoice;
-  }
 
-  @ViewChild('PrintContainer') printContainer!: ElementRef;
+    // Set the flag to true after all data and calculations are complete
+    this.isDataLoaded = true;
+  }
 
   totalAmountInWords(number: number): string {
     return this.utils.convertNumberToWords(number);
@@ -84,13 +83,19 @@ Entity: Invoice = Invoice.CreateNewInstance();
     const formattedMinutes = minutes < 10 ? '0' + minutes : minutes;
     return `${hours}h ${formattedMinutes}m`;
   }
+
   // Extracted from services date conversion //
   formatDate = (date: string | Date): string => {
     return this.DateconversionService.formatDate(date);
   }
+
   async handlePrintOrShare() {
-    if (!this.printContainer) return;
+    // We no longer need the setTimeout, as the *ngIf in the template
+    // ensures the element is ready before the button is even clickable
+    if (!this.printContainer) {
+      console.error("Print container element not found.");
+      return;
+    }
     await this.pdfService.generatePdfAndHandleAction(this.printContainer.nativeElement, `Receipt_${this.Entity.p.Ref}.pdf`);
   }
-
 }

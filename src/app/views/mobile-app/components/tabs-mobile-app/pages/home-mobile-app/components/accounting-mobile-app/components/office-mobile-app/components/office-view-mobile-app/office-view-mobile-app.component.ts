@@ -51,7 +51,7 @@ export class OfficeViewMobileAppComponent implements OnInit {
   ReasonList: any[] = [];
   LedgerList: Ledger[] = [];
   SubLedgerList: SubLedger[] = [];
-  Printheaders: string[] = ['Sr.No.', 'Date', 'Payer Name', 'Recipient Name', 'Site Name', 'Reason', 'Income', 'Expense', 'Shree Bal.', 'Mode of Payment', 'Narration',];
+  Printheaders: any[] = ['Sr.No.', 'Date', 'Payer Name', 'Recipient Name', 'Site Name', 'Reason', 'Income', 'Expense', 'Shree Bal.', 'Mode of Payment', 'Narration',];
   RecipientList: Invoice[] = [];
   RecipientTypesList = DomainEnums.RecipientTypesList();
 
@@ -287,18 +287,35 @@ export class OfficeViewMobileAppComponent implements OnInit {
   }
 
 
-    @ViewChild('PrintContainer')
-    PrintContainer!: ElementRef;
+  @ViewChild('PrintContainer')
+  PrintContainer!: ElementRef;
 
-    async handlePrintOrShare() {
-      if (this.DisplayMasterList.length == 0) {
-        await this.toastService.present('No Income Records Found', 1000, 'warning');
-        await this.haptic.warning();
-        return;
-      }
-      if (!this.PrintContainer) return;
-      await this.pdfService.generatePdfAndHandleAction(this.PrintContainer.nativeElement, `Receipt_${this.Entity.p.Ref}.pdf`);
+  async handlePrintOrShare() {
+    if (this.DisplayMasterList.length == 0) {
+      await this.toastService.present('No Income Records Found', 1000, 'warning');
+      await this.haptic.warning();
+      return;
     }
+    // if (!this.PrintContainer) return;
+    // await this.pdfService.generatePdfAndHandleAction(this.PrintContainer.nativeElement, `Receipt_${this.Entity.p.Ref}.pdf`);
+    const headers = this.Printheaders;
+    const data = this.DisplayMasterList.map((m, index) => [
+      index + 1,
+      this.formatDate(m.p.TransDateTime),
+      m.p.PayerName ? (m.p.PayerName) : '--',
+      m.p.RecipientName ? (m.p.RecipientName) : '--',
+      m.p.SiteName ? (m.p.SiteName) : '--',
+      m.p.Reason ? (m.p.Reason) : '--',
+      (m.p.IncomeAmount && m.p.IncomeAmount != 0) ? (m.p.IncomeAmount) : '--',
+      (m.p.GivenAmount && m.p.GivenAmount != 0) ? (m.p.GivenAmount) : '--',
+      (m.p.ShreesBalance && m.p.ShreesBalance != 0) ? (m.p.ShreesBalance) : '--',
+      (m.p.ModeOfPaymentName && m.p.ModeOfPaymentName != '') ? (m.p.ModeOfPaymentName) : '--',
+      (m.p.Narration && m.p.Narration != '') ? (m.p.Narration) : '--'
+    ]);
+
+    await this.pdfService.generatePdfAndHandleAction(null, 'Office-Report.pdf', { headers, data },true);
+  }
+
 
   private async loadAccountingReportIfEmployeeExists() {
     try {
@@ -337,7 +354,7 @@ export class OfficeViewMobileAppComponent implements OnInit {
       return;
     }
     let lst = await AccountingReport.FetchEntireListByFilters(
-          this.Entity.p.StartDate,
+      this.Entity.p.StartDate,
       this.Entity.p.EndDate,
       this.Entity.p.AccountingReport,
       this.Entity.p.SiteRef,
@@ -346,10 +363,10 @@ export class OfficeViewMobileAppComponent implements OnInit {
       this.Entity.p.LedgerRef,
       this.Entity.p.SubLedgerRef,
       this.Entity.p.RecipientRef,
-      this.Entity.p.PayerRef,      async errMsg => {
-      await this.toastService.present('Error' + errMsg, 1000, 'danger');
-      await this.haptic.error();
-    });
+      this.Entity.p.PayerRef, async errMsg => {
+        await this.toastService.present('Error' + errMsg, 1000, 'danger');
+        await this.haptic.error();
+      });
     this.MasterList = lst;
     this.DisplayMasterList = this.MasterList;
   }
@@ -379,7 +396,7 @@ export class OfficeViewMobileAppComponent implements OnInit {
       return;
     }
     let lst = await AccountingReport.FetchEntireListByFilters(
-           this.Entity.p.StartDate,
+      this.Entity.p.StartDate,
       this.Entity.p.EndDate,
       this.Entity.p.AccountingReport,
       this.Entity.p.SiteRef,
@@ -388,10 +405,10 @@ export class OfficeViewMobileAppComponent implements OnInit {
       this.Entity.p.LedgerRef,
       this.Entity.p.SubLedgerRef,
       this.Entity.p.RecipientRef,
-      this.Entity.p.PayerRef,      async errMsg => {
-      await this.toastService.present('Error' + errMsg, 1000, 'danger');
-      await this.haptic.error();
-    });
+      this.Entity.p.PayerRef, async errMsg => {
+        await this.toastService.present('Error' + errMsg, 1000, 'danger');
+        await this.haptic.error();
+      });
     this.MasterList = lst;
     this.DisplayMasterList = this.MasterList;
   }
@@ -457,36 +474,36 @@ export class OfficeViewMobileAppComponent implements OnInit {
     this.loadFilters();
   }
 
-    onPayerChange = () => {
-      try {
-        let SingleRecord = this.PayerList.find((data) => data.p.PlotName == this.PayerPlotNo);
-        if (SingleRecord?.p) {
-          this.Entity.p.IsRegisterCustomerRef = SingleRecord.p.IsRegisterCustomerRef;
-          this.Entity.p.PayerRef = SingleRecord.p.Ref;
-          if (this.Entity.p.PayerType == this.DealDoneCustomer) {
-            this.Entity.p.PlotName = SingleRecord.p.PlotName;
-          }
+  onPayerChange = () => {
+    try {
+      let SingleRecord = this.PayerList.find((data) => data.p.PlotName == this.PayerPlotNo);
+      if (SingleRecord?.p) {
+        this.Entity.p.IsRegisterCustomerRef = SingleRecord.p.IsRegisterCustomerRef;
+        this.Entity.p.PayerRef = SingleRecord.p.Ref;
+        if (this.Entity.p.PayerType == this.DealDoneCustomer) {
+          this.Entity.p.PlotName = SingleRecord.p.PlotName;
         }
-      } catch (error) {
       }
+    } catch (error) {
     }
+  }
 
-    getPayerListBySiteAndPayerType = async () => {
-      if (this.companyRef <= 0) {
-        await this.toastService.present('Company not selected', 1000, 'warning');
-        await this.haptic.warning();
-        return;
-      }
-      if (this.Entity.p.PayerType <= 0) {
-        return;
-      }
-      let lst = await Income.FetchPayerNameByPayerTypeRef(this.Entity.p.SiteRef, this.companyRef, this.Entity.p.PayerType, async errMsg => {
-        await this.toastService.present('Error ' + errMsg, 1000, 'danger');
-        await this.haptic.error();
-      });
-      this.PayerList = lst;
-      this.loadFilters(); // Reload filters with updated options & preserve selections
+  getPayerListBySiteAndPayerType = async () => {
+    if (this.companyRef <= 0) {
+      await this.toastService.present('Company not selected', 1000, 'warning');
+      await this.haptic.warning();
+      return;
     }
+    if (this.Entity.p.PayerType <= 0) {
+      return;
+    }
+    let lst = await Income.FetchPayerNameByPayerTypeRef(this.Entity.p.SiteRef, this.companyRef, this.Entity.p.PayerType, async errMsg => {
+      await this.toastService.present('Error ' + errMsg, 1000, 'danger');
+      await this.haptic.error();
+    });
+    this.PayerList = lst;
+    this.loadFilters(); // Reload filters with updated options & preserve selections
+  }
 
   getRecipientListByRecipientTypeRef = async () => {
     if (this.companyRef <= 0) {
@@ -501,7 +518,7 @@ export class OfficeViewMobileAppComponent implements OnInit {
     }
 
     this.RecipientList = [];
-    let lst = await Invoice.FetchRecipientByRecipientTypeRef(this.companyRef,this.Entity.p.SiteRef, this.Entity.p.RecipientType, async errMsg => {
+    let lst = await Invoice.FetchRecipientByRecipientTypeRef(this.companyRef, this.Entity.p.SiteRef, this.Entity.p.RecipientType, async errMsg => {
       await this.toastService.present('Error ' + errMsg, 1000, 'danger');
       await this.haptic.error();
     });

@@ -35,7 +35,7 @@ export class InvoiceViewMobileAppComponent implements OnInit {
   LedgerList: Ledger[] = [];
   SubLedgerList: SubLedger[] = [];
   MachineTableHeaderData = ['Machine Start Time', 'Machine End Time', 'Machine Worked Hours'];
-  LabourTableHeaderData = ['Labour Type', 'Days', 'Labour Rate', 'Labour Amount'];
+  LabourTableHeaderData = ['Labour Type', 'Days', 'Labour Quantity', 'Labour Rate', 'Labour Amount'];
   MaterialTableHeaderData: string[] = ['Material', 'Unit', 'Order Quantity', 'Rate', 'Discount Rate', 'GST', 'Delivery Charges', 'Total Amount'];
 
 
