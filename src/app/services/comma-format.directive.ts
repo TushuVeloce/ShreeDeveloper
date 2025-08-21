@@ -20,28 +20,49 @@ export class CommaFormatDirective implements ControlValueAccessor {
 
   constructor(private el: ElementRef<HTMLInputElement>) { }
 
+  // @HostListener('input', ['$event.target.value'])
+  // onInput(value: string) {
+  //   // Keep minus sign only if it's the first character
+  //   let raw = value.replace(/,/g, '').replace(/(?!^)-/g, '');
+  //   raw = raw.replace(/[^\d.-]/g, '');
+
+  //   if (raw.trim() === '') {
+  //     this.el.nativeElement.value = '0';
+  //     this.onChange(0);
+  //     return;
+  //   }
+
+  //   const isNegative = raw.startsWith('-');
+  //   raw = raw.replace(/-/g, ''); // remove all minus signs
+  //   if (isNegative) raw = '-' + raw; // put back minus at start if needed
+
+  //   const [whole, decimal] = raw.replace('-', '').split('.');
+  //   const formattedWhole = whole.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  //   const formatted = (isNegative ? '-' : '') + formattedWhole + (decimal ? '.' + decimal : '');
+
+  //   this.el.nativeElement.value = formatted;
+  //   this.onChange(raw); // send raw value (with minus) to model
+  // }
+
   @HostListener('input', ['$event.target.value'])
   onInput(value: string) {
-    // Keep minus sign only if it's the first character
+    // Keep minus only if it’s at the start
     let raw = value.replace(/,/g, '').replace(/(?!^)-/g, '');
     raw = raw.replace(/[^\d.-]/g, '');
 
-    if (raw.trim() === '') {
-      this.el.nativeElement.value = '0';
-      this.onChange(0);
-      return;
-    }
-
     const isNegative = raw.startsWith('-');
-    raw = raw.replace(/-/g, ''); // remove all minus signs
-    if (isNegative) raw = '-' + raw; // put back minus at start if needed
+    raw = raw.replace(/-/g, '');
+    if (isNegative) raw = '-' + raw;
 
     const [whole, decimal] = raw.replace('-', '').split('.');
     const formattedWhole = whole.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
     const formatted = (isNegative ? '-' : '') + formattedWhole + (decimal ? '.' + decimal : '');
 
     this.el.nativeElement.value = formatted;
-    this.onChange(raw); // send raw value (with minus) to model
+
+    // ✅ Send number instead of string
+    const numValue = parseFloat(raw);
+    this.onChange(isNaN(numValue) ? null : numValue);
   }
 
   @HostListener('blur')
@@ -49,16 +70,39 @@ export class CommaFormatDirective implements ControlValueAccessor {
     this.onTouched();
   }
 
+  // writeValue(value: any): void {
+  //   if (value == null || value === '') {
+  //     this.el.nativeElement.value = '';
+  //   } else {
+  //     let strValue = value.toString();
+  //     const isNegative = strValue.startsWith('-');
+  //     if (isNegative) {
+  //       strValue = strValue.substring(1); // remove minus for formatting
+  //     }
+
+  //     const [whole, decimal] = strValue.split('.');
+  //     const formattedWhole = whole.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  //     const formatted =
+  //       (isNegative ? '-' : '') +
+  //       formattedWhole +
+  //       (decimal ? '.' + decimal : '');
+
+  //     this.el.nativeElement.value = formatted;
+  //   }
+  // }
+
   writeValue(value: any): void {
     if (value == null || value === '') {
       this.el.nativeElement.value = '';
     } else {
-      let strValue = value.toString();
-      const isNegative = strValue.startsWith('-');
-      if (isNegative) {
-        strValue = strValue.substring(1); // remove minus for formatting
+      const num = Number(value);
+      if (isNaN(num)) {
+        this.el.nativeElement.value = '';
+        return;
       }
 
+      const isNegative = num < 0;
+      const strValue = Math.abs(num).toString();
       const [whole, decimal] = strValue.split('.');
       const formattedWhole = whole.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
       const formatted =

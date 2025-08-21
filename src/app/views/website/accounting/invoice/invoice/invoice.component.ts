@@ -52,7 +52,7 @@ export class InvoiceComponent implements OnInit {
       this.Entity.p.Ref = 0
       await this.getSiteListByCompanyRef();
       await this.getLedgerListByCompanyRef();
-      await this.getInvoiceListByCompanyRef();
+      // await this.getInvoiceListByCompanyRef();
       await this.FetchEntireListByFilters();
     });
   }
@@ -145,20 +145,19 @@ export class InvoiceComponent implements OnInit {
     this.Entity.p.Ref = 0
   }
 
-  getInvoiceListByCompanyRef = async () => {
-    this.MasterList = [];
-    this.DisplayMasterList = [];
-    if (this.companyRef() <= 0) {
-      await this.uiUtils.showErrorToster('Company not Selected');
-      return;
-    }
-    let lst = await Invoice.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-    this.AllList = lst;
-    this.MasterList = lst;
-    this.DisplayMasterList = this.MasterList;
-    console.log(' this.DisplayMasterList  :', this.DisplayMasterList);
-    this.loadPaginationData();
-  }
+  // getInvoiceListByCompanyRef = async () => {
+  //   this.MasterList = [];
+  //   this.DisplayMasterList = [];
+  //   if (this.companyRef() <= 0) {
+  //     await this.uiUtils.showErrorToster('Company not Selected');
+  //     return;
+  //   }
+  //   let lst = await Invoice.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+  //   this.AllList = lst;
+  //   this.MasterList = lst;
+  //   this.DisplayMasterList = this.MasterList;
+  //   this.loadPaginationData();
+  // }
 
   onEditClicked = async (item: Invoice) => {
     this.SelectedInvoice = item.GetEditableVersion();

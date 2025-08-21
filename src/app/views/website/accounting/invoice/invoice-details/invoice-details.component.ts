@@ -117,6 +117,7 @@ export class InvoiceDetailsComponent implements OnInit {
       this.IsNewEntity = false;
       this.DetailsFormTitle = this.IsNewEntity ? 'New Bill' : 'Edit Bill';
       this.Entity = Invoice.GetCurrentInstance();
+      console.log('this.Entity :', this.Entity);
       this.appStateManage.StorageKey.removeItem('Editable');
       this.Entity.p.UpdatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
       if (this.Entity.p.LedgerRef) {
@@ -128,6 +129,9 @@ export class InvoiceDetailsComponent implements OnInit {
       if (this.Entity.p.IsDieselPaid == 1) {
         this.isDieselPaid = true
       }
+      console.log('this.Entity.p.ExpenseType :', this.Entity.p.ExpenseType);
+      console.log('this.MachinaryExpenseRef :', this.MachinaryExpenseRef);
+      console.log('this.LabourExpenseRef :', this.LabourExpenseRef);
       if (this.Entity.p.ExpenseType == this.MachinaryExpenseRef || this.Entity.p.ExpenseType == this.LabourExpenseRef) {
         this.getVendorServiceListByVendorRef(this.Entity.p.RecipientRef);
       }

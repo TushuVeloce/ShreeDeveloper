@@ -68,7 +68,6 @@ export class CustomerFollowupComponent implements OnInit {
     try {
       this.strCDT = await CurrentDateTimeRequest.GetCurrentDateTime();
     } catch (error) {
-      console.error('Error fetching current date time:', error);
       // Optionally, show a toaster or alert
       await this.uiUtils.showErrorToster('Failed to get current date and time');
     }

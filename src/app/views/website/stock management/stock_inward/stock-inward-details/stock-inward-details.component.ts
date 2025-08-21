@@ -116,7 +116,6 @@ export class StockInwardDetailsComponent implements OnInit {
       this.IsNewEntity = false;
       this.DetailsFormTitle = this.IsNewEntity ? 'New Stock Inward' : 'Edit Stock Inward';
       this.Entity = StockInward.GetCurrentInstance();
-      console.log('this.Entity :', this.Entity);
       this.imagePostView = `${this.ImageBaseUrl}${this.Entity.p.MaterialInwardInvoicePath}/${this.LoginToken}?${this.TimeStamp}`;
       this.selectedFileName = this.Entity.p.MaterialInwardInvoicePath;
       this.InwardDate = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.InwardDate);
