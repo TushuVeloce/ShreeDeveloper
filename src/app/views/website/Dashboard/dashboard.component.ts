@@ -44,6 +44,7 @@ export class DashboardComponent implements OnInit {
   BankList: OpeningBalance[] = [];
   IncomeBankList: BankAccount[] = [];
   LedgerList: any = [];
+  WeekMonthList: any = [];
   ExpenseGraphList: any = [];
   IncomeGraphList: any = [];
   ExpenseBreakdownList: any = [];
@@ -99,22 +100,24 @@ export class DashboardComponent implements OnInit {
     this.getIncomeExpenseGraphList();
     this.getCRMFunnelListByCompanySiteMonthFilterType();
     this.getInvoiceSumExpenseSumListByCompanySiteMonthFilterType();
+    this.WeekMonthList = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat',]
+
   }
 
   setIncomeExpenseChart = () => {
-    const labels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'Jul', 'Aug', 'Spet', 'Oct', 'Nov', 'Dec'];
+    const labels = this.WeekMonthList;
 
     const data: ChartData<'bar'> = {
       labels: labels,
       datasets: [
         {
-          label: 'Income :- ₹ 15,000',
+          label: `Income :- ${this.TotalIncome}`,
           data: this.IncomeGraphList,
           backgroundColor: 'rgba(122, 30, 30, 0.8)',
           borderRadius: 6
         },
         {
-          label: 'Expense :- ₹ 10,000',
+          label: `Expense :- ${this.TotalExpense}`,
           data: this.ExpenseGraphList,
           backgroundColor: 'rgba(122, 30, 30, 0.2)',
           borderColor: 'rgba(122, 30, 30, 1)',
@@ -273,7 +276,7 @@ export class DashboardComponent implements OnInit {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
-    console.log(' this.SelectedDoughnutMonths :',  this.SelectedDoughnutMonths);
+    console.log(' this.SelectedDoughnutMonths :', this.SelectedDoughnutMonths);
     let lst = await ExpenseBreakdown.FetchEntireListByCompanySiteMonthFilterType(this.companyRef(), this.DoughnutSiteRef, this.SelectedDoughnutMonths, this.DoughnutFilterType, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     console.log('lst :', lst);
     this.LedgerColorShadesList = this.generateShades(lst.length);
@@ -293,7 +296,12 @@ export class DashboardComponent implements OnInit {
   getIncomeExpenseGraphList = async () => {
     await this.getExpenseGraphListByCompanySiteMonthFilterType();
     await this.getIncomeGraphListByCompanySiteMonthFilterType();
-    this.setIncomeExpenseChart();
+    // this.setIncomeExpenseChart();
+    if (this.BarFilterType = 37) {
+      this.WeekMonthList = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat',]
+    } else {
+      this.WeekMonthList = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'Jul', 'Aug', 'Spet', 'Oct', 'Nov', 'Dec']
+    }
   }
 
   getExpenseGraphListByCompanySiteMonthFilterType = async () => {
@@ -302,8 +310,11 @@ export class DashboardComponent implements OnInit {
       return;
     }
     let lst = await ExpenseGraph.FetchEntireListByCompanySiteMonthFilterType(this.companyRef(), this.BarSiteRef, this.SelectedBarMonths, this.BarFilterType, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    console.log('lst :', lst);
     this.ExpenseGraphList = lst.map(item => item.p.TotalGivenAmount);
     this.TotalExpense = lst.reduce((sum, item) => sum + (item.p.TotalGivenAmount || 0), 0);
+    console.log('this.TotalExpense  :', this.TotalExpense );
+    // this.setIncomeExpenseChart();
   }
 
 
@@ -313,8 +324,11 @@ export class DashboardComponent implements OnInit {
       return;
     }
     let lst = await IncomeGraph.FetchEntireListByCompanySiteMonthFilterType(this.companyRef(), this.BarSiteRef, this.SelectedBarMonths, this.BarFilterType, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-    this.TotalIncome = lst.reduce((sum, item) => sum + (item.p.TotalGivenAmount || 0), 0);
-    this.IncomeGraphList = lst.map(item => item.p.TotalGivenAmount);
+    console.log('lst :', lst);
+    this.TotalIncome = lst.reduce((sum, item) => sum + (item.p.TotalIncomeAmount || 0), 0);
+    console.log('this.TotalIncome :', this.TotalIncome);
+    this.IncomeGraphList = lst.map(item => item.p.TotalIncomeAmount);
+    this.setIncomeExpenseChart();
   }
 
   getCRMFunnelListByCompanySiteMonthFilterType = async () => {

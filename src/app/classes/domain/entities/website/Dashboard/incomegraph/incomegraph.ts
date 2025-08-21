@@ -21,7 +21,7 @@ export class IncomeGraphProps {
   public UpdatedBy: number = 0;
   public UpdatedByName: number = 0;
   public Ref: number = 0;
-  public TotalGivenAmount: number = 0;
+  public TotalIncomeAmount: number = 0;
   public readonly UnitName: string = '';
   public CompanyRef: number = 0;
   public CompanyName: string = '';
