@@ -44,25 +44,31 @@
   <div class="chart-container">
     <!-- Card 1 -->
     <div class="chart-card">
-      <h4>Income VS Expense</h4>
       <div class="chart-header">
-        <div>
-          <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
-            id="BankAccountRef" name="BankAccountRef" [nzSize]="'large'" [(ngModel)]="BankAccountRef"
-            (ngModelChange)="getBankCurrentBalance()">
-            <nz-option [nzValue]="0" [nzLabel]="'All Banks'">
+        <p>Income VS Expense</p>
+        <div style="width: 25%;">
+          <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear id="BarSiteRef"
+            name="BarSiteRef" [nzSize]="'large'" [(ngModel)]="BarSiteRef" (ngModelChange)="getIncomeExpenseGraphList()">
+            <nz-option [nzValue]="0" [nzLabel]="'All Site'">
             </nz-option>
-            <nz-option *ngFor="let bank of BankList" [nzValue]="bank.p.BankAccountRef" [nzLabel]="bank.p.BankName">
+            <nz-option *ngFor="let site of SiteList" [nzValue]="site.p.Ref" [nzLabel]="site.p.Name">
             </nz-option>
           </nz-select>
         </div>
-        <div>
+        <div style="width: 25%;">
+          <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear id="BarFilterType"
+            name="BarFilterType" [nzSize]="'large'" [(ngModel)]="BarFilterType"
+            (ngModelChange)="getIncomeExpenseGraphList()">
+            <nz-option [nzValue]="57" [nzLabel]="'Weekly'"> </nz-option>
+            <nz-option [nzValue]="63" [nzLabel]="'Monthly'"> </nz-option>
+          </nz-select>
+        </div>
+        <div *ngIf="BarFilterType == 57" style="width: 20%;">
           <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
-            id="BankAccountRef" name="BankAccountRef" [nzSize]="'large'" [(ngModel)]="BankAccountRef"
-            (ngModelChange)="getBankCurrentBalance()">
-            <nz-option [nzValue]="0" [nzLabel]="'All Banks'">
-            </nz-option>
-            <nz-option *ngFor="let bank of BankList" [nzValue]="bank.p.BankAccountRef" [nzLabel]="bank.p.BankName">
+            id="SelectedBarMonths" name="SelectedBarMonths" [nzSize]="'large'" [(ngModel)]="SelectedBarMonths"
+            (ngModelChange)="getIncomeExpenseGraphList()">
+            <nz-option *ngFor="let SelectedBarMonths of MonthList" [nzValue]="SelectedBarMonths.Ref"
+              [nzLabel]="SelectedBarMonths.Name">
             </nz-option>
           </nz-select>
         </div>
@@ -72,15 +78,37 @@
 
     <!-- Card 2 -->
     <div class="chart-card">
-      <h4>Expense Breakdown</h4>
       <div class="chart-header">
-        <select>
-          <option>Select Project</option>
-        </select>
-        <select>
-          <option>Weekly</option>
-        </select>
+        <p>Expense Breakdown</p>
+        <div style="width: 25%;">
+          <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
+            id="DoughnutSiteRef" name="DoughnutSiteRef" [nzSize]="'large'" [(ngModel)]="DoughnutSiteRef"
+            (ngModelChange)="getExpenseBreakdownListByCompanySiteMonthFilterType()">
+            <nz-option [nzValue]="0" [nzLabel]="'All Site'">
+            </nz-option>
+            <nz-option *ngFor="let site of SiteList" [nzValue]="site.p.Ref" [nzLabel]="site.p.Name">
+            </nz-option>
+          </nz-select>
+        </div>
+        <div style="width: 25%;">
+          <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear id="DoughnutMonth"
+            name="DoughnutMonth" [nzSize]="'large'" [(ngModel)]="DoughnutFilterType"
+            (ngModelChange)="getExpenseBreakdownListByCompanySiteMonthFilterType()">
+            <nz-option [nzValue]="57" [nzLabel]="'Weekly'"> </nz-option>
+            <nz-option [nzValue]="63" [nzLabel]="'Monthly'"> </nz-option>
+          </nz-select>
+        </div>
+        <div *ngIf="DoughnutFilterType == 63" style="width: 20%;">
+          <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
+            id="SelectedBarMonths" name="SelectedBarMonths" [nzSize]="'large'" [(ngModel)]="SelectedBarMonths"
+            (ngModelChange)="getExpenseBreakdownListByCompanySiteMonthFilterType()">
+            <nz-option *ngFor="let SelectedBarMonths of MonthList" [nzValue]="SelectedBarMonths.Ref"
+              [nzLabel]="SelectedBarMonths.Name">
+            </nz-option>
+          </nz-select>
+        </div>
       </div>
+
       <canvas id="doughnutChart" class="doughnut"></canvas>
     </div>
   </div>
@@ -90,33 +118,53 @@
     <div class="card border-brown p-3 mb-4">
       <div class="d-flex justify-content-between align-items-center mb-3">
         <h5 class="text-brown fw-bold mb-0">CRM Funnel</h5>
-        <div>
-          <select class="form-select d-inline-block w-auto me-2">
-            <option>Select Project</option>
-          </select>
-          <select class="form-select d-inline-block w-auto">
-            <option>Monthly</option>
-          </select>
+        <div style="width: 25%;">
+          <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
+            id="DoughnutSiteRef" name="DoughnutSiteRef" [nzSize]="'large'" [(ngModel)]="DoughnutSiteRef"
+            (ngModelChange)="getCRMFunnelListByCompanySiteMonthFilterType()">
+            <nz-option [nzValue]="0" [nzLabel]="'All Site'">
+            </nz-option>
+            <nz-option *ngFor="let site of SiteList" [nzValue]="site.p.Ref" [nzLabel]="site.p.Name">
+            </nz-option>
+          </nz-select>
         </div>
+        <div style="width: 25%;">
+          <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear id="DoughnutMonth"
+            name="DoughnutMonth" [nzSize]="'large'" [(ngModel)]="DoughnutFilterType"
+            (ngModelChange)="getCRMFunnelListByCompanySiteMonthFilterType()">
+            <nz-option [nzValue]="57" [nzLabel]="'Weekly'"> </nz-option>
+            <nz-option [nzValue]="63" [nzLabel]="'Monthly'"> </nz-option>
+          </nz-select>
+        </div>
+        <div *ngIf="DoughnutFilterType == 63" style="width: 20%;">
+          <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
+            id="SelectedBarMonths" name="SelectedBarMonths" [nzSize]="'large'" [(ngModel)]="SelectedBarMonths"
+            (ngModelChange)="getCRMFunnelListByCompanySiteMonthFilterType()">
+            <nz-option *ngFor="let SelectedBarMonths of MonthList" [nzValue]="SelectedBarMonths.Ref"
+              [nzLabel]="SelectedBarMonths.Name">
+            </nz-option>
+          </nz-select>
+        </div>
+
       </div>
 
       <div class="row text-center">
         <div class="col-md-4">
           <div class="inner-card border-brown p-3 rounded">
             <p class="fw-semibold mb-2">Total Plots</p>
-            <h4 class="text-danger fw-bold">🏠 100</h4>
+            <h4 class="text-danger fw-bold">🏠 {{TotalNoOfPlots}}</h4>
           </div>
         </div>
         <div class="col-md-4">
           <div class="inner-card border-brown p-3 rounded">
             <p class="fw-semibold mb-2">Sold Plots</p>
-            <h4 class="text-danger fw-bold">🏠 40</h4>
+            <h4 class="text-danger fw-bold">🏠 {{TotalNoOfSoldPlots}}</h4>
           </div>
         </div>
         <div class="col-md-4">
           <div class="inner-card border-brown p-3 rounded">
             <p class="fw-semibold mb-2">Revenue Generated</p>
-            <h4 class="text-danger fw-bold">₹ 3,00,000</h4>
+            <h4 class="text-danger fw-bold"> {{TotalRevenueGenerated | currency : "INR" }}</h4>
           </div>
         </div>
       </div>
@@ -126,9 +174,23 @@
     <div class="card border-brown p-3">
       <div class="d-flex justify-content-between align-items-center mb-3">
         <h5 class="text-brown fw-bold mb-0">Bills Payable Summary</h5>
-        <select class="form-select d-inline-block w-auto">
-          <option>Monthly</option>
-        </select>
+        <div style="width: 25%;">
+          <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear id="DoughnutMonth"
+            name="DoughnutMonth" [nzSize]="'large'" [(ngModel)]="DoughnutFilterType"
+            (ngModelChange)="getBankCurrentBalance()">
+            <nz-option [nzValue]="57" [nzLabel]="'Weekly'"> </nz-option>
+            <nz-option [nzValue]="63" [nzLabel]="'Monthly'"> </nz-option>
+          </nz-select>
+        </div>
+        <div *ngIf="DoughnutFilterType == 57" style="width: 20%;">
+          <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
+            id="SelectedBarMonths" name="SelectedBarMonths" [nzSize]="'large'" [(ngModel)]="SelectedBarMonths"
+            (ngModelChange)="getBankCurrentBalance()">
+            <nz-option *ngFor="let SelectedBarMonths of MonthList" [nzValue]="SelectedBarMonths.Ref"
+              [nzLabel]="SelectedBarMonths.Name">
+            </nz-option>
+          </nz-select>
+        </div>
       </div>
 
       <div class="table-responsive">

@@ -138,10 +138,8 @@
   justify-content: space-evenly;
 }
 
-.chart-card h4 {
-  position: absolute;
+.chart-card p {
   top: 0.8rem;
-  left: 1rem;
   font-size: 1rem;
   color: #7a1e1e;
   font-weight: 600;
@@ -151,7 +149,8 @@
 .chart-header {
   display: flex;
   justify-content: space-between;
-  gap: 0.5rem;
+  width: 100%;
+  // gap: 2rem;
   margin-bottom: 0.5rem;
 }
 

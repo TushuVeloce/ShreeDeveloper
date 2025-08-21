@@ -18,6 +18,12 @@ import { Expense } from 'src/app/classes/domain/entities/website/accounting/expe
 import { OpeningBalance } from 'src/app/classes/domain/entities/website/masters/openingbalance/openingbalance';
 import { BankAccount } from 'src/app/classes/domain/entities/website/masters/bankaccount/banckaccount';
 import { Ledger } from 'src/app/classes/domain/entities/website/masters/ledgermaster/ledger';
+import { Site } from 'src/app/classes/domain/entities/website/masters/site/site';
+import { DomainEnums } from 'src/app/classes/domain/domainenums/domainenums';
+import { ExpenseBreakdown } from 'src/app/classes/domain/entities/website/Dashboard/expensebreakdown/expensebreakdown';
+import { CRMFunnel } from 'src/app/classes/domain/entities/website/Dashboard/crmfunnel/crmfunnel';
+import { ExpenseGraph } from 'src/app/classes/domain/entities/website/Dashboard/expensegraph/expensegraph';
+import { IncomeGraph } from 'src/app/classes/domain/entities/website/Dashboard/incomegraph/incomegraph';
 
 Chart.register(...registerables);
 
@@ -37,9 +43,34 @@ export class DashboardComponent implements OnInit {
   BankList: OpeningBalance[] = [];
   IncomeBankList: BankAccount[] = [];
   LedgerList: any = [];
+  ExpenseGraphList: any = [];
+  IncomeGraphList: any = [];
+  ExpenseBreakdownList: any = [];
   LedgerColorShadesList: any = [];
   BalanceList: Expense[] = [];
+  SiteList: Site[] = [];
+  TotalNoOfPlots: number = 0;
+  TotalNoOfSoldPlots: number = 0;
+  TotalRevenueGenerated: number = 0;
+  TotalExpense: number = 0;
+  TotalIncome: number = 0;
 
+  private doughnutChart: Chart | null = null;
+
+
+  BarSiteRef: number = 0
+  DoughnutSiteRef: number = 0
+  CRMSiteRef: number = 0
+
+  BarFilterType: number = 57
+  DoughnutFilterType: number = 57
+  CRMFilterType: number = 57
+
+  SelectedBarMonths: number = 0;
+  SelectedDoughnutMonths: number = 0;
+  SelectedCRMMonths: number = 0;
+
+  MonthList = DomainEnums.MonthList(true, '--Select Month Type--');
 
   // Target values
   private shreeTarget: number = 0;
@@ -61,9 +92,12 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit() {
     this.getCurrentBalanceByCompanyRef();
-    this.getLedgerListByCompanyRef();
-    this.setIncomeExpenseChart();
+    this.getExpenseBreakdownListByCompanySiteMonthFilterType();
+    this.getSiteListByCompanyRef();
     this.FormulateBankList();
+    this.getIncomeExpenseGraphList();
+    // this.getIncomeGraphListByCompanySiteMonthFilterType();
+    this.getCRMFunnelListByCompanySiteMonthFilterType();
   }
 
   setIncomeExpenseChart = () => {
@@ -74,13 +108,13 @@ export class DashboardComponent implements OnInit {
       datasets: [
         {
           label: 'Income :- ₹ 15,000',
-          data: [7000, 6000, 5500, 8000, 12000, 9000, 11000, 7000, 6000, 5500, 8000, 12000],
+          data: this.IncomeGraphList,
           backgroundColor: 'rgba(122, 30, 30, 0.8)',
           borderRadius: 6
         },
         {
           label: 'Expense :- ₹ 10,000',
-          data: [5000, 8000, 5500, 6500, 4000, 9000, 7000, 5000, 8000, 5500, 6500, 4000],
+          data: this.ExpenseGraphList,
           backgroundColor: 'rgba(122, 30, 30, 0.2)',
           borderColor: 'rgba(122, 30, 30, 1)',
           borderWidth: 1,
@@ -168,11 +202,6 @@ export class DashboardComponent implements OnInit {
     if (cash) {
       this.cashTarget = cash.p.NetBalance
     }
-
-    // let bankTarget = lst.filter(item => item.p.ModeOfPayment.trim() === 'Bank').reduce((sum, item) => sum + (item.p.NetBalance || 0), 0);
-    // if (bankTarget) {
-    //   this.bankTarget = bankTarget
-    // }
     this.getBankCurrentBalance();
 
     this.animateValue('shreeBalance', this.shreeTarget);
@@ -195,19 +224,54 @@ export class DashboardComponent implements OnInit {
     this.animateValue('bankBalance', this.bankTarget);
   }
 
+  // setDoughnutChart = () => {
+  //   new Chart("doughnutChart", {
+  //     type: 'doughnut',
+  //     data: {
+  //       labels: this.LedgerList,
+  //       datasets: [{
+  //         label: 'Expenses',
+  //         data: this.ExpenseBreakdownList,
+  //         backgroundColor: this.LedgerColorShadesList,
+  //         hoverOffset: 4
+  //       }]
+  //     },
+
+  //     options: {
+  //       responsive: true,
+  //       maintainAspectRatio: true,   // keeps it circular
+  //       aspectRatio: 1,              // force square shape
+  //       plugins: {
+  //         legend: {
+  //           position: 'right',       // as in your screenshot
+  //           labels: {
+  //             boxWidth: 15,
+  //             padding: 10
+  //           }
+  //         }
+  //       }
+  //     }
+  //   });
+  // }
+
   setDoughnutChart = () => {
-    new Chart("doughnutChart", {
+    // 🔑 Destroy old chart if exists
+    if (this.doughnutChart) {
+      this.doughnutChart.destroy();
+    }
+
+    // 🔑 Store reference to new chart
+    this.doughnutChart = new Chart("doughnutChart", {
       type: 'doughnut',
       data: {
         labels: this.LedgerList,
         datasets: [{
           label: 'Expenses',
-          data: [300, 50, 100, 70, 120, 300, 50, 100, 70, 120],
+          data: this.ExpenseBreakdownList,
           backgroundColor: this.LedgerColorShadesList,
           hoverOffset: 4
         }]
       },
-
       options: {
         responsive: true,
         maintainAspectRatio: true,   // keeps it circular
@@ -225,17 +289,90 @@ export class DashboardComponent implements OnInit {
     });
   }
 
-  getLedgerListByCompanyRef = async () => {
+  // Optional cleanup when component is destroyed
+  ngOnDestroy() {
+    if (this.doughnutChart) {
+      this.doughnutChart.destroy();
+    }
+  }
+
+
+  getExpenseBreakdownListByCompanySiteMonthFilterType = async () => {
     if (this.companyRef() <= 0) {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
-    let lst = await Ledger.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-    this.LedgerList = lst.map(item => item.p.Name);
-    this.LedgerColorShadesList = this.generateShades(this.LedgerList.length);
-    if (this.LedgerList.length > 0) {
+    let lst = await ExpenseBreakdown.FetchEntireListByCompanySiteMonthFilterType(this.companyRef(), this.DoughnutSiteRef, this.SelectedDoughnutMonths, this.DoughnutFilterType, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    console.log('breakdown :', lst);
+    // debugger
+    if (lst.length > 0) {
+      this.LedgerList = lst.map(item => item.p.LedgerName);
+      this.ExpenseBreakdownList = lst.map(item => item.p.TotalGivenAmount);
+      this.setDoughnutChart();
+    } else {
+      this.LedgerList = []
+      this.ExpenseBreakdownList = []
       this.setDoughnutChart();
     }
+    // console.log('this.LedgerList.length :', this.LedgerList.length);
+    this.LedgerColorShadesList = this.generateShades(this.LedgerList.length);
+    console.log('this.LedgerColorShadesList :', this.LedgerColorShadesList);
+  }
+
+  getIncomeExpenseGraphList = async () => {
+    await this.getExpenseGraphListByCompanySiteMonthFilterType();
+    await this.getIncomeGraphListByCompanySiteMonthFilterType();
+    this.setIncomeExpenseChart();
+  }
+
+  getExpenseGraphListByCompanySiteMonthFilterType = async () => {
+    if (this.companyRef() <= 0) {
+      await this.uiUtils.showErrorToster('Company not Selected');
+      return;
+    }
+    let lst = await ExpenseGraph.FetchEntireListByCompanySiteMonthFilterType(this.companyRef(), this.BarSiteRef, this.SelectedBarMonths, this.BarFilterType, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    this.ExpenseGraphList = lst.map(item => item.p.TotalGivenAmount);
+    this.TotalExpense = lst.reduce((sum, item) => sum + (item.p.TotalGivenAmount || 0), 0);
+    console.log('TotalExpense :', this.TotalExpense);
+
+    // this.LedgerColorShadesList = this.generateShades(this.LedgerList.length);
+    // if (this.LedgerList.length > 0) {
+      //   this.setDoughnutChart();
+      // }
+    }
+
+
+    getIncomeGraphListByCompanySiteMonthFilterType = async () => {
+      if (this.companyRef() <= 0) {
+        await this.uiUtils.showErrorToster('Company not Selected');
+      return;
+    }
+    let lst = await IncomeGraph.FetchEntireListByCompanySiteMonthFilterType(this.companyRef(), this.BarSiteRef, this.SelectedBarMonths, this.BarFilterType, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    console.log('this.TotalIncome :', this.TotalIncome);
+    this.TotalIncome = lst.reduce((sum, item) => sum + (item.p.TotalGivenAmount || 0), 0);
+    this.IncomeGraphList = lst.map(item => item.p.TotalGivenAmount);
+  }
+
+  getCRMFunnelListByCompanySiteMonthFilterType = async () => {
+    if (this.companyRef() <= 0) {
+      await this.uiUtils.showErrorToster('Company not Selected');
+      return;
+    }
+    let lst = await CRMFunnel.FetchEntireListByCompanySiteMonthFilterType(this.companyRef(), this.CRMSiteRef, this.SelectedCRMMonths, this.CRMFilterType, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    if (lst.length > 0) {
+      this.TotalNoOfPlots = lst[0].p.TotalNoOfPlots
+      this.TotalNoOfSoldPlots = lst[0].p.TotalNoOfSoldPlots
+      this.TotalRevenueGenerated = lst[0].p.TotalRevenueGenerated
+    }
+  }
+
+  getSiteListByCompanyRef = async () => {
+    if (this.companyRef() <= 0) {
+      await this.uiUtils.showErrorToster('Company not Selected');
+      return;
+    }
+    let lst = await Site.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    this.SiteList = lst;
   }
 
   public FormulateBankList = async () => {

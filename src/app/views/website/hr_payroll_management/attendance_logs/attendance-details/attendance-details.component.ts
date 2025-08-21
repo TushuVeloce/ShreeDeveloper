@@ -111,9 +111,13 @@ export class AttendanceDetailsComponent implements OnInit {
         this.imagePostSiteView = `${this.ImageBaseUrl}${this.Entity.p.AttendanceLogDetailsArray[0].AttendanceLogPath2}/${this.LoginToken}?${this.TimeStamp}`;
         this.Entity.p.AttendanceLogPath2 = this.Entity.p.AttendanceLogDetailsArray[this.Entity.p.AttendanceLogDetailsArray.length - 1].AttendanceLogPath2;
       }
+      if (this.Entity.p.FirstCheckInTime) {
+        this.FirstCheckInTime = this.convertTo12Hour(this.Entity.p.FirstCheckInTime);
+      }
 
-      this.FirstCheckInTime = this.convertTo12Hour(this.Entity.p.FirstCheckInTime);
-      this.LastCheckOutTime = this.convertTo12Hour(this.Entity.p.LastCheckOutTime);
+      if (this.Entity.p.FirstCheckInTime) {
+        this.LastCheckOutTime = this.convertTo12Hour(this.Entity.p.LastCheckOutTime);
+      }
       this.getDefaultWorkingHrsByEmployeeRef();
     } else {
       this.Entity = WebAttendaneLog.CreateNewInstance();
