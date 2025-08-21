@@ -181,9 +181,9 @@ export class IncomeGraph implements IPersistable<IncomeGraph> {
     if (SiteRef) {
       req.SiteRef = SiteRef;
     }
-    if (Month) {
-      req.Month = Month;
-    }
+    // if (Month) {
+    //   req.Month = Month;
+    // }
     if (FilterType) {
       req.FilterType = FilterType;
     }

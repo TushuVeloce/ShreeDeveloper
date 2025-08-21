@@ -181,9 +181,9 @@ export class ExpenseGraph implements IPersistable<ExpenseGraph> {
     if (SiteRef) {
       req.SiteRef = SiteRef;
     }
-    if (Month) {
-      req.Month = Month;
-    }
+    // if (Month) {
+    //   req.Month = Month;
+    // }
     if (FilterType) {
       req.FilterType = FilterType;
     }

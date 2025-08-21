@@ -273,6 +273,7 @@ export class DashboardComponent implements OnInit {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
+    console.log(' this.SelectedDoughnutMonths :',  this.SelectedDoughnutMonths);
     let lst = await ExpenseBreakdown.FetchEntireListByCompanySiteMonthFilterType(this.companyRef(), this.DoughnutSiteRef, this.SelectedDoughnutMonths, this.DoughnutFilterType, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     console.log('lst :', lst);
     this.LedgerColorShadesList = this.generateShades(lst.length);
