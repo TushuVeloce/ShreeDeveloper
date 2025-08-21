@@ -92,7 +92,7 @@
         </div>
         <div style="width: 25%;">
           <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear id="DoughnutMonth"
-            name="DoughnutMonth" [nzSize]="'large'" [(ngModel)]="DoughnutFilterType">
+            name="DoughnutMonth" [nzSize]="'large'" [(ngModel)]="DoughnutFilterType" (ngModelChange)="getExpenseBreakdownListByCompanySiteMonthFilterType()">
             <nz-option [nzValue]="57" [nzLabel]="'Weekly'"> </nz-option>
             <nz-option [nzValue]="63" [nzLabel]="'Monthly'"> </nz-option>
           </nz-select>
