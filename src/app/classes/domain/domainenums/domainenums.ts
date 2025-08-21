@@ -226,7 +226,7 @@ export enum ModeOfPayments {
 
 export enum TypeOfEmployeePayments {
   None = 0,
-  Advance = 100,
+    Advance = 100,
   Salary = 200,
   Other = 300,
 }

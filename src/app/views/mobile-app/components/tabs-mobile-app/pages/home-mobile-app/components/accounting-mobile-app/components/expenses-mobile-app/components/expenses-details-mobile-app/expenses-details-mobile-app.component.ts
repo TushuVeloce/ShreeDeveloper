@@ -515,9 +515,6 @@ export class ExpensesDetailsMobileAppComponent implements OnInit {
   // }
 
   onRecipientChange = () => {
-    this.PaymentType = 0;
-    this.selectedPaymentType = [];
-    this.PaymentTypeName = '';
     this.Entity.p.TotalAdvance = 0;
     this.Entity.p.RemainingAdvance = 0;
     this.Entity.p.InvoiceAmount = 0;
@@ -572,8 +569,8 @@ export class ExpensesDetailsMobileAppComponent implements OnInit {
     this.selectedSubLedger = [];
     this.Entity.p.RecipientType = 0;
     this.RecipientList = [];
-    this.selectedToWhomType=[];   
-    this.ToWhomTypeName=''; 
+    this.selectedToWhomType=[];
+    this.ToWhomTypeName='';
 
     this.Entity.p.IncomeLedgerRef = 0;
     this.selectedIncomeLedger = [];
@@ -683,7 +680,7 @@ export class ExpensesDetailsMobileAppComponent implements OnInit {
       await this.loadingService.show();
       this.Entity.p.CompanyRef = this.companyRef;
       this.Entity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName();
-    
+
       if (this.Entity.p.RecipientType == this.Sites) {
         if (this.Entity.p.SiteRef == this.Entity.p.RecipientRef) {
           if (this.Entity.p.ExpenseModeOfPayment == this.Cash && this.Entity.p.ModeOfPaymentForIncome == this.Cash) {
@@ -701,12 +698,12 @@ export class ExpensesDetailsMobileAppComponent implements OnInit {
           }
         }
       }
-      
+
       if (this.Entity.p.CreatedBy == 0) {
         this.Entity.p.CreatedBy = Number(this.appStateManage.localStorage.getItem('LoginEmployeeRef'))
       }
       this.Entity.p.UpdatedBy = Number(this.appStateManage.localStorage.getItem('LoginEmployeeRef'))
-      
+
       this.Entity.p.Date = this.dtu.ConvertStringDateToFullFormat(this.ExpenseDate ?? '');
       let entityToSave = this.Entity.GetEditableVersion();
       let entitiesToSave = [entityToSave];
