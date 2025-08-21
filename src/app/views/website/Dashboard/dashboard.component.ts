@@ -101,8 +101,11 @@ export class DashboardComponent implements OnInit {
     this.getIncomeExpenseGraphList();
     this.getCRMFunnelListByCompanySiteMonthFilterType();
     this.getInvoiceSumExpenseSumListByCompanySiteMonthFilterType();
-    this.WeekMonthList = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat',]
-
+    if (this.BarFilterType == 57) {
+      this.WeekMonthList = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat',]
+    } else {
+      this.WeekMonthList = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'Jul', 'Aug', 'Spet', 'Oct', 'Nov', 'Dec']
+    }
   }
 
   // setIncomeExpenseChart = () => {
@@ -361,11 +364,12 @@ export class DashboardComponent implements OnInit {
     await this.getExpenseGraphListByCompanySiteMonthFilterType();
     await this.getIncomeGraphListByCompanySiteMonthFilterType();
     console.log('this.BarFilterType :', this.BarFilterType);
-    if (this.BarFilterType == 57) {
-      this.WeekMonthList = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat',]
-    } else {
+    if (this.BarFilterType == 63) {
       this.WeekMonthList = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'Jul', 'Aug', 'Spet', 'Oct', 'Nov', 'Dec']
+    } else {
+      this.WeekMonthList = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat',]
     }
+    this.setIncomeExpenseChart();
   }
 
   getExpenseGraphListByCompanySiteMonthFilterType = async () => {
