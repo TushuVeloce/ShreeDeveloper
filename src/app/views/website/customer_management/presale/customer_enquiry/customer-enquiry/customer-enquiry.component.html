@@ -3,7 +3,7 @@
     <div class="col-4 mb-2">
       <h1 style="padding-top: 3px;" class="title title_light">Customer Enquiry</h1>
     </div>
-     <div class="col-4 mb-2 search-container_light">
+    <div class="col-4 mb-2 search-container_light">
       <app-shared-filter [masterList]="MasterList" [filterFields]="['Name', 'ContactNos', 'CityName']"
         (filteredList)="DisplayMasterList = $event"></app-shared-filter>
     </div>
@@ -27,9 +27,14 @@
       <tbody>
         <tr *ngFor="let customerenquiry of paginatedList; index as i">
           <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
+          <td Class="tbldata">
+            {{formatDate(customerenquiry.p.CustomerFollowUps[0].SiteVisitDate)}}
+          </td>
           <td Class="tbldata">{{customerenquiry.p.Name}}</td>
           <td Class="tbldata">{{customerenquiry.p.ContactNos}}</td>
           <td Class="tbldata">{{customerenquiry.p.CityName}}</td>
+          <td Class="tbldata">{{customerenquiry.p.CustomerFollowUps[0].PinCode}}</td>
+          <td Class="tbldata">{{customerenquiry.p.CustomerFollowUps[0].ContactNos}}</td>
           <td class="tbldata">
             <span style="margin-left: 9px;" (click)="onEditClicked(customerenquiry);">
               <img src="\assets\icons\edit.png" alt="logo" title="Edit" width="20px" height="20px" />
