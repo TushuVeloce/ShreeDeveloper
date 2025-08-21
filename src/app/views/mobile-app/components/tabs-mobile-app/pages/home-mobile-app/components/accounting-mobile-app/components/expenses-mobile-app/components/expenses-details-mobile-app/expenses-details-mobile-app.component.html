@@ -260,7 +260,7 @@
 
     <!-- mode of payment for Income -->
     <ion-item class="input-item" button detail (click)="selectModeOfPaymentForIncomeBottomsheet()"
-      [disabled]="ModeofPaymentList.length===0">
+      [disabled]="ModeofPaymentList.length===0" *ngIf="this.Entity.p.RecipientType == Sites">
       <ion-label>Mode of Payment</ion-label>
 
       <!-- Text showing the selected status -->
