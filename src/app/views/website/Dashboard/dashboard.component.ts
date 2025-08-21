@@ -58,6 +58,7 @@ export class DashboardComponent implements OnInit {
   TotalIncome: number = 0;
 
   private doughnutChart: Chart | null = null;
+  private barChart: Chart | null = null;
 
 
   BarSiteRef: number = 0
@@ -103,6 +104,59 @@ export class DashboardComponent implements OnInit {
     this.WeekMonthList = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat',]
 
   }
+
+  // setIncomeExpenseChart = () => {
+  //   const labels = this.WeekMonthList;
+
+  //   const data: ChartData<'bar'> = {
+  //     labels: labels,
+  //     datasets: [
+  //       {
+  //         label: `Income :- ${this.TotalIncome}`,
+  //         data: this.IncomeGraphList,
+  //         backgroundColor: 'rgba(122, 30, 30, 0.8)',
+  //         borderRadius: 6
+  //       },
+  //       {
+  //         label: `Expense :- ${this.TotalExpense}`,
+  //         data: this.ExpenseGraphList,
+  //         backgroundColor: 'rgba(122, 30, 30, 0.2)',
+  //         borderColor: 'rgba(122, 30, 30, 1)',
+  //         borderWidth: 1,
+  //         borderRadius: 6
+  //       }
+  //     ]
+  //   };
+
+  //   const config: ChartConfiguration<'bar'> = {
+  //     type: 'bar',
+  //     data: data,
+  //     options: {
+  //       responsive: true,
+  //       plugins: {
+  //         legend: {
+  //           position: 'bottom',
+  //           labels: {
+  //             color: '#7a1e1e',
+  //             // font: { weight: '600' }
+  //           }
+  //         }
+  //       },
+  //       scales: {
+  //         x: {
+  //           ticks: { color: '#7a1e1e' },
+  //           grid: { drawTicks: false }
+  //         },
+  //         y: {
+  //           ticks: { color: '#7a1e1e' },
+  //           beginAtZero: true
+  //         }
+  //       }
+  //     }
+  //   };
+
+  //   new Chart('barChart', config);
+  // }
 
   setIncomeExpenseChart = () => {
     const labels = this.WeekMonthList;
@@ -154,8 +208,14 @@ export class DashboardComponent implements OnInit {
       }
     };
 
-    new Chart('barChart', config);
-  }
+    // ✅ destroy old chart if exists
+    if (this.barChart) {
+      this.barChart.destroy();
+    }
+
+    // ✅ keep reference to new one
+    this.barChart = new Chart('barChart', config);
+  };
 
 
   generateShades = (count: number): string[] => {
@@ -268,6 +328,10 @@ export class DashboardComponent implements OnInit {
     if (this.doughnutChart) {
       this.doughnutChart.destroy();
     }
+
+    if (this.barChart) {
+      this.barChart.destroy();
+    }
   }
 
 
@@ -296,8 +360,8 @@ export class DashboardComponent implements OnInit {
   getIncomeExpenseGraphList = async () => {
     await this.getExpenseGraphListByCompanySiteMonthFilterType();
     await this.getIncomeGraphListByCompanySiteMonthFilterType();
-    // this.setIncomeExpenseChart();
-    if (this.BarFilterType = 37) {
+    console.log('this.BarFilterType :', this.BarFilterType);
+    if (this.BarFilterType == 57) {
       this.WeekMonthList = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat',]
     } else {
       this.WeekMonthList = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'Jul', 'Aug', 'Spet', 'Oct', 'Nov', 'Dec']
@@ -313,8 +377,8 @@ export class DashboardComponent implements OnInit {
     console.log('lst :', lst);
     this.ExpenseGraphList = lst.map(item => item.p.TotalGivenAmount);
     this.TotalExpense = lst.reduce((sum, item) => sum + (item.p.TotalGivenAmount || 0), 0);
-    console.log('this.TotalExpense  :', this.TotalExpense );
-    // this.setIncomeExpenseChart();
+    console.log('this.TotalExpense  :', this.TotalExpense);
+    this.setIncomeExpenseChart();
   }
 
 
@@ -324,9 +388,7 @@ export class DashboardComponent implements OnInit {
       return;
     }
     let lst = await IncomeGraph.FetchEntireListByCompanySiteMonthFilterType(this.companyRef(), this.BarSiteRef, this.SelectedBarMonths, this.BarFilterType, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-    console.log('lst :', lst);
     this.TotalIncome = lst.reduce((sum, item) => sum + (item.p.TotalIncomeAmount || 0), 0);
-    console.log('this.TotalIncome :', this.TotalIncome);
     this.IncomeGraphList = lst.map(item => item.p.TotalIncomeAmount);
     this.setIncomeExpenseChart();
   }
@@ -351,11 +413,6 @@ export class DashboardComponent implements OnInit {
     }
     let lst = await InvoiceSumExpenseSum.FetchEntireListByCompanySiteMonthFilterType(this.companyRef(), this.CRMSiteRef, this.SelectedCRMMonths, this.CRMFilterType, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     console.log('lst :', lst);
-    if (lst.length > 0) {
-      // this.TotalNoOfPlots = lst[0].p.TotalNoOfPlots
-      // this.TotalNoOfSoldPlots = lst[0].p.TotalNoOfSoldPlots
-      // this.TotalRevenueGenerated = lst[0].p.TotalRevenueGenerated
-    }
   }
 
   getSiteListByCompanyRef = async () => {
