@@ -63,7 +63,7 @@
             <nz-option [nzValue]="63" [nzLabel]="'Monthly'"> </nz-option>
           </nz-select>
         </div>
-        <div *ngIf="BarFilterType == 57" style="width: 20%;">
+        <div *ngIf="BarFilterType == 63" style="width: 20%;">
           <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
             id="SelectedBarMonths" name="SelectedBarMonths" [nzSize]="'large'" [(ngModel)]="SelectedBarMonths"
             (ngModelChange)="getIncomeExpenseGraphList()">
