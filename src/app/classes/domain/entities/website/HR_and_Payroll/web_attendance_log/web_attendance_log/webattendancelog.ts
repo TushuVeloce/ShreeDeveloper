@@ -230,7 +230,9 @@ export class WebAttendaneLog implements IPersistable<WebAttendaneLog> {
     let req = new WebAttendaneLogFetchRequest();
     req.CompanyRefs.push(CompanyRef);
     req.AttendanceLogTypes.push(AttendanceLogTypeRef);
-    req.Months.push(monthref);
+    if (monthref) {
+      req.Months.push(monthref);
+    }
     req.EmployeeRefs.push(employeeref);
     let tdResponse = await WebAttendaneLog.FetchTransportData(req, errorHandler) as TransportData;
     return WebAttendaneLog.ListFromTransportData(tdResponse);
