@@ -26,7 +26,7 @@ export class CustomerinfoReportComponent implements OnInit {
 
   companyRef = this.companystatemanagement.SelectedCompanyRef;
 
-  headers: string[] = ['Sr.No.', 'Customer ID', 'Customer Name', 'Address', 'Contact No', 'PAN No', 'Aadhar No', 'Lead Source', 'Lead Handle By', 'Agent/Broker', 'Booking Remark', 'Plot No', 'Area in Sqm', 'Area in Sqft', 'Basic Rate', 'Discount Rate on Area', 'Discount On Plot Amount', 'Total Plot Amount', 'Government Recknor', 'Government Value', 'Value of Agreement', 'Reg Tax Value In %', 'Registration Fees', 'SD Tax Value In %', 'Stamp Duties', 'Goods Services Tax', 'Legal Charges', 'Total Extra Charges', 'Grand Total', 'Total Cheque Recieved', 'Total Cash Recieved', 'Total Recieved (cash + cheque)', 'Total Cheque Balance', 'Total Cash Balance', 'Total Balance',];
+  headers: string[] = ['Sr.No.', 'Customer ID', 'Customer Name', 'Address', 'Contact No', 'PAN No', 'Aadhar No', 'Lead Source', 'Lead Handle By', 'Agent/Broker', 'Booking Remark', 'Plot No', 'Area in Sqm', 'Area in Sqft', 'Basic Rate', 'Discount Rate on Area', 'Discount On Plot Amount', 'Total Plot Amount', 'Government Recknor', 'Government Value', 'Value of Agreement', 'Reg Tax Value In %', 'Registration Fees', 'SD Tax Value In %', 'Stamp Duties', 'Goods Services Tax', 'Legal Charges', 'Total Extra Charges', 'Grand Total', 'Total Bank Recieved', 'Total Cash Recieved', 'Total Recieved (cash + cheque)', 'Total Cheque Balance', 'Total Cash Balance', 'Total Balance',];
 
   constructor(
     private uiUtils: UIUtils,

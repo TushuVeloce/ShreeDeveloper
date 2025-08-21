@@ -22,7 +22,9 @@ export class CommaFormatDirective implements ControlValueAccessor {
 
   @HostListener('input', ['$event.target.value'])
   onInput(value: string) {
-    const raw = value.replace(/,/g, '');
+    // Keep minus sign only if it's the first character
+    let raw = value.replace(/,/g, '').replace(/(?!^)-/g, '');
+    raw = raw.replace(/[^\d.-]/g, '');
 
     if (raw.trim() === '') {
       this.el.nativeElement.value = '0';
@@ -30,20 +32,16 @@ export class CommaFormatDirective implements ControlValueAccessor {
       return;
     }
 
-    // Allow only valid numeric input with optional decimal point
-    const numericMatch = raw.match(/^(\d+)(\.\d*)?$/);
-    if (!numericMatch) {
-      // If invalid input (e.g., multiple dots or alphabets), skip processing
-      this.el.nativeElement.value = value;
-      return;
-    }
+    const isNegative = raw.startsWith('-');
+    raw = raw.replace(/-/g, ''); // remove all minus signs
+    if (isNegative) raw = '-' + raw; // put back minus at start if needed
 
-    const [whole, decimal] = raw.split('.');
-    const formattedWhole = this.formatIndianNumber(whole);
-    const formatted = formattedWhole + (decimal !== undefined ? '.' + decimal : '');
+    const [whole, decimal] = raw.replace('-', '').split('.');
+    const formattedWhole = whole.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    const formatted = (isNegative ? '-' : '') + formattedWhole + (decimal ? '.' + decimal : '');
 
     this.el.nativeElement.value = formatted;
-    this.onChange(parseFloat(raw));
+    this.onChange(raw); // send raw value (with minus) to model
   }
 
   @HostListener('blur')
@@ -55,9 +53,20 @@ export class CommaFormatDirective implements ControlValueAccessor {
     if (value == null || value === '') {
       this.el.nativeElement.value = '';
     } else {
-      const [whole, decimal] = value.toString().split('.');
-      const formattedWhole = this.formatIndianNumber(whole);
-      this.el.nativeElement.value = formattedWhole + (decimal ? '.' + decimal : '');
+      let strValue = value.toString();
+      const isNegative = strValue.startsWith('-');
+      if (isNegative) {
+        strValue = strValue.substring(1); // remove minus for formatting
+      }
+
+      const [whole, decimal] = strValue.split('.');
+      const formattedWhole = whole.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+      const formatted =
+        (isNegative ? '-' : '') +
+        formattedWhole +
+        (decimal ? '.' + decimal : '');
+
+      this.el.nativeElement.value = formatted;
     }
   }
 

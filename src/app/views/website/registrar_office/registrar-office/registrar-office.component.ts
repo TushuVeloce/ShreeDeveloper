@@ -32,7 +32,7 @@ export class RegistrarOfficeComponent implements OnInit {
   total = 0;
   BookingRemarks = BookingRemarks;
   companyRef = this.companystatemanagement.SelectedCompanyRef;
-  headers: string[] = ['Sr.No.', 'Customer', 'Plot Name', 'Cheque', 'Witness', 'Agreement to Sale', 'Sale Deed', 'Talathi', '7/12	', 'Spiral', 'Client Submit	', 'Action'];
+  headers: string[] = ['Sr.No.', 'Customer', 'Plot Name', 'Bank', 'Witness', 'Agreement to Sale', 'Sale Deed', 'Talathi', '7/12	', 'Spiral', 'Client Submit	', 'Action'];
 
   constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private companystatemanagement: CompanyStateManagement, private screenSizeService: ScreenSizeService) {
     effect(() => {
