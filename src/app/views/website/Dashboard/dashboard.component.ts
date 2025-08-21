@@ -325,6 +325,7 @@ export class DashboardComponent implements OnInit {
       return;
     }
     let lst = await ExpenseGraph.FetchEntireListByCompanySiteMonthFilterType(this.companyRef(), this.BarSiteRef, this.SelectedBarMonths, this.BarFilterType, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    console.log('lst :', lst);
     this.ExpenseGraphList = lst.map(item => item.p.TotalGivenAmount);
     this.TotalExpense = lst.reduce((sum, item) => sum + (item.p.TotalGivenAmount || 0), 0);
     this.setIncomeExpenseChart();

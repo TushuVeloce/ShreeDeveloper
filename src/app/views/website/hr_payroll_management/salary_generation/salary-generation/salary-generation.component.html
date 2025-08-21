@@ -69,6 +69,14 @@
                 <img src="\assets\icons\printer.png" alt="logo" title="Delete" width="20px" height="20px" /></span>
             </td>
           </tr>
+          <tr>
+            <td class="tbldata" colspan="2"><b>Total Income</b></td>
+            <td class="tbldata" colspan="5"></td>
+            <td class="tbldata">
+              <b>{{ getTotalSalary() | currency : "INR" }}</b>
+            </td>
+            <td class="tbldata" colspan="3"></td>
+          </tr>
         </tbody>
       </nz-table>
     </div>

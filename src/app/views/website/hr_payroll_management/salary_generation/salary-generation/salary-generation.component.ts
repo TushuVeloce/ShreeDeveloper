@@ -111,6 +111,12 @@ export class SalaryGenerationComponent implements OnInit {
     this.loadPaginationData();
   }
 
+  getTotalSalary = () => {
+    return this.DisplayMasterList.reduce((total: number, item: any) => {
+      return total + Number(item.p?.NetSalary || 0);
+    }, 0);
+  }
+
   getSalaryListByCompanyRef = async () => {
     this.MasterList = [];
     this.DisplayMasterList = [];
