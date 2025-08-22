@@ -59,7 +59,7 @@
           <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
           <td Class="tbldata">{{formatDate(customer.p.Date)}}</td>
           <td Class="tbldata">{{ customer.p.SiteName }}</td>
-          <td Class="tbldata">{{ customer.p.PlotName }}</td>
+          <td Class="tbldata">{{ customer.p.PlotName ? customer.p.PlotName : '--' }}</td>
           <td Class="tbldata">{{ customer.p.PayerName }}</td>
           <td Class="tbldata">{{ customer.p.IncomeAmount | currency: 'INR'}}</td>
           <td Class="tbldata">{{ customer.p.ModeOfPaymentName }}</td>
