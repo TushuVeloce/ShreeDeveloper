@@ -38,7 +38,8 @@ export class InvoiceViewMobileAppComponent implements OnInit {
   LabourTableHeaderData = ['Labour Type', 'Days', 'Labour Quantity', 'Labour Rate', 'Labour Amount'];
   MaterialTableHeaderData: string[] = ['Material', 'Unit', 'Order Quantity', 'Rate', 'Discount Rate', 'GST', 'Delivery Charges', 'Total Amount'];
 
-
+  RecipientList: Invoice[] = [];
+  RecipientTypesList = DomainEnums.RecipientTypesList();
   // Store current selected values here to preserve selections on filter reload
   selectedFilterValues: Record<string, any> = {};
 
@@ -93,6 +94,23 @@ export class InvoiceViewMobileAppComponent implements OnInit {
         })),
         selected: this.selectedFilterValues['subledger'] > 0 ? this.selectedFilterValues['subledger'] : null,
       },
+      // {
+      //   key: 'ToWhomType',
+      //   label: 'To Whom Type',
+      //   multi: false,
+      //   options: this.RecipientTypesList,
+      //   selected: this.selectedFilterValues['ToWhomType'] > 0 ? this.selectedFilterValues['ToWhomType'] : null,
+      // },
+      // {
+      //   key: 'ToWhom',
+      //   label: 'To Whom',
+      //   multi: false,
+      //   options: this.RecipientList.map(item => ({
+      //     Ref: item.p.Ref,
+      //     Name: item.p.RecipientName,
+      //   })),
+      //   selected: this.selectedFilterValues['To Whom'] > 0 ? this.selectedFilterValues['To Whom'] : null,
+      // },
       {
         key: 'reason',
         label: 'Reason',
@@ -142,6 +160,17 @@ export class InvoiceViewMobileAppComponent implements OnInit {
         case 'ledger':
           this.Entity.p.LedgerRef = selectedValue ?? 0;
           if (selectedValue != null) await this.getSubLedgerListByLedgerRef(selectedValue);  // Updates SubLedgerList
+          break;
+
+        case 'ToWhom':
+          this.Entity.p.RecipientRef = selectedValue ?? 0;
+          break;
+
+        case 'ToWhomType':
+          this.Entity.p.RecipientType = selectedValue ?? 0;
+          // this.Entity.p.RecipientRef = 0;
+          // this.RecipientList=[];
+          if (selectedValue != null) await this.getRecipientListByRecipientTypeRef();  // Updates SubLedgerList
           break;
 
         case 'modeOfPayment':
@@ -220,6 +249,26 @@ export class InvoiceViewMobileAppComponent implements OnInit {
     console.log('lst :', lst);
     this.MasterList = lst;
     this.DisplayMasterList = this.MasterList;
+  }
+
+  getRecipientListByRecipientTypeRef = async () => {
+    if (this.companyRef <= 0) {
+      await this.toastService.present('Company not selected', 1000, 'danger');
+      await this.haptic.error();
+      return;
+    }
+    if (this.Entity.p.RecipientType <= 0) {
+      await this.toastService.present('To Whom not Selected', 1000, 'danger');
+      await this.haptic.error();
+      return;
+    }
+
+    this.RecipientList = [];
+    let lst = await Invoice.FetchRecipientByRecipientTypeRef(this.companyRef, this.Entity.p.SiteRef, this.Entity.p.RecipientType, async errMsg => {
+      await this.toastService.present('Error ' + errMsg, 1000, 'danger');
+      await this.haptic.error();
+    });
+    this.RecipientList = lst;
   }
 
   getSiteListByCompanyRef = async () => {

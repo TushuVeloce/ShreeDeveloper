@@ -59,17 +59,41 @@ export class IncomeViewMobileAppComponent implements OnInit {
     // await this.loadIncomeIfEmployeeExists();
   };
 
-  @ViewChild('PrintContainer')
-  PrintContainer!: ElementRef;
+  // @ViewChild('PrintContainer')
+  // PrintContainer!: ElementRef;
 
+  // async handlePrintOrShare() {
+  //   if (this.DisplayMasterList.length == 0) {
+  //     await this.toastService.present('No Income Records Found', 1000, 'warning');
+  //     await this.haptic.warning();
+  //     return;
+  //   }
+  //   if (!this.PrintContainer) return;
+  //   await this.pdfService.generatePdfAndHandleAction(this.PrintContainer.nativeElement, `Receipt_${this.Entity.p.Ref}.pdf`);
+  // }
   async handlePrintOrShare() {
     if (this.DisplayMasterList.length == 0) {
       await this.toastService.present('No Income Records Found', 1000, 'warning');
       await this.haptic.warning();
       return;
     }
-    if (!this.PrintContainer) return;
-    await this.pdfService.generatePdfAndHandleAction(this.PrintContainer.nativeElement, `Receipt_${this.Entity.p.Ref}.pdf`);
+    // if (!this.PrintContainer) return;
+    // await this.pdfService.generatePdfAndHandleAction(this.PrintContainer.nativeElement, `Receipt_${this.Entity.p.Ref}.pdf`);
+    const headers = this.printheaders;
+    const data = this.DisplayMasterList.map((m, index) => [
+      index + 1,
+      this.formatDate(m.p.Date),
+      m.p.SiteName ? (m.p.SiteName) : '--',
+      m.p.LedgerName ? (m.p.LedgerName) : '--',
+      m.p.SubLedgerName ? (m.p.SubLedgerName) : '--',
+      m.p.PayerName ? (m.p.PayerName) : '--',
+      (m.p.Reason && m.p.Reason != '') ? (m.p.Reason) : '--',
+      (m.p.IncomeAmount && m.p.IncomeAmount != 0) ? (m.p.IncomeAmount) : '--',
+      (m.p.ShreesBalance && m.p.ShreesBalance != 0) ? (m.p.ShreesBalance) : '--',
+      (m.p.ModeOfPaymentName && m.p.ModeOfPaymentName != '') ? (m.p.ModeOfPaymentName) : '--',
+    ]);
+
+    await this.pdfService.generatePdfAndHandleAction(null, 'Income-Report.pdf', { headers, data }, false, 'l', [7], 'Income Report');
   }
 
   ionViewWillEnter = async () => {

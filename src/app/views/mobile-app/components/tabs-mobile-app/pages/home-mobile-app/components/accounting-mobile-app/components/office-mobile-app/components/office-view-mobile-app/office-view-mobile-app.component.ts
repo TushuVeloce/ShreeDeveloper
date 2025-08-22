@@ -287,8 +287,8 @@ export class OfficeViewMobileAppComponent implements OnInit {
   }
 
 
-  @ViewChild('PrintContainer')
-  PrintContainer!: ElementRef;
+  // @ViewChild('PrintContainer')
+  // PrintContainer!: ElementRef;
 
   async handlePrintOrShare() {
     if (this.DisplayMasterList.length == 0) {
