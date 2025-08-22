@@ -1,6 +1,6 @@
 import { Component, effect, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { DomainEnums, OpeningBalanceModeOfPayments, PayerTypes } from 'src/app/classes/domain/domainenums/domainenums';
+import { DomainEnums, ModeOfPayments, OpeningBalanceModeOfPayments, PayerTypes } from 'src/app/classes/domain/domainenums/domainenums';
 import { Invoice } from 'src/app/classes/domain/entities/website/accounting/billing/invoice';
 import { Expense } from 'src/app/classes/domain/entities/website/accounting/expense/expense';
 import { Income } from 'src/app/classes/domain/entities/website/accounting/income/income';
@@ -29,7 +29,8 @@ export class ExpenseComponent implements OnInit {
   SiteList: Site[] = [];
   LedgerList: Ledger[] = [];
   SubLedgerList: SubLedger[] = [];
-  ModeofPaymentList = DomainEnums.ModeOfPaymentsList();
+  Bill = ModeOfPayments.Bill;
+  ModeofPaymentList = DomainEnums.ModeOfPaymentsList().filter(item => item.Ref != this.Bill);
   SearchString: string = '';
   SelectedExpense: Expense = Expense.CreateNewInstance();
   CustomerRef: number = 0;

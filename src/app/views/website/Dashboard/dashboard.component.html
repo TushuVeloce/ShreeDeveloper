@@ -92,7 +92,7 @@
         </div>
         <div style="width: 25%;">
           <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear id="DoughnutMonth"
-            name="DoughnutMonth" [nzSize]="'large'" [(ngModel)]="DoughnutFilterType">
+            name="DoughnutMonth" [nzSize]="'large'" [(ngModel)]="DoughnutFilterType" (ngModelChange)="getExpenseBreakdownListByCompanySiteMonthFilterType()">
             <nz-option [nzValue]="57" [nzLabel]="'Weekly'"> </nz-option>
             <nz-option [nzValue]="63" [nzLabel]="'Monthly'"> </nz-option>
           </nz-select>
@@ -200,13 +200,15 @@
         <table class="table align-middle">
           <thead class="table-light">
             <tr>
+              <th>Sr. No.</th>
               <th>Vendor Name</th>
               <th>Bill Amount</th>
               <th>Given Amount</th>
             </tr>
           </thead>
           <tbody *ngIf="InvoiceSumExpenseSumList.length > 0">
-            <tr *ngFor="let rec of InvoiceSumExpenseSumList">
+            <tr *ngFor="let rec of InvoiceSumExpenseSumList; index as i">
+              <td>{{ i + 1 }}</td>
               <td>{{ rec.p.RecipientName }}</td>
               <td> {{ rec.p.InvoiceAmount | currency : "INR" }}</td>
               <td> {{ rec.p.GivenAmount | currency : "INR" }}</td>
