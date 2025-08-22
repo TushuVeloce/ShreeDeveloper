@@ -319,14 +319,6 @@ export class DashboardComponent implements OnInit {
     let lst = await ExpenseGraph.FetchEntireListByCompanySiteMonthFilterType(this.companyRef(), this.BarSiteRef, this.SelectedBarMonths, this.BarFilterType, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.ExpenseGraphList = lst.map(item => item.p.TotalGivenAmount);
     this.TotalExpense = lst.reduce((sum, item) => sum + (item.p.TotalGivenAmount || 0), 0);
-    // if (this.BarFilterType == 63 && this.SelectedBarMonths) {
-    //   this.WeekMonthList = lst.map(item => item.p.WeekName);
-    // } else if (this.BarFilterType == 63) {
-    //   this.WeekMonthList = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'Jul', 'Aug', 'Spet', 'Oct', 'Nov', 'Dec']
-    // } else {
-    //   this.WeekMonthList = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
-    // }
-
     this.setIncomeExpenseChart();
   }
 
