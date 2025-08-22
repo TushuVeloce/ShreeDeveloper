@@ -42,9 +42,7 @@ export class SiteDetailsComponent implements OnInit {
       return;
     }
     this.siteRef = Number(this.appStateManagement.localStorage.getItem('siteRf'));
-    console.log('this.siteRef :', this.siteRef);
     this.siteName = String(this.appStateManagement.localStorage.getItem('siteName'));
-    console.log('this.siteName :', this.siteName);
 
 
     await this.getSiteListByCompanyRef(this.siteRef);

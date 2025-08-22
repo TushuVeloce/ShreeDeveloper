@@ -221,7 +221,6 @@ export class ExpenseDetailsComponent implements OnInit {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
-    console.log('this.Entity.p.RecipientType :', this.Entity.p.RecipientType);
     if (this.Entity.p.RecipientType <= 0) {
       return;
     }
@@ -468,7 +467,6 @@ export class ExpenseDetailsComponent implements OnInit {
     this.Entity.p.Date = this.dtu.ConvertStringDateToFullFormat(this.Date);
     let entityToSave = this.Entity.GetEditableVersion();
     let entitiesToSave = [entityToSave];
-    console.log('entitiesToSave :', entitiesToSave);
     let tr = await this.utils.SavePersistableEntities(entitiesToSave);
 
     if (!tr.Successful) {

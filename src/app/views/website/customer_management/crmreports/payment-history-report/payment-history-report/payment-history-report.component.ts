@@ -41,7 +41,6 @@ export class PaymentHistoryReportComponent implements OnInit {
   ) {
     effect(async () => {
       await this.getSiteListByCompanyRef();
-      await this.getPaymentHistoryListByCompanyRef();
     });
   }
 
@@ -59,39 +58,45 @@ export class PaymentHistoryReportComponent implements OnInit {
     this.Entity.p.SiteRef = 0
     let lst = await Site.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.SiteList = lst;
+    if (lst.length > 0) {
+      this.Entity.p.SiteRef = lst[0].p.Ref;
+      await this.getPlotListBySiteRef(this.Entity.p.SiteRef)
+    }
   }
 
   getPlotListBySiteRef = async (siteref: number) => {
     this.Entity.p.PlotRef = 0
     this.PlotList = [];
+    if (this.Entity.p.SiteRef <= 0) {
+      await this.uiUtils.showErrorToster('Site not Selected');
+      return;
+    }
     let lst = await Plot.FetchEntireListBySiteRef(siteref, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.PlotList = lst.filter(data => data.p.CurrentBookingRemark != BookingRemarks.Plot_Of_Owner && data.p.CurrentBookingRemark != BookingRemarks.Plot_Of_Shree);
+    if (lst.length > 0) {
+      this.Entity.p.PlotRef = this.PlotList[0].p.Ref;
+      await this.getPaymentHistoryListBySiteandPlotRef()
+    }
   }
 
   // Extracted from services date conversion //
   formatDate = (date: string | Date): string => {
     return this.DateconversionService.formatDate(date);
   }
-  getPaymentHistoryListByCompanyRef = async () => {
-    this.MasterList = [];
-    this.DisplayMasterList = [];
-    if (this.companyRef() <= 0) {
-      await this.uiUtils.showErrorToster('Company not Selected');
-      return;
-    }
-    let lst = await Income.FetchEntireListByCompanyRef(this.companyRef(),
-      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
-    );
-    this.MasterList = lst;
-    this.DisplayMasterList = this.MasterList;
-    this.loadPaginationData();
-  };
 
   getPaymentHistoryListBySiteandPlotRef = async () => {
     this.MasterList = [];
     this.DisplayMasterList = [];
     if (this.companyRef() <= 0) {
       await this.uiUtils.showErrorToster('Company not Selected');
+      return;
+    }
+    if (this.Entity.p.SiteRef <= 0) {
+      await this.uiUtils.showErrorToster('Site not Selected');
+      return;
+    }
+    if (this.Entity.p.PlotRef <= 0) {
+      await this.uiUtils.showErrorToster('Plot not Selected');
       return;
     }
     if (this.Entity.p.SiteRef == null) {

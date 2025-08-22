@@ -316,19 +316,9 @@ export class DashboardComponent implements OnInit {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
-    console.log('this.SelectedBarMonths :', this.SelectedBarMonths);
     let lst = await ExpenseGraph.FetchEntireListByCompanySiteMonthFilterType(this.companyRef(), this.BarSiteRef, this.SelectedBarMonths, this.BarFilterType, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-    console.log('lst :', lst);
     this.ExpenseGraphList = lst.map(item => item.p.TotalGivenAmount);
     this.TotalExpense = lst.reduce((sum, item) => sum + (item.p.TotalGivenAmount || 0), 0);
-    if (this.BarFilterType == 63 && this.SelectedBarMonths) {
-      this.WeekMonthList = lst.map(item => item.p.WeekName);
-    } else if (this.BarFilterType == 63) {
-      this.WeekMonthList = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'Jul', 'Aug', 'Spet', 'Oct', 'Nov', 'Dec']
-    } else {
-      this.WeekMonthList = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
-    }
-
     this.setIncomeExpenseChart();
   }
 
@@ -338,7 +328,6 @@ export class DashboardComponent implements OnInit {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
-    console.log('this.SelectedBarMonths :', this.SelectedBarMonths);
     let lst = await IncomeGraph.FetchEntireListByCompanySiteMonthFilterType(this.companyRef(), this.BarSiteRef, this.SelectedBarMonths, this.BarFilterType, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.TotalIncome = lst.reduce((sum, item) => sum + (item.p.TotalIncomeAmount || 0), 0);
     this.IncomeGraphList = lst.map(item => item.p.TotalIncomeAmount);
