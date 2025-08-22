@@ -210,6 +210,14 @@
         <td Class="tbldata">{{ Income.p.ShreesBalance | currency : "INR" }}</td>
         <td Class="tbldata">{{ Income.p.ModeOfPaymentName }}</td>
       </tr>
+      <tr>
+        <td class="tbldata" colspan="2"><b>Total Income</b></td>
+        <td class="tbldata" colspan="5"></td>
+        <td class="tbldata">
+          <b>{{ getTotalIncome() | currency : "INR" }}</b>
+        </td>
+        <td class="tbldata" colspan="3"></td>
+      </tr>
     </tbody>
   </table>
 </div>

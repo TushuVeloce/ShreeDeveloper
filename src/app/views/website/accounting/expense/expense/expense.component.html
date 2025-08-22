@@ -189,6 +189,20 @@
         <td Class="tbldata"> {{ Expense.p.ShreesBalance | currency : "INR" }}</td>
         <td Class="tbldata">{{ Expense.p.ModeOfPaymentName }}</td>
       </tr>
+      <tr>
+        <td class="tbldata" colspan="2"><b>Total Expense</b></td>
+        <td class="tbldata" colspan="5"></td>
+        <td class="tbldata">
+          <b>{{TotalInvoiceAmount| currency : "INR" }}</b>
+        </td>
+        <td class="tbldata">
+          <b>{{ TotalGivenAmount | currency : "INR" }}</b>
+        </td>
+        <td class="tbldata">
+          <b>{{ RemainingAmountOfGrandTotal | currency : "INR" }}</b>
+        </td>
+        <td class="tbldata" colspan="3"></td>
+      </tr>
     </tbody>
   </table>
 </div>
