@@ -49,7 +49,7 @@
     <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear nzPlaceHolder="Select"
       id="LedgerRef" name="LedgerRef" [nzSize]="'large'" [(ngModel)]="Entity.p.LedgerRef"
       (ngModelChange)="getSubLedgerListByLedgerRef(Entity.p.LedgerRef)"
-      (ngModelChange)="FetchEntireListByFilters(); ClearRef()">
+      (ngModelChange)="FetchEntireListByFilters(); ClearRef();">
       <nz-option *ngFor="let ledger of LedgerList" [nzValue]="ledger.p.Ref" [nzLabel]="ledger.p.Name"></nz-option>
     </nz-select>
   </div>
@@ -65,11 +65,11 @@
     <label><b>Mode of Payment</b></label>
     <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear nzPlaceHolder="Select"
       id="ExpenseModeOfPayment" name="ExpenseModeOfPayment" [nzSize]="'large'"
-      [(ngModel)]="Entity.p.ExpenseModeOfPayment" (ngModelChange)="FetchEntireListByFilters(); ClearRef()">
+      [(ngModel)]="Entity.p.IncomeModeOfPayment" (ngModelChange)="FetchEntireListByFilters(); ClearRef(); Entity.p.BankAccountRef = 0">
       <nz-option *ngFor="let mode of ModeofPaymentList" [nzValue]="mode.Ref" [nzLabel]="mode.Name"></nz-option>
     </nz-select>
   </div>
-  <div class="col" *ngIf="Entity.p.ExpenseModeOfPayment != Cash && Entity.p.ExpenseModeOfPayment">
+  <div class="col" *ngIf="Entity.p.IncomeModeOfPayment != Cash && Entity.p.IncomeModeOfPayment">
     <div>
       <label><b>Bank Name</b></label>
       <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear nzPlaceHolder="Select"

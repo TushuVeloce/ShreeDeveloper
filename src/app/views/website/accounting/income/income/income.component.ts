@@ -174,7 +174,7 @@ export class IncomeComponent implements OnInit {
       this.Entity.p.SiteRef,
       this.Entity.p.LedgerRef,
       this.Entity.p.SubLedgerRef,
-      this.Entity.p.ExpenseModeOfPayment,
+      this.Entity.p.IncomeModeOfPayment,
       this.Entity.p.BankAccountRef,
       this.Entity.p.PayerRef,
       async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));

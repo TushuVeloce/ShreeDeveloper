@@ -84,6 +84,8 @@ export class DashboardComponent implements OnInit {
   private bankTarget: number = 0;
 
   BankAccountRef: number = 0;
+  isLoading = true;  // ✅ stop loading once data arrives
+
 
   private duration: number = 2000; // total duration in ms
 
@@ -97,6 +99,22 @@ export class DashboardComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    Chart.register({
+      id: 'noDataPlugin',
+      afterDraw: (chart) => {
+        if (chart.data.datasets.length === 0 || chart.data.datasets[0].data.length === 0) {
+          const { ctx, chartArea: { width, height } } = chart;
+          ctx.save();
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'middle';
+          ctx.font = '20px Poppins';
+          ctx.fillStyle = '#7a1e1e';
+          ctx.fillText('Data Not Found', width / 2, height / 2);
+          ctx.restore();
+        }
+      }
+    });
+
     this.getCurrentBalanceByCompanyRef();
     this.getExpenseBreakdownListByCompanySiteMonthFilterType();
     this.getSiteListByCompanyRef();
@@ -104,6 +122,7 @@ export class DashboardComponent implements OnInit {
     this.getIncomeExpenseGraphList();
     this.getCRMFunnelListByCompanySiteMonthFilterType();
     this.getInvoiceSumExpenseSumListByCompanySiteMonthFilterType();
+
     if (this.BarFilterType == 57) {
       this.WeekMonthList = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
     }
@@ -296,6 +315,7 @@ export class DashboardComponent implements OnInit {
     this.LedgerColorShadesList = this.generateShades(lst.length);
     // debugger
     if (lst.length > 0) {
+      this.isLoading = false;  // ✅ stop loading once data arrives
       this.LedgerList = lst.map(item => item.p.LedgerName);
       this.ExpenseBreakdownList = lst.map(item => item.p.TotalGivenAmount);
       this.setDoughnutChart();

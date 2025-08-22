@@ -65,7 +65,8 @@
     <label><b>Mode of Payment</b></label>
     <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear nzPlaceHolder="Select"
       id="ExpenseModeOfPayment" name="ExpenseModeOfPayment" [nzSize]="'large'"
-      [(ngModel)]="Entity.p.ExpenseModeOfPayment" (ngModelChange)="FetchEntireListByFilters(); ClearRef()">
+      [(ngModel)]="Entity.p.ExpenseModeOfPayment"
+      (ngModelChange)="FetchEntireListByFilters(); ClearRef(); Entity.p.BankAccountRef = 0">
       <nz-option *ngFor="let mode of ModeofPaymentList" [nzValue]="mode.Ref" [nzLabel]="mode.Name"></nz-option>
     </nz-select>
   </div>
