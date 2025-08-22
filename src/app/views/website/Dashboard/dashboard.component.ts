@@ -76,7 +76,7 @@ export class DashboardComponent implements OnInit {
   SelectedCRMMonths: number = 0;
   SelectedBillPayableMonths: number = 0;
 
-  MonthList = DomainEnums.MonthList(true, '--Select Month Type--');
+  MonthList = DomainEnums.MonthList(true, '--Select Month--');
 
   // Target values
   private shreeTarget: number = 0;
@@ -116,13 +116,13 @@ export class DashboardComponent implements OnInit {
       labels: labels,
       datasets: [
         {
-          label: `Income :- ${this.TotalIncome}`,
+          label: `Income`,
           data: this.IncomeGraphList,
           backgroundColor: 'rgba(122, 30, 30, 0.8)',
           borderRadius: 6
         },
         {
-          label: `Expense :- ${this.TotalExpense}`,
+          label: `Expense`,
           data: this.ExpenseGraphList,
           backgroundColor: 'rgba(122, 30, 30, 0.2)',
           borderColor: 'rgba(122, 30, 30, 1)',

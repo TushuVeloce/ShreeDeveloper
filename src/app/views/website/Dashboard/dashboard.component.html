@@ -45,7 +45,8 @@
     <!-- Card 1 -->
     <div class="chart-card">
       <div class="chart-header">
-        <p>Income VS Expense</p>
+        <p>Income VS Expense <br>
+          {{this.TotalIncome}} VS {{this.TotalExpense}}</p>
         <div style="width: 25%;">
           <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear id="BarSiteRef"
             name="BarSiteRef" [nzSize]="'large'" [(ngModel)]="BarSiteRef" (ngModelChange)="getIncomeExpenseGraphList()">
@@ -102,7 +103,6 @@
             id="SelectedDoughnutMonths" name="SelectedDoughnutMonths" [nzSize]="'large'"
             [(ngModel)]="SelectedDoughnutMonths"
             (ngModelChange)="getExpenseBreakdownListByCompanySiteMonthFilterType()">
-            <nz-option [nzValue]="0" [nzLabel]="'All Months'"> </nz-option>
             <nz-option *ngFor="let SelectedDoughnutMonths of MonthList" [nzValue]="SelectedDoughnutMonths.Ref"
               [nzLabel]="SelectedDoughnutMonths.Name">
             </nz-option>
