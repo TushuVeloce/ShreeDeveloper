@@ -31,7 +31,7 @@ export class WebAttendaneLogProps {
 
   public Ref: number = 0;
   public EmployeeRef: number = 0;
-  public readonly EmployeeName: string = '';
+  public EmployeeName: string = '';
   public CompanyRef: number = 0;
   public readonly CompanyName: string = '';
   public TransDateTime: string = '';

@@ -232,13 +232,10 @@ export class DashboardComponent implements OnInit {
         this.bankTarget = bankTarget.p.NetBalance;
       }
     } else {
-      console.log('this.BalanceList :', this.BalanceList);
       let allbankTarget = this.BalanceList.filter(item => item.p.ModeOfPayment.trim() === 'Bank').reduce((sum, item) => sum + (item.p.NetBalance || 0), 0);
       if (allbankTarget) {
         this.bankTarget = allbankTarget
       }
-      console.log('allbankTarget :', allbankTarget);
-      console.log('this.bankTarget :', this.bankTarget);
     }
     this.animateValue('bankBalance', this.bankTarget);
   }
