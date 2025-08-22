@@ -21,7 +21,7 @@ export class OfficeDutyandTimeProps {
   public ToTime: string = '';
   public LateMarkGraceTimeInMins: string = '';
   public ActualLateMarkTime: string = '';
-  public OvertimeGraceTimeInMins: string = '';
+  public OvertimeGraceTimeInMins: string = '1';
   public ActualOvertime: string = '';
   public TotalWorkingHrs: number = 0;
   public ShortName: string = '';
