@@ -1,6 +1,6 @@
 import { Component, effect, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { AttendanceLogType, DomainEnums } from 'src/app/classes/domain/domainenums/domainenums';
+import { AttendanceLocationType, AttendanceLogType, DomainEnums } from 'src/app/classes/domain/domainenums/domainenums';
 import { AttendanceLogsCount } from 'src/app/classes/domain/entities/website/HR_and_Payroll/attendancelogs/attendancelogcount/attendancelogsCount';
 import { AttendanceLogs, AttendanceLogsProps } from 'src/app/classes/domain/entities/website/HR_and_Payroll/attendancelogs/attendancelogs';
 import { WebAttendaneLog } from 'src/app/classes/domain/entities/website/HR_and_Payroll/web_attendance_log/web_attendance_log/webattendancelog';
@@ -28,9 +28,10 @@ export class EmployeeAttendanceLogsComponent implements OnInit {
   MasterList: WebAttendaneLog[] = [];
   DisplayMasterList: WebAttendaneLog[] = [];
   SelectedAttendance: WebAttendaneLog = WebAttendaneLog.CreateNewInstance();
+  LocationType = AttendanceLocationType;
 
   // headers as per required
-  baseHeaders: string[] = ['Sr. no', 'Date', 'First Check In', 'Last Check Out', 'Total Time', 'Is Late', 'Is Half Day'];
+  baseHeaders: string[] = ['Sr. No', 'Location', 'Date', 'First Check In', 'Last Check Out', 'Total Time', 'Is Late', 'Is Half Day'];
 
   pageSize = 10; // Items per page
   currentPage = 1; // Initialize current page

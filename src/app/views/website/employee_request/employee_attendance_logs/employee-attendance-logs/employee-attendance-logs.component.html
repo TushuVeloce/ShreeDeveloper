@@ -84,6 +84,9 @@
         <tbody>
           <tr *ngFor="let attendancelog of paginatedList(); let i = index">
             <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
+            <td Class="tbldata">{{attendancelog.p.AttendanceLogDetailsArray[0]?.AttendenceLocationType ==
+              LocationType.Office ? 'Office'
+              : attendancelog.p.AttendanceLogDetailsArray[0]?.SiteName}}</td>
             <td Class="tbldata">{{ formatDate(attendancelog.p.TransDateTime) }}</td>
             <td Class="tbldata">{{attendancelog.p.FirstCheckInTime ? convertTo12Hour(attendancelog.p.FirstCheckInTime) :
               "--"}}</td>
