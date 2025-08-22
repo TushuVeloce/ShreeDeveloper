@@ -125,7 +125,7 @@ export class SiteManagementDetailsComponent implements OnInit {
     this.focusInput();
   }
 
-    focusInput = () => {
+  focusInput = () => {
     let txtName = document.getElementById('Name')!;
     txtName.focus();
   }
@@ -283,6 +283,7 @@ export class SiteManagementDetailsComponent implements OnInit {
       this.Entity.p.SiteManagementOwnerDetails[this.editingIndex] = { ...this.newOwner };
       await this.uiUtils.showSuccessToster('Owner details updated successfully');
       this.isOwnerModalOpen = false;
+      this.newOwner = OwnerDetailProps.Blank();
 
     } else {
       let ownerInstance = new Owner(this.newOwner, true);
@@ -293,10 +294,10 @@ export class SiteManagementDetailsComponent implements OnInit {
       this.newOwner.SiteManagementRef = this.Entity.p.Ref;
       this.Entity.p.SiteManagementOwnerDetails.push({ ...ownerInstance.p });
       await this.uiUtils.showSuccessToster('Owner added successfully');
-      this.resetOwnerControls()
+      this.isOwnerModalOpen = false;
+      this.newOwner = OwnerDetailProps.Blank();
     }
 
-    this.newOwner = OwnerDetailProps.Blank();
     this.editingIndex = null;
   }
 
@@ -334,33 +335,33 @@ export class SiteManagementDetailsComponent implements OnInit {
   }
 
   restrictToTwoDecimalsForSqFt(event: any): void {
-  const input = event.target.value;
+    const input = event.target.value;
 
-  // Allow only valid number with up to 2 decimal places
-  const regex = /^\d*\.?\d{0,2}$/;
+    // Allow only valid number with up to 2 decimal places
+    const regex = /^\d*\.?\d{0,2}$/;
 
-  if (!regex.test(input)) {
-    // Remove last character if it makes the value invalid
-    event.target.value = input.slice(0, -1);
+    if (!regex.test(input)) {
+      // Remove last character if it makes the value invalid
+      event.target.value = input.slice(0, -1);
+    }
+
+    // Update model manually
+    this.Entity.p.TotalLandAreaInSqft = parseFloat(event.target.value) || 0;
+    this.convertSqftToSqm()
   }
 
-  // Update model manually
-  this.Entity.p.TotalLandAreaInSqft = parseFloat(event.target.value) || 0;
-  this.convertSqftToSqm()
-}
+  restrictToTwoDecimalsForSqm(event: any): void {
+    const input = event.target.value;
 
-restrictToTwoDecimalsForSqm(event: any): void {
-  const input = event.target.value;
+    const regex = /^\d*\.?\d{0,2}$/;
 
-  const regex = /^\d*\.?\d{0,2}$/;
+    if (!regex.test(input)) {
+      event.target.value = input.slice(0, -1);
+    }
 
-  if (!regex.test(input)) {
-    event.target.value = input.slice(0, -1);
+    this.Entity.p.TotalLandAreaInSqm = parseFloat(event.target.value) || 0;
+    this.convertSqmToSqft()
   }
-
-  this.Entity.p.TotalLandAreaInSqm = parseFloat(event.target.value) || 0;
-  this.convertSqmToSqft()
-}
 
 
   selectAllValue(event: MouseEvent): void {
@@ -437,19 +438,5 @@ restrictToTwoDecimalsForSqm(event: any): void {
     this.TotalLandAreaInSqftInputControl.control.markAsPristine();
     this.NumberOfPlotsInputControl.control.markAsPristine();
 
-  }
-
-  resetOwnerControls = () => {
-    this.OwnerNameInputControl.control.markAsUntouched();
-    this.OwnerEmailInputControl.control.markAsUntouched();
-    this.OwnerContactNosInputControl.control.markAsUntouched();
-    this.OwnerAddressInputControl.control.markAsUntouched();
-    this.OwnerPincodeInputControl.control.markAsUntouched();
-
-    this.OwnerNameInputControl.control.markAsPristine();
-    this.OwnerEmailInputControl.control.markAsPristine();
-    this.OwnerContactNosInputControl.control.markAsPristine();
-    this.OwnerAddressInputControl.control.markAsPristine();
-    this.OwnerPincodeInputControl.control.markAsPristine();
   }
 }

@@ -222,10 +222,8 @@
           <div class="col-6">
             <label>Contact Numbers</label>
             <input type="text" name="ContactNo" class="form-control" [(ngModel)]="newOwner.ContactNo"
-              [pattern]="INDPhoneNo" #OwnerContactNosCtrl="ngModel" required
-              (blur)="OwnerContactNosCtrl.control.markAsTouched()" />
+              #OwnerContactNosCtrl="ngModel" required (blur)="OwnerContactNosCtrl.control.markAsTouched()" />
             <div *ngIf="(OwnerContactNosCtrl.invalid && (OwnerContactNosCtrl.touched || OwnerContactNosCtrl.dirty))">
-              <span class="validation-text" *ngIf="OwnerContactNosCtrl.errors?.['pattern']">{{INDPhoneNoMsg}}</span>
               <span class="validation-text" *ngIf="OwnerContactNosCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
             </div>
           </div>

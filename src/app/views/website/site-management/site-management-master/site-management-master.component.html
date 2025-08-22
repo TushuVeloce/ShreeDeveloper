@@ -34,7 +34,7 @@
           <td Class="tbldata">{{site.p.AddressLine2}}</td>
           <td Class="tbldata">
             <button class="status" *ngIf="!site.p.IsSiteCompleted" (click)="handleApproval(site)" ngClass="pending">
-              Pending
+              In Process
             </button>
             <button class="status" *ngIf="site.p.IsSiteCompleted" ngClass="approved">
               Approved
