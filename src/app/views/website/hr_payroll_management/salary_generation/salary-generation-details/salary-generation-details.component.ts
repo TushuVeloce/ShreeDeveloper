@@ -89,7 +89,11 @@ export class SalaryGenerationDetailsComponent implements OnInit {
   }
 
   calculatenetsalary = () => {
-    const NetSalary = this.Entity.p.GrossTotal - this.Entity.p.TotalDeduction;
+    const tds = Number(this.Entity.p.TDS) || 0;
+    const pf = Number(this.Entity.p.PF) || 0;
+    const advance = Number(this.Entity.p.AdvanceDeduction) || 0;
+    const SalaryDeduction = tds + pf + advance;
+    const NetSalary = this.Entity.p.GrossTotal - SalaryDeduction;
 
     this.Entity.p.NetSalary = parseFloat(NetSalary.toFixed(2));
   }
