@@ -30,7 +30,7 @@ export class EmployeeAttendanceLogsComponent implements OnInit {
   SelectedAttendance: WebAttendaneLog = WebAttendaneLog.CreateNewInstance();
 
   // headers as per required
-  baseHeaders: string[] = ['Sr. no', 'Employee Name', 'Date', 'First Check In', 'Last Check Out', 'Total Time', 'Is Late', 'Is Half Day'];
+  baseHeaders: string[] = ['Sr. no', 'Date', 'First Check In', 'Last Check Out', 'Total Time', 'Is Late', 'Is Half Day'];
 
   pageSize = 10; // Items per page
   currentPage = 1; // Initialize current page
@@ -74,7 +74,7 @@ export class EmployeeAttendanceLogsComponent implements OnInit {
     private utils: Utils,
   ) {
     effect(async () => {
-      await this.getTodayAttendanceLogByAttendanceListType(); this.getEmployeeListByCompanyRef();
+      await this.getEmployeeListByCompanyRef();
     });
   }
 
@@ -169,6 +169,14 @@ export class EmployeeAttendanceLogsComponent implements OnInit {
       }
       this.IsEmployeeDisable = true
     }
+
+    if (this.isTodayAttendanceView) {
+      this.getTodayAttendanceLogByAttendanceListType()
+    } else if (this.ToDisplayWeeklyRequirement) {
+      this.getWeekWiseAttendanceLogByAttendanceListType();
+    } else if (this.ToDispayMonthlyRequirement) {
+      this.getMonthWiseAttendanceLogByAttendanceListType();
+    }
   }
 
   getTodayAttendanceLogByAttendanceListType = async () => {
@@ -183,8 +191,6 @@ export class EmployeeAttendanceLogsComponent implements OnInit {
     }
     let TodaysAttendanceLog = await WebAttendaneLog.FetchEntireListByCompanyRefAndAttendanceLogType(this.companyRef(), AttendanceLogType.TodaysAttendanceLog, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.DisplayMasterList = TodaysAttendanceLog.filter((data) => data.p.EmployeeRef == this.Entity.p.EmployeeRef)
-
-    this.getAttendanceCount(AttendanceLogType.TodaysAttendanceLog)
   }
 
   // On Week Selected

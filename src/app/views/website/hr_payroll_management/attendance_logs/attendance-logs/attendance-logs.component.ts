@@ -72,15 +72,13 @@ export class AttendanceLogsComponent implements OnInit {
     private utils: Utils,
   ) {
     effect(async () => {
-      await this.getTodayAttendanceLogByAttendanceListType(); this.getEmployeeListByCompanyRef();
+      await this.getEmployeeListByCompanyRef();
     });
   }
 
   ngOnInit() {
     this.loadPaginationData();
     this.appStateManage.setDropdownDisabled();
-    // this.pageSize = this.screenSizeService.getPageSize('withoutDropdown') - 5;
-    // this.isTodayAttendanceView = true;
     this.getViewStatus();
   }
 
@@ -133,7 +131,11 @@ export class AttendanceLogsComponent implements OnInit {
 
     this.isShowMonthlyData = JSON.parse(this.appStateManage.StorageKey.getItem('isshowmonthlydata') || 'false')
     this.isDaysShow = JSON.parse(this.appStateManage.StorageKey.getItem('isdaysshow') || 'false')
-    this.isDaysShowMonth = JSON.parse(this.appStateManage.StorageKey.getItem('isdaysshowmonth') || 'false')
+    this.isDaysShowMonth = JSON.parse(this.appStateManage.StorageKey.getItem('isdaysshowmonth') || 'false');
+
+    if (this.isTodayAttendanceView) {
+      this.getTodayAttendanceLogByAttendanceListType()
+    }
   }
 
   convertFractionTimeToHM = (fractionTime: number) => {
@@ -308,39 +310,6 @@ export class AttendanceLogsComponent implements OnInit {
     return this.DateconversionService.formatDate(date);
   }
 
-  // CustomFetchRequest
-  // getAttendanceCount = async (AttendanceLogType: number) => {
-  //   // let tranDate = this.dtu.ConvertStringDateToFullFormat(this.Date!)
-  //   let req = new AttendanceLogCountCustomRequest();
-  //   // req.TransDateTime = tranDate;
-  //   req.CompanyRef = this.companyRef();
-  //   req.EmployeeRef = this.Entity.p.EmployeeRef;
-  //   req.Months = this.Entity.p.Months
-  //   req.AttendanceLogTypes = AttendanceLogType
-
-  //   let td = req.FormulateTransportData();
-  //   let pkt = this.payloadPacketFacade.CreateNewPayloadPacket2(td);
-  //   let tr = await this.serverCommunicator.sendHttpRequest(pkt);
-
-  //   if (!tr.Successful) {
-  //     await this.uiUtils.showErrorMessage('Error', tr.Message);
-  //     return;
-  //   }
-  //   let tdResult = JSON.parse(tr.Tag) as TransportData;
-  //   let res = AttendanceLogCountCustomRequest.FromTransportData(tdResult);
-
-  //   const summaryCollection = tdResult.MainData?.Collections?.find((c: any) =>
-  //     c?.Name === '' && c?.Entries?.length > 0
-  //   );
-
-  //   if (summaryCollection && summaryCollection.Entries.length > 0) {
-  //     let DailyRecord: AttendanceLogsProps[] = res.Data as AttendanceLogsProps[];
-  //     Object.assign(this.Entity.p, summaryCollection.Entries[0]);
-
-  //   }
-  // }
-
-
   getAttendanceCount = async (AttendanceLogType: number) => {
     this.AttendanceLogCount.p.TeamSize = 0
     this.AttendanceLogCount.p.Present = 0
@@ -356,7 +325,6 @@ export class AttendanceLogsComponent implements OnInit {
     this.AttendanceLogCount.p.TotalDaysInMonth = lst[0]?.p?.TotalDaysInMonth
     this.AttendanceLogCount.p.TotalDaysInWeek = lst[0]?.p?.TotalDaysInWeek
   }
-
 
   AddAttendance = () => {
     if (this.companyRef() <= 0) {
