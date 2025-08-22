@@ -20,73 +20,6 @@ export class CommaFormatDirective implements ControlValueAccessor {
 
   constructor(private el: ElementRef<HTMLInputElement>) { }
 
-  // @HostListener('input', ['$event.target.value'])
-  // onInput(value: string) {
-  //   // Keep minus only if it’s at the start
-  //   let raw = value.replace(/,/g, '').replace(/(?!^)-/g, '');
-  //   raw = raw.replace(/[^\d.-]/g, '');
-
-  //   const isNegative = raw.startsWith('-');
-  //   raw = raw.replace(/-/g, '');
-  //   if (isNegative) raw = '-' + raw;
-
-  //   const [whole, decimal] = raw.replace('-', '').split('.');
-  //   const formattedWhole = whole.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-  //   const formatted = (isNegative ? '-' : '') + formattedWhole + (decimal ? '.' + decimal : '');
-
-  //   this.el.nativeElement.value = formatted;
-
-  //   // ✅ Send number instead of string
-  //   const numValue = parseFloat(raw);
-  //   this.onChange(isNaN(numValue) ? null : numValue);
-  // }
-
-  // @HostListener('blur')
-  // onBlur() {
-  //   this.onTouched();
-  // }
-
-  // writeValue(value: any): void {
-  //   if (value == null || value === '') {
-  //     this.el.nativeElement.value = '';
-  //   } else {
-  //     const num = Number(value);
-  //     if (isNaN(num)) {
-  //       this.el.nativeElement.value = '';
-  //       return;
-  //     }
-
-  //     const isNegative = num < 0;
-  //     const strValue = Math.abs(num).toString();
-  //     const [whole, decimal] = strValue.split('.');
-  //     const formattedWhole = whole.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-  //     const formatted =
-  //       (isNegative ? '-' : '') +
-  //       formattedWhole +
-  //       (decimal ? '.' + decimal : '');
-
-  //     this.el.nativeElement.value = formatted;
-  //   }
-  // }
-
-  // registerOnChange(fn: any): void {
-  //   this.onChange = fn;
-  // }
-
-  // registerOnTouched(fn: any): void {
-  //   this.onTouched = fn;
-  // }
-
-  // // ✅ Indian format function: 12345678 -> 1,23,45,678
-  // private formatIndianNumber(x: string): string {
-  //   if (!x) return '';
-  //   if (x.length <= 3) return x;
-  //   let lastThree = x.slice(-3);
-  //   let otherNumbers = x.slice(0, -3);
-  //   return otherNumbers.replace(/\B(?=(\d{2})+(?!\d))/g, ',') + ',' + lastThree;
-  // }
-
-
   // 🔹 Indian number formatter
   private formatINR(value: string): string {
     if (!value) return '0';
@@ -112,10 +45,16 @@ export class CommaFormatDirective implements ControlValueAccessor {
     // Keep only digits and one dot
     let raw = value.replace(/,/g, '').replace(/[^\d.]/g, '');
 
-    // Prevent multiple decimals
+    // ✅ allow only first dot
     const parts = raw.split('.');
     if (parts.length > 2) {
       raw = parts[0] + '.' + parts.slice(1).join('');
+    }
+
+    // ✅ allow max 2 decimals
+    if (parts.length === 2) {
+      parts[1] = parts[1].slice(0, 2); // keep only first 2 digits after dot
+      raw = parts[0] + '.' + parts[1];
     }
 
     // Format with Indian commas
@@ -130,14 +69,17 @@ export class CommaFormatDirective implements ControlValueAccessor {
 
   writeValue(value: any): void {
     if (value == null || value === '') {
-      this.el.nativeElement.value = '0';
+      this.el.nativeElement.value = '0.00';   // ✅ default 0.00
     } else {
       const num = Number(value);
       if (isNaN(num)) {
-        this.el.nativeElement.value = '0';
+        this.el.nativeElement.value = '0.00';
         return;
       }
-      this.el.nativeElement.value = this.formatINR(num.toString());
+      // ✅ always 2 decimals
+      const fixedValue = num.toFixed(2);
+
+      this.el.nativeElement.value = this.formatINR(fixedValue);
     }
   }
 
