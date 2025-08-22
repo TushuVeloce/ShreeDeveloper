@@ -163,7 +163,6 @@ export class AttendanceLogsComponent implements OnInit {
     }
     let TodaysAttendanceLog = await WebAttendaneLog.FetchEntireListByCompanyRefAndAttendanceLogType(this.companyRef(), AttendanceLogType.TodaysAttendanceLog, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.DisplayMasterList = TodaysAttendanceLog
-    console.log('this.DisplayMasterList :', this.DisplayMasterList);
     this.getAttendanceCount(AttendanceLogType.TodaysAttendanceLog)
   }
 

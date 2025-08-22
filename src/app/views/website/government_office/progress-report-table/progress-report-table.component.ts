@@ -36,7 +36,7 @@ export class ProgressReportTableComponent implements OnInit {
     private companystatemanagement: CompanyStateManagement
   ) {
     effect(async () => {
-      await this.getSiteListByCompanyRef(); await this.getProgressReportListByCompanyRef();
+      await this.getSiteListByCompanyRef(); await this.getProgressReportListByCompanySiteRef();
     });
   }
 
@@ -57,12 +57,12 @@ export class ProgressReportTableComponent implements OnInit {
     this.SiteList = lst;
   }
 
-  getProgressReportListByCompanyRef = async () => {
+  getProgressReportListByCompanySiteRef = async () => {
     if (this.companyRef() <= 0) {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
-    let lst = await ProgressReport.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    let lst = await ProgressReport.FetchEntireListByCompanySiteRef(this.companyRef(), this.Entity.p.SiteRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.DisplayMasterList = lst;
   }
 

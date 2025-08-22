@@ -10,6 +10,7 @@ export class ProgressReportFetchRequest
 
     ProgressReportRefs: number[] = [];
     CompanyRefs: number[] = [];
+    SiteRefs: number[] = [];
 
     public MergeIntoTransportData = (td: TransportData) =>
     {

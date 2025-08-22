@@ -16,7 +16,7 @@
       <label for="SiteRef"><b>Site Name</b></label>
       <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear nzPlaceHolder="Select"
         id="SiteRef" name="SiteRef" [nzSize]="'large'" [(ngModel)]="Entity.p.SiteRef"
-        (ngModelChange)="getRegistrarOfficeListBySiteAndPlotRef(); OnSiteChange() ">
+        (ngModelChange)="OnSiteChange(); getRegistrarOfficeListBySiteAndPlotRef()">
         <nz-option *ngFor="let site of SiteList" [nzValue]="site.p.Ref" [nzLabel]="site.p.Name"></nz-option>
       </nz-select>
     </div>

@@ -171,9 +171,10 @@ export class ProgressReport implements IPersistable<ProgressReport> {
     return ProgressReport.ListFromTransportData(tdResponse);
   }
 
-  public static async FetchEntireListByCompanyRef(CompanyRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+  public static async FetchEntireListByCompanySiteRef(CompanyRef: number, SiteRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let req = new ProgressReportFetchRequest();
     req.CompanyRefs.push(CompanyRef)
+    SiteRef && req.SiteRefs.push(SiteRef)
     let tdResponse = await ProgressReport.FetchTransportData(req, errorHandler) as TransportData;
     return ProgressReport.ListFromTransportData(tdResponse);
   }
