@@ -48,6 +48,7 @@ export class ExpenseComponent implements OnInit {
   companyRef = this.companystatemanagement.SelectedCompanyRef;
 
   Cash = OpeningBalanceModeOfPayments.Cash
+  ModeOfPayments = ModeOfPayments
   RecipientList: Invoice[] = [];
   RecipientTypesList = DomainEnums.RecipientTypesList();
 

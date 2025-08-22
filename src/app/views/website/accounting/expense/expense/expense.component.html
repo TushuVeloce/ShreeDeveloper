@@ -70,7 +70,8 @@
       <nz-option *ngFor="let mode of ModeofPaymentList" [nzValue]="mode.Ref" [nzLabel]="mode.Name"></nz-option>
     </nz-select>
   </div>
-  <div class="col" *ngIf="Entity.p.ExpenseModeOfPayment != Cash && Entity.p.ExpenseModeOfPayment">
+  <div class="col"
+    *ngIf="Entity.p.ExpenseModeOfPayment == ModeOfPayments.Cheque || Entity.p.ExpenseModeOfPayment == ModeOfPayments.RTGS || Entity.p.ExpenseModeOfPayment == ModeOfPayments.GpayPhonePay">
     <div>
       <label><b>Bank Name</b></label>
       <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear nzPlaceHolder="Select"

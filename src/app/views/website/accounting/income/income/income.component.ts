@@ -38,6 +38,7 @@ export class IncomeComponent implements OnInit {
   pageSize = 10; // Items per page
   currentPage = 1; // Initialize current page
   total = 0;
+  ModeOfPayments = ModeOfPayments
 
   PayerList: Income[] = [];
   PayerTypesList = DomainEnums.PayerTypesList();
