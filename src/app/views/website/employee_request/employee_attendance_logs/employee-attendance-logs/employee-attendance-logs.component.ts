@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { AttendanceLogType, DomainEnums } from 'src/app/classes/domain/domainenums/domainenums';
 import { AttendanceLogsCount } from 'src/app/classes/domain/entities/website/HR_and_Payroll/attendancelogs/attendancelogcount/attendancelogsCount';
 import { AttendanceLogs, AttendanceLogsProps } from 'src/app/classes/domain/entities/website/HR_and_Payroll/attendancelogs/attendancelogs';
+import { WebAttendaneLog } from 'src/app/classes/domain/entities/website/HR_and_Payroll/web_attendance_log/web_attendance_log/webattendancelog';
 import { Employee } from 'src/app/classes/domain/entities/website/masters/employee/employee';
 import { PayloadPacketFacade } from 'src/app/classes/infrastructure/payloadpacket/payloadpacketfacade';
 import { TransportData } from 'src/app/classes/infrastructure/transportdata';
@@ -22,14 +23,17 @@ import { Utils } from 'src/app/services/utils.service';
   standalone: false,
 })
 export class EmployeeAttendanceLogsComponent implements OnInit {
-  Entity: AttendanceLogs = AttendanceLogs.CreateNewInstance();
+  Entity: WebAttendaneLog = WebAttendaneLog.CreateNewInstance();
   AttendanceLogCount: AttendanceLogsCount = AttendanceLogsCount.CreateNewInstance();
-  MasterList: AttendanceLogs[] = [];
-  DisplayMasterList: AttendanceLogs[] = [];
-  SelectedAttendanceLogs: AttendanceLogs = AttendanceLogs.CreateNewInstance();
+  MasterList: WebAttendaneLog[] = [];
+  DisplayMasterList: WebAttendaneLog[] = [];
+  SelectedAttendance: WebAttendaneLog = WebAttendaneLog.CreateNewInstance();
 
-  pageSize: number = 10; // Items per page
-  currentPage: number = 1; // Initialize current page
+  // headers as per required
+  baseHeaders: string[] = ['Sr. no', 'Employee Name', 'Date', 'First Check In', 'Last Check Out', 'Total Time', 'Is Late', 'Is Half Day'];
+
+  pageSize = 10; // Items per page
+  currentPage = 1; // Initialize current page
   total = 0;
   SearchString: string = '';
 
@@ -56,7 +60,6 @@ export class EmployeeAttendanceLogsComponent implements OnInit {
   isShowMonthlyData: boolean = false;
   isDaysShow: boolean = false;
   isDaysShowMonth: boolean = false;
-  IsEmployeeDisable = false
 
   constructor(
     private uiUtils: UIUtils,
@@ -66,6 +69,7 @@ export class EmployeeAttendanceLogsComponent implements OnInit {
     private DateconversionService: DateconversionService,
     private router: Router,
     private appStateManage: AppStateManageService,
+    private utils: Utils,
   ) {
     effect(async () => {
       await this.getTodayAttendanceLogByAttendanceListType(); this.getEmployeeListByCompanyRef();
@@ -75,72 +79,154 @@ export class EmployeeAttendanceLogsComponent implements OnInit {
   ngOnInit() {
     this.loadPaginationData();
     this.appStateManage.setDropdownDisabled();
-    this.pageSize = this.screenSizeService.getPageSize('withoutDropdown');
-    this.isTodayAttendanceView = true;
+    // this.pageSize = this.screenSizeService.getPageSize('withoutDropdown') - 5;
+    // this.isTodayAttendanceView = true;
+    this.getViewStatus();
+  }
 
+  convertTo12Hour = (time24: string): string => {
+    const [hourStr, minute] = time24.split(":");
+    let hour = parseInt(hourStr, 10);
+    const ampm = hour >= 12 ? "PM" : "AM";
+
+    hour = hour % 12;
+    hour = hour === 0 ? 12 : hour; // Handle midnight (0 -> 12 AM) and noon (12 -> 12 PM)
+
+    return `${hour}:${minute} ${ampm}`;
+  }
+
+  setTodayViewStatus = () => {
+    this.appStateManage.StorageKey.setItem('todispaymonthlyrequirement', JSON.stringify(false));
+    this.appStateManage.StorageKey.setItem('todisplayweeklyrequirement', JSON.stringify(false));
+    this.appStateManage.StorageKey.setItem('istodayattendanceview', JSON.stringify(true));
+
+    this.appStateManage.StorageKey.setItem('isshowmonthlydata', JSON.stringify(false));
+    this.appStateManage.StorageKey.setItem('isdaysshow', JSON.stringify(false));
+    this.appStateManage.StorageKey.setItem('isdaysshowmonth', JSON.stringify(false));
+  }
+
+  setWeeklyViewStatus = () => {
+    this.appStateManage.StorageKey.setItem('todispaymonthlyrequirement', JSON.stringify(false));
+    this.appStateManage.StorageKey.setItem('todisplayweeklyrequirement', JSON.stringify(true));
+    this.appStateManage.StorageKey.setItem('istodayattendanceview', JSON.stringify(false));
+
+    this.appStateManage.StorageKey.setItem('isshowmonthlydata', JSON.stringify(false));
+    this.appStateManage.StorageKey.setItem('isdaysshow', JSON.stringify(true));
+    this.appStateManage.StorageKey.setItem('isdaysshowmonth', JSON.stringify(false));
+  }
+
+  setMonthlyViewStatus = () => {
+    this.appStateManage.StorageKey.setItem('todispaymonthlyrequirement', JSON.stringify(true));
+    this.appStateManage.StorageKey.setItem('todisplayweeklyrequirement', JSON.stringify(false));
+    this.appStateManage.StorageKey.setItem('istodayattendanceview', JSON.stringify(false));
+
+    this.appStateManage.StorageKey.setItem('isshowmonthlydata', JSON.stringify(true));
+    this.appStateManage.StorageKey.setItem('isdaysshow', JSON.stringify(false));
+    this.appStateManage.StorageKey.setItem('isdaysshowmonth', JSON.stringify(true));
+  }
+
+
+  getViewStatus = () => {
+    this.ToDispayMonthlyRequirement = JSON.parse(this.appStateManage.StorageKey.getItem('todispaymonthlyrequirement') || 'false')
+    this.ToDisplayWeeklyRequirement = JSON.parse(this.appStateManage.StorageKey.getItem('todisplayweeklyrequirement') || 'false')
+    this.isTodayAttendanceView = JSON.parse(this.appStateManage.StorageKey.getItem('istodayattendanceview') || 'false')
+
+    this.isShowMonthlyData = JSON.parse(this.appStateManage.StorageKey.getItem('isshowmonthlydata') || 'false')
+    this.isDaysShow = JSON.parse(this.appStateManage.StorageKey.getItem('isdaysshow') || 'false')
+    this.isDaysShowMonth = JSON.parse(this.appStateManage.StorageKey.getItem('isdaysshowmonth') || 'false')
+  }
+
+  convertFractionTimeToHM = (fractionTime: number) => {
+    const hours = Math.floor(fractionTime);
+    const fractionalMinutes = fractionTime - hours;
+
+    // Convert fractional part (base 100) to minutes (base 60)
+    const minutes = Math.round(fractionalMinutes * 100 * 60 / 100);
+
+    // Pad minutes with leading zero if needed
+    const paddedMinutes = String(minutes).padStart(2, '0');
+
+    return `${hours}h ${paddedMinutes}m`;
   }
 
   getEmployeeListByCompanyRef = async () => {
     if (this.companyRef() <= 0) {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
+
     }
     let lst = await Employee.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.EmployeeList = lst;
-    const IsDefaultUser = Number(this.appStateManage.StorageKey.getItem("IsDefaultUser"))
-    const LoginEmployeeRef = Number(this.appStateManage.StorageKey.getItem("LoginEmployeeRef"))
-    if(IsDefaultUser == 0 && LoginEmployeeRef){
-    this.Entity.p.EmployeeRef = LoginEmployeeRef
-    this.IsEmployeeDisable = true
-  }
   }
 
   getTodayAttendanceLogByAttendanceListType = async () => {
-    this.isDaysShowMonth = false
-    this.isDaysShow = false
     this.resetSummaryStats();
-    this.ToDispayMonthlyRequirement = false;
-    this.ToDisplayWeeklyRequirement = false;
-    this.isTodayAttendanceView = true;
-    this.isShowMonthlyData = false;
-     this.AttendanceLogCount.p.TotalDaysInWeek = 0;
-    this.AttendanceLogCount.p.TotalDaysInMonth = 0;
-    this.AttendanceLogCount.p.Present = 0;
-    this.AttendanceLogCount.p.Absent = 0;
-    this.AttendanceLogCount.p.OnLeave = 0;
+
     if (this.companyRef() <= 0) {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
-    let TodaysAttendanceLog = await AttendanceLogs.FetchEntireListByCompanyRefAndAttendanceLogType(this.companyRef(), AttendanceLogType.TodaysAttendanceLog, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    if (this.isTodayAttendanceView == false) {
+      return;
+    }
+    let TodaysAttendanceLog = await WebAttendaneLog.FetchEntireListByCompanyRefAndAttendanceLogType(this.companyRef(), AttendanceLogType.TodaysAttendanceLog, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.DisplayMasterList = TodaysAttendanceLog
     this.getAttendanceCount(AttendanceLogType.TodaysAttendanceLog)
   }
 
   // On Week Selected
   selectWeek = async () => {
-    // this.Entity.p.EmployeeRef = 0;
+    this.Entity.p.EmployeeRef = 0;
+    this.AttendanceLogCount.p.TotalDaysInWeek = 0;
+    this.AttendanceLogCount.p.TotalDaysInMonth = 0;
+    this.AttendanceLogCount.p.Present = 0;
+    this.AttendanceLogCount.p.Absent = 0;
+    this.AttendanceLogCount.p.OnLeave = 0;
     this.DisplayMasterList = [];
-    this.ToDispayMonthlyRequirement = false;
-    this.ToDisplayWeeklyRequirement = true;
-    this.isTodayAttendanceView = false;
-    this.isShowMonthlyData = false
-    this.isDaysShow = true
-    this.isDaysShowMonth = false
-    if(this.Entity.p.EmployeeRef > 0){
-      await this.getWeekWiseAttendanceLogByAttendanceListType()
-    }
+  }
+
+  ChangeAttendanceStatus = async (Entity: WebAttendaneLog) => {
+    await this.uiUtils.showStatusConfirmationMessage(
+      'Approval',
+      `This process is <strong>IRREVERSIBLE!</strong> <br/>
+      Are you sure that you want to Approve this Attendance?`, ['Approval'],
+      async () => {
+        this.Entity = Entity;
+        this.Entity.p.UpdatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
+        this.Entity.p.IsAttendanceVerified = true;
+        let entityToSave = this.Entity.GetEditableVersion();
+        let entitiesToSave = [entityToSave]
+        let tr = await this.utils.SavePersistableEntities(entitiesToSave);
+        if (!tr.Successful) {
+          this.uiUtils.showErrorMessage('Error', tr.Message);
+          Entity.p.IsAttendanceVerified = false;
+          return
+        }
+        else {
+          if (this.isTodayAttendanceView) {
+            this.getTodayAttendanceLogByAttendanceListType()
+          } else if (this.ToDisplayWeeklyRequirement) {
+            this.getWeekWiseAttendanceLogByAttendanceListType();
+          } else if (this.ToDispayMonthlyRequirement) {
+            this.getMonthWiseAttendanceLogByAttendanceListType();
+          }
+          await this.uiUtils.showSuccessToster('Attendance Updated successfully');
+        }
+      }
+    );
   }
 
   getWeekWiseAttendanceLogByAttendanceListType = async () => {
     this.resetSummaryStats();
-    this.ToDispayMonthlyRequirement = false;
-    this.isTodayAttendanceView = false;
-    this.isShowMonthlyData = false;
 
-    let employeeref = this.Entity.p.EmployeeRef
+    let employeeref = this.Entity.p.EmployeeRef;
 
-    let WeeklyAttendanceLog = await AttendanceLogs.FetchEntireListByCompanyRefAndAttendanceLogTypeAndEmployee(this.companyRef(), AttendanceLogType.WeeklyAttendanceLog, employeeref, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    if (employeeref <= 0) {
+      await this.uiUtils.showErrorToster('Employee not Selected');
+      return;
+    }
+
+    let WeeklyAttendanceLog = await WebAttendaneLog.FetchEntireListByCompanyRefAndAttendanceLogTypeAndEmployee(this.companyRef(), AttendanceLogType.WeeklyAttendanceLog, employeeref, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.DisplayMasterList = WeeklyAttendanceLog
     this.getAttendanceCount(AttendanceLogType.WeeklyAttendanceLog);
   }
@@ -150,36 +236,24 @@ export class EmployeeAttendanceLogsComponent implements OnInit {
   }
 
   selectMonth = async () => {
-    // this.Entity.p.EmployeeRef = 0;
-    this.Entity.p.Months = 0;
+    this.Entity.p.EmployeeRef = 0;
     this.AttendanceLogCount.p.TotalDaysInWeek = 0;
     this.AttendanceLogCount.p.TotalDaysInMonth = 0;
     this.AttendanceLogCount.p.Present = 0;
     this.AttendanceLogCount.p.Absent = 0;
     this.AttendanceLogCount.p.OnLeave = 0;
+    this.Entity.p.Months = 0;
     this.DisplayMasterList = [];
-    this.ToDispayMonthlyRequirement = true;
-    this.ToDisplayWeeklyRequirement = false;
-    this.isTodayAttendanceView = false;
-    this.isShowMonthlyData = true
-    this.isDaysShow = false
-    this.isDaysShowMonth = true
-    if(this.Entity.p.EmployeeRef > 0){
-    this.IsEmployeeDisable = true
-    }
   }
 
   getMonthWiseAttendanceLogByAttendanceListType = async () => {
     this.resetSummaryStats();
     this.DisplayMasterList = [];
-    this.ToDispayMonthlyRequirement = true;
-    this.ToDisplayWeeklyRequirement = false;
-    this.isTodayAttendanceView = false;
 
     const month = this.Entity.p.Months;
     const employeeref = this.Entity.p.EmployeeRef;
 
-    let MonthlyAttendanceLog = await AttendanceLogs.FetchEntireListByCompanyRefAndAttendanceLogTypeAndMonth(this.companyRef(), AttendanceLogType.MonthlyAttendanceLog,
+    let MonthlyAttendanceLog = await WebAttendaneLog.FetchEntireListByCompanyRefAndAttendanceLogTypeAndMonth(this.companyRef(), AttendanceLogType.MonthlyAttendanceLog,
       month, employeeref, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.DisplayMasterList = MonthlyAttendanceLog
     this.getAttendanceCount(AttendanceLogType.MonthlyAttendanceLog)
@@ -188,16 +262,16 @@ export class EmployeeAttendanceLogsComponent implements OnInit {
   // For Pagination  start ----
   loadPaginationData = () => {
     this.total = this.DisplayMasterList.length; // Update total based on loaded data
-  }
+  };
 
-  get paginatedList() {
+  paginatedList = () => {
     const start = (this.currentPage - 1) * this.pageSize;
     return this.DisplayMasterList.slice(start, start + this.pageSize);
   }
 
   onPageChange = (pageIndex: number): void => {
     this.currentPage = pageIndex; // Update the current page
-  }
+  };
 
   filterTable = () => {
     if (this.SearchString != '') {
@@ -210,13 +284,23 @@ export class EmployeeAttendanceLogsComponent implements OnInit {
     }
   }
 
-  // headers as per required
-  baseHeaders: string[] = ['Sr. no', 'Employee Name', 'Date', 'Latest Check In Time', 'First Check In Time', 'Last Check Out Time', 'Total Time', 'In Office Hours'];
-  get headers(): string[] {
-    if (this.isTodayAttendanceView) {
-      return [...this.baseHeaders, 'On Leave', 'Leave Type'];
+  onEditClicked = async (item: WebAttendaneLog) => {
+    if (item.p.IsEntryNonEditable) {
+      this.uiUtils.showWarningToster("This Record Can't be Editable");
+      return;
     }
-    return this.baseHeaders;
+    this.SelectedAttendance = item.GetEditableVersion();
+    WebAttendaneLog.SetCurrentInstance(this.SelectedAttendance);
+    this.appStateManage.StorageKey.setItem('Editable', 'Edit');
+    this.router.navigate(['/homepage/Website/Attendance_Logs_Details']);
+  };
+
+  get headers(): string[] {
+    // if (this.isTodayAttendanceView || this.ToDisplayWeeklyRequirement) {
+    //   return [...this.baseHeaders, 'On Leave', 'Leave Type', 'Status', 'Action'];
+    // }
+    // return this.baseHeaders;
+    return [...this.baseHeaders, 'Leave Type', 'Status'];
   }
 
   // Extracted from services date conversion //
@@ -268,7 +352,7 @@ export class EmployeeAttendanceLogsComponent implements OnInit {
     this.AttendanceLogCount.p.TeamSize = lst[0]?.p?.TeamSize
     this.AttendanceLogCount.p.Present = lst[0]?.p?.Present
     this.AttendanceLogCount.p.Absent = lst[0]?.p?.Absent
-    this.AttendanceLogCount.p.OnLeave = lst[0]?.p?.OnLeave || 0
+    this.AttendanceLogCount.p.OnLeave = lst[0]?.p?.OnLeave
     this.AttendanceLogCount.p.TotalDaysInMonth = lst[0]?.p?.TotalDaysInMonth
     this.AttendanceLogCount.p.TotalDaysInWeek = lst[0]?.p?.TotalDaysInWeek
   }
@@ -279,7 +363,7 @@ export class EmployeeAttendanceLogsComponent implements OnInit {
       this.uiUtils.showWarningToster('Please select company');
       return;
     }
-    this.router.navigate(['/homepage/Website/Attendance_Details']);
+    this.router.navigate(['/homepage/Website/Attendance_Logs_Details']);
   }
 
   resetSummaryStats() {
