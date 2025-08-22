@@ -66,17 +66,43 @@ export class StockSummaryMobileAppComponent implements OnInit {
     (event.target as HTMLIonRefresherElement).complete();
   }
 
-  @ViewChild('PrintContainer')
-  PrintContainer!: ElementRef;
+  // @ViewChild('PrintContainer')
+  // PrintContainer!: ElementRef;
 
+  // async handlePrintOrShare() {
+  //   if (this.DisplayMasterList.length == 0) {
+  //     await this.toastService.present('No Stock Summary Records Found', 1000, 'warning');
+  //     await this.haptic.warning();
+  //     return;
+  //   }
+  //   if (!this.PrintContainer) return;
+  //   await this.pdfService.generatePdfAndHandleAction(this.PrintContainer.nativeElement, `Receipt_${this.Entity.p.PurchaseOrderDate}.pdf`);
+  // }
   async handlePrintOrShare() {
     if (this.DisplayMasterList.length == 0) {
       await this.toastService.present('No Stock Summary Records Found', 1000, 'warning');
       await this.haptic.warning();
       return;
     }
-    if (!this.PrintContainer) return;
-    await this.pdfService.generatePdfAndHandleAction(this.PrintContainer.nativeElement, `Receipt_${this.Entity.p.PurchaseOrderDate}.pdf`);
+    // if (!this.PrintContainer) return;
+    // await this.pdfService.generatePdfAndHandleAction(this.PrintContainer.nativeElement, `Receipt_${this.Entity.p.Ref}.pdf`);
+    const headers = this.headers;
+    const data = this.DisplayMasterList.map((m, index) => [
+      index + 1,
+      m.p.SiteName ? (m.p.SiteName) : '--',
+      m.p.MaterialName ? (m.p.MaterialName) : '--',
+      m.p.TotalOrderQtyPerMaterial ? (m.p.TotalOrderQtyPerMaterial) : '--',
+      m.p.TotalExtraOrderQty ? (m.p.TotalExtraOrderQty) : '--',
+      (m.p.TotalOrderQty && m.p.TotalOrderQty != 0) ? (m.p.TotalOrderQty) : '--',
+      (m.p.TotalInwardQty && m.p.TotalInwardQty != 0) ? (m.p.TotalInwardQty) : '--',
+      (m.p.InwardRemainingQty && m.p.InwardRemainingQty != 0) ? (m.p.InwardRemainingQty) : '--',
+      (m.p.TotalConsumedQty && m.p.TotalConsumedQty != 0) ? (m.p.TotalConsumedQty) : '--',
+      (m.p.TotalTransferredInQty && m.p.TotalTransferredInQty != 0) ? (m.p.TotalTransferredInQty) : '--',
+      (m.p.CurrentStock && m.p.CurrentStock != 0) ? (m.p.CurrentStock) : '--',
+      (m.p.OrderedRemainingQty && m.p.OrderedRemainingQty != 0) ? (m.p.OrderedRemainingQty) : '--',
+    ]);
+
+    await this.pdfService.generatePdfAndHandleAction(null, 'Stock-Summary-Report.pdf', { headers, data }, false, 'l', [], 'Stock Summary Report');
   }
   loadFilters() {
     this.filters = [

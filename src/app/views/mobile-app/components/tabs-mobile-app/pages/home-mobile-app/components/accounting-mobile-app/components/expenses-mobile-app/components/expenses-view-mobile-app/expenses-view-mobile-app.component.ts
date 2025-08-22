@@ -326,19 +326,44 @@ export class ExpensesViewMobileAppComponent implements OnInit {
     this.router.navigate(['/mobile-app/tabs/dashboard/accounting/expenses/add']);
   }
 
-  @ViewChild('PrintContainer')
-  PrintContainer!: ElementRef;
+  // @ViewChild('PrintContainer')
+  // PrintContainer!: ElementRef;
 
+  // async handlePrintOrShare() {
+  //   if (this.DisplayMasterList.length == 0) {
+  //     await this.toastService.present('No Expenses Records Found', 1000, 'warning');
+  //     await this.haptic.warning();
+  //     return;
+  //   }
+  //   if (!this.PrintContainer) return;
+  //   await this.pdfService.generatePdfAndHandleAction(this.PrintContainer.nativeElement, `Receipt_${this.Entity.p.Ref}.pdf`);
+  // }
   async handlePrintOrShare() {
     if (this.DisplayMasterList.length == 0) {
       await this.toastService.present('No Expenses Records Found', 1000, 'warning');
       await this.haptic.warning();
       return;
     }
-    if (!this.PrintContainer) return;
-    await this.pdfService.generatePdfAndHandleAction(this.PrintContainer.nativeElement, `Receipt_${this.Entity.p.Ref}.pdf`);
-  }
+    // if (!this.PrintContainer) return;
+    // await this.pdfService.generatePdfAndHandleAction(this.PrintContainer.nativeElement, `Receipt_${this.Entity.p.Ref}.pdf`);
+    const headers = this.printheaders;
+    const data = this.DisplayMasterList.map((m, index) => [
+      index + 1,
+      this.formatDate(m.p.Date),
+      m.p.SiteName ? (m.p.SiteName) : '--',
+      m.p.LedgerName ? (m.p.LedgerName) : '--',
+      m.p.SubLedgerName ? (m.p.SubLedgerName) : '--',
+      m.p.RecipientName ? (m.p.RecipientName) : '--',
+      (m.p.Reason && m.p.Reason != '') ? (m.p.Reason) : '--',
+      (m.p.InvoiceAmount && m.p.InvoiceAmount != 0) ? (m.p.InvoiceAmount) : '--',
+      (m.p.GivenAmount && m.p.GivenAmount != 0) ? (m.p.GivenAmount) : '--',
+      (m.p.RemainingAmount && m.p.RemainingAmount != 0) ? (m.p.RemainingAmount) : '--',
+      (m.p.ShreesBalance && m.p.ShreesBalance != 0) ? (m.p.ShreesBalance) : '--',
+      (m.p.ModeOfPaymentName && m.p.ModeOfPaymentName != '') ? (m.p.ModeOfPaymentName) : '--',
+    ]);
 
+    await this.pdfService.generatePdfAndHandleAction(null, 'Expenses-Report.pdf', { headers, data }, false, 'l', [7,8], 'Expenses Report');
+  }
   openModal(Expense: any) {
     this.SelectedExpense = Expense;
     this.modalOpen = true;
