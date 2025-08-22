@@ -181,7 +181,6 @@ export class DashboardComponent implements OnInit {
     return colors;
   }
 
-
   private animateValue(property: keyof DashboardComponent, target: number) {
     const startTime = performance.now();
     const startValue = 0;
@@ -192,7 +191,10 @@ export class DashboardComponent implements OnInit {
 
       // Ease-out cubic
       const easedProgress = 1 - Math.pow(1 - progress, 3);
-      (this as any)[property] = Math.floor(startValue + (target - startValue) * easedProgress);
+      const value = startValue + (target - startValue) * easedProgress;
+
+      // ✅ Keep 2 decimal places
+      (this as any)[property] = parseFloat(value.toFixed(2));
 
       if (progress < 1) {
         requestAnimationFrame(animate);
@@ -221,7 +223,6 @@ export class DashboardComponent implements OnInit {
 
     this.animateValue('shreeBalance', this.shreeTarget);
     this.animateValue('cashBalance', this.cashTarget);
-    // this.animateValue('bankBalance', this.bankTarget);
   }
 
   getBankCurrentBalance = () => {
@@ -231,10 +232,13 @@ export class DashboardComponent implements OnInit {
         this.bankTarget = bankTarget.p.NetBalance;
       }
     } else {
+      console.log('this.BalanceList :', this.BalanceList);
       let allbankTarget = this.BalanceList.filter(item => item.p.ModeOfPayment.trim() === 'Bank').reduce((sum, item) => sum + (item.p.NetBalance || 0), 0);
       if (allbankTarget) {
         this.bankTarget = allbankTarget
       }
+      console.log('allbankTarget :', allbankTarget);
+      console.log('this.bankTarget :', this.bankTarget);
     }
     this.animateValue('bankBalance', this.bankTarget);
   }
