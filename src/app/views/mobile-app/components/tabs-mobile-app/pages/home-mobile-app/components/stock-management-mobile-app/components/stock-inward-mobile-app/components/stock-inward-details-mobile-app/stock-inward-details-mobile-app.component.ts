@@ -539,14 +539,28 @@ export class StockInwardDetailsMobileAppComponent implements OnInit {
     }
   };
 
+  // CalculateRemainingQty = (InwardQty: number, RemainingQty: number) => {
+  //   InwardQty = Number(InwardQty) || 0;
+  //   if (RemainingQty - InwardQty > 0) {
+  //     this.NewRemainingQty = RemainingQty - InwardQty;
+  //   } else {
+  //     this.NewRemainingQty = 0;
+  //   }
+  //   this.CalculateNetAmountAndTotalAmount()
+  // }
   CalculateRemainingQty = (InwardQty: number, RemainingQty: number) => {
     InwardQty = Number(InwardQty) || 0;
-    if (RemainingQty - InwardQty > 0) {
+    if (RemainingQty - InwardQty >= 0) {
       this.NewRemainingQty = RemainingQty - InwardQty;
     } else {
-      this.NewRemainingQty = 0;
+      this.newInward.InwardQty = 0;
+      this.NewRemainingQty = RemainingQty;
+      this.toastService.present('Inward quantity cannot be greater than the Order quantity',1000,'danger');
+      this.haptic.error();
     }
+    this.CalculateNetAmountAndTotalAmount()
   }
+
   CalculateNetAmountAndTotalAmount = async () => {
     if (this.newInward.DiscountedRate == 0) {
       this.newInward.NetAmount = (this.newInward.Rate * this.newInward.InwardQty) - this.newInward.DiscountOnNetAmount;

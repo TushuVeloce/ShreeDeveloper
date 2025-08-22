@@ -195,7 +195,8 @@ export class PaymentHistoryMobileAppComponent implements OnInit {
       }
     );
     this.MasterList = lst;
-    this.DisplayMasterList = this.MasterList;
+    // this.DisplayMasterList = this.MasterList;
+    this.DisplayMasterList = this.MasterList.filter(data => data.p.PlotName != '');
   };
 
   getPaymentHistoryListBySiteRefAndPlotRef = async () => {
@@ -214,7 +215,8 @@ export class PaymentHistoryMobileAppComponent implements OnInit {
       }
     );
     this.MasterList = lst;
-    this.DisplayMasterList = this.MasterList;
+    // this.DisplayMasterList = this.MasterList;
+    this.DisplayMasterList = this.MasterList.filter(data => data.p.PlotName != '');
   };
 
   formatDate = (date: string | Date): string => {
