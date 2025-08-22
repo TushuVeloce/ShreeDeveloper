@@ -38,7 +38,7 @@ export class ExpensesViewMobileAppComponent implements OnInit {
   ReasonList: Expense[] = [];
   LedgerList: Ledger[] = [];
   SubLedgerList: SubLedger[] = [];
-
+  AllList: Expense[] = [];
   // Store current selected values here to preserve selections on filter reload
   selectedFilterValues: Record<string, any> = {};
 
@@ -183,21 +183,56 @@ export class ExpensesViewMobileAppComponent implements OnInit {
     }
   }
 
-   FetchEntireListByFilters = async () => {
-      this.MasterList = [];
-      this.DisplayMasterList = [];
-      if (this.companyRef <= 0) {
-        await this.toastService.present('Company not selected', 1000, 'warning');
-        await this.haptic.warning();
-        return;
-      }
-      // let lst = await Expense.FetchEntireListByFilters(this.Entity.p.SiteRef, this.Entity.p.LedgerRef, this.Entity.p.SubLedgerRef,this.Entity.p.ExpenseModeOfPayment, this.Entity.p.Ref, this.companyRef, async errMsg => {
-      //   await this.toastService.present(errMsg, 1000, 'danger');
-      //   await this.haptic.error();
-      // });
-      // this.MasterList = lst;
-      this.DisplayMasterList = this.MasterList;
+  //  FetchEntireListByFilters = async () => {
+  //     this.MasterList = [];
+  //     this.DisplayMasterList = [];
+  //     if (this.companyRef <= 0) {
+  //       await this.toastService.present('Company not selected', 1000, 'warning');
+  //       await this.haptic.warning();
+  //       return;
+  //     }
+  //     let lst = await Expense.FetchEntireListByFilters(this.Entity.p.SiteRef, this.Entity.p.LedgerRef, this.Entity.p.SubLedgerRef,this.Entity.p.ExpenseModeOfPayment, this.Entity.p.Ref, this.companyRef, async errMsg => {
+  //       await this.toastService.present(errMsg, 1000, 'danger');
+  //       await this.haptic.error();
+  //     });
+  //     this.MasterList = lst;
+  //     this.DisplayMasterList = this.MasterList;
+  //   }
+  FetchEntireListByFilters = async () => {
+    this.MasterList = [];
+    this.DisplayMasterList = [];
+    if (this.companyRef <= 0) {
+      // await this.uiUtils.showErrorToster('Company not Selected');
+      await this.toastService.present('Company not selected', 1000, 'warning');
+      await this.haptic.warning();
+      return;
     }
+
+    // this.Entity.p.StartDate = this.dtu.ConvertStringDateToFullFormat(this.StartDate);
+    // this.Entity.p.EndDate = this.dtu.ConvertStringDateToFullFormat(this.EndDate);
+    this.Entity.p.StartDate = '';
+    this.Entity.p.EndDate ='';
+
+    let lst = await Expense.FetchEntireListByFilters(
+      this.companyRef,
+      this.Entity.p.StartDate,
+      this.Entity.p.EndDate,
+      this.Entity.p.SiteRef,
+      this.Entity.p.LedgerRef,
+      this.Entity.p.SubLedgerRef,
+      this.Entity.p.ExpenseModeOfPayment,
+      this.Entity.p.Ref,
+      this.Entity.p.BankAccountRef,
+      this.Entity.p.RecipientRef,
+      async errMsg => {
+        await this.toastService.present(errMsg, 1000, 'danger');
+        await this.haptic.error();
+      });
+
+    this.MasterList = lst;
+    this.DisplayMasterList = this.MasterList;
+    this.AllList = lst.filter((item) => item.p.Reason != '');
+  }
 
   getSiteListByCompanyRef = async () => {
     if (this.companyRef <= 0) {

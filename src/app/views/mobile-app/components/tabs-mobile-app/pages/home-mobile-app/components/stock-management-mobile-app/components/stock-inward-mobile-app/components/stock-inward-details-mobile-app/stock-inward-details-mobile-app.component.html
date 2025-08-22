@@ -331,7 +331,7 @@
               <ion-item class="input-item">
                 <ion-input label="Inward Quantity" name="InwardQty" labelPlacement="floating" type="number"
                   placeholder="Enter Inward Quantity" [(ngModel)]="newInward.InwardQty" clearInput="true"
-                  clearOnEdit="true" (ngModelChange)=" CalculateRemainingQty(
+                  clearOnEdit="true" (ngModelChange)="CalculateRemainingQty(
                     newInward.InwardQty,
                     newInward.PurchaseOrderRemainingQty
                   )"></ion-input> </ion-item>
