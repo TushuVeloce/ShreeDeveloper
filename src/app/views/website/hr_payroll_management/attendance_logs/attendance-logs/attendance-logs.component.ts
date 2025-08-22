@@ -207,10 +207,6 @@ export class AttendanceLogsComponent implements OnInit {
         else {
           if (this.isTodayAttendanceView) {
             this.getTodayAttendanceLogByAttendanceListType()
-          } else if (this.ToDisplayWeeklyRequirement) {
-            this.getWeekWiseAttendanceLogByAttendanceListType();
-          } else if (this.ToDispayMonthlyRequirement) {
-            this.getMonthWiseAttendanceLogByAttendanceListType();
           }
           await this.uiUtils.showSuccessToster('Attendance Updated successfully');
         }

@@ -203,37 +203,6 @@ export class EmployeeAttendanceLogsComponent implements OnInit {
     this.DisplayMasterList = [];
   }
 
-  ChangeAttendanceStatus = async (Entity: WebAttendaneLog) => {
-    await this.uiUtils.showStatusConfirmationMessage(
-      'Approval',
-      `This process is <strong>IRREVERSIBLE!</strong> <br/>
-      Are you sure that you want to Approve this Attendance?`, ['Approval'],
-      async () => {
-        this.Entity = Entity;
-        this.Entity.p.UpdatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
-        this.Entity.p.IsAttendanceVerified = true;
-        let entityToSave = this.Entity.GetEditableVersion();
-        let entitiesToSave = [entityToSave]
-        let tr = await this.utils.SavePersistableEntities(entitiesToSave);
-        if (!tr.Successful) {
-          this.uiUtils.showErrorMessage('Error', tr.Message);
-          Entity.p.IsAttendanceVerified = false;
-          return
-        }
-        else {
-          if (this.isTodayAttendanceView) {
-            this.getTodayAttendanceLogByAttendanceListType()
-          } else if (this.ToDisplayWeeklyRequirement) {
-            this.getWeekWiseAttendanceLogByAttendanceListType();
-          } else if (this.ToDispayMonthlyRequirement) {
-            this.getMonthWiseAttendanceLogByAttendanceListType();
-          }
-          await this.uiUtils.showSuccessToster('Attendance Updated successfully');
-        }
-      }
-    );
-  }
-
   getWeekWiseAttendanceLogByAttendanceListType = async () => {
     this.resetSummaryStats();
 

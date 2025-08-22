@@ -163,6 +163,7 @@ export class IncomeComponent implements OnInit {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
+    console.log('this.Entity.p.IncomeModeOfPayment :', this.Entity.p.IncomeModeOfPayment);
 
     this.Entity.p.StartDate = this.dtu.ConvertStringDateToFullFormat(this.StartDate);
     this.Entity.p.EndDate = this.dtu.ConvertStringDateToFullFormat(this.EndDate);
