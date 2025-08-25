@@ -62,7 +62,8 @@ export class ProgressReportTableComponent implements OnInit {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
-    let lst = await ProgressReport.FetchEntireListByCompanySiteRef(this.companyRef(), this.Entity.p.SiteRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    console.log('this.Entity.p.SiteRef :', this.SiteRef);
+    let lst = await ProgressReport.FetchEntireListByCompanySiteRef(this.companyRef(), this.SiteRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.DisplayMasterList = lst;
   }
 
