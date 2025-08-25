@@ -52,7 +52,7 @@ export class PDFService {
         pdf = this.generateReportPdf(reportData.headers, reportData.data, pageOfOrientation, totalColumnIndices, title);
       } else {
         // Handle the case where no valid input is provided
-        console.error('Error: No valid content or data provided for PDF generation.');
+        // console.error('Error: No valid content or data provided for PDF generation.');
         await this.toast.present('Could not find the content to generate a PDF.', 3000, 'danger');
         return;
       }
@@ -65,7 +65,7 @@ export class PDFService {
         this.downloadPdf(pdf, fileName);
       }
     } catch (error) {
-      console.error('An error occurred during PDF generation:', error);
+      // console.error('An error occurred during PDF generation:', error);
       await this.toast.present('Could not generate the PDF. Please try again.', 3000, 'danger');
     } finally {
       // Always hide the loading indicator
@@ -306,7 +306,7 @@ export class PDFService {
 
       await this.toast.present('PDF generated and ready to share!', 3000, 'success');
     } catch (error) {
-      console.error('Error sharing PDF:', error);
+      // console.error('Error sharing PDF:', error);
       throw error;
     }
   }
@@ -321,7 +321,7 @@ export class PDFService {
       pdf.save(fileName);
       this.toast.present('PDF downloaded successfully!', 3000, 'success');
     } catch (error) {
-      console.error('Error downloading PDF:', error);
+      // console.error('Error downloading PDF:', error);
       throw error;
     }
   }

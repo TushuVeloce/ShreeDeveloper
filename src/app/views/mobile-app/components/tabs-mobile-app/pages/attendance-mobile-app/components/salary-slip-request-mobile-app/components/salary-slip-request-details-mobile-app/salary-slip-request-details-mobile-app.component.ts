@@ -139,7 +139,6 @@ export class SalarySlipRequestDetailsMobileAppComponent  implements OnInit {
       }
       );
 
-      console.log('employee :', employee);
       this.Entity.p.EmployeeRef = employee.p.Ref;
       this.Entity.p.EmployeeName = employee.p.Name;
     } catch (error) {
@@ -292,8 +291,6 @@ export class SalarySlipRequestDetailsMobileAppComponent  implements OnInit {
 
   isDataFilled(): boolean {
     const emptyEntity = SalarySlipRequest.CreateNewInstance();
-    console.log('emptyEntity :', emptyEntity);
-    console.log('this Entity :', this.Entity);
     return !this.deepEqualIgnoringKeys(this.Entity, emptyEntity, []);
   }
 

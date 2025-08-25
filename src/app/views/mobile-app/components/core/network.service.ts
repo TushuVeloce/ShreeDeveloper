@@ -40,7 +40,7 @@ export class NetworkService {
     const status = await Network.getStatus();
     this.networkDetails.next({ ...status, timestamp: Date.now() });
     this.isOnline.next(status.connected);
-    console.log('[Retry] Network status rechecked:', status);
+    // console.log('[Retry] Network status rechecked:', status);
     // alert('Network status rechecked' + status)
   }
 
@@ -58,7 +58,7 @@ export class NetworkService {
       };
       this.networkDetails.next(detailedStatus);
       this.isOnline.next(status.connected);
-      console.log('Network Changed:', status);
+      // console.log('Network Changed:', status);
     });
   }
 }

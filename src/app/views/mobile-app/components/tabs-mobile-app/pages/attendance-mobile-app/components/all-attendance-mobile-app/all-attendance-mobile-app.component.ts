@@ -170,7 +170,7 @@ export class AllAttendanceMobileAppComponent implements OnInit, OnDestroy {
           await this.haptic.error();
         }
       );
-      console.log('logs :', logs);
+      // console.log('logs :', logs);
 
       this.monthlyAttendanceLogsList = logs;
       this.filteredMonthlyAttendanceLogsList = logs;
@@ -213,7 +213,7 @@ export class AllAttendanceMobileAppComponent implements OnInit, OnDestroy {
   }
 
   private async handleError(error: any, context: string): Promise<void> {
-    console.error(`${context} failed:`, error);
+    // console.error(`${context} failed:`, error);
     await this.toastService.present(`Error: ${error?.message || error}`, 1000, 'danger');
     await this.haptic.error();
   }

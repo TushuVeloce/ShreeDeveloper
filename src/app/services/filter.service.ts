@@ -33,7 +33,6 @@ export class FilterService {
 
         // Hardware back button
         this.backButtonSubscription = this.platform.backButton.subscribeWithPriority(10, () => {
-            console.log('Back button pressed - Closing filter modal');
             this.modalInstance?.dismiss();
             this.unsubscribe();
         });
@@ -41,7 +40,6 @@ export class FilterService {
         // Route change listener
         this.routeSubscription = this.router.events.subscribe(event => {
             if (event instanceof NavigationStart) {
-                console.log('Route changed - Closing filter modal');
                 this.modalInstance?.dismiss();
                 this.unsubscribe();
             }

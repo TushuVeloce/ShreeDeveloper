@@ -110,7 +110,6 @@ export class LeaveRequestDetailsMobileAppComponent  implements OnInit {
 
       this.InitialEntity = Object.assign(LeaveRequest.CreateNewInstance(), this.utils.DeepCopy(this.Entity));
     } catch (error) {
-      console.error('Error loading leave request:', error);
     }
   }
 
@@ -131,7 +130,6 @@ export class LeaveRequestDetailsMobileAppComponent  implements OnInit {
       this.Entity.p.EmployeeName = employee.p.Name;
       this.TotalWorkingHrs = employee.p.TotalWorkingHrs;
     } catch (error) {
-      console.error('Failed to fetch employee:', error);
     }
   }
 
@@ -217,7 +215,6 @@ export class LeaveRequestDetailsMobileAppComponent  implements OnInit {
       this.Entity.p.Days = this.Entity.p.Days || 0;
       this.Entity.p.LeaveHours = this.Entity.p.LeaveHours || 0;
       this.Entity.p.UpdatedBy = this.Entity.p.UpdatedBy || this.EmployeeRef;
-      console.log('this.Entity :', this.Entity);
 
       const tr = await this.utils.SavePersistableEntities([this.Entity.GetEditableVersion()]);
 
@@ -234,7 +231,7 @@ export class LeaveRequestDetailsMobileAppComponent  implements OnInit {
       await this.haptic.success();
 
     } catch (error) {
-      console.error('Save error:', error);
+      // console.error('Save error:', error);
     } finally {
       this.loadingService.hide();
     }
