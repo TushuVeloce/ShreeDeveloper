@@ -85,7 +85,7 @@
     <label><b>From Whom Type</b> </label>
     <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear nzPlaceHolder="Select"
       id="PayerType" name="PayerType" [nzSize]="'large'" [(ngModel)]="Entity.p.PayerType"
-      (ngModelChange)="getPayerListBySiteAndPayerType(); this.Entity.p.PayerRef = 0; this.PayerPlotNo = '';">
+      (ngModelChange)="getPayerListBySiteAndPayerType(); FetchEntireListByFilters(); this.Entity.p.PayerRef = 0; this.PayerPlotNo = '';">
       <nz-option *ngFor="let type of PayerTypesList" [nzValue]="type.Ref" [nzLabel]="type.Name"></nz-option>
     </nz-select>
   </div>

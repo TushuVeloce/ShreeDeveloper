@@ -86,7 +86,7 @@
     <label><b>To Whom Type</b></label>
     <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear nzPlaceHolder="Select"
       id="RecipientType" name="RecipientType" [nzSize]="'large'" [(ngModel)]="Entity.p.RecipientType"
-      (ngModelChange)="getRecipientListByRecipientTypeRef(); Entity.p.RecipientRef = 0">
+      (ngModelChange)="getRecipientListByRecipientTypeRef(); FetchEntireListByFilters(); Entity.p.RecipientRef = 0">
       <nz-option *ngFor=" let type of RecipientTypesList" [nzValue]="type.Ref" [nzLabel]="type.Name"></nz-option>
     </nz-select>
   </div>
