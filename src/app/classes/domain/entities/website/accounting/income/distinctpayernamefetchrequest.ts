@@ -15,6 +15,7 @@ export class DistinctPayerNameFetchRequest {
   SiteRef: number = 0;
   SiteRefs: number[] = [];
   PlotRefs: number[] = [];
+  PayerTypes: number[] = [];
   LedgerRefs: number[] = [];
   SubLedgerRefs: number[] = [];
   ModeOfPayments: number[] = [];

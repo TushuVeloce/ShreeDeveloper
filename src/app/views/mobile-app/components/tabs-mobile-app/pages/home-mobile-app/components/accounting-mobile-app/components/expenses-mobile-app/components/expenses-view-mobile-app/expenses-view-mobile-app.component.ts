@@ -268,6 +268,7 @@ export class ExpensesViewMobileAppComponent implements OnInit {
       this.Entity.p.ExpenseModeOfPayment,
       this.Entity.p.Ref,
       this.Entity.p.BankAccountRef,
+      this.Entity.p.RecipientType,
       this.Entity.p.RecipientRef,
       async errMsg => {
         await this.toastService.present(errMsg, 1000, 'danger');

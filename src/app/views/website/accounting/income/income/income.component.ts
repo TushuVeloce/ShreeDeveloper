@@ -177,6 +177,7 @@ export class IncomeComponent implements OnInit {
       this.Entity.p.SubLedgerRef,
       this.Entity.p.IncomeModeOfPayment,
       this.Entity.p.BankAccountRef,
+      this.Entity.p.PayerType,
       this.Entity.p.PayerRef,
       async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.AllList = lst.filter((item) => item.p.Reason != '');

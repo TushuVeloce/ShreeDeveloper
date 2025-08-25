@@ -14,12 +14,13 @@ export class TotalAmountFetchRequest {
   RecipientRefs: number[] = [];
   Refs: number[] = [];
   CompanyRef = 0;
+  PayerTypes: number[] = [];
   PlotRef = 0;
   PlotRefs: number[] = [];
   LedgerRefs: number[] = [];
   SubLedgerRefs: number[] = [];
   ModeOfPayments: number[] = [];
-    StartDate: string = '';
+  StartDate: string = '';
   EndDate: string = '';
   BankAccountRefs: number[] = [];
   PayerRefs: number[] = [];

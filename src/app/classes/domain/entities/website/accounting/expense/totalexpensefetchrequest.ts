@@ -19,6 +19,7 @@ export class TotalExpenseFetchRequest {
   SiteRef: number = 0;
   SiteRefs: number[] = [];
   LedgerRefs: number[] = [];
+  RecipientTypes: number[] = [];
   SubLedgerRefs: number[] = [];
   ModeOfPayments: number[] = [];
   Refs: number[] = [];

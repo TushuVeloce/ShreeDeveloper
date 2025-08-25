@@ -15,10 +15,12 @@ export class CurrentBalanceFetchRequest {
   RecipientRefs: number[] = [];
   PayerRef: number = 0;
   BankAccountRefs: number[] = [];
+  PayerTypes: number[] = [];
   StartDate: string = '';
   EndDate: string = '';
   SiteRef: number = 0;
   SiteRefs: number[] = [];
+  RecipientTypes: number[] = [];
   PlotRefs: number[] = [];
   LedgerRefs: number[] = [];
   SubLedgerRefs: number[] = [];

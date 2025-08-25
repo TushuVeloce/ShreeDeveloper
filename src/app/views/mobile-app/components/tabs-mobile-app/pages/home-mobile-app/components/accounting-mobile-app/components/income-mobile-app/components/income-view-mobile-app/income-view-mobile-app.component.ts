@@ -332,7 +332,7 @@ export class IncomeViewMobileAppComponent implements OnInit {
   //   this.MasterList = lst;
   //   this.DisplayMasterList = this.MasterList;
   // }
-  FetchEntireListByFilters = async () => {  
+  FetchEntireListByFilters = async () => {
     this.MasterList = [];
     this.DisplayMasterList = [];
     if (this.companyRef <= 0) {
@@ -353,6 +353,7 @@ export class IncomeViewMobileAppComponent implements OnInit {
       this.Entity.p.SubLedgerRef,
       this.Entity.p.IncomeModeOfPayment,
       this.Entity.p.BankAccountRef,
+      this.Entity.p.PayerType,
       this.Entity.p.PayerRef,
       async errMsg => {
         await this.toastService.present('Error ' + errMsg, 1000, 'danger');
@@ -385,7 +386,7 @@ export class IncomeViewMobileAppComponent implements OnInit {
 
   public FormulateBankList = async () => {
     if (this.companyRef <= 0) {
-         await this.toastService.present('Company not selected', 1000, 'danger');
+      await this.toastService.present('Company not selected', 1000, 'danger');
       await this.haptic.error();
       return;
     }

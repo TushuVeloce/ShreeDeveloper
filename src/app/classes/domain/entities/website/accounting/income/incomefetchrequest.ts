@@ -12,6 +12,7 @@ export class IncomeFetchRequest {
   StartDate: string = '';
   EndDate: string = '';
   BankAccountRefs: number[] = [];
+  PayerTypes: number[] = [];
   PayerRefs: number[] = [];
   CompanyRef: number = 0;
   SiteRef: number = 0;

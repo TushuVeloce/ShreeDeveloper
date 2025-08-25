@@ -16,6 +16,7 @@ export class ExpenseFetchRequest {
   SubLedgerRefs: number[] = [];
   ModeOfPayments: number[] = [];
   BankAccountRefs: number[] = [];
+  RecipientTypes: number[] = [];
   Refs: number[] = [];
   RecipientRefs: number[] = [];
   RecipientRef: number = 0;

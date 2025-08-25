@@ -13,6 +13,7 @@ export class TotalIncomeFetchRequest {
   SiteRefs: number[] = [];
   RecipientRefs: number[] = [];
   Refs: number[] = [];
+  PayerTypes: number[] = [];
   CompanyRef = 0;
   PlotRef = 0;
   PlotRefs: number[] = [];

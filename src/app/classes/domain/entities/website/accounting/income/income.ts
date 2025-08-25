@@ -267,6 +267,7 @@ export class Income implements IPersistable<Income> {
     SubLedgerRef: number,
     ModeOfPayment: number,
     BankAccountRef: number,
+    PayerType: number,
     PayerRef: number,
     errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let req = new IncomeFetchRequest();
@@ -290,6 +291,9 @@ export class Income implements IPersistable<Income> {
     }
     if (BankAccountRef) {
       req.BankAccountRefs.push(BankAccountRef)
+    }
+    if (PayerType) {
+      req.PayerTypes.push(PayerType)
     }
     if (PayerRef) {
       req.PayerRefs.push(PayerRef);;
