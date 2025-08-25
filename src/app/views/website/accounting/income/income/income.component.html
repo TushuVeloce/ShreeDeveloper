@@ -85,12 +85,13 @@
     <label><b>From Whom Type</b> </label>
     <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear nzPlaceHolder="Select"
       id="PayerType" name="PayerType" [nzSize]="'large'" [(ngModel)]="Entity.p.PayerType"
-      (ngModelChange)="getPayerListBySiteAndPayerType(); this.Entity.p.PayerRef = 0; this.PayerPlotNo = '';">
+      (ngModelChange)="getPayerListBySiteAndPayerType(); FetchEntireListByFilters(); this.Entity.p.PayerRef = 0; this.PayerPlotNo = '';">
       <nz-option *ngFor="let type of PayerTypesList" [nzValue]="type.Ref" [nzLabel]="type.Name"></nz-option>
     </nz-select>
   </div>
   <div class="col">
     <label><b>Received By</b></label>
+
     <div class="d-flex align-items-center">
       <nz-select *ngIf="Entity.p.PayerType == DealDoneCustomer" class="nzSelect-light" [nzNotFoundContent]="noDataTpl"
         nzShowSearch nzAllowClear nzPlaceHolder="Select" id="PayerRef" name="PayerRef" [nzSize]="'large'"
@@ -110,12 +111,7 @@
       <nz-select *ngIf="Entity.p.PayerType != DealDoneCustomer" class="nzSelect-light" [nzNotFoundContent]="noDataTpl"
         nzShowSearch nzAllowClear nzPlaceHolder="Select" id="PayerRef" name="PayerRef" [nzSize]="'large'"
         [(ngModel)]="Entity.p.PayerRef" (ngModelChange)="onPayerChange()">
-        <nz-option *ngFor="let payer of PayerList" [nzValue]="payer.p.Ref"
-          [nzLabel]="payer.p.PayerName + ' - ' + payer.p.PlotName | titleCase">
-          <span *ngIf="Entity.p.PayerType == DealDoneCustomer"
-            [ngClass]="payer.p.IsRegisterCustomerRef == 1 ? 'sitecus' : 'nonsitecus'">
-            {{ payer.p.PayerName + ' - ' + payer.p.PlotName| titleCase }}
-          </span>
+        <nz-option *ngFor="let payer of PayerList" [nzValue]="payer.p.Ref" [nzLabel]="payer.p.PayerName | titleCase">
           <span *ngIf="Entity.p.PayerType != DealDoneCustomer"
             [ngClass]="payer.p.IsRegisterCustomerRef == 1 ? 'sitecus' : 'nonsitecus'">
             {{ payer.p.PayerName| titleCase }}

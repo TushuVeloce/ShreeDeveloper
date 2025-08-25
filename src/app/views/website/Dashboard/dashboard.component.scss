@@ -106,15 +106,16 @@
 
 .chart-container {
   display: flex;
-  gap: 1rem;
+  gap: 5px;
   flex-wrap: wrap;
+  justify-content: space-between;
   margin-top: 10px;
   /* allow wrapping on small screens */
 }
 
 .chart-card {
-  flex: 1 1 calc(50% - 1rem);
-  max-width: calc(50% - 1rem);
+  flex: 1 1 calc(50% - 5px);
+  max-width: calc(50% - 5px);
   padding: 1rem;
   border: 1px solid #7a1e1e;
   border-radius: 10px;
