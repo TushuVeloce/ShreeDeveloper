@@ -1,42 +1,44 @@
 ion-content.login-content {
-  --background:
-    radial-gradient(circle at 2% 7%, rgba(123, 34, 28, 0.5) 0%, transparent 25%),
-    radial-gradient(circle at 2% 90%, rgba(123, 34, 28, 0.5) 0%, transparent 25%),
-    radial-gradient(circle at 100% 40%, rgba(123, 34, 28, 0.5) 0%, transparent 30%);
-  background-repeat: no-repeat;
-  background-size: cover;
-  min-height: 100vh; // ✅ Key for mobile browser keyboard
+    --background:
+        radial-gradient(circle at 2% 7%, rgba(123, 34, 28, 0.5) 0%, transparent 25%),
+        radial-gradient(circle at 2% 90%, rgba(123, 34, 28, 0.5) 0%, transparent 25%),
+        radial-gradient(circle at 100% 40%, rgba(123, 34, 28, 0.5) 0%, transparent 30%);
+    background-repeat: no-repeat;
+    background-size: cover;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
 ion-grid,
 ion-row,
 ion-col {
-  height: auto; // ✅ Prevent fixed 100% height
+    height: auto; // keep auto so it adapts naturally
 }
 
 ion-col {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding-bottom: 200px; // ✅ Enough room for keyboard
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
 .logo-wrapper {
-    margin: 12px 0;
+    margin: 16px 0;
     display: flex;
     justify-content: center;
 
     .logo-img {
-        width: 200px;
+        width: 160px;
+        max-width: 70%;
         height: auto;
     }
 }
 
 .login-title {
-    font-size: 24px;
+    font-size: 26px;
     font-weight: 600;
-    color: #000;
-    margin-bottom: 12px;
+    color: #222;
+    margin-bottom: 16px;
 }
 
 .form-wrapper {
@@ -50,27 +52,32 @@ ion-col {
 .forgot-password-wrapper {
     display: flex;
     justify-content: flex-end;
-    margin-top: -24px;
-    /* Slightly pull up closer to password input */
-    margin-bottom: 4px;
+    margin-top: -8px;
+    margin-bottom: 12px;
 
     ion-button {
-        font-size: 12px;
-        height: auto;
+        font-size: 13px;
+        font-weight: 500;
+        --color: var(--ion-color-primary);
         padding: 0 6px;
-        line-height: 1.2;
-        color: #000;
     }
 }
 
-.Button-In-loginPage {
-    color: #000;
+.new-user-text {
+    margin-top: 16px;
+    font-size: 14px;
+    color: #555;
+
+    span {
+        font-weight: 600;
+        color: var(--ion-color-primary);
+    }
 }
 
 // Input field wrapper class
 .input-wrapper {
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
     margin-top: 8px;
 
     ion-input {
@@ -78,7 +85,7 @@ ion-col {
     }
 
     ion-icon {
-        color: #555;
+        color: #666;
     }
 }
 

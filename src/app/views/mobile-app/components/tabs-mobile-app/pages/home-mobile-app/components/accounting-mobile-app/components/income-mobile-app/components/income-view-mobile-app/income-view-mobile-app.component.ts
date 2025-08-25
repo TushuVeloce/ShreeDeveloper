@@ -156,16 +156,6 @@ export class IncomeViewMobileAppComponent implements OnInit {
         options: this.PayerTypesList,
         selected: this.selectedFilterValues['payerType'] > 0 ? this.selectedFilterValues['payerType'] : null,
       },
-      // {
-      //   key: 'payer',
-      //   label: 'Received By',
-      //   multi: false,
-      //   options: this.PayerList.map(item => ({
-      //     Ref: item.p.Ref,
-      //     Name: item.p.PayerName + (item.p.PlotName ? ' - ' + item.p.PlotName : ''),
-      //   })),
-      //   selected: this.selectedFilterValues['payer'] > 0 ? this.selectedFilterValues['payer'] : null,
-      // },
       {
         key: 'payer',
         label: 'Received By',
@@ -177,14 +167,17 @@ export class IncomeViewMobileAppComponent implements OnInit {
             : item.p.PayerName,
         })),
         selected: this.Entity.p.PayerType === this.DealDoneCustomer
-          ? (this.PayerPlotNo || null)   // keep PlotName
+          ? (this.PayerPlotNo || null) // keep PlotName
           : (this.selectedFilterValues['payer'] > 0 ? this.selectedFilterValues['payer'] : null),
       },
       {
         key: 'reason',
         label: 'Reason',
         multi: false,
-        options: this.ReasonList.map(item => ({ Ref: item.p.Ref, Name: item.p.Reason, })),
+        options: this.ReasonList.map(item => ({
+          Ref: item.p.Ref,
+          Name: item.p.Reason,
+        })),
         selected: this.selectedFilterValues['reason'] > 0 ? this.selectedFilterValues['reason'] : null,
       },
       {
@@ -199,7 +192,7 @@ export class IncomeViewMobileAppComponent implements OnInit {
       },
     ];
 
-    // 👇 Bank filter only when modeOfPayment = Cheque / RTGS / GPayPhonePay
+    // Bank filter only when modeOfPayment = Cheque / RTGS / GPayPhonePay
     if (
       this.selectedFilterValues['modeOfPayment'] &&
       (this.selectedFilterValues['modeOfPayment'] === this.ModeOfPayments.Cheque ||
@@ -219,12 +212,10 @@ export class IncomeViewMobileAppComponent implements OnInit {
     }
   }
 
-
   async onFiltersChanged(updatedFilters: any[]) {
     for (const filter of updatedFilters) {
       const selected = filter.selected;
       const selectedValue = (selected === null || selected === undefined) ? null : selected;
-
       this.selectedFilterValues[filter.key] = selectedValue ?? null;
 
       switch (filter.key) {
@@ -241,21 +232,27 @@ export class IncomeViewMobileAppComponent implements OnInit {
           this.Entity.p.SubLedgerRef = selectedValue ?? 0;
           break;
 
+        // case 'payerType':
+        //   this.Entity.p.PayerType = selectedValue ?? 0;
+        //   this.Entity.p.PayerRef = 0;
+        //   this.PayerPlotNo = '';
+        //   this.selectedFilterValues['payer'] = null; // reset payer properly
+        //   if (selectedValue != null) await this.getPayerListBySiteAndPayerType();
+        //   break;
+
         case 'payerType':
           this.Entity.p.PayerType = selectedValue ?? 0;
           this.Entity.p.PayerRef = 0;
           this.PayerPlotNo = '';
-          if (selectedValue != null) await this.getPayerListBySiteAndPayerType();
+          this.selectedFilterValues['payer'] = null; // reset payer filter
+          await this.getPayerListBySiteAndPayerType();
+          this.loadFilters(); // refresh filters immediately so UI clears payer
           break;
-
-        // case 'payer':
-        //   this.Entity.p.PayerRef = selectedValue ?? 0;
-        //   break;
         case 'payer':
           if (this.Entity.p.PayerType === this.DealDoneCustomer) {
             // store plot no instead of Ref
             this.PayerPlotNo = selectedValue || '';
-            this.onPayerChange(); // your existing function that maps PlotNo -> PayerRef
+            this.onPayerChange(); // maps PlotNo -> PayerRef
           } else {
             this.Entity.p.PayerRef = selectedValue ?? 0;
             this.onPayerChange();
@@ -263,7 +260,7 @@ export class IncomeViewMobileAppComponent implements OnInit {
           break;
 
         case 'reason':
-          this.Entity.p.Ref = selectedValue ?? 0;
+          this.Entity.p.Ref = selectedValue ?? 0; // ✅ FIXED
           break;
 
         case 'modeOfPayment':
@@ -283,6 +280,7 @@ export class IncomeViewMobileAppComponent implements OnInit {
     await this.FetchEntireListByFilters();
     this.loadFilters(); // refresh filters with new data
   }
+
 
 
   private async loadIncomeIfEmployeeExists() {
