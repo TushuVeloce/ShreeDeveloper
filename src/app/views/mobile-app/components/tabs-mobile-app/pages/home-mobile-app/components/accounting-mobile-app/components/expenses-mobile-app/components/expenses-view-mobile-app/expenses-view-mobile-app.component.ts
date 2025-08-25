@@ -1,8 +1,10 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
-import { DomainEnums } from 'src/app/classes/domain/domainenums/domainenums';
+import { DomainEnums, ModeOfPayments, OpeningBalanceModeOfPayments, PayerTypes } from 'src/app/classes/domain/domainenums/domainenums';
+import { Invoice } from 'src/app/classes/domain/entities/website/accounting/billing/invoice';
 import { Expense } from 'src/app/classes/domain/entities/website/accounting/expense/expense';
 import { Ledger } from 'src/app/classes/domain/entities/website/masters/ledgermaster/ledger';
+import { OpeningBalance } from 'src/app/classes/domain/entities/website/masters/openingbalance/openingbalance';
 import { Site } from 'src/app/classes/domain/entities/website/masters/site/site';
 import { SubLedger } from 'src/app/classes/domain/entities/website/masters/subledgermaster/subledger';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
@@ -34,11 +36,19 @@ export class ExpensesViewMobileAppComponent implements OnInit {
   modalOpen = false;
   filters: FilterItem[] = [];
   SiteList: Site[] = [];
-  ModeofPaymentList = DomainEnums.ModeOfPaymentsList();
   ReasonList: Expense[] = [];
   LedgerList: Ledger[] = [];
   SubLedgerList: SubLedger[] = [];
   AllList: Expense[] = [];
+  BankList: OpeningBalance[] = [];
+  Cash = OpeningBalanceModeOfPayments.Cash
+  RecipientList: Invoice[] = [];
+  RecipientTypesList = DomainEnums.RecipientTypesList();
+  Bill = ModeOfPayments.Bill;
+  ModeofPaymentList = DomainEnums.ModeOfPaymentsList().filter(item => item.Ref != this.Bill);
+
+  DealDoneCustomer = PayerTypes.DealDoneCustomer;
+  PayerPlotNo: string = '';
   // Store current selected values here to preserve selections on filter reload
   selectedFilterValues: Record<string, any> = {};
 
@@ -59,7 +69,7 @@ export class ExpensesViewMobileAppComponent implements OnInit {
 
   ionViewWillEnter = async () => {
     await this.loadExpenseIfEmployeeExists();
-   this.loadFilters();
+    this.loadFilters();
   };
 
   async handleRefresh(event: CustomEvent) {
@@ -101,6 +111,23 @@ export class ExpensesViewMobileAppComponent implements OnInit {
         selected: this.selectedFilterValues['subledger'] > 0 ? this.selectedFilterValues['subledger'] : null,
       },
       {
+        key: 'ToWhomType',
+        label: 'To Whom Type',
+        multi: false,
+        options: this.RecipientTypesList,
+        selected: this.selectedFilterValues['ToWhomType'] > 0 ? this.selectedFilterValues['ToWhomType'] : null,
+      },
+      {
+        key: 'ToWhom',
+        label: 'To Whom',
+        multi: false,
+        options: this.RecipientList.map(item => ({
+          Ref: item.p.Ref,
+          Name: item.p.RecipientName,
+        })),
+        selected: this.selectedFilterValues['ToWhom'] > 0 ? this.selectedFilterValues['ToWhom'] : null,
+      },
+      {
         key: 'reason',
         label: 'Reason',
         multi: false,
@@ -119,8 +146,25 @@ export class ExpensesViewMobileAppComponent implements OnInit {
           Name: item.Name,
         })),
         selected: this.selectedFilterValues['modeOfPayment'] > 0 ? this.selectedFilterValues['modeOfPayment'] : null,
-      }
+      },
     ];
+
+    // 👇 Add Bank filter ONLY if modeOfPayment is selected & not Cash
+    if (
+      this.selectedFilterValues['modeOfPayment'] &&
+      (this.selectedFilterValues['modeOfPayment'] === ModeOfPayments.Cheque || this.selectedFilterValues['modeOfPayment'] === ModeOfPayments.RTGS || this.selectedFilterValues['modeOfPayment'] === ModeOfPayments.GpayPhonePay)
+    ) {
+      this.filters.push({
+        key: 'bank',
+        label: 'Bank',
+        multi: false,
+        options: this.BankList.map(item => ({
+          Ref: item.p.BankAccountRef,
+          Name: item.p.BankName,
+        })),
+        selected: this.selectedFilterValues['bank'] > 0 ? this.selectedFilterValues['bank'] : null,
+      });
+    }
   }
 
   async onFiltersChanged(updatedFilters: any[]) {
@@ -152,6 +196,22 @@ export class ExpensesViewMobileAppComponent implements OnInit {
 
         case 'modeOfPayment':
           this.Entity.p.ExpenseModeOfPayment = selectedValue ?? 0;
+          if (selectedValue != null) { if (this.Entity.p.ExpenseModeOfPayment != this.Cash) await this.FormulateBankList(); }  // Updates SubLedgerList
+          break;
+
+        case 'ToWhom':
+          this.Entity.p.RecipientRef = selectedValue ?? 0;
+          break;
+
+        case 'ToWhomType':
+          this.Entity.p.RecipientType = selectedValue ?? 0;
+          // this.Entity.p.RecipientRef = 0;
+          // this.RecipientList=[];
+          if (selectedValue != null) await this.getRecipientListByRecipientTypeRef();  // Updates SubLedgerList
+          break;
+
+        case 'bank':
+          this.Entity.p.BankAccountRef = selectedValue ?? 0;
           break;
       }
     }
@@ -183,21 +243,6 @@ export class ExpensesViewMobileAppComponent implements OnInit {
     }
   }
 
-  //  FetchEntireListByFilters = async () => {
-  //     this.MasterList = [];
-  //     this.DisplayMasterList = [];
-  //     if (this.companyRef <= 0) {
-  //       await this.toastService.present('Company not selected', 1000, 'warning');
-  //       await this.haptic.warning();
-  //       return;
-  //     }
-  //     let lst = await Expense.FetchEntireListByFilters(this.Entity.p.SiteRef, this.Entity.p.LedgerRef, this.Entity.p.SubLedgerRef,this.Entity.p.ExpenseModeOfPayment, this.Entity.p.Ref, this.companyRef, async errMsg => {
-  //       await this.toastService.present(errMsg, 1000, 'danger');
-  //       await this.haptic.error();
-  //     });
-  //     this.MasterList = lst;
-  //     this.DisplayMasterList = this.MasterList;
-  //   }
   FetchEntireListByFilters = async () => {
     this.MasterList = [];
     this.DisplayMasterList = [];
@@ -211,7 +256,7 @@ export class ExpensesViewMobileAppComponent implements OnInit {
     // this.Entity.p.StartDate = this.dtu.ConvertStringDateToFullFormat(this.StartDate);
     // this.Entity.p.EndDate = this.dtu.ConvertStringDateToFullFormat(this.EndDate);
     this.Entity.p.StartDate = '';
-    this.Entity.p.EndDate ='';
+    this.Entity.p.EndDate = '';
 
     let lst = await Expense.FetchEntireListByFilters(
       this.companyRef,
@@ -233,6 +278,43 @@ export class ExpensesViewMobileAppComponent implements OnInit {
     this.DisplayMasterList = this.MasterList;
     this.AllList = lst.filter((item) => item.p.Reason != '');
   }
+
+  getRecipientListByRecipientTypeRef = async () => {
+    if (this.companyRef <= 0) {
+      // await this.uiUtils.showErrorToster('Company not Selected');
+      await this.toastService.present('Company not selected', 1000, 'warning');
+      await this.haptic.warning();
+      return;
+    }
+    if (this.Entity.p.RecipientType <= 0) {
+      // await this.uiUtils.showErrorToster('To Whom not Selected');
+      await this.toastService.present('To Whom not Selected', 1000, 'warning');
+      await this.haptic.warning();
+      return;
+    }
+
+    this.RecipientList = [];
+    let lst = await Invoice.FetchRecipientByRecipientTypeRef(this.companyRef, this.Entity.p.SiteRef, this.Entity.p.RecipientType, async errMsg => {
+      await this.toastService.present(errMsg, 1000, 'danger');
+      await this.haptic.error();
+    });
+    this.RecipientList = lst;
+    this.loadFilters();
+  }
+
+  public FormulateBankList = async () => {
+    if (this.companyRef <= 0) {
+      await this.toastService.present('Company not selected', 1000, 'warning');
+      await this.haptic.warning();
+      return;
+    }
+    let lst = await OpeningBalance.FetchEntireListByCompanyRef(this.companyRef, async (errMsg) => {
+      await this.toastService.present(errMsg, 1000, 'danger');
+      await this.haptic.error();
+    });
+    this.BankList = lst.filter((item) => item.p.BankAccountRef > 0 && (item.p.OpeningBalanceAmount > 0 || item.p.InitialBalance > 0));
+    this.loadFilters();
+  };
 
   getSiteListByCompanyRef = async () => {
     if (this.companyRef <= 0) {
@@ -397,7 +479,7 @@ export class ExpensesViewMobileAppComponent implements OnInit {
       (m.p.ModeOfPaymentName && m.p.ModeOfPaymentName != '') ? (m.p.ModeOfPaymentName) : '--',
     ]);
 
-    await this.pdfService.generatePdfAndHandleAction(null, 'Expenses-Report.pdf', { headers, data }, false, 'l', [7,8], 'Expenses Report');
+    await this.pdfService.generatePdfAndHandleAction(null, 'Expenses-Report.pdf', { headers, data }, false, 'l', [7, 8], 'Expenses Report');
   }
   openModal(Expense: any) {
     this.SelectedExpense = Expense;

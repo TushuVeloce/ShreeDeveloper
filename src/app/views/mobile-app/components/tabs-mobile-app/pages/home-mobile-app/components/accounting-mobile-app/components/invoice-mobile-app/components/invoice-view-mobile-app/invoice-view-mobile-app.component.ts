@@ -94,23 +94,23 @@ export class InvoiceViewMobileAppComponent implements OnInit {
         })),
         selected: this.selectedFilterValues['subledger'] > 0 ? this.selectedFilterValues['subledger'] : null,
       },
-      // {
-      //   key: 'ToWhomType',
-      //   label: 'To Whom Type',
-      //   multi: false,
-      //   options: this.RecipientTypesList,
-      //   selected: this.selectedFilterValues['ToWhomType'] > 0 ? this.selectedFilterValues['ToWhomType'] : null,
-      // },
-      // {
-      //   key: 'ToWhom',
-      //   label: 'To Whom',
-      //   multi: false,
-      //   options: this.RecipientList.map(item => ({
-      //     Ref: item.p.Ref,
-      //     Name: item.p.RecipientName,
-      //   })),
-      //   selected: this.selectedFilterValues['To Whom'] > 0 ? this.selectedFilterValues['To Whom'] : null,
-      // },
+      {
+        key: 'ToWhomType',
+        label: 'To Whom Type',
+        multi: false,
+        options: this.RecipientTypesList,
+        selected: this.selectedFilterValues['ToWhomType'] > 0 ? this.selectedFilterValues['ToWhomType'] : null,
+      },
+      {
+        key: 'ToWhom',
+        label: 'To Whom',
+        multi: false,
+        options: this.RecipientList.map(item => ({
+          Ref: item.p.Ref,
+          Name: item.p.RecipientName,
+        })),
+        selected: this.selectedFilterValues['ToWhom'] > 0 ? this.selectedFilterValues['ToWhom'] : null,
+      },
       {
         key: 'reason',
         label: 'Reason',
@@ -269,6 +269,7 @@ export class InvoiceViewMobileAppComponent implements OnInit {
       await this.haptic.error();
     });
     this.RecipientList = lst;
+    this.loadFilters();
   }
 
   getSiteListByCompanyRef = async () => {

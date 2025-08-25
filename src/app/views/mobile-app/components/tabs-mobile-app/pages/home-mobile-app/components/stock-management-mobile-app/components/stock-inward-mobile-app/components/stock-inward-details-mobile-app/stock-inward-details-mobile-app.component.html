@@ -114,7 +114,7 @@
                 <tr *ngFor="let item of Entity.p.MaterialInwardDetailsArray; let i = index">
                   <td class="sticky-col">{{i + 1 }}</td>
                   <td>
-                    {{ formatDate(item.InwardDate) }}
+                    {{ formatDate(item.Date) }}
                   </td>
                   <td>
                     {{ item.MaterialName }}
@@ -160,13 +160,7 @@
                   </td>
                 </tr>
                 <tr>
-                  <td class="sticky-col" colspan="2"><b>Grand Total</b></td>
-                  <td colspan="11"></td>
-                  <td>
-                    <b>{{ getGrandTotal() | currency : "INR"}}</b>
-                  </td>
-                  <td>
-                  </td>
+                  <td class="sticky-col" colspan="2"><b>Grand Total</b> : <b>{{ getGrandTotal() | currency : "INR"}}</b></td>
                 </tr>
               </tbody>
             </table>

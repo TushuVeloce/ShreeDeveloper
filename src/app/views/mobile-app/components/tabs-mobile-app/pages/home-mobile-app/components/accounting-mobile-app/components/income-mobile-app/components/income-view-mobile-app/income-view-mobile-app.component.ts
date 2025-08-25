@@ -10,9 +10,10 @@ import { ToastService } from 'src/app/views/mobile-app/components/core/toast.ser
 import { PDFService } from 'src/app/views/mobile-app/components/core/pdf.service';
 import { FilterItem } from 'src/app/views/mobile-app/components/shared/chip-filter-mobile-app/chip-filter-mobile-app.component';
 import { Site } from 'src/app/classes/domain/entities/website/masters/site/site';
-import { DomainEnums } from 'src/app/classes/domain/domainenums/domainenums';
+import { DomainEnums, ModeOfPayments, OpeningBalanceModeOfPayments, PayerTypes } from 'src/app/classes/domain/domainenums/domainenums';
 import { Ledger } from 'src/app/classes/domain/entities/website/masters/ledgermaster/ledger';
 import { SubLedger } from 'src/app/classes/domain/entities/website/masters/subledgermaster/subledger';
+import { OpeningBalance } from 'src/app/classes/domain/entities/website/masters/openingbalance/openingbalance';
 
 @Component({
   selector: 'app-income-view-mobile-app',
@@ -35,13 +36,23 @@ export class IncomeViewMobileAppComponent implements OnInit {
 
   filters: FilterItem[] = [];
   SiteList: Site[] = [];
-  ModeofPaymentList = DomainEnums.ModeOfPaymentsList();
   ReasonList: Income[] = [];
   LedgerList: Ledger[] = [];
   SubLedgerList: SubLedger[] = [];
+  AllList: Income[] = [];
 
   // Store current selected values here to preserve selections on filter reload
   selectedFilterValues: Record<string, any> = {};
+  Cash = OpeningBalanceModeOfPayments.Cash
+  BankList: OpeningBalance[] = [];
+  Bill = ModeOfPayments.Bill;
+  ModeofPaymentList = DomainEnums.ModeOfPaymentsList().filter(item => item.Ref != this.Bill);
+  ModeOfPayments = ModeOfPayments
+
+  PayerList: Income[] = [];
+  PayerTypesList = DomainEnums.PayerTypesList();
+  DealDoneCustomer = PayerTypes.DealDoneCustomer;
+  PayerPlotNo: string = '';
 
 
   constructor(
@@ -139,13 +150,41 @@ export class IncomeViewMobileAppComponent implements OnInit {
         selected: this.selectedFilterValues['subledger'] > 0 ? this.selectedFilterValues['subledger'] : null,
       },
       {
+        key: 'payerType',
+        label: 'From Whom Type',
+        multi: false,
+        options: this.PayerTypesList,
+        selected: this.selectedFilterValues['payerType'] > 0 ? this.selectedFilterValues['payerType'] : null,
+      },
+      // {
+      //   key: 'payer',
+      //   label: 'Received By',
+      //   multi: false,
+      //   options: this.PayerList.map(item => ({
+      //     Ref: item.p.Ref,
+      //     Name: item.p.PayerName + (item.p.PlotName ? ' - ' + item.p.PlotName : ''),
+      //   })),
+      //   selected: this.selectedFilterValues['payer'] > 0 ? this.selectedFilterValues['payer'] : null,
+      // },
+      {
+        key: 'payer',
+        label: 'Received By',
+        multi: false,
+        options: this.PayerList.map(item => ({
+          Ref: this.Entity.p.PayerType === this.DealDoneCustomer ? item.p.PlotName : item.p.Ref,
+          Name: this.Entity.p.PayerType === this.DealDoneCustomer
+            ? `${item.p.PayerName} - ${item.p.PlotName}`
+            : item.p.PayerName,
+        })),
+        selected: this.Entity.p.PayerType === this.DealDoneCustomer
+          ? (this.PayerPlotNo || null)   // keep PlotName
+          : (this.selectedFilterValues['payer'] > 0 ? this.selectedFilterValues['payer'] : null),
+      },
+      {
         key: 'reason',
         label: 'Reason',
         multi: false,
-        options: this.ReasonList.map(item => ({
-          Ref: item.p.Ref,
-          Name: item.p.Reason,
-        })),
+        options: this.ReasonList.map(item => ({ Ref: item.p.Ref, Name: item.p.Reason, })),
         selected: this.selectedFilterValues['reason'] > 0 ? this.selectedFilterValues['reason'] : null,
       },
       {
@@ -157,19 +196,35 @@ export class IncomeViewMobileAppComponent implements OnInit {
           Name: item.Name,
         })),
         selected: this.selectedFilterValues['modeOfPayment'] > 0 ? this.selectedFilterValues['modeOfPayment'] : null,
-      }
+      },
     ];
+
+    // 👇 Bank filter only when modeOfPayment = Cheque / RTGS / GPayPhonePay
+    if (
+      this.selectedFilterValues['modeOfPayment'] &&
+      (this.selectedFilterValues['modeOfPayment'] === this.ModeOfPayments.Cheque ||
+        this.selectedFilterValues['modeOfPayment'] === this.ModeOfPayments.RTGS ||
+        this.selectedFilterValues['modeOfPayment'] === this.ModeOfPayments.GpayPhonePay)
+    ) {
+      this.filters.push({
+        key: 'bank',
+        label: 'Bank',
+        multi: false,
+        options: this.BankList.map(item => ({
+          Ref: item.p.BankAccountRef,
+          Name: item.p.BankName,
+        })),
+        selected: this.selectedFilterValues['bank'] > 0 ? this.selectedFilterValues['bank'] : null,
+      });
+    }
   }
 
-  async onFiltersChanged(updatedFilters: any[]) {
-    // debugger
-    console.log('Updated Filters:', updatedFilters);
 
+  async onFiltersChanged(updatedFilters: any[]) {
     for (const filter of updatedFilters) {
       const selected = filter.selected;
       const selectedValue = (selected === null || selected === undefined) ? null : selected;
 
-      // Save selected value to preserve after reload
       this.selectedFilterValues[filter.key] = selectedValue ?? null;
 
       switch (filter.key) {
@@ -177,27 +232,58 @@ export class IncomeViewMobileAppComponent implements OnInit {
           this.Entity.p.SiteRef = selectedValue ?? 0;
           break;
 
-        case 'reason':
-          this.Entity.p.Ref = selectedValue ?? 0;
+        case 'ledger':
+          this.Entity.p.LedgerRef = selectedValue ?? 0;
+          if (selectedValue != null) await this.getSubLedgerListByLedgerRef(selectedValue);
           break;
 
         case 'subledger':
           this.Entity.p.SubLedgerRef = selectedValue ?? 0;
           break;
 
-        case 'ledger':
-          this.Entity.p.LedgerRef = selectedValue ?? 0;
-          if (selectedValue != null) await this.getSubLedgerListByLedgerRef(selectedValue);  // Updates SubLedgerList
+        case 'payerType':
+          this.Entity.p.PayerType = selectedValue ?? 0;
+          this.Entity.p.PayerRef = 0;
+          this.PayerPlotNo = '';
+          if (selectedValue != null) await this.getPayerListBySiteAndPayerType();
+          break;
+
+        // case 'payer':
+        //   this.Entity.p.PayerRef = selectedValue ?? 0;
+        //   break;
+        case 'payer':
+          if (this.Entity.p.PayerType === this.DealDoneCustomer) {
+            // store plot no instead of Ref
+            this.PayerPlotNo = selectedValue || '';
+            this.onPayerChange(); // your existing function that maps PlotNo -> PayerRef
+          } else {
+            this.Entity.p.PayerRef = selectedValue ?? 0;
+            this.onPayerChange();
+          }
+          break;
+
+        case 'reason':
+          this.Entity.p.Ref = selectedValue ?? 0;
           break;
 
         case 'modeOfPayment':
           this.Entity.p.IncomeModeOfPayment = selectedValue ?? 0;
+          this.Entity.p.BankAccountRef = 0;
+          if (selectedValue != null && this.Entity.p.IncomeModeOfPayment !== this.ModeOfPayments.Cash) {
+            await this.FormulateBankList();
+          }
+          break;
+
+        case 'bank':
+          this.Entity.p.BankAccountRef = selectedValue ?? 0;
           break;
       }
     }
+
     await this.FetchEntireListByFilters();
-    this.loadFilters(); // Reload filters with updated options & preserve selections
+    this.loadFilters(); // refresh filters with new data
   }
+
 
   private async loadIncomeIfEmployeeExists() {
     try {
@@ -222,7 +308,31 @@ export class IncomeViewMobileAppComponent implements OnInit {
     }
   }
 
-  FetchEntireListByFilters = async () => {
+  // FetchEntireListByFilters = async () => {
+  //   this.MasterList = [];
+  //   this.DisplayMasterList = [];
+  //   if (this.companyRef <= 0) {
+  //     await this.toastService.present('Company not selected', 1000, 'danger');
+  //     await this.haptic.error();
+  //     return;
+  //   }
+  //   let lst = await Income.FetchEntireListByFilters(
+  //     this.companyRef,
+  //     this.Entity.p.StartDate,
+  //     this.Entity.p.EndDate,
+  //     this.Entity.p.SiteRef,
+  //     this.Entity.p.LedgerRef,
+  //     this.Entity.p.SubLedgerRef,
+  //     this.Entity.p.ExpenseModeOfPayment,
+  //     this.Entity.p.BankAccountRef,
+  //     this.Entity.p.PayerRef, async errMsg => {
+  //       await this.toastService.present('Error ' + errMsg, 1000, 'danger');
+  //       await this.haptic.error();
+  //     });
+  //   this.MasterList = lst;
+  //   this.DisplayMasterList = this.MasterList;
+  // }
+  FetchEntireListByFilters = async () => {  
     this.MasterList = [];
     this.DisplayMasterList = [];
     if (this.companyRef <= 0) {
@@ -230,6 +340,10 @@ export class IncomeViewMobileAppComponent implements OnInit {
       await this.haptic.error();
       return;
     }
+
+    this.Entity.p.StartDate = '';
+    this.Entity.p.EndDate = '';
+
     let lst = await Income.FetchEntireListByFilters(
       this.companyRef,
       this.Entity.p.StartDate,
@@ -237,14 +351,65 @@ export class IncomeViewMobileAppComponent implements OnInit {
       this.Entity.p.SiteRef,
       this.Entity.p.LedgerRef,
       this.Entity.p.SubLedgerRef,
-      this.Entity.p.ExpenseModeOfPayment,
+      this.Entity.p.IncomeModeOfPayment,
       this.Entity.p.BankAccountRef,
-      this.Entity.p.PayerRef, async errMsg => {
+      this.Entity.p.PayerRef,
+      async errMsg => {
         await this.toastService.present('Error ' + errMsg, 1000, 'danger');
         await this.haptic.error();
       });
+    this.AllList = lst.filter((item) => item.p.Reason != '');
     this.MasterList = lst;
     this.DisplayMasterList = this.MasterList;
+  }
+
+  onPayerChange = () => {
+    let SingleRecord;
+    try {
+      if (this.Entity.p.PayerType == this.DealDoneCustomer) {
+        SingleRecord = this.PayerList.find((data) => data.p.PlotName == this.PayerPlotNo);
+      } else {
+        SingleRecord = this.PayerList.find((data) => data.p.Ref == this.Entity.p.PayerRef);
+      }
+      if (SingleRecord?.p) {
+        this.Entity.p.IsRegisterCustomerRef = SingleRecord.p.IsRegisterCustomerRef;
+        this.Entity.p.PayerRef = SingleRecord.p.Ref;
+        if (this.Entity.p.PayerType == this.DealDoneCustomer) {
+          this.Entity.p.PlotName = SingleRecord.p.PlotName;
+        }
+      }
+      this.FetchEntireListByFilters();
+    } catch (error) {
+    }
+  }
+
+  public FormulateBankList = async () => {
+    if (this.companyRef <= 0) {
+         await this.toastService.present('Company not selected', 1000, 'danger');
+      await this.haptic.error();
+      return;
+    }
+    let lst = await OpeningBalance.FetchEntireListByCompanyRef(this.companyRef, async (errMsg) => {
+      await this.toastService.present('Error ' + errMsg, 1000, 'danger');
+      await this.haptic.error();
+    });
+    this.BankList = lst.filter((item) => item.p.BankAccountRef > 0 && (item.p.OpeningBalanceAmount > 0 || item.p.InitialBalance > 0));
+  };
+  getPayerListBySiteAndPayerType = async () => {
+    if (this.companyRef <= 0) {
+      await this.toastService.present('Company not selected', 1000, 'danger');
+      await this.haptic.error();
+      return;
+    }
+    if (this.Entity.p.PayerType <= 0) {
+      return;
+    }
+    let lst = await Income.FetchPayerNameByPayerTypeRef(this.Entity.p.SiteRef, this.companyRef, this.Entity.p.PayerType, async errMsg => {
+      await this.toastService.present('Error ' + errMsg, 1000, 'danger');
+      await this.haptic.error();
+    });
+    this.PayerList = lst;
+    this.loadFilters();
   }
 
   getSiteListByCompanyRef = async () => {
