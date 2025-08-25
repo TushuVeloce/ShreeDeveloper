@@ -1,61 +1,84 @@
 .dashboard-bg {
-    --background: var(--dashboard-bg-gradient);
+    --background: var(--ion-background-color);
     padding: 12px;
 }
 
 /* Main Site Card */
 .main-site-card {
-    margin-bottom: 20px;
-    border-radius: 14px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
     background: var(--ion-color-light);
+    margin-bottom: 20px;
 }
 
-.main-site-card ion-card-title {
+.site-card-header {
+    background: var(--ion-color-primary);
+    color: #fff;
+    padding: 16px;
+}
+
+.site-card-header ion-card-title {
     font-size: 1.4em;
     font-weight: 700;
-    color: var(--ion-color-dark);
+    color: #fff;
 }
 
-.main-site-card ion-card-subtitle {
+.site-card-header ion-card-subtitle {
     font-size: 1em;
-    color: var(--ion-color-medium);
-    margin-bottom: 8px;
+    opacity: 0.9;
+    color: #fff;
 }
 
 .site-details {
     display: flex;
-    justify-content: space-between;
-    margin-top: 10px;
-    font-size: 0.95em;
-}
-
-.plot-list{
-    margin: 0;
-    padding: 0;
-    background: var(--dashboard-bg-gradient);
-}
-/* Plot Items */
-.plot-item {
-    --border-radius: 10px;
-    --margin-bottom: 8px;
-    padding: 10px 12px;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
-    display: flex;
-    justify-content: space-between;
     align-items: center;
-    --background: var(--ion-color-light);
-}
-
-.plot-item h3 {
-    font-size: 1em;
-    font-weight: 600;
+    gap: 8px;
+    margin: 10px 0;
+    font-size: 0.95em;
     color: var(--ion-color-dark);
 }
 
-.plot-item p {
+/* Plot Section */
+.plot-header {
+    font-weight: bold;
+    font-size: 1.1em;
+    color: var(--ion-color-primary);
+    margin-bottom: 8px;
+}
+
+.plot-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 12px;
+    padding: 8px 0;
+}
+
+.plot-card {
+    border-radius: 12px;
+    background: var(--ion-color-light);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06);
+    transition: transform 0.2s;
+}
+
+.plot-card:hover {
+    transform: translateY(-4px);
+}
+
+.plot-card h3 {
+    font-size: 1em;
+    font-weight: 600;
+    margin-bottom: 6px;
+    color: var(--ion-color-dark);
+}
+
+.area-badge {
     font-size: 0.85em;
     color: var(--ion-color-medium);
+    background: rgba(0, 0, 0, 0.05);
+    padding: 4px 8px;
+    border-radius: 8px;
+    display: inline-block;
 }
 
 /* No Data Found */
@@ -67,13 +90,13 @@
     padding: 3em 1em;
     text-align: center;
     color: var(--ion-color-medium);
+}
 
-    ion-icon {
-        font-size: 3em;
-        margin-bottom: 0.5em;
-    }
+.no-data-found ion-icon {
+    font-size: 3em;
+    margin-bottom: 0.5em;
+}
 
-    p {
-        font-size: 1.1em;
-    }
+.no-data-found p {
+    font-size: 1.1em;
 }

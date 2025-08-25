@@ -1,37 +1,45 @@
-<!-- <app-loader *ngIf="isLoading"></app-loader> -->
-<app-header-with-back-handler title={{siteName}}
-  backRoute="mobile-app/tabs/dashboard/site-management"></app-header-with-back-handler>
-
+<app-header-with-back-handler title="Site Details" backRoute="mobile-app/tabs/dashboard/site-management">
+</app-header-with-back-handler>
 
 <ion-content [fullscreen]="true" class="dashboard-bg">
   <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
+
   <!-- Main Site Info Card -->
   <ion-card class="main-site-card" *ngIf="singleSite; else noData">
-    <ion-card-header>
+    <ion-card-header class="site-card-header">
       <ion-card-title>{{ singleSite.p.Name }}</ion-card-title>
       <ion-card-subtitle>{{ singleSite.p.AddressLine1 }}</ion-card-subtitle>
-      <!-- <ion-card-subtitle>{{ singleSite?.p?.AddressLine2 }}</ion-card-subtitle> -->
     </ion-card-header>
+
     <ion-card-content>
-      <p><strong>Total Land Area:</strong> {{ singleSite.p.TotalLandAreaInSqm }}Sqm</p>
-      <p><strong>Total Plots:</strong> {{ DisplayMasterList.length || 0 }}</p>
+      <div class="site-details">
+        <ion-icon name="layers-outline"></ion-icon>
+        <p><strong>Total Land Area:</strong> {{ singleSite.p.TotalLandAreaInSqm }} Sqm</p>
+      </div>
+      <div class="site-details">
+        <ion-icon name="grid-outline"></ion-icon>
+        <p><strong>Total Plots:</strong> {{ DisplayMasterList.length || 0 }}</p>
+      </div>
     </ion-card-content>
   </ion-card>
-  <hr>
+
   <!-- Plot List -->
-  <ion-list class="plot-list" *ngIf="DisplayMasterList.length > 0; else noPlots" lines="none">
+  <ion-list *ngIf="DisplayMasterList.length > 0; else noPlots" lines="none" class="plot-list">
     <ion-list-header>
-      <ion-label style="color: var(--ion-color-primary);">Plots</ion-label>
+      <ion-label class="plot-header">Plots List</ion-label>
     </ion-list-header>
 
-    <ion-item *ngFor="let plot of DisplayMasterList" class="plot-item">
-      <ion-label>
-        <h3>Plot No: {{ plot.p.PlotNo }}</h3>
-        <p>Area: {{ plot.p.AreaInSqft }} sq.ft | {{ plot.p.AreaInSqm }} sq.m</p>
-      </ion-label>
-    </ion-item>
+    <div class="plot-grid">
+      <ion-card *ngFor="let plot of DisplayMasterList" class="plot-card">
+        <ion-card-content>
+          <h3>Plot No: {{ plot.p.PlotNo }}</h3>
+          <p class="area-badge">{{ plot.p.AreaInSqft }} sq.ft | {{ plot.p.AreaInSqm }} sq.m</p>
+          <p class="area-badge">{{ plot.p.BookingRemarkName }}</p>
+        </ion-card-content>
+      </ion-card>
+    </div>
   </ion-list>
 
   <!-- No Data Templates -->
@@ -48,5 +56,4 @@
       <p>No plots available</p>
     </div>
   </ng-template>
-
 </ion-content>
