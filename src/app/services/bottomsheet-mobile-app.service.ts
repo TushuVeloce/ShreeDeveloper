@@ -34,22 +34,15 @@ export class BottomsheetMobileAppService {
             handle: true,
             backdropDismiss: true
         });
-        console.log(`                
-            selectedOptions:`,
-            selectedOptions);
-
-
         await this.modalInstance.present();
 
         this.backButtonSubscription = this.platform.backButton.subscribeWithPriority(10, () => {
-            console.log('Back button pressed - Closing modal');
             this.modalInstance?.dismiss();
             this.unsubscribe();
         });
 
         this.routeSubscription = this.router.events.subscribe(event => {
             if (event instanceof NavigationStart) {
-                console.log('Route changed - Closing modal');
                 this.modalInstance?.dismiss();
                 this.unsubscribe();
             }

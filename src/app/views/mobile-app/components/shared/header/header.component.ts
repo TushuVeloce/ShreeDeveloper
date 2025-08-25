@@ -64,7 +64,7 @@ export class HeaderComponent implements OnInit {
         }
       ];
       this.IsDefaultUser = await this.appStateManagement.localStorage.getItem('IsDefaultUser') == "1" ? false : true;
-      console.log('this.IsDefaultUser :', this.IsDefaultUser);
+      // console.log('this.IsDefaultUser :', this.IsDefaultUser);
       const list = await Company.FetchEntireList(
         async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
       );
@@ -83,7 +83,7 @@ export class HeaderComponent implements OnInit {
         await this.getEmployeeDetails();
       }
     } catch (error) {
-      console.error('Company fetch failed:', error);
+      // console.error('Company fetch failed:', error);
     }
   }
 
@@ -97,7 +97,7 @@ export class HeaderComponent implements OnInit {
           // await this.haptic.error();
         }
       );
-      console.log('employeeData :', employeeData);
+      // console.log('employeeData :', employeeData);
       if (employeeData == null) {
         const adminData = await AdminProfile.FetchAdminData(async errMsg => {
           // await this.toastService.present("Error " + errMsg, 1000, 'danger');
@@ -106,7 +106,7 @@ export class HeaderComponent implements OnInit {
         }
         );
 
-        console.log('adminData :', adminData);
+        // console.log('adminData :', adminData);
 
         if (adminData?.[0]) {
           this.AdminEntity = adminData[0];
@@ -165,7 +165,7 @@ export class HeaderComponent implements OnInit {
         this.onSelectionChange(this.selectedCompany);
       }
     } catch (error) {
-      console.error('Company selection failed:', error);
+      // console.error('Company selection failed:', error);
     }
   }
 

@@ -54,9 +54,9 @@ export class LoadingService {
     spinner: 'bubbles' | 'circles' | 'circular' | 'crescent' | 'dots' | 'lines' | 'lines-small' | 'lines-sharp' | 'lines-sharp-small' | null = 'crescent'
   ) {
     try {
-      console.log('Loading started');
+      // console.log('Loading started');
       if (this.isLoading || this.loading) {
-        console.log('Loader is already active, not showing again.');
+        // console.log('Loader is already active, not showing again.');
         return;
       }
 
@@ -76,13 +76,13 @@ export class LoadingService {
         await this.hide();
       });
     } catch (error) {
-      console.error('Error showing loader:', error);
+      // console.error('Error showing loader:', error);
     }
   }
 
   async hide() {
     try {
-      console.log('Loading ended');
+      // console.log('Loading ended');
       if (this.loading) {
         await this.loading.dismiss();
         this.loading = null;
@@ -96,7 +96,7 @@ export class LoadingService {
         this.backButtonSubscription = null;
       }
     } catch (error) {
-      console.warn('Loader dismiss error (likely already dismissed):', error);
+      // console.warn('Loader dismiss error (likely already dismissed):', error);
       this.loading = null;
       this.isLoading = false;
     }

@@ -155,9 +155,7 @@ export class AttendanceViewMobileAppComponent  implements OnInit {
   };
 
   onAttendanceLogTypeChange = async () => {
-    console.log('this.selectedAttendanceLogType :', this.selectedAttendanceLogType, this.AttendanceLogTypeList);
     const selected = this.AttendanceLogTypeList.find(w => w.Ref === this.selectedAttendanceLogType);
-    console.log('Selected onAttendanceLogTypeChange:', selected?.Name);
     await this.getAttendanceLogByAttendanceType();
   }
 
@@ -166,7 +164,6 @@ export class AttendanceViewMobileAppComponent  implements OnInit {
       const SelectedMonth = Number(value);
       if (isNaN(SelectedMonth)) return;
       this.selectedMonth = SelectedMonth;
-      console.log('selectedMonth :', SelectedMonth);
       // await this.fetchMonthlyLogs();
     } catch (error) {
       // this.handleError(error, 'Fetching attendance for selected month');
@@ -191,7 +188,6 @@ export class AttendanceViewMobileAppComponent  implements OnInit {
         }
       );
 
-      console.log('Attendance List:', lst);
 
       if (!lst || lst.length === 0) {
         this.isCheckInEnabled = true;
@@ -278,7 +274,7 @@ export class AttendanceViewMobileAppComponent  implements OnInit {
         await this.haptic.error();
       });
       const location = await this.locationMobileAppService.getCurrentCoordinates();
-      console.log(location);
+      // console.log(location);
     } catch (error) {
       // this.toastService.present('Error fetching site list', 1000, 'danger');
       // await this.haptic.error();
@@ -477,16 +473,10 @@ export class AttendanceViewMobileAppComponent  implements OnInit {
         const strCurrentDateTime = await CurrentDateTimeRequest.GetCurrentDateTime();
         const today = strCurrentDateTime.substring(0, 10); // e.g. '2025-07-09'
 
-        console.log('today :', today);
-        console.log('allLogs :', allLogs);
-
         logs = allLogs.filter(log => {
           const transDate = log.p.TransDateTime?.substring(0, 10);
-          console.log('transDate:', transDate);
           return transDate === today;
         });
-
-        console.log('filtered today logs :', logs);
       }
 
       else if (this.selectedAttendanceLogType === AttendanceLogType.WeeklyAttendanceLog) {
@@ -513,8 +503,6 @@ export class AttendanceViewMobileAppComponent  implements OnInit {
           }
         );
       }
-
-      console.log('Final logs:', logs);
 
       this.weeklyAttendanceLogs = logs;
       this.filteredWeeklyAttendanceLogs = logs;
