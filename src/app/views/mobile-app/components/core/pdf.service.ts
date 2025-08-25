@@ -265,7 +265,9 @@ export class PDFService {
         fontStyle: 'bold',
         halign: 'center'
       },
-       foot: [totalRow],
+      foot: [totalRow],
+      showHead: 'everyPage',
+      showFoot: 'lastPage', 
     });
     return doc;
   }

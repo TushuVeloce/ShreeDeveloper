@@ -13,9 +13,10 @@
       <ion-label>
         <h2>Site : {{ Invoice.p.SiteName || 'Unknown Site' }}</h2>
         <p class="date-label">Accounting Report Date : {{ formatDate(Invoice.p.TransDateTime) || '-' }}</p>
-        <p class="date-label">Payer Name : {{ Invoice.p.PayerName || '-' }}</p>
-        <p class="date-label">Income Amount : {{ Invoice.p.IncomeAmount | currency : "INR" }}
-        <p class="date-label">Given Amount: {{ Invoice.p.GivenAmount | currency : "INR" }}
+        <p class="date-label" *ngIf="Invoice.p.PayerName">Payer Name : {{ Invoice.p.PayerName || '-' }}</p>
+        <p class="date-label" *ngIf="Invoice.p.RecipientName">Recipient Name : {{ Invoice.p.RecipientName || '-' }}</p>
+        <p class="date-label" *ngIf="Invoice.p.IncomeAmount">Income Amount : {{ Invoice.p.IncomeAmount | currency : "INR" }}
+        <p class="date-label" *ngIf="Invoice.p.GivenAmount">Given Amount: {{ Invoice.p.GivenAmount | currency : "INR" }}
         </p>
       </ion-label>
     </ion-item>
@@ -54,11 +55,11 @@
             <span class="label-mobile-app">Site Name:</span>
             <span class="value-mobile-app">{{ SelectedAccountingReport.p.SiteName || '-' }}</span>
           </div>
-          <div class="info-row-of-model-mobile-app">
+          <div class="info-row-of-model-mobile-app" *ngIf="SelectedAccountingReport.p.PayerName">
             <span class="label-mobile-app">Payer Name :</span>
             <span class="value-mobile-app">{{ SelectedAccountingReport.p.PayerName || '-' }}</span>
           </div>
-          <div class="info-row-of-model-mobile-app">
+          <div class="info-row-of-model-mobile-app" *ngIf="SelectedAccountingReport.p.RecipientName">
             <span class="label-mobile-app">Recipient Name:</span>
             <span class="value-mobile-app">{{ SelectedAccountingReport.p.RecipientName || '-' }}</span>
           </div>
@@ -66,11 +67,11 @@
             <span class="label-mobile-app">Reason :</span>
             <span class="value-mobile-app">{{ SelectedAccountingReport.p.Reason || '-' }}</span>
           </div>
-          <div class="info-row-of-model-mobile-app">
+          <div class="info-row-of-model-mobile-app" *ngIf="SelectedAccountingReport.p.IncomeAmount">
             <span class="label-mobile-app">Income Amount :</span>
             <span class="value-mobile-app">{{ SelectedAccountingReport.p.IncomeAmount | currency : "INR" }}</span>
           </div>
-          <div class="info-row-of-model-mobile-app">
+          <div class="info-row-of-model-mobile-app" *ngIf="SelectedAccountingReport.p.GivenAmount">
             <span class="label-mobile-app">Given Amount :</span>
             <span class="value-mobile-app">{{ SelectedAccountingReport.p.GivenAmount | currency : "INR" }}</span>
           </div>
