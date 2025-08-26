@@ -58,12 +58,12 @@ export class CustomerRelationshipManagementViewMobileAppComponent implements OnI
       routerPath: '/mobile-app/tabs/dashboard/customer-relationship-management/customer-visit-report'
     },
     {
-      icon: 'assets/icons/customer_visit_report_mobile_app.png',
+      icon: 'assets/icons/Payment_History_Report_md.png',
       label: 'Payment History Report',
       routerPath: '/mobile-app/tabs/dashboard/customer-relationship-management/payment-history-report'
     },
     {
-      icon: 'assets/icons/customer_visit_report_mobile_app.png',
+      icon: 'assets/icons/Deal_Cancelled_Customer_Report_md.png',
       label: 'Deal Cancelled Customer Report',
       routerPath: '/mobile-app/tabs/dashboard/customer-relationship-management/deal-cancelled-customer-report'
     }

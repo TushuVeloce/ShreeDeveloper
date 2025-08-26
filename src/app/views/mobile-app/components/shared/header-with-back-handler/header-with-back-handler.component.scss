@@ -1,15 +1,36 @@
 /* Modern Header */
+// .modern-header {
+//     // --background: linear-gradient(to right, var(--ion-color-primary), var(--ion-color-secondary));
+//     // --background: var(--ion-color-primary);
+//     --background: linear-gradient(to bottom right, #7c2424, #c0392b);
+
+//     display: flex;
+//     align-items: center;
+//     color: var(--ion-text-color-dark);
+//     border-bottom-left-radius: 12px;
+//     border-bottom-right-radius: 12px;
+
+//     // --ion-safe-area-top: 1.5rem;
+//     // margin-top: var(--ion-safe-area-top);
+// }
+// ion-toolbar {
+//     --ion-safe-area-top: 1.5rem;
+//     padding-top: var(--ion-safe-area-top);
+// }
+
 .modern-header {
-    // --background: linear-gradient(to right, var(--ion-color-primary), var(--ion-color-secondary));
-    // --background: var(--ion-color-primary);
-    --background:linear-gradient(to bottom right, #7c2424, #c0392b);
-    
+    --background: linear-gradient(to bottom right, #7c2424, #c0392b);
     display: flex;
     align-items: center;
     color: var(--ion-text-color-dark);
     border-bottom-left-radius: 12px;
     border-bottom-right-radius: 12px;
 }
+
+// ion-toolbar {
+//     --ion-safe-area-top: 2rem;
+//     padding-top: var(--ion-safe-area-top);
+// }
 
 /* Logo Styling */
 .logo-button {
@@ -44,6 +65,7 @@
     font-size: 1.4rem;
     --color: var(--ion-text-color-dark);
 }
-.icon-button-back{
+
+.icon-button-back {
     --color: var(--ion-text-color-dark);
-}   
+}

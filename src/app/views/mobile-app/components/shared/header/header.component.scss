@@ -2,8 +2,16 @@
 .modern-header {
     // --background: linear-gradient(135deg, #4c6ef5 0%, #15aabf 100%);
     color: #333;
-    padding: 0 10px;
+    padding: 0 6px;
+    /* small side padding */
+    display: flex;
+    align-items: center;
 }
+
+// ion-toolbar {
+//     --ion-safe-area-top: 2rem;
+//     padding-top: var(--ion-safe-area-top);
+// }
 
 /* Logo Button */
 .logo-button {
@@ -22,42 +30,35 @@
     --padding-start: 0;
     --inner-padding-end: 0;
     color: var(--ion-text-color);
-    margin: 10 auto;
     border-radius: 8px;
-    font-size: 0.9rem;
-    margin-top: 10px;
+    font-size: 0.95rem;
+    margin: 0 8px;
 }
 
 .status-text {
     font-weight: 600;
     font-size: 1rem;
-    margin-right: 4px;
-    padding-left: 10px;
-}
-.status-text-user{
-    font-weight: 600;
-    font-size: 4vw;
-    margin-right: 4px;
-    padding-left: 10px;
-    justify-content: center;
-    align-items: center;
-    display: flex;
+    padding-left: 6px;
 }
 
-.dropdown-icon {
-    font-size: 1.2rem;
-    margin-left: 4px;
-    color: var(--ion-color-primary);
+.status-text-user {
+    font-weight: 600;
+    font-size: 1rem;
+    padding-left: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 /* Notification & Avatar */
 .icon-button {
     color: var(--ion-color-primary);
-    font-size: 1.5rem;
+    font-size: 1.4rem;
 }
 
 .user-avatar {
     width: 36px;
     height: 36px;
     border: 2px solid var(--ion-color-primary);
+    margin-left: 8px;
 }

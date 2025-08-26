@@ -696,12 +696,12 @@ export class SidebarlayoutComponent implements OnInit {
       {
         Name: 'Deal Cancelled Customer',
         RouterLink: '/homepage/Website/Deal_Cancelled_Customer_Report',
-        LogoPath: '/assets/icons/customer_visit_report.png',
+        LogoPath: '/assets/icons/Deal_Cancelled_Customer_Report.png',
       },
       {
         Name: 'Payment History Report',
         RouterLink: '/homepage/Website/Payment_History_Report',
-        LogoPath: '/assets/icons/customer_visit_report.png',
+        LogoPath: '/assets/icons/Payment_History_Report.png',
       }
     ]
 

@@ -19,6 +19,7 @@ import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
 import { NzModalModule } from 'ng-zorro-antd/modal';
 import { PhoneCommaFormatDirective } from '../core/directives/phone-comma-format.directive';
 import { AmountCommaFormatDirective } from '../core/directives/amount-comma-format.directive';
+import { SafeAreaDirective } from '../core/directives/safe-area.directive';
 @NgModule({
   declarations: [HeaderComponent, 
     HeaderWithBackHandlerComponent, 
@@ -33,7 +34,8 @@ import { AmountCommaFormatDirective } from '../core/directives/amount-comma-form
     DatePickerComponent, 
     ChipFilterMobileAppComponent, 
     PhoneCommaFormatDirective,
-    AmountCommaFormatDirective
+    AmountCommaFormatDirective,
+    SafeAreaDirective
   ],
   imports: [
     CommonModule,
@@ -57,7 +59,8 @@ import { AmountCommaFormatDirective } from '../core/directives/amount-comma-form
     DatePickerComponent, 
     ChipFilterMobileAppComponent, 
     PhoneCommaFormatDirective,
-    AmountCommaFormatDirective
+    AmountCommaFormatDirective,
+    SafeAreaDirective
   ]
 })
 export class SharedModule { }
