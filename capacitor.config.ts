@@ -11,7 +11,11 @@ const config: CapacitorConfig = {
     Keyboard: {
       resize: 'body', // options: 'body', 'ionic', 'native', 'none'
       resizeOnFullScreen: true
-    }
+    },
+    StatusBar: {
+      overlaysWebView: false,
+      style: "DARK"
+    },
   }
 };
 
