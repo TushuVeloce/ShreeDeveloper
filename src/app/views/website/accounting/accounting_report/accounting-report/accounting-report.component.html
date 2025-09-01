@@ -4,8 +4,8 @@
   </div>
   <div class="col-3 mb-1 search-container_light">
     <app-shared-filter [masterList]="MasterList"
-      [filterFields]="['TransDateTime', 'PayerName', 'RecipientName','SiteName','RecipientName','Reason','IncomeAmount','GivenAmount','ShreesBalance','ModeOfPaymentName','Narration']"
-      (filteredList)="DisplayMasterList = $event"></app-shared-filter>
+      [filterFields]="['TransDateTime', 'PayerName','RecipientName','SiteName','Reason','IncomeAmount','GivenAmount','ShreesBalance','ModeOfPaymentName','Narration']"
+      (filteredList)="onFilteredList($event)"></app-shared-filter>
   </div>
   <div class="col-3 mb-1 search-container_light text-end">
     <p class="balance_title"><b>Shree Balance : {{Entity.p.ShreesBalance | currency : 'INR'}}</b></p>

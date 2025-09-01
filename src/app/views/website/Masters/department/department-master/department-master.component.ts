@@ -27,7 +27,7 @@ export class DepartmentMasterComponent implements OnInit {
 
   headers: string[] = ['Sr.No.', 'Name', 'Action'];
 
-  constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private companystatemanagement: CompanyStateManagement,private screenSizeService: ScreenSizeService) {
+  constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private companystatemanagement: CompanyStateManagement, private screenSizeService: ScreenSizeService) {
     effect(() => {
       this.getDepartmentListByCompanyRef()
     });
@@ -81,6 +81,14 @@ export class DepartmentMasterComponent implements OnInit {
   paginatedList = () => {
     const start = (this.currentPage - 1) * this.pageSize;
     return this.DisplayMasterList.slice(start, start + this.pageSize);
+  }
+
+  // 🔑 Whenever filteredList event is received
+  onFilteredList(list: any[]) {
+    this.DisplayMasterList = list;
+    this.currentPage = 1;   // reset to first page after filtering
+
+    this.loadPaginationData();
   }
 
   onPageChange = (pageIndex: number): void => {

@@ -13,8 +13,8 @@ import { UIUtils } from 'src/app/services/uiutils.service';
   templateUrl: './account-sub-ledger.component.html',
   styleUrls: ['./account-sub-ledger.component.scss'],
 })
-export class AccountSubLedgerComponent  implements OnInit {
-Entity: SubLedger = SubLedger.CreateNewInstance();
+export class AccountSubLedgerComponent implements OnInit {
+  Entity: SubLedger = SubLedger.CreateNewInstance();
   MasterList: SubLedger[] = [];
   DisplayMasterList: SubLedger[] = [];
   LedgerList: Ledger[] = [];
@@ -54,25 +54,25 @@ Entity: SubLedger = SubLedger.CreateNewInstance();
   //   this.loadPaginationData();
   // }
 
-   public FormulateLedgerList = async () => {
+  public FormulateLedgerList = async () => {
     this.Entity.p.LedgerRef = 0
-      if (this.companyRef() <= 0) {
-        await this.uiUtils.showErrorToster('Company not Selected');
-        return;
-      }
-      let lst = await Ledger.FetchEntireListByCompanyRef(this.companyRef(),
-        async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
-      );
-      this.LedgerList = lst
-        if (this.LedgerList.length > 0) {
+    if (this.companyRef() <= 0) {
+      await this.uiUtils.showErrorToster('Company not Selected');
+      return;
+    }
+    let lst = await Ledger.FetchEntireListByCompanyRef(this.companyRef(),
+      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+    );
+    this.LedgerList = lst
+    if (this.LedgerList.length > 0) {
       this.Entity.p.LedgerRef = this.LedgerList[0].p.Ref
-     await this.getSubLedgerListByLedgerRef(this.Entity.p.LedgerRef)
+      await this.getSubLedgerListByLedgerRef(this.Entity.p.LedgerRef)
     } else {
       this.DisplayMasterList = [];
     }
-    };
+  };
 
-   getSubLedgerListByLedgerRef = async (ledgerref:number) => {
+  getSubLedgerListByLedgerRef = async (ledgerref: number) => {
     this.MasterList = [];
     this.DisplayMasterList = [];
     if (ledgerref <= 0) {
@@ -118,6 +118,14 @@ Entity: SubLedger = SubLedger.CreateNewInstance();
   paginatedList = () => {
     const start = (this.currentPage - 1) * this.pageSize;
     return this.DisplayMasterList.slice(start, start + this.pageSize);
+  }
+
+  // 🔑 Whenever filteredList event is received
+  onFilteredList(list: any[]) {
+    this.DisplayMasterList = list;
+    this.currentPage = 1;   // reset to first page after filtering
+
+    this.loadPaginationData();
   }
 
   onPageChange = (pageIndex: number): void => {

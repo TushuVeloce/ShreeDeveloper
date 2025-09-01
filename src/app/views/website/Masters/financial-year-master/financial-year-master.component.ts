@@ -51,7 +51,7 @@ export class FinancialYearMasterComponent implements OnInit {
   headers: string[] = ['Sr.No.', 'From Date', 'To Date', 'Status'];
   constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private utils: Utils,
     private dtu: DTU, private datePipe: DatePipe, private companystatemanagement: CompanyStateManagement, private payloadPacketFacade: PayloadPacketFacade,
-    private serverCommunicator: ServerCommunicatorService,private screenSizeService: ScreenSizeService
+    private serverCommunicator: ServerCommunicatorService, private screenSizeService: ScreenSizeService
   ) {
     effect(() => {
       this.getFinancialYearListByCompanyRef()
@@ -171,7 +171,7 @@ export class FinancialYearMasterComponent implements OnInit {
       req.FinancialYearRef = this.Entity.p.Ref
       req.CompanyRef = this.companyRef();
 
-        req.Password = this.localpassword;
+      req.Password = this.localpassword;
       req.EmployeeRef = this.appStateManage.getEmployeeRef();
       req.LoginToken = this.appStateManage.getLoginToken();
 
@@ -203,6 +203,14 @@ export class FinancialYearMasterComponent implements OnInit {
   paginatedList = () => {
     const start = (this.currentPage - 1) * this.pageSize;
     return this.DisplayMasterList.slice(start, start + this.pageSize);
+  }
+
+  // 🔑 Whenever filteredList event is received
+  onFilteredList(list: any[]) {
+    this.DisplayMasterList = list;
+    this.currentPage = 1;   // reset to first page after filtering
+
+    this.loadPaginationData();
   }
 
   onPageChange = (pageIndex: number): void => {

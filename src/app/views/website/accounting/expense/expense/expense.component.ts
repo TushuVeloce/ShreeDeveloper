@@ -266,6 +266,14 @@ export class ExpenseComponent implements OnInit {
     return this.DisplayMasterList.slice(start, start + this.pageSize);
   }
 
+  // 🔑 Whenever filteredList event is received
+  onFilteredList(list: any[]) {
+    this.DisplayMasterList = list;
+    this.currentPage = 1;   // reset to first page after filtering
+
+    this.loadPaginationData();
+  }
+
   getTotalInvoice = () => {
     this.TotalInvoice = this.DisplayMasterList.reduce((total: number, item: any) => {
       return total + Number(item.p?.InvoiceAmount || 0);

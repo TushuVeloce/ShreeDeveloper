@@ -28,7 +28,7 @@ export class CityComponent implements OnInit {
   total = 0;
   headers: string[] = ['Sr.No.', 'City Name'];
 
-  constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService,private screenSizeService: ScreenSizeService) { }
+  constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private screenSizeService: ScreenSizeService) { }
 
   async ngOnInit() {
     this.appStateManage.setDropdownDisabled(true);
@@ -40,7 +40,7 @@ export class CityComponent implements OnInit {
   private FormulateCountryList = async () => {
     this.CountryList = [];
     let lst = await Country.FetchEntireList(async errMsg =>
-        await this.uiUtils.showErrorMessage('Error', errMsg)
+      await this.uiUtils.showErrorMessage('Error', errMsg)
     );
     this.CountryList = lst;
 
@@ -50,32 +50,32 @@ export class CityComponent implements OnInit {
 
     // Fetch states based on the selected country
     if (this.CountryRef) {
-        await this.getStateListByCountryRef(this.CountryRef);
+      await this.getStateListByCountryRef(this.CountryRef);
     }
-};
+  };
 
 
-getStateListByCountryRef = async (CountryRef: number) => {
-  this.Entity.p.StateRef = 0;
-  this.StateList = [];
-  this.MasterList = [];
-  this.DisplayMasterList = [];
-  let lst = await State.FetchEntireListByCountryRef(CountryRef, async errMsg =>
+  getStateListByCountryRef = async (CountryRef: number) => {
+    this.Entity.p.StateRef = 0;
+    this.StateList = [];
+    this.MasterList = [];
+    this.DisplayMasterList = [];
+    let lst = await State.FetchEntireListByCountryRef(CountryRef, async errMsg =>
       await this.uiUtils.showErrorMessage('Error', errMsg)
-  );
-  this.StateList = lst;
+    );
+    this.StateList = lst;
 
-  // Set default state (10263)
-  const defaultState = this.StateList.find(s => s.p.Ref === 10263);
-  this.Entity.p.StateRef = defaultState ? defaultState.p.Ref : this.StateList[0]?.p.Ref;
+    // Set default state (10263)
+    const defaultState = this.StateList.find(s => s.p.Ref === 10263);
+    this.Entity.p.StateRef = defaultState ? defaultState.p.Ref : this.StateList[0]?.p.Ref;
 
-  // Fetch cities based on selected state
-  if (this.Entity.p.StateRef) {
+    // Fetch cities based on selected state
+    if (this.Entity.p.StateRef) {
       await this.getCityListByStateRef(this.Entity.p.StateRef);
-  }
+    }
 
-  this.loadPaginationData();
-};
+    this.loadPaginationData();
+  };
 
 
   getCityListByStateRef = async (StateRef: number) => {
@@ -95,6 +95,14 @@ getStateListByCountryRef = async (CountryRef: number) => {
   paginatedList = () => {
     const start = (this.currentPage - 1) * this.pageSize;
     return this.DisplayMasterList.slice(start, start + this.pageSize);
+  }
+
+  // 🔑 Whenever filteredList event is received
+  onFilteredList(list: any[]) {
+    this.DisplayMasterList = list;
+    this.currentPage = 1;   // reset to first page after filtering
+
+    this.loadPaginationData();
   }
 
   onPageChange = (pageIndex: number): void => {

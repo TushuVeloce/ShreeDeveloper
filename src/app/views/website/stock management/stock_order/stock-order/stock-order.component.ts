@@ -138,6 +138,14 @@ export class StockOrderComponent implements OnInit {
     this.currentPage = pageIndex; // Update the current page
   };
 
+  // 🔑 Whenever filteredList event is received
+  onFilteredList(list: any[]) {
+    this.DisplayMasterList = list;
+    this.currentPage = 1;   // reset to first page after filtering
+
+    this.loadPaginationData();
+  }
+
   checkIsEnable = (data: OrderMaterialDetailProps[]): boolean => {
     // Collect boolean values based on the condition
     const booleanValues = data.map(item => item.RequisitionQty <= item.TotalOrderedQty);

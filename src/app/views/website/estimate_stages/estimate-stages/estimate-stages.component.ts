@@ -154,6 +154,14 @@ export class EstimateStagesComponent implements OnInit {
     return this.DisplayMasterList.slice(start, start + this.pageSize);
   }
 
+  // 🔑 Whenever filteredList event is received
+  onFilteredList(list: any[]) {
+    this.DisplayMasterList = list;
+    this.currentPage = 1;   // reset to first page after filtering
+
+    this.loadPaginationData();
+  }
+
   get totalAmount(): number {
     return this.paginatedList.reduce((sum, item) => sum + (item.p.Amount || 0), 0);
   }

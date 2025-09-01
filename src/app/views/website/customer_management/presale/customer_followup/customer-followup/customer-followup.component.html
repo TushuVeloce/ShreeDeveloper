@@ -5,7 +5,7 @@
   <div class="col-4 mb-2 search-container_light">
     <app-shared-filter [masterList]="followup"
       [filterFields]="['CustomerName', 'ContactNos', 'ReminderDate', 'CustomerStatusName']"
-      (filteredList)="DisplayMasterList = $event"></app-shared-filter>
+      (filteredList)="onFilteredList($event)"></app-shared-filter>
   </div>
 </div>
 <ng-template #noDataTpl>

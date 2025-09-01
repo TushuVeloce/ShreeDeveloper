@@ -71,6 +71,14 @@ export class StateComponent implements OnInit {
     return this.DisplayMasterList.slice(start, start + this.pageSize);
   }
 
+  // 🔑 Whenever filteredList event is received
+  onFilteredList(list: any[]) {
+    this.DisplayMasterList = list;
+    this.currentPage = 1;   // reset to first page after filtering
+
+    this.loadPaginationData();
+  }
+
   onPageChange = (pageIndex: number): void => {
     this.currentPage = pageIndex; // Update the current page
   }

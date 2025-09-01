@@ -86,14 +86,11 @@ export class PlotMasterComponent implements OnInit {
     let lst = await Site.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.SiteList = lst;
     if (this.siteref == 0 && lst.length > 0) {
-      // this.getPlotList()
       this.siteref = lst[0].p.Ref
       this.Entity.p.SiteManagementRef = lst[0].p.Ref
       this.onsitechange(this.siteref)
     }
-    // else {
-    //   this.BookingRemarkList = DomainEnums.BookingRemarkList(true, '--select--');
-    // }
+
     this.loadPaginationData();
   }
 
@@ -105,12 +102,8 @@ export class PlotMasterComponent implements OnInit {
     this.DisplayMasterList = [];
     if (this.siteref <= 0) {
       this.clearStorage();
-      // this.getPlotList()
       this.BookingRemarkList = DomainEnums.BookingRemarksList(true);
     }
-    //  else {
-    //   this.BookingRemarkList = DomainEnums.BookingRemarkList(true, '--select--');
-    // }
     if (siteref > 0 && this.SiteList.length > 0) {
       this.Entity.p.SiteManagementRef = siteref;
       const selectedSite = this.SiteList.find(site => site.p.Ref === siteref);
@@ -140,16 +133,6 @@ export class PlotMasterComponent implements OnInit {
     this.loadPaginationData();
   }
 
-  // getPlotList = async () => {
-  //   this.MasterList = [];
-  //   this.DisplayMasterList = [];
-  //   this.siteref = 0
-  //   let lst = await Plot.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-  //   this.MasterList = lst;
-  //   this.DisplayMasterList = this.MasterList;
-  //   this.loadPaginationData();
-  // }
-
   onEditClicked = async (item: Plot) => {
     this.SelectedPlot = item.GetEditableVersion();
     Plot.SetCurrentInstance(this.SelectedPlot);
@@ -157,7 +140,6 @@ export class PlotMasterComponent implements OnInit {
     this.shouldDestroy = false;
     await this.router.navigate(['/homepage/Website/Plot_Master_Details']);
   };
-
 
   onDeleteClicked = async (plot: Plot) => {
     await this.uiUtils.showConfirmationMessage(
@@ -183,6 +165,14 @@ export class PlotMasterComponent implements OnInit {
   get paginatedList() {
     const start = (this.currentPage - 1) * this.pageSize;
     return this.DisplayMasterList.slice(start, start + this.pageSize);
+  }
+
+  // 🔑 Whenever filteredList event is received
+  onFilteredList(list: any[]) {
+    this.DisplayMasterList = list;
+    this.currentPage = 1;   // reset to first page after filtering
+
+    this.loadPaginationData();
   }
 
   onPageChange = (pageIndex: number): void => {

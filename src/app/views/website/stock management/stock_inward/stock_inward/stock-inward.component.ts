@@ -36,7 +36,7 @@ export class StockInwardComponent implements OnInit {
 
   companyRef = this.companystatemanagement.SelectedCompanyRef;
 
-  headers: string[] = ['Sr.No.', 'Chalan No', 'PO ID','Site', 'Vendor', 'Material', 'Unit', 'Ordered Qty', 'Total Inward Qty', 'Remaining Qty', 'Inward Date', 'Action & Print'];
+  headers: string[] = ['Sr.No.', 'Chalan No', 'PO ID', 'Site', 'Vendor', 'Material', 'Unit', 'Ordered Qty', 'Total Inward Qty', 'Remaining Qty', 'Inward Date', 'Action & Print'];
 
   constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private screenSizeService: ScreenSizeService,
     private companystatemanagement: CompanyStateManagement, private DateconversionService: DateconversionService, private dtu: DTU,
@@ -149,9 +149,18 @@ export class StockInwardComponent implements OnInit {
   loadPaginationData = () => {
     this.total = this.DisplayMasterList.length; // Update total based on loaded data
   };
+
   get paginatedList() {
     const start = (this.currentPage - 1) * this.pageSize;
     return this.DisplayMasterList.slice(start, start + this.pageSize);
+  }
+
+  // 🔑 Whenever filteredList event is received
+  onFilteredList(list: any[]) {
+    this.DisplayMasterList = list;
+    this.currentPage = 1;   // reset to first page after filtering
+
+    this.loadPaginationData();
   }
 
   onPageChange = (pageIndex: number): void => {

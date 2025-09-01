@@ -5,8 +5,8 @@
     </div>
      <div class="col-4 mb-2 search-container_light">
       <app-shared-filter [masterList]="MasterList"
-        [filterFields]="['LeaveRequestName', 'Description', 'ToDate', 'HalfDayDate', 'Days']"
-        (filteredList)="DisplayMasterList = $event"></app-shared-filter>
+        [filterFields]="['LeaveRequestName', 'Description', 'FromDate', 'ToDate', 'HalfDayDate', 'Days']"
+        (filteredList)="onFilteredList($event)"></app-shared-filter>
     </div>
     <div class="col-4 mb-2" routerLinkActive="active">
       <nz-button nz-button class="btn1" (click)='AddLeaveRequest()'>

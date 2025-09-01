@@ -6,7 +6,7 @@
   </div>
   <div class="col-4 mb-2 search-container_light">
     <app-shared-filter [masterList]="MasterList" [filterFields]="['Name', 'StageName', 'StageTypeName']"
-      (filteredList)="DisplayMasterList = $event"></app-shared-filter>
+      (filteredList)="onFilteredList($event)"></app-shared-filter>
   </div>
   <div class="col-4 mb-2" routerLinkActive="active">
     <nz-button nz-button class="btn1" (click)="AddSubStage()">

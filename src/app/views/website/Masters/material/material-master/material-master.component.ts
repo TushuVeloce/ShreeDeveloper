@@ -25,14 +25,15 @@ export class MaterialMasterComponent implements OnInit {
   total = 0;
   companyRef = this.companystatemanagement.SelectedCompanyRef;
 
-  headers: string[] = ['Sr.No.','Material Name', 'Material Unit', 'Action'];
+  headers: string[] = ['Sr.No.', 'Material Name', 'Material Unit', 'Action'];
 
   constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private screenSizeService: ScreenSizeService,
     private companystatemanagement: CompanyStateManagement
   ) {
     effect(async () => {
       await this.getMaterialListByCompanyRef();
-    });}
+    });
+  }
 
   async ngOnInit() {
     this.appStateManage.setDropdownDisabled();
@@ -88,9 +89,18 @@ export class MaterialMasterComponent implements OnInit {
     return this.DisplayMasterList.slice(start, start + this.pageSize);
   }
 
+  // 🔑 Whenever filteredList event is received
+  onFilteredList(list: any[]) {
+    this.DisplayMasterList = list;
+    this.currentPage = 1;   // reset to first page after filtering
+
+    this.loadPaginationData();
+  }
+
   onPageChange = (pageIndex: number): void => {
     this.currentPage = pageIndex; // Update the current page
   };
+
 
   AddMaterial = () => {
     if (this.companyRef() <= 0) {

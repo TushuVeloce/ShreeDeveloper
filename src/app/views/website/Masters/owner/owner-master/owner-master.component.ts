@@ -14,7 +14,7 @@ import { UIUtils } from 'src/app/services/uiutils.service';
   templateUrl: './owner-master.component.html',
   styleUrls: ['./owner-master.component.scss'],
 })
-export class OwnerMasterComponent  implements OnInit {
+export class OwnerMasterComponent implements OnInit {
 
   Entity: Owner = Owner.CreateNewInstance();
   MasterList: Owner[] = [];
@@ -91,6 +91,14 @@ export class OwnerMasterComponent  implements OnInit {
   paginatedList = () => {
     const start = (this.currentPage - 1) * this.pageSize;
     return this.DisplayMasterList.slice(start, start + this.pageSize);
+  }
+
+  // 🔑 Whenever filteredList event is received
+  onFilteredList(list: any[]) {
+    this.DisplayMasterList = list;
+    this.currentPage = 1;   // reset to first page after filtering
+
+    this.loadPaginationData();
   }
 
   onPageChange = (pageIndex: number): void => {

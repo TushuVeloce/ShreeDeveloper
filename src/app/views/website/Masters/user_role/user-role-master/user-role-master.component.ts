@@ -47,12 +47,12 @@ export class UserRoleMasterComponent implements OnInit {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
-      let lst = await UserRole.FetchEntireListByCompanyRef(
-        this.companyRef(),
-        async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
-      );
-      this.MasterList = lst;
-      this.DisplayMasterList = this.MasterList;
+    let lst = await UserRole.FetchEntireListByCompanyRef(
+      this.companyRef(),
+      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+    );
+    this.MasterList = lst;
+    this.DisplayMasterList = this.MasterList;
     this.loadPaginationData();
   };
 
@@ -89,6 +89,14 @@ export class UserRoleMasterComponent implements OnInit {
   paginatedList = () => {
     const start = (this.currentPage - 1) * this.pageSize;
     return this.DisplayMasterList.slice(start, start + this.pageSize);
+  }
+
+  // 🔑 Whenever filteredList event is received
+  onFilteredList(list: any[]) {
+    this.DisplayMasterList = list;
+    this.currentPage = 1;   // reset to first page after filtering
+
+    this.loadPaginationData();
   }
 
   onPageChange = (pageIndex: number): void => {

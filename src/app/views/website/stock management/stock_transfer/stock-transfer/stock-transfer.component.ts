@@ -14,8 +14,8 @@ import { UIUtils } from 'src/app/services/uiutils.service';
   styleUrls: ['./stock-transfer.component.scss'],
   standalone: false,
 })
-export class StockTransferComponent  implements OnInit {
-Entity: StockTransfer = StockTransfer.CreateNewInstance();
+export class StockTransferComponent implements OnInit {
+  Entity: StockTransfer = StockTransfer.CreateNewInstance();
   MasterList: StockTransfer[] = [];
   DisplayMasterList: StockTransfer[] = [];
   SiteList: Site[] = [];
@@ -28,7 +28,7 @@ Entity: StockTransfer = StockTransfer.CreateNewInstance();
 
   companyRef = this.companystatemanagement.SelectedCompanyRef;
 
-  headers: string[] = ['Sr.No.','Date', 'From Site', 'To Site','Material Name','Unit', 'Current Qty.' ,'Transferred Qty.','Remaining Qty.','Action'];
+  headers: string[] = ['Sr.No.', 'Date', 'From Site', 'To Site', 'Material Name', 'Unit', 'Current Qty.', 'Transferred Qty.', 'Remaining Qty.', 'Action'];
   constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private screenSizeService: ScreenSizeService,
     private companystatemanagement: CompanyStateManagement, private DateconversionService: DateconversionService,
   ) {
@@ -44,7 +44,7 @@ Entity: StockTransfer = StockTransfer.CreateNewInstance();
     this.pageSize = this.screenSizeService.getPageSize('withDropdown');
   }
 
-getSiteListByCompanyRef = async () => {
+  getSiteListByCompanyRef = async () => {
     if (this.companyRef() <= 0) {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
@@ -74,21 +74,21 @@ getSiteListByCompanyRef = async () => {
   }
 
   getTransferListByCompanyRefAndSiteRef = async () => {
-        this.MasterList = [];
-        this.DisplayMasterList = [];
-        if (this.Entity.p.FromSiteRef <= 0 && this.Entity.p.ToSiteRef == 0) {
-          this.getStockTransferListByCompanyRef();
-          return;
-        }
-        let lst = await StockTransfer.FetchEntireListByCompanyRefAndSiteRef(this.companyRef(), this.Entity.p.FromSiteRef,this.Entity.p.ToSiteRef,
-          async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
-        );
-        this.MasterList = lst;
-        this.DisplayMasterList = this.MasterList;
-        this.loadPaginationData();
-      };
+    this.MasterList = [];
+    this.DisplayMasterList = [];
+    if (this.Entity.p.FromSiteRef <= 0 && this.Entity.p.ToSiteRef == 0) {
+      this.getStockTransferListByCompanyRef();
+      return;
+    }
+    let lst = await StockTransfer.FetchEntireListByCompanyRefAndSiteRef(this.companyRef(), this.Entity.p.FromSiteRef, this.Entity.p.ToSiteRef,
+      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+    );
+    this.MasterList = lst;
+    this.DisplayMasterList = this.MasterList;
+    this.loadPaginationData();
+  };
 
-   // Extracted from services date conversion //
+  // Extracted from services date conversion //
   formatDate = (date: string | Date): string => {
     return this.DateconversionService.formatDate(date);
   }
@@ -113,7 +113,7 @@ getSiteListByCompanyRef = async () => {
           await this.getStockTransferListByCompanyRef();
           this.SearchString = '';
           this.loadPaginationData();
-           if (this.Entity.p.FromSiteRef <= 0) {
+          if (this.Entity.p.FromSiteRef <= 0) {
             this.getStockTransferListByCompanyRef();
           } else {
             this.getTransferListByCompanyRefAndSiteRef();
@@ -131,6 +131,14 @@ getSiteListByCompanyRef = async () => {
   paginatedList = () => {
     const start = (this.currentPage - 1) * this.pageSize;
     return this.DisplayMasterList.slice(start, start + this.pageSize);
+  }
+
+  // 🔑 Whenever filteredList event is received
+  onFilteredList(list: any[]) {
+    this.DisplayMasterList = list;
+    this.currentPage = 1;   // reset to first page after filtering
+
+    this.loadPaginationData();
   }
 
   onPageChange = (pageIndex: number): void => {

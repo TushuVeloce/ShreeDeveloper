@@ -88,6 +88,14 @@ export class MarketingTypeMasterComponent implements OnInit {
     this.currentPage = pageIndex; // Update the current page
   }
 
+  // 🔑 Whenever filteredList event is received
+  onFilteredList(list: any[]) {
+    this.DisplayMasterList = list;
+    this.currentPage = 1;   // reset to first page after filtering
+
+    this.loadPaginationData();
+  }
+
   AddMarketingType = () => {
     if (this.companyRef() <= 0) {
       this.uiUtils.showWarningToster('Please select company');
