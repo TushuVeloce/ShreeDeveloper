@@ -171,16 +171,4 @@ export class RegistrarOfficeComponent implements OnInit {
   async AddRegistrarOffice() {
     this.router.navigate(['/homepage/Website/Registrar_Office_Details']);
   }
-
-  filterTable = () => {
-    if (this.SearchString != '') {
-      this.DisplayMasterList = this.MasterList.filter((data: any) => {
-        return data.p.CustomerName.toLowerCase().indexOf(this.SearchString.toLowerCase()) > -1
-      })
-    }
-    else {
-      this.DisplayMasterList = this.MasterList
-    }
-  }
-
 }

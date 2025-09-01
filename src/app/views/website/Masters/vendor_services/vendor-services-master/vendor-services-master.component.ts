@@ -106,15 +106,4 @@ export class VendorServicesMasterComponent implements OnInit {
     }
     this.router.navigate(['/homepage/Website/Vendor_Services_Master_Details']);
   }
-
-  filterTable = () => {
-    if (this.SearchString != '') {
-      this.DisplayMasterList = this.MasterList.filter((data: any) => {
-        return data.p.Name.toLowerCase().indexOf(this.SearchString.toLowerCase()) > -1
-      })
-    }
-    else {
-      this.DisplayMasterList = this.MasterList
-    }
-  }
 }

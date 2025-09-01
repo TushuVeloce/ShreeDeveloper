@@ -138,32 +138,4 @@ export class StockConsumeComponent implements OnInit {
     }
     this.router.navigate(['/homepage/Website/Stock_Consume_Details']);
   }
-
-  // filterTable = () => {
-  //   if (this.SearchString != '') {
-  //     this.DisplayMasterList = this.MasterList.filter((data: any) => {
-  //       return data.p.Name.toLowerCase().indexOf(this.SearchString.toLowerCase()) > -1
-  //     })
-  //   }
-  //   else {
-  //     this.DisplayMasterList = this.MasterList
-  //   }
-  // }
-
-  // filterFields: string[] = ['Code', 'Name', 'UnitName'];
-
-  // filterTable = () => {
-  //   const search = this.SearchString?.toLowerCase() || '';
-
-  //   if (search) {
-  //     this.DisplayMasterList = this.MasterList.filter((item: any) => {
-  //       return this.filterFields.some((field) => {
-  //         const value = item.p?.[field];
-  //         return value && value.toString().toLowerCase().includes(search);
-  //       });
-  //     });
-  //   } else {
-  //     this.DisplayMasterList = this.MasterList;
-  //   }
-  // }
 }

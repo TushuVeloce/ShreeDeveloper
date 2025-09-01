@@ -74,18 +74,4 @@ export class StateComponent implements OnInit {
   onPageChange = (pageIndex: number): void => {
     this.currentPage = pageIndex; // Update the current page
   }
-
-  filterTable = () => {
-    const searchTerm = this.SearchString?.trim().toLowerCase();
-
-    if (searchTerm) {
-      this.DisplayMasterList = this.MasterList.filter((data: any) => {
-        // Check if data.p and data.p.Name exist before accessing
-        return data?.p?.Name?.toLowerCase().includes(searchTerm);
-      });
-    } else {
-      // If no search string, reset to the full list
-      this.DisplayMasterList = [...this.MasterList];
-    }
-  };
 }

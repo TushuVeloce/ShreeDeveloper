@@ -148,15 +148,4 @@ export class SalarySlipApprovalComponent implements OnInit {
   onPageChange = (pageIndex: number): void => {
     this.currentPage = pageIndex; // Update the current page
   };
-
-  filterTable = () => {
-    if (this.SearchString != '') {
-      this.DisplayMasterList = this.MasterList.filter((data: any) => {
-        return data.p.Year.indexOf(this.SearchString) > -1
-      })
-    }
-    else {
-      this.DisplayMasterList = this.MasterList
-    }
-  }
 }

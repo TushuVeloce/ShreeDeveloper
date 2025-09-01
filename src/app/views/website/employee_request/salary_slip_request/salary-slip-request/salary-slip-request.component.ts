@@ -97,17 +97,6 @@ export class SalarySlipRequestComponent implements OnInit {
     this.currentPage = pageIndex; // Update the current page
   };
 
-  filterTable = () => {
-    if (this.SearchString != '') {
-      this.DisplayMasterList = this.MasterList.filter((data: any) => {
-        return data.p.Year.indexOf(this.SearchString) > -1
-      })
-    }
-    else {
-      this.DisplayMasterList = this.MasterList
-    }
-  }
-
   AddSalarySlipRequest = () => {
     if (this.companyRef() <= 0) {
       this.uiUtils.showWarningToster('Please select company');

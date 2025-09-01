@@ -150,16 +150,4 @@ export class RegisteredCustomerComponent implements OnInit {
   onPageChange = (pageIndex: number): void => {
     this.currentPage = pageIndex; // Update the current page
   };
-
-
-  filterTable = () => {
-    if (this.SearchString != '') {
-      this.DisplayMasterList = this.MasterList.filter((data: any) => {
-        return data.p.siteName.toLowerCase().indexOf(this.SearchString.toLowerCase()) > -1
-      })
-    }
-    else {
-      this.DisplayMasterList = this.MasterList
-    }
-  }
 }

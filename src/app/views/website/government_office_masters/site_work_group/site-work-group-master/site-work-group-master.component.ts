@@ -99,18 +99,5 @@ export class SiteWorkGroupMasterComponent implements OnInit {
     }
     this.router.navigate(['/homepage/Website/Site_Work_Group_Details']);
   }
-
-
-
-  filterTable = () => {
-    if (this.SearchString != '') {
-      this.DisplayMasterList = this.MasterList.filter((data: any) => {
-        return data.p.Name.toLowerCase().indexOf(this.SearchString.toLowerCase()) > -1
-      })
-    }
-    else {
-      this.DisplayMasterList = this.MasterList
-    }
-  }
 }
 

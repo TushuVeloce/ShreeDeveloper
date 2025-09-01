@@ -104,17 +104,6 @@ export class LeaveRequestComponent implements OnInit {
     this.currentPage = pageIndex; // Update the current page
   };
 
-  filterTable = () => {
-    if (this.SearchString != '') {
-      this.DisplayMasterList = this.MasterList.filter((data: any) => {
-        return data.p.LeaveRequestName.toLowerCase().indexOf(this.SearchString.toLowerCase()) > -1
-      })
-    }
-    else {
-      this.DisplayMasterList = this.MasterList
-    }
-  }
-
   AddLeaveRequest = () => {
     if (this.companyRef() <= 0) {
       this.uiUtils.showWarningToster('Please select company');

@@ -167,17 +167,6 @@ export class StockOrderComponent implements OnInit {
     this.appStateManage.StorageKey.setItem('Editable', 'Edit');
     this.router.navigate(['/homepage/Website/Order_Approval']);
   }
-
-  filterTable = () => {
-    if (this.SearchString != '') {
-      this.DisplayMasterList = this.MasterList.filter((data: any) => {
-        return data.p.Name.toLowerCase().indexOf(this.SearchString.toLowerCase()) > -1
-      })
-    }
-    else {
-      this.DisplayMasterList = this.MasterList
-    }
-  }
 }
 
 

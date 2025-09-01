@@ -105,17 +105,6 @@ export class BankAccountMasterComponent implements OnInit {
     this.router.navigate(['/homepage/Website/Bank_Account_Master_Details']);
   }
 
-  filterTable = () => {
-    if (this.SearchString != '') {
-      this.DisplayMasterList = this.MasterList.filter((data: any) => {
-        return data.p.Name.toLowerCase().indexOf(this.SearchString.toLowerCase()) > -1
-      })
-    }
-    else {
-      this.DisplayMasterList = this.MasterList
-    }
-  }
-
   // without using services date conersion into dd-mm-yyyy //
   // formatDate(dateValue: string | Date): string {
   //   if (!dateValue) return '';

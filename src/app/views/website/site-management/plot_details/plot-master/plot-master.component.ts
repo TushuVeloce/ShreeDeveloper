@@ -189,17 +189,6 @@ export class PlotMasterComponent implements OnInit {
     this.currentPage = pageIndex; // Update the current page
   };
 
-  filterTable = () => {
-    const searchTerm = this.SearchString?.trim().toLowerCase();
-    if (searchTerm) {
-      this.DisplayMasterList = this.MasterList.filter((data: any) => {
-        return data?.p?.Name?.toLowerCase().includes(searchTerm);
-      });
-    } else {
-      this.DisplayMasterList = [...this.MasterList];
-    }
-  };
-
   formatToFixed(value: number): string {
     if (value == null) return '0';
 

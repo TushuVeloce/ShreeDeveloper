@@ -19,8 +19,7 @@ export class CustomerEnquiryComponent implements OnInit {
   MasterList: CustomerEnquiry[] = [];
   DisplayMasterList: CustomerEnquiry[] = [];
   SearchString: string = '';
-  SelectedCustomerEnquiry: CustomerEnquiry =
-    CustomerEnquiry.CreateNewInstance();
+  SelectedCustomerEnquiry: CustomerEnquiry = CustomerEnquiry.CreateNewInstance();
   CustomerRef: number = 0;
   pageSize = 5; // Items per page
   currentPage = 1; // Initialize current page
@@ -34,7 +33,7 @@ export class CustomerEnquiryComponent implements OnInit {
     'Contact No',
     'City',
     'Pincode',
-    'Contact',
+    'Address',
     'Action',
   ];
 
@@ -120,6 +119,14 @@ export class CustomerEnquiryComponent implements OnInit {
     return this.DisplayMasterList.slice(start, start + this.pageSize);
   }
 
+  // 🔑 Whenever filteredList event is received
+  onFilteredList(list: any[]) {
+    this.DisplayMasterList = list;
+    this.currentPage = 1;   // reset to first page after filtering
+
+    this.loadPaginationData();
+  }
+
   onPageChange = (pageIndex: number): void => {
     this.currentPage = pageIndex; // Update the current page
   }
@@ -131,17 +138,4 @@ export class CustomerEnquiryComponent implements OnInit {
     }
     this.router.navigate(['/homepage/Website/Customer_Enquiry_Details']);
   }
-
-  filterTable = () => {
-    if (this.SearchString != '') {
-      this.DisplayMasterList = this.MasterList.filter((data: any) => {
-        return (
-          data.p.Name.toLowerCase().indexOf(this.SearchString.toLowerCase()) >
-          -1
-        );
-      });
-    } else {
-      this.DisplayMasterList = this.MasterList;
-    }
-  };
 }

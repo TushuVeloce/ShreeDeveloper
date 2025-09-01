@@ -261,17 +261,6 @@ export class AttendanceLogsComponent implements OnInit {
     this.currentPage = pageIndex; // Update the current page
   };
 
-  filterTable = () => {
-    if (this.SearchString != '') {
-      this.DisplayMasterList = this.MasterList.filter((data: any) => {
-        return data.p.EmployeeName.toLowerCase().indexOf(this.SearchString.toLowerCase()) > -1
-      })
-    }
-    else {
-      this.DisplayMasterList = this.MasterList
-    }
-  }
-
   onEditClicked = async (item: WebAttendaneLog) => {
     if (item.p.IsEntryNonEditable) {
       this.uiUtils.showWarningToster("This Record Can't be Editable");

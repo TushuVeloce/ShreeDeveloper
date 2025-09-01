@@ -142,17 +142,4 @@ export class SiteWorkMasterComponent implements OnInit {
     }
     this.router.navigate(['/homepage/Website/Site_Work_Master_Detail']);
   }
-
-  filterTable = () => {
-    if (this.SearchString != '') {
-      this.DisplayMasterList = this.MasterList.filter((data: any) => {
-        return (
-          data.p.Name.toLowerCase().indexOf(this.SearchString.toLowerCase()) >
-          -1
-        );
-      });
-    } else {
-      this.DisplayMasterList = this.MasterList;
-    }
-  };
 }
