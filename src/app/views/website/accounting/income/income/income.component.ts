@@ -121,6 +121,9 @@ export class IncomeComponent implements OnInit {
   }
 
   getPayerListBySiteAndPayerType = async () => {
+    this.Entity.p.PayerRef = 0;
+    this.PayerPlotNo = '';
+    this.PayerList = [];
     if (this.companyRef() <= 0) {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;

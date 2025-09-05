@@ -42,7 +42,7 @@
     <div class="chart-card">
       <div class="chart-header">
         <p>Income VS Expense <br>
-          {{this.TotalIncome}} VS {{this.TotalExpense}}</p>
+          <span style="font-size: 13px;">{{this.TotalIncome | currency : "INR"}} VS {{this.TotalExpense | currency : "INR"}}</span></p>
         <div style="width: 25%;">
           <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear id="BarSiteRef"
             name="BarSiteRef" [nzSize]="'large'" [(ngModel)]="BarSiteRef" (ngModelChange)="getIncomeExpenseGraphList()">
