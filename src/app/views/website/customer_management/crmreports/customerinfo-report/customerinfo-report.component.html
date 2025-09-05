@@ -65,7 +65,7 @@
           <td Class="tbldata">{{customer.p.GovernmentRecknor | currency : "INR"}}</td>
           <td Class="tbldata">{{customer.p.GovernmentValue | currency : "INR"}}</td>
           <td Class="tbldata">{{customer.p.ValueOfAgreement | currency : "INR"}}</td>
-          <td Class="tbldata">1</td>
+          <td Class="tbldata">1%</td>
           <td Class="tbldata">{{customer.p.RegistrationFees}}</td>
           <td Class="tbldata">{{customer.p.TaxValueInPercentage }}%</td>
           <td Class="tbldata">{{customer.p.StampDuties | currency : "INR"}}</td>
@@ -76,10 +76,66 @@
           <td Class="tbldata">{{customer.p.TotalChequeReceived | currency : "INR"}}</td>
           <td Class="tbldata">{{customer.p.TotalCashReceived | currency : "INR"}}</td>
           <td Class="tbldata">{{customer.p.TotalAmountReceived | currency : "INR"}}</td>
-
           <td Class="tbldata">{{customer.p.TotalChequeBalance | currency : "INR"}}</td>
           <td Class="tbldata">{{customer.p.TotalCashBalance | currency : "INR"}}</td>
           <td Class="tbldata">{{customer.p.TotalBalance | currency : "INR"}}</td>
+        </tr>
+        <tr>
+          <td class="tbldata"><b>Total Amount</b></td>
+          <td class="tbldata" colspan="11"></td>
+          <td class="tbldata">
+            <b>{{ getTotalAreaInSqm() }}</b>
+          </td>
+          <td class="tbldata">
+            <b>{{ getTotalAreaInSqft() }}</b>
+          </td>
+          <td class="tbldata" colspan="3"></td>
+          <td class="tbldata">
+            <b>{{ getTotalPlotAmount() | currency : "INR" }}</b>
+          </td>
+          <td class="tbldata"></td>
+          <td class="tbldata">
+            <b>{{ getTotalGovernmentValue() | currency : "INR" }}</b>
+          </td>
+          <td class="tbldata">
+            <b>{{ getTotalValueOfAgreement() | currency : "INR" }}</b>
+          </td>
+          <td class="tbldata"></td>
+          <td class="tbldata">
+            <b>{{ getTotalRegistrationFees() | currency : "INR" }}</b>
+          </td>
+          <td class="tbldata"></td>
+          <td class="tbldata">
+            <b>{{ getTotalStampDuties() | currency : "INR" }}</b>
+          </td>
+          <td class="tbldata"></td>
+          <td class="tbldata">
+            <b>{{ getTotalLegalCharges() | currency : "INR" }}</b>
+          </td>
+          <td class="tbldata">
+            <b>{{ getTotalExtraCharges() | currency : "INR" }}</b>
+          </td>
+          <td class="tbldata">
+            <b>{{ getTotalGrandTotal() | currency : "INR" }}</b>
+          </td>
+          <td Class="tbldata">
+            <b>{{getTotalChequeReceived() | currency : "INR"}}</b>
+          </td>
+          <td Class="tbldata">
+            <b>{{getTotalCashReceived() | currency : "INR"}}</b>
+          </td>
+          <td Class="tbldata">
+            <b>{{getTotalAmountReceived() | currency : "INR"}}</b>
+          </td>
+          <td Class="tbldata">
+            <b>{{getTotalChequeBalance() | currency : "INR"}}</b>
+          </td>
+          <td Class="tbldata">
+            <b>{{getTotalCashBalance() | currency : "INR"}}</b>
+          </td>
+          <td Class="tbldata">
+            <b>{{getTotalBalance() | currency : "INR"}}</b>
+          </td>
         </tr>
       </tbody>
     </nz-table>

@@ -97,6 +97,99 @@ export class CustomerinfoReportComponent implements OnInit {
     }
   }
 
+  getTotalAreaInSqm = () => {
+    return this.DisplayMasterList.reduce((total: number, item: any) => {
+      return total + Number(item.p?.AreaInSqm || 0);
+    }, 0).toFixed(2);
+  }
+
+  getTotalAreaInSqft = () => {
+    return this.DisplayMasterList.reduce((total: number, item: any) => {
+      return total + Number(item.p?.AreaInSqft || 0);
+    }, 0).toFixed(2);
+  }
+
+  getTotalPlotAmount = () => {
+    return this.DisplayMasterList.reduce((total: number, item: any) => {
+      return total + Number(item.p?.TotalPlotAmount || 0);
+    }, 0);
+  }
+
+  getTotalGovernmentValue = () => {
+    return this.DisplayMasterList.reduce((total: number, item: any) => {
+      return total + Number(item.p?.GovernmentValue || 0);
+    }, 0);
+  }
+
+  getTotalValueOfAgreement = () => {
+    return this.DisplayMasterList.reduce((total: number, item: any) => {
+      return total + Number(item.p?.ValueOfAgreement || 0);
+    }, 0);
+  }
+
+  getTotalRegistrationFees = () => {
+    return this.DisplayMasterList.reduce((total: number, item: any) => {
+      return total + Number(item.p?.RegistrationFees || 0);
+    }, 0);
+  }
+
+  getTotalStampDuties = () => {
+    return this.DisplayMasterList.reduce((total: number, item: any) => {
+      return total + Number(item.p?.StampDuties || 0);
+    }, 0);
+  }
+
+  getTotalLegalCharges = () => {
+    return this.DisplayMasterList.reduce((total: number, item: any) => {
+      return total + Number(item.p?.LegalCharges || 0);
+    }, 0);
+  }
+
+  getTotalExtraCharges = () => {
+    return this.DisplayMasterList.reduce((total: number, item: any) => {
+      return total + Number(item.p?.TotalExtraCharges || 0);
+    }, 0);
+  }
+
+  getTotalGrandTotal = () => {
+    return this.DisplayMasterList.reduce((total: number, item: any) => {
+      return total + Number(item.p?.GrandTotal || 0);
+    }, 0);
+  }
+
+  getTotalChequeReceived = () => {
+    return this.DisplayMasterList.reduce((total: number, item: any) => {
+      return total + Number(item.p?.TotalChequeReceived || 0);
+    }, 0);
+  }
+  getTotalCashReceived = () => {
+    return this.DisplayMasterList.reduce((total: number, item: any) => {
+      return total + Number(item.p?.TotalCashReceived || 0);
+    }, 0);
+  }
+  getTotalAmountReceived = () => {
+    return this.DisplayMasterList.reduce((total: number, item: any) => {
+      return total + Number(item.p?.TotalAmountReceived || 0);
+    }, 0);
+  }
+  getTotalChequeBalance = () => {
+    return this.DisplayMasterList.reduce((total: number, item: any) => {
+      return total + Number(item.p?.TotalChequeBalance || 0);
+    }, 0);
+  }
+
+  getTotalCashBalance = () => {
+    return this.DisplayMasterList.reduce((total: number, item: any) => {
+      return total + Number(item.p?.TotalCashBalance || 0);
+    }, 0);
+  }
+
+  getTotalBalance = () => {
+    return this.DisplayMasterList.reduce((total: number, item: any) => {
+      return total + Number(item.p?.TotalBalance || 0);
+    }, 0);
+  }
+
   printReport(): void {
     const printContents = document.getElementById('print-section')?.innerHTML;
     if (printContents) {
