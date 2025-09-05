@@ -23,7 +23,7 @@ export class RegistrarOfficeComponent implements OnInit {
   MasterList: RegistrarOffice[] = [];
   DisplayMasterList: RegistrarOffice[] = [];
   SiteList: Site[] = [];
-  CustomerList: CustomerFollowUp[] = [];
+  CustomerList: RegistrarOffice[] = [];
   PlotNoList: Plot[] = [];
   SearchString: string = '';
   SelectedRegistrarOffice: RegistrarOffice = RegistrarOffice.CreateNewInstance();
@@ -31,8 +31,10 @@ export class RegistrarOfficeComponent implements OnInit {
   currentPage = 1; // Initialize current page
   total = 0;
   BookingRemarks = BookingRemarks;
+  CustomerName = '';
+
   companyRef = this.companystatemanagement.SelectedCompanyRef;
-  headers: string[] = ['Sr.No.', 'Customer', 'Plot Name', 'Bank', 'Witness', 'Agreement to Sale', 'Sale Deed', 'Talathi', '7/12	', 'Spiral', 'Client Submit	', 'Action'];
+  headers: string[] = ['Sr.No.', 'Customer', 'Registration Person One', 'Registration Person Two', 'Plot Name', 'Bank', 'Witness', 'Agreement to Sale', 'Sale Deed', 'Talathi', '7/12	', 'Spiral', 'Client Submit	', 'Action'];
 
   constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private companystatemanagement: CompanyStateManagement, private screenSizeService: ScreenSizeService) {
     effect(() => {
@@ -99,6 +101,15 @@ export class RegistrarOfficeComponent implements OnInit {
     let lst = await RegistrarOffice.FetchEntireListBySiteAndPlotRef(this.Entity.p.SiteRef, this.Entity.p.PlotRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.MasterList = lst;
     this.DisplayMasterList = this.MasterList;
+    this.CustomerList = lst.filter(
+      (item, index, self) =>
+        index === self.findIndex(t => t.p.CustomerName === item.p.CustomerName)
+    );
+    this.loadPaginationData();
+  }
+
+  getRegistrarOfficeListByCustomer = () => {
+    this.DisplayMasterList = this.MasterList.filter((data) => data.p.CustomerName == this.CustomerName);
     this.loadPaginationData();
   }
 

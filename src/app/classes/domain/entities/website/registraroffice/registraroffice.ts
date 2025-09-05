@@ -23,6 +23,8 @@ export class RegistrarOfficeProps {
   public PlotRef: number = 0;
   public SiteRef: number = 0;
   public CustomerName: string = '';
+  public RegistrationNameofPersonOne: string = '';
+  public RegistrationNameofPersonTwo: string = '';
   public PlotName: string = '';
   public Name: string = '';
   public PhoneNumber: number = 0;

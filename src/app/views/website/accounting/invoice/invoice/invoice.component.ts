@@ -35,6 +35,7 @@ export class InvoiceComponent implements OnInit {
   pageSize = 10; // Items per page
   currentPage = 1; // Initialize current page
   total = 0;
+  Reason = '';
 
   companyRef = this.companystatemanagement.SelectedCompanyRef;
 
@@ -74,6 +75,9 @@ export class InvoiceComponent implements OnInit {
     this.SiteList = lst;
   }
 
+  filterByReason = () => {
+    this.DisplayMasterList = this.MasterList.filter((data) => data.p.Reason == this.Reason)
+  }
 
   getRecipientListByRecipientTypeRef = async () => {
     if (this.companyRef() <= 0) {
@@ -135,7 +139,10 @@ export class InvoiceComponent implements OnInit {
       this.Entity.p.Ref,
       this.companyRef(),
       async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-    // this.AllList = lst.filter((item)=>item.p.Reason != '');
+    this.AllList = lst.filter(
+      (item, index, self) =>
+        index === self.findIndex(t => t.p.Reason === item.p.Reason && item.p.Reason != '')
+    );;
     this.MasterList = lst;
     this.DisplayMasterList = this.MasterList;
     this.loadPaginationData();

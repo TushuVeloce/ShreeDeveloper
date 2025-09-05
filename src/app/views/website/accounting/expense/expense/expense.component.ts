@@ -44,6 +44,7 @@ export class ExpenseComponent implements OnInit {
   RemainingAmountOfGrandTotal: number = 0;
   StartDate = '';
   EndDate = '';
+  Reason = '';
 
   companyRef = this.companystatemanagement.SelectedCompanyRef;
 
@@ -150,7 +151,7 @@ export class ExpenseComponent implements OnInit {
   }
 
   filterByReason = () => {
-    this.DisplayMasterList = this.MasterList.filter((data) => data.p.Ref == this.Entity.p.Ref)
+    this.DisplayMasterList = this.MasterList.filter((data) => data.p.Reason == this.Reason);
   }
 
   FetchEntireListByFilters = async () => {

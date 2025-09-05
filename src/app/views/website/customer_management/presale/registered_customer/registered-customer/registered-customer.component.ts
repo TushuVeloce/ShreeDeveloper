@@ -37,6 +37,8 @@ export class RegisteredCustomerComponent implements OnInit {
     'Site Name',
     'Plot No',
     'Customer Name',
+    'Registration Person One',
+    'Registration Person Two',
     'Mobile No',
     'Address',
     'Action',
