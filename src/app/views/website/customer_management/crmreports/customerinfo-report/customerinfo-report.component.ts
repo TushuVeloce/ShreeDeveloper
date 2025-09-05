@@ -63,6 +63,8 @@ export class CustomerinfoReportComponent implements OnInit {
     }
     let lst = await CRMReports.FetchEntireListByCompanyAndSiteRef(this.companyRef(), this.SiteRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.DisplayMasterList = lst;
+    this.MasterList = lst;
+    this.loadPaginationData();
   }
 
   // For Pagination  start ----
@@ -70,7 +72,7 @@ export class CustomerinfoReportComponent implements OnInit {
     this.total = this.DisplayMasterList.length; // Update total based on loaded data
   };
 
-  paginatedList = () => {
+  paginatedList() {
     const start = (this.currentPage - 1) * this.pageSize;
     return this.DisplayMasterList.slice(start, start + this.pageSize);
   }

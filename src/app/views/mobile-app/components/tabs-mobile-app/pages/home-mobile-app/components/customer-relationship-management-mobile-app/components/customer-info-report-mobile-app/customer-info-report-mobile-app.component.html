@@ -54,9 +54,9 @@
               <td>{{ (item.p.LegalCharges | currency : "INR") || '-' }}</td>
               <td>{{ (item.p.TotalExtraCharges | currency : "INR") || '-' }}</td>
               <td>{{ (item.p.GrandTotal | currency : "INR") || '-' }}</td>
-              <td>{{ (item.p.TotalChequeRecieved | currency : "INR") || '-' }}</td>
-              <td>{{ (item.p.TotalCashRecieved | currency : "INR") || '-' }}</td>
-              <td>{{ (item.p.TotalAmountRecieved | currency : "INR") || '-' }}</td>
+              <td>{{ (item.p.TotalChequeReceived | currency : "INR") || '-' }}</td>
+              <td>{{ (item.p.TotalCashReceived | currency : "INR") || '-' }}</td>
+              <td>{{ (item.p.TotalAmountReceived | currency : "INR") || '-' }}</td>
 
               <td>{{ (item.p.TotalChequeBalance | currency : "INR") || '-' }}</td>
               <td>{{ (item.p.TotalCashBalance | currency : "INR") || '-' }}</td>
@@ -123,9 +123,9 @@
     { label: 'Legal Charges', value: SelectedCRMReports.p.LegalCharges | currency : 'INR' },
     { label: 'Total Extra Charges', value: SelectedCRMReports.p.TotalExtraCharges | currency : 'INR' },
     { label: 'Grand Total', value: SelectedCRMReports.p.GrandTotal | currency : 'INR' },
-    { label: 'Total Cheque Received', value: SelectedCRMReports.p.TotalChequeRecieved | currency : 'INR' },
-    { label: 'Total Cash Received', value: SelectedCRMReports.p.TotalCashRecieved | currency : 'INR' },
-    { label: 'Total Amount Received', value: SelectedCRMReports.p.TotalAmountRecieved | currency : 'INR' },
+    { label: 'Total Cheque Received', value: SelectedCRMReports.p.TotalChequeReceived | currency : 'INR' },
+    { label: 'Total Cash Received', value: SelectedCRMReports.p.TotalCashReceived | currency : 'INR' },
+    { label: 'Total Amount Received', value: SelectedCRMReports.p.TotalAmountReceived | currency : 'INR' },
     { label: 'Total Cheque Balance', value: SelectedCRMReports.p.TotalChequeBalance | currency : 'INR' },
     { label: 'Total Cash Balance', value: SelectedCRMReports.p.TotalCashBalance | currency : 'INR' },
     { label: 'Total Balance', value: SelectedCRMReports.p.TotalBalance | currency : 'INR' }
@@ -192,9 +192,9 @@
           <td class="tbldata">{{ item.p.GoodsServicesTax != null ? item.p.GoodsServicesTax + '%' : '-' }}</td>
           <td class="tbldata">{{ (item.p.TotalExtraCharges | currency : 'INR') || '-' }}</td>
           <td class="tbldata">{{ (item.p.LegalCharges | currency : 'INR') || '-' }}</td>
-          <td class="tbldata">{{ (item.p.TotalChequeRecieved | currency : 'INR') || '-' }}</td>
-          <td class="tbldata">{{ (item.p.TotalCashRecieved | currency : 'INR') || '-' }}</td>
-          <td class="tbldata">{{ (item.p.TotalAmountRecieved | currency : 'INR') || '-' }}</td>
+          <td class="tbldata">{{ (item.p.TotalChequeReceived | currency : 'INR') || '-' }}</td>
+          <td class="tbldata">{{ (item.p.TotalCashReceived | currency : 'INR') || '-' }}</td>
+          <td class="tbldata">{{ (item.p.TotalAmountReceived | currency : 'INR') || '-' }}</td>
           <td class="tbldata">{{ (item.p.TotalChequeBalance | currency : 'INR') || '-' }}</td>
           <td class="tbldata">{{ (item.p.TotalCashBalance | currency : 'INR') || '-' }}</td>
           <td class="tbldata">{{ (item.p.TotalBalance | currency : 'INR') || '-' }}</td>

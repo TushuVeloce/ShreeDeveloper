@@ -47,9 +47,9 @@ export class CRMReportsProps {
   public RegTaxValueInPercentage: number = 0;
   public GoodsServicesTax: number = 0;
   public GstToatalAmount: number = 0;
-  public TotalChequeRecieved: number = 0;
-  public TotalCashRecieved: number = 0;
-  public TotalAmountRecieved: number = 0;
+  public TotalChequeReceived: number = 0;
+  public TotalCashReceived: number = 0;
+  public TotalAmountReceived: number = 0;
   public TotalChequeBalance: number = 0;
   public TotalCashBalance: number = 0;
   public TotalBalance: number = 0;
@@ -212,7 +212,7 @@ export class CRMReports implements IPersistable<CRMReports> {
   public static async FetchEntireListByCompanyAndSiteRef(CompanyRef: number, SiteRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let req = new CRMReportsFetchRequest();
     req.CompanyRef = CompanyRef
-    if(SiteRef){
+    if (SiteRef) {
       req.SiteRef = SiteRef
     }
     let tdResponse = await CRMReports.FetchTransportData(req, errorHandler) as TransportData;

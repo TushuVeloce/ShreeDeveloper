@@ -9,7 +9,7 @@
   </ng-template>
   <div class="col-4 mb-2 search-container_light">
     <app-shared-filter [masterList]="MasterList"
-      [filterFields]="['CustomerName', 'CustomerAddress', 'ContactNos', 'PANNo', 'AdharNo', 'LeadSourceName', 'BookingRemarkName', 'PlotNo']"
+      [filterFields]="['CustID','CustomerName', 'CustomerAddress', 'ContactNos', 'PANNo', 'AdharNo', 'LeadSourceName', 'BookingRemarkName', 'PlotNo']"
       (filteredList)="onFilteredList($event)"></app-shared-filter>
   </div>
   <div class="col-4 mb-2 text-end" *ngIf="DisplayMasterList.length > 0">
@@ -17,7 +17,7 @@
       style="cursor: pointer; padding-top: 4px;" (click)="printReport()" />
   </div>
 </div>
-<div class="card-body m-3">
+<div class="card-body">
   <form autocomplete="off">
     <div class="row gy-3">
       <div class="col-md-4 col-6">
@@ -31,65 +31,73 @@
       </div>
     </div>
   </form>
-  <div class="tblcard_light" style="margin-top: 2rem;" *ngIf="DisplayMasterList.length > 0">
-    <div class="table-container">
-      <nz-table #basicTable nzSize="small" class="no-hover-table bgtable_light" [nzData]="paginatedList()"
-        [nzScroll]="{x:'auto' }" nzFrontPagination="false" [nzShowSizeChanger]="false">
-        <thead>
-          <tr>
-            <th *ngFor="let header of headers" class="tblheader">{{ header }}</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let material of paginatedList(); index as i">
-            <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
-            <td Class="tbldata">{{material.p.CustID ? material.p.CustID : '--'}}</td>
-            <td Class="tbldata">{{material.p.CustomerName}}</td>
-            <td Class="tbldata">{{material.p.CustomerAddress}}</td>
-            <td Class="tbldata">{{material.p.ContactNos}}</td>
-            <td Class="tbldata">{{material.p.PANNo ? material.p.PANNo : '--'}}</td>
-            <td Class="tbldata">{{material.p.AdharNo ? material.p.AdharNo : '--'}}</td>
-            <td Class="tbldata">{{material.p.LeadSourceName}}</td>
-            <td Class="tbldata">{{material.p.LeadHandleByName}}</td>
-            <td Class="tbldata">{{material.p.BrokerName ? material.p.BrokerName : '--'}}</td>
-            <td Class="tbldata">{{material.p.RegisterCustomerBookingRemarkName ?
-              material.p.RegisterCustomerBookingRemarkName : '--'}}</td>
-            <td Class="tbldata">{{material.p.PlotNo}}</td>
-            <td Class="tbldata">{{material.p.AreaInSqm}}</td>
-            <td Class="tbldata">{{material.p.AreaInSqft}}</td>
-            <td Class="tbldata">{{material.p.BasicRate | currency : "INR"}}</td>
-            <td Class="tbldata">{{material.p.DiscountedRateOnArea | currency : "INR"}}</td>
-            <td Class="tbldata">{{material.p.DiscountOnTotalPlotAmount | currency : "INR"}}</td>
-            <td Class="tbldata">{{material.p.TotalPlotAmount | currency : "INR"}}</td>
-            <td Class="tbldata">{{material.p.GovernmentRecknor | currency : "INR"}}</td>
-            <td Class="tbldata">{{material.p.GovernmentValue | currency : "INR"}}</td>
-            <td Class="tbldata">{{material.p.ValueOfAgreement | currency : "INR"}}</td>
-            <td Class="tbldata">1</td>
-            <td Class="tbldata">{{material.p.RegistrationFees}}</td>
-            <td Class="tbldata">{{material.p.TaxValueInPercentage }}%</td>
-            <td Class="tbldata">{{material.p.StampDuties | currency : "INR"}}</td>
-            <td Class="tbldata">{{material.p.GoodsServicesTax }}%</td>
-            <td Class="tbldata">{{material.p.LegalCharges | currency : "INR"}}</td>
-            <td Class="tbldata">{{material.p.TotalExtraCharges | currency : "INR"}}</td>
-            <td Class="tbldata">{{material.p.GrandTotal | currency : "INR"}}</td>
-            <td Class="tbldata">{{material.p.TotalChequeRecieved | currency : "INR"}}</td>
-            <td Class="tbldata">{{material.p.TotalCashRecieved | currency : "INR"}}</td>
-            <td Class="tbldata">{{material.p.TotalAmountRecieved | currency : "INR"}}</td>
 
-            <td Class="tbldata">{{material.p.TotalChequeBalance | currency : "INR"}}</td>
-            <td Class="tbldata">{{material.p.TotalCashBalance | currency : "INR"}}</td>
-            <td Class="tbldata">{{material.p.TotalBalance | currency : "INR"}}</td>
-          </tr>
-        </tbody>
-      </nz-table>
-    </div>
-    <Pagination [pageSize]="pageSize" [total]="total" [(currentPage)]="currentPage"
-      (pageChange)="onPageChange($event)" />
+  <div class="table-wrapper" class="tblcard_light" *ngIf="DisplayMasterList.length > 0">
+    <nz-table #basicTable nzSize="small" class="no-hover-table bgtable_light" [nzScroll]="{x:'auto' }"
+      nzFrontPagination="false" [nzShowSizeChanger]="false" [nzData]="paginatedList()"
+      (nzPageIndexChange)="onPageChange($event)">
+      <thead>
+        <tr>
+          <th *ngFor="let header of headers" class="tblheader">{{ header }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let customer of paginatedList(); index as i">
+          <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
+          <td Class="tbldata">{{customer.p.CustID ? customer.p.CustID : '--'}}</td>
+          <td Class="tbldata">{{customer.p.CustomerName}}</td>
+          <td Class="tbldata">{{customer.p.CustomerAddress}}</td>
+          <td Class="tbldata">{{customer.p.ContactNos}}</td>
+          <td Class="tbldata">{{customer.p.PANNo ? customer.p.PANNo : '--'}}</td>
+          <td Class="tbldata">{{customer.p.AdharNo ? customer.p.AdharNo : '--'}}</td>
+          <td Class="tbldata">{{customer.p.LeadSourceName}}</td>
+          <td Class="tbldata">{{customer.p.LeadHandleByName}}</td>
+          <td Class="tbldata">{{customer.p.BrokerName ? customer.p.BrokerName : '--'}}</td>
+          <td Class="tbldata">{{customer.p.RegisterCustomerBookingRemarkName ?
+            customer.p.RegisterCustomerBookingRemarkName : '--'}}</td>
+          <td Class="tbldata">{{customer.p.PlotNo}}</td>
+          <td Class="tbldata">{{customer.p.AreaInSqm}}</td>
+          <td Class="tbldata">{{customer.p.AreaInSqft}}</td>
+          <td Class="tbldata">{{customer.p.BasicRate | currency : "INR"}}</td>
+          <td Class="tbldata">{{customer.p.DiscountedRateOnArea | currency : "INR"}}</td>
+          <td Class="tbldata">{{customer.p.DiscountOnTotalPlotAmount | currency : "INR"}}</td>
+          <td Class="tbldata">{{customer.p.TotalPlotAmount | currency : "INR"}}</td>
+          <td Class="tbldata">{{customer.p.GovernmentRecknor | currency : "INR"}}</td>
+          <td Class="tbldata">{{customer.p.GovernmentValue | currency : "INR"}}</td>
+          <td Class="tbldata">{{customer.p.ValueOfAgreement | currency : "INR"}}</td>
+          <td Class="tbldata">1</td>
+          <td Class="tbldata">{{customer.p.RegistrationFees}}</td>
+          <td Class="tbldata">{{customer.p.TaxValueInPercentage }}%</td>
+          <td Class="tbldata">{{customer.p.StampDuties | currency : "INR"}}</td>
+          <td Class="tbldata">{{customer.p.GoodsServicesTax }}%</td>
+          <td Class="tbldata">{{customer.p.LegalCharges | currency : "INR"}}</td>
+          <td Class="tbldata">{{customer.p.TotalExtraCharges | currency : "INR"}}</td>
+          <td Class="tbldata">{{customer.p.GrandTotal | currency : "INR"}}</td>
+          <td Class="tbldata">{{customer.p.TotalChequeReceived | currency : "INR"}}</td>
+          <td Class="tbldata">{{customer.p.TotalCashReceived | currency : "INR"}}</td>
+          <td Class="tbldata">{{customer.p.TotalAmountReceived | currency : "INR"}}</td>
+
+          <td Class="tbldata">{{customer.p.TotalChequeBalance | currency : "INR"}}</td>
+          <td Class="tbldata">{{customer.p.TotalCashBalance | currency : "INR"}}</td>
+          <td Class="tbldata">{{customer.p.TotalBalance | currency : "INR"}}</td>
+        </tr>
+      </tbody>
+    </nz-table>
   </div>
-
+  <div class="fixed-pagination">
+    <nz-pagination class="try light-theme" [nzPageSize]="pageSize" [nzTotal]="total" [(nzPageIndex)]="currentPage"
+      (nzPageIndexChange)="onPageChange($event)" [nzShowSizeChanger]="false" [nzResponsive]="true">
+    </nz-pagination>
+  </div>
   <div *ngIf="DisplayMasterList.length === 0">
-    <Data-Not-Found />
+    <div style="height: 200px;" class="d-flex align-items-center justify-content-center">
+      <span Class="title_light"> Data Not Found</span>
+    </div>
   </div>
+
+
+
+
 
   <!-- Print Section with automatic page breaks -->
   <div id="print-section" style="display: none;" #PrintContainer>
@@ -133,9 +141,9 @@
           <td class="tbldata">{{ item.p.GoodsServicesTax != null ? item.p.GoodsServicesTax + '%' : '-' }}</td>
           <td class="tbldata">{{ (item.p.TotalExtraCharges | currency : 'INR') || '-' }}</td>
           <td class="tbldata">{{ (item.p.LegalCharges | currency : 'INR') || '-' }}</td>
-          <td class="tbldata">{{ (item.p.TotalChequeRecieved | currency : 'INR') || '-' }}</td>
-          <td class="tbldata">{{ (item.p.TotalCashRecieved | currency : 'INR') || '-' }}</td>
-          <td class="tbldata">{{ (item.p.TotalAmountRecieved | currency : 'INR') || '-' }}</td>
+          <td class="tbldata">{{ (item.p.TotalChequeReceived | currency : 'INR') || '-' }}</td>
+          <td class="tbldata">{{ (item.p.TotalCashReceived | currency : 'INR') || '-' }}</td>
+          <td class="tbldata">{{ (item.p.TotalAmountReceived | currency : 'INR') || '-' }}</td>
           <td class="tbldata">{{ (item.p.TotalChequeBalance | currency : 'INR') || '-' }}</td>
           <td class="tbldata">{{ (item.p.TotalCashBalance | currency : 'INR') || '-' }}</td>
           <td class="tbldata">{{ (item.p.TotalBalance | currency : 'INR') || '-' }}</td>
