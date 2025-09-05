@@ -1,6 +1,6 @@
 import { Component, effect, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { AccountingReports, DomainEnums, OpeningBalanceModeOfPayments, PayerTypes } from 'src/app/classes/domain/domainenums/domainenums';
+import { AccountingReports, DomainEnums, ModeOfPayments, OpeningBalanceModeOfPayments, PayerTypes } from 'src/app/classes/domain/domainenums/domainenums';
 import { AccountingReport } from 'src/app/classes/domain/entities/website/accounting/accountingreport/accoiuntingreport';
 import { Invoice } from 'src/app/classes/domain/entities/website/accounting/billing/invoice';
 import { Expense } from 'src/app/classes/domain/entities/website/accounting/expense/expense';
@@ -41,6 +41,8 @@ export class AccountingReportComponent implements OnInit {
   LedgerList: Ledger[] = [];
   SubLedgerList: SubLedger[] = [];
   RecipientList: Invoice[] = [];
+  ModeOfPayments = ModeOfPayments;
+  BankList: OpeningBalance[] = [];
   ModeofPaymentList = DomainEnums.ModeOfPaymentsList();
   RecipientTypesList = DomainEnums.RecipientTypesList();
 
@@ -66,6 +68,7 @@ export class AccountingReportComponent implements OnInit {
       await this.getSiteListByCompanyRef();
       await this.getEntireListByFilters();
       await this.getLedgerListByCompanyRef();
+      await this.FormulateBankList();
     });
   }
 
@@ -86,6 +89,15 @@ export class AccountingReportComponent implements OnInit {
     let lst = await Site.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.SiteList = lst;
   }
+
+  public FormulateBankList = async () => {
+    if (this.companyRef() <= 0) {
+      await this.uiUtils.showErrorToster('Company not Selected');
+      return;
+    }
+    let lst = await OpeningBalance.FetchEntireListByCompanyRef(this.companyRef(), async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg));
+    this.BankList = lst.filter((item) => item.p.BankAccountRef > 0 && (item.p.OpeningBalanceAmount > 0 || item.p.InitialBalance > 0));
+  };
 
   getLedgerListByCompanyRef = async () => {
     if (this.companyRef() <= 0) {
@@ -158,6 +170,7 @@ export class AccountingReportComponent implements OnInit {
       this.Entity.p.SubLedgerRef,
       this.Entity.p.RecipientRef,
       this.Entity.p.PayerRef,
+      this.Entity.p.BankAccountRef,
       async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.MasterList = lst;
     this.DisplayMasterList = this.MasterList;

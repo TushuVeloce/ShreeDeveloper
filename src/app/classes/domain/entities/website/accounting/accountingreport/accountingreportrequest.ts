@@ -18,6 +18,7 @@ export class AccountingReportFetchRequest {
   RecipientRef: number = 0;
   PayerRef: number = 0;
   ModeOfPayments: number = 0;
+  BankAccountRef: number = 0;
 
   public MergeIntoTransportData = (td: TransportData) => {
     let coll = DataContainerService.GetInstance().GetOrCreateCollection(td.MainData, AccountingReportFetchRequest.FetchRequestType) as DataCollection;

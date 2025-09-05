@@ -29,6 +29,7 @@ export class AccountingReportProps {
   public ShreesBalance: number = 0
   public ModeOfPayment: number = 0
   public ModeOfPaymentName: string = ''
+  public BankAccountRef: number = 0
   public Narration: string = ''
   public StartDate: string = ''
   public EndDate: string = ''
@@ -193,7 +194,7 @@ export class AccountingReport implements IPersistable<AccountingReport> {
     return AccountingReport.ListFromTransportData(tdResponse);
   }
 
-  public static async FetchEntireListByFilters(StartDate: string, EndDate: string, accountingreport: number, SiteRef: number, ModeOfPayment: number, CompanyRef: number, LedgerRef: number, SubLedgerRef: number, RecipientRef: number, PayerRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+  public static async FetchEntireListByFilters(StartDate: string, EndDate: string, accountingreport: number, SiteRef: number, ModeOfPayment: number, CompanyRef: number, LedgerRef: number, SubLedgerRef: number, RecipientRef: number, PayerRef: number, BankAccountRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let req = new AccountingReportFetchRequest();
     req.CompanyRef = CompanyRef;
     if (StartDate) {
@@ -222,6 +223,9 @@ export class AccountingReport implements IPersistable<AccountingReport> {
     }
     if (PayerRef) {
       req.PayerRef = PayerRef;
+    }
+    if (BankAccountRef) {
+      req.BankAccountRef = BankAccountRef;
     }
 
     let tdResponse = await AccountingReport.FetchTransportData(req, errorHandler) as TransportData;

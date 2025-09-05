@@ -49,6 +49,18 @@
       <nz-option *ngFor="let mode of ModeofPaymentList" [nzValue]="mode.Ref" [nzLabel]="mode.Name"></nz-option>
     </nz-select>
   </div>
+  <div class="col"
+    *ngIf="Entity.p.ModeOfPayment == ModeOfPayments.Cheque || Entity.p.ModeOfPayment == ModeOfPayments.RTGS || Entity.p.ModeOfPayment == ModeOfPayments.GpayPhonePay">
+    <div>
+      <label><b>Bank Name</b></label>
+      <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear nzPlaceHolder="Select"
+        id="BankAccountRef" name="BankAccountRef" [nzSize]="'large'" [(ngModel)]="Entity.p.BankAccountRef"
+        (ngModelChange)="getEntireListByFilters()">
+        <nz-option *ngFor="let bank of BankList" [nzValue]="bank.p.BankAccountRef"
+          [nzLabel]="bank.p.BankName"></nz-option>
+      </nz-select>
+    </div>
+  </div>
   <div class="col-lg-2 col-md-3 col-6 g-1">
     <label><b>Accounting Report</b></label>
     <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="AccountingReport"
