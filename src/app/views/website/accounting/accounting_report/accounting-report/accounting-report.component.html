@@ -46,11 +46,11 @@
     <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear nzPlaceHolder="Select"
       id="ModeOfPayment" name="ModeOfPayment" [nzSize]="'large'" [(ngModel)]="Entity.p.ModeOfPayment"
       (ngModelChange)="getEntireListByFilters()">
-      <nz-option *ngFor="let mode of ModeofPaymentList" [nzValue]="mode.Ref" [nzLabel]="mode.Name"></nz-option>
+      <nz-option [nzValue]="ModeOfPayments.Cash" [nzLabel]="'Cash'"></nz-option>
+      <nz-option [nzValue]="ModeOfPayments.Cheque" [nzLabel]="'Bank'"></nz-option>
     </nz-select>
   </div>
-  <div class="col"
-    *ngIf="Entity.p.ModeOfPayment == ModeOfPayments.Cheque || Entity.p.ModeOfPayment == ModeOfPayments.RTGS || Entity.p.ModeOfPayment == ModeOfPayments.GpayPhonePay">
+  <div class="col" *ngIf="Entity.p.ModeOfPayment == ModeOfPayments.Cheque">
     <div>
       <label><b>Bank Name</b></label>
       <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear nzPlaceHolder="Select"

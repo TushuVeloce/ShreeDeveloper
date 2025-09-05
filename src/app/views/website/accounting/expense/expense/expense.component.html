@@ -67,11 +67,12 @@
       id="ExpenseModeOfPayment" name="ExpenseModeOfPayment" [nzSize]="'large'"
       [(ngModel)]="Entity.p.ExpenseModeOfPayment"
       (ngModelChange)="Entity.p.BankAccountRef = 0; FetchEntireListByFilters(); ClearRef();">
-      <nz-option *ngFor="let mode of ModeofPaymentList" [nzValue]="mode.Ref" [nzLabel]="mode.Name"></nz-option>
+      <nz-option [nzValue]="ModeOfPayments.Cash" [nzLabel]="'Cash'"></nz-option>
+      <nz-option [nzValue]="ModeOfPayments.Cheque" [nzLabel]="'Bank'"></nz-option>
     </nz-select>
   </div>
   <div class="col"
-    *ngIf="Entity.p.ExpenseModeOfPayment == ModeOfPayments.Cheque || Entity.p.ExpenseModeOfPayment == ModeOfPayments.RTGS || Entity.p.ExpenseModeOfPayment == ModeOfPayments.GpayPhonePay">
+    *ngIf="Entity.p.ExpenseModeOfPayment == ModeOfPayments.Cheque">
     <div>
       <label><b>Bank Name</b></label>
       <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear nzPlaceHolder="Select"
