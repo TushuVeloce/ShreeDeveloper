@@ -34,6 +34,9 @@ export class AllAttendanceMobileAppComponent implements OnInit, OnDestroy {
   private CompanyName: string = '';
   public PresentCount: number = 0;
   public AbsentCount: number = 0;
+  public isAdmin: boolean = false;
+  employeeRef: number = 0;
+
 
   readonly leaveTypeEnum = LeaveRequestType;
   readonly DEFAULT_LOCALE = 'en-US';
@@ -65,20 +68,20 @@ export class AllAttendanceMobileAppComponent implements OnInit, OnDestroy {
     await this.loadAttendanceDetailsIfEmployeeExists();
     (event.target as HTMLIonRefresherElement).complete();
   }
-
   async loadAttendanceDetailsIfEmployeeExists(): Promise<void> {
     try {
       await this.loadingService.show();
 
-      const employeeRef = Number(this.appStateManagement.localStorage.getItem('LoginEmployeeRef'));
+      this.employeeRef = Number(this.appStateManagement.localStorage.getItem('LoginEmployeeRef'));
       this.companyRef = Number(this.appStateManagement.localStorage.getItem('SelectedCompanyRef'));
       this.CompanyRef = this.companyRef;
       this.CompanyName = this.companystatemanagement.getCurrentCompanyName();
-      this.attendanceLogFilter.p.EmployeeRef = employeeRef;
+       this.isAdmin =(await this.appStateManagement.localStorage.getItem('IsDefaultUser')) ==='1';
+      this.attendanceLogFilter.p.EmployeeRef = this.employeeRef;
 
       await this.getFinancialYearListByCompanyRef();
 
-      if (employeeRef > 0) {
+      if (this.employeeRef > 0) {
         this.months = DomainEnums.MonthList();
         await this.fetchAttendanceByMonth(new Date().getMonth()+1);
       } else {

@@ -3,8 +3,25 @@
   <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
-  <div class="top-card" [class.disabled]="disableTopCard">
+  <div class="top-card">
     <h2>Today, {{ currentDateTime ? formatDate(currentDateTime) : '--' }}</h2>
+          <!-- 👇 Show Employee Dropdown only if Admin -->
+      <ion-select
+        *ngIf="isAdmin"
+        class="Employee-select"
+        mode="ios"
+        interface="popover"
+        placeholder="Select Employee"
+        [(ngModel)]="selectedEmployee"
+        (ionChange)="onEmployeeChange()"
+      >
+        <ion-select-option
+          *ngFor="let Employee of EmployeeList"
+          [value]="Employee.p.Ref"
+        >
+          {{ Employee.p.Name }}
+        </ion-select-option>
+      </ion-select>
     <div class="btn-group">
       <div>
         <p class="label">Check In</p>
