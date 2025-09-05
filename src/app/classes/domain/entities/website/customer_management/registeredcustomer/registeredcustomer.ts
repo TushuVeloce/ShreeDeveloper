@@ -43,6 +43,8 @@ export class RegisteredCustomerProps {
   public UpdatedDate: string = '';
   public PANNo: string = '';
   public AdharNo: string = '';
+  public RegistrationNameofPersonOne: string = '';
+  public RegistrationNameofPersonTwo: string = '';
   public CustID: string = '';
   public RegisterCustomerBookingRemark: number = 0;
 

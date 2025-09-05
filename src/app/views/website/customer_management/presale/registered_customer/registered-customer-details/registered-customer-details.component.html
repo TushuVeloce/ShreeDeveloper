@@ -21,7 +21,8 @@
         <div class="col-md-4 col-6">
           <label>Customer Id</label>
           <input type="text" [(ngModel)]="Entity.p.CustID" name="CustID" class="form-control" id="CustID"
-            placeholder="Enter Customer Id" disabled #CusIdCtrl="ngModel" required (blur)="CusIdCtrl.control.markAsTouched()" />
+            placeholder="Enter Customer Id" disabled #CusIdCtrl="ngModel" required
+            (blur)="CusIdCtrl.control.markAsTouched()" />
           <div *ngIf="(CusIdCtrl.invalid && (CusIdCtrl.touched || CusIdCtrl.dirty))">
             <span class="validation-text" *ngIf="CusIdCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
           </div>
@@ -149,17 +150,19 @@
         <div class="col-md-4">
           <div>
             <label>Discounted Rate On Area </label>
-            <input type="text" appCommaFormat name="DiscountedRateOnArea" class="form-control" id="DiscountedRateOnArea "
-              [(ngModel)]="Entity.p.DiscountedRateOnArea" (ngModelChange)="calculateTotalPlotAmount()"
-              placeholder="Enter Discounted Rate" (click)="selectAllValue($event)" />
+            <input type="text" appCommaFormat name="DiscountedRateOnArea" class="form-control"
+              id="DiscountedRateOnArea " [(ngModel)]="Entity.p.DiscountedRateOnArea"
+              (ngModelChange)="calculateTotalPlotAmount()" placeholder="Enter Discounted Rate"
+              (click)="selectAllValue($event)" />
           </div>
         </div>
         <div class="col-md-4">
           <div>
             <label>Discount On Total Plot Amount </label>
-            <input type="text" appCommaFormat name="DiscountOnTotalPlotAmount" class="form-control" id="DiscountOnTotalPlotAmount "
-              [(ngModel)]="Entity.p.DiscountOnTotalPlotAmount" (ngModelChange)="calculateTotalPlotAmount()" required
-              placeholder="Enter Discount On Total Plot Amount" (click)="selectAllValue($event)" />
+            <input type="text" appCommaFormat name="DiscountOnTotalPlotAmount" class="form-control"
+              id="DiscountOnTotalPlotAmount " [(ngModel)]="Entity.p.DiscountOnTotalPlotAmount"
+              (ngModelChange)="calculateTotalPlotAmount()" required placeholder="Enter Discount On Total Plot Amount"
+              (click)="selectAllValue($event)" />
           </div>
         </div>
       </div>
@@ -194,13 +197,29 @@
         </div>
         <div class="col-md-4">
           <div>
+            <label>Registration Name of Person 1</label>
+            <input type="text" name="RegistrationNameofPersonOne" class="form-control" id="RegistrationNameofPersonOne"
+              [(ngModel)]="Entity.p.RegistrationNameofPersonOne" required
+              placeholder="Enter Registration Name of Person 1" />
+          </div>
+        </div>
+      </div>
+      <div class="row" style="margin-top: 1rem;">
+        <div class="col-md-4">
+          <div>
+            <label>Registration Name of Person 2</label>
+            <input type="text" name="RegistrationNameofPersonTwo" class="form-control" id="RegistrationNameofPersonTwo"
+              [(ngModel)]="Entity.p.RegistrationNameofPersonTwo" required
+              placeholder="Enter Registration Name of Person 1" />
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div>
             <label>Government Recknor</label>
             <input type="text" appCommaFormat name="GovermentRatePerSqm" class="form-control" id="GovermentRatePerSqm"
               [(ngModel)]="Entity.p.GovermentRatePerSqm" disabled placeholder="Enter Government Recknor" />
           </div>
         </div>
-      </div>
-      <div class="row" style="margin-top: 1rem;">
         <div class="col-md-4">
           <div>
             <label>Government Value</label>
@@ -208,6 +227,8 @@
               [(ngModel)]="Entity.p.GovernmentValue" disabled placeholder="Enter Government Value" />
           </div>
         </div>
+      </div>
+      <div class="row" style="margin-top: 1rem;">
         <div class="col-md-4">
           <div>
             <label>Value of Agreement</label>
@@ -223,8 +244,6 @@
               [(ngModel)]="Entity.p.TaxValueInPercentage" disabled placeholder="Enter Tax Value In %" />
           </div>
         </div>
-      </div>
-      <div class="row" style="margin-top: 1rem;">
         <div class="col-md-4">
           <div>
             <label>Stamp Duties</label>
@@ -232,6 +251,8 @@
               [(ngModel)]="Entity.p.StampDuties" disabled placeholder="Enter Stamp Duties" />
           </div>
         </div>
+      </div>
+      <div class="row" style="margin-top: 1rem;">
         <div class="col-md-4">
           <div>
             <label>Reg. Tax Values in %</label>
@@ -246,8 +267,6 @@
               [(ngModel)]="Entity.p.RegistrationFees" disabled placeholder="Enter Registration Fees" />
           </div>
         </div>
-      </div>
-      <div class="row" style="margin-top: 1rem;">
         <div class="col-md-4">
           <div>
             <label>Goods & Services Tax (GST)</label>
@@ -259,6 +278,8 @@
             </nz-select>
           </div>
         </div>
+      </div>
+      <div class="row" style="margin-top: 1rem;">
         <div class="col-md-4">
           <div>
             <label>Gst Total Amount </label>
@@ -274,8 +295,6 @@
               placeholder="Enter Legal Charges" (click)="selectAllValue($event)" />
           </div>
         </div>
-      </div>
-      <div class="row" style="margin-top: 1rem;">
         <div class="col-md-4">
           <div>
             <label>Total Extra Charges</label>
@@ -283,6 +302,8 @@
               [(ngModel)]="Entity.p.TotalExtraCharges" required placeholder="Enter Total Extra Charges" disabled />
           </div>
         </div>
+      </div>
+      <div class="row" style="margin-top: 1rem;">
         <div class="col-md-4">
           <div>
             <label>Grand Total</label>
