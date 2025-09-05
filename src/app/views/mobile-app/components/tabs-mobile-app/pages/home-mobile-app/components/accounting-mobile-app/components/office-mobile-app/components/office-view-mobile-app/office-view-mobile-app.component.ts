@@ -313,7 +313,7 @@ export class OfficeViewMobileAppComponent implements OnInit {
       (m.p.Narration && m.p.Narration != '') ? (m.p.Narration) : '--'
     ]);
 
-    await this.pdfService.generatePdfAndHandleAction(null, 'Office-Report.pdf', { headers, data },false,'l',[6,7],'Office Report');
+    await this.pdfService.generatePdfAndHandleAction(null, 'Office-Report.pdf', { headers, data }, false, 'l', [6, 7], 'Office Report');
   }
 
 
@@ -363,7 +363,9 @@ export class OfficeViewMobileAppComponent implements OnInit {
       this.Entity.p.LedgerRef,
       this.Entity.p.SubLedgerRef,
       this.Entity.p.RecipientRef,
-      this.Entity.p.PayerRef, async errMsg => {
+      this.Entity.p.PayerRef,
+      this.Entity.p.BankAccountRef,
+      async errMsg => {
         await this.toastService.present('Error' + errMsg, 1000, 'danger');
         await this.haptic.error();
       });
@@ -405,7 +407,9 @@ export class OfficeViewMobileAppComponent implements OnInit {
       this.Entity.p.LedgerRef,
       this.Entity.p.SubLedgerRef,
       this.Entity.p.RecipientRef,
-      this.Entity.p.PayerRef, async errMsg => {
+      this.Entity.p.PayerRef,
+      this.Entity.p.BankAccountRef,
+      async errMsg => {
         await this.toastService.present('Error' + errMsg, 1000, 'danger');
         await this.haptic.error();
       });
