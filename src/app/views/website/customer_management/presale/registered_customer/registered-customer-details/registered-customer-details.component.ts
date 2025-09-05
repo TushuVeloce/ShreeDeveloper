@@ -131,14 +131,25 @@ export class RegisteredCustomerDetailsComponent implements OnInit {
     //   this.calculateRegistrationFees()
     //   return;
     // }
-    this.Entity.p.StampDuties = Math.floor(ValueOfAgreement * (TaxValueInPercentage / 100) * 100) / 100;
+    if (ValueOfAgreement > GovernmentValue) {
+      this.Entity.p.StampDuties = Math.floor(ValueOfAgreement * (TaxValueInPercentage / 100) * 100) / 100;
+    } else {
+      this.Entity.p.StampDuties = Math.floor(GovernmentValue * (TaxValueInPercentage / 100) * 100) / 100;
+    }
     this.calculateRegistrationFees()
   }
 
   calculateRegistrationFees = () => {
+    let RegistrationFees = 0;
+    const GovernmentValue = Number(this.Entity.p.GovernmentValue);
     const ValueOfAgreement = Number(this.Entity.p.ValueOfAgreement);
     const RegTaxValuesInPercentage = Number(this.Entity.p.RegTaxValuesInPercentage);
-    const RegistrationFees = Math.ceil(ValueOfAgreement * (RegTaxValuesInPercentage / 100));
+
+    if (ValueOfAgreement > GovernmentValue) {
+      RegistrationFees = Math.ceil(ValueOfAgreement * (RegTaxValuesInPercentage / 100));
+    } else {
+      RegistrationFees = Math.ceil(GovernmentValue * (RegTaxValuesInPercentage / 100));
+    }
 
     if (RegistrationFees > 30000) {
       this.Entity.p.RegistrationFees = 30000
@@ -152,7 +163,15 @@ export class RegisteredCustomerDetailsComponent implements OnInit {
     const LegalCharges = Number(this.Entity.p.LegalCharges);
     const StampDuties = Number(this.Entity.p.StampDuties);
     const RegistrationFees = Number(this.Entity.p.RegistrationFees);
-    const GSTonValueofAgreement = (Number(this.Entity.p.GoodsServicesTax) / 100) * Number(this.Entity.p.ValueOfAgreement);
+
+    const GovernmentValue = Number(this.Entity.p.GovernmentValue);
+    const ValueOfAgreement = Number(this.Entity.p.ValueOfAgreement);
+    let GSTonValueofAgreement = 0;
+    if (ValueOfAgreement > GovernmentValue) {
+      GSTonValueofAgreement = (Number(this.Entity.p.GoodsServicesTax) / 100) * Number(ValueOfAgreement);
+    } else {
+      GSTonValueofAgreement = (Number(this.Entity.p.GoodsServicesTax) / 100) * Number(GovernmentValue);
+    }
     this.Entity.p.GstToatalAmount = Math.trunc(GSTonValueofAgreement * 100) / 100;
     this.Entity.p.TotalExtraCharges = Math.trunc((LegalCharges + StampDuties + RegistrationFees) * 100) / 100;
     this.calculateGrandTotal()
@@ -160,7 +179,6 @@ export class RegisteredCustomerDetailsComponent implements OnInit {
 
   calculateGrandTotal = () => {
     const TotalPlotAmount = Number(this.Entity.p.TotalPlotAmount);
-    const ValueOfAgreement = Number(this.Entity.p.ValueOfAgreement);
     const TotalExtraCharges = Number(this.Entity.p.TotalExtraCharges);
     this.Entity.p.GrandTotal = Math.trunc((TotalPlotAmount + TotalExtraCharges) * 100) / 100;
   }
