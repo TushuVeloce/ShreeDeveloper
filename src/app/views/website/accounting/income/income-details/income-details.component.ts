@@ -122,6 +122,8 @@ export class IncomeDetailsComponent implements OnInit {
     if(this.IsNewEntity){
       this.Entity.p.ShreesBalance = this.ShreeBalance + this.Entity.p.IncomeAmount;
       this.RemainingPlotAmount = this.Entity.p.RemainingPlotAmount - this.Entity.p.IncomeAmount;
+    } else {
+      
     }
   }
 

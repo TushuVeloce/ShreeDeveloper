@@ -233,7 +233,7 @@ export class ExpenseComponent implements OnInit {
       'Delete', `This process is <strong>IRREVERSIBLE!</strong> <br/>Are you sure that you want to DELETE this Expense?`,
       async () => {
         let req = new DeleteExpenseCustomRequest();
-        req.StageRef = Expense.p.Ref;
+        req.Ref = Expense.p.Ref;
         let td = req.FormulateTransportData();
         let pkt = this.payloadPacketFacade.CreateNewPayloadPacket2(td);
         let tr = await this.serverCommunicator.sendHttpRequest(pkt);

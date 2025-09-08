@@ -8,7 +8,7 @@ export class DeleteExpenseCustomRequest
 {
     public static readonly CustomProcessRequestType: string = "DeleteExpenseCustomRequest";
 
-    StageRef: number = 0;
+    Ref: number = 0;
 
     public MergeIntoTransportData = (td: TransportData) =>
     {
