@@ -119,11 +119,18 @@ export class IncomeDetailsComponent implements OnInit {
   }
 
   CalculateShreeBalance = () => {
-    if(this.IsNewEntity){
+    let currentIncomeAmount = 0;
+    this.RemainingPlotAmount = this.Entity.p.RemainingPlotAmount - this.Entity.p.IncomeAmount;
+    if (this.IsNewEntity) {
       this.Entity.p.ShreesBalance = this.ShreeBalance + this.Entity.p.IncomeAmount;
-      this.RemainingPlotAmount = this.Entity.p.RemainingPlotAmount - this.Entity.p.IncomeAmount;
     } else {
-      
+      if (this.OldIncomeAmount > this.Entity.p.IncomeAmount) {
+        currentIncomeAmount = this.OldIncomeAmount - this.Entity.p.IncomeAmount;
+        this.Entity.p.ShreesBalance = this.ShreeBalance - currentIncomeAmount;
+      } else {
+        currentIncomeAmount = this.Entity.p.IncomeAmount - this.OldIncomeAmount;
+        this.Entity.p.ShreesBalance = this.ShreeBalance + currentIncomeAmount;
+      }
     }
   }
 
