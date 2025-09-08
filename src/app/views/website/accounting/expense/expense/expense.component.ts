@@ -2,17 +2,21 @@ import { Component, effect, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { DomainEnums, ModeOfPayments, OpeningBalanceModeOfPayments, PayerTypes } from 'src/app/classes/domain/domainenums/domainenums';
 import { Invoice } from 'src/app/classes/domain/entities/website/accounting/billing/invoice';
+import { DeleteExpenseCustomRequest } from 'src/app/classes/domain/entities/website/accounting/expense/DeleteExpenseCustomRequest';
 import { Expense } from 'src/app/classes/domain/entities/website/accounting/expense/expense';
 import { Income } from 'src/app/classes/domain/entities/website/accounting/income/income';
 import { Ledger } from 'src/app/classes/domain/entities/website/masters/ledgermaster/ledger';
 import { OpeningBalance } from 'src/app/classes/domain/entities/website/masters/openingbalance/openingbalance';
 import { Site } from 'src/app/classes/domain/entities/website/masters/site/site';
 import { SubLedger } from 'src/app/classes/domain/entities/website/masters/subledgermaster/subledger';
+import { PayloadPacketFacade } from 'src/app/classes/infrastructure/payloadpacket/payloadpacketfacade';
+import { TransportData } from 'src/app/classes/infrastructure/transportdata';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
 import { DateconversionService } from 'src/app/services/dateconversion.service';
 import { DTU } from 'src/app/services/dtu.service';
 import { ScreenSizeService } from 'src/app/services/screensize.service';
+import { ServerCommunicatorService } from 'src/app/services/server-communicator.service';
 import { UIUtils } from 'src/app/services/uiutils.service';
 
 @Component({
@@ -66,6 +70,8 @@ export class ExpenseComponent implements OnInit {
     private screenSizeService: ScreenSizeService,
     private companystatemanagement: CompanyStateManagement,
     private dtu: DTU,
+    private payloadPacketFacade: PayloadPacketFacade,
+    private serverCommunicator: ServerCommunicatorService
   ) {
     effect(async () => {
       this.Entity.p.ExpenseModeOfPayment = 0
@@ -203,24 +209,47 @@ export class ExpenseComponent implements OnInit {
     await this.router.navigate(['/homepage/Website/Expense_Details']);
   };
 
+  // onDeleteClicked = async (Expense: Expense) => {
+  //   await this.uiUtils.showConfirmationMessage(
+  //     'Delete',
+  //     `This process is <strong>IRREVERSIBLE!</strong> <br/>
+  //    Are you sure that you want to DELETE this Expense?`,
+  //     async () => {
+  //       await Expense.DeleteInstance(async () => {
+  //         await this.uiUtils.showSuccessToster(
+  //           `Expense ${Expense.p.SubLedgerRef} has been deleted!`
+  //         );
+  //         // await this.getExpenseListByCompanyRef();
+  //         await this.FetchEntireListByFilters();
+  //         this.SearchString = '';
+  //         this.loadPaginationData();
+  //       });
+  //     }
+  //   );
+  // };
+
   onDeleteClicked = async (Expense: Expense) => {
     await this.uiUtils.showConfirmationMessage(
-      'Delete',
-      `This process is <strong>IRREVERSIBLE!</strong> <br/>
-     Are you sure that you want to DELETE this Expense?`,
+      'Delete', `This process is <strong>IRREVERSIBLE!</strong> <br/>Are you sure that you want to DELETE this Expense?`,
       async () => {
-        await Expense.DeleteInstance(async () => {
-          await this.uiUtils.showSuccessToster(
-            `Expense ${Expense.p.SubLedgerRef} has been deleted!`
-          );
-          // await this.getExpenseListByCompanyRef();
-          await this.FetchEntireListByFilters();
-          this.SearchString = '';
-          this.loadPaginationData();
-        });
+        let req = new DeleteExpenseCustomRequest();
+        req.StageRef = Expense.p.Ref;
+        let td = req.FormulateTransportData();
+        let pkt = this.payloadPacketFacade.CreateNewPayloadPacket2(td);
+        let tr = await this.serverCommunicator.sendHttpRequest(pkt);
+        if (!tr.Successful) {
+          await this.uiUtils.showErrorMessage('Error', tr.Message);
+          return;
+        }
+        await this.uiUtils.showSuccessToster(`Expense has been deleted!`);
+        let tdResult = JSON.parse(tr.Tag) as TransportData;
       }
     );
+    this.FetchEntireListByFilters()
+    this.loadPaginationData()
+    this.SearchString = '';
   };
+
 
   printReport(): void {
     const printContents = document.getElementById('print-section')?.innerHTML;

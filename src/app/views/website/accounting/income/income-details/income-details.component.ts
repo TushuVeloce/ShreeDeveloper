@@ -49,6 +49,7 @@ export class IncomeDetailsComponent implements OnInit {
   DealDoneCustomer = PayerTypes.DealDoneCustomer;
   PayerPlotNo: string = '';
   RemainingPlotAmount: number = 0;
+  OldIncomeAmount: number = 0;
 
   Date: string = '';
 
@@ -76,6 +77,7 @@ export class IncomeDetailsComponent implements OnInit {
       this.Date = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.Date);
       this.appStateManage.StorageKey.removeItem('Editable');
       await this.getSubLedgerListByLedgerRef(this.Entity.p.LedgerRef);
+      this.OldIncomeAmount = this.Entity.p.IncomeAmount;
       this.Entity.p.UpdatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
     } else {
       this.Entity = Income.CreateNewInstance();
@@ -117,8 +119,10 @@ export class IncomeDetailsComponent implements OnInit {
   }
 
   CalculateShreeBalance = () => {
-    this.Entity.p.ShreesBalance = this.ShreeBalance + this.Entity.p.IncomeAmount;
-    this.RemainingPlotAmount = this.Entity.p.RemainingPlotAmount - this.Entity.p.IncomeAmount;
+    if(this.IsNewEntity){
+      this.Entity.p.ShreesBalance = this.ShreeBalance + this.Entity.p.IncomeAmount;
+      this.RemainingPlotAmount = this.Entity.p.RemainingPlotAmount - this.Entity.p.IncomeAmount;
+    }
   }
 
   getCurrentBalanceByCompanyRef = async () => {

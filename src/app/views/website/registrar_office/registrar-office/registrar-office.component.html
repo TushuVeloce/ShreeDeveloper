@@ -25,7 +25,9 @@
       <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear nzPlaceHolder="Select"
         id="SiteRef" name="SiteRef" [nzSize]="'large'" [(ngModel)]="CustomerName"
         (ngModelChange)="getRegistrarOfficeListByCustomer()">
-        <nz-option *ngFor="let site of CustomerList" [nzValue]="site.p.CustomerName" [nzLabel]="site.p.CustomerName"></nz-option>
+        <nz-option [nzValue]="''" [nzLabel]="'All'"></nz-option>
+        <nz-option *ngFor="let site of CustomerList" [nzValue]="site.p.CustomerName"
+          [nzLabel]="site.p.CustomerName"></nz-option>
       </nz-select>
     </div>
     <div class="col-md-4">
@@ -33,6 +35,7 @@
       <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear nzPlaceHolder="Select"
         id="PlotRef" name="PlotRef" [nzSize]="'large'" [(ngModel)]="Entity.p.PlotRef"
         (ngModelChange)="getRegistrarOfficeListBySiteAndPlotRef()">
+        <nz-option [nzValue]="0" [nzLabel]="'All'"></nz-option>
         <nz-option *ngFor="let plot of PlotNoList" [nzValue]="plot.p.Ref" [nzLabel]="plot.p.PlotNo"></nz-option>
       </nz-select>
     </div>

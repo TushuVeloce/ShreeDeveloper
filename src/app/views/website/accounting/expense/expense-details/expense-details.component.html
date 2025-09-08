@@ -192,7 +192,7 @@
             <label *ngIf="Entity.p.RecipientType == EmployeeType && !Entity.p.IsSalaryExpense">Bill Amount</label>
             <label *ngIf="Entity.p.RecipientType == EmployeeType &&  Entity.p.IsSalaryExpense">Net Salary</label>
             <label *ngIf="Entity.p.RecipientType != EmployeeType">Bill Amount</label>
-            <input type="text" appCommaFormat [(ngModel)]="Entity.p.InvoiceAmount" name="InvoiceAmount"
+            <input type="text" appCommaFormat [(ngModel)]="Entity.p.InvoiceAmount" (ngModelChange)="Entity.p.GivenAmount = 0" name="InvoiceAmount"
               class="form-control" id="InvoiceAmount" required placeholder="Enter InvoiceAmount"
               #InvoiceAmountCtrl="ngModel" (blur)="InvoiceAmountCtrl.control.markAsTouched()"
               (click)="selectAllValue($event)" />
@@ -228,7 +228,7 @@
         <div class="col-md-4" style="margin-top: 1rem;">
           <div>
             <label>Shree Balance</label>
-            <input type="text" appCommaFormat [(ngModel)]="Entity.p.ShreesBalance" name="ShreesBalance"
+            <input type="text" appCommaFormat [(ngModel)]="Entity.p.ShreesBalance" disabled name="ShreesBalance"
               class="form-control" id="ShreesBalance" required placeholder="Enter ShreesBalance"
               #ShreesBalanceCtrl="ngModel" (blur)="ShreesBalanceCtrl.control.markAsTouched()"
               (click)="selectAllValue($event)" />

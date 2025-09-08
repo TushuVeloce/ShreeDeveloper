@@ -109,7 +109,11 @@ export class RegistrarOfficeComponent implements OnInit {
   }
 
   getRegistrarOfficeListByCustomer = () => {
-    this.DisplayMasterList = this.MasterList.filter((data) => data.p.CustomerName == this.CustomerName);
+    if (this.CustomerName) {
+      this.DisplayMasterList = this.MasterList.filter((data) => data.p.CustomerName == this.CustomerName);
+    } else {
+      this.DisplayMasterList = this.MasterList;
+    }
     this.loadPaginationData();
   }
 

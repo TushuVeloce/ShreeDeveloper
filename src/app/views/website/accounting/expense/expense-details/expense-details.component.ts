@@ -60,6 +60,7 @@ export class ExpenseDetailsComponent implements OnInit {
   Sites = RecipientTypes.Sites;
   Date: string = '';
   PayerPlotNo: number = 0;
+  OldGivenAmount: number = 0;
   IncomeBankList: BankAccount[] = [];
 
 
@@ -95,6 +96,8 @@ export class ExpenseDetailsComponent implements OnInit {
       } else {
         this.PaymentType = this.TypeofEmployeePayments.Other;
       }
+
+      this.OldGivenAmount = this.Entity.p.GivenAmount;
 
       this.Date = this.Entity.p.Date;
       this.getSubLedgerListByLedgerRef(this.Entity.p.LedgerRef);
@@ -389,11 +392,25 @@ export class ExpenseDetailsComponent implements OnInit {
       this.Entity.p.InvoiceAmount = this.Entity.p.GivenAmount;
     }
 
-    if (this.Entity.p.GivenAmount <= this.Entity.p.ShreesBalance) {
-      this.Entity.p.ShreesBalance = Number((this.ShreeBalance - this.Entity.p.GivenAmount).toFixed(2));
+    if (this.IsNewEntity) {
+      if (this.Entity.p.GivenAmount <= this.Entity.p.ShreesBalance) {
+        this.Entity.p.ShreesBalance = Number((this.ShreeBalance - this.Entity.p.GivenAmount).toFixed(2));
+      } else {
+        this.Entity.p.ShreesBalance = -Number((this.Entity.p.GivenAmount - this.ShreeBalance).toFixed(2));
+      }
     } else {
-      this.Entity.p.ShreesBalance = -Number((this.Entity.p.GivenAmount - this.ShreeBalance).toFixed(2));
+
+      let currentExpenseAmount = 0;
+
+      if (this.Entity.p.GivenAmount > this.OldGivenAmount) {
+        currentExpenseAmount = this.Entity.p.GivenAmount - this.OldGivenAmount;
+        this.Entity.p.ShreesBalance = Number((this.ShreeBalance - currentExpenseAmount).toFixed(2));
+      } else {
+        currentExpenseAmount = this.OldGivenAmount - this.Entity.p.GivenAmount;
+        this.Entity.p.ShreesBalance = Number((this.ShreeBalance + currentExpenseAmount).toFixed(2));
+      }
     }
+
     if (this.Entity.p.IsAdvancePayment) {
       this.Entity.p.TotalAdvance = this.Entity.p.RemainingAdvance + this.Entity.p.GivenAmount
     }
