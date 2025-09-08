@@ -334,7 +334,7 @@ export class CustomerEnquiry implements IPersistable<CustomerEnquiry> {
     let req = new CustomerEnquiryFetchRequest();
     req.CompanyRefs.push(CompanyRef)
     SiteRef && req.SiteRefs.push(SiteRef)
-    CustomerProgress && req.CustomerProgressRefs.push(CustomerProgress)
+    CustomerProgress && req.CustomerEnquiryFilterType.push(CustomerProgress)
     let tdResponse = await CustomerEnquiry.FetchTransportData(req, errorHandler) as TransportData;
     return CustomerEnquiry.ListFromTransportData(tdResponse);
   }

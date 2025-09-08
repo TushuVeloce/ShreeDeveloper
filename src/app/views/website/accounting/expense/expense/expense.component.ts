@@ -189,11 +189,11 @@ export class ExpenseComponent implements OnInit {
     this.DisplayMasterList = this.MasterList;
     this.AllList = lst.filter((item) => item.p.Reason != '');
 
-    if (this.DisplayMasterList.length > 0) {
-      this.TotalInvoiceAmount = this.DisplayMasterList[0].p.TotalInvoiceAmount;
-      this.TotalGivenAmount = this.DisplayMasterList[0].p.TotalGivenAmount;
-      this.RemainingAmountOfGrandTotal = this.DisplayMasterList[0].p.RemainingAmountOfGrandTotal;
-    }
+    // if (this.DisplayMasterList.length > 0) {
+    //   this.TotalInvoiceAmount = this.DisplayMasterList[0].p.TotalInvoiceAmount;
+    //   this.TotalGivenAmount = this.DisplayMasterList[0].p.TotalGivenAmount;
+    //   this.RemainingAmountOfGrandTotal = this.DisplayMasterList[0].p.RemainingAmountOfGrandTotal;
+    // }
     this.loadPaginationData();
   }
 
