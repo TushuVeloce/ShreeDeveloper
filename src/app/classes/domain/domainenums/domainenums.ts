@@ -272,6 +272,14 @@ export enum PayerTypes {
   Owner = 600,
 }
 
+export enum CustomerProgress {
+  None = 0,
+  OnGoingCustomer = 100,
+  DealCancelCustomer = 200,
+  DealDoneCustomer = 300,
+  LeadClosedCustomer = 400,
+}
+
 export class DomainEnums {
   public static MarketingModeName(MarketingMode: MarketingModes) {
     switch (MarketingMode) {
@@ -2145,6 +2153,53 @@ export class DomainEnums {
     if (withAllOption) {
       let allEntry = {
         Ref: PayerTypes.None,
+        Name: allOptionName,
+      };
+      result.unshift(allEntry);
+    }
+    return result;
+  }
+
+  public static CustomerProgressName(itemType: CustomerProgress) {
+    switch (itemType) {
+      case CustomerProgress.OnGoingCustomer:
+        return 'On Going Customer';
+      case CustomerProgress.DealCancelCustomer:
+        return 'Deal Cancel Customer';
+      case CustomerProgress.DealDoneCustomer:
+        return 'Deal Done Customer';
+      case CustomerProgress.LeadClosedCustomer:
+        return 'Lead Closed Customer';
+      default:
+        return '';
+    }
+  }
+
+  public static CustomerProgressList(
+    withAllOption: boolean = false,
+    allOptionName: string = '<All>'
+  ) {
+    let result = [
+      {
+        Ref: CustomerProgress.OnGoingCustomer,
+        Name: DomainEnums.CustomerProgressName(CustomerProgress.OnGoingCustomer),
+      },
+      {
+        Ref: CustomerProgress.DealCancelCustomer,
+        Name: DomainEnums.CustomerProgressName(CustomerProgress.DealCancelCustomer),
+      },
+      {
+        Ref: CustomerProgress.DealDoneCustomer,
+        Name: DomainEnums.CustomerProgressName(CustomerProgress.DealDoneCustomer),
+      },
+      {
+        Ref: CustomerProgress.LeadClosedCustomer,
+        Name: DomainEnums.CustomerProgressName(CustomerProgress.LeadClosedCustomer),
+      },
+    ];
+    if (withAllOption) {
+      let allEntry = {
+        Ref: CustomerProgress.None,
         Name: allOptionName,
       };
       result.unshift(allEntry);

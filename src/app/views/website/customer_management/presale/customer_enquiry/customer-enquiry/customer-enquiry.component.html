@@ -15,6 +15,33 @@
     <div>
     </div>
   </div>
+  <ng-template #noDataTpl>
+    <div class="no-data-text">Data Not Found</div>
+  </ng-template>
+  <div class="row" style="margin-top: 1rem">
+    <div class="col-md-4">
+      <div>
+        <label for="SiteRef"><b>Site</b></label>
+        <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
+          nzPlaceHolder="Select" [nzSize]="'large'" name="SiteRef" [(ngModel)]="SiteRef" required id="SiteRef"
+          (ngModelChange)="getRegisterCustomerListByCompanySiteAndcustomerProgressEnum()">
+          <nz-option nzLabel="All" [nzValue]="0"></nz-option>
+          <nz-option *ngFor="let Site of SiteList" [nzValue]="Site.p.Ref" [nzLabel]="Site.p.Name"></nz-option>
+        </nz-select>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div>
+        <label for="CustomerProgress"><b>Customer Progress</b></label>
+        <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
+          nzPlaceHolder="Select" [nzSize]="'large'" name="CustomerProgress" [(ngModel)]="CustomerProgress" required id="CustomerProgress"
+          (ngModelChange)="getRegisterCustomerListByCompanySiteAndcustomerProgressEnum()">
+          <nz-option nzLabel="All" [nzValue]="0"></nz-option>
+          <nz-option *ngFor="let Cust of CustomerProgressList" [nzValue]="Cust.Ref" [nzLabel]="Cust.Name"></nz-option>
+        </nz-select>
+      </div>
+    </div>
+  </div>
   <div class="table-wrapper" class="tblcard_light" style="margin-top: 2rem" *ngIf="DisplayMasterList.length > 0">
     <nz-table #basicTable nzSize="small" class="no-hover-table bgtable_light" [nzScroll]="{x:'auto' }"
       nzFrontPagination="false" [nzShowSizeChanger]="false" [nzData]="paginatedList"

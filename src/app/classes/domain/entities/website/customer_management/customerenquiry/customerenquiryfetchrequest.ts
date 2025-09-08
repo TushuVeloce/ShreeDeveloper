@@ -10,6 +10,8 @@ export class CustomerEnquiryFetchRequest
 
     CustomerEnquiryRefs: number[] = [];
     CompanyRefs: number[] = [];
+    CustomerProgressRefs: number[] = [];
+    SiteRefs: number[] = [];
 
     public MergeIntoTransportData = (td: TransportData) =>
     {

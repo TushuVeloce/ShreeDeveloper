@@ -1,7 +1,9 @@
 import { Component, effect, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { DomainEnums } from 'src/app/classes/domain/domainenums/domainenums';
 import { CustomerEnquiry } from 'src/app/classes/domain/entities/website/customer_management/customerenquiry/customerenquiry';
 import { CustomerFollowUp, CustomerFollowUpProps } from 'src/app/classes/domain/entities/website/customer_management/customerfollowup/customerfollowup';
+import { Site } from 'src/app/classes/domain/entities/website/masters/site/site';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
 import { DateconversionService } from 'src/app/services/dateconversion.service';
@@ -21,6 +23,10 @@ export class CustomerEnquiryComponent implements OnInit {
   SearchString: string = '';
   SelectedCustomerEnquiry: CustomerEnquiry = CustomerEnquiry.CreateNewInstance();
   CustomerRef: number = 0;
+  SiteRef: number = 0;
+  CustomerProgress: number = 0;
+  CustomerProgressList = DomainEnums.CustomerProgressList()
+  SiteList: Site[] = [];
   pageSize = 5; // Items per page
   currentPage = 1; // Initialize current page
   total = 0;
@@ -46,7 +52,7 @@ export class CustomerEnquiryComponent implements OnInit {
     private DateconversionService: DateconversionService
   ) {
     effect(() => {
-      this.getCustomerEnquiryListByCompanyRef();
+      this.getRegisterCustomerListByCompanySiteAndcustomerProgressEnum();
     });
   }
 
@@ -61,19 +67,31 @@ export class CustomerEnquiryComponent implements OnInit {
     return this.DateconversionService.formatDate(date);
   }
 
-  getCustomerEnquiryListByCompanyRef = async () => {
+  // getCustomerEnquiryListByCompanyRef = async () => {
+  //   this.MasterList = [];
+  //   this.DisplayMasterList = [];
+  //   if (this.companyRef() <= 0) {
+  //     await this.uiUtils.showErrorToster('Company not Selected');
+  //     return;
+  //   }
+  //   let lst = await CustomerEnquiry.FetchEntireListByCompanyRef(
+  //     this.companyRef(),
+  //     async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+  //   );
+  //   this.MasterList = lst;
+  //   this.MasterList.forEach(e => e.p.CustomerFollowUps.push(CustomerFollowUpProps.Blank()))
+  //   this.DisplayMasterList = this.MasterList;
+  //   console.log('this.DisplayMasterList :', this.DisplayMasterList);
+  //   this.loadPaginationData();
+  // };
+
+  getRegisterCustomerListByCompanySiteAndcustomerProgressEnum = async () => {
     this.MasterList = [];
     this.DisplayMasterList = [];
-    if (this.companyRef() <= 0) {
-      await this.uiUtils.showErrorToster('Company not Selected');
-      return;
-    }
-    let lst = await CustomerEnquiry.FetchEntireListByCompanyRef(
-      this.companyRef(),
+    let lst = await CustomerEnquiry.FetchEntireListByCompanySiteAndcustomerProgressEnum(this.companyRef(), this.SiteRef, this.CustomerProgress,
       async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
     );
     this.MasterList = lst;
-    this.MasterList.forEach(e => e.p.CustomerFollowUps.push(CustomerFollowUpProps.Blank()))
     this.DisplayMasterList = this.MasterList;
     this.loadPaginationData();
   };
@@ -101,7 +119,7 @@ export class CustomerEnquiryComponent implements OnInit {
           await this.uiUtils.showSuccessToster(
             `Customer Enquiry ${customerenquiry.p.Name} has been deleted!`
           );
-          await this.getCustomerEnquiryListByCompanyRef();
+          await this.getRegisterCustomerListByCompanySiteAndcustomerProgressEnum();
           this.SearchString = '';
           this.loadPaginationData();
         });

@@ -96,7 +96,7 @@ export class CustomerEnquiry implements IPersistable<CustomerEnquiry> {
       vra.add('', 'This object is not editable and hence cannot be saved.');
     if (this.p.Name == '') vra.add('Name', 'Name cannot be blank.');
 
-     if (this.p.ContactNos == '') {
+    if (this.p.ContactNos == '') {
       vra.add('Contact No', 'Contact No cannot be blank.');
     } else if (!new RegExp(ValidationPatterns.INDPhoneNo).test(this.p.ContactNos)) {
       vra.add('Contact No', ValidationMessages.INDPhoneNoMsg);
@@ -106,7 +106,7 @@ export class CustomerEnquiry implements IPersistable<CustomerEnquiry> {
     if (this.p.StateRef == 0)
       vra.add('StateRef', 'State Name cannot be blank.');
     if (this.p.CityRef == 0) vra.add('CityRef', 'City Name cannot be blank.');
-     if (this.p.PinCode == '') {
+    if (this.p.PinCode == '') {
       vra.add('PinCode', 'Pin cannot be blank.');
     } else if (!new RegExp(ValidationPatterns.PinCode).test(this.p.PinCode)) {
       vra.add('PinCode', ValidationMessages.PinCodeMsg);
@@ -327,6 +327,15 @@ export class CustomerEnquiry implements IPersistable<CustomerEnquiry> {
       req,
       errorHandler
     )) as TransportData;
+    return CustomerEnquiry.ListFromTransportData(tdResponse);
+  }
+
+  public static async FetchEntireListByCompanySiteAndcustomerProgressEnum(CompanyRef: number, SiteRef: number, CustomerProgress: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+    let req = new CustomerEnquiryFetchRequest();
+    req.CompanyRefs.push(CompanyRef)
+    SiteRef && req.SiteRefs.push(SiteRef)
+    CustomerProgress && req.CustomerProgressRefs.push(CustomerProgress)
+    let tdResponse = await CustomerEnquiry.FetchTransportData(req, errorHandler) as TransportData;
     return CustomerEnquiry.ListFromTransportData(tdResponse);
   }
 
