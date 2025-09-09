@@ -159,8 +159,8 @@
                   [(ngModel)]="plot.Reason" required placeholder="Enter Reason" />
               </td>
               <td class="tbldata" *ngIf="plot.CustomerStatus == CustomerStatusEnum.ConvertToDeal">
-                <input type="text" name="" class="form-control"
-                  [(ngModel)]="plot.CustID" required placeholder="Cust ID" />
+                <input type="text" name="" class="form-control" [(ngModel)]="plot.CustID" required
+                  placeholder="Cust ID" />
               </td>
               <td Class="tbldata" *ngIf="plot.CustomerStatus !== CustomerStatusEnum.ConvertToDeal"> -- </td>
               <td class="tbldata">
@@ -262,7 +262,7 @@
       </div>
       <div style="justify-content: center; display: flex; gap: 2rem; margin-top : 2rem">
         <div>
-          <button type="submit" class="btn" (click)="SaveCustomerFollowUp()">Save</button>
+          <button type="submit" class="btn" (click)="SaveCustomerFollowUp()" [disabled]="isSaveDisabled">Save</button>
         </div>
         <div>
           <button type="button" class="btn" (click)="BackCustomerFollowUp()">Cancel</button>

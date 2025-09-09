@@ -425,11 +425,14 @@ export class AttendanceDetailsComponent implements OnInit {
           return this.uiUtils.showWarningToster('Next Check In time should be after previous Check Out.');
         }
       }
+      this.isSaveDisabled = true;
       let AttendaneDetailsLogInstance = new WebAttendaneLogDetailsLog(this.newAttendance, true);
 
       this.Entity.p.AttendanceLogDetailsArray.push({ ...AttendaneDetailsLogInstance.p });
       await this.uiUtils.showSuccessToster('Attendance added successfully');
+      this.isSaveDisabled = false;
     }
+
     this.newAttendance = WebAttendaneLogDetailsLogProps.Blank();
 
     this.CheckInTime = null

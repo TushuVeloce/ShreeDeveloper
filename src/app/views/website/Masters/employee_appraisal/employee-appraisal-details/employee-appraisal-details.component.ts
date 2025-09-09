@@ -49,6 +49,7 @@ export class EmployeeAppraisalDetailsComponent implements OnInit {
   }
 
   SaveEmployeeAppraisalMaster = async () => {
+    this.isSaveDisabled = true;
     this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef()
     this.Entity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName()
     if (this.Entity.p.CreatedBy == 0) {

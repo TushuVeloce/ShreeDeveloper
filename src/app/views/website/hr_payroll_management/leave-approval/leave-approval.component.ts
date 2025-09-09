@@ -98,6 +98,7 @@ export class LeaveApprovalComponent implements OnInit {
   }
 
   handleApproval = async (leaveapproval: LeaveRequest) => {
+    this.isSaveDisabled = true;
     await this.uiUtils.showStatusConfirmationMessage(
       'Update Leave Status',
       `Please confirm the new status for this leave request.`,
@@ -140,13 +141,16 @@ export class LeaveApprovalComponent implements OnInit {
           this.Entity.p.LeaveApprovedBy = originalApprovedBy;
           this.Entity.p.LeaveCancelledBy = originalCancelledBy;
           this.uiUtils.showErrorMessage('Error', tr.Message);
+          this.isSaveDisabled = false;
           return;
         } else {
           if (selectedStatus === 'Approved') {
             await this.uiUtils.showSuccessToster(`Leave has been approved successfully`);
+            this.isSaveDisabled = false;
           }
           else if (selectedStatus === 'Rejected') {
             await this.uiUtils.showSuccessToster(`Leave has been rejected  successfully`);
+            this.isSaveDisabled = false;
           }
           this.getLeaveApprovalListByEmployeeRef();
         }

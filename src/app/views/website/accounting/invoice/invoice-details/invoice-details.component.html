@@ -492,7 +492,7 @@
           margin-top: 2rem;
         ">
         <div>
-          <button type="submit" class="btn" (click)="SaveTime()">Save</button>
+          <button type="submit" class="btn" (click)="SaveTime()" [disabled]="isSaveDisabled">Save</button>
         </div>
         <div>
           <nz-button nz-button class="btn1" (click)="CloseTimeModal('machinetime')">
@@ -576,7 +576,7 @@
           margin-top: 2rem;
         ">
         <div>
-          <button type="submit" class="btn" (click)="SaveLabourTime()">Save</button>
+          <button type="submit" class="btn" (click)="SaveLabourTime()" [disabled]="isSaveDisabled">Save</button>
         </div>
         <div>
           <nz-button nz-button class="btn1" (click)="CloseLabourTimeModal('labourtime')">

@@ -301,7 +301,7 @@
 
       <div style="justify-content: center; display: flex; gap: 2rem; margin-top : 2rem">
         <div>
-          <button type="submit" class="btn" (click)="SaveCustomerEnquiry()">Save</button>
+          <button type="submit" class="btn" (click)="SaveCustomerEnquiry()" [disabled]="isSaveDisabled">Save</button>
         </div>
         <div>
           <button type="button" class="btn" (click)="BackCustomerEnquiry()">Cancel</button>

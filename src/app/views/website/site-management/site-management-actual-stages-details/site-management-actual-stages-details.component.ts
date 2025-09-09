@@ -601,6 +601,7 @@ export class SiteManagementActualStagesDetailsComponent implements OnInit {
   }
 
   SaveActualStage = async () => {
+    this.isSaveDisabled = true;
     this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef()
     this.Entity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName()
     this.Entity.p.CreatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'));

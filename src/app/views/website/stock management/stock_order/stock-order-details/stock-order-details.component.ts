@@ -358,6 +358,7 @@ export class StockOrderDetailsComponent implements OnInit {
 
     this.newOrderMaterial.ExpectedDeliveryDate = this.dtu.ConvertStringDateToFullFormat(this.ExpectedDeliveryDate);
     this.ExpectedDeliveryDate = '';
+    this.isSaveDisabled = true;
     if (this.editingIndex !== null && this.editingIndex !== undefined && this.editingIndex >= 0) {
       this.Entity.p.MaterialPurchaseOrderDetailsArray[this.editingIndex] = { ...this.newOrderMaterial };
       await this.uiUtils.showSuccessToster('Material updated successfully');
@@ -369,6 +370,7 @@ export class StockOrderDetailsComponent implements OnInit {
       await this.uiUtils.showSuccessToster('Material added successfully');
       this.resetMaterialControls()
     }
+    this.isSaveDisabled = false;
     this.newOrderMaterial = OrderMaterialDetailProps.Blank();
     this.editingIndex = null;
   }
@@ -394,6 +396,7 @@ export class StockOrderDetailsComponent implements OnInit {
   }
 
   SaveOrder = async () => {
+    this.isSaveDisabled = true;
     let lstFTO: FileTransferObject[] = [];
     this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef()
     this.newOrderMaterial.MaterialPurchaseOrderRef = this.Entity.p.Ref

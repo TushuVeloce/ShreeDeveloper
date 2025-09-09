@@ -105,6 +105,7 @@ export class SiteWorkMasterDetailComponent implements OnInit {
 
 
   SaveSiteWorkMaster = async () => {
+    this.isSaveDisabled = true;
     this.Entity.p.CompanyRef =
       this.companystatemanagement.getCurrentCompanyRef();
     this.Entity.p.CompanyName =

@@ -128,7 +128,7 @@ export class InvoiceDetailsComponent implements OnInit {
       if (this.Entity.p.IsDieselPaid == 1) {
         this.isDieselPaid = true
       }
- 
+
       if (this.Entity.p.ExpenseType == this.MachinaryExpenseRef || this.Entity.p.ExpenseType == this.LabourExpenseRef) {
         this.getVendorServiceListByVendorRef(this.Entity.p.RecipientRef);
       }
@@ -472,6 +472,8 @@ export class InvoiceDetailsComponent implements OnInit {
       return;
     }
 
+    this.isSaveDisabled = true;
+
     if (this.MachineEditingIndex !== null && this.MachineEditingIndex !== undefined && this.MachineEditingIndex >= 0) {
       this.Entity.p.MachineUsageDetailsArray[this.MachineEditingIndex] = { ...this.MachineTimeEntity };
       await this.uiUtils.showSuccessToster('Machinary Time updated successfully');
@@ -482,6 +484,7 @@ export class InvoiceDetailsComponent implements OnInit {
       await this.uiUtils.showSuccessToster('Machinary Time added successfully');
       this.isTimeModalOpen = false;
     }
+    this.isSaveDisabled = false;
 
     this.MachineTimeEntity = TimeDetailProps.Blank();
     this.MachineEditingIndex = null;
@@ -543,6 +546,7 @@ export class InvoiceDetailsComponent implements OnInit {
       await this.uiUtils.showErrorMessage('Error', 'Labour Qty is required!');
       return;
     }
+    this.isSaveDisabled = true;
     if (this.LabourTimeEntity.LabourType != 0) {
       const labourtype = this.LabourTypeList.find(item => item.Ref == this.LabourTimeEntity.LabourType)
       this.LabourTimeEntity.LabourTypeName = labourtype?.Name || ''
@@ -558,6 +562,7 @@ export class InvoiceDetailsComponent implements OnInit {
       // this.resetTimeControls();
       this.isLabourTimeModalOpen = false;
     }
+    this.isSaveDisabled = false;
     this.LabourTimeEntity = LabourTimeProps.Blank();
     this.LabourFromTime = null
     this.LabourToTime = null

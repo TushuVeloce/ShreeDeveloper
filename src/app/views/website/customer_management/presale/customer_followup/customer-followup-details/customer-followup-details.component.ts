@@ -251,7 +251,7 @@ export class CustomerFollowupDetailsComponent implements OnInit {
   };
 
   getPlotBySiteRefList = async (siteRef: number) => {
-     this.PlotList = []
+    this.PlotList = []
     this.InterestedPlotRef = 0;
     if (siteRef <= 0) {
       // await this.uiUtils.showWarningToster(`Please Select Site`);
@@ -374,18 +374,19 @@ export class CustomerFollowupDetailsComponent implements OnInit {
     return true;
   };
 
-   async removePlot(index: number) {
-      await this.uiUtils.showConfirmationMessage(
-        'Delete',
-        `This process is <strong>IRREVERSIBLE!</strong> <br/>
+  async removePlot(index: number) {
+    await this.uiUtils.showConfirmationMessage(
+      'Delete',
+      `This process is <strong>IRREVERSIBLE!</strong> <br/>
        Are you sure that you want to DELETE this Plot?`,
-        async () => {
-          this.Entity.p.CustomerFollowUpPlotDetails.splice(index, 1);
-        }
-      );
-    }
+      async () => {
+        this.Entity.p.CustomerFollowUpPlotDetails.splice(index, 1);
+      }
+    );
+  }
 
   SaveCustomerFollowUp = async () => {
+    this.isSaveDisabled = true;
     this.Entity.p.LoginEmployeeRef = Number(
       this.appStateManage.StorageKey.getItem('LoginEmployeeRef')
     );
@@ -427,10 +428,10 @@ export class CustomerFollowupDetailsComponent implements OnInit {
 
     if (missingList?.length > 0) {
       // alert(`${missingList.length} 'convert to deal' entries are missing CustID.`);
-       await this.uiUtils.showWarningToster(`Please Enter Customer ID to convert to deal plots`);
+      await this.uiUtils.showWarningToster(`Please Enter Customer ID to convert to deal plots`);
       return;
     }
-     if (this.SiteManagementRef || this.InterestedPlotRef) {
+    if (this.SiteManagementRef || this.InterestedPlotRef) {
       this.uiUtils.showWarningToster(
         'Please add selected plot or remove it'
       );
@@ -445,13 +446,15 @@ export class CustomerFollowupDetailsComponent implements OnInit {
     // // await this.Entity.EnsurePrimaryKeysWithValidValues()
     let tr = await this.utils.SavePersistableEntities(entitiesToSave);
     if (!tr.Successful) {
+      this.isSaveDisabled = false;
       this.uiUtils.showErrorMessage('Error', tr.Message);
       return;
     } else {
       // this.onEntitySaved.emit(entityToSave);
+      this.isSaveDisabled = false;
       if (this.IsNewEntity) {
         await this.uiUtils.showSuccessToster(
-          'Customer Enquiry saved successfully'
+          'Customer Enquiry Saved successfully'
         );
         this.Entity = CustomerFollowUp.CreateNewInstance();
       } else {

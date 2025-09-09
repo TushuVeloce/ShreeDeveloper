@@ -215,6 +215,7 @@ export class MaterialRequisitionDetailsComponent implements OnInit {
   }
 
   SaveMaterialRequisition = async () => {
+    this.isSaveDisabled = true;
     this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef()
     this.Entity.p.UpdatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
     this.Entity.p.CreatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))

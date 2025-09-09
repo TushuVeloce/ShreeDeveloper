@@ -112,10 +112,11 @@ export class SiteWorkDoneMasterDetailsComponent implements OnInit {
   }
 
   onSiteGroupChange() {
-    this.Entity.p.SiteWorkRef =0
+    this.Entity.p.SiteWorkRef = 0
   }
 
   SaveSiteWorkDone = async () => {
+    this.isSaveDisabled = true;
     this.Entity.p.CompanyRef =
       this.companystatemanagement.getCurrentCompanyRef();
     this.Entity.p.CompanyName =

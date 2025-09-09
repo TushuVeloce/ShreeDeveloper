@@ -1,4 +1,4 @@
-  import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { Material } from 'src/app/classes/domain/entities/website/masters/material/material';
 import { Unit } from 'src/app/classes/domain/entities/website/masters/unit/unit';
@@ -43,7 +43,7 @@ export class MaterialMasterDetailsComponent implements OnInit {
     this.appStateManage.setDropdownDisabled(true);
     if (this.appStateManage.StorageKey.getItem('Editable') == 'Edit') {
       this.IsNewEntity = false;
-      this.DetailsFormTitle = this.IsNewEntity? 'New Material': 'Edit Material';
+      this.DetailsFormTitle = this.IsNewEntity ? 'New Material' : 'Edit Material';
       this.Entity = Material.GetCurrentInstance();
       this.appStateManage.StorageKey.removeItem('Editable');
       this.Entity.p.UpdatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
@@ -51,7 +51,7 @@ export class MaterialMasterDetailsComponent implements OnInit {
       this.Entity = Material.CreateNewInstance();
       Material.SetCurrentInstance(this.Entity);
     }
-    this.InitialEntity = Object.assign(Material.CreateNewInstance(),this.utils.DeepCopy(this.Entity))as Material;
+    this.InitialEntity = Object.assign(Material.CreateNewInstance(), this.utils.DeepCopy(this.Entity)) as Material;
     this.FormulateUnitList();
     this.focusInput();
   }
@@ -67,6 +67,7 @@ export class MaterialMasterDetailsComponent implements OnInit {
   };
 
   SaveMaterialMaster = async () => {
+    this.isSaveDisabled = true;
     this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef();
     this.Entity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName();
     if (this.Entity.p.CreatedBy == 0) {

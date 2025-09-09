@@ -437,6 +437,7 @@ export class ExpenseDetailsComponent implements OnInit {
       this.uiUtils.showErrorToster('Recipient Name can not be Blank');
       return
     }
+    this.isSaveDisabled = true;
     this.RecipientEntity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef();
     this.RecipientEntity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName();
     if (this.RecipientEntity.p.CreatedBy == 0) {
@@ -476,6 +477,8 @@ export class ExpenseDetailsComponent implements OnInit {
         }
       }
     }
+
+    this.isSaveDisabled = true;
 
     if (this.Entity.p.CreatedBy == 0) {
       this.Entity.p.CreatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))

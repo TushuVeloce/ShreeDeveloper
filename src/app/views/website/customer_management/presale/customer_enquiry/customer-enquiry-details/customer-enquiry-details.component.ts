@@ -407,6 +407,7 @@ export class CustomerEnquiryDetailsComponent implements OnInit {
   }
 
   SaveCustomerEnquiry = async () => {
+    this.isSaveDisabled = true;
     this.Entity.p.CompanyRef =
       this.companystatemanagement.getCurrentCompanyRef();
     this.Entity.p.CustomerFollowUps[0].Ref =
@@ -444,10 +445,12 @@ export class CustomerEnquiryDetailsComponent implements OnInit {
     await this.Entity.EnsurePrimaryKeysWithValidValues()
     let tr = await this.utils.SavePersistableEntities(entitiesToSave);
     if (!tr.Successful) {
+      this.isSaveDisabled = false;
       this.uiUtils.showErrorMessage('Error', tr.Message);
       return;
     } else {
       // this.onEntitySaved.emit(entityToSave);
+      this.isSaveDisabled = false;
       if (this.IsNewEntity) {
         await this.uiUtils.showSuccessToster(
           'Customer Enquiry saved successfully'

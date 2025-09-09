@@ -76,6 +76,7 @@ export class CompanyHolidaysDetailsComponent implements OnInit {
   }
 
   SaveCompanyHoliday = async () => {
+    this.isSaveDisabled = true;
     this.Entity.p.CompanyRef =
       this.companystatemanagement.getCurrentCompanyRef();
     if (this.Entity.p.CreatedBy == 0) {

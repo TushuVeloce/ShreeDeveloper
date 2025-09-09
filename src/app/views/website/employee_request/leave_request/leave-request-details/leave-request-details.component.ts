@@ -166,6 +166,7 @@ export class LeaveRequestDetailsComponent implements OnInit {
   };
 
   SaveLeaveRequest = async () => {
+    this.isSaveDisabled = true;
     this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef();
     this.Entity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName();
 

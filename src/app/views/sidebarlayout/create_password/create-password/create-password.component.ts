@@ -15,35 +15,37 @@ import { UIUtils } from 'src/app/services/uiutils.service';
   selector: 'app-create-password',
   templateUrl: './create-password.component.html',
   styleUrls: ['./create-password.component.scss'],
-    imports: [CommonModule, NzLayoutModule,
-      NzMenuModule, FormsModule]
-    })
-export class CreatePasswordComponent  implements OnInit {
-OldPassword: string = '';
-NewPassword: string='';
-ConfirmPassword:string='';
-EmployeeRef:number=0;
-CompanyRef:number=0;
+  imports: [CommonModule, NzLayoutModule,
+    NzMenuModule, FormsModule]
+})
+export class CreatePasswordComponent implements OnInit {
+  OldPassword: string = '';
+  NewPassword: string = '';
+  ConfirmPassword: string = '';
+  EmployeeRef: number = 0;
+  CompanyRef: number = 0;
+  isSaveDisabled: boolean = false
 
-constructor(private router: Router,private uiUtils: UIUtils,private payloadPacketFacade: PayloadPacketFacade,private serverCommunicator: ServerCommunicatorService,private appStateManage: AppStateManageService,) {}
+  constructor(private router: Router, private uiUtils: UIUtils, private payloadPacketFacade: PayloadPacketFacade, private serverCommunicator: ServerCommunicatorService, private appStateManage: AppStateManageService,) { }
 
   ngOnInit() {
-    this.EmployeeRef=  Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
-    this.CompanyRef=  Number(this.appStateManage.StorageKey.getItem('SelectedCompanyRef'))
+    this.EmployeeRef = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
+    this.CompanyRef = Number(this.appStateManage.StorageKey.getItem('SelectedCompanyRef'))
   }
 
 
-  Save = async (oldpassword:string, newpassword: string, confirmpassword: string,) => {
+  Save = async (oldpassword: string, newpassword: string, confirmpassword: string,) => {
     if (newpassword !== confirmpassword) {
       await this.uiUtils.showErrorMessage('Error', 'Password and Confirm Password are not the same');
       return;
-    }else if(newpassword == ''){
+    } else if (newpassword == '') {
       await this.uiUtils.showErrorMessage('Error', 'Password cannot be empty');
-    }else if(confirmpassword == ''){
+    } else if (confirmpassword == '') {
       await this.uiUtils.showErrorMessage('Error', 'Confirm Password cannot be empty');
-    }else if(oldpassword == ''){
+    } else if (oldpassword == '') {
       await this.uiUtils.showErrorMessage('Error', 'Old Password cannot be empty');
     }
+    this.isSaveDisabled = true;
 
     let req = new CraetePasswordCustomRequest();
     req.CompanyRef = this.CompanyRef
@@ -56,10 +58,11 @@ constructor(private router: Router,private uiUtils: UIUtils,private payloadPacke
     let tr = await this.serverCommunicator.sendHttpRequest(pkt);
 
     if (!tr.Successful) {
+      this.isSaveDisabled = false;
       await this.uiUtils.showErrorMessage('Error', tr.Message);
       return;
     }
-
+    this.isSaveDisabled = false;
     await this.uiUtils.showSuccessToster('Password Created Successfully');
     let tdResult = JSON.parse(tr.Tag) as TransportData;
     await this.router.navigate(['/login']);

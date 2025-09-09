@@ -189,6 +189,7 @@ export class RegisteredCustomerDetailsComponent implements OnInit {
   }
 
   SaveRegisteredCustomer = async () => {
+    this.isSaveDisabled = true;
     this.Entity.p.CreatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
     this.Entity.p.UpdatedDate = await CurrentDateTimeRequest.GetCurrentDateTime();
     this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef()

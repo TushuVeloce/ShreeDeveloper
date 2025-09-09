@@ -105,6 +105,7 @@ export class OfficeDutyTimeDetailsComponent implements OnInit {
   };
 
   SaveOfficeDutyTimeMaster = async () => {
+    this.isSaveDisabled = true;
     this.Entity.p.CompanyRef =
       this.companystatemanagement.getCurrentCompanyRef();
     if (this.Entity.p.CreatedBy == 0) {

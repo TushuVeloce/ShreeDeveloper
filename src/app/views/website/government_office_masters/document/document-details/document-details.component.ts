@@ -74,6 +74,7 @@ export class DocumentDetailsComponent implements OnInit {
   };
 
   SaveDocument = async () => {
+    this.isSaveDisabled = true;
     this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef();
     this.Entity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName();
     if (this.Entity.p.CreatedBy == 0) {
@@ -103,7 +104,7 @@ export class DocumentDetailsComponent implements OnInit {
         await this.uiUtils.showSuccessToster(
           'Document Master Updated successfully'
         );
-       this.BackDocument()
+        this.BackDocument()
       }
     }
   };

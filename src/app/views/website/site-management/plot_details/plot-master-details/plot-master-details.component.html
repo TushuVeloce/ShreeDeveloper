@@ -23,8 +23,9 @@
         <div class="col-md-6">
           <label>Site Name</label>
           <nz-select class="nzSelect-light" nzShowSearch [nzNotFoundContent]="noDataTpl" nzAllowClear
-            nzPlaceHolder="Select" id="SiteManagementRef" name="SiteManagementRef" [nzSize]="'large'" [(ngModel)]="Entity.p.SiteManagementRef"
-           (ngModelChange)="getCustomerListBySiteandBookingRef(Entity.p.SiteManagementRef); onsitechange(Entity.p.SiteManagementRef)">
+            nzPlaceHolder="Select" id="SiteManagementRef" name="SiteManagementRef" [nzSize]="'large'"
+            [(ngModel)]="Entity.p.SiteManagementRef"
+            (ngModelChange)="getCustomerListBySiteandBookingRef(Entity.p.SiteManagementRef); onsitechange(Entity.p.SiteManagementRef)">
             <nz-option *ngFor="let site of SiteList" [nzValue]="site.p.Ref" [nzLabel]="site.p.Name"></nz-option>
           </nz-select>
         </div>
@@ -37,31 +38,31 @@
             <span class="validation-text" *ngIf="PlotNoCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
           </div>
         </div>
-          <div class="col-md-6 col-6">
+        <div class="col-md-6 col-6">
           <label for="AreaInSqm">Area in Sqm</label>
           <input type="number" class="form-control" name="AreaInSqm" id="AreaInSqm" [(ngModel)]="Entity.p.AreaInSqm"
-            (input)="restrictToTwoDecimalsForSqm($event)"  #AreaInSqmCtrl="ngModel" required
+            (input)="restrictToTwoDecimalsForSqm($event)" #AreaInSqmCtrl="ngModel" required
             (blur)="AreaInSqmCtrl.control.markAsTouched()" placeholder="Enter Area in Sqm"
             (click)="selectAllValue($event)" />
         </div>
-         <div class="col-md-6 col-6">
+        <div class="col-md-6 col-6">
           <label for="AreaInSqft">Area in Sqft</label>
-          <input type="number" class="form-control" disabled name="AreaInSqft" id="AreaInSqft" [(ngModel)]="Entity.p.AreaInSqft"
-           (input)="restrictToTwoDecimalsForSqFt($event)" #AreaInSqftCtrl="ngModel" required
-            (blur)="AreaInSqftCtrl.control.markAsTouched()" placeholder="Enter Area in Sqft"
+          <input type="number" class="form-control" disabled name="AreaInSqft" id="AreaInSqft"
+            [(ngModel)]="Entity.p.AreaInSqft" (input)="restrictToTwoDecimalsForSqFt($event)" #AreaInSqftCtrl="ngModel"
+            required (blur)="AreaInSqftCtrl.control.markAsTouched()" placeholder="Enter Area in Sqft"
             (click)="selectAllValue($event)" />
         </div>
         <div class="col-md-6 col-6">
           <label>Goverment Rate Per Sqm </label>
-          <input type="text" appCommaFormat name="GovermentRatePerSqm" class="form-control date-input" id="GovermentRatePerSqm"
-            [(ngModel)]="Entity.p.GovermentRatePerSqm" #GovermentRatePerSqmCtrl="ngModel" required
-            (blur)="GovermentRatePerSqmCtrl.control.markAsTouched()" placeholder="Enter Goverment Rate Per Sqm "
-            (click)="selectAllValue($event)" />
+          <input type="text" appCommaFormat name="GovermentRatePerSqm" class="form-control date-input"
+            id="GovermentRatePerSqm" [(ngModel)]="Entity.p.GovermentRatePerSqm" #GovermentRatePerSqmCtrl="ngModel"
+            required (blur)="GovermentRatePerSqmCtrl.control.markAsTouched()"
+            placeholder="Enter Goverment Rate Per Sqm " (click)="selectAllValue($event)" />
         </div>
         <div class="col-md-6 col-6">
           <label>Basic Rate Per Sqft </label>
-          <input type="text" appCommaFormat name="BasicRatePerSqft" class="form-control date-input" id="BasicRatePerSqft"
-            [(ngModel)]="Entity.p.BasicRatePerSqft" #BasicRatePerSqftCtrl="ngModel" required
+          <input type="text" appCommaFormat name="BasicRatePerSqft" class="form-control date-input"
+            id="BasicRatePerSqft" [(ngModel)]="Entity.p.BasicRatePerSqft" #BasicRatePerSqftCtrl="ngModel" required
             (blur)="BasicRatePerSqftCtrl.control.markAsTouched()" placeholder="Enter Basic Rate Per Sqft"
             (click)="selectAllValue($event)" />
         </div>
@@ -88,7 +89,7 @@
               [nzValue]="customer.p.Ref"></nz-option>
           </nz-select>
         </div>
-        <div class="col-md-4 col-6">
+        <!-- <div class="col-md-4 col-6">
           <label>Mobile No</label>
           <input class="form-control date-input"
             [value]="Entity.p.CurrentBookingRemark == BookingRemark.Plot_Of_Shree ? CompanyEntity.p.Contacts : CustomerEntity.p.ContactNo"
@@ -117,7 +118,51 @@
           <input class="form-control date-input"
             [value]="Entity.p.CurrentBookingRemark == BookingRemark.Plot_Of_Shree ? CompanyEntity.p.AddressLine1 : CustomerEntity.p.Address"
             disabled />
+        </div> -->
+
+
+        <div class="col-md-4 col-6" *ngIf="Entity.p.CurrentBookingRemark == BookingRemark.Plot_Of_Shree">
+          <label>Mobile No</label>
+          <input class="form-control date-input" [value]="CompanyEntity.p.Contacts" disabled />
         </div>
+        <div class="col-md-4 col-6" *ngIf="Entity.p.CurrentBookingRemark == BookingRemark.Plot_Of_Shree">
+          <label>Country</label>
+          <input class="form-control date-input" [value]="CompanyEntity.p.CountryName" disabled />
+        </div>
+        <div class="col-md-4 col-6" *ngIf="Entity.p.CurrentBookingRemark == BookingRemark.Plot_Of_Shree">
+          <label>State</label>
+          <input class="form-control date-input" [value]="CompanyEntity.p.StateName" disabled />
+        </div>
+        <div class="col-md-4 col-6" *ngIf="Entity.p.CurrentBookingRemark == BookingRemark.Plot_Of_Shree">
+          <label>City</label>
+          <input class="form-control date-input" [value]="CompanyEntity.p.CityName" disabled />
+        </div>
+        <div class="col-md-4 col-6" *ngIf="Entity.p.CurrentBookingRemark == BookingRemark.Plot_Of_Shree">
+          <label>Address</label>
+          <input class="form-control date-input" [value]="CompanyEntity.p.AddressLine1" disabled />
+        </div>
+
+        <div class="col-md-4 col-6" *ngIf="Entity.p.CurrentBookingRemark == BookingRemark.Plot_Of_Owner">
+          <label>Mobile No</label>
+          <input class="form-control date-input" [value]="CustomerEntity.p.ContactNo" disabled />
+        </div>
+        <div class="col-md-4 col-6" *ngIf="Entity.p.CurrentBookingRemark == BookingRemark.Plot_Of_Owner">
+          <label>Country</label>
+          <input class="form-control date-input" [value]="CustomerEntity.p.CountryName" disabled />
+        </div>
+        <div class="col-md-4 col-6" *ngIf="Entity.p.CurrentBookingRemark == BookingRemark.Plot_Of_Owner">
+          <label>State</label>
+          <input class="form-control date-input" [value]="CustomerEntity.p.StateName" disabled />
+        </div>
+        <div class="col-md-4 col-6" *ngIf="Entity.p.CurrentBookingRemark == BookingRemark.Plot_Of_Owner">
+          <label>City</label>
+          <input class="form-control date-input" [value]="CustomerEntity.p.CityName" disabled />
+        </div>
+        <div class="col-md-4 col-6" *ngIf="Entity.p.CurrentBookingRemark == BookingRemark.Plot_Of_Owner">
+          <label>Address</label>
+          <input class="form-control date-input" [value]="CustomerEntity.p.Address" disabled />
+        </div>
+
       </div>
       <div style="justify-content: center; display: flex; gap: 2rem; margin-top : 2rem">
         <div>

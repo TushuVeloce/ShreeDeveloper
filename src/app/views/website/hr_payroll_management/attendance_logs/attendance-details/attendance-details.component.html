@@ -251,7 +251,7 @@
           margin-top: 1rem;
         ">
         <div>
-          <button type="submit" class="btn" (click)="addAttendance()">Save</button>
+          <button type="submit" class="btn" (click)="addAttendance()" [disabled]="isSaveDisabled">Save</button>
         </div>
         <div>
           <nz-button nz-button class="btn1" (click)="closeModal()">

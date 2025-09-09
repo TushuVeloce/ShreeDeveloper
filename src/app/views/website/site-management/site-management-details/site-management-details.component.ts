@@ -279,6 +279,8 @@ export class SiteManagementDetailsComponent implements OnInit {
       return this.uiUtils.showWarningToster('City cannot be blank.');
     }
 
+    this.isSaveDisabled = true;
+
     if (this.editingIndex !== null && this.editingIndex !== undefined && this.editingIndex >= 0) {
       this.Entity.p.SiteManagementOwnerDetails[this.editingIndex] = { ...this.newOwner };
       await this.uiUtils.showSuccessToster('Owner details updated successfully');
@@ -297,6 +299,8 @@ export class SiteManagementDetailsComponent implements OnInit {
       this.isOwnerModalOpen = false;
       this.newOwner = OwnerDetailProps.Blank();
     }
+
+    this.isSaveDisabled = false;
 
     this.editingIndex = null;
   }
@@ -370,6 +374,7 @@ export class SiteManagementDetailsComponent implements OnInit {
   }
 
   SaveSite = async () => {
+    this.isSaveDisabled = true;
     this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef()
     this.Entity.p.LoginEmployeeRef = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
     this.newOwner.SiteManagementRef = this.Entity.p.Ref

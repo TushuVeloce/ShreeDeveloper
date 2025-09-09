@@ -134,6 +134,10 @@ export class PlotMasterComponent implements OnInit {
   }
 
   onEditClicked = async (item: Plot) => {
+    if (item.p.CurrentBookingRemark != this.BookingRemarkEnum.Plot_Of_Shree && item.p.CurrentBookingRemark != this.BookingRemarkEnum.Plot_Of_Owner) {
+      await this.uiUtils.showErrorToster("Booked & Saled Plot Can't be Edited");
+      return;
+    }
     this.SelectedPlot = item.GetEditableVersion();
     Plot.SetCurrentInstance(this.SelectedPlot);
     this.appStateManage.StorageKey.setItem('Editable', 'Edit');

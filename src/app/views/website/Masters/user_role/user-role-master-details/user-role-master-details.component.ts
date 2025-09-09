@@ -12,7 +12,7 @@ import { Utils } from 'src/app/services/utils.service';
   templateUrl: './user-role-master-details.component.html',
   styleUrls: ['./user-role-master-details.component.scss'],
 })
-export class UserRoleMasterDetailsComponent  implements OnInit {
+export class UserRoleMasterDetailsComponent implements OnInit {
 
   Entity: UserRole = UserRole.CreateNewInstance();
   private IsNewEntity: boolean = true;
@@ -23,7 +23,7 @@ export class UserRoleMasterDetailsComponent  implements OnInit {
   companyName = this.companystatemanagement.SelectedCompanyName;
 
 
-  constructor(private router: Router, private uiUtils: UIUtils, private appStateManage: AppStateManageService, private utils: Utils,private companystatemanagement: CompanyStateManagement) { }
+  constructor(private router: Router, private uiUtils: UIUtils, private appStateManage: AppStateManageService, private utils: Utils, private companystatemanagement: CompanyStateManagement) { }
 
   ngOnInit() {
     this.appStateManage.setDropdownDisabled(true);
@@ -38,11 +38,12 @@ export class UserRoleMasterDetailsComponent  implements OnInit {
       UserRole.SetCurrentInstance(this.Entity);
     }
     this.InitialEntity = Object.assign(UserRole.CreateNewInstance(),
-    this.utils.DeepCopy(this.Entity)) as UserRole;
+      this.utils.DeepCopy(this.Entity)) as UserRole;
     this.focusInput();
   }
 
   SaveUserRole = async () => {
+    this.isSaveDisabled = true;
     this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef()
     this.Entity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName()
     this.isSaveDisabled = true;
@@ -53,7 +54,7 @@ export class UserRoleMasterDetailsComponent  implements OnInit {
 
     if (!tr.Successful) {
       this.isSaveDisabled = false;
-      this.uiUtils.showErrorMessage('Error',tr.Message);
+      this.uiUtils.showErrorMessage('Error', tr.Message);
       return
     }
     else {
@@ -78,6 +79,6 @@ export class UserRoleMasterDetailsComponent  implements OnInit {
 
   BackUserRole = () => {
     this.router.navigate(['/homepage/Website/User_Role_Master']);
-   }
+  }
 
 }

@@ -173,6 +173,7 @@ export class MarketingManagementMasterDetailsComponent implements OnInit {
 
 
   SaveMarketingManagementMaster = async () => {
+    this.isSaveDisabled = true;
     this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef();
     this.Entity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName();
     this.Entity.p.Date = this.dtu.ConvertStringDateToFullFormat(this.Entity.p.Date)
