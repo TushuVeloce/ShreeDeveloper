@@ -76,6 +76,7 @@ export class IncomeDetailsComponent implements OnInit {
       this.Entity = Income.GetCurrentInstance();
       this.Date = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.Date);
       this.appStateManage.StorageKey.removeItem('Editable');
+      console.log(' this.Entity :',  this.Entity);
       await this.getSubLedgerListByLedgerRef(this.Entity.p.LedgerRef);
       this.OldIncomeAmount = this.Entity.p.IncomeAmount;
       this.Entity.p.UpdatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))

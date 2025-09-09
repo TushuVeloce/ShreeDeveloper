@@ -1,6 +1,6 @@
 <div class="row">
   <div class="col-4 mb-2">
-    <h1 style="padding-top: 3px" class="title title_light">Billing List</h1>
+    <h1 style="padding-top: 3px" class="title title_light">Bills Payable List</h1>
   </div>
   <div class="col-4 mb-2 search-container_light">
     <app-shared-filter [masterList]="MasterList"
@@ -8,9 +8,6 @@
       (filteredList)="onFilteredList($event)"></app-shared-filter>
   </div>
   <div class="col-4 mb-2" routerLinkActive="active">
-    <nz-button nz-button class="btn1" (click)="AddInvoice()">
-      Add Bill
-    </nz-button>
   </div>
 </div>
 <ng-template #noDataTpl>
@@ -19,69 +16,20 @@
 
 <div class="row row-cols-4 g-1">
   <div class="col">
-    <label for="StartDate"><b>From Date</b></label>
-    <input type="date" [(ngModel)]="Entity.p.StartDate" name="StartDate" class="form-control" id="StartDate"
-      placeholder="Enter Start Date" (ngModelChange)="FetchEntireListByFilters()" />
-  </div>
-  <div class="col">
-    <label for="EndDate"><b>To Date</b></label>
-    <input type="date" [(ngModel)]="Entity.p.EndDate" name="EndDate" class="form-control" id="EndDate"
-      placeholder="Enter End Date" (ngModelChange)="FetchEntireListByFilters()" />
-  </div>
-  <div class="col">
-    <label for="SiteRef"><b>Site</b></label>
-    <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear nzPlaceHolder="Select"
-      [nzSize]="'large'" name="SiteRef" [(ngModel)]="Entity.p.SiteRef" required id="SiteRef"
-      (ngModelChange)="FetchEntireListByFilters(); ClearRef()">
-      <nz-option nzLabel="All" [nzValue]="0"></nz-option>
-      <nz-option *ngFor="let Site of SiteList" [nzValue]="Site.p.Ref" [nzLabel]="Site.p.Name"></nz-option>
+    <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
+      id="BillPayableFilterType" name="BillPayableFilterType" [nzSize]="'large'" [(ngModel)]="BillPayableFilterType"
+      (ngModelChange)="getInvoiceSumExpenseSumListByCompanySiteMonthFilterType()">
+      <nz-option [nzValue]="57" [nzLabel]="'Weekly'"> </nz-option>
+      <nz-option [nzValue]="63" [nzLabel]="'Monthly'"> </nz-option>
     </nz-select>
   </div>
-  <div class="col">
-    <label><b>Ledger</b></label>
-    <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear nzPlaceHolder="Select"
-      id="LedgerRef" name="LedgerRef" [nzSize]="'large'" [(ngModel)]="Entity.p.LedgerRef"
-      (ngModelChange)="getSubLedgerListByLedgerRef(Entity.p.LedgerRef)"
-      (ngModelChange)="FetchEntireListByFilters(); ClearRef()">
-      <nz-option *ngFor="let ledger of LedgerList" [nzValue]="ledger.p.Ref" [nzLabel]="ledger.p.Name"></nz-option>
-    </nz-select>
-  </div>
-  <div class="col">
-    <label><b>Sub Ledger</b></label>
-    <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear nzPlaceHolder="Select"
-      id="SubLedgerRef" name="SubLedgerRef" [nzSize]="'large'" [(ngModel)]="Entity.p.SubLedgerRef"
-      (ngModelChange)="FetchEntireListByFilters(); ClearRef()">
-      <nz-option *ngFor="let sub of SubLedgerList" [nzValue]="sub.p.Ref" [nzLabel]="sub.p.Name"></nz-option>
-    </nz-select>
-  </div>
-  <div class="col">
-    <label><b>To Whom Type</b></label>
-    <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear nzPlaceHolder="Select"
-      id="RecipientType" name="RecipientType" [nzSize]="'large'" [(ngModel)]="Entity.p.RecipientType"
-      (ngModelChange)="getRecipientListByRecipientTypeRef(); Entity.p.RecipientRef = 0">
-      <nz-option *ngFor=" let type of RecipientTypesList" [nzValue]="type.Ref" [nzLabel]="type.Name"></nz-option>
-    </nz-select>
-  </div>
-  <div class="col">
-    <label><b>To Whom</b></label>
-    <div class="d-flex align-items-center">
-      <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear nzPlaceHolder="Select"
-        id="RecipientRef" name="RecipientRef" [nzSize]="'large'" [(ngModel)]="Entity.p.RecipientRef"
-        (ngModelChange)="FetchEntireListByFilters(); ">
-        <nz-option *ngFor="let recipient of RecipientList" [nzValue]="recipient.p.Ref"
-          [nzLabel]="recipient.p.RecipientName | titleCase" nzCustomContent>
-          <span [ngClass]="recipient.p.IsSiteRef == 1 ? 'site' : 'nonsite'">
-            {{ recipient.p.RecipientName | titleCase }}
-          </span>
-        </nz-option>
-      </nz-select>
-    </div>
-  </div>
-  <div class="col">
-    <label><b>Reason</b></label>
-    <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear nzPlaceHolder="Select"
-      id="Ref" name="Ref" [nzSize]="'large'" [(ngModel)]="Reason" (ngModelChange)="filterByReason()">
-      <nz-option *ngFor="let sub of AllList" [nzValue]="sub.p.Reason" [nzLabel]="sub.p.Reason">
+  <div class="col" *ngIf="BillPayableFilterType == 63">
+    <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
+      id="SelectedBillPayableMonths" name="SelectedBillPayableMonths" [nzSize]="'large'"
+      [(ngModel)]="SelectedBillPayableMonths"
+      (ngModelChange)="getInvoiceSumExpenseSumListByCompanySiteMonthFilterType()">
+      <nz-option *ngFor="let SelectedBillPayableMonths of MonthList" [nzValue]="SelectedBillPayableMonths.Ref"
+        [nzLabel]="SelectedBillPayableMonths.Name">
       </nz-option>
     </nz-select>
   </div>
@@ -99,30 +47,40 @@
       <tbody>
         <tr *ngFor="let Invoice of paginatedList(); index as i">
           <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
-          <td Class="tbldata">{{ formatDate(Invoice.p.Date) }}</td>
-          <td Class="tbldata">{{ Invoice.p.InvoiceNo }}</td>
-          <td Class="tbldata">{{ Invoice.p.SiteName }}</td>
-          <td Class="tbldata">{{ Invoice.p.LedgerName }}</td>
-          <td Class="tbldata">{{ Invoice.p.SubLedgerName }}</td>
-          <td Class="tbldata">{{ Invoice.p.Description }}</td>
-          <td class="tbldata"> {{ Invoice.p.RecipientName }}</td>
+          <td Class="tbldata">{{ Invoice.p.RecipientName }}</td>
           <td Class="tbldata">
             {{ Invoice.p.InvoiceAmount | currency : "INR" }}
           </td>
-          <td class="tbldata">
-            <Edit-Icon (editClick)="onEditClicked(Invoice)" />
-            <Delete-Icon (deleteClicked)="onDeleteClicked(Invoice)" />
-            <span style="margin-left: 9px; cursor: pointer" (click)="navigateToPrint(Invoice)">
-              <img src="\assets\icons\printer.png" alt="logo" title="Print" width="20px" height="20px" /></span>
+          <td Class="tbldata">
+            {{ Invoice.p.GivenAmount | currency : "INR"}}
+          </td>
+          <td Class="tbldata">
+            {{ Invoice.p.RemainingAmount | currency : "INR" }}
+          </td>
+          <td Class="tbldata">
+            {{ Invoice.p.TotalCashReceived | currency : "INR" }}
+          </td>
+          <td Class="tbldata">
+            {{ Invoice.p.TotalChequeReceived | currency : "INR" }}
           </td>
         </tr>
         <tr>
-          <td class="tbldata" colspan="3"><b>Total Bill Amount</b></td>
-          <td class="tbldata" colspan="5"></td>
+          <td class="tbldata" colspan="2"><b>Total</b></td>
           <td class="tbldata">
-            <b>{{ getTotalInvoice() | currency : "INR" }}</b>
+            <b>{{ totalInvoiceAmount | currency : "INR" }}</b>
           </td>
-          <td class="tbldata"></td>
+          <td class="tbldata">
+            <b>{{ totalGivenAmount | currency : "INR" }}</b>
+          </td>
+          <td class="tbldata">
+            <b>{{ totalRemainingAmount | currency : "INR" }}</b>
+          </td>
+          <td class="tbldata">
+            <b>{{ totalCashReceived | currency : "INR" }}</b>
+          </td>
+          <td class="tbldata">
+            <b>{{ totalChequeReceived | currency : "INR" }}</b>
+          </td>
         </tr>
       </tbody>
     </nz-table>

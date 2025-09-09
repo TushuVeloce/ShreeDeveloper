@@ -845,6 +845,11 @@ export class SidebarlayoutComponent implements OnInit {
         RouterLink: '/homepage/Website/Accounting_Report',
         LogoPath: '/assets/icons/office_report.png',
       },
+      {
+        Name: 'Bill Payable Report',
+        RouterLink: '/homepage/Website/Bill_Payable_Report',
+        LogoPath: '/assets/icons/office_report.png',
+      },
     ]
 
     let moduleListInternal = [

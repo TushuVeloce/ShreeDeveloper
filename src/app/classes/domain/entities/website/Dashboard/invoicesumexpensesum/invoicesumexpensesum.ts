@@ -22,6 +22,9 @@ export class InvoiceSumExpenseSumProps {
   public UpdatedByName: number = 0;
   public Ref: number = 0;
   public InvoiceAmount: number = 0;
+  public TotalCashReceived: number = 0;
+  public TotalChequeReceived: number = 0;
+  public RemainingAmount: number = 0;
   public GivenAmount: number = 0;
   public RecipientName: string = '';
   public CompanyRef: number = 0;

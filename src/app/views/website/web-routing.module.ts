@@ -161,6 +161,7 @@ import { CustomerVisitReportComponent } from './customer_management/customervisi
 import { PaymentHistoryReportComponent } from './customer_management/crmreports/payment-history-report/payment-history-report/payment-history-report.component';
 import { DealCancelledCustomer } from 'src/app/classes/domain/entities/website/customer_management/dealcancelledcustomer/dealcancelledcustomer';
 import { DealCancelledCustomerReportComponent } from './customer_management/crmreports/deal-cancelled-customer-report/deal-cancelled-customer-report.component';
+import { BillsPayableComponent } from './accounting/bills-payable/bills-payable.component';
 
 
 const routes: Routes = [
@@ -335,6 +336,8 @@ const routes: Routes = [
       { path: 'Income_Details', component: IncomeDetailsComponent },
 
       { path: 'Accounting_Report', component: AccountingReportComponent },
+
+      { path: 'Bill_Payable_Report', component: BillsPayableComponent },
 
 
       // Reports
