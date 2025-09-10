@@ -37,8 +37,8 @@ export class LoginPageComponent implements OnInit {
       this.isAndroidPlatform = platform.is('android');
     });
   }
-  UserId: string = 'pranav.p@velocetechinsights.com';
-  Password: string = '123';
+  UserId: string = 'admin@gmail.com';
+  Password: string = '1234';
 
   // UserId: string = '';
   // Password: string = '';
