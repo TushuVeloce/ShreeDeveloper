@@ -52,6 +52,7 @@ export class DashboardComponent implements OnInit {
   BalanceList: Expense[] = [];
   SiteList: Site[] = [];
   TotalNoOfPlots: number = 0;
+  TotalEnquiries: number = 0;
   TotalNoOfSoldPlots: number = 0;
   TotalRevenueGenerated: number = 0;
   TotalExpense: number = 0;
@@ -373,6 +374,7 @@ export class DashboardComponent implements OnInit {
       this.TotalNoOfPlots = lst[0].p.TotalNoOfPlots
       this.TotalNoOfSoldPlots = lst[0].p.TotalNoOfSoldPlots
       this.TotalRevenueGenerated = lst[0].p.TotalRevenueGenerated
+      this.TotalEnquiries = lst[0].p.TotalEnquiries
     } else {
       this.TotalNoOfPlots = 0;
       this.TotalNoOfSoldPlots = 0;

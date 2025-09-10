@@ -24,6 +24,7 @@ export class CRMFunnelProps {
   public TotalNoOfPlots: number = 0;
   public TotalNoOfSoldPlots: number = 0;
   public TotalRevenueGenerated: number = 0;
+  public TotalEnquiries: number = 0;
   public readonly UnitName: string = '';
   public CompanyRef: number = 0;
   public CompanyName: string = '';

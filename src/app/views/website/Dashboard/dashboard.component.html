@@ -145,19 +145,25 @@
       </div>
 
       <div class="row text-center">
-        <div class="col-md-4">
+        <div class="col-md-3">
+          <div class="inner-card border-brown p-3 rounded">
+            <p class="fw-semibold mb-2">Total Enquiry</p>
+            <h4 class="text-danger fw-bold">🏠 {{TotalEnquiries}}</h4>
+          </div>
+        </div>
+        <div class="col-md-3">
           <div class="inner-card border-brown p-3 rounded">
             <p class="fw-semibold mb-2">Total Plots</p>
             <h4 class="text-danger fw-bold">🏠 {{TotalNoOfPlots}}</h4>
           </div>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-3">
           <div class="inner-card border-brown p-3 rounded">
             <p class="fw-semibold mb-2">Sold Plots</p>
             <h4 class="text-danger fw-bold">🏠 {{TotalNoOfSoldPlots}}</h4>
           </div>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-3">
           <div class="inner-card border-brown p-3 rounded">
             <p class="fw-semibold mb-2">Revenue Generated</p>
             <h4 class="text-danger fw-bold"> {{TotalRevenueGenerated | currency : "INR" }}</h4>
