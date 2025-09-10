@@ -81,7 +81,6 @@ export class CustomerEnquiryComponent implements OnInit {
   //   this.MasterList = lst;
   //   this.MasterList.forEach(e => e.p.CustomerFollowUps.push(CustomerFollowUpProps.Blank()))
   //   this.DisplayMasterList = this.MasterList;
-  //   console.log('this.DisplayMasterList :', this.DisplayMasterList);
   //   this.loadPaginationData();
   // };
 

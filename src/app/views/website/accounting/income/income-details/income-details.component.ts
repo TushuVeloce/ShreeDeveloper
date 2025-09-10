@@ -76,7 +76,7 @@ export class IncomeDetailsComponent implements OnInit {
       this.Entity = Income.GetCurrentInstance();
       this.Date = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.Date);
       this.appStateManage.StorageKey.removeItem('Editable');
-      console.log(' this.Entity :',  this.Entity);
+      this.PayerPlotNo = this.Entity.p.PlotName;
       await this.getSubLedgerListByLedgerRef(this.Entity.p.LedgerRef);
       this.OldIncomeAmount = this.Entity.p.IncomeAmount;
       this.Entity.p.UpdatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
@@ -270,13 +270,15 @@ export class IncomeDetailsComponent implements OnInit {
   };
 
   getSubLedgerListByLedgerRef = async (ledgerref: number) => {
-    this.Entity.p.SubLedgerRef = 0;
     if (ledgerref <= 0) {
       await this.uiUtils.showErrorToster('Ledger not Selected');
       return;
     }
     let lst = await SubLedger.FetchEntireListByLedgerRef(ledgerref, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.SubLedgerList = lst;
+    if (lst.length < 0) {
+      this.Entity.p.SubLedgerRef = 0;
+    }
   }
 
   onTypeChange = () => {

@@ -85,7 +85,6 @@ export class BillsPayableComponent implements OnInit {
     let lst = await InvoiceSumExpenseSum.FetchEntireListByCompanySiteMonthFilterType(this.companyRef(), this.SelectedBillPayableMonths, this.BillPayableFilterType, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.MasterList = lst;
     this.DisplayMasterList = lst;
-    console.log('this.DisplayMasterList :', this.DisplayMasterList);
   }
 
   // For Pagination  start ----
