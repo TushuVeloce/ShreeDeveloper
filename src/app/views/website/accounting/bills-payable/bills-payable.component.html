@@ -87,6 +87,6 @@
   </div>
   <Pagination [pageSize]="pageSize" [total]="total" [(currentPage)]="currentPage" (pageChange)="onPageChange($event)" />
 </div>
-<div *ngIf="DisplayMasterList.length === 0">
+<div *ngIf="DisplayMasterList.length == 0">
   <Data-Not-Found />
 </div>
