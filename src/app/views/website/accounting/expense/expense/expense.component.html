@@ -193,13 +193,13 @@
         <td class="tbldata" colspan="2"><b>Total Expense</b></td>
         <td class="tbldata" colspan="5"></td>
         <td class="tbldata">
-          <b>{{TotalInvoiceAmount| currency : "INR" }}</b>
+          <!-- <b>{{TotalInvoiceAmount| currency : "INR" }}</b> -->
         </td>
         <td class="tbldata">
-          <b>{{ TotalGivenAmount | currency : "INR" }}</b>
+          <b>{{ getTotalGiven() | currency : "INR" }}</b>
         </td>
         <td class="tbldata">
-          <b>{{ RemainingAmountOfGrandTotal | currency : "INR" }}</b>
+          <!-- <b>{{ RemainingAmountOfGrandTotal | currency : "INR" }}</b> -->
         </td>
         <td class="tbldata" colspan="3"></td>
       </tr>

@@ -69,9 +69,9 @@ export class CustomersummarryReportComponent implements OnInit {
     }
   }
 
-   printReport() {
-  window.print();
-}
+  printReport() {
+    window.print();
+  }
 
 
 }
