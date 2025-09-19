@@ -36,6 +36,7 @@ export class IncomeDetailsComponent implements OnInit {
   PayerNameInput: boolean = false
   PayerNameReadOnly: boolean = false
   isSaveDisabled: boolean = false;
+  isPayerSaveDisabled: boolean = false;
   DetailsFormTitle: 'New Income' | 'Edit Income' = 'New Income';
   IsDropdownDisabled: boolean = false;
   InitialEntity: Income = null as any;
@@ -210,6 +211,10 @@ export class IncomeDetailsComponent implements OnInit {
       this.uiUtils.showErrorToster('Payer Name can not be Blank');
       return
     }
+    if (this.isPayerSaveDisabled == true) {
+      return
+    }
+    this.isPayerSaveDisabled = true;
     this.PayerEntity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef();
     this.PayerEntity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName();
     if (this.PayerEntity.p.CreatedBy == 0) {
@@ -221,10 +226,11 @@ export class IncomeDetailsComponent implements OnInit {
     let tr = await this.utils.SavePersistableEntities(entitiesToSave);
 
     if (!tr.Successful) {
-      this.isSaveDisabled = false;
+      this.isPayerSaveDisabled = false;
       this.uiUtils.showErrorMessage('Error', tr.Message);
       return;
     } else {
+      this.isPayerSaveDisabled = false;
       if (this.IsNewEntity) {
         await this.uiUtils.showSuccessToster('Payer Name saved successfully');
         this.PayerNameInput = false
