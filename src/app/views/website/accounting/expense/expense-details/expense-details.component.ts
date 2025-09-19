@@ -39,6 +39,7 @@ export class ExpenseDetailsComponent implements OnInit {
   UnitList: Unit[] = [];
   RecipientNameInput: boolean = false
   isSaveDisabled: boolean = false;
+  isRecipientSaveDisabled: boolean = false;
   ShreeBalance: number = 0;
   PaymentType: number = 0;
   DetailsFormTitle: 'New Expense' | 'Edit Expense' = 'New Expense';
@@ -437,7 +438,10 @@ export class ExpenseDetailsComponent implements OnInit {
       this.uiUtils.showErrorToster('Recipient Name can not be Blank');
       return
     }
-    this.isSaveDisabled = true;
+    if (this.isRecipientSaveDisabled == true) {
+      return
+    }
+    this.isRecipientSaveDisabled = true;
     this.RecipientEntity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef();
     this.RecipientEntity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName();
     if (this.RecipientEntity.p.CreatedBy == 0) {
@@ -449,10 +453,11 @@ export class ExpenseDetailsComponent implements OnInit {
     let tr = await this.utils.SavePersistableEntities(entitiesToSave);
 
     if (!tr.Successful) {
-      this.isSaveDisabled = false;
+      this.isRecipientSaveDisabled = false;
       this.uiUtils.showErrorMessage('Error', tr.Message);
       return;
     } else {
+      this.isRecipientSaveDisabled = false;
       await this.uiUtils.showSuccessToster('Recipient Name saved successfully');
       this.RecipientNameInput = false
       this.RecipientEntity = Recipient.CreateNewInstance();
