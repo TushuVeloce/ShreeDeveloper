@@ -1,25 +1,22 @@
-<ion-header class="ion-no-border modern-header">
-  <ion-toolbar appSafeArea="top:2rem" class="modern-header">
-    <!-- Left-aligned logo -->
+<ion-header class="ion-no-border">
+  <ion-toolbar>
     <ion-buttons slot="start">
       <ion-button class="logo-button" fill="clear">
         <img src="assets/logos/ShreeIcon.png" alt="Shree Developers" class="logo-img" />
       </ion-button>
     </ion-buttons>
 
-    <!-- Company Selector -->
+    <ion-title class="company-title" *ngIf="IsDefaultUser">
+      {{ CompanyName || 'Select Company' }}
+    </ion-title>
+
     <ion-item class="input-item" button detail="false" (click)="selectCountryBottomsheet()" [disabled]="IsDefaultUser"
       *ngIf="!IsDefaultUser" lines="none">
-      <ion-text class="status-text">
+      <ion-label class="company-label">
         {{ CompanyName || 'Select Company' }}
-      </ion-text>
+      </ion-label>
     </ion-item>
 
-    <ion-text class="status-text-user" *ngIf="IsDefaultUser">
-      {{ CompanyName || 'Select Company' }}
-    </ion-text>
-
-    <!-- Right-side actions -->
     <ion-buttons slot="end">
       <ion-button class="icon-button" (click)="goToNotificationPage()" fill="clear">
         <ion-icon name="notifications-outline" slot="icon-only"></ion-icon>

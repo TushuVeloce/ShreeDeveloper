@@ -1,0 +1,113 @@
+ion-content {
+  --background: var(--ion-background-color);
+}
+
+// Global styles for the list
+.holiday-list {
+  background: transparent;
+  padding: 10px 0; // Add padding to the top and bottom of the list
+}
+
+.holiday-item {
+  --background: var(--ion-background-color);
+  --border-radius: 12px;
+  margin: 10px 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  transition: transform 0.2s ease-in-out;
+  cursor: pointer;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+  }
+
+  &:active {
+    transform: translateY(2px);
+  }
+
+  ion-label {
+    display: flex;
+    align-items: center;
+  }
+}
+
+.date-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 80px; // Ensure consistent width
+  height: 60px;
+  background: var(--ion-color-tertiary, #9a9a9a);
+  color: var(--ion-color-light);
+  border-radius: 8px;
+  margin-right: 16px;
+  text-align: center;
+}
+
+.day {
+  font-size: 0.8rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  opacity: 0.8;
+}
+
+.date {
+  font-size: 0.8rem;
+  font-weight: bold;
+  line-height: 1.1;
+}
+
+.reason {
+  font-size: 1.1em;
+  font-weight: bold;
+  color: var(--ion-color-dark);
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.no-data-message {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: calc(100vh - 56px - 60px);
+  text-align: center;
+  padding: 0 20px;
+  color: var(--ion-color-medium);
+  ion-icon {
+    font-size: 5rem;
+    color: var(--ion-color-light);
+  }
+  h2 {
+    font-weight: bold;
+    font-size: 1.5em;
+    color: var(--ion-color-dark);
+    margin-top: 20px;
+    margin-bottom: 10px;
+  }
+  p {
+    font-size: 1em;
+    color: var(--ion-color-medium);
+    margin: 0;
+  }
+}
+
+// FAB and item-option styles remain the same from your original code.
+// No need to repeat the SCSS for those.
+
+// Responsive styles for large screens
+@media (min-width: 768px) {
+  ion-list {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  .holiday-item {
+    margin: 10px auto;
+    width: 95%;
+  }
+  ion-fab {
+    bottom: 30px;
+    right: 30px;
+  }
+}

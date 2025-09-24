@@ -172,12 +172,29 @@ export class PendingCustomerFollowupMobileAppComponent implements OnInit {
   onAddCustomerEnquiry = async () => {
     await this.router.navigate(['/mobile-app/tabs/dashboard/customer-relationship-management/customer-followup/edit']);
   }
+  // Add this method to your component class
+public getStatusColor(statusName: string): string {
+  switch (statusName.toLowerCase()) {
+    case 'new lead':
+      return 'primary';
+    case 'in progress':
+      return 'warning';
+    case 'completed':
+      return 'success';
+    case 'pending':
+      return 'danger';
+    default:
+      return 'medium';
+  }
+}
+
   formatData = (list: any[]) => {
     return list.map(item => ({
       Ref: item.p.Ref,
       Name: item.p.Name
     }));
   };
+  
   openFilterSheet = async () => {
     const filterData = {
       categories: [

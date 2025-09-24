@@ -1,64 +1,59 @@
-/* Gradient background with modern look */
-.modern-header {
-    // --background: linear-gradient(135deg, #4c6ef5 0%, #15aabf 100%);
-    color: #333;
-    padding: 0 6px;
-    /* small side padding */
-    display: flex;
-    align-items: center;
+ion-toolbar {
+  --background: var(--ion-background-color);
+  --color: var(--ion-text-color);
+  --border-width: 0;
+  --min-height: 56px; /* Standard toolbar height */
 }
 
-// ion-toolbar {
-//     --ion-safe-area-top: 2rem;
-//     padding-top: var(--ion-safe-area-top);
-// }
+/* Important: Let Ionic handle the safe area. 
+  The ion-header and ion-toolbar components automatically add
+  padding to account for the notch on notched devices. 
+  Do not manually add padding-top.
+*/
 
 /* Logo Button */
 .logo-button {
-    padding: 0;
-    height: 100%;
+  padding: 0;
 }
 
 .logo-img {
-    height: 36px;
-    width: auto;
+  height: 36px;
+  width: auto;
 }
 
-/* Company Dropdown Styling */
+/* Company Selector */
 .input-item {
-    --background: transparent;
-    --padding-start: 0;
-    --inner-padding-end: 0;
-    color: var(--ion-text-color);
-    border-radius: 8px;
-    font-size: 0.95rem;
-    margin: 0 8px;
+  --background: transparent;
+  --padding-start: 5px;
+  --inner-padding-end: 0;
+  --padding-end: 0;
+  font-size: 0.95rem;
+  margin: 0 8px; /* Correct spacing */
 }
 
-.status-text {
-    font-weight: 600;
-    font-size: 1rem;
-    padding-left: 6px;
+.company-label {
+  font-weight: 600;
+  font-size: 1rem;
+  margin: 0; /* Remove default margin */
 }
 
-.status-text-user {
-    font-weight: 600;
-    font-size: 1rem;
-    padding-left: 6px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+/* For the text-only version */
+ion-title.company-title {
+  --text-align: start; /* Align to the start of the toolbar content */
+  font-size: 1rem;
+  font-weight: 600;
+  padding-left: 6px;
 }
 
 /* Notification & Avatar */
 .icon-button {
-    color: var(--ion-color-primary);
-    font-size: 1.4rem;
+  color: var(--ion-color-primary);
+  font-size: 1.4rem;
 }
 
 .user-avatar {
-    width: 36px;
-    height: 36px;
-    border: 2px solid var(--ion-color-primary);
-    margin-left: 8px;
+  width: 36px;
+  height: 36px;
+  border: 2px solid var(--ion-color-primary);
+  margin-left: 8px;
 }

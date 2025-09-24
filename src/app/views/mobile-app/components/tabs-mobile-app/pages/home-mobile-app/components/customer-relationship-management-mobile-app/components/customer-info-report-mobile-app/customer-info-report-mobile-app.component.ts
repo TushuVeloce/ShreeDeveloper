@@ -12,7 +12,7 @@ import { FilterItem } from 'src/app/views/mobile-app/components/shared/chip-filt
   selector: 'app-customer-info-report-mobile-app',
   templateUrl: './customer-info-report-mobile-app.component.html',
   styleUrls: ['./customer-info-report-mobile-app.component.scss'],
-  standalone: false
+  standalone: false,
 })
 export class CustomerInfoReportMobileAppComponent implements OnInit {
   Entity: CRMReports = CRMReports.CreateNewInstance();
@@ -26,11 +26,46 @@ export class CustomerInfoReportMobileAppComponent implements OnInit {
   ModalOpen: boolean = false;
   companyRef = 0;
 
-  headers: string[] = ['Sr.No.', 'Customer ID', 'Customer Name', 'Address', 'Contact No', 'PAN No', 'Aadhar No', 'Lead Source', 'Lead Handle By', 'Agent/Broker', 'Booking Remark', 'Plot No', 'Area in Sqm', 'Area in Sqft', 'Basic Rate', 'Discount Rate on Area', 'Discount On Plot Amount', 'Total Plot Amount', 'Government Recknor', 'Government Value', 'Value of Agreement', 'Reg Tax Value In %', 'Registration Fees', 'SD Tax Value In %', 'Stamp Duties', 'Goods Services Tax', 'Legal Charges', 'Total Extra Charges', 'Grand Total', 'Total Cheque Recieved', 'Total Cash Recieved', 'Total Recieved (cash + cheque)', 'Total Cheque Balance', 'Total Cash Balance', 'Total Balance',];
+  headers: string[] = [
+    'Sr.No.',
+    'Customer ID',
+    'Customer Name',
+    'Address',
+    'Contact No',
+    'PAN No',
+    'Aadhar No',
+    'Lead Source',
+    'Lead Handle By',
+    'Agent/Broker',
+    'Booking Remark',
+    'Plot No',
+    'Area in Sqm',
+    'Area in Sqft',
+    'Basic Rate',
+    'Discount Rate on Area',
+    'Discount On Plot Amount',
+    'Total Plot Amount',
+    'Government Recknor',
+    'Government Value',
+    'Value of Agreement',
+    'Reg Tax Value In %',
+    'Registration Fees',
+    'SD Tax Value In %',
+    'Stamp Duties',
+    'Goods Services Tax',
+    'Legal Charges',
+    'Total Extra Charges',
+    'Grand Total',
+    'Total Cheque Recieved',
+    'Total Cash Recieved',
+    'Total Recieved (cash + cheque)',
+    'Total Cheque Balance',
+    'Total Cash Balance',
+    'Total Balance',
+  ];
   filters: FilterItem[] = [];
   // Store current selected values here to preserve selections on filter reload
   selectedFilterValues: Record<string, any> = {};
-
 
   constructor(
     private appStateManagement: AppStateManageService,
@@ -38,11 +73,11 @@ export class CustomerInfoReportMobileAppComponent implements OnInit {
     private haptic: HapticService,
     public loadingService: LoadingService,
     private pdfService: PDFService
-  ) { }
+  ) {}
 
   ngOnInit = (): void => {
     // this.loadCustomerInfoReportIfCompanyExists();
-  }
+  };
 
   ionViewWillEnter = async () => {
     await this.loadCustomerInfoReportIfCompanyExists();
@@ -60,13 +95,20 @@ export class CustomerInfoReportMobileAppComponent implements OnInit {
 
   handlePrintOrShare = async () => {
     if (this.DisplayMasterList.length == 0) {
-      await this.toastService.present('No Customer Info Records Found', 1000, 'warning');
+      await this.toastService.present(
+        'No Customer Info Records Found',
+        1000,
+        'warning'
+      );
       await this.haptic.warning();
       return;
     }
     if (!this.PrintContainer) return;
-    await this.pdfService.generatePdfAndHandleAction(this.PrintContainer.nativeElement, `Receipt_${this.Entity.p.RegisterDate}.pdf`);
-  }
+    await this.pdfService.generatePdfAndHandleAction(
+      this.PrintContainer.nativeElement,
+      `Receipt_${this.Entity.p.RegisterDate}.pdf`
+    );
+  };
 
   loadFilters = () => {
     this.filters = [
@@ -74,19 +116,23 @@ export class CustomerInfoReportMobileAppComponent implements OnInit {
         key: 'site',
         label: 'Site',
         multi: false,
-        options: this.SiteList.map(item => ({
+        options: this.SiteList.map((item) => ({
           Ref: item.p.Ref,
           Name: item.p.Name,
         })),
-        selected: this.selectedFilterValues['site'] > 0 ? this.selectedFilterValues['site'] : null,
-      }
+        selected:
+          this.selectedFilterValues['site'] > 0
+            ? this.selectedFilterValues['site']
+            : null,
+      },
     ];
-  }
+  };
 
   onFiltersChanged = async (updatedFilters: any[]) => {
     for (const filter of updatedFilters) {
       const selected = filter.selected;
-      const selectedValue = (selected === null || selected === undefined) ? null : selected;
+      const selectedValue =
+        selected === null || selected === undefined ? null : selected;
 
       // Save selected value to preserve after reload
       this.selectedFilterValues[filter.key] = selectedValue ?? null;
@@ -103,18 +149,19 @@ export class CustomerInfoReportMobileAppComponent implements OnInit {
       await this.getCustomerReportByCompanyRef();
     }
     this.loadFilters(); // Reload filters with updated options & preserve selections
-  }
+  };
   private loadCustomerInfoReportIfCompanyExists = async (): Promise<void> => {
-
-    this.companyRef = Number(this.appStateManagement.localStorage.getItem('SelectedCompanyRef'));
+    this.companyRef = Number(
+      this.appStateManagement.localStorage.getItem('SelectedCompanyRef')
+    );
     if (this.companyRef <= 0) {
       await this.toastService.present('company not selected', 1000, 'danger');
       await this.haptic.error();
       return;
     }
     await this.FormulateSiteListByCompanyRef();
-    await this.getCustomerReportByCompanyRef()
-  }
+    await this.getCustomerReportByCompanyRef();
+  };
 
   FormulateSiteListByCompanyRef = async () => {
     this.MasterList = [];
@@ -125,57 +172,80 @@ export class CustomerInfoReportMobileAppComponent implements OnInit {
       await this.toastService.present('company not selected', 1000, 'danger');
       return;
     }
-    let lst = await Site.FetchEntireListByCompanyRef(this.companyRef, async errMsg => {
-      await this.toastService.present(errMsg, 1000, 'danger');
-    });
+    let lst = await Site.FetchEntireListByCompanyRef(
+      this.companyRef,
+      async (errMsg) => {
+        await this.toastService.present(errMsg, 1000, 'danger');
+      }
+    );
     this.SiteList = lst;
-  }
+  };
   getCustomerReportByCompanyRef = async () => {
-    this.MasterList = [];
-    this.DisplayMasterList = [];
-    if (this.companyRef <= 0) {
-      await this.toastService.present('Site not selected', 1000, 'danger');
-      await this.haptic.error();
-      return;
+    try {
+      await this.loadingService.show();
+      this.MasterList = [];
+      this.DisplayMasterList = [];
+      if (this.companyRef <= 0) {
+        await this.toastService.present('Site not selected', 1000, 'danger');
+        await this.haptic.error();
+        return;
+      }
+
+      let lst = await CRMReports.FetchEntireListByCompanyRef(
+        this.companyRef,
+        async (errMsg) => {
+          await this.toastService.present(errMsg, 1000, 'danger');
+        }
+      );
+      this.DisplayMasterList = lst;
+    } catch (error) {
+    } finally {
+      await this.loadingService.hide();
     }
-
-    let lst = await CRMReports.FetchEntireListByCompanyRef(this.companyRef, async errMsg => {
-      await this.toastService.present(errMsg, 1000, 'danger');
-
-    });
-    this.DisplayMasterList = lst;
-  }
+  };
   getCustomerReportByCompanyAndSiteRef = async () => {
-    this.MasterList = [];
-    this.DisplayMasterList = [];
-    if (this.companyRef <= 0) {
-      await this.toastService.present('Company not selected', 1000, 'danger');
-      await this.haptic.error();
-      return;
+    try {
+      await this.loadingService.show();
+      this.MasterList = [];
+      this.DisplayMasterList = [];
+      if (this.companyRef <= 0) {
+        await this.toastService.present('Company not selected', 1000, 'danger');
+        await this.haptic.error();
+        return;
+      }
+      if (this.SiteRef <= 0) {
+        await this.toastService.present('Site not selected', 1000, 'danger');
+        return;
+      }
+      let lst = await CRMReports.FetchEntireListByCompanyAndSiteRef(
+        this.companyRef,
+        this.SiteRef,
+        async (errMsg) => {
+          await this.toastService.present(errMsg, 1000, 'danger');
+        }
+      );
+      this.DisplayMasterList = lst;
+    } catch (error) {
+    } finally {
+      await this.loadingService.hide();
     }
-    if (this.SiteRef <= 0) {
-      await this.toastService.present('Site not selected', 1000, 'danger');
-      return;
-    }
-    let lst = await CRMReports.FetchEntireListByCompanyAndSiteRef(this.companyRef, this.SiteRef, async errMsg => {
-      await this.toastService.present(errMsg, 1000, 'danger');
-    });
-    this.DisplayMasterList = lst;
-  }
+  };
 
   OnCustomerSelection = () => {
-    let report = this.CustomerList.filter((data) => data.p.CustomerEnquiryRef == this.CustomerRef);
+    let report = this.CustomerList.filter(
+      (data) => data.p.CustomerEnquiryRef == this.CustomerRef
+    );
     if (report.length > 0) {
       this.Entity = report[0];
     }
-  }
+  };
 
   onViewClicked = async (item: CRMReports) => {
     this.SelectedCRMReports = item;
     this.ModalOpen = true;
-  }
+  };
 
   closeModal = () => {
     this.ModalOpen = false;
-  }
+  };
 }

@@ -1,99 +1,128 @@
-<app-header-with-back-handler title="Attendance Details"
-  backRoute="mobile-app/tabs/attendance"></app-header-with-back-handler>
+<app-header-with-back-handler
+  title="Attendance Details"
+  backRoute="mobile-app/tabs/attendance"
+></app-header-with-back-handler>
 
-<ion-content [fullscreen]="true" class="attendance-content">
+<ion-content [fullscreen]="true" class="attendance-content ion-padding">
   <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
 
-  <!-- Year Select -->
-  <!-- Uncomment if needed -->
-  <!--
-  <ion-select class="year-select" mode="ios" interface="popover"
-    [(ngModel)]="SelectedYear" (ionChange)="onYearChange()">
-    <ion-select-option *ngFor="let year of FinancialYearList" [value]="year">
-      {{ year }}
-    </ion-select-option>
-  </ion-select>
-  -->
-
-  <!-- Month Dropdown -->
   <ion-item lines="none" class="month-dropdown">
     <ion-label>Month</ion-label>
-    <ion-select [(ngModel)]="selectedMonth" [mode]="'ios'" (ionChange)="fetchAttendanceByMonth($event.detail.value)"
-      interface="popover">
+    <ion-select
+      [(ngModel)]="selectedMonth"
+      [mode]="'ios'"
+      (ionChange)="fetchAttendanceByMonth($event.detail.value)"
+      interface="popover"
+    >
       <ion-select-option *ngFor="let month of months" [value]="month.Ref">
         {{ month.Name }}
       </ion-select-option>
     </ion-select>
   </ion-item>
 
-  <!-- Present/Absent Summary -->
-  <ion-card class="attendance-dashboard-card">
+  <ion-card class="attendance-summary-card">
     <ion-card-content>
       <ion-grid>
         <ion-row class="ion-align-items-center ion-justify-content-between">
-          <ion-col size="5">
+          <ion-col size="5" class="status-col present-col">
             <ion-row class="ion-align-items-center">
-              <ion-col size="auto"><ion-icon name="person-add-outline" class="person-icon"></ion-icon></ion-col>
+              <ion-col size="auto">
+                <ion-icon name="checkmark-circle-outline"></ion-icon>
+              </ion-col>
               <ion-col>
-                <h3>Present: {{ PresentCount }}</h3>
+                <div class="count">{{ PresentCount }}</div>
+                <div class="label">Present</div>
               </ion-col>
             </ion-row>
           </ion-col>
 
-          <ion-col size="auto">
-            <div class="vertical-line-grid"></div>
+          <ion-col size="auto" class="divider-col">
+            <div class="vertical-divider"></div>
           </ion-col>
 
-          <ion-col size="5">
+          <ion-col size="5" class="status-col absent-col">
             <ion-row class="ion-align-items-center">
-              <ion-col size="auto"><ion-icon name="person-remove-outline" class="person-icon"></ion-icon></ion-col>
+              <ion-col size="auto">
+                <ion-icon name="close-circle-outline"></ion-icon>
+              </ion-col>
               <ion-col>
-                <h3>Absent: {{ AbsentCount }}</h3>
+                <div class="count">{{ AbsentCount }}</div>
+                <div class="label">Absent</div>
               </ion-col>
             </ion-row>
           </ion-col>
         </ion-row>
       </ion-grid>
-    </ion-card-content>
+      </ion-card-content>
   </ion-card>
 
-  <ion-list *ngIf="filteredMonthlyAttendanceLogsList.length > 0 && !loadingService.isLoaderActive()"
-    class="attendance-list ion-padding">
-    <ion-card *ngFor="let day of filteredMonthlyAttendanceLogsList" class="attendance-card"
-      [class.empty]="!day.p.FirstCheckInTime && !day.p.LastCheckOutTime">
+  <ion-list
+    *ngIf="filteredMonthlyAttendanceLogsList.length > 0 && !loadingService.isLoaderActive()"
+    class="daily-attendance-list"
+  >
+    <ion-card
+      *ngFor="let day of filteredMonthlyAttendanceLogsList"
+      class="attendance-day-card"
+    >
       <ion-card-header class="card-header">
-        <div class="date">Date : {{ day.p.TransDateTime ? formatDay(day.p.TransDateTime) : '--' }}</div>
+        <div class="date-container">
+          <div class="day-of-week">
+            {{ formatDay(day.p.TransDateTime) | date: 'EEEE' }}
+          </div>
+          <div class="full-date">
+            {{ day.p.TransDateTime ? formatDay(day.p.TransDateTime) : '--' }}
+          </div>
+        </div>
+
+        <ion-badge
+          [class]="{
+            'status-present': day.p.FirstCheckInTime&& !day.p.IsLeave,
+            'status-absent': !day.p.FirstCheckInTime && !day.p.IsLeave,
+            'status-leave': day.p.IsLeave
+          }"
+          class="status-badge"
+        >
+          {{ day.p.IsLeave? 'Leave' : day.p.FirstCheckInTime ? 'Present' : 'Absent' }}
+        </ion-badge>
       </ion-card-header>
 
-      <ion-card-content *ngIf="day.p.FirstCheckInTime || day.p.LastCheckOutTime || day.p.DisplayTotalWorkingHrs"
-        class="timing-row">
-        <ion-grid>
-          <ion-row class="ion-align-items-center">
-            <ion-col size="6">
-              <div class="timing-box">
-                <label>Total Hours</label>
-                <span>{{ day.p.DisplayTotalWorkingHrs || '--' }}</span>
-              </div>
-            </ion-col>
-            <ion-col size="6">
-              <div class="timing-box">
-                <label>Check In/Out</label>
-                <span>{{day.p.FirstCheckInTime +'-'+ day.p.LastCheckOutTime || '--' }}</span>
-              </div>
-            </ion-col>
-          </ion-row>
-        </ion-grid>
+      <ion-card-content
+        *ngIf="day.p.FirstCheckInTime"
+        class="timing-details-container"
+      >
+        <div class="timing-box total-hours">
+          <ion-icon name="time-outline"></ion-icon>
+          <div class="timing-info">
+            <div class="label">Total Hours</div>
+            <div class="value">
+              {{ day.p.DisplayTotalWorkingHrs || '--' }}
+            </div>
+          </div>
+        </div>
+
+        <div class="timing-box check-in-out">
+          <ion-icon name="swap-vertical-outline"></ion-icon>
+          <div class="timing-info">
+            <div class="label">Check In/Out</div>
+            <div class="value">
+              {{ day.p.FirstCheckInTime || '--' }} -
+              {{ day.p.LastCheckOutTime || '--' }}
+            </div>
+          </div>
+        </div>
       </ion-card-content>
     </ion-card>
   </ion-list>
 
-  <!-- No Data -->
-  <ng-template #noDataTemplate>
+  <ng-container
+    *ngIf="filteredMonthlyAttendanceLogsList.length === 0 && !loadingService.isLoaderActive()"
+  >
     <div class="no-data-text">
-      <ion-icon name="alert-circle-outline"></ion-icon>
-      No attendance data found
+      <ion-icon name="calendar-outline"></ion-icon>
+      <h3>No attendance data found for this month</h3>
+      <p>Select a different month or check back later.</p>
     </div>
-  </ng-template>
+  </ng-container>
 </ion-content>

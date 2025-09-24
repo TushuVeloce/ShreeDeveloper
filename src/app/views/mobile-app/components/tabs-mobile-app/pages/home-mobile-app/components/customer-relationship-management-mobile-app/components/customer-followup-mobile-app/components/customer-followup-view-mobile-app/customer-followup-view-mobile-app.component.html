@@ -1,32 +1,62 @@
-<app-header-with-back-handler title="Customer Follow-Up"
-  backRoute="mobile-app/tabs/dashboard/customer-relationship-management">
-</app-header-with-back-handler>
+<app-header-with-back-handler
+  title="Customer Follow-Up"
+  backRoute="mobile-app/tabs/dashboard/customer-relationship-management"
+></app-header-with-back-handler>
 
-<!-- <app-chip-filter-mobile-app [filters]="filters" (filtersChanged)="onFiltersChanged($event)">
-</app-chip-filter-mobile-app> -->
 <ion-content class="followup-content">
+  <div class="filter-bar ion-padding-horizontal">
+    <div class="date-filter">
+      <ion-label>Reminder Date:</ion-label>
+        <ion-datetime-button datetime="EntryDate" trigger="entry-date-modal"></ion-datetime-button>
+      <ion-modal keepContentsMounted="true" trigger="entry-date-modal">
+        <ng-template>
+          <ion-datetime id="EntryDate" [name]="'EntryDate'" presentation="date" [(ngModel)]="selectedDate"
+            show-default-buttons="true"
+            (ionChange)="onDateChange($event)"
+            show-clear-button="true"
+            ></ion-datetime>
+        </ng-template>
+      </ion-modal>
+    </div>
+  </div>
 
-  <!-- Pull to Refresh -->
   <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
 
-  <!-- Customer Follow-Up List -->
-  <ion-list class="data-list">
+  <ion-list class="followup-list ion-padding">
     <ng-container *ngIf="FilterFollowupList.length > 0">
-      <ion-card *ngFor="let item of FilterFollowupList" class="data-card">
-        <ion-card-header>
-          <ion-card-title>Customer Name: <span>{{ item.p.CustomerName }}</span></ion-card-title>
-        </ion-card-header>
-
+      <ion-card
+        *ngFor="let item of FilterFollowupList"
+        class="followup-card"
+        (click)="onFollowUpClick(item)"
+        button
+      >
         <ion-card-content>
-          <div class="info-row"><strong>Contact No:</strong><span>{{ item.p.ContactNos }}</span></div>
-          <div class="info-row"><strong>Reminder Date:</strong><span>{{ formatDate(item.p.ReminderDate) }}</span></div>
-          <div class="info-row"><strong>Customer Status:</strong><span>{{ item.p.CustomerStatusName }}</span></div>
-          <div class="info-row"><strong>Requirement:</strong><span>{{ item.p.CustomerRequirement }}</span></div>
-
-          <div class="btn-row">
-            <ion-button fill="outline" size="small" color="primary" (click)="onFollowUpClick(item)">
+          <div class="card-header">
+            <h2 class="customer-name">{{ item.p.CustomerName }}</h2>
+            <ion-badge color="primary">{{
+              item.p.CustomerStatusName
+            }}</ion-badge>
+          </div>
+          <div class="card-details">
+            <div class="detail-item">
+              <span class="label">Contact No:</span>
+              <span class="value">{{ item.p.ContactNos }}</span>
+            </div>
+            <div class="detail-item">
+              <span class="label">Reminder Date:</span>
+              <span class="value date-highlight">{{
+                formatDate(item.p.ReminderDate)
+              }}</span>
+            </div>
+            <div class="detail-item">
+              <span class="label">Requirement:</span>
+              <span class="value">{{ item.p.CustomerRequirement }}</span>
+            </div>
+          </div>
+          <div class="card-actions">
+            <ion-button fill="solid" size="small" color="primary">
               <ion-icon slot="start" name="people-outline"></ion-icon> Follow Up
             </ion-button>
           </div>
@@ -34,9 +64,13 @@
       </ion-card>
     </ng-container>
 
-    <!-- No Data -->
-    <div *ngIf="FilterFollowupList.length === 0 && !loadingService.isLoaderActive()" class="no-data-mobile-app">
-      <ion-icon name="alert-circle-outline" size="large" color="medium"></ion-icon>
+    <div
+      *ngIf="
+        FilterFollowupList.length === 0 && !loadingService.isLoaderActive()
+      "
+      class="empty-state-message"
+    >
+      <ion-icon name="alert-circle-outline"></ion-icon>
       <p>No customer follow-up records found.</p>
     </div>
   </ion-list>

@@ -2,45 +2,61 @@
 </app-header-with-back-handler>
 <app-chip-filter-mobile-app [filters]="filters" (filtersChanged)="onFiltersChanged($event)">
 </app-chip-filter-mobile-app>
-<ion-content class="ion-padding">
+<ion-content class="ion-padding material-requisition-content">
 
   <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
 
   <ion-list class="requisition-list" [lines]="'none'">
-    <ion-item *ngFor="let requisition of DisplayMasterList" class="requisition-item" button detail
-      (click)="openModal(requisition, requisition.p.MaterialRequisitionDetailsArray[0])">
-      <ion-label>
-        <h2>Site : {{ requisition.p.SiteName || 'Unknown Site' }}</h2>
-        <p class="date-label">Date : {{ formatDate(requisition.p.Date) || 'Unknown Date' }}</p>
-        <p class="date-label">Materials : {{ requisition.p.MaterialRequisitionDetailsArray.length || 'Unknown Date' }}</p>
-      </ion-label>
+    <ng-container *ngIf="DisplayMasterList.length > 0">
+      <ion-item-sliding *ngFor="let requisition of DisplayMasterList">
+        <ion-item-options side="start" *ngIf="isAnyMaterialPending(requisition)">
+          <ion-item-option color="primary" (click)="onEditClicked(requisition)">
+            <ion-icon name="pencil-outline" slot="icon-only"></ion-icon>
+          </ion-item-option>
+        </ion-item-options>
+        
+        <ion-item-options side="end" *ngIf="isAnyMaterialPending(requisition)">
+          <ion-item-option color="danger" (click)="onDeleteClicked(requisition)">
+            <ion-icon name="trash-outline" slot="icon-only"></ion-icon>
+          </ion-item-option>
+        </ion-item-options>
 
-      <div class="action-buttons" slot="end" (click)="$event.stopPropagation()" *ngIf="isAnyMaterialPending(requisition)">
-        <ion-button fill="clear" size="small" color="primary" (click)="onEditClicked(requisition)">
-          <ion-icon name="pencil-outline" slot="icon-only"></ion-icon>
-        </ion-button>
-        <ion-button fill="clear" size="small" color="primary" (click)="onDeleteClicked(requisition)">
-          <ion-icon name="trash-outline" slot="icon-only"></ion-icon>
-        </ion-button>
-      </div>
-    </ion-item>
+        <ion-card class="requisition-card" button (click)="openModal(requisition,requisition.p.MaterialRequisitionDetailsArray[0])">
+          <ion-card-content>
+            <div class="card-header">
+              <h2 class="site-name">{{ requisition.p.SiteName || 'Unknown Site' }}</h2>
+              <!-- <div class="status-badge" [ngClass]="getStatusClass(requisition.p.MaterialStatus)">
+                {{ getStatusText(requisition.p.MaterialStatus)}}
+              </div> -->
+            </div>
+            <div class="card-details">
+              <div class="detail-row">
+                <span class="label">Date:</span>
+                <span class="value">{{ formatDate(requisition.p.Date) || 'Unknown Date' }}</span>
+              </div>
+              <div class="detail-row">
+                <span class="label">Materials:</span>
+                <span class="value">{{ requisition.p.MaterialRequisitionDetailsArray.length }} items</span>
+              </div>
+            </div>
+          </ion-card-content>
+        </ion-card>
+      </ion-item-sliding>
+    </ng-container>
+
+    <div *ngIf="DisplayMasterList.length === 0 && !loadingService.isLoaderActive()" class="empty-state">
+      <ion-icon name="alert-circle-outline"></ion-icon>
+      <p>No Material Requisition records found.</p>
+    </div>
   </ion-list>
 
-  <!-- Show "Data not found" if list is empty -->
-  <div *ngIf="DisplayMasterList.length === 0 && !loadingService.isLoaderActive()" class="no-data-mobile-app">
-    <ion-icon name="alert-circle-outline" size="large" color="medium"></ion-icon>
-    <p>No Material Requisition records found.</p>
-  </div>
-
-
-  <!-- Modal -->
   <ion-modal [isOpen]="modalOpen" (didDismiss)="closeModal()" class="custom-modal-mobile-app">
     <ng-template>
-      <ion-header class="modal-toolbar-mobile-app">
+      <ion-header>
         <ion-toolbar color="primary">
-          <ion-title>Material Details</ion-title>
+          <ion-title>Requisition Details</ion-title>
           <ion-buttons slot="end">
             <ion-button fill="clear" (click)="closeModal()">
               <ion-icon name="close-outline"></ion-icon>
@@ -48,57 +64,55 @@
           </ion-buttons>
         </ion-toolbar>
       </ion-header>
-
-      <ion-content scroll-y="true" class="ion-padding modal-content ion-text-center">
-        <div class="info-row-of-model-mobile-app" *ngIf="SelectedMaterialRequisition">
-          <strong class="label-mobile-app">Date:</strong>
-          <span class="value-mobile-app">{{ formatDate(SelectedMaterialRequisition.p.Date) || '-' }}</span>
+      <ion-content class="ion-padding modal-content">
+        <div class="modal-section">
+          <h3>Requisition Summary</h3>
+          <div class="detail-row">
+            <span class="label">Date:</span>
+            <span class="value">{{ formatDate(SelectedMaterialRequisition.p.Date) || '-' }}</span>
+          </div>
+          <div class="detail-row">
+            <span class="label">Site:</span>
+            <span class="value">{{ SelectedMaterialRequisition.p.SiteName || '-' }}</span>
+          </div>
         </div>
-        <div class="info-row-of-model-mobile-app">
-          <strong class="label-mobile-app">Site:</strong>
-          <span class="value-mobile-app">{{ SelectedMaterialRequisition.p.SiteName || '-' }}</span>
-        </div>
-        <div class="table-container">
-          <div class="table-scroll">
-            <table class="custom-table">
-              <thead>
-                <tr>
-                  <th class="sticky-col sticky-header">#</th>
-                  <th *ngFor="let item of tableHeaderData" class="sticky-header">{{ item }}</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr *ngFor="let item of SelectedMaterialRequisition.p.MaterialRequisitionDetailsArray; let i = index">
-                  <td class="sticky-col">{{i + 1 }}</td>
-                  <td>
-                    {{ item.MaterialName || '-' }}
-                  </td>
-                  <td>
-                    {{ item.UnitName || '-' }}
-                  </td>
-                  <td>
-                    {{ item.RequisitionQty || '-' }}
-                  </td>
-                  <td>
-                    <div class="status-badge" [ngClass]="getStatusClass(item.MaterialStatus)">
-                      {{ getStatusText(item.MaterialStatus)}}
-                    </div>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+        <div class="modal-section">
+          <h3>Material Details</h3>
+          <div class="table-container">
+            <div class="table-scroll">
+              <table class="custom-table">
+                <thead>
+                  <tr>
+                    <th class="sticky-col sticky-header">#</th>
+                    <th *ngFor="let item of tableHeaderData" class="sticky-header">{{ item }}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let item of SelectedMaterialRequisition.p.MaterialRequisitionDetailsArray; let i = index">
+                    <td class="sticky-col">{{i + 1 }}</td>
+                    <td>{{ item.MaterialName || '-' }}</td>
+                    <td>{{ item.UnitName || '-' }}</td>
+                    <td>{{ item.RequisitionQty || '-' }}</td>
+                    <td>
+                      <div class="status-badge" [ngClass]="getStatusClass(item.MaterialStatus)">
+                        {{ getStatusText(item.MaterialStatus)}}
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
       </ion-content>
-
-      <ion-footer class="modal-footer-mobile-app">
-        <ion-button expand="block" color="primary" shape="round" (click)="closeModal()">Close</ion-button>
+      <ion-footer>
+        <ion-toolbar>
+          <ion-button expand="block" color="primary" shape="round" (click)="closeModal()">Close</ion-button>
+        </ion-toolbar>
       </ion-footer>
     </ng-template>
   </ion-modal>
 
-
-  <!-- FAB -->
   <ion-fab vertical="bottom" horizontal="end" slot="fixed">
     <ion-fab-button color="primary" (click)="AddMaterialRequisition()">
       <ion-icon name="add-outline"></ion-icon>

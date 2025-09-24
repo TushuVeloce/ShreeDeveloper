@@ -1,38 +1,75 @@
-<app-header-with-back-handler [title]="'CRM'" backRoute='mobile-app/tabs/dashboard'></app-header-with-back-handler>
+<app-header-with-back-handler title="CRM" backRoute="mobile-app/tabs/dashboard"></app-header-with-back-handler>
 
 <ion-content>
   <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
 
-  <ion-grid class="ion-padding">
-
-    <!-- Quick Actions Grid -->
-    <div class="grid-mobile-app">
-      <ion-grid>
-        <ion-row class="grid-row-mobile-app" [class.single-item-mobile-app]="gridItems.length === 1">
-          <ion-col *ngFor="let item of gridItems; let i = index"
-            [size]="gridItems.length === 1 ? '12' : gridItems.length === 2 ? '6' : '4'"
-            class="grid-item-wrapper-mobile-app">
-            <div class="grid-item-mobile-app" [routerLink]="item.routerPath" [ngClass]="{ active: i === selectedIndex }"
-              (click)="selectItem(i)">
-              <img [src]="item.icon" alt="{{item.label}} icon" />
-            </div>
-            <p class="grid-label-mobile-app">{{ item.label }}</p>
-          </ion-col>
-        </ion-row>
-      </ion-grid>
-    </div>
-    <!-- 🔔 Follow-Up Reminders -->
-    <ion-row *ngIf="FilterFollowupList.length > 0">
-      <ion-col size="12">
-        <h2 class="section-title">Today's Reminders</h2>
+  <div class="dashboard-container ion-padding">
+    <h2 class="section-title" *ngIf="false" >Key Metrics</h2>
+    <!-- Summary -->
+    <ion-grid class="summary-grid" *ngIf="false">
+      <ion-row>
+        <ion-col size="4" size-md="4">
+          <div class="summary-box present">
+            <ion-icon name="checkmark-circle" class="summary-icon"></ion-icon>
+            <h2>{{ newLeadsThisMonth }}</h2>
+            <p>New Leads This Month</p>
+          </div>
+        </ion-col>
+        <ion-col size="4" size-md="4">
+          <div class="summary-box absent">
+            <ion-icon name="close-circle" class="summary-icon"></ion-icon>
+            <h2>{{ todaysFollowups }}</h2>
+            <p>Today's Follow-ups</p>
+          </div>
+        </ion-col>
+        <ion-col size="4" size-md="4">
+          <div class="summary-box leave">
+            <ion-icon name="calendar" class="summary-icon"></ion-icon>
+            <h2>{{ convertedLeads }}</h2>
+            <p>Converted Leads</p>
+          </div>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+    <ion-row class="chart-section-row" *ngIf="false">
+      <ion-col size="12" size-md="6" size-sm="6">
+        <h2 class="section-title">Monthly Trends</h2>
+        <ion-card class="chart-card">
+          <ion-card-content>
+            <canvas #monthlyTrendsChart id="monthlyTrendsChart"></canvas>
+          </ion-card-content>
+        </ion-card>
       </ion-col>
-      <ion-col size="12" size-md="6" *ngFor="let reminder of FilterFollowupList">
-        <ion-card class="reminder-card-modern" (click)="onFollowUpClick(reminder)">
-          <ion-card-content class="reminder-content">
-            <ion-icon name="people-circle-outline"></ion-icon>
-            <div>
+      <ion-col size="12" size-md="6" size-sm="6">
+        <h2 class="section-title">Sales Funnel</h2>
+        <ion-card class="chart-card">
+          <ion-card-content>
+            <canvas #salesFunnelChart id="salesFunnelChart"></canvas>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+    
+
+    <h2 class="section-title">Quick Actions</h2>
+    <div class="quick-actions-grid">
+      <a *ngFor="let item of gridItems; let i = index" [routerLink]="item.routerPath" class="action-card">
+        <div class="action-icon">
+          <img [src]="item.icon" alt="{{ item.label }} icon" />
+        </div>
+        <p class="action-label">{{ item.label }}</p>
+      </a>
+    </div>
+
+    <h2 class="section-title">Today's Reminders</h2>
+    <ion-row *ngIf="FilterFollowupList.length > 0">
+      <ion-col size="12" *ngFor="let reminder of FilterFollowupList">
+        <ion-card class="reminder-card" button (click)="onFollowUpClick(reminder)">
+          <ion-card-content>
+            <ion-icon name="person-circle-outline"></ion-icon>
+            <div class="reminder-text">
               <h3>{{ reminder.p.CustomerName }}</h3>
               <p>{{ reminder.p.ContactNos }}</p>
             </div>
@@ -43,9 +80,11 @@
 
     <ion-row *ngIf="!FilterFollowupList.length && !loadingService.isLoaderActive()">
       <ion-col size="12" class="ion-text-center">
-        <p class="no-data-msg">No follow-up reminders found for today.</p>
+        <div class="empty-state">
+          <ion-icon name="notifications-off-outline"></ion-icon>
+          <p>No follow-up reminders found for today.</p>
+        </div>
       </ion-col>
     </ion-row>
-
-  </ion-grid>
+  </div>
 </ion-content>

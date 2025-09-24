@@ -1,39 +1,222 @@
-.dashboard-wrapper {
-    padding: 1rem;
+.dashboard-bg {
+  --background: var(--ion-color-step-50);
+}
 
-    ion-grid {
-        --ion-grid-padding: 0;
+.dashboard-container {
+  padding: 16px;
+  // max-width: 1200px;
+  margin: 0 auto;
+}
+
+.section-title {
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: var(--ion-color-dark);
+  margin: 24px 0 16px;
+  &.ion-padding-top {
+    margin-top: 0;
+  }
+}
+
+/* --- Welcome Card & Stats --- */
+.welcome-card {
+  margin: 0;
+  border-radius: 12px;
+  background: var(--ion-color-primary);
+  color: white;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  ion-card-header {
+    padding: 16px;
+    ion-card-title {
+      color: white;
+      font-weight: 600;
+      font-size: 1.2rem;
+    }
+    ion-card-subtitle {
+      color: #e0e0e0;
+      font-size: 0.8rem;
+    }
+  }
+}
+
+.main-stats-grid,
+.chart-grid {
+  margin-top: 16px;
+  ion-row {
+    ion-col {
+      padding: 8px; /* Add some padding between grid items */
+    }
+  }
+}
+
+.stat-card {
+  border-radius: 12px;
+  background: var(--ion-color-primary);
+  color: white;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  margin: 0;
+  ion-card-content {
+    padding: 16px;
+  }
+  .stat-item {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    ion-icon {
+      font-size: 2.2rem;
+    }
+    .stat-content {
+      display: flex;
+      flex-direction: column;
+    }
+    .stat-value {
+      font-size: 1.6rem;
+      font-weight: bold;
+    }
+    .stat-label {
+      font-size: 0.8rem;
+      color: #e0e0e0;
+      margin-top: 4px;
+    }
+  }
+}
+
+.admin-reports-card {
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  margin: 0;
+  height: auto; /* Allow the card to grow */
+  
+  ion-card-header {
+    padding-bottom: 0;
+    ion-card-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--ion-color-dark);
+    }
+  }
+  
+  ion-card-content {
+    padding-top: 8px;
+    height: 300px; /* Set a fixed height for the content area to make the chart larger */
+    position: relative; // Needed for canvas to fill container
+  }
+}
+
+/* Ensure the canvas fills its container */
+#incomeExpenseChart, #bankBalanceChart {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+// Ensure the container has enough height on larger screens to make charts grow
+@media (min-width: 768px) {
+  .chart-grid ion-card-content {
+    height: 400px; /* Increase height for tablets and desktops */
+  }
+}
+
+/* --- Quick Actions Grid --- */
+.quick-actions-grid {
+  margin-top: 16px;
+  ion-grid {
+    padding: 0;
+  }
+  .dashboard-item {
+    background: var(--ion-color-primary);
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    padding: 16px;
+    text-align: center;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    img {
+      width: 50px;
+      height: 50px;
+      margin-bottom: 8px;
+    }
+    span {
+      font-size: 0.9rem;
+      color: var(--ion-color-light);
+      font-weight: 500;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    &:hover,
+    &.active {
+      transform: translateY(-4px);
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+    }
+  }
+}
+
+/* --- Attendance List Redesign --- */
+.attendance-list {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    margin-top: 16px;
+    padding: 0;
+}
+
+.attendance-item {
+    --background: transparent;
+    --border-width: 0;
+    --inner-border-width: 0;
+    --padding-start: 16px;
+    --padding-end: 16px;
+    align-items: center;
+
+    ion-avatar {
+        --border-radius: 50%; /* Makes the avatar perfectly round */
+        width: 48px;
+        height: 48px;
     }
 
-    .dashboard-item {
-        background: var(--ion-color-primary);
-        border-radius: 12px;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-        padding: 1.2rem;
-        text-align: center;
-        transition: transform 0.2s ease, box-shadow 0.2s ease;
-        cursor: pointer;
+    .person-info {
         display: flex;
         flex-direction: column;
+        flex: 1; /* Allows the info section to grow */
+        min-width: 0; /* Prevents overflow */
+    }
+
+    .person-details {
+        display: flex;
+        flex-direction: column;
+        min-width: 0;
+    }
+
+    .person-name {
+        font-weight: 500;
+        color: var(--ion-color-dark);
+        font-size: 1rem;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis; /* Truncates long names */
+    }
+
+    .location-status {
+        display: flex;
         align-items: center;
-        justify-content: center;
+        gap: 4px;
+        font-size: 0.8rem;
+        color: var(--ion-color-medium-tint);
+        margin-top: 2px;
+    }
 
-        img {
-            width: 60px;
-            height: 60px;
-            margin-bottom: 0.8rem;
-        }
+    .location-icon {
+        font-size: 0.8rem;
+    }
 
-        span {
-            font-size: 1rem;
-            color: var(--ion-text-color-dark);
-            font-weight: 500;
-        }
-
-        &:hover,
-        &.active {
-            transform: translateY(-4px);
-            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
-        }
+    .location-name {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis; /* Truncates long location names */
     }
 }

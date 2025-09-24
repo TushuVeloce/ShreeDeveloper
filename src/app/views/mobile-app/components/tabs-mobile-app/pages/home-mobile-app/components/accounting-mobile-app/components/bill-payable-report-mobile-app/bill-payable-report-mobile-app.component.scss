@@ -1,0 +1,122 @@
+ion-content {
+  --background: #f4f5f8;
+}
+
+.requisition-list{
+    background: #f4f5f8;
+}
+.invoice-card {
+  margin: 10px 0; // Better vertical spacing
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s ease-in-out;
+  cursor: pointer;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.08);
+  }
+}
+
+// ion-card-content {
+//   padding: 16px;
+// }
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.vendor-name {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: var(--ion-color-dark);
+  margin: 0;
+}
+
+.invoice-amount {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: var(--ion-color-primary); // Use your primary color for the main amount
+}
+
+.card-details {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px 16px; // Adjust gap for better layout
+}
+
+.detail-row {
+  display: flex;
+  flex-direction: column;
+}
+
+.label {
+  font-size: 0.8rem;
+  color: var(--ion-color-medium);
+  text-transform: uppercase;
+}
+
+.value {
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--ion-color-dark);
+}
+
+.remaining-amount {
+  color: var(--ion-color-danger); // Highlight remaining amount with a warning color
+  font-weight: bold;
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  text-align: center;
+  padding: 20px;
+
+  ion-icon {
+    font-size: 4rem;
+    color: var(--ion-color-light);
+  }
+
+  p {
+    margin-top: 10px;
+    font-size: 1rem;
+    color: var(--ion-color-medium);
+  }
+}
+
+/* Modal styles */
+.modal-details-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.custom-modal-mobile-app {
+  --border-radius: 12px;
+}
+
+/* Responsive styles for large screens */
+@media (min-width: 768px) {
+  .invoice-card {
+    // max-width: 700px;
+    margin: 10px auto;
+  }
+
+  .card-details {
+    grid-template-columns: repeat(4, 1fr); // More columns on desktop
+  }
+
+  .detail-row {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+  }
+}

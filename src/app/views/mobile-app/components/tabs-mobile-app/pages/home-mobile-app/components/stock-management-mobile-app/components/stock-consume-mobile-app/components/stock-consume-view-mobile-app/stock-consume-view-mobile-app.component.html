@@ -1,117 +1,119 @@
 <app-header-with-back-handler title="Stock Consume"
   backRoute="mobile-app/tabs/dashboard/stock-management"></app-header-with-back-handler>
 
-  <app-chip-filter-mobile-app [filters]="filters" (filtersChanged)="onFiltersChanged($event)">
-  </app-chip-filter-mobile-app>
+<app-chip-filter-mobile-app [filters]="filters" (filtersChanged)="onFiltersChanged($event)">
+</app-chip-filter-mobile-app>
 
-<ion-content class="ion-padding">
+<ion-content class="ion-padding stock-consume-content">
   <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
 
-  <ion-list class="requisition-list" [lines]="'none'">
-    <ion-item *ngFor="let stockConsume of DisplayMasterList" class="requisition-item" button detail
-      (click)="openModal(stockConsume)">
-      <ion-label>
-        <h3>Site : {{ stockConsume.p.SiteName || 'Unknown Site' }}</h3>
-        <p class="date-label">Date : {{ formatDate(stockConsume.p.ConsumptionDate) || '-' }}</p>
-        <p class="date-label">Material : {{ stockConsume.p.MaterialName || '-' }}</p>
-        <p class="date-label">QTY. : {{ stockConsume.p.ConsumedQuantity + " " + stockConsume.p.UnitName }}
-        </p>
-      </ion-label>
+  <ion-list class="consume-list" [lines]="'none'">
+    <ng-container *ngIf="DisplayMasterList.length > 0">
+      <ion-card *ngFor="let stockConsume of DisplayMasterList" class="consume-card" button (click)="openModal(stockConsume)">
+        <ion-card-content>
+          <div class="card-header">
+            <h2 class="site-name">Site: {{ stockConsume.p.SiteName || 'Unknown Site' }}</h2>
+            <div class="action-buttons-card">
+              <ion-button fill="clear" color="primary" size="small" (click)="$event.stopPropagation(); onEditClicked(stockConsume)">
+                <ion-icon name="pencil-outline" slot="icon-only"></ion-icon>
+              </ion-button>
+              <ion-button fill="clear" color="danger" size="small" (click)="$event.stopPropagation(); onDeleteClicked(stockConsume)">
+                <ion-icon name="trash-outline" slot="icon-only"></ion-icon>
+              </ion-button>
+            </div>
+          </div>
+          <div class="card-details">
+            <div class="detail-row">
+              <span class="label">Material:</span>
+              <span class="value">{{ stockConsume.p.MaterialName || '-' }}</span>
+            </div>
+            <div class="detail-row">
+              <span class="label">Date:</span>
+              <span class="value">{{ formatDate(stockConsume.p.ConsumptionDate) || '-' }}</span>
+            </div>
+            <div class="detail-row">
+              <span class="label">Quantity:</span>
+              <span class="value quantity">{{ stockConsume.p.ConsumedQuantity + " " + stockConsume.p.UnitName }}</span>
+            </div>
+          </div>
+        </ion-card-content>
+      </ion-card>
+    </ng-container>
 
-      <div class="action-buttons" slot="end" (click)="$event.stopPropagation()">
-        <ion-button fill="clear" size="small" color="primary" (click)="onEditClicked(stockConsume)">
-          <ion-icon name="pencil-outline" slot="icon-only"></ion-icon>
-        </ion-button>
-        <ion-button fill="clear" size="small" color="primary" (click)="onDeleteClicked(stockConsume)">
-          <ion-icon name="trash-outline" slot="icon-only"></ion-icon>
-        </ion-button>
-      </div>
-    </ion-item>
+    <div *ngIf="DisplayMasterList.length === 0 && !loadingService.isLoaderActive()" class="empty-state">
+      <ion-icon name="alert-circle-outline"></ion-icon>
+      <p>No Stock Consume records found.</p>
+    </div>
   </ion-list>
 
-  <!-- Show "Data not found" if list is empty -->
-  <div *ngIf="DisplayMasterList.length === 0 && !loadingService.isLoaderActive()" class="no-data-mobile-app">
-    <ion-icon name="alert-circle-outline" size="large" color="medium"></ion-icon>
-    <p>No Stock Consume records found.</p>
-  </div>
-
-
-  <!-- Modal -->
   <ion-modal [isOpen]="modalOpen" (didDismiss)="closeModal()" class="custom-modal-mobile-app">
     <ng-template>
-        <!-- Header -->
-        <ion-header class="modal-toolbar-mobile-app">
-          <ion-toolbar color="primary" class="modal-toolbar">
-            <ion-title>Inward Details</ion-title>
-            <ion-buttons slot="end">
-              <ion-button fill="clear" (click)="closeModal()">
-                <ion-icon name="close-outline"></ion-icon>
-              </ion-button>
-            </ion-buttons>
-          </ion-toolbar>
-        </ion-header>
+      <ion-header>
+        <ion-toolbar color="primary">
+          <ion-title>Stock Consume Details</ion-title>
+          <ion-buttons slot="end">
+            <ion-button fill="clear" (click)="closeModal()">
+              <ion-icon name="close-outline"></ion-icon>
+            </ion-button>
+          </ion-buttons>
+        </ion-toolbar>
+      </ion-header>
 
-        <!-- Body -->
-        <ion-content class="ion-padding modal-content-mobile-app" scroll-y="true">
-          <!-- Info Rows -->
-          <div class="info-row-of-model-mobile-app">
-            <span class="label-mobile-app">Consumption Date:</span>
+      <ion-content scroll-y="true" class="ion-padding modal-content">
+        <div class="modal-section">
+          <h3>Consumption Summary</h3>
+          <div class="detail-row">
+            <span class="label">Consumption Date:</span>
             <span class="value">{{ formatDate(SelectedStockConsume.p.ConsumptionDate) || '-' }}</span>
           </div>
-          <div class="info-row-of-model-mobile-app">
-            <span class="label-mobile-app">Site Name:</span>
+          <div class="detail-row">
+            <span class="label">Site Name:</span>
             <span class="value">{{ SelectedStockConsume.p.SiteName || '-' }}</span>
           </div>
-          <div class="info-row-of-model-mobile-app">
-            <span class="label-mobile-app">Stage Name :</span>
-            <span class="value-mobile-app">{{ SelectedStockConsume.p.StageName || '-' }}</span>
+          <div class="detail-row">
+            <span class="label">Material:</span>
+            <span class="value">{{ SelectedStockConsume.p.MaterialName || '-' }}</span>
           </div>
-          <div class="info-row-of-model-mobile-app">
-            <span class="label-mobile-app">Material Name:</span>
-            <span class="value-mobile-app">{{ SelectedStockConsume.p.MaterialName || '-' }}</span>
+          <div class="detail-row">
+            <span class="label">Quantity:</span>
+            <span class="value">{{ SelectedStockConsume.p.ConsumedQuantity || '-' }} {{ SelectedStockConsume.p.UnitName || '-' }}</span>
           </div>
-          <div class="info-row-of-model-mobile-app">
-            <span class="label-mobile-app">Unit Name :</span>
-            <span class="value-mobile-app">{{ SelectedStockConsume.p.UnitName || '-' }}</span>
+          <div class="detail-row">
+            <span class="label">Remaining Qty:</span>
+            <span class="value">{{ SelectedStockConsume.p.RemainingQuantity || '-' }} {{ SelectedStockConsume.p.UnitName || '-' }}</span>
           </div>
-          <div class="info-row-of-model-mobile-app">
-            <span class="label-mobile-app">Consumed Quantity :</span>
-            <span class="value-mobile-app">{{ SelectedStockConsume.p.ConsumedQuantity || '-' }}</span>
-          </div>
-          <div class="info-row-of-model-mobile-app">
-            <span class="label-mobile-app">Current Quantity :</span>
-            <span class="value-mobile-app">{{ SelectedStockConsume.p.CurrentQuantity || '-' }}</span>
-          </div>
-          <div class="info-row-of-model-mobile-app">
-            <span class="label-mobile-app">Remaining Quantity :</span>
-            <span class="value-mobile-app">{{ SelectedStockConsume.p.RemainingQuantity || '-' }}</span>
-          </div>
-          <div class="info-row-of-model-mobile-app">
-            <span class="label-mobile-app">Remark :</span>
-            <span class="value-mobile-app">{{ SelectedStockConsume.p.Remark || '-' }}</span>
-          </div>
-          <div class="info-row-of-model-mobile-app">
-            <span class="label-mobile-app">Description :</span>
-            <span class="value-mobile-app">{{ SelectedStockConsume.p.Description || '-' }}</span>
-          </div>
-        </ion-content>
+        </div>
 
-        <!-- Footer -->
-        <ion-footer class="modal-footer-mobile-app">
-          <ion-button expand="block" color="primary" shape="round" (click)="closeModal()">
-            Close
-          </ion-button>
-        </ion-footer>
+        <div class="modal-section">
+          <h3>Additional Details</h3>
+          <div class="detail-row">
+            <span class="label">Stage Name:</span>
+            <span class="value">{{ SelectedStockConsume.p.StageName || '-' }}</span>
+          </div>
+          <div class="detail-row">
+            <span class="label">Description:</span>
+            <span class="value">{{ SelectedStockConsume.p.Description || '-' }}</span>
+          </div>
+          <div class="detail-row">
+            <span class="label">Remark:</span>
+            <span class="value">{{ SelectedStockConsume.p.Remark || '-' }}</span>
+          </div>
+        </div>
+      </ion-content>
+
+      <ion-footer>
+        <ion-toolbar>
+          <ion-button expand="block" color="primary" shape="round" (click)="closeModal()">Close</ion-button>
+        </ion-toolbar>
+      </ion-footer>
     </ng-template>
   </ion-modal>
 
-
-  <!-- FAB -->
   <ion-fab vertical="bottom" horizontal="end" slot="fixed">
     <ion-fab-button color="primary" (click)="AddStockConsume()">
-        <ion-icon name="add-outline"></ion-icon>
-      </ion-fab-button>
+      <ion-icon name="add-outline"></ion-icon>
+    </ion-fab-button>
   </ion-fab>
 </ion-content>

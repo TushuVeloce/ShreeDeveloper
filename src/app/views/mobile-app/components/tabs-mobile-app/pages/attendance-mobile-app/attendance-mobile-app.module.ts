@@ -10,7 +10,6 @@ import { AttendanceMobileAppPage } from './attendance-mobile-app.page';
 import { AttendanceViewMobileAppComponent } from './components/attendance-view-mobile-app/attendance-view-mobile-app.component';
 import { SharedModule } from "src/app/views/mobile-app/components/shared/shared.module";
 import { AllAttendanceMobileAppComponent } from './components/all-attendance-mobile-app/all-attendance-mobile-app.component';
-
 @NgModule({
   imports: [
     CommonModule,

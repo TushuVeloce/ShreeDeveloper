@@ -1,0 +1,218 @@
+.attendance-content {
+  --background: #f9f9f9;
+}
+
+/* Section Cards */
+.filter-section {
+  padding: 12px;
+  background: #fff;
+  border-radius: 12px;
+  margin: 12px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.06);
+}
+
+.section-title {
+  font-weight: 600;
+  font-size: 15px;
+}
+
+.month-label {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--ion-color-medium);
+}
+
+/* Summary */
+.summary-box {
+  text-align: center;
+}
+.summary-box h1,
+.summary-box h3 {
+  margin: 0;
+  font-weight: bold;
+}
+.summary-box.pending h1 {
+  color: var(--ion-color-success);
+}
+.summary-box.approved h3 {
+  color: var(--ion-color-danger);
+}
+.summary-box.rejected h3 {
+  color: var(--ion-color-warning);
+}
+
+/* Cards */
+.approval-list ion-card {
+  margin: 12px;
+  border-radius: 14px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+  transition: transform 0.15s ease;
+}
+.approval-list ion-card:hover {
+  transform: translateY(-2px);
+}
+
+/* Remarks */
+.late {
+  color: var(--ion-color-danger);
+  font-size: 12px;
+}
+.ontime {
+  color: var(--ion-color-success);
+  font-size: 12px;
+}
+.halfday {
+  color: var(--ion-color-warning);
+  font-size: 12px;
+}
+
+/* Extra Info */
+.extra-info {
+  margin-top: 6px;
+  font-size: 14px;
+  color: var(--ion-color-dark);
+}
+
+/* Reason Box */
+.reason-box {
+  background: #eef3ff;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 13px;
+  margin: 8px 0 14px;
+  font-weight: 500;
+}
+.reason-box.halfday {
+  background: #fff7e6;
+  color: #ff9800;
+}
+.reason-box.leave {
+  background: #ffeef0;
+  color: #e53935;
+}
+
+/* Buttons */
+.action-buttons {
+  margin-top: 12px;
+}
+.item-card-disabled {
+  opacity: 0.5;
+  pointer-events: none; // Prevent interaction
+  filter: grayscale(0.3);
+}
+
+/* Filters */
+.custom-input {
+  --background: #f5f7fa;
+  --border-radius: 12px;
+  margin: 6px 0;
+  border: 1px solid #e0e0e0;
+  ion-icon {
+    color: var(--ion-color-primary);
+    font-size: 20px;
+  }
+}
+
+/* Month Segment */
+.month-segment {
+  --background: var(--ion-background-color);
+  border-radius: 12px;
+  padding: 4px;
+}
+
+.month-segment ion-segment-button {
+  font-size: 13px;
+  --color: var(--ion-text-color); /* default text */
+  --color-checked: #fff; /* checked text color */
+  --indicator-color: transparent; /* remove default iOS underline */
+  --background-checked: var(--ion-color-primary);
+  border-radius: 8px;
+  margin: 0 2px;
+  min-height: 32px;
+  padding: 0 8px;
+}
+
+/* Fix iOS native part */
+.month-segment ion-segment-button::part(native) {
+  border-radius: 8px;
+  background: transparent;
+}
+
+/* Active button background for iOS */
+.month-segment ion-segment-button[aria-pressed="true"]::part(native) {
+  background: var(--ion-color-primary);
+  color: #fff;
+}
+
+/* Summary */
+.summary-grid {
+  padding: 0 12px;
+}
+.summary-box {
+  text-align: center;
+  padding: 16px;
+  border-radius: 12px;
+  margin: 8px 0;
+  color: #fff;
+  .summary-icon {
+    font-size: 24px;
+    margin-bottom: 6px;
+  }
+  h2 {
+    margin: 0;
+    font-weight: 700;
+  }
+  p {
+    margin: 0;
+    font-size: 14px;
+    opacity: 0.9;
+  }
+}
+.summary-box.present {
+  background: linear-gradient(135deg, #4caf50, #66bb6a);
+}
+.summary-box.absent {
+  background: linear-gradient(135deg, #f44336, #e57373);
+}
+.summary-box.leave {
+  background: linear-gradient(135deg, #ff9800, #ffb74d);
+}
+
+/* Avatar styling */
+.checkin-avatar {
+  width: 80px;
+  height: 80px;
+  margin: auto;
+  border: 2px solid var(--ion-color-primary);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.placeholder-icon {
+  font-size: 32px;
+  color: var(--ion-color-medium);
+}
+
+/* Label under images */
+.checkin-label {
+  font-size: 13px;
+  margin-top: 6px;
+  font-weight: 500;
+  color: var(--ion-color-dark);
+}
+
+/* Logs styling */
+.logs-list ion-item h3 {
+  font-weight: 600;
+  margin-bottom: 4px;
+  color: var(--ion-color-primary);
+}
+
+.logs-list ion-item p {
+  margin: 2px 0;
+  font-size: 14px;
+  color: var(--ion-color-dark);
+}
+

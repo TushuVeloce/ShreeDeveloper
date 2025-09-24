@@ -1,71 +1,40 @@
-/* Modern Header */
-// .modern-header {
-//     // --background: linear-gradient(to right, var(--ion-color-primary), var(--ion-color-secondary));
-//     // --background: var(--ion-color-primary);
-//     --background: linear-gradient(to bottom right, #7c2424, #c0392b);
+/* Style the entire toolbar */
+.header-toolbar {
+  --background: linear-gradient(to bottom right, #7c2424, #c0392b);
+  --color: #fff; /* Use a light color for text on a dark background */
+  --border-width: 0;
+  --min-height: 56px; /* Standard toolbar height */
 
-//     display: flex;
-//     align-items: center;
-//     color: var(--ion-text-color-dark);
-//     border-bottom-left-radius: 12px;
-//     border-bottom-right-radius: 12px;
-
-//     // --ion-safe-area-top: 1.5rem;
-//     // margin-top: var(--ion-safe-area-top);
-// }
-// ion-toolbar {
-//     --ion-safe-area-top: 1.5rem;
-//     padding-top: var(--ion-safe-area-top);
-// }
-
-.modern-header {
-    --background: linear-gradient(to bottom right, #7c2424, #c0392b);
-    display: flex;
-    align-items: center;
-    color: var(--ion-text-color-dark);
-    border-bottom-left-radius: 12px;
-    border-bottom-right-radius: 12px;
+  /* The padding-top here is handled automatically by Ionic for the safe area. 
+     Do not manually add padding-top. The ion-header component does this for you. */
 }
 
-// ion-toolbar {
-//     --ion-safe-area-top: 2rem;
-//     padding-top: var(--ion-safe-area-top);
-// }
-
-/* Logo Styling */
-.logo-button {
-    display: flex;
-    align-items: center;
-    padding: 0;
+/* Rounded bottom corners for the header component */
+ion-header {
+  border-bottom-left-radius: 12px;
+  border-bottom-right-radius: 12px;
+  overflow: hidden; /* Ensures the border-radius is visible */
 }
 
-.logo-img {
-    height: 40px;
-    width: auto;
+/* Back button styling */
+.header-back-button {
+ --color: var(--ion-text-color-dark); /* Set color to white for visibility */
 }
-
-/* Title Styling */
-.mobile-app-title {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 1.2rem;
-    font-weight: 600;
-}
-
-/* User Avatar */
-.user-avatar {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-}
-
-/* Action Buttons */
-.icon-button {
-    font-size: 1.4rem;
-    --color: var(--ion-text-color-dark);
-}
-
 .icon-button-back {
     --color: var(--ion-text-color-dark);
+}
+
+/* Title styling */
+.header-title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  --color: #fff;
+  text-align: center; /* Center the title */
+  padding: 0 20px; /* Add some padding to prevent it from touching the buttons */
+}
+
+/* Action buttons styling */
+.notification-button {
+  --color: #fff;
+  font-size: 1.4rem;
 }

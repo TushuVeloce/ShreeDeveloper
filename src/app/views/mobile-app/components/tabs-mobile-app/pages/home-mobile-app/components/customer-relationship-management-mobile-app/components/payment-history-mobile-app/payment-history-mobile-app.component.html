@@ -5,15 +5,35 @@
 <app-chip-filter-mobile-app [filters]="filters" (filtersChanged)="onFiltersChanged($event)">
 </app-chip-filter-mobile-app>
 
-<ion-content class="ion-padding">
-
-  <!-- Pull-to-refresh -->
+<ion-content class="ion-padding payment-history-content">
   <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
 
-  <!-- Table -->
-  <ion-list class="requisition-list ion-text-center" [lines]="'none'" *ngIf="DisplayMasterList.length > 0">
+  <ion-list class="mobile-list">
+    <ion-card *ngFor="let item of DisplayMasterList" class="payment-card" button (click)="openModal(item)">
+      <ion-card-header>
+        <ion-card-title class="payer-name">{{ item.p.PayerName || '-' }}</ion-card-title>
+        <ion-card-subtitle class="payment-date">{{ formatDate(item.p.Date) || '-' }}</ion-card-subtitle>
+      </ion-card-header>
+      <ion-card-content>
+        <div class="card-info-row">
+          <span class="label">Amount:</span>
+          <span class="value amount-positive">{{ (item.p.IncomeAmount | currency : "INR") || '0' }}</span>
+        </div>
+        <div class="card-info-row">
+          <span class="label">Plot:</span>
+          <span class="value">{{ item.p.PlotName || '-' }}</span>
+        </div>
+        <div class="card-info-row">
+          <span class="label">Payment Mode:</span>
+          <span class="value">{{ item.p.ModeOfPaymentName || '-' }}</span>
+        </div>
+      </ion-card-content>
+    </ion-card>
+  </ion-list>
+
+  <div class="desktop-table">
     <div class="table-container">
       <div class="table-scroll">
         <table class="custom-table">
@@ -32,7 +52,7 @@
               <td>{{ item.p.SiteName || '-' }}</td>
               <td>{{ item.p.PlotName || '-' }}</td>
               <td>{{ item.p.PayerName || '-' }}</td>
-              <td>₹{{ item.p.IncomeAmount || '0' }}</td>
+              <td>{{ (item.p.IncomeAmount | currency : "INR") || '0' }}</td>
               <td>{{ item.p.ModeOfPaymentName || '-' }}</td>
               <td>{{ item.p.Reason || '-' }}</td>
               <td>
@@ -45,18 +65,16 @@
         </table>
       </div>
     </div>
-  </ion-list>
+  </div>
 
-  <!-- No Data -->
   <div *ngIf="DisplayMasterList.length === 0 && !loadingService.isLoaderActive()" class="no-data-mobile-app">
     <ion-icon name="alert-circle-outline" size="large" color="medium"></ion-icon>
     <p>No Payment History Found.</p>
   </div>
 
-  <!-- Modal -->
   <ion-modal [isOpen]="modalOpen" (didDismiss)="closeModal()" class="custom-modal-mobile-app">
     <ng-template>
-      <ion-header class="modal-toolbar-mobile-app">
+      <ion-header>
         <ion-toolbar color="primary">
           <ion-title>Payment Details</ion-title>
           <ion-buttons slot="end">
@@ -67,64 +85,55 @@
         </ion-toolbar>
       </ion-header>
 
-      <ion-content scroll-y="true" class="ion-padding modal-content-mobile-app">
-        <div class="info-row-of-model-mobile-app" *ngFor="let field of [
-          { label: 'Date', value: formatDate(SelectedIncome.p.Date) },
-          { label: 'Site Name', value: SelectedIncome.p.SiteName },
-          { label: 'Plot Name', value: SelectedIncome.p.PlotName},
-          { label: 'Payer Name', value: SelectedIncome.p.PayerName },
-          { label: 'Mode Of Payment', value: SelectedIncome.p.ModeOfPaymentName},
-          { label: 'Amount', value: '₹' + (SelectedIncome.p.IncomeAmount || '0') },
-          { label: 'Reason', value: SelectedIncome.p.Reason}
-        ]">
-          <strong class="label-mobile-app">{{ field.label }}:</strong>
-          <span class="value-mobile-app">
-            {{ field.value !== null && field.value !== undefined && field.value !== '' ? field.value : '-' }}
-          </span>
+      <ion-content class="modal-content ion-padding">
+        <div class="modal-section">
+          <h3>Transaction Details</h3>
+          <div class="info-row">
+            <span class="label">Date:</span>
+            <span class="value">{{ formatDate(SelectedIncome.p.Date) || '-' }}</span>
+          </div>
+          <div class="info-row">
+            <span class="label">Site Name:</span>
+            <span class="value">{{ SelectedIncome.p.SiteName || '-' }}</span>
+          </div>
+          <div class="info-row">
+            <span class="label">Plot Name:</span>
+            <span class="value">{{ SelectedIncome.p.PlotName || '-' }}</span>
+          </div>
+        </div>
+        
+        <div class="modal-section">
+          <h3>Payment Information</h3>
+          <div class="info-row">
+            <span class="label">Payer Name:</span>
+            <span class="value">{{ SelectedIncome.p.PayerName || '-' }}</span>
+          </div>
+          <div class="info-row">
+            <span class="label">Amount:</span>
+            <span class="value amount-positive">{{ (SelectedIncome.p.IncomeAmount | currency : "INR") || '0' }}</span>
+          </div>
+          <div class="info-row">
+            <span class="label">Payment Mode:</span>
+            <span class="value">{{ SelectedIncome.p.ModeOfPaymentName || '-' }}</span>
+          </div>
+          <div class="info-row">
+            <span class="label">Reason:</span>
+            <span class="value">{{ SelectedIncome.p.Reason || '-' }}</span>
+          </div>
         </div>
       </ion-content>
 
-      <ion-footer class="modal-footer-mobile-app">
-        <ion-button expand="block" color="primary" shape="round" (click)="closeModal()">Close</ion-button>
+      <ion-footer>
+        <ion-toolbar>
+          <ion-button expand="block" color="primary" shape="round" (click)="closeModal()">Close</ion-button>
+        </ion-toolbar>
       </ion-footer>
     </ng-template>
   </ion-modal>
 
-  <!-- Print FAB -->
   <ion-fab vertical="bottom" horizontal="end" slot="fixed">
     <ion-fab-button color="primary" (click)="handlePrintOrShare()">
       <ion-icon name="print-outline"></ion-icon>
     </ion-fab-button>
   </ion-fab>
-
-  <!-- Print Section -->
-  <div id="print-section" style="display: none;" #PrintContainer>
-    <h2 style="text-align: center; margin-bottom: 1rem;">Payment History Report</h2>
-    <table class="table table-bordered print-table" style="width: 100%; border-collapse: collapse;">
-      <thead>
-        <tr>
-          <th style="background-color: maroon; color: white;">Sr.No.</th>
-          <th style="background-color: maroon; color: white;">Date</th>
-          <th style="background-color: maroon; color: white;">Site</th>
-          <th style="background-color: maroon; color: white;">Plot</th>
-          <th style="background-color: maroon; color: white;">Payer Name</th>
-          <th style="background-color: maroon; color: white;">Amount</th>
-          <th style="background-color: maroon; color: white;">Mode of Payment</th>
-          <th style="background-color: maroon; color: white;">Reason</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let item of DisplayMasterList; let i = index">
-          <td class="tbldata">{{ i + 1 }}</td>
-          <td class="tbldata">{{ formatDate(item.p.Date) }}</td>
-          <td class="tbldata">{{ item.p.SiteName }}</td>
-          <td class="tbldata">{{ item.p.PlotName }}</td>
-          <td class="tbldata">{{ item.p.PayerName }}</td>
-          <td class="tbldata">₹{{ item.p.IncomeAmount }}</td>
-          <td class="tbldata">{{ item.p.ModeOfPaymentName }}</td>
-          <td class="tbldata">{{ item.p.Reason }}</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
 </ion-content>

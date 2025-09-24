@@ -3,6 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { AccountingMobileAppPage } from './accounting-mobile-app.page';
 import { AccountingViewMobileAppPageComponent } from './components/accounting-view-mobile-app-page/accounting-view-mobile-app-page.component';
+import { BillPayableReportMobileAppComponent } from './components/bill-payable-report-mobile-app/bill-payable-report-mobile-app.component';
 
 const routes: Routes = [
   {
@@ -11,6 +12,7 @@ const routes: Routes = [
     children: [
       // { path: '', redirectTo: 'home', pathMatch: 'full' },
       { path: '', component: AccountingViewMobileAppPageComponent },
+      { path: 'bill-payable', component: BillPayableReportMobileAppComponent },
       {
         path: 'invoice',
         loadChildren: () => import('./components/invoice-mobile-app/invoice-mobile-app.module').then(m => m.InvoiceMobileAppPageModule)

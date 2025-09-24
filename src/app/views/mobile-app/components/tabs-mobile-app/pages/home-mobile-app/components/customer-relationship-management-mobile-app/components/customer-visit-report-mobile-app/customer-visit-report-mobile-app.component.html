@@ -5,34 +5,43 @@
 <app-chip-filter-mobile-app [filters]="filters" (filtersChanged)="onFiltersChanged($event)">
 </app-chip-filter-mobile-app>
 
-<ion-content class="ion-padding">
+<ion-content class="ion-padding visit-content">
   <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
 
-  <!-- List Section -->
-  <ion-list class="requisition-list" [lines]="'none'">
-    <ion-item *ngFor="let customer of DisplayMasterList" class="requisition-item" button detail
-      (click)="openModal(customer)">
-      <ion-label>
-        <h2>Site: {{ customer.p.SiteName || '-' }}</h2>
-        <p class="date-label">Plot No: {{ customer.p.PlotNo || '-' }}</p>
-        <p class="date-label">Customer Name: {{ customer.p.CustomerName || '-' }}</p>
-        <p class="date-label">Phone No: {{ customer.p.CustomerPhoneNo || '-' }}</p>
-      </ion-label>
-    </ion-item>
+  <ion-list class="visit-list" [lines]="'none'">
+    <ion-card *ngFor="let customer of DisplayMasterList" class="visit-card" button (click)="openModal(customer)">
+      <ion-card-content>
+        <div class="card-header">
+          <h2 class="site-name">Site: {{ customer.p.SiteName || '-' }}</h2>
+        </div>
+        <div class="card-details">
+          <div class="detail-row">
+            <span class="label">Customer:</span>
+            <span class="value">{{ customer.p.CustomerName || '-' }}</span>
+          </div>
+          <div class="detail-row">
+            <span class="label">Plot No:</span>
+            <span class="value">{{ customer.p.PlotNo || '-' }}</span>
+          </div>
+          <div class="detail-row">
+            <span class="label">Phone No:</span>
+            <span class="value">{{ customer.p.CustomerPhoneNo || '-' }}</span>
+          </div>
+        </div>
+      </ion-card-content>
+    </ion-card>
   </ion-list>
 
-  <!-- No Data -->
-  <div *ngIf="DisplayMasterList.length === 0 && !loadingService.isLoaderActive()" class="no-data-mobile-app">
-    <ion-icon name="alert-circle-outline" size="large" color="medium"></ion-icon>
+  <div *ngIf="DisplayMasterList.length === 0 && !loadingService.isLoaderActive()" class="empty-state">
+    <ion-icon name="alert-circle-outline"></ion-icon>
     <p>No Customer Visit Records Found.</p>
   </div>
 
-  <!-- Modal -->
   <ion-modal [isOpen]="modalOpen" (didDismiss)="closeModal()" class="custom-modal-mobile-app">
     <ng-template>
-      <ion-header class="modal-toolbar-mobile-app">
+      <ion-header>
         <ion-toolbar color="primary">
           <ion-title>Customer Visit Details</ion-title>
           <ion-buttons slot="end">
@@ -43,51 +52,57 @@
         </ion-toolbar>
       </ion-header>
 
-      <ion-content scroll-y="true" class="ion-padding modal-content-mobile-app">
-        <div class="info-row-of-model-mobile-app">
-          <span class="label-mobile-app">Date:</span>
-          <span class="value-mobile-app">{{ formatDate(SelectedCustomerSiteVisit.p.TransDateTime)|| '-' }}</span>
+      <ion-content class="ion-padding modal-content">
+        <div class="modal-section">
+          <h3>Visit Information</h3>
+          <div class="detail-row">
+            <span class="label">Date:</span>
+            <span class="value">{{ formatDate(SelectedCustomerSiteVisit.p.TransDateTime) || '-' }}</span>
+          </div>
+          <div class="detail-row">
+            <span class="label">Site Name:</span>
+            <span class="value">{{ SelectedCustomerSiteVisit.p.SiteName || '-' }}</span>
+          </div>
+          <div class="detail-row">
+            <span class="label">Plot No:</span>
+            <span class="value">{{ SelectedCustomerSiteVisit.p.PlotNo || '-' }}</span>
+          </div>
         </div>
-        <div class="info-row-of-model-mobile-app">
-          <span class="label-mobile-app">Site Name:</span>
-          <span class="value-mobile-app">{{ SelectedCustomerSiteVisit.p.SiteName || '-' }}</span>
-        </div>
-        <div class="info-row-of-model-mobile-app">
-          <span class="label-mobile-app">Plot No:</span>
-          <span class="value-mobile-app">{{ SelectedCustomerSiteVisit.p.PlotNo || '-' }}</span>
-        </div>
-        <div class="info-row-of-model-mobile-app">
-          <span class="label-mobile-app">Customer Name:</span>
-          <span class="value-mobile-app">{{ SelectedCustomerSiteVisit.p.CustomerName || '-' }}</span>
-        </div>
-        <div class="info-row-of-model-mobile-app">
-          <span class="label-mobile-app">Customer Address:</span>
-          <span class="value-mobile-app">{{ SelectedCustomerSiteVisit.p.CustomerAddress || '-' }}</span>
-        </div>
-        <div class="info-row-of-model-mobile-app">
-          <span class="label-mobile-app">Customer Phone No:</span>
-          <span class="value-mobile-app">{{ SelectedCustomerSiteVisit.p.CustomerPhoneNo || '-' }}</span>
-        </div>
-        <div class="info-row-of-model-mobile-app">
-          <span class="label-mobile-app">Customer Requirement:</span>
-          <span class="value-mobile-app">{{ SelectedCustomerSiteVisit.p.CustomerRequirement || '-' }}</span>
+        <div class="modal-section">
+          <h3>Customer Details</h3>
+          <div class="detail-row">
+            <span class="label">Customer Name:</span>
+            <span class="value">{{ SelectedCustomerSiteVisit.p.CustomerName || '-' }}</span>
+          </div>
+          <div class="detail-row">
+            <span class="label">Address:</span>
+            <span class="value">{{ SelectedCustomerSiteVisit.p.CustomerAddress || '-' }}</span>
+          </div>
+          <div class="detail-row">
+            <span class="label">Phone No:</span>
+            <span class="value">{{ SelectedCustomerSiteVisit.p.CustomerPhoneNo || '-' }}</span>
+          </div>
+          <div class="detail-row">
+            <span class="label">Requirement:</span>
+            <span class="value">{{ SelectedCustomerSiteVisit.p.CustomerRequirement || '-' }}</span>
+          </div>
         </div>
       </ion-content>
 
-      <ion-footer class="modal-footer-mobile-app">
-        <ion-button expand="block" color="primary" shape="round" (click)="closeModal()">Close</ion-button>
+      <ion-footer>
+        <ion-toolbar>
+          <ion-button expand="block" color="primary" shape="round" (click)="closeModal()">Close</ion-button>
+        </ion-toolbar>
       </ion-footer>
     </ng-template>
   </ion-modal>
 
-  <!-- Print FAB -->
   <ion-fab vertical="bottom" horizontal="end" slot="fixed">
     <ion-fab-button color="primary" (click)="handlePrintOrShare()">
       <ion-icon name="print-outline"></ion-icon>
     </ion-fab-button>
   </ion-fab>
 
-  <!-- Print Section -->
   <div id="print-section" style="display: none;" #PrintContainer>
     <h2>Customer Visit Report</h2>
     <table class="table table-bordered print-table">

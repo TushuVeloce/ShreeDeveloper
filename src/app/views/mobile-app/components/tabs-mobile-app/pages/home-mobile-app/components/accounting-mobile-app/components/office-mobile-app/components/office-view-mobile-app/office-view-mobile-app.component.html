@@ -1,144 +1,175 @@
-<app-header-with-back-handler title="Office"
-  backRoute="mobile-app/tabs/dashboard/accounting"></app-header-with-back-handler>
-<app-chip-filter-mobile-app [filters]="filters" (filtersChanged)="onFiltersChanged($event)">
-</app-chip-filter-mobile-app>
+<app-header-with-back-handler
+  title="Office"
+  backRoute="mobile-app/tabs/dashboard/accounting"
+></app-header-with-back-handler>
+
+<app-chip-filter-mobile-app
+  [filters]="filters"
+  (filtersChanged)="onFiltersChanged($event)"
+></app-chip-filter-mobile-app>
+
 <ion-content class="ion-padding">
   <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
 
-  <ion-list class="requisition-list" [lines]="'none'">
-    <ion-item *ngFor="let Invoice of DisplayMasterList" class="requisition-item" button detail
-      (click)="openModal(Invoice)">
-      <ion-label>
-        <h2>Site : {{ Invoice.p.SiteName || 'Unknown Site' }}</h2>
-        <p class="date-label">Accounting Report Date : {{ formatDate(Invoice.p.TransDateTime) || '-' }}</p>
-        <p class="date-label" *ngIf="Invoice.p.PayerName">Payer Name : {{ Invoice.p.PayerName || '-' }}</p>
-        <p class="date-label" *ngIf="Invoice.p.RecipientName">Recipient Name : {{ Invoice.p.RecipientName || '-' }}</p>
-        <p class="date-label" *ngIf="Invoice.p.IncomeAmount">Income Amount : {{ Invoice.p.IncomeAmount | currency : "INR" }}
-        <p class="date-label" *ngIf="Invoice.p.GivenAmount">Given Amount: {{ Invoice.p.GivenAmount | currency : "INR" }}
-        </p>
-      </ion-label>
-    </ion-item>
+  <ion-list class="invoice-list" [lines]="'none'">
+    <ion-card
+      *ngFor="let invoice of DisplayMasterList"
+      class="invoice-card"
+      button
+      (click)="openModal(invoice)"
+    >
+      <ion-card-content>
+        <div class="card-header">
+          <h2 class="site-name">
+            Site: {{ invoice.p.SiteName || 'Unknown Site' }}
+          </h2>
+          <span class="report-date"
+            >{{ formatDate(invoice.p.TransDateTime) || '-' }}</span
+          >
+        </div>
+
+        <div class="card-details">
+          <div class="detail-group" *ngIf="invoice.p.PayerName">
+            <span class="label">Payer:</span>
+            <span class="value">{{ invoice.p.PayerName || '-' }}</span>
+          </div>
+          <div class="detail-group" *ngIf="invoice.p.RecipientName">
+            <span class="label">Recipient:</span>
+            <span class="value">{{ invoice.p.RecipientName || '-' }}</span>
+          </div>
+          <div class="detail-group" *ngIf="invoice.p.IncomeAmount">
+            <span class="label">Income Amount:</span>
+            <span class="value amount-positive"
+              >{{ invoice.p.IncomeAmount | currency : 'INR' }}</span
+            >
+          </div>
+          <div class="detail-group" *ngIf="invoice.p.GivenAmount">
+            <span class="label">Given Amount:</span>
+            <span class="value amount-negative"
+              >{{ invoice.p.GivenAmount | currency : 'INR' }}</span
+            >
+          </div>
+        </div>
+      </ion-card-content>
+    </ion-card>
   </ion-list>
 
-  <!-- Show "Data not found" if list is empty -->
-  <div *ngIf="DisplayMasterList.length === 0 && !loadingService.isLoaderActive()" class="no-data-mobile-app">
-    <ion-icon name="alert-circle-outline" size="large" color="medium"></ion-icon>
-    <p>No Office records found.</p>
+  <div
+    *ngIf="DisplayMasterList.length === 0 && !loadingService.isLoaderActive()"
+    class="empty-state"
+  >
+    <ion-icon name="alert-circle-outline"></ion-icon>
+    <p>No office records found.</p>
   </div>
 
-
-  <!-- Modal -->
-  <ion-modal [isOpen]="modalOpen" (didDismiss)="closeModal()" class="custom-modal-mobile-app">
+  <ion-modal
+    [isOpen]="modalOpen"
+    (didDismiss)="closeModal()"
+    class="custom-modal-mobile-app"
+  >
     <ng-template>
-        <!-- Header -->
-         <ion-header class="modal-toolbar-mobile-app">
-          <ion-toolbar color="primary">
-            <ion-title>Accounting Report Details</ion-title>
-            <ion-buttons slot="end">
-              <ion-button fill="clear" (click)="closeModal()">
-                <ion-icon name="close-outline"></ion-icon>
-              </ion-button>
-            </ion-buttons>
-          </ion-toolbar>
-        </ion-header>
+      <ion-header>
+        <ion-toolbar color="primary">
+          <ion-title>Details</ion-title>
+          <ion-buttons slot="end">
+            <ion-button fill="clear" (click)="closeModal()">
+              <ion-icon name="close-outline"></ion-icon>
+            </ion-button>
+          </ion-buttons>
+        </ion-toolbar>
+      </ion-header>
 
-        <!-- Body -->
-         <ion-content scroll-y="true" class="ion-padding modal-content-mobile-app">
-          <!-- Info Rows -->
-          <div class="info-row-of-model-mobile-app">
-            <span class="label-mobile-app">Office Date:</span>
-            <span class="value-mobile-app">{{ formatDate(SelectedAccountingReport.p.TransDateTime) || '-' }}</span>
+      <ion-content class="ion-padding modal-content">
+        <div class="modal-section">
+          <h3>Transaction Information</h3>
+          <div class="detail-row">
+            <span class="label">Date:</span>
+            <span class="value">{{
+              formatDate(SelectedAccountingReport.p.TransDateTime) || '-'
+            }}</span>
           </div>
-          <div class="info-row-of-model-mobile-app">
-            <span class="label-mobile-app">Site Name:</span>
-            <span class="value-mobile-app">{{ SelectedAccountingReport.p.SiteName || '-' }}</span>
+          <div class="detail-row">
+            <span class="label">Site:</span>
+            <span class="value">{{ SelectedAccountingReport.p.SiteName || '-' }}</span>
           </div>
-          <div class="info-row-of-model-mobile-app" *ngIf="SelectedAccountingReport.p.PayerName">
-            <span class="label-mobile-app">Payer Name :</span>
-            <span class="value-mobile-app">{{ SelectedAccountingReport.p.PayerName || '-' }}</span>
+          <div
+            class="detail-row"
+            *ngIf="SelectedAccountingReport.p.PayerName || SelectedAccountingReport.p.RecipientName"
+          >
+            <span class="label"
+              >{{
+                SelectedAccountingReport.p.PayerName ? 'Payer' : 'Recipient'
+              }}:</span
+            >
+            <span class="value">{{
+              SelectedAccountingReport.p.PayerName ||
+                SelectedAccountingReport.p.RecipientName ||
+                '-'
+            }}</span>
           </div>
-          <div class="info-row-of-model-mobile-app" *ngIf="SelectedAccountingReport.p.RecipientName">
-            <span class="label-mobile-app">Recipient Name:</span>
-            <span class="value-mobile-app">{{ SelectedAccountingReport.p.RecipientName || '-' }}</span>
+          <div class="detail-row">
+            <span class="label">Reason:</span>
+            <span class="value">{{ SelectedAccountingReport.p.Reason || '-' }}</span>
           </div>
-          <div class="info-row-of-model-mobile-app">
-            <span class="label-mobile-app">Reason :</span>
-            <span class="value-mobile-app">{{ SelectedAccountingReport.p.Reason || '-' }}</span>
-          </div>
-          <div class="info-row-of-model-mobile-app" *ngIf="SelectedAccountingReport.p.IncomeAmount">
-            <span class="label-mobile-app">Income Amount :</span>
-            <span class="value-mobile-app">{{ SelectedAccountingReport.p.IncomeAmount | currency : "INR" }}</span>
-          </div>
-          <div class="info-row-of-model-mobile-app" *ngIf="SelectedAccountingReport.p.GivenAmount">
-            <span class="label-mobile-app">Given Amount :</span>
-            <span class="value-mobile-app">{{ SelectedAccountingReport.p.GivenAmount | currency : "INR" }}</span>
-          </div>
-          <div class="info-row-of-model-mobile-app">
-            <span class="label-mobile-app">Shrees Balance :</span>
-            <span class="value-mobile-app">{{ SelectedAccountingReport.p.ShreesBalance | currency : "INR" }}</span>
-          </div>
-          <div class="info-row-of-model-mobile-app">
-            <span class="label-mobile-app">Mode Of Payment Name :</span>
-            <span class="value-mobile-app">{{ SelectedAccountingReport.p.ModeOfPaymentName || '-' }}</span>
-          </div>
-          <div class="info-row-of-model-mobile-app">
-            <span class="label-mobile-app">Narration :</span>
-            <span class="value-mobile-app">{{ SelectedAccountingReport.p.Narration || '-' }}</span>
-          </div>
-        </ion-content>
+        </div>
 
-        <!-- Footer -->
-        <ion-footer class="modal-footer-mobile-app">
-          <ion-button expand="block" color="primary" shape="round" (click)="closeModal()">
+        <div class="modal-section">
+          <h3>Financials</h3>
+          <div class="detail-row" *ngIf="SelectedAccountingReport.p.IncomeAmount">
+            <span class="label">Income Amount:</span>
+            <span class="value amount-positive">{{
+              SelectedAccountingReport.p.IncomeAmount | currency : 'INR'
+            }}</span>
+          </div>
+          <div class="detail-row" *ngIf="SelectedAccountingReport.p.GivenAmount">
+            <span class="label">Given Amount:</span>
+            <span class="value amount-negative">{{
+              SelectedAccountingReport.p.GivenAmount | currency : 'INR'
+            }}</span>
+          </div>
+          <div class="detail-row">
+            <span class="label">Shree's Balance:</span>
+            <span class="value balance-amount">{{
+              SelectedAccountingReport.p.ShreesBalance | currency : 'INR'
+            }}</span>
+          </div>
+        </div>
+
+        <div class="modal-section">
+          <h3>Payment Details</h3>
+          <div class="detail-row">
+            <span class="label">Mode:</span>
+            <span class="value">{{
+              SelectedAccountingReport.p.ModeOfPaymentName || '-'
+            }}</span>
+          </div>
+          <div class="detail-row">
+            <span class="label">Narration:</span>
+            <span class="value">{{ SelectedAccountingReport.p.Narration || '-' }}</span>
+          </div>
+        </div>
+      </ion-content>
+
+      <ion-footer>
+        <ion-toolbar>
+          <ion-button
+            expand="block"
+            color="primary"
+            shape="round"
+            (click)="closeModal()"
+          >
             Close
           </ion-button>
-        </ion-footer>
+        </ion-toolbar>
+      </ion-footer>
     </ng-template>
   </ion-modal>
 
-
-  <!-- FAB -->
   <ion-fab vertical="bottom" horizontal="end" slot="fixed">
-  <ion-fab-button color="primary" (click)="handlePrintOrShare()">
-    <ion-icon name="print-outline"></ion-icon>
-  </ion-fab-button>
+    <ion-fab-button color="primary" (click)="handlePrintOrShare()">
+      <ion-icon name="print-outline"></ion-icon>
+    </ion-fab-button>
   </ion-fab>
-
-  <!-- Print Section with automatic page breaks -->
-<!-- <div id="print-section" style="display: none;" #PrintContainer>
-  <h2>Office Report</h2>
-  <table class="table table-bordered print-table">
-    <thead>
-      <tr>
-        <th *ngFor="let header of Printheaders" style="background-color: maroon; color: white;">{{ header }}</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let report of DisplayMasterList; index as i">
-        <td class="tbldata">{{ i + 1 }}</td>
-        <td class="tbldata" style="white-space: nowrap;">{{ formatDate(report.p.TransDateTime) }}</td>
-        <td class="tbldata">{{ report.p.PayerName? (report.p.PayerName ) : '--' }} </td>
-        <td class="tbldata">{{ report.p.RecipientName? (report.p.RecipientName ) : '--' }}</td>
-        <td class="tbldata">{{ report.p.SiteName }}</td>
-        <td class="tbldata">{{ report.p.Reason }}</td>
-        <td class="tbldata">{{ report.p.IncomeAmount && report.p.IncomeAmount != 0 ? (report.p.IncomeAmount | currency:
-          'INR'): '--'}}</td>
-        <td class="tbldata">{{ report.p.GivenAmount && report.p.GivenAmount != 0 ? (report.p.GivenAmount | currency:
-          'INR'): '--'}}</td>
-        <td class="tbldata">{{ report.p.ShreesBalance | currency: 'INR' }}</td>
-        <td class="tbldata">{{ report.p.ModeOfPaymentName }}</td>
-        <td class="tbldata">{{ report.p.Narration }}</td>
-      </tr>
-       <tr *ngIf="DisplayMasterList.length > 0">
-          <td class="tbldata" colspan="5"></td>
-          <td class="tbldata"><b>Total</b></td>
-          <td class="tbldata"><b>{{ totalTotalIncome | currency: 'INR' }}</b></td>
-          <td class="tbldata"><b>{{ totalTotalExpense | currency: 'INR' }}</b></td>
-          <td class="tbldata" colspan="3"></td>
-        </tr>
-    </tbody>
-  </table>
-</div> -->
 </ion-content>

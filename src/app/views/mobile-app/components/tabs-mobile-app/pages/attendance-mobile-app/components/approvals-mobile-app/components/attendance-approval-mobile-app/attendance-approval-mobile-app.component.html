@@ -1,0 +1,427 @@
+<!-- Header -->
+<app-header-with-back-handler
+  title="Attendance Approval"
+  backRoute="mobile-app/tabs/attendance/approvals/"
+>
+</app-header-with-back-handler>
+
+<ion-content [fullscreen]="true" class="attendance-content">
+  <!-- Pull to Refresh -->
+  <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+  <!-- Filter Section -->
+  <ion-card class="filter-section">
+    <ion-grid>
+      <ion-row class="ion-align-items-center ion-justify-content-between">
+        <ion-col size="6">
+          <ion-label class="section-title">Time Period</ion-label>
+        </ion-col>
+        <ion-col size="6" class="ion-text-right" *ngIf="selectedPeriod === 0">
+          <div class="month-label">{{ formatDate(currentDateTime) }}</div>
+        </ion-col>
+      </ion-row>
+
+      <ion-row>
+        <ion-col size="12">
+          <ion-segment
+            [(ngModel)]="selectedPeriod"
+            class="modern-segment"
+            (ngModelChange)="filterRequestsByStatus()"
+          >
+            <ion-segment-button
+              *ngFor="let status of PeriodOptions"
+              [value]="status.value"
+            >
+              <ion-label>{{ status.label }}</ion-label>
+            </ion-segment-button>
+          </ion-segment>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-card>
+
+  <!-- Employee & Month Selection -->
+  <ion-card class="filter-section" *ngIf="selectedPeriod !== 0">
+    <ion-grid>
+      <ion-row>
+        <ion-col
+          size="12"
+          size-md="6"
+          *ngIf="selectedPeriod == 1 || selectedPeriod == 2"
+        >
+          <h3>Employee</h3>
+          <ion-item lines="none" class="custom-input">
+            <ion-icon slot="start" name="person-circle-outline"></ion-icon>
+            <ion-select
+              mode="ios"
+              placeholder="Select Employee"
+              interface="action-sheet"
+              [(ngModel)]="selectEmployee"
+              (ionChange)="onEmployeeChange()"
+            >
+              <ion-select-option
+                *ngFor="let Employee of EmployeeList"
+                [value]="Employee.p.Ref"
+              >
+                {{ Employee.p.Name }}
+              </ion-select-option>
+            </ion-select>
+          </ion-item>
+        </ion-col>
+
+        <ion-col size="12" size-md="6" *ngIf="selectedPeriod == 2">
+          <h3>Month</h3>
+          <ion-segment
+            [(ngModel)]="selectMonth"
+            class="month-segment"
+            (ngModelChange)="onMonthChange()"
+            scrollable
+          >
+            <ion-segment-button
+              *ngFor="let month of MonthList"
+              [value]="month.Ref"
+              class="month-segment-button"
+            >
+              <ion-label>{{ month.Name }}</ion-label>
+            </ion-segment-button>
+          </ion-segment>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-card>
+
+  <!-- Summary -->
+  <ion-grid class="summary-grid">
+    <ion-row>
+      <ion-col size="4" size-md="4">
+        <div class="summary-box present">
+          <ion-icon name="checkmark-circle" class="summary-icon"></ion-icon>
+          <h2>{{ AttendanceLogCount.p.Present }}</h2>
+          <p>Present</p>
+        </div>
+      </ion-col>
+      <ion-col size="4" size-md="4">
+        <div class="summary-box absent">
+          <ion-icon name="close-circle" class="summary-icon"></ion-icon>
+          <h2>{{ AttendanceLogCount.p.Absent }}</h2>
+          <p>Absent</p>
+        </div>
+      </ion-col>
+      <ion-col size="4" size-md="4">
+        <div class="summary-box leave">
+          <ion-icon name="calendar" class="summary-icon"></ion-icon>
+          <h2>{{ AttendanceLogCount.p.OnLeave }}</h2>
+          <p>On Leave</p>
+        </div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <!-- Approvals List -->
+  <div class="approval-list">
+    <ion-card *ngFor="let approval of DisplayMasterList">
+      <ion-item lines="none">
+        <ion-avatar slot="start">
+          <img [src]="'assets/logos/ShreeIcon.png'" alt="avatar" />
+        </ion-avatar>
+        <ion-label class="ion-text-wrap">
+          <h2>{{ approval.p.EmployeeName }}</h2>
+          <p>
+            {{
+              approval.p.AttendanceLogDetailsArray[0]
+                ?.AttendenceLocationType === LocationType.Office
+                ? "Office"
+                : approval.p.AttendanceLogDetailsArray[0]?.SiteName || "--"
+            }}
+          </p>
+        </ion-label>
+        <ion-badge slot="end" [color]="getStatusColor(approval)">
+          {{ getStatusText(approval) }}
+        </ion-badge>
+      </ion-item>
+
+      <ion-card-content
+        *ngIf="!getItemIsLeave(approval)"
+        [ngClass]="getItemDisable(approval)"
+      >
+        <ion-grid>
+          <ion-row>
+            <ion-col size="6">
+              <strong>Check In</strong>
+              <p>
+                {{
+                  approval.p.FirstCheckInTime
+                    ? convertTo12HourFormat(approval.p.FirstCheckInTime)
+                    : "--"
+                }}
+              </p>
+              <span [ngClass]="getInRemarkColor(approval)">
+                {{ getInRemarkText(approval) }}
+              </span>
+            </ion-col>
+            <ion-col size="6">
+              <strong>Check Out</strong>
+              <p>
+                {{
+                  approval.p.LastCheckOutTime
+                    ? convertTo12HourFormat(approval.p.LastCheckOutTime)
+                    : "--"
+                }}
+              </p>
+              <span [ngClass]="getOutRemarkColor(approval)">
+                {{ getOutRemarkText(approval) }}
+              </span>
+            </ion-col>
+          </ion-row>
+
+          <ion-row class="extra-info">
+            <ion-col size="6">
+              <p><strong>Total Hours:</strong></p>
+              <p>{{ approval.p.DisplayTotalWorkingHrs || "--" }}</p>
+            </ion-col>
+            <ion-col size="6" class="ion-text-right">
+              <p><strong>Date:</strong></p>
+              <p>{{ formatDate(approval.p.TransDateTime) || "--" }}</p>
+            </ion-col>
+          </ion-row>
+          <!-- Action Buttons -->
+          <ion-row
+            class="action-buttons"
+            *ngIf="!approval.p.IsAttendanceVerified"
+          >
+            <ion-col size="6">
+              <ion-button
+                expand="block"
+                fill="solid"
+                color="warning"
+                (click)="openModal(approval)"
+              >
+                View Details
+              </ion-button>
+            </ion-col>
+            <ion-col size="6">
+              <ion-button
+                expand="block"
+                fill="solid"
+                color="success"
+                (click)="ChangeAttendanceStatus(approval)"
+              >
+                Approve
+              </ion-button>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-card-content>
+      <ion-card-content *ngIf="getItemIsLeave(approval)">
+        <ion-grid>
+          <ion-row class="extra-info">
+            <ion-col size="6">
+              <p><strong>Leave Type:</strong></p>
+              <p>{{ approval.p.LeaveTypeName || "--" }}</p>
+            </ion-col>
+            <ion-col size="6" class="ion-text-right">
+              <p><strong>Date:</strong></p>
+              <p>{{ formatDate(approval.p.TransDateTime) || "--" }}</p>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-card-content>
+    </ion-card>
+  </div>
+
+  <!-- Attendance Details Modal -->
+  <ion-modal
+    [isOpen]="isModalOpen"
+    (didDismiss)="closeModal()"
+    class="custom-modal-mobile-app"
+  >
+    <ng-template>
+      <!-- Header -->
+      <ion-header class="modal-toolbar-mobile-app">
+        <ion-toolbar color="primary">
+          <ion-title>Check In / Out Details</ion-title>
+          <ion-buttons slot="end">
+            <ion-button fill="clear" (click)="closeModal()">
+              <ion-icon name="close-outline"></ion-icon>
+            </ion-button>
+          </ion-buttons>
+        </ion-toolbar>
+      </ion-header>
+
+      <!-- Body -->
+      <ion-content scroll-y="true" class="ion-padding modal-content-mobile-app">
+        <!-- Employee Name -->
+        <div class="info-row-of-model-mobile-app">
+          <strong class="label-mobile-app">Name:</strong>
+          <span class="value-mobile-app">
+            {{ SelectedAttendance.p.EmployeeName || "--" }}
+          </span>
+        </div>
+
+        <!-- Check-in Images -->
+        <!-- <ion-grid class="checkin-grid">
+          <ion-row> -->
+        <!-- Self -->
+        <!-- <ion-col size="6" class="ion-text-center">
+              <div class="checkin-wrapper">
+                <ion-avatar class="checkin-avatar">
+                  <ng-container
+                    *ngIf="
+                      SelectedAttendance.p.AttendanceLogDetailsArray[0]
+                        .AttendanceLogPath1;
+                      else noSelfImg
+                    "
+                  >
+                    <img
+                      [src]="
+                        getImageURL(
+                          SelectedAttendance.p.AttendanceLogDetailsArray[0]
+                            .AttendanceLogPath1
+                        )
+                      "
+                      alt="Self Check-in"
+                    />
+                  </ng-container>
+                  <ng-template #noSelfImg>
+                    <ion-icon
+                      name="image-outline"
+                      class="placeholder-icon"
+                    ></ion-icon>
+                  </ng-template>
+                </ion-avatar>
+                <p class="checkin-label">Self</p>
+              </div>
+            </ion-col> -->
+
+        <!-- Work Location -->
+        <!-- <ion-col size="6" class="ion-text-center">
+              <div class="checkin-wrapper">
+                <ion-avatar class="checkin-avatar">
+                  <ng-container
+                    *ngIf="
+                      SelectedAttendance.p.AttendanceLogDetailsArray[0]
+                        .AttendanceLogPath2;
+                      else noWorkImg
+                    "
+                  >
+                    <img
+                      [src]="
+                        getImageURL(
+                          SelectedAttendance.p.AttendanceLogDetailsArray[0]
+                            .AttendanceLogPath2
+                        )
+                      "
+                      alt="Work Location Check-in"
+                    />
+                  </ng-container>
+                  <ng-template #noWorkImg>
+                    <ion-icon
+                      name="image-outline"
+                      class="placeholder-icon"
+                    ></ion-icon>
+                  </ng-template>
+                </ion-avatar>
+                <p class="checkin-label">Work Location</p>
+              </div>
+            </ion-col>
+          </ion-row>
+        </ion-grid> -->
+
+        <!-- Logs List -->
+        <ion-list lines="full" class="logs-list">
+          <div
+            *ngFor="
+              let item of SelectedAttendance?.p?.AttendanceLogDetailsArray;
+              let i = index
+            "
+          >
+            <ion-item lines="none">
+              <ion-label>
+                <h3>Log #{{ i + 1 }}</h3>
+                <p>
+                  <strong>Check-In:</strong>
+                  {{
+                    item.CheckInTime
+                      ? convertTo12HourFormat(item.CheckInTime)
+                      : "--"
+                  }}
+                </p>
+                <p>
+                  <strong>Check-Out:</strong>
+                  {{
+                    item.CheckOutTime
+                      ? convertTo12HourFormat(item.CheckOutTime)
+                      : "--"
+                  }}
+                </p>
+              </ion-label>
+            </ion-item>
+            <ion-grid class="checkin-grid">
+              <ion-row>
+                <!-- Self -->
+                <ion-col size="6" class="ion-text-center">
+                  <div class="checkin-wrapper">
+                    <ion-avatar class="checkin-avatar">
+                      <ng-container
+                        *ngIf="item.AttendanceLogPath1; else noSelfImg"
+                      >
+                        <img
+                          [src]="getImageURL(item.AttendanceLogPath1)"
+                          alt="Self Check-in"
+                        />
+                      </ng-container>
+                      <ng-template #noSelfImg>
+                        <ion-icon
+                          name="image-outline"
+                          class="placeholder-icon"
+                        ></ion-icon>
+                      </ng-template>
+                    </ion-avatar>
+                    <p class="checkin-label">Self</p>
+                  </div>
+                </ion-col>
+
+                <!-- Work Location -->
+                <ion-col size="6" class="ion-text-center">
+                  <div class="checkin-wrapper">
+                    <ion-avatar class="checkin-avatar">
+                      <ng-container
+                        *ngIf="item.AttendanceLogPath2; else noWorkImg"
+                      >
+                        <img
+                          [src]="getImageURL(item.AttendanceLogPath2)"
+                          alt="Work Location Check-in"
+                        />
+                      </ng-container>
+                      <ng-template #noWorkImg>
+                        <ion-icon
+                          name="image-outline"
+                          class="placeholder-icon"
+                        ></ion-icon>
+                      </ng-template>
+                    </ion-avatar>
+                    <p class="checkin-label">Work Location</p>
+                  </div>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </div>
+        </ion-list>
+      </ion-content>
+
+      <!-- Footer -->
+      <ion-footer class="modal-footer-mobile-app">
+        <ion-button
+          expand="block"
+          color="primary"
+          shape="round"
+          (click)="closeModal()"
+        >
+          Close
+        </ion-button>
+      </ion-footer>
+    </ng-template>
+  </ion-modal>
+</ion-content>

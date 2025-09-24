@@ -4,7 +4,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { AttendanceMobileAppPage } from './attendance-mobile-app.page';
 import { AttendanceViewMobileAppComponent } from './components/attendance-view-mobile-app/attendance-view-mobile-app.component';
 import { AllAttendanceMobileAppComponent } from './components/all-attendance-mobile-app/all-attendance-mobile-app.component';
- 
+
 const routes: Routes = [
   {
     path: '',
@@ -15,13 +15,33 @@ const routes: Routes = [
       { path: 'all-attendance', component: AllAttendanceMobileAppComponent },
       {
         path: 'leave-request',
-        loadChildren: () => import('./components/leave-request-mobile-app/leave-request-mobile-app.module').then(m => m.LeaveRequestMobileAppPageModule)
+        loadChildren: () =>
+          import(
+            './components/leave-request-mobile-app/leave-request-mobile-app.module'
+          ).then((m) => m.LeaveRequestMobileAppPageModule),
       },
       {
         path: 'salary-slip-request',
-        loadChildren: () => import('./components/salary-slip-request-mobile-app/salary-slip-request-mobile-app.module').then(m => m.SalarySlipRequestMobileAppPageModule)
-      }
-    ]
+        loadChildren: () =>
+          import(
+            './components/salary-slip-request-mobile-app/salary-slip-request-mobile-app.module'
+          ).then((m) => m.SalarySlipRequestMobileAppPageModule),
+      },
+      {
+        path: 'approvals',
+        loadChildren: () =>
+          import(
+            './components/approvals-mobile-app/approvals-mobile-app.module'
+          ).then((m) => m.ApprovalsMobileAppPageModule),
+      },
+      {
+        path: 'holidays',
+        loadChildren: () =>
+          import(
+            './components/holidays-mobile-app/holidays-mobile-app.module'
+          ).then((m) => m.HolidaysMobileAppPageModule),
+      },
+    ],
   },
 ];
 

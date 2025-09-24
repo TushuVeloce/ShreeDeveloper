@@ -39,9 +39,8 @@
 
 // global css for Table
 * {
-  font-family: 'Poppins';
+  font-family: "Poppins";
 }
-
 
 .bgtable_light {
   background-color: rgb(229, 231, 235);
@@ -114,11 +113,11 @@
   font-size: 16px !important;
   font-weight: 600 !important;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2) !important;
-  transition: background-color 0.1s ease, transform 0.2s ease, box-shadow 0.3s ease !important;
+  transition: background-color 0.1s ease, transform 0.2s ease,
+    box-shadow 0.3s ease !important;
   position: relative !important;
   overflow: hidden !important;
 }
-
 
 /* Hover Effect */
 .btn:hover {
@@ -171,7 +170,6 @@ textarea.form-control:focus {
 
 // ========================== Input, textarea, nz-select Class CSS End =========================== //
 
-
 /* ------------------------- Search Box Styles Start ------------------------- */
 .search-container_light {
   position: relative;
@@ -197,7 +195,7 @@ textarea.form-control:focus {
 
 .col-md-4,
 .col-md-6,
-.col-6>* {
+.col-6 > * {
   margin-bottom: 10px;
 
   @media (max-width: 468px) {
@@ -225,7 +223,6 @@ form label {
   background-color: var(--ion-color-primary-tint);
   color: white;
 }
-
 
 .backbtn {
   background-color: rgb(252, 252, 252);
@@ -279,7 +276,6 @@ form label {
   }
 }
 
-
 form {
   label {
     margin-bottom: 0.5rem;
@@ -321,7 +317,6 @@ form {
   }
 }
 
-
 .form-label_light {
   color: black;
 }
@@ -358,7 +353,6 @@ img[title="Delete"] {
   float: right;
   justify-self: right;
 
-
   // Slightly scale up on larger screens
   @media (min-width: 480px) {
     font-size: 0.9rem;
@@ -379,7 +373,6 @@ img[title="Delete"] {
     background-color: maroon;
   }
 }
-
 
 /* ------------------------- Search Box Styles End ------------------------- */
 .mobile-btn {
@@ -405,7 +398,8 @@ input[type="date"] {
   position: relative;
   display: block;
   width: 100%;
-  background: url('https://cdn-icons-png.flaticon.com/512/747/747310.png') no-repeat right 10px center;
+  background: url("https://cdn-icons-png.flaticon.com/512/747/747310.png")
+    no-repeat right 10px center;
   background-size: 20px 20px;
   padding-right: 35px;
   cursor: pointer;
@@ -420,7 +414,6 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   width: 100%;
   height: 100%;
 }
-
 
 // ====================================== NZ Dropdown Input CSS ======================= //
 
@@ -470,9 +463,6 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 
 // ====================================== NZ Dropdown Input CSS End ======================= //
 
-
-
-
 // =========================== Nz Select Menu  Css start ==============================
 nz-select {
   width: 100%;
@@ -505,8 +495,9 @@ nz-select {
   /* Change icon color in light theme */
 }
 
-::ng-deep .ant-select-item-option-selected:not(.ant-select-item-option-disabled) {
-  background-color: #8dd0f0 !important
+::ng-deep
+  .ant-select-item-option-selected:not(.ant-select-item-option-disabled) {
+  background-color: #8dd0f0 !important;
 }
 
 ::ng-deep .ant-empty-description {
@@ -571,7 +562,6 @@ nz-select {
   }
 }
 
-
 .card-body_light {
   background-color: rgb(229, 231, 235);
 }
@@ -630,8 +620,6 @@ nz-select {
   border-color: #a0522d !important;
 }
 
-
-
 // .fixed-pagination2 {
 //   width: 100%;
 //   padding: 10px 12px;
@@ -670,7 +658,7 @@ input::-webkit-inner-spin-button {
 }
 
 /* Firefox */
-input[type=number] {
+input[type="number"] {
   --moz-appearance: textfield;
 }
 
@@ -709,7 +697,7 @@ input[type=number] {
   padding: 16px;
 
   ion-list {
-    background: #FFF;
+    background: #fff;
   }
 
   label {
@@ -825,7 +813,6 @@ ion-textarea {
 .cancel-button {
   --background: var(--ion-color-secondary);
   --color: var(--ion-text-color-dark);
-  ;
 }
 
 .cancel-button:hover,
@@ -1001,7 +988,9 @@ input[type="time"] {
   width: 100%;
   aspect-ratio: 1 / 1;
   border-radius: 20px;
-  background-color: var(--ion-card-background-color); // Default light blue background
+  background-color: var(
+    --ion-card-background-color
+  ); // Default light blue background
   overflow: hidden;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   display: flex;
@@ -1012,7 +1001,9 @@ input[type="time"] {
   margin: 0 auto;
 
   &.active {
-    background-color: var(--ion-card-background-color); // Highlighted selected category
+    background-color: var(
+      --ion-card-background-color
+    ); // Highlighted selected category
   }
 
   &:hover {
@@ -1064,7 +1055,6 @@ textarea[placeholder]::placeholder {
 
 /* Responsive font-size using media queries */
 @media (min-width: 640px) {
-
   input[placeholder]::placeholder,
   textarea[placeholder]::placeholder {
     font-size: 12px;
@@ -1072,7 +1062,6 @@ textarea[placeholder]::placeholder {
 }
 
 @media (min-width: 768px) {
-
   input[placeholder]::placeholder,
   textarea[placeholder]::placeholder {
     font-size: 18px;
@@ -1080,7 +1069,6 @@ textarea[placeholder]::placeholder {
 }
 
 @media (min-width: 1024px) {
-
   input[placeholder]::placeholder,
   textarea[placeholder]::placeholder {
     font-size: 16px;
@@ -1091,6 +1079,9 @@ textarea[placeholder]::placeholder {
   --height: 60%;
   --width: 90%;
   --border-radius: 20px;
+  --display: block;
+  --justify-content: center;
+  --ion-safe-area-top: 0;
 
   .modal-toolbar-mobile-app {
     border-top-left-radius: 20px;
@@ -1102,7 +1093,7 @@ textarea[placeholder]::placeholder {
     overflow-y: auto;
 
     ion-list {
-      background: #FFF;
+      background: #fff;
     }
   }
 

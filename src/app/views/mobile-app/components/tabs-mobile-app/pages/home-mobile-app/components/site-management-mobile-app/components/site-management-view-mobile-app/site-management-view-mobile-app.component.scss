@@ -1,99 +1,162 @@
-.site {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 16px;
-    justify-content: center;
+/* Page-level styles */
+.site-management-content {
+  --background: #f4f5f8;
 }
 
-.site-card {
-    flex: 1 1 320px;
-    max-width: 360px;
-    transition: transform 0.2s ease-in-out;
+/* List styles */
+.site-list {
+  background: transparent;
+  padding: 0;
 }
 
-.site-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+.site-item-container {
+  margin-bottom: 12px;
+  border-radius: 12px;
+  background-color: white;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+  transition: box-shadow 0.2s ease-in-out;
 }
 
-ion-card {
-    min-width: 300px;
-    scroll-snap-align: start;
-    border-left: 4px solid var(--ion-color-danger);
-    border-radius: 12px;
-    background-color: var(--ion-background-color-step-50);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+.site-item-container:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
-.card-header-flex {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+.site-item {
+  --background: transparent;
+  --padding-start: 16px;
+  --padding-end: 12px;
+  --min-height: 60px;
+  position: relative;
+  transition: background-color 0.2s ease;
+}
+
+.site-item:active {
+  background-color: var(--ion-color-step-100);
 }
 
 .site-title {
-    display: flex;
-    align-items: center;
-    font-size: 1.1rem;
-    gap: 6px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: var(--ion-color-dark);
+  margin: 0;
 }
 
-.site-details {
-    flex-direction: column;
-    font-size: 0.85rem;
-    color: #444;
-
-    small {
-        strong {
-            justify-content: space-between;
-            padding: 10px;
-        }
-    }
+.site-dates {
+  font-size: 0.9rem;
+  color: var(--ion-color-medium);
+  margin-top: 4px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
-.detail-icon {
+.site-actions {
+  display: flex;
+  gap: 4px;
+}
+
+/* --- Animation Styles --- */
+.expand-icon {
+  font-size: 1.2rem;
+  color: var(--ion-color-medium);
+  transition: transform 0.2s ease-in-out;
+}
+
+.expand-icon.rotated {
+  transform: rotate(180deg);
+}
+
+/* The animation trigger handles this now, so we only need inner styling */
+.collapsible-details-inner {
+  padding: 16px;
+}
+
+.detail-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0;
+  font-size: 0.9rem;
+  .label {
+    font-weight: bold;
+    color: var(--ion-color-medium);
+  }
+  .value {
+    font-weight: 500;
+    color: var(--ion-color-dark);
+  }
+}
+
+.details-action-buttons {
+  margin-top: 12px;
+}
+
+/* Empty state message */
+.no-data-mobile-app {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: calc(100vh - 100px);
+  text-align: center;
+  padding: 20px;
+  ion-icon {
+    font-size: 4rem;
+    color: var(--ion-color-light);
+  }
+  p {
+    margin-top: 10px;
     font-size: 1rem;
-    margin-right: 10px;
-    vertical-align: middle;
-    color: var(--ion-background-color-step-50);
+    color: var(--ion-color-medium);
+  }
+}
+/* Modal styles */
+.site-details-modal {
+  --border-radius: 12px;
+}
+.modal-content {
+  padding: 16px;
 }
 
-.custom-modal-mobile-app {
-    --height: 60%;
-    --width: 90%;
-    --border-radius: 20px;
-    --background: var(--ion-background-color);
+.modal-section {
+  margin-bottom: 20px;
+  h3 {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: var(--ion-color-dark);
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid var(--ion-color-light);
+  }
+}
 
-    .modal-toolbar-mobile-app {
-        border-top-left-radius: 20px;
-        border-top-right-radius: 20px;
-    }
-
-    .modal-content-mobile-app {
-        max-height: 100%;
-        overflow-y: auto;
-    }
-
-    .info-row-of-model-mobile-app {
-        margin-bottom: 12px;
-        display: flex;
-        justify-content: space-between;
-        padding: 0 10px;
-
-        .label-mobile-app {
-            font-weight: 600;
-        }
-
-        .value-mobile-app {
-            font-weight: 500;
-            text-align: right;
-            max-width: 60%;
-            word-break: break-word;
-        }
-    }
-
-    .modal-footer-mobile-app {
-        padding: 12px;
-        background-color: var(--ion-background-color-step-50);
-    }
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--ion-color-step-100);
+  &:last-child {
+    border-bottom: none;
+  }
+  .label {
+    font-weight: 500;
+    color: var(--ion-color-medium);
+    font-size: 0.9rem;
+    flex-grow: 1;
+  }
+  .value {
+    font-weight: bold;
+    color: var(--ion-color-dark);
+    font-size: 0.9rem;
+    text-align: right;
+  }
+  .link-value {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  color: var(--ion-color-primary); /* Style the link with your primary color */
+  text-decoration: none; /* Remove underline */
+  font-weight: bold;
+}
 }

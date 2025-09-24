@@ -1,0 +1,60 @@
+<app-header-with-back-handler title="Employee Overtime"
+  backRoute="mobile-app/tabs/attendance/approvals"></app-header-with-back-handler>
+
+<ion-content [fullscreen]="true">
+  <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+  
+  <!-- <ion-searchbar (ionInput)="onSearch($event)" placeholder="Search by name or date"></ion-searchbar> -->
+  
+  <ion-list lines="none" *ngIf="paginatedList().length > 0; else noData" class="ion-padding">
+    <ion-card *ngFor="let overtime of paginatedList(); let i = index">
+      <ion-item detail="false">
+        <ion-label>
+          <div class="header-section">
+            <h2 class="employee-name">{{ overtime.p.EmployeeName }}</h2>
+            <ion-chip [ngClass]="{'approved-chip': overtime.p.IsOverTimeVerified, 'pending-chip': !overtime.p.IsOverTimeVerified}">
+              <ion-label>{{ overtime.p.IsOverTimeVerified ? 'Approved' : 'Pending' }}</ion-label>
+            </ion-chip>
+          </div>
+          <p class="overtime-info">
+            <ion-icon name="calendar-outline" class="icon-small"></ion-icon>
+            {{overtime.p.Date? formatDate(overtime.p.Date):'--' }}
+          </p>
+          <p class="overtime-info">
+            <ion-icon name="time-outline" class="icon-small"></ion-icon>
+            {{convertTo12Hour(overtime.p.FromTime) }} - {{ convertTo12Hour(overtime.p.ToTime) }}
+          </p>
+          <p class="overtime-info">
+            <ion-icon name="timer-outline" class="icon-small"></ion-icon>
+            Total Overtime: {{ overtime.p.DisplayOverTime || '--' }}
+          </p>
+        </ion-label>
+        
+        <ion-buttons slot="end" *ngIf="!overtime.p.IsOverTimeVerified">
+          <ion-button fill="clear" (click)="showOvertimeActions(overtime)">
+            <ion-icon name="ellipsis-vertical"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+      </ion-item>
+    </ion-card>
+  </ion-list>
+
+  <ion-infinite-scroll (ionInfinite)="loadMoreData($event)">
+    <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="Loading more data..."></ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+  
+  <ng-template #noData>
+    <div class="data-not-found">
+      <ion-icon name="document-outline"></ion-icon>
+      <p>No overtime data found.</p>
+    </div>
+  </ng-template>
+
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button (click)="AddEmployeeOvertime()">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+</ion-content>

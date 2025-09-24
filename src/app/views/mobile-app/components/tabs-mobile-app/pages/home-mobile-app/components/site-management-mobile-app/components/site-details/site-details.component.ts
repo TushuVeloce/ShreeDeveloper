@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { IonTitle, IonHeader, IonToolbar, IonButtons, IonButton } from "@ionic/angular/standalone";
+import { BookingRemark } from 'src/app/classes/domain/domainenums/domainenums';
 import { Plot } from 'src/app/classes/domain/entities/website/masters/plot/plot';
 import { Site } from 'src/app/classes/domain/entities/website/masters/site/site';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
@@ -25,6 +26,7 @@ export class SiteDetailsComponent implements OnInit {
   companyRef: number = 0;
   siteRef: number = 0;
   siteName: string = '';
+  BookingRemark = BookingRemark
 
   constructor(
     private route: Router,

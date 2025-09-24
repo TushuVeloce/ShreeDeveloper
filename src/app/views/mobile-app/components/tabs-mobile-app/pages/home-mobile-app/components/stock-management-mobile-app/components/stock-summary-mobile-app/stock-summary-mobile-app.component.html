@@ -1,17 +1,38 @@
 <app-header-with-back-handler title="Stock Summary"
   backRoute="mobile-app/tabs/dashboard/stock-management"></app-header-with-back-handler>
 
-<!-- Filters -->
 <app-chip-filter-mobile-app [filters]="filters" (filtersChanged)="onFiltersChanged($event)">
 </app-chip-filter-mobile-app>
 
-<ion-content class="ion-padding">
+<ion-content class="ion-padding stock-summary-content">
   <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
 
-  <!-- Table -->
-  <ion-list class="requisition-list ion-text-center" [lines]="'none'" *ngIf="DisplayMasterList.length > 0">
+  <ion-list class="mobile-list">
+    <ion-card *ngFor="let stock of DisplayMasterList" class="stock-card" button (click)="onViewClicked(stock)">
+      <ion-card-header>
+        <ion-card-title class="material-name">{{ stock.p.MaterialName || '-' }}</ion-card-title>
+        <ion-card-subtitle class="site-name">{{ stock.p.SiteName || '-' }}</ion-card-subtitle>
+      </ion-card-header>
+      <ion-card-content>
+        <div class="card-info-row">
+          <span class="label">Current Stock:</span>
+          <span class="value current-stock-value">{{ stock.p.CurrentStock || '0' }}</span>
+        </div>
+        <div class="card-info-row">
+          <span class="label">Total Inward:</span>
+          <span class="value">{{ stock.p.TotalInwardQty || '0' }}</span>
+        </div>
+        <div class="card-info-row">
+          <span class="label">Total Consumed:</span>
+          <span class="value">{{ stock.p.TotalConsumedQty || '0' }}</span>
+        </div>
+      </ion-card-content>
+    </ion-card>
+  </ion-list>
+
+  <div class="desktop-table">
     <div class="table-container">
       <div class="table-scroll">
         <table class="custom-table">
@@ -47,18 +68,16 @@
         </table>
       </div>
     </div>
-  </ion-list>
+  </div>
 
-  <!-- No data found -->
   <div *ngIf="DisplayMasterList.length === 0 && !loadingService.isLoaderActive()" class="no-data-mobile-app">
     <ion-icon name="alert-circle-outline" size="large" color="medium"></ion-icon>
     <p>No stock Summary records found.</p>
   </div>
 
-  <!-- Modal for stock Detail -->
   <ion-modal [isOpen]="ModalOpen" (didDismiss)="closeModal()" class="custom-modal-mobile-app">
     <ng-container *ngIf="SelectedStockSummary">
-      <ion-header class="modal-toolbar-mobile-app">
+      <ion-header>
         <ion-toolbar color="primary">
           <ion-title>Stock Details</ion-title>
           <ion-buttons slot="end">
@@ -69,68 +88,71 @@
         </ion-toolbar>
       </ion-header>
 
-      <ion-content scroll-y="true" class="ion-padding modal-content-mobile-app">
-        <div class="info-row-of-model-mobile-app" *ngFor="let field of [
-   { label: 'Site', value: SelectedStockSummary.p.SiteName },
-    { label: 'Material', value: SelectedStockSummary.p.MaterialName },
-    { label: 'Total Requisition Qty', value: SelectedStockSummary.p.TotalRequisitionQty },
-    { label: 'Total Order Qty Per Material', value: SelectedStockSummary.p.TotalOrderQtyPerMaterial },
-    { label: 'Total Extra Order Qty', value: SelectedStockSummary.p.TotalExtraOrderQty },
-    { label: 'Total Inward Qty', value: SelectedStockSummary.p.TotalInwardQty },
-    { label: 'Inward Remaining Qty', value: SelectedStockSummary.p.InwardRemainingQty },
-    { label: 'Total Consumed Qty', value: SelectedStockSummary.p.TotalConsumedQty },
-    { label: 'Total Transferred Out Qty', value: SelectedStockSummary.p.TotalTransferredOutQty },
-    { label: 'Current Stock', value: SelectedStockSummary.p.CurrentStock },
-    { label: 'Ordered Remaining Qty', value: SelectedStockSummary.p.OrderedRemainingQty }
-          ]">
-          <strong class="label-mobile-app">{{ field.label }}:</strong>
-          <span class="value-mobile-app">
-            {{ field.value !== null && field.value !== undefined && field.value !== '' ? field.value : '-' }}
-          </span>
+      <ion-content class="modal-content ion-padding">
+        <div class="modal-section">
+          <h3>Material Information</h3>
+          <div class="info-row">
+            <span class="label">Site:</span>
+            <span class="value">{{ SelectedStockSummary.p.SiteName || '-' }}</span>
+          </div>
+          <div class="info-row">
+            <span class="label">Material:</span>
+            <span class="value">{{ SelectedStockSummary.p.MaterialName || '-' }}</span>
+          </div>
+          <div class="info-row">
+            <span class="label">Current Stock:</span>
+            <span class="value">{{ SelectedStockSummary.p.CurrentStock || '0' }}</span>
+          </div>
+        </div>
+
+        <div class="modal-section">
+          <h3>Stock Flow</h3>
+          <div class="info-row">
+            <span class="label">Total Requisition Qty:</span>
+            <span class="value">{{ SelectedStockSummary.p.TotalRequisitionQty || '0' }}</span>
+          </div>
+          <div class="info-row">
+            <span class="label">Total Inward Qty:</span>
+            <span class="value">{{ SelectedStockSummary.p.TotalInwardQty || '0' }}</span>
+          </div>
+          <div class="info-row">
+            <span class="label">Total Consumed Qty:</span>
+            <span class="value">{{ SelectedStockSummary.p.TotalConsumedQty || '0' }}</span>
+          </div>
+          <div class="info-row">
+            <span class="label">Total Transferred Out Qty:</span>
+            <span class="value">{{ SelectedStockSummary.p.TotalTransferredOutQty || '0' }}</span>
+          </div>
+        </div>
+
+        <div class="modal-section">
+          <h3>Order Details</h3>
+          <div class="info-row">
+            <span class="label">Total Ordered:</span>
+            <span class="value">{{ SelectedStockSummary.p.TotalOrderQtyPerMaterial || '0' }}</span>
+          </div>
+          <div class="info-row">
+            <span class="label">Extra Ordered:</span>
+            <span class="value">{{ SelectedStockSummary.p.TotalExtraOrderQty || '0' }}</span>
+          </div>
+          <div class="info-row">
+            <span class="label">Ordered Remaining:</span>
+            <span class="value">{{ SelectedStockSummary.p.OrderedRemainingQty || '0' }}</span>
+          </div>
         </div>
       </ion-content>
 
-      <ion-footer class="modal-footer-mobile-app">
-        <ion-button expand="block" color="primary" shape="round" (click)="closeModal()">Close</ion-button>
+      <ion-footer>
+        <ion-toolbar>
+          <ion-button expand="block" color="primary" shape="round" (click)="closeModal()">Close</ion-button>
+        </ion-toolbar>
       </ion-footer>
     </ng-container>
   </ion-modal>
 
-  <!-- Floating Action Button -->
   <ion-fab vertical="bottom" horizontal="end" slot="fixed">
     <ion-fab-button color="primary" (click)="handlePrintOrShare()">
       <ion-icon name="print-outline"></ion-icon>
     </ion-fab-button>
   </ion-fab>
-
-  <!-- Hidden Print Section -->
-  <!-- <div id="print-section" style="display: none;" #PrintContainer>
-    <h2 style="text-align: center; margin-bottom: 1rem;">Stock Summary Report</h2>
-    <table class="table table-bordered print-table" style="width: 100%; border-collapse: collapse;">
-      <thead>
-        <tr>
-          <th style="background-color: maroon; color: white;">Sr.No</th>
-          <th *ngFor="let header of headers.slice(1)" style="background-color: maroon; color: white;">
-            {{ header }}
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let stock of DisplayMasterList; let i = index">
-          <td class="tbldata">{{ i + 1 }}</td>
-          <td>{{ stock.p.SiteName || '-' }}</td>
-          <td>{{ stock.p.MaterialName || '-' }}</td>
-          <td>{{ stock.p.TotalOrderQtyPerMaterial || '0' }}</td>
-          <td>{{ stock.p.TotalExtraOrderQty || '0' }}</td>
-          <td>{{ stock.p.TotalOrderQty || '0' }}</td>
-          <td>{{ stock.p.TotalInwardQty || '0' }}</td>
-          <td>{{ stock.p.InwardRemainingQty || '0' }}</td>
-          <td>{{ stock.p.TotalConsumedQty || '0' }}</td>
-          <td>{{ stock.p.TotalTransferredInQty || '0' }}</td>
-          <td>{{ stock.p.CurrentStock || '0' }}</td>
-          <td>{{ stock.p.OrderedRemainingQty || '0' }}</td>
-        </tr>
-      </tbody>
-    </table>
-  </div> -->
 </ion-content>

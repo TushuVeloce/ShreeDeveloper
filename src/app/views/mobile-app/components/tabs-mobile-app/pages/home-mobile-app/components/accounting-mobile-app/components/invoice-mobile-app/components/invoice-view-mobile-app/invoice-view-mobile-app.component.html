@@ -1,51 +1,68 @@
-<app-header-with-back-handler title="Billing"
-  backRoute="mobile-app/tabs/dashboard/accounting"></app-header-with-back-handler>
-<app-chip-filter-mobile-app [filters]="filters" (filtersChanged)="onFiltersChanged($event)">
-</app-chip-filter-mobile-app>
+<app-header-with-back-handler
+  title="Billing"
+  backRoute="mobile-app/tabs/dashboard/accounting"
+></app-header-with-back-handler>
+
+<app-chip-filter-mobile-app
+  [filters]="filters"
+  (filtersChanged)="onFiltersChanged($event)"
+></app-chip-filter-mobile-app>
 
 <ion-content class="ion-padding">
   <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
-  <ion-list class="requisition-list" [lines]="'none'">
-    <ion-item *ngFor="let Invoice of DisplayMasterList" class="requisition-item" button detail
-      (click)="openModal(Invoice)">
-      <ion-label>
-        <h3>Site : {{ Invoice.p.SiteName || 'Unknown Site' }}</h3>
-        <p class="date-label">Billing Date : {{ formatDate(Invoice.p.Date) || '-' }}</p>
-        <p class="date-label">Recipient Name : {{ Invoice.p.RecipientName? Invoice.p.RecipientName :
-          Invoice.p.RecipientName || '-' }}</p>
-        <p class="date-label">Billing Amount : {{ Invoice.p.InvoiceAmount | currency : "INR" }}
-        </p>
-      </ion-label>
 
-      <div class="action-buttons" slot="end" (click)="$event.stopPropagation()">
-        <ion-button fill="clear" size="small" color="primary" (click)="onEditClicked(Invoice)">
-          <ion-icon name="pencil-outline" slot="icon-only"></ion-icon>
-        </ion-button>
-        <ion-button fill="clear" size="small" color="primary" (click)="onDeleteClicked(Invoice)">
-          <ion-icon name="trash-outline" slot="icon-only"></ion-icon>
-        </ion-button>
-        <ion-button fill="clear" size="small" color="primary" (click)="navigateToPrint(Invoice)">
-          <ion-icon name="print-outline" slot="icon-only"></ion-icon>
-        </ion-button>
-      </div>
-    </ion-item>
+  <ion-list class="billing-list" [lines]="'none'">
+    <ion-card
+      *ngFor="let invoice of DisplayMasterList"
+      class="billing-card"
+      button
+      (click)="openModal(invoice)"
+    >
+      <ion-card-content>
+        <div class="card-header">
+          <h3 class="site-name">{{ invoice.p.SiteName || 'Unknown Site' }}</h3>
+          <span class="billing-date">{{ formatDate(invoice.p.Date) || '-' }}</span>
+        </div>
+
+        <div class="card-details">
+          <div class="detail-row">
+            <span class="label">Billing Amount:</span>
+            <span class="value amount-positive">{{ invoice.p.InvoiceAmount | currency : "INR" }}</span>
+          </div>
+          <div class="detail-row">
+            <span class="label">Recipient:</span>
+            <span class="value">{{ invoice.p.RecipientName || '-' }}</span>
+          </div>
+        </div>
+
+        <div class="card-actions">
+          <ion-button fill="clear" color="tertiary" size="small" (click)="$event.stopPropagation(); onEditClicked(invoice);">
+            <ion-icon name="pencil-outline" slot="start"></ion-icon>
+            Edit
+          </ion-button>
+          <ion-button fill="clear" color="danger" size="small" (click)="$event.stopPropagation(); onDeleteClicked(invoice);">
+            <ion-icon name="trash-outline" slot="start"></ion-icon>
+            Delete
+          </ion-button>
+          <ion-button fill="clear" color="primary" size="small" (click)="$event.stopPropagation(); navigateToPrint(invoice);">
+            <ion-icon name="print-outline" slot="start"></ion-icon>
+            Print
+          </ion-button>
+        </div>
+      </ion-card-content>
+    </ion-card>
   </ion-list>
 
-
-  <!-- Show "Data not found" if list is empty -->
-  <div *ngIf="DisplayMasterList.length === 0 && !loadingService.isLoaderActive()" class="no-data-mobile-app">
-    <ion-icon name="alert-circle-outline" size="large" color="medium"></ion-icon>
-    <p>No Billing records found.</p>
+  <div *ngIf="DisplayMasterList.length === 0 && !loadingService.isLoaderActive()" class="empty-state">
+    <ion-icon name="alert-circle-outline"></ion-icon>
+    <p>No billing records found.</p>
   </div>
 
-
-  <!-- Modal -->
   <ion-modal [isOpen]="modalOpen" (didDismiss)="closeModal()" class="custom-modal-mobile-app">
     <ng-template>
-      <!-- Header -->
-      <ion-header class="modal-toolbar-mobile-app">
+      <ion-header>
         <ion-toolbar color="primary">
           <ion-title>Billing Details</ion-title>
           <ion-buttons slot="end">
@@ -56,164 +73,129 @@
         </ion-toolbar>
       </ion-header>
 
-      <!-- Body -->
-      <ion-content scroll-y="true" class="ion-padding modal-content-mobile-app">
-        <!-- Info Rows -->
-        <div class="info-row-of-model-mobile-app">
-          <span class="label-mobile-app">Billing Date:</span>
-          <span class="value-mobile-app">{{ formatDate(SelectedInvoice.p.Date) || '-' }}</span>
-        </div>
-        <div class="info-row-of-model-mobile-app">
-          <span class="label-mobile-app">Billing No.:</span>
-          <span class="value-mobile-app">{{ SelectedInvoice.p.InvoiceNo || '-' }}</span>
-        </div>
-        <div class="info-row-of-model-mobile-app">
-          <span class="label-mobile-app">Site Name:</span>
-          <span class="value-mobile-app">{{ SelectedInvoice.p.SiteName || '-' }}</span>
-        </div>
-        <div class="info-row-of-model-mobile-app">
-          <span class="label-mobile-app">Ledger Name :</span>
-          <span class="value-mobile-app">{{ SelectedInvoice.p.LedgerName || '-' }}</span>
-        </div>
-        <div class="info-row-of-model-mobile-app">
-          <span class="label-mobile-app">Sub Ledger Name:</span>
-          <span class="value-mobile-app">{{ SelectedInvoice.p.SubLedgerName || '-' }}</span>
-        </div>
-        <div class="info-row-of-model-mobile-app">
-          <span class="label-mobile-app">Description :</span>
-          <span class="value-mobile-app">{{ SelectedInvoice.p.Description || '-' }}</span>
-        </div>
-        <div class="info-row-of-model-mobile-app">
-          <span class="label-mobile-app">Recipient Name :</span>
-          <span class="value-mobile-app">{{SelectedInvoice.p.RecipientName? SelectedInvoice.p.RecipientName :
-            SelectedInvoice.p.RecipientName || '-' }}</span>
-        </div>
-        <div class="info-row-of-model-mobile-app" *ngIf="SelectedInvoice.p.MachineUsageDetailsArray.length > 0">
-          <span class="label-mobile-app">Machine Time Details :</span>
-        </div>
-        <div class="table-container" *ngIf="SelectedInvoice.p.MachineUsageDetailsArray.length > 0">
-          <div class="table-scroll">
-            <table class="custom-table ion-text-center">
-              <thead>
-                <tr>
-                  <th class="sticky-col sticky-header">#</th>
-                  <th *ngFor="let item of MachineTableHeaderData" class="sticky-header">{{ item }}</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr *ngFor="let item of SelectedInvoice.p.MachineUsageDetailsArray; let i = index">
-                  <td class="sticky-col">{{i + 1 }}</td>
-                  <td>
-                    {{ convertTo12HourFormat(item.StartTime) }}
-                  </td>
-                  <td>
-                    {{ convertTo12HourFormat(item.EndTime) || '-' }}
-                  </td>
-                  <td>
-                    {{ item.DisplayWorkedHours || '-' }}
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+      <ion-content class="ion-padding modal-content">
+        <div class="modal-section">
+          <h3>General Details</h3>
+          <div class="detail-row">
+            <span class="label">Billing Date:</span>
+            <span class="value">{{ formatDate(SelectedInvoice.p.Date) || '-' }}</span>
           </div>
-        </div>
-        <div class="info-row-of-model-mobile-app" *ngIf="SelectedInvoice.p.LabourExpenseDetailsArray.length > 0">
-          <span class="label-mobile-app">Labour Details :</span>
-        </div>
-        <div class="table-container" *ngIf="SelectedInvoice.p.LabourExpenseDetailsArray.length > 0">
-          <div class="table-scroll">
-            <table class="custom-table">
-              <thead>
-                <tr>
-                  <th class="sticky-col sticky-header">#</th>
-                  <th *ngFor="let item of LabourTableHeaderData" class="sticky-header">{{ item }}</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr *ngFor="let item of SelectedInvoice.p.LabourExpenseDetailsArray; let i = index">
-                  <td class="sticky-col">{{i + 1 }}</td>
-                  <td>
-                    {{ item.LabourTypeName || '-' }}
-                  </td>
-                  <td>
-                    {{ item.Days || '-' }}
-                  </td>
-                  <td>
-                    {{ item.LabourQty || '-' }}
-                  </td>
-                  <td>
-                    {{ (item.LabourRate| currency : "INR") || '-' }}
-                  </td>
-                  <td>
-                    {{ (item.LabourAmount| currency : "INR") || '-' }}
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+          <div class="detail-row">
+            <span class="label">Billing No.:</span>
+            <span class="value">{{ SelectedInvoice.p.InvoiceNo || '-' }}</span>
+          </div>
+          <div class="detail-row">
+            <span class="label">Site Name:</span>
+            <span class="value">{{ SelectedInvoice.p.SiteName || '-' }}</span>
+          </div>
+          <div class="detail-row">
+            <span class="label">Recipient Name:</span>
+            <span class="value">{{ SelectedInvoice.p.RecipientName || '-' }}</span>
+          </div>
+          <div class="detail-row">
+            <span class="label">Description:</span>
+            <span class="value">{{ SelectedInvoice.p.Description || '-' }}</span>
           </div>
         </div>
 
-        <div class="info-row-of-model-mobile-app" *ngIf="SelectedInvoice.p.MaterialInvoiceDetailsArray.length > 0">
-          <span class="label-mobile-app">Material Inward Details :</span>
-        </div>
-        <div class="table-container" *ngIf="SelectedInvoice.p.MaterialInvoiceDetailsArray.length > 0">
-          <div class="table-scroll">
-            <table class="custom-table">
-              <thead>
-                <tr>
-                  <th class="sticky-col sticky-header">#</th>
-                  <th *ngFor="let item of MaterialTableHeaderData" class="sticky-header">{{ item }}</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr *ngFor="let item of SelectedInvoice.p.MaterialInvoiceDetailsArray; let i = index">
-                  <td class="sticky-col">{{i + 1 }}</td>
-                  <td>
-                    {{ item.MaterialName || '-' }}
-                  </td>
-                  <td>
-                    {{ item.UnitName || '-' }}
-                  </td>
-                  <td>
-                    {{ item.TotalOrderedQty || '-' }}
-                  </td>
-                  <td>
-                    {{ (item.Rate| currency : "INR") || '-' }}
-                  </td>
-                  <td>
-                    {{ (item.DiscountedRate| currency : "INR") || '-' }}
-                  </td>
-                  <td>
-                    {{ item.Gst || '-' }}
-                  </td>
-                  <td>
-                    {{ (item.DeliveryCharges | currency : "INR") || '-' }}
-                  </td>
-                  <td>
-                    {{ (item.TotalAmount | currency : "INR") || '-' }}
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+        <div class="modal-section" *ngIf="SelectedInvoice.p.MachineUsageDetailsArray.length > 0">
+          <h3>Machine Time Details</h3>
+          <div class="table-container">
+            <div class="table-scroll">
+              <table class="custom-table ion-text-center">
+                <thead>
+                  <tr>
+                    <th class="sticky-col sticky-header">#</th>
+                    <th *ngFor="let item of MachineTableHeaderData" class="sticky-header">{{ item }}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let item of SelectedInvoice.p.MachineUsageDetailsArray; let i = index">
+                    <td class="sticky-col">{{ i + 1 }}</td>
+                    <td>{{ convertTo12HourFormat(item.StartTime) }}</td>
+                    <td>{{ convertTo12HourFormat(item.EndTime) || '-' }}</td>
+                    <td>{{ item.DisplayWorkedHours || '-' }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
-        <div class="info-row-of-model-mobile-app">
-          <span class="label-mobile-app">Billing Amount :</span>
-          <span class="value-mobile-app">{{ (SelectedInvoice.p.InvoiceAmount | currency : "INR") || '-' }}</span>
+        
+        <div class="modal-section" *ngIf="SelectedInvoice.p.LabourExpenseDetailsArray.length > 0">
+          <h3>Labour Details</h3>
+          <div class="table-container">
+            <div class="table-scroll">
+              <table class="custom-table">
+                <thead>
+                  <tr>
+                    <th class="sticky-col sticky-header">#</th>
+                    <th *ngFor="let item of LabourTableHeaderData" class="sticky-header">{{ item }}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let item of SelectedInvoice.p.LabourExpenseDetailsArray; let i = index">
+                    <td class="sticky-col">{{i + 1 }}</td>
+                    <td>{{ item.LabourTypeName || '-' }}</td>
+                    <td>{{ item.Days || '-' }}</td>
+                    <td>{{ item.LabourQty || '-' }}</td>
+                    <td>{{ (item.LabourRate | currency : "INR") || '-' }}</td>
+                    <td>{{ (item.LabourAmount | currency : "INR") || '-' }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-section" *ngIf="SelectedInvoice.p.MaterialInvoiceDetailsArray.length > 0">
+          <h3>Material Details</h3>
+          <div class="table-container">
+            <div class="table-scroll">
+              <table class="custom-table">
+                <thead>
+                  <tr>
+                    <th class="sticky-col sticky-header">#</th>
+                    <th *ngFor="let item of MaterialTableHeaderData" class="sticky-header">{{ item }}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let item of SelectedInvoice.p.MaterialInvoiceDetailsArray; let i = index">
+                    <td class="sticky-col">{{i + 1 }}</td>
+                    <td>{{ item.MaterialName || '-' }}</td>
+                    <td>{{ item.UnitName || '-' }}</td>
+                    <td>{{ item.TotalOrderedQty || '-' }}</td>
+                    <td>{{ (item.Rate | currency : "INR") || '-' }}</td>
+                    <td>{{ (item.DiscountedRate | currency : "INR") || '-' }}</td>
+                    <td>{{ item.Gst || '-' }}</td>
+                    <td>{{ (item.DeliveryCharges | currency : "INR") || '-' }}</td>
+                    <td>{{ (item.TotalAmount | currency : "INR") || '-' }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        
+        <div class="modal-section">
+          <h3>Billing Summary</h3>
+          <div class="detail-row total-amount">
+            <span class="label">Total Billing Amount:</span>
+            <span class="value">{{ (SelectedInvoice.p.InvoiceAmount | currency : "INR") || '-' }}</span>
+          </div>
         </div>
       </ion-content>
 
-      <!-- Footer -->
-      <ion-footer class="modal-footer-mobile-app">
-        <ion-button expand="block" color="primary" shape="round" (click)="closeModal()">
-          Close
-        </ion-button>
+      <ion-footer>
+        <ion-toolbar>
+          <ion-button expand="block" color="primary" shape="round" (click)="closeModal()">
+            Close
+          </ion-button>
+        </ion-toolbar>
       </ion-footer>
     </ng-template>
   </ion-modal>
 
-
-  <!-- FAB -->
   <ion-fab vertical="bottom" horizontal="end" slot="fixed">
     <ion-fab-button (click)="AddInvoice()">
       <ion-icon name="add-outline"></ion-icon>

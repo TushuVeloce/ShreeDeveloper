@@ -1,138 +1,276 @@
-/* === General Reset === */
+/* === General Layout === */
 ion-content {
-    --background: var(--ion-background-color);
+  --background: var(--ion-background-color);
+}
+
+.dashboard-container {
+  padding-bottom: 20px;
 }
 
 .section-title {
-    font-size: 20px;
-    font-weight: 600;
-    color: #333;
-    margin: 16px 0 8px;
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--ion-color-dark);
+  margin: 16px 0 8px;
 }
 
-/* === Buttons === */
-.action-button-group ion-button {
-    font-weight: 500;
-    font-size: 15px;
+/* --- Quick Actions Grid --- */
+.quick-actions-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+  gap: 16px;
+  padding: 16px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.action-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  text-decoration: none;
+  transition: transform 0.2s ease-in-out;
+
+  &:hover {
+    transform: translateY(-2px);
+  }
+
+  .action-icon {
+    width: 60px;
+    height: 60px;
     border-radius: 12px;
-    height: 48px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
-    --box-shadow: none;
-}
-
-/* === Reminder Cards === */
-.reminder-card-modern {
-    border-radius: 12px;
-    transition: transform 0.2s ease-in-out;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
-    background: var(--ion-background-color-step-100);
-}
-
-.reminder-card-modern:hover {
-    transform: translateY(-3px);
-}
-
-.reminder-content {
+    background: var(--ion-color-primary);
     display: flex;
-    gap: 14px;
+    justify-content: center;
     align-items: center;
+    margin-bottom: 8px;
+
+    img {
+      max-width: 40px;
+      max-height: 40px;
+    }
+  }
+
+  .action-label {
+    margin: 0;
+    font-size: 14px;
+    color: var(--ion-color-dark);
+    font-weight: 500;
+  }
 }
 
-.reminder-content ion-icon {
+/* --- KPI Cards --- */
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.kpi-card {
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s ease-in-out;
+  width: 100%;
+
+  &:hover {
+    transform: translateY(-2px);
+  }
+
+  ion-card-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 16px;
+  }
+
+  ion-icon {
     font-size: 28px;
     color: var(--ion-color-primary);
-}
+    margin-bottom: 8px;
+  }
 
-.reminder-content h3 {
-    font-size: 16px;
+  .kpi-value {
+    font-size: 22px;
+    font-weight: bold;
+    color: var(--ion-color-dark);
     margin: 0;
-    font-weight: 600;
-    color: #111;
-}
+  }
 
-.reminder-content p {
-    font-size: 14px;
-    margin: 2px 0 0;
-    color: #666;
-}
-
-/* === No Data Message === */
-.no-data-msg {
-    font-size: 15px;
-    color: #888;
-    margin-top: 20px;
-}
-
-/* === Responsive Design === */
-@media (max-width: 768px) {
-    .reminder-content h3 {
-        font-size: 15px;
-    }
-
-    .reminder-content p {
-        font-size: 13px;
-    }
-
-    .section-title {
-        font-size: 18px;
-    }
-}
-
-.crm-stats {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-    gap: 12px;
-}
-
-.stat-card {
-    background: var(--ion-color-primary);
-    padding: 10px;
-    border-radius: 8px;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-    text-align: center;
-    transition: transform 0.2s ease-in-out;
-}
-
-.stat-card:hover {
-    transform: translateY(-3px);
-}
-
-.stat-icon {
-    font-size: 24px;
-    color: var(--ion-text-color-dark);
-    margin-bottom: 6px;
-}
-
-.stat-value {
-    font-size: 18px;
-    font-weight: 500;
-    color: var(--ion-text-color-dark);
-}
-
-.stat-title {
+  .kpi-label {
     font-size: 12px;
-    color: var(--ion-text-color-dark);
+    color: var(--ion-color-medium);
+    margin-top: 4px;
+    text-transform: uppercase;
+  }
 }
 
-/* 📱 Responsive Adjustments */
-@media (max-width: 768px) {
-    .crm-stats {
-        grid-template-columns: repeat(2, 1fr);
-    }
-
-    .stat-card {
-        padding: 8px;
-    }
-
-    .stat-icon {
-        font-size: 22px;
-    }
-
-    .stat-value {
-        font-size: 16px;
-    }
-
-    .stat-title {
-        font-size: 10px;
-    }
+/* --- Charts Section --- */
+.chart-card {
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  margin-top: 16px;
 }
+
+.chart-section-row {
+  ion-col {
+    padding-bottom: 0;
+  }
+  h2 {
+    margin-bottom: 0;
+  }
+}
+
+/* Responsive chart layout */
+@media (min-width: 768px) {
+  .chart-section-row {
+    h2 {
+      margin-top: 0;
+    }
+    ion-col:first-child {
+      padding-right: 8px;
+    }
+    ion-col:last-child {
+      padding-left: 8px;
+    }
+    .chart-card {
+      margin-top: 8px;
+    }
+  }
+}
+
+/* --- Reminder Cards --- */
+.reminder-card {
+  border-radius: 12px;
+  transition: transform 0.2s ease-in-out;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  cursor: pointer;
+
+  &:hover {
+    transform: translateY(-3px);
+  }
+
+  ion-card-content {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    padding: 14px;
+  }
+
+  ion-icon {
+    font-size: 32px;
+    color: var(--ion-color-primary);
+  }
+
+  .reminder-text {
+    flex: 1;
+    h3 {
+      font-size: 16px;
+      margin: 0;
+      font-weight: 600;
+      color: var(--ion-color-dark);
+    }
+    p {
+      font-size: 14px;
+      margin: 2px 0 0;
+      color: var(--ion-color-medium);
+    }
+  }
+}
+
+/* --- No Data Message --- */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 200px;
+  text-align: center;
+
+  ion-icon {
+    font-size: 48px;
+    color: var(--ion-color-light);
+    margin-bottom: 12px;
+  }
+
+  p {
+    font-size: 16px;
+    color: var(--ion-color-medium);
+  }
+}
+
+/* Summary */
+.summary-grid {
+  padding: 0 12px;
+}
+.summary-box {
+  text-align: center;
+  padding: 16px;
+  border-radius: 12px;
+  margin: 8px 0;
+  color: #fff;
+  .summary-icon {
+    font-size: 24px;
+    margin-bottom: 6px;
+  }
+  h2 {
+    margin: 0;
+    font-weight: 700;
+  }
+  p {
+    margin: 0;
+    font-size: 14px;
+    opacity: 0.9;
+  }
+}
+.summary-box.present {
+  background: linear-gradient(135deg, #4caf50, #66bb6a);
+}
+.summary-box.absent {
+  background: linear-gradient(135deg, #f44336, #e57373);
+}
+.summary-box.leave {
+  background: linear-gradient(135deg, #ff9800, #ffb74d);
+}
+
+/* Avatar styling */
+.checkin-avatar {
+  width: 80px;
+  height: 80px;
+  margin: auto;
+  border: 2px solid var(--ion-color-primary);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.placeholder-icon {
+  font-size: 32px;
+  color: var(--ion-color-medium);
+}
+
+/* Label under images */
+.checkin-label {
+  font-size: 13px;
+  margin-top: 6px;
+  font-weight: 500;
+  color: var(--ion-color-dark);
+}
+
+/* Logs styling */
+.logs-list ion-item h3 {
+  font-weight: 600;
+  margin-bottom: 4px;
+  color: var(--ion-color-primary);
+}
+
+.logs-list ion-item p {
+  margin: 2px 0;
+  font-size: 14px;
+  color: var(--ion-color-dark);
+}
+

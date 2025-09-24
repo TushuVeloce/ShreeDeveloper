@@ -1,47 +1,80 @@
-<app-header-with-back-handler title="Income"
-  backRoute="mobile-app/tabs/dashboard/accounting"></app-header-with-back-handler>
-<app-chip-filter-mobile-app [filters]="filters" (filtersChanged)="onFiltersChanged($event)">
-</app-chip-filter-mobile-app>
+<app-header-with-back-handler
+  title="Income"
+  backRoute="mobile-app/tabs/dashboard/accounting"
+></app-header-with-back-handler>
+
+<app-chip-filter-mobile-app
+  [filters]="filters"
+  (filtersChanged)="onFiltersChanged($event)"
+></app-chip-filter-mobile-app>
 
 <ion-content class="ion-padding">
   <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
 
-  <ion-list class="requisition-list" [lines]="'none'">
-    <ion-item *ngFor="let Income of DisplayMasterList" class="requisition-item" button detail
-      (click)="openModal(Income)">
-      <ion-label>
-        <h2>Site : {{ Income.p.SiteName || 'Unknown Site' }}</h2>
-        <p class="date-label">Income Date : {{ formatDate(Income.p.Date) || '-' }}</p>
-        <p class="date-label">Received By : {{ Income.p.PayerName || '-' }}
-        <p class="date-label">Income Amount : {{ Income.p.IncomeAmount| currency : "INR" }}
-        </p>
-      </ion-label>
+  <ion-list class="income-list" [lines]="'none'">
+    <ion-card
+      *ngFor="let income of DisplayMasterList"
+      class="income-card"
+      button
+      (click)="openModal(income)"
+    >
+      <ion-card-content>
+        <div class="card-header">
+          <h2 class="site-name">{{ income.p.SiteName || 'Unknown Site' }}</h2>
+          <span class="income-amount">{{ income.p.IncomeAmount | currency : "INR" }}</span>
+        </div>
+        <div class="card-details">
+          <div class="detail-row">
+            <span class="label">Received By:</span>
+            <span class="value">{{ income.p.PayerName || '-' }}</span>
+          </div>
+          <div class="detail-row">
+            <span class="label">Date:</span>
+            <span class="value">{{ formatDate(income.p.Date) || '-' }}</span>
+          </div>
+        </div>
 
-      <div class="action-buttons" slot="end" (click)="$event.stopPropagation()">
-        <ion-button fill="clear" size="small" color="primary" (click)="onEditClicked(Income)">
-          <ion-icon name="pencil-outline" slot="icon-only"></ion-icon>
-        </ion-button>
-        <ion-button fill="clear" size="small" color="primary" (click)="onDeleteClicked(Income)">
-          <ion-icon name="trash-outline" slot="icon-only"></ion-icon>
-        </ion-button>
-      </div>
-    </ion-item>
+        <div class="card-actions">
+          <ion-button
+            fill="clear"
+            color="tertiary"
+            size="small"
+            (click)="$event.stopPropagation(); onEditClicked(income);"
+          >
+            <ion-icon name="pencil-outline" slot="start"></ion-icon>
+            Edit
+          </ion-button>
+          <ion-button
+            fill="clear"
+            color="danger"
+            size="small"
+            (click)="$event.stopPropagation(); onDeleteClicked(income);"
+          >
+            <ion-icon name="trash-outline" slot="start"></ion-icon>
+            Delete
+          </ion-button>
+        </div>
+      </ion-card-content>
+    </ion-card>
   </ion-list>
 
-  <!-- Show "Data not found" if list is empty -->
-  <div *ngIf="DisplayMasterList.length === 0 && !loadingService.isLoaderActive()" class="no-data-mobile-app">
-    <ion-icon name="alert-circle-outline" size="large" color="medium"></ion-icon>
-    <p>No Income records found.</p>
+  <div
+    *ngIf="DisplayMasterList.length === 0 && !loadingService.isLoaderActive()"
+    class="empty-state"
+  >
+    <ion-icon name="alert-circle-outline"></ion-icon>
+    <p>No income records found.</p>
   </div>
 
-
-  <!-- Modal -->
-  <ion-modal [isOpen]="modalOpen" (didDismiss)="closeModal()" class="custom-modal-mobile-app">
+  <ion-modal
+    [isOpen]="modalOpen"
+    (didDismiss)="closeModal()"
+    class="custom-modal-mobile-app"
+  >
     <ng-template>
-      <!-- Header -->
-      <ion-header class="modal-toolbar-mobile-app">
+      <ion-header>
         <ion-toolbar color="primary">
           <ion-title>Income Details</ion-title>
           <ion-buttons slot="end">
@@ -51,96 +84,72 @@
           </ion-buttons>
         </ion-toolbar>
       </ion-header>
+      <ion-content class="ion-padding modal-content">
+        <div class="modal-section">
+          <h3>General Information</h3>
+          <div class="detail-row">
+            <span class="label">Date:</span>
+            <span class="value">{{ formatDate(SelectedIncome.p.Date) || '-' }}</span>
+          </div>
+          <div class="detail-row">
+            <span class="label">Site:</span>
+            <span class="value">{{ SelectedIncome.p.SiteName || '-' }}</span>
+          </div>
+          <div class="detail-row">
+            <span class="label">Received By:</span>
+            <span class="value">{{ SelectedIncome.p.PayerName || '-' }}</span>
+          </div>
+          <div class="detail-row">
+            <span class="label">Reason:</span>
+            <span class="value">{{ SelectedIncome.p.Reason || '-' }}</span>
+          </div>
+        </div>
+        
+        <div class="modal-section">
+          <h3>Financial Details</h3>
+          <div class="detail-row">
+            <span class="label">Income Amount:</span>
+            <span class="value">{{ SelectedIncome.p.IncomeAmount | currency : "INR" }}</span>
+          </div>
+          <div class="detail-row">
+            <span class="label">Balance:</span>
+            <span class="value balance">{{ SelectedIncome.p.ShreesBalance | currency : "INR" }}</span>
+          </div>
+        </div>
 
-      <!-- Body -->
-      <ion-content scroll-y="true" class="ion-padding modal-content-mobile-app">
-        <!-- Info Rows -->
-        <div class="info-row-of-model-mobile-app">
-          <span class="label-mobile-app">Income Date:</span>
-          <span class="value-mobile-app">{{ formatDate(SelectedIncome.p.Date) || '-' }}</span>
-        </div>
-        <div class="info-row-of-model-mobile-app">
-          <span class="label-mobile-app">Site Name:</span>
-          <span class="value-mobile-app">{{ SelectedIncome.p.SiteName || '-' }}</span>
-        </div>
-        <div class="info-row-of-model-mobile-app">
-          <span class="label-mobile-app">Ledger Name :</span>
-          <span class="value-mobile-app">{{ SelectedIncome.p.LedgerName || '-' }}</span>
-        </div>
-        <div class="info-row-of-model-mobile-app">
-          <span class="label-mobile-app">Sub Ledger Name:</span>
-          <span class="value-mobile-app">{{ SelectedIncome.p.SubLedgerName || '-' }}</span>
-        </div>
-        <div class="info-row-of-model-mobile-app">
-          <span class="label-mobile-app">Reason :</span>
-          <span class="value-mobile-app">{{ SelectedIncome.p.Reason || '-' }}</span>
-        </div>
-        <div class="info-row-of-model-mobile-app">
-          <span class="label-mobile-app">Income Amount :</span>
-          <span class="value-mobile-app">{{ SelectedIncome.p.IncomeAmount | currency : "INR" }}</span>
-        </div>
-        <div class="info-row-of-model-mobile-app">
-          <span class="label-mobile-app">Shrees Balance :</span>
-          <span class="value-mobile-app">{{ SelectedIncome.p.ShreesBalance | currency : "INR" }}</span>
-        </div>
-        <div class="info-row-of-model-mobile-app">
-          <span class="label-mobile-app">Mode Of Payment :</span>
-          <span class="value-mobile-app">{{ SelectedIncome.p.ModeOfPaymentName || '-' }}</span>
-        </div>
-        <div class="info-row-of-model-mobile-app">
-          <span class="label-mobile-app">Narration :</span>
-          <span class="value-mobile-app">{{ SelectedIncome.p.Narration || '-' }}</span>
+        <div class="modal-section">
+          <h3>Other Details</h3>
+          <div class="detail-row">
+            <span class="label">Ledger:</span>
+            <span class="value">{{ SelectedIncome.p.LedgerName || '-' }}</span>
+          </div>
+          <div class="detail-row">
+            <span class="label">Sub Ledger:</span>
+            <span class="value">{{ SelectedIncome.p.SubLedgerName || '-' }}</span>
+          </div>
+          <div class="detail-row">
+            <span class="label">Payment Mode:</span>
+            <span class="value">{{ SelectedIncome.p.ModeOfPaymentName || '-' }}</span>
+          </div>
+          <div class="detail-row">
+            <span class="label">Narration:</span>
+            <span class="value narration">{{ SelectedIncome.p.Narration || '-' }}</span>
+          </div>
         </div>
       </ion-content>
-
-      <!-- Footer -->
-      <ion-footer class="modal-footer-mobile-app">
-        <ion-button expand="block" color="primary" shape="round" (click)="closeModal()">
-          Close
-        </ion-button>
+      <ion-footer>
+        <ion-toolbar>
+          <ion-button expand="block" color="primary" shape="round" (click)="closeModal()">
+            Close
+          </ion-button>
+        </ion-toolbar>
       </ion-footer>
     </ng-template>
   </ion-modal>
 
-
-  <!-- FAB -->
   <ion-fab vertical="bottom" horizontal="end" slot="fixed">
-    <ion-fab-button>
-      <ion-icon name="ellipsis-vertical"></ion-icon>
+    <ion-fab-button (click)="AddIncome()">
+      <ion-icon name="add-outline"></ion-icon>
     </ion-fab-button>
-    <ion-fab-list side="top">
-      <ion-fab-button color="primary" (click)="handlePrintOrShare()">
-        <ion-icon name="print-outline"></ion-icon>
-      </ion-fab-button>
-      <ion-fab-button color="primary" (click)="AddIncome()">
-        <ion-icon name="add-outline"></ion-icon>
-      </ion-fab-button>
-    </ion-fab-list>
   </ion-fab>
-
-  <!-- Print Section with automatic page breaks -->
-  <!-- <div id="print-section" style="display: none;" #PrintContainer>
-    <h2>Income</h2>
-    <table class="table table-bordered print-table">
-      <thead>
-        <tr>
-          <th *ngFor="let header of printheaders" style="background-color: maroon; color: white;">{{ header }}</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let Income of DisplayMasterList; index as i">
-          <td class="tbldata">{{ i + 1 }}</td>
-          <td Class="tbldata" style="white-space: nowrap;">{{formatDate(Income.p.Date)}}</td>
-          <td Class="tbldata">{{ Income.p.SiteName }}</td>
-          <td Class="tbldata">{{ Income.p.LedgerName  }}</td>
-          <td Class="tbldata">{{ Income.p.SubLedgerName }}</td>
-          <td Class="tbldata">{{ Income.p.PayerName }}</td>
-          <td Class="tbldata">{{ Income.p.Reason }}</td>
-          <td Class="tbldata">{{ Income.p.IncomeAmount | currency : "INR" }}</td>
-          <td Class="tbldata">{{ Income.p.ShreesBalance | currency : "INR" }}</td>
-          <td Class="tbldata">{{ Income.p.ModeOfPaymentName }}</td>
-        </tr>
-      </tbody>
-    </table>
-  </div> -->
 </ion-content>

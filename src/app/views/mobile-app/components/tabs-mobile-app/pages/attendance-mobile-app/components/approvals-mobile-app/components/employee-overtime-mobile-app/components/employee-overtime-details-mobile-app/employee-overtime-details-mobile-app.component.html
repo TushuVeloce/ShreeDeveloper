@@ -1,0 +1,125 @@
+<app-header-with-back-handler
+  title="{{ DetailsFormTitle }}"
+></app-header-with-back-handler>
+<ion-content
+  class="form-container"
+  scrollY="true"
+  [scrollEvents]="true"
+  [fullscreen]="true"
+>
+  <ion-list lines="none" class="ion-padding">
+    <!--  Date -->
+    <ion-item class="input-item">
+      <ion-label>Date</ion-label>
+      <ion-datetime-button
+        datetime="Date"
+        id="Date-modal"
+      ></ion-datetime-button>
+      <ion-checkbox
+        slot="end"
+        [(ngModel)]="Date"
+        name="DateCheckBox"
+        [disabled]="true"
+      >
+      </ion-checkbox>
+    </ion-item>
+    <ion-modal trigger="Date-modal" keepContentsMounted="true">
+      <ng-template>
+        <ion-datetime
+          id="Date"
+          presentation="date"
+          [(ngModel)]="Date"
+          show-default-buttons="true"
+          (ionChange)="onDateChange($event.detail.value)"
+        >
+        </ion-datetime>
+      </ng-template>
+    </ion-modal>
+
+    <!-- Select site -->
+    <ion-item
+      class="input-item"
+      button
+      detail
+      (click)="selectEmployeeBottomsheet()"
+      [disabled]="EmployeeList.length === 0"
+    >
+      <ion-label>Employee</ion-label>
+
+      <!-- Text showing the selected status -->
+      <ion-text slot="end" class="status-text">
+        {{ EmployeeName || "Select" }}
+      </ion-text>
+    </ion-item>
+
+    <ion-item class="input-item">
+      <ion-label>From Time</ion-label>
+      <ion-datetime-button datetime="FromTime"></ion-datetime-button>
+    </ion-item>
+    <ion-modal keepContentsMounted="true">
+      <ng-template>
+        <ion-datetime
+          id="FromTime"
+          presentation="time"
+          [(ngModel)]="FromTime"
+          (ngModelChange)="FromTimeChange($event)"
+          hour-cycle="h12"
+          prefer-wheel="true"
+          show-default-buttons="true"
+        >
+        </ion-datetime>
+      </ng-template>
+    </ion-modal>
+    <ion-item class="input-item">
+      <ion-label>To Time</ion-label>
+      <ion-datetime-button datetime="ToTime"></ion-datetime-button>
+    </ion-item>
+    <ion-modal keepContentsMounted="true">
+      <ng-template>
+        <ion-datetime
+          id="ToTime"
+          presentation="time"
+          [(ngModel)]="ToTime"
+          (ngModelChange)="ToTimeChange($event)"
+          hour-cycle="h12"
+          prefer-wheel="true"
+          show-default-buttons="true"
+        >
+        </ion-datetime>
+      </ng-template>
+    </ion-modal>
+
+    <ion-item class="input-item">
+      <ion-label color="primary">Total Working Hours</ion-label>
+      <ion-text color="dark"
+        ><strong>{{ Entity.p.DisplayOverTime }} </strong></ion-text
+      >
+      <!-- <ion-note><strong>{{ Entity.p.DisplayOverTime }} </strong></ion-note> -->
+    </ion-item>
+    <!-- Main Buttons -->
+    <ion-grid>
+      <ion-row>
+        <ion-col size="6">
+          <ion-button
+            expand="block"
+            color="medium"
+            shape="round"
+            (click)="(goBack())"
+          >
+            Cancel
+          </ion-button>
+        </ion-col>
+        <ion-col size="6">
+          <ion-button
+            expand="block"
+            color="primary"
+            shape="round"
+            (click)="SaveEmployeeOvertime()"
+          >
+            Save
+          </ion-button>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-list>
+</ion-content>

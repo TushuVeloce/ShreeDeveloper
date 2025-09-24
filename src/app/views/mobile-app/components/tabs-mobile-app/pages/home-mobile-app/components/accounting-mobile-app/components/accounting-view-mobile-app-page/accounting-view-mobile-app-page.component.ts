@@ -33,6 +33,11 @@ export class AccountingViewMobileAppPageComponent  implements OnInit {
       label: 'Office',
       routerPath: '/mobile-app/tabs/dashboard/accounting/office'
     },
+    {
+      icon: 'assets/icons/office_report_mobile_app.png',
+      label: 'Bill Payable Report',
+      routerPath: '/mobile-app/tabs/dashboard/accounting/bill-payable'
+    },
   ];
 
 

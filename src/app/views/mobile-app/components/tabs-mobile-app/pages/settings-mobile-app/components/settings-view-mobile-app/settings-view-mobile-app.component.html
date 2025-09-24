@@ -1,42 +1,58 @@
 <app-header title="Attendance Management"></app-header>
-<ion-content class="ion-padding">
-  <div class="user-card">
-    <div class="user-header">
-      <div class="user-details">
-        <h3>{{ employeeName || 'User' }}</h3>
-        <p class="email-text">{{ employeeEmail || 'email' }}</p>
-      </div>
 
-      <ion-avatar class="avatar">
-        <img *ngIf="imagePreviewUrl; else placeholderImage" [src]="imagePreviewUrl" alt="Profile" loading="lazy" />
-        <ng-template #placeholderImage>
-          <ion-icon name="person-circle-outline" size="large"></ion-icon>
-        </ng-template>
-      </ion-avatar>
+<ion-content class="ion-padding custom-background">
+  <div class="profile-container">
+
+    <ion-card class="user-profile-card">
+      <ion-card-content class="ion-no-padding">
+        <div class="user-header">
+          <div class="user-info">
+            <ion-avatar class="profile-avatar">
+              <img *ngIf="imagePreviewUrl; else placeholderImage" [src]="imagePreviewUrl" alt="Profile" loading="lazy" />
+              <ng-template #placeholderImage>
+                <ion-icon name="person-circle-outline"></ion-icon>
+              </ng-template>
+            </ion-avatar>
+            <div class="user-details-text">
+              <h2 class="ion-no-margin">{{ employeeName || 'User' }}</h2>
+              <p class="ion-no-margin">{{ employeeEmail || 'email' }}</p>
+            </div>
+          </div>
+          <ion-button fill="clear" (click)="openProfile()">
+            <ion-icon name="create-outline" slot="icon-only"></ion-icon>
+          </ion-button>
+        </div>
+      </ion-card-content>
+    </ion-card>
+
+    <div class="quick-info-grid">
+      <ion-card class="info-card">
+        <ion-card-content>
+          <p class="label-text">Role</p>
+          <ion-label>
+            <h3>{{ Role || 'Role' }}</h3>
+          </ion-label>
+        </ion-card-content>
+      </ion-card>
+      <!-- <ion-card class="info-card">
+        <ion-card-content>
+          <p class="label-text">Today's Status</p>
+          <ion-label>
+            <h3>Present</h3>
+          </ion-label>
+        </ion-card-content>
+      </ion-card> -->
     </div>
 
-    <div class="info-pills">
-      <ion-chip class="info-chip">
-        <ion-label>
-          <small>Role</small><br />
-          <strong>{{Role ? Role: 'Role'}}</strong>
-        </ion-label>
-      </ion-chip>
-      <ion-chip class="info-chip" (click)="openProfile()">
-        <ion-label>
-          <ion-icon name="create-outline" color="primary"></ion-icon><br />
-          <strong>Edit Profile</strong>
-        </ion-label>
-      </ion-chip>
-    </div>
+    <ion-list class="profile-options-list ion-margin-top" lines="none">
+      <ion-list-header class="ion-no-padding">
+        <ion-label>Profile Options</ion-label>
+      </ion-list-header>
+      <ion-item *ngFor="let option of profileOptions" button detail (click)="option.action()">
+        <ion-icon [name]="option.icon" slot="start" color="primary"></ion-icon>
+        <ion-label>{{ option.title }}</ion-label>
+      </ion-item>
+    </ion-list>
+
   </div>
-
-  <ion-list class="additional-list" lines="none">
-    <ion-item *ngFor="let option of profileOptions" button detail (click)="option.action()">
-      <ion-icon [name]="option.icon" slot="start" color="primary"></ion-icon>
-      <ion-label>{{ option.title }}</ion-label>
-      <!-- <ion-icon name="chevron-forward-outline" slot="end"></ion-icon> -->
-    </ion-item>
-  </ion-list>
-
 </ion-content>

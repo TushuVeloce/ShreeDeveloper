@@ -1,0 +1,149 @@
+<app-header-with-back-handler
+  title="Leave Approval"
+  backRoute="mobile-app/tabs/attendance/approvals/"
+></app-header-with-back-handler>
+
+<ion-content [fullscreen]="true" class="ion-padding">
+  <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+  <!-- Present/Absent Summary -->
+  <ion-card class="Leaves-dashboard-card">
+    <ion-card-content>
+      <ion-grid>
+        <ion-row class="ion-align-items-center ion-justify-content-between">
+          <ion-col size="3">
+            <ion-row class="ion-align-items-center">
+              <!-- <ion-col size="auto"><ion-icon name="person-add-outline" class="person-icon"></ion-icon></ion-col> -->
+              <ion-col>
+                <div class="Leaves-card-header">
+                  <label>Pending</label>
+                  <span>{{ pendingCount || "0" }}</span>
+                </div>
+              </ion-col>
+            </ion-row>
+          </ion-col>
+
+          <ion-col size="auto">
+            <div class="vertical-line-grid"></div>
+          </ion-col>
+
+          <ion-col size="3">
+            <ion-row class="ion-align-items-center">
+              <!-- <ion-col size="auto"><ion-icon name="person-remove-outline" class="person-icon"></ion-icon></ion-col> -->
+              <ion-col>
+                <div class="Leaves-card-header">
+                  <label>Approved</label>
+                  <span>{{ approvedCount || "0" }}</span>
+                </div>
+              </ion-col>
+            </ion-row>
+          </ion-col>
+          <ion-col size="auto">
+            <div class="vertical-line-grid"></div>
+          </ion-col>
+
+          <ion-col size="3">
+            <ion-row class="ion-align-items-center">
+              <!-- <ion-col size="auto"><ion-icon name="person-remove-outline" class="person-icon"></ion-icon></ion-col> -->
+              <ion-col>
+                <div class="Leaves-card-header">
+                  <label>Rejected</label>
+                  <span>{{ rejectedCount || "0" }}</span>
+                </div>
+              </ion-col>
+            </ion-row>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-card-content>
+  </ion-card>
+  <!-- Status Filter -->
+  <ion-segment
+    [(ngModel)]="selectedStatus"
+    class="modern-segment"
+    (ngModelChange)="filterRequestsByStatus()"
+  >
+    <ion-segment-button
+      *ngFor="let status of statusOptions"
+      [value]="status.value"
+    >
+      <ion-label>{{ status.label }}</ion-label>
+    </ion-segment-button>
+  </ion-segment>
+
+  <!-- Leave Requests List -->
+  <ion-card class="activity-card" *ngFor="let activity of FilteredMasterList">
+    <ion-card-content>
+      <!-- <ion-item lines="none"> -->
+      <!-- <ion-avatar slot="start">
+        <img [src]="'assets/logos/ShreeIcon.png'" />
+      </ion-avatar> -->
+
+      <ion-avatar slot="start">
+        <img
+          *ngIf="
+            false;
+            else placeholderImage
+          "
+          [src]="loadImageFromBackend(activity.p.CompanyName)"
+          alt="Profile"
+          loading="lazy"
+        />
+        <ng-template #placeholderImage>
+          <ion-icon name="person-circle-outline" size="large"></ion-icon>
+        </ng-template>
+      </ion-avatar>
+
+      <ion-label>
+        <h3>{{ activity.p.EmployeeName }}</h3>
+        <p>
+          <strong>{{ formatDate(activity.p.FromDate) }}</strong> {{ " TO " }}
+          <strong>{{ formatDate(activity.p.ToDate) }}</strong>
+        </p>
+        <p>
+          {{ activity.p.Description }}
+        </p>
+
+        <div
+          class="actions"
+          *ngIf="!activity.p.IsApproved && !activity.p.IsCancelled"
+        >
+          <ion-button
+            size="small"
+            color="success"
+            (click)="handleApproval(activity, 'Approved')"
+            >Approve</ion-button
+          >
+          <ion-button
+            size="small"
+            color="danger"
+            (click)="handleApproval(activity, 'Rejected')"
+            >Reject</ion-button
+          >
+        </div>
+
+        <p
+          *ngIf="activity.p.IsApproved == 1 && activity.p.IsCancelled !== 1"
+          class="approved"
+        >
+          ✔ Approved
+        </p>
+        <p
+          *ngIf="activity.p.IsApproved !== 1 && activity.p.IsCancelled === 1"
+          class="rejected"
+        >
+          ❌ Rejected
+        </p>
+        <!-- <p
+          *ngIf="activity.p.IsApproved !== 1 && activity.p.IsCancelled !== 1"
+          class="pending"
+        >
+          Pending
+        </p> -->
+      </ion-label>
+      <ion-note slot="end">{{ activity.p.Days + " Days" }}</ion-note>
+      <!-- </ion-item> -->
+    </ion-card-content>
+  </ion-card>
+</ion-content>

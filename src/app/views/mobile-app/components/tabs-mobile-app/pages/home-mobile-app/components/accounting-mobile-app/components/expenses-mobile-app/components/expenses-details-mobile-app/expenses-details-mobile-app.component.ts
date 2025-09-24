@@ -61,6 +61,7 @@ export class ExpensesDetailsMobileAppComponent implements OnInit {
   TypeofEmployeePayments = TypeOfEmployeePayments;
   EmployeeType = RecipientTypes.Employee
   DealDoneCustomer = PayerTypes.DealDoneCustomer;
+  OldGivenAmount: number = 0;
 
   ExpenseDate: string | null = null;
 
@@ -214,7 +215,7 @@ export class ExpensesDetailsMobileAppComponent implements OnInit {
 
           this.BankNameForNewBank = this.BankList.find(item => item.p.Ref == this.Entity.p.BankAccountRef)?.p.BankName ?? '';
           this.selectedBankForNewBank = [{ p: { Ref: this.Entity.p.BankAccountRef, Name: this.BankNameForNewBank } }];
-
+          this.OldGivenAmount = this.Entity.p.GivenAmount;
         } else {
           this.Entity = Expense.CreateNewInstance();
           Expense.SetCurrentInstance(this.Entity)
@@ -609,7 +610,27 @@ export class ExpensesDetailsMobileAppComponent implements OnInit {
     this.getCurrentBalanceByCompanyRef()
   }
 
-  CalculateRemainingAmountandBalance = () => {
+  // CalculateRemainingAmountandBalance = () => {
+  //   if (this.Entity.p.GivenAmount <= this.Entity.p.InvoiceAmount) {
+  //     this.Entity.p.RemainingAmount = Number((this.Entity.p.InvoiceAmount - this.Entity.p.GivenAmount).toFixed(2));
+  //   } else {
+  //     this.Entity.p.RemainingAmount = 0;
+  //   }
+
+  //   if (this.PaymentType == this.TypeofEmployeePayments.Advance) {
+  //     this.Entity.p.InvoiceAmount = this.Entity.p.GivenAmount;
+  //   }
+
+  //   if (this.Entity.p.GivenAmount <= this.Entity.p.ShreesBalance) {
+  //     this.Entity.p.ShreesBalance = Number((this.ShreeBalance - this.Entity.p.GivenAmount).toFixed(2));
+  //   } else {
+  //     this.Entity.p.ShreesBalance = -Number((this.Entity.p.GivenAmount - this.ShreeBalance).toFixed(2));
+  //   }
+  //   if (this.Entity.p.IsAdvancePayment) {
+  //     this.Entity.p.TotalAdvance = this.Entity.p.RemainingAdvance + this.Entity.p.GivenAmount
+  //   }
+  // }
+    CalculateRemainingAmountandBalance = () => {
     if (this.Entity.p.GivenAmount <= this.Entity.p.InvoiceAmount) {
       this.Entity.p.RemainingAmount = Number((this.Entity.p.InvoiceAmount - this.Entity.p.GivenAmount).toFixed(2));
     } else {
@@ -620,11 +641,25 @@ export class ExpensesDetailsMobileAppComponent implements OnInit {
       this.Entity.p.InvoiceAmount = this.Entity.p.GivenAmount;
     }
 
-    if (this.Entity.p.GivenAmount <= this.Entity.p.ShreesBalance) {
-      this.Entity.p.ShreesBalance = Number((this.ShreeBalance - this.Entity.p.GivenAmount).toFixed(2));
+    if (this.IsNewEntity) {
+      if (this.Entity.p.GivenAmount <= this.Entity.p.ShreesBalance) {
+        this.Entity.p.ShreesBalance = Number((this.ShreeBalance - this.Entity.p.GivenAmount).toFixed(2));
+      } else {
+        this.Entity.p.ShreesBalance = -Number((this.Entity.p.GivenAmount - this.ShreeBalance).toFixed(2));
+      }
     } else {
-      this.Entity.p.ShreesBalance = -Number((this.Entity.p.GivenAmount - this.ShreeBalance).toFixed(2));
+
+      let currentExpenseAmount = 0;
+
+      if (this.Entity.p.GivenAmount > this.OldGivenAmount) {
+        currentExpenseAmount = this.Entity.p.GivenAmount - this.OldGivenAmount;
+        this.Entity.p.ShreesBalance = Number((this.ShreeBalance - currentExpenseAmount).toFixed(2));
+      } else {
+        currentExpenseAmount = this.OldGivenAmount - this.Entity.p.GivenAmount;
+        this.Entity.p.ShreesBalance = Number((this.ShreeBalance + currentExpenseAmount).toFixed(2));
+      }
     }
+
     if (this.Entity.p.IsAdvancePayment) {
       this.Entity.p.TotalAdvance = this.Entity.p.RemainingAdvance + this.Entity.p.GivenAmount
     }

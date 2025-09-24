@@ -20,6 +20,7 @@ import { NzModalModule } from 'ng-zorro-antd/modal';
 import { PhoneCommaFormatDirective } from '../core/directives/phone-comma-format.directive';
 import { AmountCommaFormatDirective } from '../core/directives/amount-comma-format.directive';
 import { SafeAreaDirective } from '../core/directives/safe-area.directive';
+import { ImageViewerModalComponent } from './image-viewer-modal/image-viewer-modal.component';
 @NgModule({
   declarations: [HeaderComponent, 
     HeaderWithBackHandlerComponent, 
@@ -35,7 +36,8 @@ import { SafeAreaDirective } from '../core/directives/safe-area.directive';
     ChipFilterMobileAppComponent, 
     PhoneCommaFormatDirective,
     AmountCommaFormatDirective,
-    SafeAreaDirective
+    SafeAreaDirective,
+    ImageViewerModalComponent
   ],
   imports: [
     CommonModule,
@@ -60,7 +62,8 @@ import { SafeAreaDirective } from '../core/directives/safe-area.directive';
     ChipFilterMobileAppComponent, 
     PhoneCommaFormatDirective,
     AmountCommaFormatDirective,
-    SafeAreaDirective
+    SafeAreaDirective,
+    ImageViewerModalComponent
   ]
 })
 export class SharedModule { }

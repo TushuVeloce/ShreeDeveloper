@@ -1,0 +1,93 @@
+/* Overrides and general styling */
+ion-content {
+  --background: var(--ion-background-colors); // Consistent light gray background
+}
+
+/* Specific card and list styling */
+.overtime-list {
+  padding: 0 8px; // Add some padding to the list container
+}
+
+ion-card {
+  margin: 8px 0; // Reduce vertical margin slightly for a tighter look
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  border-radius: 12px;
+}
+
+ion-item {
+  --background: #fff;
+  --padding-start: 16px;
+  --inner-padding-end: 16px;
+}
+
+/* Header section within the card */
+.header-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.employee-name {
+  font-weight: 700;
+  font-size: 1.25rem; // Slightly larger for better readability
+  color: #333;
+  margin: 0;
+}
+
+/* Status chip styling */
+ion-chip {
+  font-weight: bold;
+  font-size: 0.7rem; // A little smaller
+  height: 22px; // Reduced height
+  padding: 0 10px; // More horizontal padding
+}
+
+.approved-chip {
+  --background: #d4edda;
+  --color: #155724;
+}
+
+.pending-chip {
+  --background: #fff3cd;
+  --color: #856404;
+}
+
+/* Information lines with icons */
+.overtime-info {
+  display: flex;
+  align-items: center;
+  font-size: 0.9rem;
+  color: #666;
+  margin: 4px 0;
+}
+
+.icon-small {
+  margin-right: 8px;
+  color: #888;
+}
+
+.total-overtime {
+  font-weight: 600; // Bold the total overtime value
+  color: #1e6091; // Use a brand color for emphasis
+}
+
+/* No data message styling */
+.data-not-found {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 80vh;
+  text-align: center;
+  color: #999;
+}
+
+.data-not-found ion-icon {
+  font-size: 4rem;
+  margin-bottom: 1rem;
+}
+
+.data-not-found p {
+  font-size: 1.1rem;
+}

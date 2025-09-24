@@ -32,6 +32,13 @@ import { FileTransferObject } from 'src/app/classes/infrastructure/filetransfero
 import { AttendanceLogCheckOutCustomProcess } from 'src/app/classes/domain/entities/mobile-app/attendance-management/attendancelogcheckoutcustomprocess';
 import { LocationMobileAppService } from 'src/app/views/mobile-app/components/core/location-mobile-app.service';
 import { Employee } from 'src/app/classes/domain/entities/website/masters/employee/employee';
+import {
+  BehaviorSubject,
+  combineLatest,
+  debounceTime,
+  distinctUntilChanged,
+} from 'rxjs';
+import { IonSearchbar } from '@ionic/angular';
 
 @Component({
   selector: 'app-attendance-view-mobile-app',
@@ -41,7 +48,6 @@ import { Employee } from 'src/app/classes/domain/entities/website/masters/employ
 })
 export class AttendanceViewMobileAppComponent implements OnInit {
   isAdmin: boolean = false;
-
   punchModalOpen = false;
   isSubmitting = false;
   disableTopCard = false;
@@ -49,16 +55,17 @@ export class AttendanceViewMobileAppComponent implements OnInit {
   currentDateTime = '';
   checkInTime = '';
   checkOutTime = '';
-  DateValue = '';
+  attendanceStatus:
+    | 'checkedIn'
+    | 'checkedOut'
+    | 'onLeave'
+    | 'notCheckedIn'
+    | 'disabled' = 'disabled';
 
   capturedSelfPhoto: string | null = null;
   rawCapturedSelfPhoto: string | null = null;
   capturedWorkLocationPhoto: string | null = null;
   rawCapturedWorkLocationPhoto: string | null = null;
-
-  isOnLeave = false;
-  isCheckInEnabled = false;
-  bothButtonsEnabled = true;
 
   attendanceLog = AttendanceLog.CreateNewInstance();
 
@@ -68,6 +75,7 @@ export class AttendanceViewMobileAppComponent implements OnInit {
   SiteName = '';
   AttendanceLocationTypeName = '';
   AttendanceLocationTypeRef: number = 0;
+  gridItems: any[] = [];
 
   weeklyAttendanceLogs: AttendanceLogs[] = [];
   filteredWeeklyAttendanceLogs: AttendanceLogs[] = [];
@@ -77,38 +85,15 @@ export class AttendanceViewMobileAppComponent implements OnInit {
   AttendanceLogTypeList = DomainEnums.AttendanceLogTypeMobileAppList();
   readonly LeaveRequestTypeEnum = LeaveRequestType;
 
-  selectedIndex = 0;
-
-  selectItem(index: number) {
-    this.selectedIndex = index;
-  }
-
-  gridItems = [
-    {
-      icon: 'assets/icons/salary_slip_request_mobile_app.png',
-      label: 'Salary Slip',
-      routerPath: '/mobile-app/tabs/attendance/salary-slip-request',
-    },
-    {
-      icon: 'assets/icons/leave_requests_mobile_app.png',
-      label: 'Leave',
-      routerPath: '/mobile-app/tabs/attendance/leave-request',
-    },
-    {
-      icon: 'assets/icons/attendance _mobile_app.png',
-      label: 'Attendance',
-      routerPath: '/mobile-app/tabs/attendance/all-attendance',
-    },
-  ];
-
   selectedAttendanceLogType: number = AttendanceLogType.TodaysAttendanceLog;
   employeeRef: number = 0;
   companyRef: number = 0;
-  selectedMonth: number = 0;
-  months: any[] = [];
+  selectedMonth: number = new Date().getMonth();
 
-  selectedEmployee: number = 0;
-  EmployeeList: any[] = [];
+  employeeList: Employee[] = [];
+  selectedEmployeeRef: number | null = null;
+  employeeSearchTerm$ = new BehaviorSubject<string>('');
+  filteredEmployeeList: Employee[] = [];
 
   constructor(
     private appStateManage: AppStateManageService,
@@ -124,34 +109,98 @@ export class AttendanceViewMobileAppComponent implements OnInit {
   ) {}
 
   ngOnInit = async () => {
-    // await this.loadAttendanceIfEmployeeExists();
+    // Setup search filter observable
+    combineLatest([
+      this.employeeSearchTerm$.pipe(debounceTime(300), distinctUntilChanged()),
+      // this.employeeList$
+    ]).subscribe(([searchTerm]) => {
+      this.filterEmployees(searchTerm);
+    });
+
+    await this.loadAttendanceIfEmployeeExists();
   };
 
   ionViewWillEnter = async () => {
     await this.loadAttendanceIfEmployeeExists();
   };
 
-  private loadAttendanceIfEmployeeExists = async () => {
+  private async buildGridItems() {
+    this.gridItems = [
+      {
+        icon: 'assets/icons/approvals_mobile_app.png',
+        label: 'Approvals',
+        routerPath: '/mobile-app/tabs/attendance/approvals',
+      },
+      {
+        icon: 'assets/icons/holiday_mobile_app.png',
+        label: 'Holidays',
+        routerPath: '/mobile-app/tabs/attendance/holidays',
+      },
+    ];
+
+    if (!this.isAdmin) {
+      this.gridItems.push(
+        {
+          icon: 'assets/icons/salary_slip_request_mobile_app.png',
+          label: 'Salary Slip',
+          routerPath: '/mobile-app/tabs/attendance/salary-slip-request',
+        },
+        {
+          icon: 'assets/icons/leave_requests_mobile_app.png',
+          label: 'Leave',
+          routerPath: '/mobile-app/tabs/attendance/leave-request',
+        },
+        {
+          icon: 'assets/icons/attendance _mobile_app.png',
+          label: 'Attendance',
+          routerPath: '/mobile-app/tabs/attendance/all-attendance',
+        }
+      );
+    } 
+    // else {
+    //   // Admin specific grid items
+    //   this.gridItems.push(
+    //     {
+    //       icon: 'assets/icons/attendance_reports_mobile_app.png',
+    //       label: 'Reports',
+    //       routerPath: '/mobile-app/tabs/attendance/reports', // new route for reports
+    //     },
+    //     {
+    //       icon: 'assets/icons/leave_requests_mobile_app.png',
+    //       label: 'All Leaves',
+    //       routerPath: '/mobile-app/tabs/attendance/all-leaves', // new route for all leaves
+    //     }
+    //   );
+    // }
+  }
+
+  private async loadAttendanceIfEmployeeExists() {
     try {
       await this.loadingService.show();
-      this.disableTopCard =
-        (await this.appStateManage.localStorage.getItem('IsDefaultUser')) ===
-        '1';
       this.isAdmin =
         (await this.appStateManage.localStorage.getItem('IsDefaultUser')) ===
         '1';
       this.companyRef = Number(
         this.appStateManage.localStorage.getItem('SelectedCompanyRef')
       );
+
       if (!this.isAdmin) {
         this.employeeRef = Number(
           this.appStateManage.localStorage.getItem('LoginEmployeeRef')
         );
+        this.disableTopCard = this.employeeRef === 0;
+        await this.getCheckInData();
+      } else {
+        await this.getEmployeeListByCompanyRef();
+        this.disableTopCard = false; // Admins won't use this card, so it can be enabled for a user to select an employee
       }
+
+      this.buildGridItems();
+      await this.getAttendanceLogByAttendanceType();
+
       try {
         const strCurrentDateTime =
           await CurrentDateTimeRequest.GetCurrentDateTime();
-        this.DateValue = strCurrentDateTime.substring(0, 10);
         this.currentDateTime = strCurrentDateTime;
       } catch (error) {
         this.toastService.present(
@@ -161,17 +210,6 @@ export class AttendanceViewMobileAppComponent implements OnInit {
         );
         await this.haptic.warning();
       }
-
-      await this.fetchAttendanceByMonth(new Date().getMonth());
-
-      if (this.AttendanceLogTypeList?.length > 0) {
-        this.selectedAttendanceLogType = this.AttendanceLogTypeList[0].Ref;
-        this.onAttendanceLogTypeChange();
-      }
-
-      await this.getEmployeeListByCompanyRef();
-      await this.getCheckInData();
-      await this.getAttendanceLogByAttendanceType();
     } catch (error) {
       this.toastService.present(
         'Unexpected error while loading attendance.',
@@ -181,11 +219,13 @@ export class AttendanceViewMobileAppComponent implements OnInit {
     } finally {
       await this.loadingService.hide();
     }
-  };
+  }
 
   handleRefresh = async (event: CustomEvent) => {
     try {
-      await this.getCheckInData();
+      if (!this.isAdmin) {
+        await this.getCheckInData();
+      }
       await this.getAttendanceLogByAttendanceType();
     } finally {
       (event.target as HTMLIonRefresherElement).complete();
@@ -193,25 +233,34 @@ export class AttendanceViewMobileAppComponent implements OnInit {
   };
 
   onAttendanceLogTypeChange = async () => {
-    const selected = this.AttendanceLogTypeList.find(
-      (w) => w.Ref === this.selectedAttendanceLogType
-    );
     await this.getAttendanceLogByAttendanceType();
   };
 
-  onEmployeeChange = () => {
-    this.employeeRef = this.selectedEmployee;
-    this.loadAttendanceIfEmployeeExists();
-  };
-
   async fetchAttendanceByMonth(value: SegmentValue | undefined): Promise<void> {
-    try {
-      const SelectedMonth = Number(value);
-      if (isNaN(SelectedMonth)) return;
-      this.selectedMonth = SelectedMonth;
-      // await this.fetchMonthlyLogs();
-    } catch (error) {
-      // this.handleError(error, 'Fetching attendance for selected month');
+    const SelectedMonth = Number(value);
+    if (isNaN(SelectedMonth)) return;
+    this.selectedMonth = SelectedMonth;
+    await this.getAttendanceLogByAttendanceType();
+  }
+
+  onEmployeeSearch(event: any) {
+    this.employeeSearchTerm$.next(event.detail.value);
+  }
+
+  onEmployeeSelect(employee: Employee) {
+    this.selectedEmployeeRef = employee.p.Ref;
+    this.employeeSearchTerm$.next(''); // Clear the search term
+    this.employeeRef = this.selectedEmployeeRef;
+    this.loadAttendanceIfEmployeeExists();
+  }
+
+  private filterEmployees(searchTerm: string) {
+    if (!searchTerm) {
+      this.filteredEmployeeList = [];
+    } else {
+      this.filteredEmployeeList = this.employeeList.filter((employee) =>
+        employee.p.Name.toLowerCase().includes(searchTerm.toLowerCase())
+      );
     }
   }
 
@@ -221,26 +270,26 @@ export class AttendanceViewMobileAppComponent implements OnInit {
       await this.haptic.warning();
       return;
     }
-    let lst = await Employee.FetchEntireListByCompanyRef(
+    this.employeeList = await Employee.FetchEntireListByCompanyRef(
       this.companyRef,
       async (errMsg) => await this.toastService.present('Error ' + errMsg)
     );
-    this.EmployeeList = lst;
   };
 
   getCheckInData = async () => {
     try {
       if (this.employeeRef == 0) {
-        await this.toastService.present('Employee is not');
-        await this.haptic.warning();
+        this.attendanceStatus = 'disabled';
         return;
       }
       this.attendanceLog = AttendanceLog.CreateNewInstance();
       this.checkInTime = '';
       this.checkOutTime = '';
-      this.isOnLeave = false;
+      const strCurrentDateTime =
+        await CurrentDateTimeRequest.GetCurrentDateTime();
+      const tranDate1 = strCurrentDateTime.substring(0, 10);
+      const tranDate = this.dtu.ConvertStringDateToFullFormat(tranDate1);
 
-      const tranDate = this.dtu.ConvertStringDateToFullFormat(this.DateValue);
       const lst = await AttendanceLog.FetchEntireListByCompanyRef(
         this.employeeRef,
         this.companyRef,
@@ -251,44 +300,29 @@ export class AttendanceViewMobileAppComponent implements OnInit {
         }
       );
 
+      console.log('lst :', lst);
       if (!lst || lst.length === 0) {
-        this.isCheckInEnabled = true;
-        this.bothButtonsEnabled = true;
+        this.attendanceStatus = 'notCheckedIn';
         return;
       }
 
-      const checkInData: AttendanceLogProps[] = lst.map((log) => log.p);
-      const pendingCheckIn = checkInData.find((e) => !e.CheckOutTime);
-      const completedCheckIn = checkInData.find((e) => e.CheckOutTime);
+      const pendingCheckIn = lst.find((e) => !e.p.CheckOutTime);
+      const completedCheckIn = lst.find((e) => e.p.CheckOutTime);
 
-      // Assign latest attendance data to attendanceLog
-      Object.assign(
-        this.attendanceLog.p,
-        pendingCheckIn || completedCheckIn || {}
-      );
-
-      // Update state from assigned log data
-      const { FirstCheckInTime, CheckInTime, CheckOutTime } =
-        this.attendanceLog.p;
-
-      if (!FirstCheckInTime && !CheckInTime && !CheckOutTime) {
-        this.isCheckInEnabled = true;
-        this.bothButtonsEnabled = true;
-      } else if (CheckInTime && !CheckOutTime) {
-        this.isCheckInEnabled = false;
-        this.bothButtonsEnabled = true;
-      } else if (CheckInTime && CheckOutTime) {
-        this.isCheckInEnabled = true;
-        this.bothButtonsEnabled = true;
-      } else {
-        this.isCheckInEnabled = false;
-        this.bothButtonsEnabled = false;
+      if (pendingCheckIn) {
+        this.attendanceStatus = 'checkedIn';
+        this.attendanceLog = pendingCheckIn;
+      } else if (completedCheckIn) {
+        this.attendanceStatus = 'checkedOut';
+        this.attendanceLog = completedCheckIn;
       }
 
-      // Optionally use `AttendanceLogCheckInOut` if it contains relevant runtime data
       this.checkInTime = this.attendanceLog.p.CheckInTime || '';
       this.checkOutTime = this.attendanceLog.p.CheckOutTime || '';
-      this.isOnLeave = Boolean(this.attendanceLog.p.IsLeave);
+
+      if (this.attendanceLog.p.IsLeave) {
+        this.attendanceStatus = 'onLeave';
+      }
     } catch (error) {
       this.toastService.present(
         'Unexpected error while fetching attendance.',
@@ -299,41 +333,81 @@ export class AttendanceViewMobileAppComponent implements OnInit {
     }
   };
 
+  //  getCheckInData = async () => {
+  //   try {
+  //     if (this.employeeRef == 0) {
+  //       await this.toastService.present('Employee is not');
+  //       await this.haptic.warning();
+  //       return;
+  //     }
+  //     this.attendanceLog = AttendanceLog.CreateNewInstance();
+  //     this.checkInTime = '';
+  //     this.checkOutTime = '';
+  //     this.isOnLeave = false;
+
+  //     const tranDate = this.dtu.ConvertStringDateToFullFormat(this.DateValue);
+  //     const lst = await AttendanceLog.FetchEntireListByCompanyRef(
+  //       this.employeeRef,
+  //       this.companyRef,
+  //       tranDate,
+  //       async (errMsg) => {
+  //         this.toastService.present('Error ' + errMsg, 1000, 'danger');
+  //         await this.haptic.error();
+  //       }
+  //     );
+
+  //     if (!lst || lst.length === 0) {
+  //       this.isCheckInEnabled = true;
+  //       this.bothButtonsEnabled = true;
+  //       return;
+  //     }
+
+  //     const checkInData: AttendanceLogProps[] = lst.map((log) => log.p);
+  //     const pendingCheckIn = checkInData.find((e) => !e.CheckOutTime);
+  //     const completedCheckIn = checkInData.find((e) => e.CheckOutTime);
+
+  //     // Assign latest attendance data to attendanceLog
+  //     Object.assign(
+  //       this.attendanceLog.p,
+  //       pendingCheckIn || completedCheckIn || {}
+  //     );
+
+  //     // Update state from assigned log data
+  //     const { FirstCheckInTime, CheckInTime, CheckOutTime } =
+  //       this.attendanceLog.p;
+
+  //     if (!FirstCheckInTime && !CheckInTime && !CheckOutTime) {
+  //       this.isCheckInEnabled = true;
+  //       this.bothButtonsEnabled = true;
+  //     } else if (CheckInTime && !CheckOutTime) {
+  //       this.isCheckInEnabled = false;
+  //       this.bothButtonsEnabled = true;
+  //     } else if (CheckInTime && CheckOutTime) {
+  //       this.isCheckInEnabled = true;
+  //       this.bothButtonsEnabled = true;
+  //     } else {
+  //       this.isCheckInEnabled = false;
+  //       this.bothButtonsEnabled = false;
+  //     }
+
+  //     // Optionally use `AttendanceLogCheckInOut` if it contains relevant runtime data
+  //     this.checkInTime = this.attendanceLog.p.CheckInTime || '';
+  //     this.checkOutTime = this.attendanceLog.p.CheckOutTime || '';
+  //     this.isOnLeave = Boolean(this.attendanceLog.p.IsLeave);
+  //   } catch (error) {
+  //     this.toastService.present(
+  //       'Unexpected error while fetching attendance.',
+  //       1000,
+  //       'danger'
+  //     );
+  //     await this.haptic.error();
+  //   }
+  // };
+
   formatDate(date: string | Date): string {
     return this.dateConversionService.formatDate(date);
   }
 
-  selectAttendanceLocationBottomsheet = async () => {
-    const options = this.attendanceLocationTypeList.map((item) => ({
-      p: item,
-    }));
-    const selected = await this.bottomsheetMobileAppService.openSelectModal(
-      options,
-      this.selectedAttendanceLocationType,
-      false,
-      'Select Location Type',
-      1
-    );
-    if (selected) {
-      this.selectedAttendanceLocationType = selected;
-      this.AttendanceLocationTypeName = selected[0].p.Name;
-      this.AttendanceLocationTypeRef = selected[0].p.Ref;
-    }
-  };
-
-  selectSiteBottomsheet = async () => {
-    const selected = await this.bottomsheetMobileAppService.openSelectModal(
-      this.siteList,
-      this.selectedSite,
-      false,
-      'Select Site',
-      1
-    );
-    if (selected) {
-      this.selectedSite = selected;
-      this.SiteName = selected[0].p.Name;
-    }
-  };
   convertTo12HourFormat = (time: string): string => {
     const [hourStr, minuteStr] = time.split(':');
     let hour = parseInt(hourStr, 10);
@@ -347,9 +421,7 @@ export class AttendanceViewMobileAppComponent implements OnInit {
   };
 
   openPunchModal = async () => {
-    if (!this.isCheckInEnabled) return;
     this.punchModalOpen = true;
-
     try {
       this.siteList = await Site.FetchEntireListByCompanyRef(
         this.companyRef,
@@ -358,32 +430,10 @@ export class AttendanceViewMobileAppComponent implements OnInit {
           await this.haptic.error();
         }
       );
-      const location =
-        await this.locationMobileAppService.getCurrentCoordinates();
-      // console.log(location);
-    } catch (error) {
-      // this.toastService.present('Error fetching site list', 1000, 'danger');
-      // await this.haptic.error();
-    }
+      await this.locationMobileAppService.getCurrentCoordinates();
+    } catch (error) {}
   };
 
-  // takePhoto = async (type: 'before' | 'after') => {
-  //   try {
-  //     const image = await Camera.getPhoto({ quality: 80, allowEditing: false, resultType: CameraResultType.Uri, source: CameraSource.Camera });
-  //     const uri = image.path ?? image.webPath;
-
-  //     if (type === 'before') {
-  //       this.rawCapturedSelfPhoto = uri ?? null;
-  //       this.capturedSelfPhoto = image.webPath ?? null;
-  //     } else {
-  //       this.rawCapturedWorkLocationPhoto = uri ?? null;
-  //       this.capturedWorkLocationPhoto = image.webPath ?? null;
-  //     }
-  //   } catch (error) {
-  //     this.toastService.present(`Error capturing ${type} photo`, 1000, 'danger');
-  //     await this.haptic.error();
-  //   }
-  // }
   takePhoto = async (type: 'before' | 'after') => {
     try {
       const image = await Camera.getPhoto({
@@ -392,8 +442,6 @@ export class AttendanceViewMobileAppComponent implements OnInit {
         resultType: CameraResultType.Uri,
         source: CameraSource.Camera,
       });
-
-      // Always prefer webPath
       const uri = image.webPath;
 
       if (type === 'before') {
@@ -427,19 +475,13 @@ export class AttendanceViewMobileAppComponent implements OnInit {
     try {
       await this.loadingService.show();
       this.isSubmitting = true;
-      if (!this.employeeRef) {
-        this.toastService.present('Employee not selected', 1000, 'warning');
-        await this.haptic.warning();
-        return;
-      }
-      if (!this.companyRef) {
-        this.toastService.present('Company not selected', 1000, 'warning');
-        await this.haptic.warning();
-        return;
-      }
-      if (this.selectedAttendanceLocationType.length === 0) {
+      if (
+        !this.employeeRef ||
+        !this.companyRef ||
+        this.selectedAttendanceLocationType.length === 0
+      ) {
         this.toastService.present(
-          'Location Type not selected',
+          'Missing required information',
           1000,
           'warning'
         );
@@ -447,31 +489,12 @@ export class AttendanceViewMobileAppComponent implements OnInit {
         return;
       }
 
-      const selectedTypeRef = this.selectedAttendanceLocationType[0]?.p?.Ref;
-      if (
-        selectedTypeRef === this.AttendanceLocationTypes.Site &&
-        this.selectedSite.length === 0
-      ) {
-        this.toastService.present('Site not selected', 1000, 'warning');
-        await this.haptic.warning();
-        return;
-      }
-      // if (!this.rawCapturedSelfPhoto) {
-      //   this.toastService.present('Self Photo not uploaded', 1000, 'warning');
-      //   await this.haptic.warning();
-      //   return;
-      // }
-      // if (!this.rawCapturedWorkLocationPhoto) {
-      //   this.toastService.present('Work Location Photo not uploaded', 1000, 'warning');
-      //   await this.haptic.warning();
-      //   return;
-      // }
       const request = new AttendanceLogCheckInCustomProcess();
       Object.assign(request, {
         IsCheckIn: true,
         CompanyRef: this.companyRef,
         EmployeeRef: this.employeeRef,
-        SiteRef: this.selectedSite[0]?.p?.Ref ? this.selectedSite[0].p.Ref : 0,
+        SiteRef: this.selectedSite[0]?.p?.Ref || 0,
         AttendanceLocationType:
           Number(this.selectedAttendanceLocationType[0].p.Ref) || 0,
       });
@@ -490,7 +513,6 @@ export class AttendanceViewMobileAppComponent implements OnInit {
           )
         );
       }
-
       if (this.rawCapturedWorkLocationPhoto) {
         const file = await this.uriToFile(
           this.rawCapturedWorkLocationPhoto,
@@ -504,8 +526,10 @@ export class AttendanceViewMobileAppComponent implements OnInit {
           )
         );
       }
-      const td = request.FormulateTransportData();
-      const pkt = this.payloadPacketFacade.CreateNewPayloadPacket2(td);
+
+      const pkt = this.payloadPacketFacade.CreateNewPayloadPacket2(
+        request.FormulateTransportData()
+      );
       const tr = await this.serverCommunicator.sendHttpRequest(
         pkt,
         'acceptrequest',
@@ -513,7 +537,7 @@ export class AttendanceViewMobileAppComponent implements OnInit {
       );
 
       if (!tr.Successful) {
-        this.toastService.present(`Error ${tr.Message}`, 1000, 'danger');
+        this.toastService.present(`Error: ${tr.Message}`, 1000, 'danger');
         await this.haptic.error();
         return;
       }
@@ -521,9 +545,6 @@ export class AttendanceViewMobileAppComponent implements OnInit {
       this.toastService.present('Punch in successfully', 1000, 'success');
       await this.haptic.success();
     } catch (error) {
-      // console.log('error :', error);
-      //   this.toastService.present('Error during punch in', 1000, 'danger');
-      //   await this.haptic.error();
     } finally {
       this.punchModalOpen = false;
       this.resetPunchState();
@@ -548,12 +569,13 @@ export class AttendanceViewMobileAppComponent implements OnInit {
         EmployeeRef: this.employeeRef,
       });
 
-      const td = request.FormulateTransportData();
-      const pkt = this.payloadPacketFacade.CreateNewPayloadPacket2(td);
+      const pkt = this.payloadPacketFacade.CreateNewPayloadPacket2(
+        request.FormulateTransportData()
+      );
       const tr = await this.serverCommunicator.sendHttpRequest(pkt);
 
       if (!tr.Successful) {
-        this.toastService.present(`Error ${tr.Message}`, 1000, 'danger');
+        this.toastService.present(`Error: ${tr.Message}`, 1000, 'danger');
         await this.haptic.error();
         return;
       }
@@ -561,8 +583,6 @@ export class AttendanceViewMobileAppComponent implements OnInit {
       this.toastService.present('Punch out successfully', 1000, 'success');
       await this.haptic.success();
     } catch (error) {
-      // this.toastService.present('Error during punch out', 1000, 'danger');
-      // await this.haptic.error();
     } finally {
       await Promise.all([
         this.getCheckInData(),
@@ -577,6 +597,17 @@ export class AttendanceViewMobileAppComponent implements OnInit {
   getAttendanceLogByAttendanceType = async () => {
     try {
       let logs: any[] = [];
+      const targetEmployeeRef = this.isAdmin
+        ? this.selectedEmployeeRef
+        : this.employeeRef;
+      if (!targetEmployeeRef) {
+        this.filteredWeeklyAttendanceLogs = [];
+        return;
+      }
+
+      const strCurrentDateTime =
+        await CurrentDateTimeRequest.GetCurrentDateTime();
+      const today = strCurrentDateTime.substring(0, 10);
 
       if (
         this.selectedAttendanceLogType === AttendanceLogType.TodaysAttendanceLog
@@ -584,22 +615,14 @@ export class AttendanceViewMobileAppComponent implements OnInit {
         const allLogs =
           await AttendanceLogs.FetchEntireListByCompanyRefAndAttendanceLogTypeAndEmployee(
             this.companyRef,
-            AttendanceLogType.WeeklyAttendanceLog, // using weekly to fetch today from it
-            this.employeeRef,
-            async (errMsg) => {
-              this.toastService.present(`Error ${errMsg}`, 1000, 'danger');
-              await this.haptic.error();
-            }
+            AttendanceLogType.WeeklyAttendanceLog,
+            targetEmployeeRef,
+            async (errMsg) =>
+              this.toastService.present(`Error ${errMsg}`, 1000, 'danger')
           );
-
-        const strCurrentDateTime =
-          await CurrentDateTimeRequest.GetCurrentDateTime();
-        const today = strCurrentDateTime.substring(0, 10); // e.g. '2025-07-09'
-
-        logs = allLogs.filter((log) => {
-          const transDate = log.p.TransDateTime?.substring(0, 10);
-          return transDate === today;
-        });
+        logs = allLogs.filter(
+          (log) => log.p.TransDateTime?.substring(0, 10) === today
+        );
       } else if (
         this.selectedAttendanceLogType === AttendanceLogType.WeeklyAttendanceLog
       ) {
@@ -607,11 +630,9 @@ export class AttendanceViewMobileAppComponent implements OnInit {
           await AttendanceLogs.FetchEntireListByCompanyRefAndAttendanceLogTypeAndEmployee(
             this.companyRef,
             this.selectedAttendanceLogType,
-            this.employeeRef,
-            async (errMsg) => {
-              this.toastService.present(`Error ${errMsg}`, 1000, 'danger');
-              await this.haptic.error();
-            }
+            targetEmployeeRef,
+            async (errMsg) =>
+              this.toastService.present(`Error ${errMsg}`, 1000, 'danger')
           );
       } else if (
         this.selectedAttendanceLogType ===
@@ -621,22 +642,16 @@ export class AttendanceViewMobileAppComponent implements OnInit {
           await AttendanceLogs.FetchEntireListByCompanyRefAndAttendanceLogTypeAndMonth(
             this.companyRef,
             this.selectedAttendanceLogType,
-            this.selectedMonth + 1, // Month is 0-indexed
-            this.employeeRef,
-            async (errMsg) => {
-              this.toastService.present(`Error ${errMsg}`, 1000, 'danger');
-              await this.haptic.error();
-            }
+            this.selectedMonth + 1,
+            targetEmployeeRef,
+            async (errMsg) =>
+              this.toastService.present(`Error ${errMsg}`, 1000, 'danger')
           );
       }
 
       this.weeklyAttendanceLogs = logs;
       this.filteredWeeklyAttendanceLogs = logs;
-      console.log('logs :', logs);
-    } catch (error) {
-      // this.toastService.present('Error fetching attendance logs', 1000, 'danger');
-      // await this.haptic.error();
-    }
+    } catch (error) {}
   };
 
   private resetPunchState = () => {
@@ -649,5 +664,37 @@ export class AttendanceViewMobileAppComponent implements OnInit {
     this.rawCapturedSelfPhoto = null;
     this.capturedWorkLocationPhoto = null;
     this.rawCapturedWorkLocationPhoto = null;
+  };
+
+  selectAttendanceLocationBottomsheet = async () => {
+    const options = this.attendanceLocationTypeList.map((item) => ({
+      p: item,
+    }));
+    const selected = await this.bottomsheetMobileAppService.openSelectModal(
+      options,
+      this.selectedAttendanceLocationType,
+      false,
+      'Select Location Type',
+      1
+    );
+    if (selected) {
+      this.selectedAttendanceLocationType = selected;
+      this.AttendanceLocationTypeName = selected[0].p.Name;
+      this.AttendanceLocationTypeRef = selected[0].p.Ref;
+    }
+  };
+
+  selectSiteBottomsheet = async () => {
+    const selected = await this.bottomsheetMobileAppService.openSelectModal(
+      this.siteList,
+      this.selectedSite,
+      false,
+      'Select Site',
+      1
+    );
+    if (selected) {
+      this.selectedSite = selected;
+      this.SiteName = selected[0].p.Name;
+    }
   };
 }

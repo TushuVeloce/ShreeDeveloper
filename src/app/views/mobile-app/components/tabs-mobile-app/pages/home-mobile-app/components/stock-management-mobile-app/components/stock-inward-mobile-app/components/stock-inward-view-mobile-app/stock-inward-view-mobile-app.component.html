@@ -2,47 +2,51 @@
   backRoute="mobile-app/tabs/dashboard/stock-management"></app-header-with-back-handler>
 <app-chip-filter-mobile-app [filters]="filters" (filtersChanged)="onFiltersChanged($event)">
 </app-chip-filter-mobile-app>
-<ion-content class="ion-padding">
+<ion-content class="ion-padding stock-inward-content">
   <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
 
-  <ion-list class="requisition-list" [lines]="'none'">
-    <ion-item *ngFor="let Inward of DisplayMasterList" class="requisition-item" button detail
-      (click)="openModal(Inward)">
-      <ion-label>
-        <h2>Chalan No. : {{ Inward.p.ChalanNo || '-' }}</h2>
-        <p>Site : {{ Inward.p.SiteName || '-' }}</p>
-        <p class="date-label">Date : {{ formatDate(Inward.p.InwardDate) || '-' }}</p>
-        <p class="date-label">Material : {{Inward.p.MaterialInwardDetailsArray.length || '-' }}</p>
-      </ion-label>
+  <ion-list class="inward-list" [lines]="'none'">
+    <ng-container *ngIf="DisplayMasterList.length > 0">
+      <ion-card *ngFor="let Inward of DisplayMasterList" class="inward-card" button (click)="openModal(Inward)">
+        <ion-card-content>
+          <div class="card-header">
+            <div class="main-info">
+              <h2 class="chalan-no">Chalan No. : {{ Inward.p.ChalanNo || '-' }}</h2>
+              <p class="site-name">Site : {{ Inward.p.SiteName || '-' }}</p>
+            </div>
+            <div class="action-buttons-card">
+              <ion-button fill="clear" color="primary" (click)="$event.stopPropagation(); navigateToPrint(Inward)">
+                <ion-icon name="print-outline" slot="icon-only"></ion-icon>
+              </ion-button>
+            </div>
+          </div>
+          <div class="card-details">
+            <div class="detail-row">
+              <span class="label">Date:</span>
+              <span class="value">{{ formatDate(Inward.p.InwardDate) || '-' }}</span>
+            </div>
+            <div class="detail-row">
+              <span class="label">Materials:</span>
+              <span class="value">{{ Inward.p.MaterialInwardDetailsArray.length || '0' }} items</span>
+            </div>
+          </div>
+        </ion-card-content>
+      </ion-card>
+    </ng-container>
 
-      <div class="action-buttons" slot="end" (click)="$event.stopPropagation()">
-        <!-- <ion-button fill="clear" size="small" color="primary" (click)="onEditClicked(Inward)">
-          <ion-icon name="pencil-outline" slot="icon-only"></ion-icon>
-        </ion-button> -->
-        <!-- <ion-button fill="clear" size="small" color="primary" (click)="onDeleteClicked(Inward)">
-          <ion-icon name="trash-outline" slot="icon-only"></ion-icon>
-        </ion-button> -->
-        <ion-button fill="clear" size="small" color="primary" (click)="navigateToPrint(Inward)">
-          <ion-icon name="print-outline" slot="icon-only"></ion-icon>
-        </ion-button>
-      </div>
-    </ion-item>
+    <div *ngIf="DisplayMasterList.length === 0 && !loadingService.isLoaderActive()" class="empty-state">
+      <ion-icon name="alert-circle-outline"></ion-icon>
+      <p>No Stock Inward records found.</p>
+    </div>
   </ion-list>
 
-  <!-- Show "Data not found" if list is empty -->
-  <div *ngIf="DisplayMasterList.length === 0 && !loadingService.isLoaderActive()" class="no-data-mobile-app">
-    <ion-icon name="alert-circle-outline" size="large" color="medium"></ion-icon>
-    <p>No Stock Inward records found.</p>
-  </div>
-
-  <!-- Modal -->
   <ion-modal [isOpen]="modalOpen" (didDismiss)="closeModal()" class="custom-modal-mobile-app">
     <ng-template>
-      <ion-header class="modal-toolbar-mobile-app">
+      <ion-header>
         <ion-toolbar color="primary">
-          <ion-title>Material Details</ion-title>
+          <ion-title>Stock Inward Details</ion-title>
           <ion-buttons slot="end">
             <ion-button fill="clear" (click)="closeModal()">
               <ion-icon name="close-outline"></ion-icon>
@@ -51,83 +55,78 @@
         </ion-toolbar>
       </ion-header>
 
-      <!-- Body -->
-      <ion-content scroll-y="true" class="ion-padding modal-content-mobile-app">
-        <!-- Info Rows -->
-        <div class="info-row-of-model-mobile-app">
-          <span class="label-mobile-app">Date:</span>
-          <span class="value-mobile-app">{{ formatDate(SelectedStockInward.p.InwardDate) || '-' }}</span>
+      <ion-content scroll-y="true" class="ion-padding modal-content">
+        <div class="modal-section">
+          <h3>Inward Summary</h3>
+          <div class="detail-row">
+            <span class="label">Chalan No:</span>
+            <span class="value">{{ SelectedStockInward.p.ChalanNo || '-' }}</span>
+          </div>
+          <div class="detail-row">
+            <span class="label">Date:</span>
+            <span class="value">{{ formatDate(SelectedStockInward.p.InwardDate) || '-' }}</span>
+          </div>
+          <div class="detail-row">
+            <span class="label">Site:</span>
+            <span class="value">{{ SelectedStockInward.p.SiteName || '-' }}</span>
+          </div>
         </div>
-        <div class="info-row-of-model-mobile-app">
-          <span class="label-mobile-app">Chalan No.:</span>
-          <span class="value-mobile-app">{{ SelectedStockInward.p.ChalanNo || '-' }}</span>
-        </div>
-        <div class="info-row-of-model-mobile-app">
-          <span class="label-mobile-app">Site:</span>
-          <span class="value-mobile-app">{{ SelectedStockInward.p.SiteName || '-' }}</span>
-        </div>
-        <div class="info-row-of-model-mobile-app">
-          <span class="label-mobile-app">Vendor:</span>
-          <span class="value-mobile-app">{{ SelectedStockInward.p.VendorName || '-' }}</span>
-        </div>
-        <div class="info-row-of-model-mobile-app">
-          <span class="label-mobile-app">Trade Name:</span>
-          <span class="value-mobile-app">{{ SelectedStockInward.p.VendorTradeName || '-' }}</span>
-        </div>
-        <!-- Invoice Preview Button -->
-        <div class="info-row-of-model-mobile-app" *ngIf="SelectedStockInward?.p?.MaterialInwardInvoicePath">
-          <span class="label-mobile-app">Invoice:</span>
-          <ion-button size="small" fill="clear" color="primary"
-            (click)="prepareInvoiceUrl(SelectedStockInward.p.MaterialInwardInvoicePath)">
-            <ion-icon [name]="showInvoicePreview?'eye-outline':'eye-off-outline'" slot="icon-only"></ion-icon>
-          </ion-button>
+        
+        <div class="modal-section">
+          <h3>Vendor Details</h3>
+          <div class="detail-row">
+            <span class="label">Vendor:</span>
+            <span class="value">{{ SelectedStockInward.p.VendorName || '-' }}</span>
+          </div>
+          <div class="detail-row">
+            <span class="label">Trade Name:</span>
+            <span class="value">{{ SelectedStockInward.p.VendorTradeName || '-' }}</span>
+          </div>
         </div>
 
-        <!-- Invoice Viewer Section -->
-        <div *ngIf="showInvoicePreview" class="invoice-preview-container">
-          <ng-container *ngIf="isPDF(SelectedStockInward.p.MaterialInwardInvoicePath); else imageBlock">
-            <img [src]="'assets/icons/doc-placeholder.png'" alt="Invoice Image" class="invoice-pdf"
-              (click)="fileNavigation(SelectedStockInward.p.MaterialInwardInvoicePath)" />
-          </ng-container>
-
-          <ng-template #imageBlock>
-            <img [src]="sanitizedInvoiceUrl" alt="Invoice Image" class="invoice-image" />
-          </ng-template>
+        <div class="modal-section">
+          <h3>Material Details</h3>
+          <div class="table-container ion-text-center">
+            <div class="table-scroll">
+              <table class="custom-table">
+                <thead>
+                  <tr>
+                    <th class="sticky-col sticky-header">#</th>
+                    <th *ngFor="let item of tableHeaderData" class="sticky-header">{{ item }}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let item of SelectedStockInward.p.MaterialInwardDetailsArray; let i = index">
+                    <td class="sticky-col">{{i + 1 }}</td>
+                    <td>{{ item.MaterialName || '-' }}</td>
+                    <td>{{ item.UnitName || '-' }}</td>
+                    <td>{{ item.PurchaseOrderQty || '0' }}</td>
+                    <td>{{ item.InwardQty || '0' }}</td>
+                    <td>{{ item.PurchaseOrderRemainingQty || '0' }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
         </div>
-
-        <div class="info-row-of-model-mobile-app">
-          <span class="label-mobile-app">Materials :</span>
-        </div>
-        <div class="table-container ion-text-center">
-          <div class="table-scroll">
-            <table class="custom-table">
-              <thead>
-                <tr>
-                  <th class="sticky-col sticky-header">#</th>
-                  <th *ngFor="let item of tableHeaderData" class="sticky-header">{{ item }}</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr *ngFor="let item of SelectedStockInward.p.MaterialInwardDetailsArray; let i = index">
-                  <td class="sticky-col">{{i + 1 }}</td>
-                  <td>
-                    {{ item.MaterialName || '-' }}
-                  </td>
-                  <td>
-                    {{ item.UnitName || '-' }}
-                  </td>
-                  <td>
-                    {{ item.PurchaseOrderQty || '0' }}
-                  </td>
-                  <td>
-                    {{ item.InwardQty || '0' }}
-                  </td>
-                  <td>
-                    {{ item.PurchaseOrderRemainingQty || '0' }}
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+        
+        <div class="modal-section" *ngIf="SelectedStockInward?.p?.MaterialInwardInvoicePath">
+          <h3>Invoice</h3>
+          <div class="detail-row">
+            <span class="label">Preview:</span>
+            <ion-button size="small" fill="clear" color="primary"
+              (click)="prepareInvoiceUrl(SelectedStockInward.p.MaterialInwardInvoicePath)">
+              <ion-icon [name]="showInvoicePreview ? 'eye-outline' : 'eye-off-outline'" slot="icon-only"></ion-icon>
+            </ion-button>
+          </div>
+          <div *ngIf="showInvoicePreview" class="invoice-preview-container">
+            <ng-container *ngIf="isPDF(SelectedStockInward.p.MaterialInwardInvoicePath); else imageBlock">
+              <img [src]="'assets/icons/doc-placeholder.png'" alt="Invoice Image" class="invoice-pdf"
+                (click)="fileNavigation(SelectedStockInward.p.MaterialInwardInvoicePath)" />
+            </ng-container>
+            <ng-template #imageBlock>
+              <img [src]="sanitizedInvoiceUrl" alt="Invoice Image" class="invoice-image" />
+            </ng-template>
           </div>
         </div>
       </ion-content>

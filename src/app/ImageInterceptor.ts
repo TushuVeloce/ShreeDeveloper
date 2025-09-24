@@ -12,13 +12,14 @@ import { SessionValues } from './services/sessionvalues.service';
 @Injectable()
 export class ImageInterceptor implements HttpInterceptor {
 
-  constructor(private sessionValues: SessionValues) { }
+  constructor(private sessionValues: SessionValues,private AppStateManageService: AppStateManageService) { }
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
     let authToken = this.sessionValues.CurrentLoginToken;
+    let authTokenForMobileApp = this.AppStateManageService.getLoginTokenForMobile();
 
     // cloned headers, updated with the authorization.
-   const headers = request.headers.set('LoginToken', authToken);
+   const headers = request.headers.set('LoginToken', authToken? authToken: authTokenForMobileApp);
     const authReq = request.clone({headers});
 
     // Clone the request and set the new header in one step.

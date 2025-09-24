@@ -84,6 +84,8 @@ export class IncomeDetailsMobileAppComponent implements OnInit {
   selectedBank: any[] = [];
   PayerPlotNo: string = '';
   RemainingPlotAmount: number = 0;
+  OldIncomeAmount: number = 0;
+
 
   constructor(
     private router: Router,
@@ -154,7 +156,7 @@ export class IncomeDetailsMobileAppComponent implements OnInit {
 
           this.BankName = this.BankList.find(item => item.p.Ref == this.Entity.p.BankAccountRef)?.p.BankName ?? '';
           this.selectedBank = [{ p: { Ref: this.Entity.p.BankAccountRef, Name: this.BankName } }];
-
+          this.OldIncomeAmount = this.Entity.p.IncomeAmount;
         } else {
           this.Entity = Income.CreateNewInstance();
           Income.SetCurrentInstance(this.Entity);
@@ -222,9 +224,24 @@ export class IncomeDetailsMobileAppComponent implements OnInit {
     this.BankName = '';
   }
 
-  CalculateShreeBalance = () => {
-    this.Entity.p.ShreesBalance = this.ShreeBalance + this.Entity.p.IncomeAmount;
+  // CalculateShreeBalance = () => {
+  //   this.Entity.p.ShreesBalance = this.ShreeBalance + this.Entity.p.IncomeAmount;
+  //   this.RemainingPlotAmount = this.Entity.p.RemainingPlotAmount - this.Entity.p.IncomeAmount;
+  // }
+    CalculateShreeBalance = () => {
+    let currentIncomeAmount = 0;
     this.RemainingPlotAmount = this.Entity.p.RemainingPlotAmount - this.Entity.p.IncomeAmount;
+    if (this.IsNewEntity) {
+      this.Entity.p.ShreesBalance = this.ShreeBalance + this.Entity.p.IncomeAmount;
+    } else {
+      if (this.OldIncomeAmount > this.Entity.p.IncomeAmount) {
+        currentIncomeAmount = this.OldIncomeAmount - this.Entity.p.IncomeAmount;
+        this.Entity.p.ShreesBalance = this.ShreeBalance - currentIncomeAmount;
+      } else {
+        currentIncomeAmount = this.Entity.p.IncomeAmount - this.OldIncomeAmount;
+        this.Entity.p.ShreesBalance = this.ShreeBalance + currentIncomeAmount;
+      }
+    }
   }
 
   getCurrentBalanceByCompanyRef = async () => {

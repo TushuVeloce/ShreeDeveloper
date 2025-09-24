@@ -1,60 +1,77 @@
-<app-header-with-back-handler title="Customer Enquiry"
-  backRoute="mobile-app/tabs/dashboard/customer-relationship-management"></app-header-with-back-handler>
-<!-- <app-chip-filter-mobile-app [filters]="filters" (filtersChanged)="onFiltersChanged($event)">
-</app-chip-filter-mobile-app> -->
+<app-header-with-back-handler
+  title="Customer Enquiry"
+  backRoute="mobile-app/tabs/dashboard/customer-relationship-management"
+></app-header-with-back-handler>
 <ion-content class="customer-enquiry-content">
-
-  <!-- Refresher -->
   <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
 
-  <!-- Customer List -->
-  <ion-list class="data-list">
+  <ion-list class="enquiry-list">
     <ng-container *ngIf="FilteredCustomerEnquiryList.length > 0">
-      <ion-card *ngFor="let item of FilteredCustomerEnquiryList" class="data-card">
-        <ion-card-header>
-          <ion-card-title>Customer Name: <span>{{ item.p.Name }}</span></ion-card-title>
-        </ion-card-header>
-
+      <ion-card *ngFor="let item of FilteredCustomerEnquiryList" class="enquiry-card">
         <ion-card-content>
-          <div class="info-row"><strong>Contact No:</strong><span>{{ item.p.ContactNos }}</span></div>
-          <div class="info-row"><strong>Address:</strong><span>{{ item.p.Address }}</span></div>
+          <div class="card-header">
+            <ion-text>
+              <h2 class="customer-name">{{ item.p.Name }}</h2>
+              <p class="contact-info">{{ item.p.ContactNos }}</p>
+            </ion-text>
+            <!-- <div class="status-badge">
+              <ion-badge color="tertiary">{{ item.p.CustomerStatusName || '-' }}</ion-badge>
+            </div> -->
+          </div>
 
-          <div class="btn-row">
-            <!-- <ion-button fill="outline" size="small" color="primary" (click)="onDeleteClicked(item)">
-              <ion-icon slot="start" name="trash-outline"></ion-icon> Follow Up
-            </ion-button> -->
-            <ion-button fill="outline" size="small" color="primary" (click)="onEditClicked(item)">
-              <ion-icon slot="start" name="create-outline"></ion-icon> Edit
+          <div class="card-details">
+            <div class="detail-row">
+              <span class="label">Address:</span>
+              <span class="value">{{ item.p.Address || '-' }}</span>
+            </div>
+            <div class="detail-row">
+              <span class="label">City:</span>
+              <span class="value">{{ item.p.CityName || '-' }}</span>
+            </div>
+          </div>
+
+          <div class="card-actions">
+            <ion-button fill="outline" size="small" (click)="onViewClicked(item)">
+              <ion-icon slot="start" name="eye-outline"></ion-icon>
+              View
             </ion-button>
-            <ion-button fill="outline" size="small" color="primary" (click)="onViewClicked(item)">
-              <ion-icon slot="start" name="eye-outline"></ion-icon> View
+            <ion-button fill="outline" size="small" (click)="onEditClicked(item)">
+              <ion-icon slot="start" name="create-outline"></ion-icon>
+              Edit
+            </ion-button>
+            <ion-button fill="outline" size="small" (click)="onDeleteClicked(item)">
+              <ion-icon slot="start" name="trash-outline"></ion-icon>
+              Delete
             </ion-button>
           </div>
         </ion-card-content>
       </ion-card>
     </ng-container>
 
-    <!-- No Data -->
-    <div *ngIf="FilteredCustomerEnquiryList.length === 0 && !loadingService.isLoaderActive()"
-      class="no-data-mobile-app">
-      <ion-icon name="alert-circle-outline" size="large" color="medium"></ion-icon>
-      <p>No Customer Enquiry records found.</p>
+    <div
+      *ngIf="FilteredCustomerEnquiryList.length === 0 && !loadingService.isLoaderActive()"
+      class="empty-state-message"
+    >
+      <ion-icon name="alert-circle-outline"></ion-icon>
+      <p>No customer enquiries found.</p>
     </div>
   </ion-list>
 
-  <!-- FAB Button -->
   <ion-fab vertical="bottom" horizontal="end" slot="fixed">
     <ion-fab-button color="primary" (click)="AddCustomerEnquiryForm()">
       <ion-icon name="add-outline"></ion-icon>
     </ion-fab-button>
   </ion-fab>
 
-  <!-- Modal -->
-  <ion-modal [isOpen]="ModalOpen" (didDismiss)="closeModal()" class="custom-modal-mobile-app">
+  <ion-modal
+    [isOpen]="ModalOpen"
+    (didDismiss)="closeModal()"
+    class="custom-modal-mobile-app"
+  >
     <ng-container *ngIf="SelectedCustomerEnquiry">
-      <ion-header class="modal-toolbar-mobile-app">
+      <ion-header>
         <ion-toolbar color="primary">
           <ion-title>Customer Details</ion-title>
           <ion-buttons slot="end">
@@ -64,44 +81,74 @@
           </ion-buttons>
         </ion-toolbar>
       </ion-header>
-      <!-- { label: 'Status', value: SelectedCustomerEnquiry.p.CustomerStatusName }, -->
 
-      <ion-content scroll-y="true" class="ion-padding modal-content-mobile-app">
-        <div class="info-row-of-model-mobile-app" *ngFor="let field of [
-          { label: 'Name', value: SelectedCustomerEnquiry.p.Name },
-          { label: 'Contact No', value: SelectedCustomerEnquiry.p.ContactNos },
-          { label: 'Address', value: SelectedCustomerEnquiry.p.Address },
-          { label: 'City', value: SelectedCustomerEnquiry.p.CityName },
-          { label: 'State', value: SelectedCustomerEnquiry.p.StateName },
-          { label: 'Country', value: SelectedCustomerEnquiry.p.CountryName },
-          { label: 'Pin Code', value: SelectedCustomerEnquiry.p.PinCode }
-        ]">
-          <strong class="label-mobile-app">{{ field.label }}:</strong>
-          <span class="value-mobile-app">{{ field.value ? field.value : '-' }}</span>
+      <ion-content scroll-y="true" class="ion-padding modal-content">
+        <div class="modal-section">
+          <h3>Customer Information</h3>
+          <div class="detail-row">
+            <span class="label">Name:</span>
+            <span class="value">{{ SelectedCustomerEnquiry.p.Name || '-' }}</span>
+          </div>
+          <div class="detail-row">
+            <span class="label">Contact No:</span>
+            <span class="value">{{ SelectedCustomerEnquiry.p.ContactNos || '-' }}</span>
+          </div>
+          <div class="detail-row">
+            <span class="label">Address:</span>
+            <span class="value">{{ SelectedCustomerEnquiry.p.Address || '-' }}</span>
+          </div>
+          <div class="detail-row">
+            <span class="label">City:</span>
+            <span class="value">{{ SelectedCustomerEnquiry.p.CityName || '-' }}</span>
+          </div>
+          <div class="detail-row">
+            <span class="label">State:</span>
+            <span class="value">{{ SelectedCustomerEnquiry.p.StateName || '-' }}</span>
+          </div>
+          <div class="detail-row">
+            <span class="label">Country:</span>
+            <span class="value">{{ SelectedCustomerEnquiry.p.CountryName || '-' }}</span>
+          </div>
+          <div class="detail-row">
+            <span class="label">Pin Code:</span>
+            <span class="value">{{ SelectedCustomerEnquiry.p.PinCode || '-' }}</span>
+          </div>
         </div>
-        <div class="info-row-of-model-mobile-app" *ngIf="(SelectedCustomerEnquiry.p.CustomerFollowUps).length > 1">
-          <ion-text class="ion-text-center">
-            <strong>Customer Follow Up Details</strong></ion-text>
-        </div>
-        <div *ngIf="(SelectedCustomerEnquiry.p.CustomerFollowUps).length > 1">
-          <div class="info-row-of-model-mobile-app" *ngFor="let field of [
-                          { label: 'Contact Mode', value: SelectedCustomerEnquiry.p.CustomerFollowUps[0].ContactModeName },
-                          { label: 'Customer Requirement', value: SelectedCustomerEnquiry.p.CustomerFollowUps[0].CustomerRequirement },
-                          { label: 'Customer Status', value: SelectedCustomerEnquiry.p.CustomerFollowUps[0].CustomerStatusName },
-                          { label: 'Lead Handle By', value: SelectedCustomerEnquiry.p.CustomerFollowUps[0].LeadHandleByName },
-                          { label: 'Lead Source', value: SelectedCustomerEnquiry.p.CustomerFollowUps[0].LeadSourceName },
-                          { label: 'Remark', value: SelectedCustomerEnquiry.p.CustomerFollowUps[0].Remark },
-                          { label: 'Reminder Date', value:formatDate(SelectedCustomerEnquiry.p.CustomerFollowUps[0].ReminderDate) },
-                          { label: 'Site Visit Date', value: formatDate(SelectedCustomerEnquiry.p.CustomerFollowUps[0].SiteVisitDate) },
-                          { label: 'Office Visit Date', value: formatDate(SelectedCustomerEnquiry.p.CustomerFollowUps[0].OfficeVisitDate) },
-                        ]">
-            <strong class="label-mobile-app">{{ field.label }}:</strong>
-            <span class="value-mobile-app">{{ field.value ? field.value : '-' }}</span>
+
+        <div
+          class="modal-section"
+          *ngIf="(SelectedCustomerEnquiry.p.CustomerFollowUps).length > 0"
+        >
+          <h3>Latest Follow-Up Details</h3>
+          <div
+            class="detail-row"
+            *ngFor="let field of [
+              { label: 'Status', value: SelectedCustomerEnquiry.p.CustomerFollowUps[0].CustomerStatusName },
+              { label: 'Source', value: SelectedCustomerEnquiry.p.CustomerFollowUps[0].LeadSourceName },
+              { label: 'Handled By', value: SelectedCustomerEnquiry.p.CustomerFollowUps[0].LeadHandleByName },
+              { label: 'Contact Mode', value: SelectedCustomerEnquiry.p.CustomerFollowUps[0].ContactModeName },
+              { label: 'Requirement', value: SelectedCustomerEnquiry.p.CustomerFollowUps[0].CustomerRequirement },
+              { label: 'Remark', value: SelectedCustomerEnquiry.p.CustomerFollowUps[0].Remark },
+              { label: 'Reminder Date', value: formatDate(SelectedCustomerEnquiry.p.CustomerFollowUps[0].ReminderDate) },
+              { label: 'Site Visit Date', value: formatDate(SelectedCustomerEnquiry.p.CustomerFollowUps[0].SiteVisitDate) },
+              { label: 'Office Visit Date', value: formatDate(SelectedCustomerEnquiry.p.CustomerFollowUps[0].OfficeVisitDate) }
+            ]"
+          >
+            <span class="label">{{ field.label }}:</span>
+            <span class="value">{{ field.value || '-' }}</span>
           </div>
         </div>
       </ion-content>
-      <ion-footer class="modal-footer-mobile-app">
-        <ion-button expand="block" color="primary" shape="round" (click)="closeModal()">Close</ion-button>
+      <ion-footer>
+        <ion-toolbar>
+          <ion-button
+            expand="block"
+            color="primary"
+            shape="round"
+            (click)="closeModal()"
+            >Close</ion-button
+          >
+        </ion-toolbar>
       </ion-footer>
     </ng-container>
   </ion-modal>

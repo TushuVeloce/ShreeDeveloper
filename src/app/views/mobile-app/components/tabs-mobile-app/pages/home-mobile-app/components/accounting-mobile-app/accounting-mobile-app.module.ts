@@ -9,6 +9,7 @@ import { AccountingMobileAppPageRoutingModule } from './accounting-mobile-app-ro
 import { AccountingMobileAppPage } from './accounting-mobile-app.page';
 import { AccountingViewMobileAppPageComponent } from './components/accounting-view-mobile-app-page/accounting-view-mobile-app-page.component';
 import { SharedModule } from "src/app/views/mobile-app/components/shared/shared.module";
+import { BillPayableReportMobileAppComponent } from './components/bill-payable-report-mobile-app/bill-payable-report-mobile-app.component';
 
 @NgModule({
   imports: [
@@ -18,6 +19,6 @@ import { SharedModule } from "src/app/views/mobile-app/components/shared/shared.
     AccountingMobileAppPageRoutingModule,
     SharedModule
 ],
-  declarations: [AccountingMobileAppPage,AccountingViewMobileAppPageComponent]
+  declarations: [AccountingMobileAppPage,AccountingViewMobileAppPageComponent,BillPayableReportMobileAppComponent]
 })
 export class AccountingMobileAppPageModule {}
