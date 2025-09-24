@@ -129,7 +129,7 @@ export class InvoiceDetailsComponent implements OnInit {
         this.isDieselPaid = true
       }
 
-      if (this.Entity.p.ExpenseType == this.MachinaryExpenseRef || this.Entity.p.ExpenseType == this.LabourExpenseRef) {
+      if (this.Entity.p.ExpenseType.includes(this.MachinaryExpenseRef) || this.Entity.p.ExpenseType.includes(this.LabourExpenseRef)) {
         this.getVendorServiceListByVendorRef(this.Entity.p.RecipientRef);
       }
       this.getTotalWorkedHours();
@@ -257,7 +257,7 @@ export class InvoiceDetailsComponent implements OnInit {
       return;
     }
 
-    if (this.Entity.p.ExpenseType != ExpenseTypes.OtherExpense) {
+    if (!this.Entity.p.ExpenseType.includes(this.OtherExpenseRef)) {
       return;
     }
 

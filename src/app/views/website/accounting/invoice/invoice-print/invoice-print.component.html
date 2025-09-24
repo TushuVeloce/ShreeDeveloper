@@ -87,10 +87,10 @@
         </table>
       </div>
 
-      <div *ngIf="Entity.p.ExpenseType != StockExpenseRef">
+      <div *ngIf="!Entity.p.ExpenseType.includes(StockExpenseRef)">
         <!-- Table Header -->
         <table style="width: 100%; border-collapse: collapse; text-align: center;">
-          <thead *ngIf="Entity.p.ExpenseType != LabourExpenseRef">
+          <thead *ngIf="!Entity.p.ExpenseType.includes(LabourExpenseRef)">
             <tr style="background-color: maroon; color: white;">
               <th style="padding: 8px; border: none;">Sr.No</th>
               <th style="padding: 8px; border: none;">Details</th>
@@ -101,7 +101,7 @@
               <th style="padding: 8px; border: none;">AMOUNT</th>
             </tr>
           </thead>
-          <thead *ngIf="Entity.p.ExpenseType == LabourExpenseRef">
+          <thead *ngIf="Entity.p.ExpenseType.includes(LabourExpenseRef)">
             <tr style="background-color: maroon; color: white;">
               <th style="padding: 8px; border: none;">Sr.No</th>
               <th style="padding: 8px; border: none;">Labour Type</th>
@@ -112,7 +112,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngIf="Entity.p.ExpenseType != LabourExpenseRef">
+            <tr *ngIf="!Entity.p.ExpenseType.includes(LabourExpenseRef)">
               <td style="padding: 8px; border: none;">1.</td>
               <td style="padding: 8px; border: none;">{{Entity.p.Description}}</td>
               <td style="padding: 8px; border: none;">
@@ -135,7 +135,7 @@
               <td style="padding: 8px; border: none;"> {{ Entity.p.DieselRate | currency : "INR" }}</td>
               <td style="padding: 8px; border: none;"> {{ Entity.p.DieselAmount | currency : "INR" }}</td>
             </tr>
-            <ng-container *ngIf="Entity.p.ExpenseType == LabourExpenseRef">
+            <ng-container *ngIf="Entity.p.ExpenseType.includes(LabourExpenseRef)">
               <tr *ngFor="let time of Entity.p.LabourExpenseDetailsArray; let i = index">
                 <td style="padding: 8px; border: none;">{{ i + 1 }}</td>
                 <td style="padding: 8px; border: none;">{{ time.LabourTypeName }}</td>
@@ -150,11 +150,11 @@
             <!-- Total -->
             <tr>
 
-              <td colspan="5" *ngIf="Entity.p.ExpenseType != LabourExpenseRef"
+              <td colspan="5" *ngIf="!Entity.p.ExpenseType.includes(LabourExpenseRef)"
                 style="padding: 8px; border: none; text-align: center; font-weight: bold; background-color: #fef4d4;">
                 <strong>TOTAL</strong>
               </td>
-              <td colspan="5" *ngIf="Entity.p.ExpenseType == LabourExpenseRef"
+              <td colspan="5" *ngIf="Entity.p.ExpenseType.includes(LabourExpenseRef)"
                 style="padding: 8px; border: none; text-align: center; font-weight: bold; background-color: #fef4d4;">
                 <strong>TOTAL</strong>
               </td>
@@ -174,7 +174,7 @@
         </table>
       </div>
 
-      <table *ngIf="Entity.p.ExpenseType == StockExpenseRef"
+      <table *ngIf="Entity.p.ExpenseType.includes(StockExpenseRef)"
         style="width: 100%; border-collapse: collapse; text-align: center;">
         <thead>
           <tr style="background-color: maroon; color: white;">
@@ -184,7 +184,7 @@
           </tr>
         </thead>
         <tbody>
-          <ng-container *ngIf="Entity.p.ExpenseType == StockExpenseRef">
+          <ng-container *ngIf="Entity.p.ExpenseType.includes(StockExpenseRef)">
             <tr *ngFor="let material of Entity.p.MaterialInvoiceDetailsArray; let i = index">
               <td Class="tbldata">{{ i + 1 }}</td>
               <td style="padding: 8px; border: none;">{{ material.MaterialName }}</td>
@@ -198,7 +198,7 @@
           </ng-container>
           <!-- Total -->
           <tr>
-            <td colspan="7" *ngIf="Entity.p.ExpenseType == StockExpenseRef"
+            <td colspan="7" *ngIf="Entity.p.ExpenseType.includes(StockExpenseRef)"
               style="padding: 8px; border: none; text-align: center; font-weight: bold; background-color: #fef4d4;">
               <strong>TOTAL</strong>
             </td>

@@ -43,10 +43,8 @@ export class InvoiceProps {
   public readonly LedgerName: string = ''
   public SubLedgerRef: number = 0
   public readonly SubLedgerName: string = ''
-  public ExpenseType: number = 0
-  // public VendorRef: number = 0
-  // public readonly VendorName: string = ''
-  // public RecipientRef: number = 0
+  // public ExpenseType: number = 0
+  public ExpenseType: number[] = []
   public RecipientName: string = ''
   public VendorServiceRef: number = 0
   public readonly VendorServiceName: string = ''
@@ -135,10 +133,8 @@ export class Invoice implements IPersistable<Invoice> {
     if (this.p.Date == '') { vra.add('Date', 'Date cannot be blank.'); }
     if (this.p.SiteRef <= 0) { vra.add('SiteRef', 'Site Name cannot be blank.'); }
     if (this.p.LedgerRef <= 0) { vra.add('LedgerRef', 'Ledger cannot be blank.'); }
-    if (this.p.ExpenseType <= 0) { vra.add('ExpenseType', 'Expense Type cannot be blank.'); }
-    // if (this.p.Description == '') { vra.add('Description', 'Description cannot be blank.'); }
-    if (this.p.Qty <= 0 && this.p.ExpenseType == this.p.OtherExpenseRef) { vra.add('Qty', 'Quantity cannot be blank.'); }
-    // if (this.p.Rate <= 0) { vra.add('Rate', 'Rate cannot be blank.'); }
+    if (this.p.ExpenseType.length <= 0) { vra.add('ExpenseType', 'Expense Type cannot be blank.'); }
+    // if (this.p.Qty <= 0 && this.p.ExpenseType == this.p.OtherExpenseRef) { vra.add('Qty', 'Quantity cannot be blank.'); }
     if (this.p.IsDieselPaid == 1) {
       if (this.p.DieselQty <= 0) { vra.add('DieselQty', ' Diesel Quantity cannot be blank.'); }
       if (this.p.DieselRate <= 0) { vra.add('DieselRate', ' Diesel Rate cannot be blank.'); }

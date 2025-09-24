@@ -210,8 +210,8 @@ export class InvoiceDetailsMobileAppComponent implements OnInit {
           this.selectedUnit = [{ p: { Ref: this.Entity.p.UnitRef, Name: this.Entity.p.UnitName } }];
           this.UnitName = this.Entity.p.UnitName;
 
-          this.ExpenseTypeName = this.ExpenseTypeList.find(item => item.Ref == this.Entity.p.ExpenseType)?.Name ?? '';
-          this.selectedExpenseType = [{ p: { Ref: this.Entity.p.ExpenseType, Name: this.ExpenseTypeName } }];
+          // this.ExpenseTypeName = this.ExpenseTypeList.find(item => item.Ref == this.Entity.p.ExpenseType)?.Name ?? '';
+          // this.selectedExpenseType = [{ p: { Ref: this.Entity.p.ExpenseType, Name: this.ExpenseTypeName } }];
 
           this.InvoiceModeOfPaymentName = this.ModeofPaymentList.find(item => item.Ref == this.Entity.p.InvoiceModeOfPayment)?.Name ?? '';
           this.selectedInvoiceModeOfPayment = [{ p: { Ref: this.Entity.p.InvoiceModeOfPayment, Name: this.InvoiceModeOfPaymentName } }];
@@ -228,7 +228,7 @@ export class InvoiceDetailsMobileAppComponent implements OnInit {
           if (this.Entity.p.IsDieselPaid == 1) {
             this.isDieselPaid = true
           }
-          if (this.Entity.p.ExpenseType == this.MachinaryExpenseRef || this.Entity.p.ExpenseType == this.LabourExpenseRef) {
+          if(this.Entity.p.ExpenseType.includes(this.MachinaryExpenseRef) || this.Entity.p.ExpenseType.includes(this.LabourExpenseRef)) {
             await this.getVendorServiceListByVendorRef(this.Entity.p.RecipientRef);
           }
           this.getTotalWorkedHours()
@@ -852,7 +852,7 @@ export class InvoiceDetailsMobileAppComponent implements OnInit {
     if (this.Entity.p.InvoiceRecipientType <= 0) {
       return;
     }
-    if (this.Entity.p.ExpenseType != ExpenseTypes.OtherExpense) {
+    if (!this.Entity.p.ExpenseType.includes(this.OtherExpenseRef)) {
       return;
     }
 

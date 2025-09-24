@@ -41,10 +41,10 @@
             <nz-option *ngFor="let site of SiteList" [nzValue]="site.p.Ref" [nzLabel]="site.p.Name"></nz-option>
           </nz-select>
         </div>
-        <div *ngIf="Entity.p.ExpenseType == StockExpenseRef" class="col-md-4" style="margin-top: 1rem">
+        <div *ngIf="Entity.p.ExpenseType.includes(StockExpenseRef)" class="col-md-4" style="margin-top: 1rem">
           <label>Vendor Name</label>
-          <input type="text" [(ngModel)]="Entity.p.RecipientName" name="RecipientName" class="form-control" id="RecipientName"
-            placeholder="Enter Vendor Name" disabled />
+          <input type="text" [(ngModel)]="Entity.p.RecipientName" name="RecipientName" class="form-control"
+            id="RecipientName" placeholder="Enter Vendor Name" disabled />
         </div>
         <div class="col-md-4" style="margin-top: 1rem">
           <label>Ledger</label>
@@ -67,7 +67,7 @@
         <div class="col-md-4" style="margin-top: 1rem;">
           <label>Expense Type</label>
           <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="ExpenseType"
-            name="ExpenseType" [nzSize]="'large'" [(ngModel)]="Entity.p.ExpenseType"
+            name="ExpenseType" [nzSize]="'large'" [(ngModel)]="Entity.p.ExpenseType" nzMode="multiple"
             (ngModelChange)="ClearInputsOnExpenseChange()">
             <nz-option *ngFor="let expense of ExpenseTypeList" [nzValue]="expense.Ref"
               [nzLabel]="expense.Name"></nz-option>
@@ -83,7 +83,7 @@
             <span class="validation-text" *ngIf="DescriptionCtrl.errors?.['required']">{{ RequiredFieldMsg }}</span>
           </div>
         </div>
-        <div class="col-md-4" style="margin-top: 1rem;" *ngIf="Entity.p.ExpenseType == OtherExpenseRef">
+        <div class="col-md-4" style="margin-top: 1rem;" *ngIf="Entity.p.ExpenseType.includes(OtherExpenseRef)">
           <label>Recipient Type</label>
           <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
             nzPlaceHolder="Select" id="InvoiceRecipientType" name="InvoiceRecipientType" [nzSize]="'large'"
@@ -92,7 +92,7 @@
             <nz-option *ngFor="let type of RecipientTypesList" [nzValue]="type.Ref" [nzLabel]="type.Name"></nz-option>
           </nz-select>
         </div>
-        <div class="col-md-4" style="margin-top: 1rem" *ngIf="Entity.p.ExpenseType == OtherExpenseRef ">
+        <div class="col-md-4" style="margin-top: 1rem" *ngIf="Entity.p.ExpenseType.includes(OtherExpenseRef)">
           <label>Recipient Name</label>
           <div class="d-flex align-items-center">
             <nz-select *ngIf="!RecipientNameInput && !RecipientNameReadOnly" class="nzSelect-light"
@@ -135,16 +135,17 @@
       </div>
       <div class="row">
         <div class="col-md-4" style="margin-top: 1rem"
-          *ngIf="Entity.p.ExpenseType == MachinaryExpenseRef || Entity.p.ExpenseType == LabourExpenseRef">
+          *ngIf="Entity.p.ExpenseType.includes(MachinaryExpenseRef) || Entity.p.ExpenseType.includes(LabourExpenseRef)">
           <label>Vendor</label>
           <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
-            nzPlaceHolder="Select" id="RecipientRef" name="RecipientRef" [nzSize]="'large'" [(ngModel)]="Entity.p.RecipientRef"
+            nzPlaceHolder="Select" id="RecipientRef" name="RecipientRef" [nzSize]="'large'"
+            [(ngModel)]="Entity.p.RecipientRef"
             (ngModelChange)="getVendorServiceListByVendorRef(Entity.p.RecipientRef)">
             <nz-option *ngFor="let Vendor of VendorList" [nzValue]="Vendor.p.Ref" [nzLabel]="Vendor.p.Name"></nz-option>
           </nz-select>
         </div>
         <div class="col-md-4" style="margin-top: 1rem"
-          *ngIf="Entity.p.ExpenseType == MachinaryExpenseRef || Entity.p.ExpenseType == LabourExpenseRef">
+          *ngIf="Entity.p.ExpenseType.includes(MachinaryExpenseRef) || Entity.p.ExpenseType.includes(LabourExpenseRef)">
           <label>Vendor Service</label>
           <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl"
             [disabled]="VendorServiceListByVendor.length == 0" nzShowSearch nzAllowClear nzPlaceHolder="Select"
@@ -153,7 +154,7 @@
               [nzLabel]="VendorServices.p.Name"></nz-option>
           </nz-select>
         </div>
-        <div class="col-md-4" style="margin-top: 1rem" *ngIf="Entity.p.ExpenseType == MachinaryExpenseRef">
+        <div class="col-md-4" style="margin-top: 1rem" *ngIf="Entity.p.ExpenseType.includes(MachinaryExpenseRef)">
           <label><b>Vehical No.</b></label>
           <input type="text" [(ngModel)]="Entity.p.VehicleNo" name="VehicleNo" class="form-control" id="VehicleNo"
             placeholder="Enter Vehicle No" #VehicleNoCtrl="ngModel" (blur)="VehicleNoCtrl.control.markAsTouched()" />
@@ -170,7 +171,7 @@
 
         <!-- time table start -->
         <div class="row" style="margin-top: 2rem; padding: 1rem"
-          *ngIf="Entity.p.ExpenseType == MachinaryExpenseRef && Entity.p.UnitRef == TimeUnitRef">
+          *ngIf="Entity.p.ExpenseType.includes(MachinaryExpenseRef) && Entity.p.UnitRef == TimeUnitRef">
           <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 col-12">
             <h5 style="padding-top: 3px; color: black">
               <b>Machinary Details</b>
@@ -182,7 +183,7 @@
           </div>
         </div>
         <div class="table-wrapper" class="tblcard_light" style="margin-top: 2rem"
-          *ngIf="Entity.p.MachineUsageDetailsArray.length > 0 && Entity.p.ExpenseType == MachinaryExpenseRef && Entity.p.UnitRef == TimeUnitRef">
+          *ngIf="Entity.p.MachineUsageDetailsArray.length > 0 && Entity.p.ExpenseType.includes(MachinaryExpenseRef) && Entity.p.UnitRef == TimeUnitRef">
           <div class="table-container" style="margin-top: 2rem">
             <div class="row">
               <div class="col-12">
@@ -223,7 +224,7 @@
           </div>
         </div>
         <div
-          *ngIf="Entity.p.MachineUsageDetailsArray.length === 0 && Entity.p.ExpenseType == MachinaryExpenseRef && Entity.p.UnitRef == TimeUnitRef"
+          *ngIf="Entity.p.MachineUsageDetailsArray.length === 0 && Entity.p.ExpenseType.includes(MachinaryExpenseRef) && Entity.p.UnitRef == TimeUnitRef"
           class="card-body_light">
           <div style="height: 200px; background-color: white" class="d-flex align-items-center justify-content-center">
             <span class="title_light"> Data Not Found</span>
@@ -232,7 +233,8 @@
         <!-- time table Ends -->
 
         <!-- Labour time table start -->
-        <div class="row" style="margin-top: 1rem; padding: 1rem" *ngIf="Entity.p.ExpenseType == LabourExpenseRef">
+        <div class="row" style="margin-top: 1rem; padding: 1rem"
+          *ngIf="Entity.p.ExpenseType.includes(LabourExpenseRef)">
           <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 col-12">
             <h5 style="padding-top: 3px; color: black">
               <b>Labour Time Details</b>
@@ -244,7 +246,7 @@
           </div>
         </div>
         <div class="table-wrapper" class="tblcard_light" style="margin-top: 1rem"
-          *ngIf="Entity.p.LabourExpenseDetailsArray.length > 0 && Entity.p.ExpenseType == LabourExpenseRef">
+          *ngIf="Entity.p.LabourExpenseDetailsArray.length > 0 && Entity.p.ExpenseType.includes(LabourExpenseRef)">
           <div class="table-container" style="margin-top: 1rem">
             <div class="row">
               <div class="col-12">
@@ -280,7 +282,7 @@
             </nz-table>
           </div>
         </div>
-        <div *ngIf="Entity.p.LabourExpenseDetailsArray.length === 0 && Entity.p.ExpenseType == LabourExpenseRef"
+        <div *ngIf="Entity.p.LabourExpenseDetailsArray.length === 0 && Entity.p.ExpenseType.includes(LabourExpenseRef)"
           class="card-body_light">
           <div style="height: 200px; background-color: white" class="d-flex align-items-center justify-content-center">
             <span class="title_light"> Data Not Found</span>
@@ -289,7 +291,7 @@
         <!-- Labour time table Ends -->
 
         <!-- Material time table start -->
-        <div class="row" style="margin-top: 1rem; padding: 1rem" *ngIf="Entity.p.ExpenseType == StockExpenseRef">
+        <div class="row" style="margin-top: 1rem; padding: 1rem" *ngIf="Entity.p.ExpenseType.includes(StockExpenseRef)">
           <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 col-12">
             <h5 style="padding-top: 3px; color: black">
               <b>Material Details</b>
@@ -297,7 +299,7 @@
           </div>
         </div>
         <div class="table-wrapper" class="tblcard_light" style="margin-top: 1rem"
-          *ngIf="Entity.p.MaterialInvoiceDetailsArray.length > 0 && Entity.p.ExpenseType == StockExpenseRef">
+          *ngIf="Entity.p.MaterialInvoiceDetailsArray.length > 0 && Entity.p.ExpenseType.includes(StockExpenseRef)">
           <div class="table-container" style="margin-top: 1rem">
             <div class="row">
               <div class="col-12">
@@ -329,7 +331,7 @@
             </nz-table>
           </div>
         </div>
-        <div *ngIf="Entity.p.MaterialInvoiceDetailsArray.length === 0 && Entity.p.ExpenseType == StockExpenseRef"
+        <div *ngIf="Entity.p.MaterialInvoiceDetailsArray.length === 0 && Entity.p.ExpenseType.includes(StockExpenseRef)"
           class="card-body_light">
           <div style="height: 200px; background-color: white" class="d-flex align-items-center justify-content-center">
             <span class="title_light"> Data Not Found</span>
@@ -338,7 +340,7 @@
         <!-- Labour time table Ends -->
 
         <div class="col-md-4" style="margin-top: 1rem"
-          *ngIf="Entity.p.ExpenseType != LabourExpenseRef && !(Entity.p.ExpenseType == MachinaryExpenseRef&& Entity.p.UnitRef == TimeUnitRef) ">
+          *ngIf="!Entity.p.ExpenseType.includes(LabourExpenseRef) && !(Entity.p.ExpenseType.includes(MachinaryExpenseRef)&& Entity.p.UnitRef == TimeUnitRef) ">
           <div *ngIf="!Entity.p.IsInvoiceAutoGenerated">
             <label>Quantity</label>
             <input type="text" appCommaFormat [(ngModel)]="Entity.p.Qty" name="Qty" class="form-control" id="Qty"
@@ -349,7 +351,7 @@
             </div>
           </div>
         </div>
-        <div class="col-md-4" style="margin-top: 1rem" *ngIf="Entity.p.ExpenseType != LabourExpenseRef">
+        <div class="col-md-4" style="margin-top: 1rem" *ngIf="!Entity.p.ExpenseType.includes(LabourExpenseRef)">
           <div *ngIf="!Entity.p.IsInvoiceAutoGenerated">
             <label>Rate</label>
             <input type="text" appCommaFormat [(ngModel)]="Entity.p.Rate" name="Rate" class="form-control" id="Rate"
@@ -360,7 +362,7 @@
             </div>
           </div>
         </div>
-        <div class="" style="margin-top: 2.6rem" *ngIf="Entity.p.ExpenseType == MachinaryExpenseRef">
+        <div class="" style="margin-top: 2.6rem" *ngIf="Entity.p.ExpenseType.includes(MachinaryExpenseRef)">
           <div class="d-flex align-items-center mb-2">
             <label for="IsDieselPaid"><b>Diesel Paid</b></label>
             <input type="checkbox" id="IsDieselPaid" [(ngModel)]="Entity.p.IsDieselPaid" name="IsDieselPaid"
@@ -434,7 +436,7 @@
           margin-top: 2rem;
         ">
         <div *ngIf="!Entity.p.IsInvoiceAutoGenerated">
-          <button type="submit" [disabled]="Entity.p.ExpenseType == StockExpenseRef" class="btn"
+          <button type="submit" [disabled]="Entity.p.ExpenseType.includes(StockExpenseRef)" class="btn"
             (click)="SaveInvoiceMaster()">
             Save
           </button>
