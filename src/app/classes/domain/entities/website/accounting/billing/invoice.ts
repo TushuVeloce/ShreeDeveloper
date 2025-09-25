@@ -133,6 +133,7 @@ export class Invoice implements IPersistable<Invoice> {
     if (this.p.Date == '') { vra.add('Date', 'Date cannot be blank.'); }
     if (this.p.SiteRef <= 0) { vra.add('SiteRef', 'Site Name cannot be blank.'); }
     if (this.p.LedgerRef <= 0) { vra.add('LedgerRef', 'Ledger cannot be blank.'); }
+    if (this.p.InvoiceNo <= 0) { vra.add('InvoiceNo', 'Invoice No cannot be blank.'); }
     if (this.p.ExpenseType.length <= 0) { vra.add('ExpenseType', 'Expense Type cannot be blank.'); }
     // if (this.p.Qty <= 0 && this.p.ExpenseType == this.p.OtherExpenseRef) { vra.add('Qty', 'Quantity cannot be blank.'); }
     if (this.p.IsDieselPaid == 1) {
