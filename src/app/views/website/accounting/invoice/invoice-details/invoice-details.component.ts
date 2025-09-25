@@ -24,6 +24,7 @@ import { VendorService } from 'src/app/classes/domain/entities/website/masters/v
 import { TimeDetailProps } from 'src/app/classes/domain/entities/website/site_management/time/time';
 import { LabourTimeProps } from 'src/app/classes/domain/entities/website/site_management/labourtime/labourtime';
 import { DateconversionService } from 'src/app/services/dateconversion.service';
+import { MultiOtherExpenseProps } from 'src/app/classes/domain/entities/website/site_management/multiotherexpense/multiotherexpense';
 
 @Component({
   selector: 'app-invoice-details',
@@ -57,6 +58,7 @@ export class InvoiceDetailsComponent implements OnInit {
 
   MachinaryExpenseRef: number = ExpenseTypes.MachinaryExpense
   LabourExpenseRef: number = ExpenseTypes.LabourExpense
+  MultiOtherExpenseRef: number = ExpenseTypes.MultiOtherExpense
   OtherExpenseRef: number = ExpenseTypes.OtherExpense
   StockExpenseRef: number = ExpenseTypes.StockExpense
   TimeUnitRef: number = UnitRefs.TimeUnitRef
@@ -68,6 +70,11 @@ export class InvoiceDetailsComponent implements OnInit {
   LabourTimeEntity: LabourTimeProps = LabourTimeProps.Blank();
   LabourEditingIndex: null | undefined | number
   isLabourTimeModalOpen: boolean = false;
+
+  MultiOtherExpenseEntity: MultiOtherExpenseProps = MultiOtherExpenseProps.Blank();
+  MultiOtherEditingIndex: null | undefined | number
+  isMultiOtherExpenseModalOpen: boolean = false;
+
   Bill = ModeOfPayments.Bill
   TypeRecipient = RecipientTypes.Recipient
   TypeRecipientVendor = RecipientTypes.Vendor
@@ -83,6 +90,7 @@ export class InvoiceDetailsComponent implements OnInit {
   companyRef = this.companystatemanagement.SelectedCompanyRef;
   timeheaders: string[] = ['Sr.No.', 'Start Time ', 'End Time', 'Worked Hours', 'Action'];
   labourtimeheaders: string[] = ['Sr.No.', 'Labour Type', 'Days', 'Quantity ', 'Rate', 'Amount', 'Action'];
+  multiotherheaders: string[] = ['Sr.No.', 'Discription', 'Unit', 'Quantity ', 'Rate', 'Amount', 'Action'];
   materialheaders: string[] = ['Sr.No.', 'Material', 'Unit', 'Order Quantity', 'Rate', 'Discount Rate', 'GST', 'Delivery Charges', 'Total Amount'];
   RequiredFieldMsg: string = ValidationMessages.RequiredFieldMsg
 
