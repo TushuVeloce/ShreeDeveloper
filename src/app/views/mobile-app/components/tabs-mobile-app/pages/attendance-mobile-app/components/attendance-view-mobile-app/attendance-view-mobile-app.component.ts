@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
 import { SegmentValue } from '@ionic/angular';
 import {
   AttendanceLocationType,
@@ -17,12 +16,9 @@ import { PayloadPacketFacade } from 'src/app/classes/infrastructure/payloadpacke
 import { CurrentDateTimeRequest } from 'src/app/classes/infrastructure/request_response/currentdatetimerequest';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { BottomsheetMobileAppService } from 'src/app/services/bottomsheet-mobile-app.service';
-import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
 import { DateconversionService } from 'src/app/services/dateconversion.service';
 import { DTU } from 'src/app/services/dtu.service';
 import { ServerCommunicatorService } from 'src/app/services/server-communicator.service';
-import { Utils } from 'src/app/services/utils.service';
-import { AlertService } from 'src/app/views/mobile-app/components/core/alert.service';
 import { HapticService } from 'src/app/views/mobile-app/components/core/haptic.service';
 import { LoadingService } from 'src/app/views/mobile-app/components/core/loading.service';
 import { ToastService } from 'src/app/views/mobile-app/components/core/toast.service';
@@ -38,7 +34,6 @@ import {
   debounceTime,
   distinctUntilChanged,
 } from 'rxjs';
-import { IonSearchbar } from '@ionic/angular';
 
 @Component({
   selector: 'app-attendance-view-mobile-app',
@@ -156,7 +151,7 @@ export class AttendanceViewMobileAppComponent implements OnInit {
           routerPath: '/mobile-app/tabs/attendance/all-attendance',
         }
       );
-    } 
+    }
     // else {
     //   // Admin specific grid items
     //   this.gridItems.push(
@@ -276,62 +271,69 @@ export class AttendanceViewMobileAppComponent implements OnInit {
     );
   };
 
-  getCheckInData = async () => {
-    try {
-      if (this.employeeRef == 0) {
-        this.attendanceStatus = 'disabled';
-        return;
-      }
-      this.attendanceLog = AttendanceLog.CreateNewInstance();
-      this.checkInTime = '';
-      this.checkOutTime = '';
-      const strCurrentDateTime =
-        await CurrentDateTimeRequest.GetCurrentDateTime();
-      const tranDate1 = strCurrentDateTime.substring(0, 10);
-      const tranDate = this.dtu.ConvertStringDateToFullFormat(tranDate1);
-
-      const lst = await AttendanceLog.FetchEntireListByCompanyRef(
-        this.employeeRef,
-        this.companyRef,
-        tranDate,
-        async (errMsg) => {
-          this.toastService.present('Error ' + errMsg, 1000, 'danger');
-          await this.haptic.error();
-        }
-      );
-
-      console.log('lst :', lst);
-      if (!lst || lst.length === 0) {
-        this.attendanceStatus = 'notCheckedIn';
-        return;
-      }
-
-      const pendingCheckIn = lst.find((e) => !e.p.CheckOutTime);
-      const completedCheckIn = lst.find((e) => e.p.CheckOutTime);
-
-      if (pendingCheckIn) {
-        this.attendanceStatus = 'checkedIn';
-        this.attendanceLog = pendingCheckIn;
-      } else if (completedCheckIn) {
-        this.attendanceStatus = 'checkedOut';
-        this.attendanceLog = completedCheckIn;
-      }
-
-      this.checkInTime = this.attendanceLog.p.CheckInTime || '';
-      this.checkOutTime = this.attendanceLog.p.CheckOutTime || '';
-
-      if (this.attendanceLog.p.IsLeave) {
-        this.attendanceStatus = 'onLeave';
-      }
-    } catch (error) {
-      this.toastService.present(
-        'Unexpected error while fetching attendance.',
-        1000,
-        'danger'
-      );
-      await this.haptic.error();
+getCheckInData = async () => {
+  try {
+    // If employeeRef is not set, disable attendance and return.
+    if (this.employeeRef === 0) {
+      this.attendanceStatus = 'disabled';
+      return;
     }
-  };
+
+    this.attendanceLog = AttendanceLog.CreateNewInstance();
+    this.checkInTime = '';
+    this.checkOutTime = '';
+
+    const strCurrentDateTime = await CurrentDateTimeRequest.GetCurrentDateTime();
+    const tranDate = this.dtu.ConvertStringDateToFullFormat(strCurrentDateTime.substring(0, 10));
+
+    const lst = await AttendanceLog.FetchEntireListByCompanyRef(
+      this.employeeRef,
+      this.companyRef,
+      tranDate,
+      async (errMsg) => {
+        this.toastService.present('Error ' + errMsg, 1000, 'danger');
+        await this.haptic.error();
+      }
+    );
+
+    // Guard clause for empty list
+    if (!lst || lst.length === 0) {
+      this.attendanceStatus = 'notCheckedIn';
+      return;
+    }
+
+    const attendanceData = lst[0].p;
+
+    // First, check for 'onLeave' status as a priority.
+    if (attendanceData.IsLeave === 1) {
+      this.attendanceStatus = 'onLeave';
+      return;
+    }
+
+    // A more reliable way to determine status based on CheckInTime and CheckOutTime
+    if (attendanceData.CheckInTime && attendanceData.CheckOutTime) {
+      // Completed check-in/check-out cycle
+      this.attendanceStatus = 'checkedOut';
+      this.checkInTime = attendanceData.CheckInTime;
+      this.checkOutTime = attendanceData.CheckOutTime;
+    } else if (attendanceData.CheckInTime && !attendanceData.CheckOutTime) {
+      // User has checked in but not checked out yet
+      this.attendanceStatus = 'checkedIn';
+      this.checkInTime = attendanceData.CheckInTime;
+    } else {
+      // No check-in has been performed
+      this.attendanceStatus = 'notCheckedIn';
+    }
+    
+  } catch (error) {
+    this.toastService.present(
+      'Unexpected error while fetching attendance.',
+      1000,
+      'danger'
+    );
+    await this.haptic.error();
+  }
+};
 
   //  getCheckInData = async () => {
   //   try {

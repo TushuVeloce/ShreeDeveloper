@@ -39,6 +39,7 @@ export class AttendanceLogProps {
   public HandleBy: number = 0;
   public CreatedBy: number = 0;
   public UpdatedBy: number = 0;
+  public IsCheckInDone : number = 0;
   public readonly EmployeeName: string = '';
   public readonly SiteName: string = '';
   public readonly CompanyName: string = '';
@@ -168,7 +169,7 @@ export class AttendanceLog implements IPersistable<AttendanceLog> {
 
   public static async FetchInstance(ref: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let req = new AttendanceLogFetchRequest();
-    req.CompanyRefs.push(ref);
+    req.CompanyRef=ref;
 
     let tdResponse = await AttendanceLog.FetchTransportData(req, errorHandler) as TransportData;
     return AttendanceLog.SingleInstanceFromTransportData(tdResponse);
@@ -187,8 +188,8 @@ export class AttendanceLog implements IPersistable<AttendanceLog> {
 
   public static async FetchEntireListByCompanyRef(employeeRef: number, CompanyRef: number, TransDateTime: string, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let req = new AttendanceLogFetchRequest();
-    req.CompanyRefs.push(CompanyRef);
-    req.EmployeeRefs.push(employeeRef);
+    req.CompanyRef = CompanyRef;
+    req.EmployeeRef = employeeRef;
     req.TransDateTime = TransDateTime;
     let tdResponse = await AttendanceLog.FetchTransportData(req, errorHandler) as TransportData;
     return AttendanceLog.ListFromTransportData(tdResponse);
