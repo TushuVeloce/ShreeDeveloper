@@ -10,10 +10,10 @@ import { Utils } from "src/app/services/utils.service";
 import { isNullOrUndefined } from "src/tools";
 import { UIUtils } from "src/app/services/uiutils.service";
 import { RequestTypes } from "src/app/classes/infrastructure/enums";
-import { MultiOtherExpenseFetchRequest } from "./multiotherexpensefetchrequest";
+import { MultipleExpenseFetchRequest } from "./multipleexpensefetchrequest";
 
 
-export class MultiOtherExpenseProps {
+export class MultipleExpenseProps {
   public readonly Db_Table_Name = "LabourExpenseDetails";
   public CreatedBy: number = 0;
   public CreatedByName: string = '';
@@ -36,14 +36,14 @@ export class MultiOtherExpenseProps {
   }
 
   public static Blank() {
-    return new MultiOtherExpenseProps(true);
+    return new MultipleExpenseProps(true);
   }
 }
 
-export class MultiOtherExpense implements IPersistable<MultiOtherExpense> {
+export class MultipleExpense implements IPersistable<MultipleExpense> {
   public static readonly Db_Table_Name: string = 'LabourExpenseDetails';
 
-  public constructor(public readonly p: MultiOtherExpenseProps, public readonly AllowEdit: boolean) {
+  public constructor(public readonly p: MultipleExpenseProps, public readonly AllowEdit: boolean) {
 
   }
 
@@ -56,17 +56,17 @@ export class MultiOtherExpense implements IPersistable<MultiOtherExpense> {
     }
   }
 
-  public GetEditableVersion(): MultiOtherExpense {
-    let newState: MultiOtherExpenseProps = Utils.GetInstance().DeepCopy(this.p);
-    return MultiOtherExpense.CreateInstance(newState, true);
+  public GetEditableVersion(): MultipleExpense {
+    let newState: MultipleExpenseProps = Utils.GetInstance().DeepCopy(this.p);
+    return MultipleExpense.CreateInstance(newState, true);
   }
 
   public static CreateNewInstance() {
-    return new MultiOtherExpense(MultiOtherExpenseProps.Blank(), true);
+    return new MultipleExpense(MultipleExpenseProps.Blank(), true);
   }
 
   public static CreateInstance(data: any, allowEdit: boolean) {
-    return new MultiOtherExpense(data as MultiOtherExpenseProps, allowEdit);
+    return new MultipleExpense(data as MultipleExpenseProps, allowEdit);
   }
 
   public CheckSaveValidity(_td: TransportData, vra: ValidationResultAccumulator): void {
@@ -74,28 +74,28 @@ export class MultiOtherExpense implements IPersistable<MultiOtherExpense> {
   }
 
   public MergeIntoTransportData(td: TransportData) {
-    DataContainerService.GetInstance().MergeIntoContainer(td.MainData, MultiOtherExpense.Db_Table_Name, this.p);
+    DataContainerService.GetInstance().MergeIntoContainer(td.MainData, MultipleExpense.Db_Table_Name, this.p);
   }
 
-  private static m_currentInstance: MultiOtherExpense = MultiOtherExpense.CreateNewInstance();
+  private static m_currentInstance: MultipleExpense = MultipleExpense.CreateNewInstance();
 
   public static GetCurrentInstance() {
-    return MultiOtherExpense.m_currentInstance;
+    return MultipleExpense.m_currentInstance;
   }
 
-  public static SetCurrentInstance(value: MultiOtherExpense) {
-    MultiOtherExpense.m_currentInstance = value;
+  public static SetCurrentInstance(value: MultipleExpense) {
+    MultipleExpense.m_currentInstance = value;
   }
 
 
   // ********************************************
   public static cacheDataChangeLevel: number = -1;
 
-  public static SingleInstanceFromTransportData(td: TransportData): MultiOtherExpense {
+  public static SingleInstanceFromTransportData(td: TransportData): MultipleExpense {
     let dcs = DataContainerService.GetInstance();
-    if (dcs.CollectionExists(td.MainData, MultiOtherExpense.Db_Table_Name)) {
-      for (let data of dcs.GetCollection(td.MainData, MultiOtherExpense.Db_Table_Name)!.Entries) {
-        return MultiOtherExpense.CreateInstance(data, false);
+    if (dcs.CollectionExists(td.MainData, MultipleExpense.Db_Table_Name)) {
+      for (let data of dcs.GetCollection(td.MainData, MultipleExpense.Db_Table_Name)!.Entries) {
+        return MultipleExpense.CreateInstance(data, false);
       }
     }
 
@@ -104,13 +104,13 @@ export class MultiOtherExpense implements IPersistable<MultiOtherExpense> {
 
   public static ListFromDataContainer(cont: DataContainer,
     filterPredicate: (arg0: any) => boolean = null as any,
-    sortPropertyName: string = ""): MultiOtherExpense[] {
-    let result: MultiOtherExpense[] = [];
+    sortPropertyName: string = ""): MultipleExpense[] {
+    let result: MultipleExpense[] = [];
 
     let dcs = DataContainerService.GetInstance();
 
-    if (dcs.CollectionExists(cont, MultiOtherExpense.Db_Table_Name)) {
-      let coll = dcs.GetCollection(cont, MultiOtherExpense.Db_Table_Name)!;
+    if (dcs.CollectionExists(cont, MultipleExpense.Db_Table_Name)) {
+      let coll = dcs.GetCollection(cont, MultipleExpense.Db_Table_Name)!;
       let entries = coll.Entries;
 
       if (!isNullOrUndefined(filterPredicate)) entries = entries.filter(filterPredicate);
@@ -120,18 +120,18 @@ export class MultiOtherExpense implements IPersistable<MultiOtherExpense> {
       }
 
       for (let data of entries) {
-        result.push(MultiOtherExpense.CreateInstance(data, false));
+        result.push(MultipleExpense.CreateInstance(data, false));
       }
     }
 
     return result;
   }
 
-  public static ListFromTransportData(td: TransportData): MultiOtherExpense[] {
-    return MultiOtherExpense.ListFromDataContainer(td.MainData);
+  public static ListFromTransportData(td: TransportData): MultipleExpense[] {
+    return MultipleExpense.ListFromDataContainer(td.MainData);
   }
 
-  public static async FetchTransportData(req: MultiOtherExpenseFetchRequest, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+  public static async FetchTransportData(req: MultipleExpenseFetchRequest, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let tdRequest = req.FormulateTransportData();
     let pktRequest = PayloadPacketFacade.GetInstance().CreateNewPayloadPacket2(tdRequest);
 
@@ -146,37 +146,37 @@ export class MultiOtherExpense implements IPersistable<MultiOtherExpense> {
   }
 
   public static async FetchInstance(ref: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-    let req = new MultiOtherExpenseFetchRequest();
-    req.MultiOtherExpenseRefs.push(ref);
+    let req = new MultipleExpenseFetchRequest();
+    req.MultipleExpenseRefs.push(ref);
 
-    let tdResponse = await MultiOtherExpense.FetchTransportData(req, errorHandler) as TransportData;
-    return MultiOtherExpense.SingleInstanceFromTransportData(tdResponse);
+    let tdResponse = await MultipleExpense.FetchTransportData(req, errorHandler) as TransportData;
+    return MultipleExpense.SingleInstanceFromTransportData(tdResponse);
   }
 
-  public static async FetchList(req: MultiOtherExpenseFetchRequest, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-    let tdResponse = await MultiOtherExpense.FetchTransportData(req, errorHandler) as TransportData;
-    return MultiOtherExpense.ListFromTransportData(tdResponse);
+  public static async FetchList(req: MultipleExpenseFetchRequest, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+    let tdResponse = await MultipleExpense.FetchTransportData(req, errorHandler) as TransportData;
+    return MultipleExpense.ListFromTransportData(tdResponse);
   }
 
   public static async FetchEntireList(errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-    let req = new MultiOtherExpenseFetchRequest();
-    let tdResponse = await MultiOtherExpense.FetchTransportData(req, errorHandler) as TransportData;
-    return MultiOtherExpense.ListFromTransportData(tdResponse);
+    let req = new MultipleExpenseFetchRequest();
+    let tdResponse = await MultipleExpense.FetchTransportData(req, errorHandler) as TransportData;
+    return MultipleExpense.ListFromTransportData(tdResponse);
   }
 
   public static async FetchEntireListByCompanyRefAndSiteRef(CompanyRef: number, SiteRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-    let req = new MultiOtherExpenseFetchRequest();
+    let req = new MultipleExpenseFetchRequest();
     req.CompanyRefs.push(CompanyRef)
     req.SiteManagementRefs.push(SiteRef)
-    let tdResponse = await MultiOtherExpense.FetchTransportData(req, errorHandler) as TransportData;
-    return MultiOtherExpense.ListFromTransportData(tdResponse);
+    let tdResponse = await MultipleExpense.FetchTransportData(req, errorHandler) as TransportData;
+    return MultipleExpense.ListFromTransportData(tdResponse);
   }
 
   public static async FetchEntireListBySiteRef(siteref: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-    let req = new MultiOtherExpenseFetchRequest();
+    let req = new MultipleExpenseFetchRequest();
     req.SiteManagementRefs.push(siteref)
-    let tdResponse = await MultiOtherExpense.FetchTransportData(req, errorHandler) as TransportData;
-    return MultiOtherExpense.ListFromTransportData(tdResponse);
+    let tdResponse = await MultipleExpense.FetchTransportData(req, errorHandler) as TransportData;
+    return MultipleExpense.ListFromTransportData(tdResponse);
   }
 
 

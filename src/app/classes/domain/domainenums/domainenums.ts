@@ -243,7 +243,7 @@ export enum ExpenseTypes {
   LabourExpense = 110,
   OtherExpense = 115,
   StockExpense = 120,
-  MultiOtherExpense = 125,
+  MultipleExpense = 125,
 }
 
 export enum LabourTypes {
@@ -1965,8 +1965,8 @@ export class DomainEnums {
         return 'Stock Expense';
       case ExpenseTypes.OtherExpense:
         return 'Other Expense';
-      case ExpenseTypes.MultiOtherExpense:
-        return 'Multi Other Expense';
+      case ExpenseTypes.MultipleExpense:
+        return 'Multiple Expense';
       default:
         return '';
     }
@@ -1994,8 +1994,8 @@ export class DomainEnums {
         Name: DomainEnums.ExpenseTypeName(ExpenseTypes.OtherExpense),
       },
       {
-        Ref: ExpenseTypes.MultiOtherExpense,
-        Name: DomainEnums.ExpenseTypeName(ExpenseTypes.MultiOtherExpense),
+        Ref: ExpenseTypes.MultipleExpense,
+        Name: DomainEnums.ExpenseTypeName(ExpenseTypes.MultipleExpense),
       }
     ];
     if (withAllOption) {

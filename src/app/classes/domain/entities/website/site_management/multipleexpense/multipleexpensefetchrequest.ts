@@ -4,17 +4,17 @@ import { Utils } from 'src/app/services/utils.service';
 import { RequestTypes } from 'src/app/classes/infrastructure/enums';
 import { DataCollection } from 'src/app/classes/infrastructure/datacollection';
 
-export class MultiOtherExpenseFetchRequest
+export class MultipleExpenseFetchRequest
 {
     // public static readonly FetchRequestType: string = "GAAProjectSpaceGroupFetchRequest";
-    public static readonly FetchRequestType: string = "MultiOtherExpenseDetailsFetchRequest";
+    public static readonly FetchRequestType: string = "MultipleExpenseDetailsFetchRequest";
     CompanyRefs: number[] = [];
     SiteManagementRefs: number[] = [];
-    MultiOtherExpenseRefs: number[] = [];
+    MultipleExpenseRefs: number[] = [];
 
     public MergeIntoTransportData = (td: TransportData) =>
     {
-        let coll = DataContainerService.GetInstance().GetOrCreateCollection(td.MainData, MultiOtherExpenseFetchRequest.FetchRequestType) as DataCollection;
+        let coll = DataContainerService.GetInstance().GetOrCreateCollection(td.MainData, MultipleExpenseFetchRequest.FetchRequestType) as DataCollection;
         coll.Entries.push(this);
     }
 

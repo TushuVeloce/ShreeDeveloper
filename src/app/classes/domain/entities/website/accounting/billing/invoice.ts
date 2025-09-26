@@ -16,8 +16,7 @@ import { TimeDetailProps } from "../../site_management/time/time";
 import { LabourTimeProps } from "../../site_management/labourtime/labourtime";
 import { ExpenseTypes, ModeOfPayments } from "src/app/classes/domain/domainenums/domainenums";
 import { OrderInvoiceMaterialDetailProps } from "./OrderInvoiceMaterial/orderinvoicematerial";
-import { MultiOtherExpense, MultiOtherExpenseProps } from "../../site_management/multiotherexpense/multiotherexpense";
-
+import { MultipleExpenseProps } from "../../site_management/multipleexpense/multipleexpense";
 
 export class InvoiceProps {
   public readonly Db_Table_Name = "Invoice";
@@ -72,7 +71,7 @@ export class InvoiceProps {
   public IsDeleted: number = 0
   public MachineUsageDetailsArray: TimeDetailProps[] = [];
   public LabourExpenseDetailsArray: LabourTimeProps[] = [];
-  public MultiOtherExpenseDetailsArray: MultiOtherExpenseProps[] = [];
+  public MultipleExpenseDetailsArray: MultipleExpenseProps[] = [];
   public MaterialInvoiceDetailsArray: OrderInvoiceMaterialDetailProps[] = [];
   public readonly AddressLine1: string = ''
   public readonly AddressLine2: string = ''

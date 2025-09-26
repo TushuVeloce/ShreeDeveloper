@@ -292,39 +292,39 @@
 
 
 
-        <!-- Multi Other table start -->
+        <!-- Multiple table start -->
         <div class="row" style="margin-top: 1rem; padding: 1rem"
-          *ngIf="Entity.p.ExpenseType.includes(MultiOtherExpenseRef)">
+          *ngIf="Entity.p.ExpenseType.includes(MultipleExpenseRef)">
           <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 col-12">
             <h5 style="padding-top: 3px; color: black">
-              <b>Multi Other Expense Details</b>
+              <b>Multiple Expense Details</b>
             </h5>
           </div>
           <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 col-12 btn-container"
             style="display: flex; justify-content: end" routerLinkActive="active">
-            <nz-button nz-button class="btn1" (click)="isMultiOtherExpenseModalOpen = true">Add Multi Other Expense
+            <nz-button nz-button class="btn1" (click)="isMultipleExpenseModalOpen = true">Add Multiple Expense
             </nz-button>
           </div>
         </div>
         <div class="table-wrapper" class="tblcard_light" style="margin-top: 1rem"
-          *ngIf="Entity.p.MultiOtherExpenseDetailsArray.length > 0 && Entity.p.ExpenseType.includes(MultiOtherExpenseRef)">
+          *ngIf="Entity.p.MultipleExpenseDetailsArray.length > 0 && Entity.p.ExpenseType.includes(MultipleExpenseRef)">
           <div class="table-container" style="margin-top: 1rem">
             <div class="row">
               <div class="col-12">
-                <h3 class="TableHeading"> Multi Other Details</h3>
+                <h3 class="TableHeading"> Multiple Details</h3>
               </div>
             </div>
             <nz-table #basicTable nzSize="small" class="no-hover-table bgtable_light" [nzScroll]="{ x: 'auto' }"
               nzFrontPagination="false" [nzShowSizeChanger]="false" [nzData]="Entity.p.LabourExpenseDetailsArray">
               <thead>
                 <tr>
-                  <th *ngFor="let header of multiotherheaders" class="tblsubheader">
+                  <th *ngFor="let header of Multipleheaders" class="tblsubheader">
                     {{ header }}
                   </th>
                 </tr>
               </thead>
               <tbody>
-                <tr *ngFor="   let other of Entity.p.MultiOtherExpenseDetailsArray;   let i = index ">
+                <tr *ngFor="   let other of Entity.p.MultipleExpenseDetailsArray;   let i = index ">
                   <td Class="tbldata">{{ i + 1 }}</td>
                   <td Class="tbldata">{{ other.Discription }}</td>
                   <td Class="tbldata">{{ other.UnitName}}</td>
@@ -349,7 +349,7 @@
             <span class="title_light"> Data Not Found</span>
           </div>
         </div>
-        <!-- Multi Other table Ends -->
+        <!-- Multiple table Ends -->
 
         <!-- Material time table start -->
         <div class="row" style="margin-top: 1rem; padding: 1rem" *ngIf="Entity.p.ExpenseType.includes(StockExpenseRef)">
@@ -572,6 +572,90 @@
   <div class="custom-modal">
     <div class="custom-modal-header">
       <h5>Add Labour Time</h5>
+      <button type="button" class="btn-close" (click)="CloseLabourTimeModal('labourtime')"></button>
+    </div>
+    <div class="custom-modal-body">
+      <form autocomplete="off">
+        <div class="row">
+          <div class="col-md-6" style="margin-top: 1rem;">
+            <label>Labour Type</label>
+            <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="LabourType"
+              name="LabourType" [nzSize]="'large'" [(ngModel)]="LabourTimeEntity.LabourType"
+              (ngModelChange)="ClearInputsOnLabourType()">
+              <nz-option *ngFor="let labour of LabourTypeList" [nzValue]="labour.Ref"
+                [nzLabel]="labour.Name"></nz-option>
+            </nz-select>
+          </div>
+          <div class="col-md-6" style="margin-top: 1rem">
+            <div>
+              <label for="Days">Number of Days</label>
+              <input type="number" name="Days" class="form-control" id="Days" [(ngModel)]="LabourTimeEntity.Days"
+                placeholder="Enter Days" #DaysCtrl="ngModel" (ngModelChange)="CalculateLabourAmount()" required
+                (blur)="DaysCtrl.control.markAsTouched()" (click)="selectAllValue($event)" />
+              <div *ngIf="(DaysCtrl.invalid && (DaysCtrl.touched || DaysCtrl.dirty))">
+                <span class="validation-text" *ngIf="DaysCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4" style="margin-top: 1rem">
+            <div>
+              <label for="LabourQty">Labour Quantity</label>
+              <input type="text" appCommaFormat name="LabourQty" class="form-control" id="LabourQty"
+                [(ngModel)]="LabourTimeEntity.LabourQty" (ngModelChange)="calculateWorkedHours()"
+                placeholder="Enter Quantity" #LabourQtyCtrl="ngModel" (ngModelChange)="CalculateLabourAmount()" required
+                (blur)="LabourQtyCtrl.control.markAsTouched()" (click)="selectAllValue($event)" />
+              <div *ngIf="(LabourQtyCtrl.invalid && (LabourQtyCtrl.touched || LabourQtyCtrl.dirty))">
+                <span class="validation-text" *ngIf="LabourQtyCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4" style="margin-top: 1rem">
+            <div>
+              <label for="LabourRate">Labour Day Rate</label>
+              <input type="text" appCommaFormat name="LabourRate" class="form-control" id="LabourRate"
+                [(ngModel)]="LabourTimeEntity.LabourRate" (ngModelChange)="calculateWorkedHours()"
+                placeholder="Enter Rate" #LabourRateCtrl="ngModel" (ngModelChange)="CalculateLabourAmount()" required
+                (blur)="LabourRateCtrl.control.markAsTouched()" (click)="selectAllValue($event)" />
+              <div *ngIf="(LabourRateCtrl.invalid && (LabourRateCtrl.touched || LabourRateCtrl.dirty))">
+                <span class="validation-text" *ngIf="LabourRateCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4" style="margin-top: 1rem">
+            <div>
+              <label for="LabourAmount">Labour Amount</label>
+              <input type="text" appCommaFormat name="LabourAmount" class="form-control" id="LabourAmount"
+                [(ngModel)]="LabourTimeEntity.LabourAmount" placeholder="Amount" disabled />
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="custom-modal-footer">
+      <div style="
+          justify-content: center;
+          display: flex;
+          gap: 2rem;
+          margin-top: 2rem;
+        ">
+        <div>
+          <button type="submit" class="btn" (click)="SaveLabourTime()" [disabled]="isSaveDisabled">Save</button>
+        </div>
+        <div>
+          <nz-button nz-button class="btn1" (click)="CloseLabourTimeModal('labourtime')">
+            Close
+          </nz-button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div *ngIf="isMultipleExpenseModalOpen" class="custom-modal-overlay">
+  <div class="custom-modal">
+    <div class="custom-modal-header">
+      <h5>Add Multiple Expense</h5>
       <button type="button" class="btn-close" (click)="CloseLabourTimeModal('labourtime')"></button>
     </div>
     <div class="custom-modal-body">

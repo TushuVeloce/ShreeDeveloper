@@ -24,7 +24,7 @@ import { VendorService } from 'src/app/classes/domain/entities/website/masters/v
 import { TimeDetailProps } from 'src/app/classes/domain/entities/website/site_management/time/time';
 import { LabourTimeProps } from 'src/app/classes/domain/entities/website/site_management/labourtime/labourtime';
 import { DateconversionService } from 'src/app/services/dateconversion.service';
-import { MultiOtherExpenseProps } from 'src/app/classes/domain/entities/website/site_management/multiotherexpense/multiotherexpense';
+import { MultipleExpenseProps } from 'src/app/classes/domain/entities/website/site_management/multipleexpense/multipleexpense';
 
 @Component({
   selector: 'app-invoice-details',
@@ -58,7 +58,7 @@ export class InvoiceDetailsComponent implements OnInit {
 
   MachinaryExpenseRef: number = ExpenseTypes.MachinaryExpense
   LabourExpenseRef: number = ExpenseTypes.LabourExpense
-  MultiOtherExpenseRef: number = ExpenseTypes.MultiOtherExpense
+  MultipleExpenseRef: number = ExpenseTypes.MultipleExpense
   OtherExpenseRef: number = ExpenseTypes.OtherExpense
   StockExpenseRef: number = ExpenseTypes.StockExpense
   TimeUnitRef: number = UnitRefs.TimeUnitRef
@@ -71,9 +71,9 @@ export class InvoiceDetailsComponent implements OnInit {
   LabourEditingIndex: null | undefined | number
   isLabourTimeModalOpen: boolean = false;
 
-  MultiOtherExpenseEntity: MultiOtherExpenseProps = MultiOtherExpenseProps.Blank();
-  MultiOtherEditingIndex: null | undefined | number
-  isMultiOtherExpenseModalOpen: boolean = false;
+  MultipleExpenseEntity: MultipleExpenseProps = MultipleExpenseProps.Blank();
+  MultipleEditingIndex: null | undefined | number
+  isMultipleExpenseModalOpen: boolean = false;
 
   Bill = ModeOfPayments.Bill
   TypeRecipient = RecipientTypes.Recipient
@@ -90,7 +90,7 @@ export class InvoiceDetailsComponent implements OnInit {
   companyRef = this.companystatemanagement.SelectedCompanyRef;
   timeheaders: string[] = ['Sr.No.', 'Start Time ', 'End Time', 'Worked Hours', 'Action'];
   labourtimeheaders: string[] = ['Sr.No.', 'Labour Type', 'Days', 'Quantity ', 'Rate', 'Amount', 'Action'];
-  multiotherheaders: string[] = ['Sr.No.', 'Discription', 'Unit', 'Quantity ', 'Rate', 'Amount', 'Action'];
+  Multipleheaders: string[] = ['Sr.No.', 'Discription', 'Unit', 'Quantity ', 'Rate', 'Amount', 'Action'];
   materialheaders: string[] = ['Sr.No.', 'Material', 'Unit', 'Order Quantity', 'Rate', 'Discount Rate', 'GST', 'Delivery Charges', 'Total Amount'];
   RequiredFieldMsg: string = ValidationMessages.RequiredFieldMsg
 
@@ -164,37 +164,37 @@ export class InvoiceDetailsComponent implements OnInit {
     this.focusInput();
   }
 
-  focusInput = () => {
-    let txtName = document.getElementById('SiteRef')!;
-    txtName.focus();
-  }
+  // ========================================================= Start All API Calls Code =========================================================
+  getChalanNo = async () => {
+    let req = new InvoiceNoFetchRequest();
+    req.CompanyRef = this.companystatemanagement.getCurrentCompanyRef();
+    let td = req.FormulateTransportData();
+    let pkt = this.payloadPacketFacade.CreateNewPayloadPacket2(td);
+    let tr = await this.serverCommunicator.sendHttpRequest(pkt);
 
-  onRecipientTypeVendor = () => {
-    if (this.Entity.p.InvoiceRecipientType == this.TypeRecipientVendor) {
-      this.Entity.p.RecipientRef = this.Entity.p.RecipientRef;
+    if (!tr.Successful) {
+      await this.uiUtils.showErrorMessage('Error', tr.Message);
+      return;
     }
-  }
 
-  // Extracted from services date conversion //
-  formatDate = (date: string | Date): string => {
-    return this.DateconversionService.formatDate(date);
-  }
+    let tdResult = JSON.parse(tr.Tag) as TransportData;
+    let collections = tdResult?.MainData?.Collections;
 
-  convertToFullTime(timeStr: string): Date {
-    const [hours, minutes] = timeStr.split(':').map(Number);
-    const now = new Date();
-    return new Date(now.getFullYear(), now.getMonth(), now.getDate(), hours, minutes, 0);
-  }
-
-
-  convertIOS12To24HoursFormat = (value: Date | null) => {
-    if (value) {
-      const hours = value.getHours().toString().padStart(2, '0');
-      const minutes = value.getMinutes().toString().padStart(2, '0');
-      return `${hours}:${minutes}`;
-    } else {
-      return '';
+    if (Array.isArray(collections)) {
+      for (const item of collections) {
+        if (
+          item.Name === 'Invoice' &&
+          Array.isArray(item.Entries) &&
+          item.Entries.length > 0
+        ) {
+          const entry = item.Entries[0] as { NextInvoiceNo: number };
+          const NextInvoiceNo = entry.NextInvoiceNo;
+          this.Entity.p.InvoiceNo = NextInvoiceNo
+          return;
+        }
+      }
     }
+    await this.uiUtils.showErrorMessage('Error', 'Chalan number could not be retrieved.');
   };
 
   getVendorListByCompanyRef = async () => {
@@ -274,22 +274,6 @@ export class InvoiceDetailsComponent implements OnInit {
     this.RecipientList = lst;
   }
 
-  AddRecipientName = () => {
-    this.Entity.p.RecipientRef = 0
-    this.RecipientEntity.p.Name = ''
-    this.RecipientNameInput = true
-  }
-
-  cancelRecipientName = () => {
-    this.RecipientNameInput = false
-    this.RecipientEntity.p.Name = ''
-  }
-
-  onTypeChange = async () => {
-    this.Entity.p.RecipientRef = 0;
-    this.RecipientNameInput = false
-  }
-
   getLedgerListByCompanyRef = async () => {
     if (this.companyRef() <= 0) {
       await this.uiUtils.showErrorToster('Company not Selected');
@@ -309,11 +293,102 @@ export class InvoiceDetailsComponent implements OnInit {
     let lst = await SubLedger.FetchEntireListByLedgerRef(ledgerref, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.SubLedgerList = lst;
   }
+  // ========================================================= End All API Calls Code =========================================================
+
+
+  // ========================================================= Start Comman Code =========================================================
+  focusInput = () => {
+    let txtName = document.getElementById('SiteRef')!;
+    txtName.focus();
+  }
+
+  // for value 0 selected while click on Input //
+  selectAllValue = (event: MouseEvent): void => {
+    const input = event.target as HTMLInputElement;
+    input.select();
+  }
+
+  // Extracted from services date conversion //
+  formatDate = (date: string | Date): string => {
+    return this.DateconversionService.formatDate(date);
+  }
 
   OnLedgerChange = () => {
     this.Entity.p.SubLedgerRef = 0
   }
 
+  ClearInputsOnExpenseChange = () => {
+    this.Entity.p.MachineUsageDetailsArray = []
+    this.Entity.p.LabourExpenseDetailsArray = []
+    this.Entity.p.MultipleExpenseDetailsArray = []
+    this.Entity.p.InvoiceRecipientType = 0
+    this.Entity.p.RecipientRef = 0
+    this.RecipientNameInput = false
+    this.Entity.p.RecipientRef = 0
+    this.Entity.p.VendorServiceRef = 0
+    this.Entity.p.VehicleNo = ''
+    this.Entity.p.Qty = 0
+    this.Entity.p.Rate = 0
+    this.CalculateAmount()
+    this.DiselPaid(0)
+  }
+  // ========================================================= end Comman Code =========================================================
+
+
+  // ========================================================= Start Recipient Code =========================================================
+  onRecipientTypeVendor = () => {
+    if (this.Entity.p.InvoiceRecipientType == this.TypeRecipientVendor) {
+      this.Entity.p.RecipientRef = this.Entity.p.RecipientRef;
+    }
+  }
+
+  AddRecipientName = () => {
+    this.Entity.p.RecipientRef = 0
+    this.RecipientEntity.p.Name = ''
+    this.RecipientNameInput = true
+  }
+
+  cancelRecipientName = () => {
+    this.RecipientNameInput = false
+    this.RecipientEntity.p.Name = ''
+  }
+
+  onTypeChange = async () => {
+    this.Entity.p.RecipientRef = 0;
+    this.RecipientNameInput = false
+  }
+
+  SaveNewRecipientName = async () => {
+    if (this.RecipientEntity.p.Name == '') {
+      this.uiUtils.showErrorToster('Recipient Name can not be Blank');
+      return
+    }
+    this.RecipientEntity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef();
+    this.RecipientEntity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName();
+    if (this.RecipientEntity.p.CreatedBy == 0) {
+      this.RecipientEntity.p.CreatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
+      this.RecipientEntity.p.UpdatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
+    }
+    let entityToSave = this.RecipientEntity.GetEditableVersion();
+    let entitiesToSave = [entityToSave];
+    let tr = await this.utils.SavePersistableEntities(entitiesToSave);
+
+    if (!tr.Successful) {
+      this.isSaveDisabled = false;
+      this.uiUtils.showErrorMessage('Error', tr.Message);
+      return;
+    } else {
+      await this.uiUtils.showSuccessToster('Recipient Name saved successfully');
+      this.RecipientNameInput = false
+      this.RecipientEntity = Recipient.CreateNewInstance();
+      // await this.getRecipientListByCompanyRef()
+      await this.getRecipientListByRecipientTypeRef()
+    }
+  };
+  // ========================================================= End Recipient Code =========================================================
+
+
+  // ========================================================= Start Machine Code =========================================================
   DiselPaid = (DiselPaid: number) => {
     if (DiselPaid == 1) {
       this.isDieselPaid = true
@@ -335,54 +410,6 @@ export class InvoiceDetailsComponent implements OnInit {
     this.CalculateAmount()
   }
 
-  CalculateAmount = () => {
-    const TotalWorkedHours = this.getTotalWorkedHours()
-    const TotalLabourAmount = this.getTotalLabourAmount()
-    const Qty = Number(this.Entity.p.Qty)
-    const DieselAmount = Number(this.Entity.p.DieselAmount) || 0
-    // debugger
-    if (TotalWorkedHours > 0) {
-      const Rate = Number(this.Entity.p.Rate / 60);
-      this.Entity.p.InvoiceAmount = Math.round(((TotalWorkedHours * Rate) - DieselAmount) * 100) / 100;
-    } else if (TotalLabourAmount > 0) {
-      this.Entity.p.InvoiceAmount = Math.round((TotalLabourAmount) * 100) / 100;
-    } else {
-      this.Entity.p.InvoiceAmount = Math.round(((Qty * this.Entity.p.Rate) - DieselAmount) * 100) / 100;
-    }
-  }
-
-  getChalanNo = async () => {
-    let req = new InvoiceNoFetchRequest();
-    req.CompanyRef = this.companystatemanagement.getCurrentCompanyRef();
-    let td = req.FormulateTransportData();
-    let pkt = this.payloadPacketFacade.CreateNewPayloadPacket2(td);
-    let tr = await this.serverCommunicator.sendHttpRequest(pkt);
-
-    if (!tr.Successful) {
-      await this.uiUtils.showErrorMessage('Error', tr.Message);
-      return;
-    }
-
-    let tdResult = JSON.parse(tr.Tag) as TransportData;
-    let collections = tdResult?.MainData?.Collections;
-
-    if (Array.isArray(collections)) {
-      for (const item of collections) {
-        if (
-          item.Name === 'Invoice' &&
-          Array.isArray(item.Entries) &&
-          item.Entries.length > 0
-        ) {
-          const entry = item.Entries[0] as { NextInvoiceNo: number };
-          const NextInvoiceNo = entry.NextInvoiceNo;
-          this.Entity.p.InvoiceNo = NextInvoiceNo
-          return;
-        }
-      }
-    }
-    await this.uiUtils.showErrorMessage('Error', 'Chalan number could not be retrieved.');
-  };
-
   getTotalWorkedHours(): number {
     let total = this.Entity.p.MachineUsageDetailsArray.reduce((total: number, item: any) => {
       return total + Number(item.WorkedHours || 0);
@@ -398,12 +425,6 @@ export class InvoiceDetailsComponent implements OnInit {
     return `${hours}h ${formattedMinutes}m`;
   }
 
-  getTotalLabourAmount(): number {
-    return this.Entity.p.LabourExpenseDetailsArray.reduce((total: number, item: any) => {
-      return total + Number(item.LabourAmount || 0);
-    }, 0);
-  }
-
   convertTo12Hour = (time24: string): string => {
     const [hourStr, minute] = time24.split(":");
     let hour = parseInt(hourStr, 10);
@@ -415,19 +436,15 @@ export class InvoiceDetailsComponent implements OnInit {
     return `${hour}:${minute} ${ampm}`;
   }
 
-
-  convertFractionTimeToHM = (fractionTime: number) => {
-    const hours = Math.floor(fractionTime);
-    const fractionalMinutes = fractionTime - hours;
-
-    // Convert fractional part (base 100) to minutes (base 60)
-    const minutes = Math.round(fractionalMinutes * 100 * 60 / 100);
-
-    // Pad minutes with leading zero if needed
-    const paddedMinutes = String(minutes).padStart(2, '0');
-
-    return `${hours}h ${paddedMinutes}m`;
-  }
+  convertIOS12To24HoursFormat = (value: Date | null) => {
+    if (value) {
+      const hours = value.getHours().toString().padStart(2, '0');
+      const minutes = value.getMinutes().toString().padStart(2, '0');
+      return `${hours}:${minutes}`;
+    } else {
+      return '';
+    }
+  };
 
   calculateWorkedHours() {
     if (!this.StartTime) return;
@@ -502,6 +519,12 @@ export class InvoiceDetailsComponent implements OnInit {
     this.CalculateAmount();
   }
 
+  convertToFullTime(timeStr: string): Date {
+    const [hours, minutes] = timeStr.split(':').map(Number);
+    const now = new Date();
+    return new Date(now.getFullYear(), now.getMonth(), now.getDate(), hours, minutes, 0);
+  }
+
   EditTime(index: number) {
     this.isTimeModalOpen = true
     this.MachineTimeEntity = { ...this.Entity.p.MachineUsageDetailsArray[index] }
@@ -513,6 +536,10 @@ export class InvoiceDetailsComponent implements OnInit {
   RemoveTime(index: number) {
     this.Entity.p.MachineUsageDetailsArray.splice(index, 1); // Remove Time
     this.CalculateAmount()
+  }
+
+  ClearMachineTimeTable = () => {
+    this.Entity.p.MachineUsageDetailsArray = []
   }
 
   CloseTimeModal = async (type: string) => {
@@ -539,7 +566,10 @@ export class InvoiceDetailsComponent implements OnInit {
       }
     }
   };
+  // ========================================================= End Machine Code =========================================================
 
+
+  // ========================================================= Start Labour Code =========================================================
   async SaveLabourTime() {
     if (!this.LabourTimeEntity.Days) {
       await this.uiUtils.showErrorMessage('Error', 'Days is required!');
@@ -567,7 +597,6 @@ export class InvoiceDetailsComponent implements OnInit {
       this.LabourTimeEntity.InvoiceRef = this.Entity.p.Ref;
       this.Entity.p.LabourExpenseDetailsArray.push({ ...this.LabourTimeEntity });
       await this.uiUtils.showSuccessToster('Labour Time added successfully');
-      // this.resetTimeControls();
       this.isLabourTimeModalOpen = false;
     }
     this.isSaveDisabled = false;
@@ -594,25 +623,6 @@ export class InvoiceDetailsComponent implements OnInit {
     this.LabourTimeEntity = LabourTimeProps.Blank();
   };
 
-  ClearInputsOnExpenseChange = () => {
-    this.Entity.p.MachineUsageDetailsArray = []
-    this.Entity.p.LabourExpenseDetailsArray = []
-    this.Entity.p.InvoiceRecipientType = 0
-    this.Entity.p.RecipientRef = 0
-    this.RecipientNameInput = false
-    this.Entity.p.RecipientRef = 0
-    this.Entity.p.VendorServiceRef = 0
-    this.Entity.p.VehicleNo = ''
-    this.Entity.p.Qty = 0
-    this.Entity.p.Rate = 0
-    this.CalculateAmount()
-    this.DiselPaid(0)
-  }
-
-  ClearMachineTimeTable = () => {
-    this.Entity.p.MachineUsageDetailsArray = []
-  }
-
   ClearInputsOnLabourType = () => {
     this.LabourTimeEntity.LabourQty = 0
     this.LabourTimeEntity.LabourRate = 0
@@ -628,39 +638,30 @@ export class InvoiceDetailsComponent implements OnInit {
     this.LabourTimeEntity.LabourAmount = Math.round(Qty * Rate * 100) / 100;
   }
 
-  // for value 0 selected while click on Input //
-  selectAllValue = (event: MouseEvent): void => {
-    const input = event.target as HTMLInputElement;
-    input.select();
+  getTotalLabourAmount(): number {
+    return this.Entity.p.LabourExpenseDetailsArray.reduce((total: number, item: any) => {
+      return total + Number(item.LabourAmount || 0);
+    }, 0);
   }
+  // ========================================================= End Labour Code =========================================================
 
-  SaveNewRecipientName = async () => {
-    if (this.RecipientEntity.p.Name == '') {
-      this.uiUtils.showErrorToster('Recipient Name can not be Blank');
-      return
-    }
-    this.RecipientEntity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef();
-    this.RecipientEntity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName();
-    if (this.RecipientEntity.p.CreatedBy == 0) {
-      this.RecipientEntity.p.CreatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
-      this.RecipientEntity.p.UpdatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
-    }
-    let entityToSave = this.RecipientEntity.GetEditableVersion();
-    let entitiesToSave = [entityToSave];
-    let tr = await this.utils.SavePersistableEntities(entitiesToSave);
+  // ========================================================= Start Multiple Code =========================================================
 
-    if (!tr.Successful) {
-      this.isSaveDisabled = false;
-      this.uiUtils.showErrorMessage('Error', tr.Message);
-      return;
+  CalculateAmount = () => {
+    const TotalWorkedHours = this.getTotalWorkedHours()
+    const TotalLabourAmount = this.getTotalLabourAmount()
+    const Qty = Number(this.Entity.p.Qty)
+    const DieselAmount = Number(this.Entity.p.DieselAmount) || 0
+    // debugger
+    if (TotalWorkedHours > 0) {
+      const Rate = Number(this.Entity.p.Rate / 60);
+      this.Entity.p.InvoiceAmount = Math.round(((TotalWorkedHours * Rate) - DieselAmount) * 100) / 100;
+    } else if (TotalLabourAmount > 0) {
+      this.Entity.p.InvoiceAmount = Math.round((TotalLabourAmount) * 100) / 100;
     } else {
-      await this.uiUtils.showSuccessToster('Recipient Name saved successfully');
-      this.RecipientNameInput = false
-      this.RecipientEntity = Recipient.CreateNewInstance();
-      // await this.getRecipientListByCompanyRef()
-      await this.getRecipientListByRecipientTypeRef()
+      this.Entity.p.InvoiceAmount = Math.round(((Qty * this.Entity.p.Rate) - DieselAmount) * 100) / 100;
     }
-  };
+  }
 
   SaveInvoiceMaster = async () => {
     this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef();
