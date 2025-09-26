@@ -41,6 +41,7 @@ export class InvoiceDetailsComponent implements OnInit {
   RecipientNameInput: boolean = false
   SubLedgerList: SubLedger[] = [];
   UnitList: Unit[] = [];
+  UnitListwithoutHours: Unit[] = [];
   VendorList: Vendor[] = [];
   VendorServiceList: ServiceSuppliedByVendorProps[] = [];
   VendorServiceListByVendor: VendorService[] = [];
@@ -49,6 +50,10 @@ export class InvoiceDetailsComponent implements OnInit {
   ExpenseTypeList = DomainEnums.ExpenseTypeList();
   LabourTypeList = DomainEnums.LabourTypesList();
   isSaveDisabled: boolean = false;
+  isLabourSaveDisabled: boolean = false;
+  isMultiSaveDisabled: boolean = false;
+  isRecipientSaveDisabled: boolean = false;
+  isMachineSaveDisabled: boolean = false;
   DetailsFormTitle: 'New Bill' | 'Edit Bill' = 'New Bill';
   IsDropdownDisabled: boolean = false;
   InitialEntity: Invoice = null as any;
@@ -245,6 +250,7 @@ export class InvoiceDetailsComponent implements OnInit {
   getUnitList = async () => {
     let lst = await Unit.FetchEntireList(async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.UnitList = lst;
+    this.UnitListwithoutHours = lst.filter((data) => data.p.Ref != this.TimeUnitRef);
   }
 
   getSiteListByCompanyRef = async () => {
@@ -318,19 +324,32 @@ export class InvoiceDetailsComponent implements OnInit {
   }
 
   ClearInputsOnExpenseChange = () => {
-    this.Entity.p.MachineUsageDetailsArray = []
-    this.Entity.p.LabourExpenseDetailsArray = []
-    this.Entity.p.MultipleExpenseDetailsArray = []
-    this.Entity.p.InvoiceRecipientType = 0
-    this.Entity.p.RecipientRef = 0
-    this.RecipientNameInput = false
-    this.Entity.p.RecipientRef = 0
-    this.Entity.p.VendorServiceRef = 0
-    this.Entity.p.VehicleNo = ''
-    this.Entity.p.Qty = 0
-    this.Entity.p.Rate = 0
-    this.CalculateAmount()
-    this.DiselPaid(0)
+    if (this.Entity.p.ExpenseType.includes(this.OtherExpenseRef)) {
+      this.Entity.p.ExpenseType = [];
+      this.Entity.p.ExpenseType.push(this.OtherExpenseRef);
+      this.Entity.p.LabourExpenseDetailsArray = [];
+      this.Entity.p.MachineUsageDetailsArray = [];
+      this.Entity.p.MultipleExpenseDetailsArray = [];
+      this.Entity.p.Rate = 0;
+    } else {
+      this.Entity.p.InvoiceRecipientType = 0;
+      this.Entity.p.RecipientRef = 0;
+      this.RecipientNameInput = false;
+      this.Entity.p.RecipientRef = 0;
+      this.Entity.p.VendorServiceRef = 0;
+      this.Entity.p.VehicleNo = '';
+      this.Entity.p.Qty = 0;
+      if (!this.Entity.p.ExpenseType.includes(this.MachinaryExpenseRef)) {
+        this.Entity.p.Rate = 0;
+        this.Entity.p.UnitRef = 0;
+      }
+      this.DiselPaid(0);
+    }
+    if (this.Entity.p.ExpenseType.includes(this.MachinaryExpenseRef)) {
+      this.Entity.p.UnitRef = this.TimeUnitRef;
+    }
+    this.CalculateAmount();
+
   }
   // ========================================================= end Comman Code =========================================================
 
@@ -363,6 +382,7 @@ export class InvoiceDetailsComponent implements OnInit {
       this.uiUtils.showErrorToster('Recipient Name can not be Blank');
       return
     }
+    this.isRecipientSaveDisabled = true;
     this.RecipientEntity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef();
     this.RecipientEntity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName();
     if (this.RecipientEntity.p.CreatedBy == 0) {
@@ -374,11 +394,12 @@ export class InvoiceDetailsComponent implements OnInit {
     let tr = await this.utils.SavePersistableEntities(entitiesToSave);
 
     if (!tr.Successful) {
-      this.isSaveDisabled = false;
+      this.isRecipientSaveDisabled = false;
       this.uiUtils.showErrorMessage('Error', tr.Message);
       return;
     } else {
       await this.uiUtils.showSuccessToster('Recipient Name saved successfully');
+      this.isRecipientSaveDisabled = false;
       this.RecipientNameInput = false
       this.RecipientEntity = Recipient.CreateNewInstance();
       // await this.getRecipientListByCompanyRef()
@@ -497,7 +518,7 @@ export class InvoiceDetailsComponent implements OnInit {
       return;
     }
 
-    this.isSaveDisabled = true;
+    this.isMachineSaveDisabled = true;
 
     if (this.MachineEditingIndex !== null && this.MachineEditingIndex !== undefined && this.MachineEditingIndex >= 0) {
       this.Entity.p.MachineUsageDetailsArray[this.MachineEditingIndex] = { ...this.MachineTimeEntity };
@@ -509,7 +530,7 @@ export class InvoiceDetailsComponent implements OnInit {
       await this.uiUtils.showSuccessToster('Machinary Time added successfully');
       this.isTimeModalOpen = false;
     }
-    this.isSaveDisabled = false;
+    this.isMachineSaveDisabled = false;
 
     this.MachineTimeEntity = TimeDetailProps.Blank();
     this.MachineEditingIndex = null;
@@ -570,7 +591,7 @@ export class InvoiceDetailsComponent implements OnInit {
 
 
   // ========================================================= Start Labour Code =========================================================
-  async SaveLabourTime() {
+  SaveLabourExpense = async () => {
     if (!this.LabourTimeEntity.Days) {
       await this.uiUtils.showErrorMessage('Error', 'Days is required!');
       return;
@@ -584,7 +605,7 @@ export class InvoiceDetailsComponent implements OnInit {
       await this.uiUtils.showErrorMessage('Error', 'Labour Qty is required!');
       return;
     }
-    this.isSaveDisabled = true;
+    this.isLabourSaveDisabled = true;
     if (this.LabourTimeEntity.LabourType != 0) {
       const labourtype = this.LabourTypeList.find(item => item.Ref == this.LabourTimeEntity.LabourType)
       this.LabourTimeEntity.LabourTypeName = labourtype?.Name || ''
@@ -599,7 +620,7 @@ export class InvoiceDetailsComponent implements OnInit {
       await this.uiUtils.showSuccessToster('Labour Time added successfully');
       this.isLabourTimeModalOpen = false;
     }
-    this.isSaveDisabled = false;
+    this.isLabourSaveDisabled = false;
     this.LabourTimeEntity = LabourTimeProps.Blank();
     this.LabourFromTime = null
     this.LabourToTime = null
@@ -607,18 +628,18 @@ export class InvoiceDetailsComponent implements OnInit {
     this.CalculateAmount()
   }
 
-  EditLabourTime(index: number) {
+  EditLabourExpense(index: number) {
     this.isLabourTimeModalOpen = true
     this.LabourTimeEntity = { ...this.Entity.p.LabourExpenseDetailsArray[index] }
     this.LabourEditingIndex = index;
   }
 
-  RemoveLabourTime(index: number) {
+  RemoveLabourExpense(index: number) {
     this.Entity.p.LabourExpenseDetailsArray.splice(index, 1); // Remove Time
     this.CalculateAmount()
   }
 
-  CloseLabourTimeModal = async (type: string) => {
+  CloseLabourExpenseModal = async () => {
     this.isLabourTimeModalOpen = false;
     this.LabourTimeEntity = LabourTimeProps.Blank();
   };
@@ -647,33 +668,98 @@ export class InvoiceDetailsComponent implements OnInit {
 
   // ========================================================= Start Multiple Code =========================================================
 
+  CloseMultipleExpenseModal = async () => {
+    this.isMultipleExpenseModalOpen = false;
+    this.MultipleExpenseEntity = MultipleExpenseProps.Blank();
+  };
+
+
+  CalculateMultipleExpenseAmount = () => {
+    if (this.MultipleExpenseEntity.Quantity <= 0 || this.MultipleExpenseEntity.Rate <= 0) {
+      return;
+    }
+    this.MultipleExpenseEntity.Amount = this.MultipleExpenseEntity.Rate * this.MultipleExpenseEntity.Quantity;
+  }
+
+  getTotalMultipleExpenseAmount(): number {
+    return this.Entity.p.MultipleExpenseDetailsArray.reduce((total: number, item: any) => {
+      return total + Number(item.Amount || 0);
+    }, 0);
+  }
+
+  SaveMultipleExpense = async () => {
+    if (!this.MultipleExpenseEntity.Discription) {
+      await this.uiUtils.showErrorMessage('Error', 'Discription is required!');
+      return;
+    } else if (!this.MultipleExpenseEntity.Rate) {
+      await this.uiUtils.showErrorMessage('Error', 'Rate is required!');
+      return;
+    } else if (!this.MultipleExpenseEntity.Quantity) {
+      await this.uiUtils.showErrorMessage('Error', 'Quantity is required!');
+      return;
+    }
+    this.isMultiSaveDisabled = true;
+    if (this.MultipleExpenseEntity.UnitRef != 0) {
+      const UnitRecord = this.UnitListwithoutHours.find(item => item.p.Ref == this.MultipleExpenseEntity.UnitRef)
+      this.MultipleExpenseEntity.UnitName = UnitRecord?.p.Name || ''
+    }
+    if (this.MultipleEditingIndex !== null && this.MultipleEditingIndex !== undefined && this.MultipleEditingIndex >= 0) {
+      this.Entity.p.MultipleExpenseDetailsArray[this.MultipleEditingIndex] = { ...this.MultipleExpenseEntity };
+      await this.uiUtils.showSuccessToster('Multiple Expense updated successfully');
+      this.isMultipleExpenseModalOpen = false;
+    } else {
+      this.MultipleExpenseEntity.InvoiceRef = this.Entity.p.Ref;
+      this.Entity.p.MultipleExpenseDetailsArray.push({ ...this.MultipleExpenseEntity });
+      await this.uiUtils.showSuccessToster('Multiple Expense added successfully');
+      this.isMultipleExpenseModalOpen = false;
+    }
+    this.isMultiSaveDisabled = false;
+    this.MultipleExpenseEntity = MultipleExpenseProps.Blank();
+    this.MultipleEditingIndex = null;
+    this.CalculateAmount()
+  }
+
+  EditMultipleExpense(index: number) {
+    this.isMultipleExpenseModalOpen = true
+    this.MultipleExpenseEntity = { ...this.Entity.p.MultipleExpenseDetailsArray[index] }
+    this.MultipleEditingIndex = index;
+  }
+
+  RemoveMultipleExpense(index: number) {
+    this.Entity.p.MultipleExpenseDetailsArray.splice(index, 1); // Remove Time
+    this.CalculateAmount()
+  }
+
+  // ========================================================= End Multiple Code =========================================================
+
+
   CalculateAmount = () => {
     const TotalWorkedHours = this.getTotalWorkedHours()
     const TotalLabourAmount = this.getTotalLabourAmount()
+    const TotalMultiExpenseAmount = this.getTotalMultipleExpenseAmount()
     const Qty = Number(this.Entity.p.Qty)
     const DieselAmount = Number(this.Entity.p.DieselAmount) || 0
-    // debugger
-    if (TotalWorkedHours > 0) {
-      const Rate = Number(this.Entity.p.Rate / 60);
-      this.Entity.p.InvoiceAmount = Math.round(((TotalWorkedHours * Rate) - DieselAmount) * 100) / 100;
-    } else if (TotalLabourAmount > 0) {
-      this.Entity.p.InvoiceAmount = Math.round((TotalLabourAmount) * 100) / 100;
-    } else {
-      this.Entity.p.InvoiceAmount = Math.round(((Qty * this.Entity.p.Rate) - DieselAmount) * 100) / 100;
+
+    let Rate = 0;
+    if (Number(this.Entity.p.Rate / 60) > 0) {
+      Rate = Number(this.Entity.p.Rate / 60);
     }
+
+    this.Entity.p.InvoiceAmount = (Math.round(((TotalWorkedHours * Rate) - DieselAmount) * 100) / 100) + (Math.round((TotalLabourAmount) * 100) / 100) + (Math.round(((Qty * this.Entity.p.Rate) - DieselAmount) * 100) / 100) + (Math.round((TotalMultiExpenseAmount) * 100) / 100);
   }
 
   SaveInvoiceMaster = async () => {
+    if (this.Entity.p.InvoiceAmount < 0) {
+      await this.uiUtils.showErrorMessage('Error', 'Bill amount should be greater than zero.');
+      return;
+    }
     this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef();
     this.Entity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName();
     if (this.Entity.p.CreatedBy == 0) {
       this.Entity.p.CreatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
       this.Entity.p.UpdatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
     }
-    if (this.Entity.p.InvoiceAmount < 0) {
-      await this.uiUtils.showErrorMessage('Error', 'Bill amount should be greater than zero.');
-      return;
-    }
+    this.isSaveDisabled = true;
     this.Entity.p.Date = this.dtu.ConvertStringDateToFullFormat(this.Entity.p.Date)
     let entityToSave = this.Entity.GetEditableVersion();
     let entitiesToSave = [entityToSave];

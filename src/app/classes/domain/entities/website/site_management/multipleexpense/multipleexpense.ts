@@ -21,7 +21,7 @@ export class MultipleExpenseProps {
   public UpdatedByName: string = '';
   public Ref: number = 0;
   public Discription: string = '';
-  public Unit: number = 0;
+  public UnitRef: number = 0;
   public UnitName: string = '';
   public Rate: number = 0;
   public Quantity: number = 0;
