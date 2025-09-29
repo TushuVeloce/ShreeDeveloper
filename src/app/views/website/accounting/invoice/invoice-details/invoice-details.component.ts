@@ -324,6 +324,12 @@ export class InvoiceDetailsComponent implements OnInit {
   }
 
   ClearInputsOnExpenseChange = () => {
+    if (this.Entity.p.ExpenseType[0] == this.OtherExpenseRef && this.Entity.p.ExpenseType.length == 2) {
+      let temp = this.Entity.p.ExpenseType[1];
+      this.Entity.p.ExpenseType = [];
+      this.Entity.p.ExpenseType.push(temp);
+
+    }
     if (this.Entity.p.ExpenseType.includes(this.OtherExpenseRef)) {
       this.Entity.p.ExpenseType = [];
       this.Entity.p.ExpenseType.push(this.OtherExpenseRef);
@@ -349,7 +355,6 @@ export class InvoiceDetailsComponent implements OnInit {
       this.Entity.p.UnitRef = this.TimeUnitRef;
     }
     this.CalculateAmount();
-
   }
   // ========================================================= end Comman Code =========================================================
 
@@ -688,7 +693,7 @@ export class InvoiceDetailsComponent implements OnInit {
   }
 
   SaveMultipleExpense = async () => {
-    if (!this.MultipleExpenseEntity.Discription) {
+    if (!this.MultipleExpenseEntity.Description) {
       await this.uiUtils.showErrorMessage('Error', 'Discription is required!');
       return;
     } else if (!this.MultipleExpenseEntity.Rate) {

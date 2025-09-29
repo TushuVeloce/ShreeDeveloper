@@ -329,7 +329,7 @@
               <tbody>
                 <tr *ngFor="   let other of Entity.p.MultipleExpenseDetailsArray;   let i = index ">
                   <td Class="tbldata">{{ i + 1 }}</td>
-                  <td Class="tbldata">{{ other.Discription }}</td>
+                  <td Class="tbldata">{{ other.Description }}</td>
                   <td Class="tbldata">{{ other.UnitName}}</td>
                   <td Class="tbldata">{{ other.Quantity}}</td>
                   <td Class="tbldata">{{ other.Rate | currency : "INR"}}</td>
@@ -667,12 +667,12 @@
       <form autocomplete="off">
         <div class="row">
           <div class="col-md-6" style="margin-top: 1rem;">
-            <label>Discription</label>
-            <input type="text" name="Discription" class="form-control" id="Discription"
-              [(ngModel)]="MultipleExpenseEntity.Discription" placeholder="Enter Discription" #DiscriptionCtrl="ngModel"
-              required (blur)="DiscriptionCtrl.control.markAsTouched()" (click)="selectAllValue($event)" />
-            <div *ngIf="(DiscriptionCtrl.invalid && (DiscriptionCtrl.touched || DiscriptionCtrl.dirty))">
-              <span class="validation-text" *ngIf="DiscriptionCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
+            <label>Description</label>
+            <input type="text" name="Description" class="form-control" id="Description"
+              [(ngModel)]="MultipleExpenseEntity.Description" placeholder="Enter Description" #DescriptionCtrl="ngModel"
+              required (blur)="DescriptionCtrl.control.markAsTouched()" (click)="selectAllValue($event)" />
+            <div *ngIf="(DescriptionCtrl.invalid && (DescriptionCtrl.touched || DescriptionCtrl.dirty))">
+              <span class="validation-text" *ngIf="DescriptionCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
             </div>
           </div>
           <div class="col-md-6" style="margin-top: 1rem">

@@ -20,7 +20,7 @@ export class MultipleExpenseProps {
   public UpdatedBy: number = 0;
   public UpdatedByName: string = '';
   public Ref: number = 0;
-  public Discription: string = '';
+  public Description: string = '';
   public UnitRef: number = 0;
   public UnitName: string = '';
   public Rate: number = 0;
