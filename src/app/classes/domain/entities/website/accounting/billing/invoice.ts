@@ -71,7 +71,7 @@ export class InvoiceProps {
   public IsDeleted: number = 0
   public MachineUsageDetailsArray: TimeDetailProps[] = [];
   public LabourExpenseDetailsArray: LabourTimeProps[] = [];
-  public MultipleExpenseDetailsArray: MultipleExpenseProps[] = [];
+  public InvoiceItemDetailsArray: MultipleExpenseProps[] = [];
   public MaterialInvoiceDetailsArray: OrderInvoiceMaterialDetailProps[] = [];
   public readonly AddressLine1: string = ''
   public readonly AddressLine2: string = ''

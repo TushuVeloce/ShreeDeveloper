@@ -335,7 +335,7 @@ export class InvoiceDetailsComponent implements OnInit {
       this.Entity.p.ExpenseType.push(this.OtherExpenseRef);
       this.Entity.p.LabourExpenseDetailsArray = [];
       this.Entity.p.MachineUsageDetailsArray = [];
-      this.Entity.p.MultipleExpenseDetailsArray = [];
+      this.Entity.p.InvoiceItemDetailsArray = [];
       this.Entity.p.Rate = 0;
     } else {
       this.Entity.p.InvoiceRecipientType = 0;
@@ -687,7 +687,7 @@ export class InvoiceDetailsComponent implements OnInit {
   }
 
   getTotalMultipleExpenseAmount(): number {
-    return this.Entity.p.MultipleExpenseDetailsArray.reduce((total: number, item: any) => {
+    return this.Entity.p.InvoiceItemDetailsArray.reduce((total: number, item: any) => {
       return total + Number(item.Amount || 0);
     }, 0);
   }
@@ -712,12 +712,12 @@ export class InvoiceDetailsComponent implements OnInit {
       this.MultipleExpenseEntity.UnitName = UnitRecord?.p.Name || ''
     }
     if (this.MultipleEditingIndex !== null && this.MultipleEditingIndex !== undefined && this.MultipleEditingIndex >= 0) {
-      this.Entity.p.MultipleExpenseDetailsArray[this.MultipleEditingIndex] = { ...this.MultipleExpenseEntity };
+      this.Entity.p.InvoiceItemDetailsArray[this.MultipleEditingIndex] = { ...this.MultipleExpenseEntity };
       await this.uiUtils.showSuccessToster('Multiple Expense updated successfully');
       this.isMultipleExpenseModalOpen = false;
     } else {
       this.MultipleExpenseEntity.InvoiceRef = this.Entity.p.Ref;
-      this.Entity.p.MultipleExpenseDetailsArray.push({ ...this.MultipleExpenseEntity });
+      this.Entity.p.InvoiceItemDetailsArray.push({ ...this.MultipleExpenseEntity });
       await this.uiUtils.showSuccessToster('Multiple Expense added successfully');
       this.isMultipleExpenseModalOpen = false;
     }
@@ -729,12 +729,12 @@ export class InvoiceDetailsComponent implements OnInit {
 
   EditMultipleExpense(index: number) {
     this.isMultipleExpenseModalOpen = true
-    this.MultipleExpenseEntity = { ...this.Entity.p.MultipleExpenseDetailsArray[index] }
+    this.MultipleExpenseEntity = { ...this.Entity.p.InvoiceItemDetailsArray[index] }
     this.MultipleEditingIndex = index;
   }
 
   RemoveMultipleExpense(index: number) {
-    this.Entity.p.MultipleExpenseDetailsArray.splice(index, 1); // Remove Time
+    this.Entity.p.InvoiceItemDetailsArray.splice(index, 1); // Remove Time
     this.CalculateAmount()
   }
 

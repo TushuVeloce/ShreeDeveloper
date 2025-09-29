@@ -310,7 +310,7 @@
           </div>
         </div>
         <div class="table-wrapper" class="tblcard_light"
-          *ngIf="Entity.p.MultipleExpenseDetailsArray.length > 0 && Entity.p.ExpenseType.includes(MultipleExpenseRef)">
+          *ngIf="Entity.p.InvoiceItemDetailsArray.length > 0 && Entity.p.ExpenseType.includes(MultipleExpenseRef)">
           <div class="table-container">
             <div class="row">
               <div class="col-12">
@@ -318,7 +318,7 @@
               </div>
             </div>
             <nz-table #basicTable nzSize="small" class="no-hover-table bgtable_light" [nzScroll]="{ x: 'auto' }"
-              nzFrontPagination="false" [nzShowSizeChanger]="false" [nzData]="Entity.p.MultipleExpenseDetailsArray">
+              nzFrontPagination="false" [nzShowSizeChanger]="false" [nzData]="Entity.p.InvoiceItemDetailsArray">
               <thead>
                 <tr>
                   <th *ngFor="let header of Multipleheaders" class="tblsubheader">
@@ -327,7 +327,7 @@
                 </tr>
               </thead>
               <tbody>
-                <tr *ngFor="   let other of Entity.p.MultipleExpenseDetailsArray;   let i = index ">
+                <tr *ngFor="   let other of Entity.p.InvoiceItemDetailsArray;   let i = index ">
                   <td Class="tbldata">{{ i + 1 }}</td>
                   <td Class="tbldata">{{ other.Description }}</td>
                   <td Class="tbldata">{{ other.UnitName}}</td>
@@ -347,7 +347,7 @@
           </div>
         </div>
         <div
-          *ngIf="Entity.p.MultipleExpenseDetailsArray.length === 0 && Entity.p.ExpenseType.includes(MultipleExpenseRef)"
+          *ngIf="Entity.p.InvoiceItemDetailsArray.length === 0 && Entity.p.ExpenseType.includes(MultipleExpenseRef)"
           class="card-body_light">
           <div style="height: 200px; background-color: white" class="d-flex align-items-center justify-content-center">
             <span class="title_light"> Data Not Found</span>
