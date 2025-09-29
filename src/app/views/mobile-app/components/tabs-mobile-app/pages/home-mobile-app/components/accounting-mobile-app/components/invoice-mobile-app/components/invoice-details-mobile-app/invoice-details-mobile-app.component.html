@@ -36,12 +36,12 @@
     </ion-item>
 
     <!-- Vendor Name -->
-    <ion-item class="input-item" *ngIf="Entity.p.ExpenseType.includes(StockExpenseRef)">
+    <ion-item class="input-item" *ngIf="Entity.p.ExpenseTypeArray.includes(StockExpenseRef)">
       <ion-input label="Vendor Name" labelPlacement="floating" placeholder="Enter Vendor Name"
         [(ngModel)]="Entity.p.RecipientName" clearInput="true"></ion-input>
     </ion-item>
     <!-- Vendor Trade Name -->
-    <!-- <ion-item class="input-item" *ngIf="Entity.p.ExpenseType.includes(StockExpenseRef)">
+    <!-- <ion-item class="input-item" *ngIf="Entity.p.ExpenseTypeArray.includes(StockExpenseRef)">
       <ion-input label="Vendor Trade Name" labelPlacement="floating" placeholder="Enter Vendor Trade Name"
         [(ngModel)]="Entity.p.VendorTradeName" clearInput="true"></ion-input>
     </ion-item> -->
@@ -68,13 +68,13 @@
     </ion-item>
 
     <!-- Select Expense Type -->
-    <ion-item class="input-item" button detail (click)="selectExpenseTypeBottomsheet()"
-      [disabled]="ExpenseTypeList.length === 0">
+    <ion-item class="input-item" button detail (click)="selectExpenseTypeArrayBottomsheet()"
+      [disabled]="ExpenseTypeArrayList.length === 0">
       <ion-label>Expense Type</ion-label>
 
       <!-- Text showing the selected status -->
       <ion-text slot="end" class="status-text">
-        {{ ExpenseTypeName|| 'Select' }}
+        {{ ExpenseTypeArrayName|| 'Select' }}
       </ion-text>
     </ion-item>
 
@@ -86,7 +86,7 @@
 
     <!-- Select Recipient Type -->
     <ion-item class="input-item" button detail (click)="selectRecipientTypeBottomsheet()"
-      *ngIf="Entity.p.ExpenseType.includes(OtherExpenseRef)" [disabled]="RecipientTypesList.length === 0">
+      *ngIf="Entity.p.ExpenseTypeArray.includes(OtherExpenseRef)" [disabled]="RecipientTypesList.length === 0">
       <ion-label>Recipient Type</ion-label>
 
       <!-- Text showing the selected status -->
@@ -98,7 +98,7 @@
 
     <!-- Select Recipient Name -->
     <ion-item class="input-item" button detail
-      *ngIf="Entity.p.ExpenseType.includes(OtherExpenseRef) && !RecipientNameInput">
+      *ngIf="Entity.p.ExpenseTypeArray.includes(OtherExpenseRef) && !RecipientNameInput">
       <ion-label (click)="selectRecipientNameBottomsheet()">Recipient Name</ion-label>
 
       <!-- Selected Text -->
@@ -154,7 +154,7 @@
 
     <!-- Select Vendor -->
     <ion-item class="input-item" button detail (click)="selectVendorBottomsheet()"
-      *ngIf="Entity.p.ExpenseType.includes(MachinaryExpenseRef) || Entity.p.ExpenseType.includes(LabourExpenseRef)"
+      *ngIf="Entity.p.ExpenseTypeArray.includes(MachinaryExpenseRef) || Entity.p.ExpenseTypeArray.includes(LabourExpenseRef)"
       [disabled]="VendorList.length === 0">
       <ion-label>Vendor</ion-label>
 
@@ -166,7 +166,7 @@
 
     <!-- Vendor Service -->
     <ion-item class="input-item" button detail (click)="selectVendorServiceBottomsheet()"
-      *ngIf="Entity.p.ExpenseType.includes(MachinaryExpenseRef) || Entity.p.ExpenseType.includes(LabourExpenseRef)"
+      *ngIf="Entity.p.ExpenseTypeArray.includes(MachinaryExpenseRef) || Entity.p.ExpenseTypeArray.includes(LabourExpenseRef)"
       [disabled]="!VendorName && VendorServiceListByVendor.length === 0">
       <ion-label>Vendor Service</ion-label>
 
@@ -178,7 +178,7 @@
     </ion-item>
 
     <!-- Vehical No. input-->
-    <ion-item class="input-item" *ngIf="Entity.p.ExpenseType.includes(MachinaryExpenseRef)">
+    <ion-item class="input-item" *ngIf="Entity.p.ExpenseTypeArray.includes(MachinaryExpenseRef)">
       <ion-input label="Vehical No." labelPlacement="floating" placeholder="Enter Vehical No."
         [(ngModel)]="Entity.p.VehicleNo"></ion-input>
     </ion-item>
@@ -196,7 +196,7 @@
 
     <!--Machinary Details Header -->
     <ion-grid class="ion-margin-top"
-      *ngIf="Entity.p.ExpenseType.includes(MachinaryExpenseRef) && Entity.p.UnitRef == TimeUnitRef">
+      *ngIf="Entity.p.ExpenseTypeArray.includes(MachinaryExpenseRef) && Entity.p.UnitRef == TimeUnitRef">
       <ion-row class="ion-align-items-center">
         <ion-col size="6">
           <h5><strong>Machinary Details</strong></h5>
@@ -212,7 +212,7 @@
 
     <!-- Machinary Details Table -->
     <ng-container
-      *ngIf="Entity.p.MachineUsageDetailsArray.length > 0 &&( Entity.p.ExpenseType.includes(MachinaryExpenseRef) && Entity.p.UnitRef == TimeUnitRef)">
+      *ngIf="Entity.p.MachineUsageDetailsArray.length > 0 &&( Entity.p.ExpenseTypeArray.includes(MachinaryExpenseRef) && Entity.p.UnitRef == TimeUnitRef)">
       <div class="table-container">
         <div class="table-scroll">
           <table class="custom-table ion-text-center">
@@ -255,7 +255,7 @@
     </ng-container>
 
     <ng-container
-      *ngIf="Entity.p.MachineUsageDetailsArray.length === 0 &&( Entity.p.ExpenseType.includes(MachinaryExpenseRef) && Entity.p.UnitRef == TimeUnitRef)">
+      *ngIf="Entity.p.MachineUsageDetailsArray.length === 0 &&( Entity.p.ExpenseTypeArray.includes(MachinaryExpenseRef) && Entity.p.UnitRef == TimeUnitRef)">
       <div class="ion-padding ion-text-center">
         <ion-text color="medium">
           <p>No Machinery Details data available</p>
@@ -265,7 +265,7 @@
 
 
     <!--Labour Time Details Header -->
-    <ion-grid class="ion-margin-top" *ngIf="Entity.p.ExpenseType.includes(LabourExpenseRef)">
+    <ion-grid class="ion-margin-top" *ngIf="Entity.p.ExpenseTypeArray.includes(LabourExpenseRef)">
       <ion-row class="ion-align-items-center">
         <ion-col size="6">
           <h5><strong>Labour Details</strong></h5>
@@ -281,7 +281,7 @@
 
     <!-- Labour Time Details Table -->
     <ng-container
-      *ngIf="Entity.p.LabourExpenseDetailsArray.length > 0 && Entity.p.ExpenseType.includes(LabourExpenseRef)">
+      *ngIf="Entity.p.LabourExpenseDetailsArray.length > 0 && Entity.p.ExpenseTypeArray.includes(LabourExpenseRef)">
       <div class="table-container">
         <div class="table-scroll">
           <table class="custom-table ion-text-center">
@@ -331,7 +331,7 @@
     </ng-container>
 
     <ng-container
-      *ngIf="Entity.p.LabourExpenseDetailsArray.length === 0 && Entity.p.ExpenseType.includes(LabourExpenseRef)">
+      *ngIf="Entity.p.LabourExpenseDetailsArray.length === 0 && Entity.p.ExpenseTypeArray.includes(LabourExpenseRef)">
       <div class="ion-padding ion-text-center">
         <ion-text color="medium">
           <p>No Labour Details data available</p>
@@ -340,7 +340,7 @@
     </ng-container>
 
     <!--Material Details Header -->
-    <ion-grid class="ion-margin-top" *ngIf="Entity.p.ExpenseType.includes(StockExpenseRef)">
+    <ion-grid class="ion-margin-top" *ngIf="Entity.p.ExpenseTypeArray.includes(StockExpenseRef)">
       <ion-row class="ion-align-items-center">
         <ion-col size="6">
           <h5><strong>Material Details</strong></h5>
@@ -350,7 +350,7 @@
 
     <!-- Material Details Table -->
     <ng-container
-      *ngIf="Entity.p.MaterialInvoiceDetailsArray.length > 0 && Entity.p.ExpenseType.includes(StockExpenseRef)">
+      *ngIf="Entity.p.MaterialInvoiceDetailsArray.length > 0 && Entity.p.ExpenseTypeArray.includes(StockExpenseRef)">
       <div class="table-container">
         <div class="table-scroll">
           <table class="custom-table ion-text-center">
@@ -395,7 +395,7 @@
     </ng-container>
 
     <ng-container
-      *ngIf="Entity.p.MaterialInvoiceDetailsArray.length == 0 && Entity.p.ExpenseType.includes(StockExpenseRef)">
+      *ngIf="Entity.p.MaterialInvoiceDetailsArray.length == 0 && Entity.p.ExpenseTypeArray.includes(StockExpenseRef)">
       <div class="ion-padding ion-text-center">
         <ion-text color="medium">
           <p>No Material Details data available</p>
@@ -405,20 +405,20 @@
 
     <!-- Quantity input-->
     <ion-item class="input-item"
-      *ngIf="!Entity.p.IsInvoiceAutoGenerated &&  ( !Entity.p.ExpenseType.includes(LabourExpenseRef) && !(Entity.p.ExpenseType.includes(MachinaryExpenseRef) && Entity.p.UnitRef == TimeUnitRef))">
+      *ngIf="!Entity.p.IsInvoiceAutoGenerated &&  ( !Entity.p.ExpenseTypeArray.includes(LabourExpenseRef) && !(Entity.p.ExpenseTypeArray.includes(MachinaryExpenseRef) && Entity.p.UnitRef == TimeUnitRef))">
       <ion-input label="Quantity" labelPlacement="floating" placeholder="Enter Quantity" [(ngModel)]="Entity.p.Qty"
         (ngModelChange)="CalculateAmount()" clearInput="true" clearOnEdit="true" type="number"></ion-input>
     </ion-item>
 
     <!-- Rate input-->
     <ion-item class="input-item"
-      *ngIf="!Entity.p.IsInvoiceAutoGenerated && !Entity.p.ExpenseType.includes(LabourExpenseRef)">
+      *ngIf="!Entity.p.IsInvoiceAutoGenerated && !Entity.p.ExpenseTypeArray.includes(LabourExpenseRef)">
       <ion-input label="Rate" labelPlacement="floating" placeholder="Enter Rate" [(ngModel)]="Entity.p.Rate"
         (ngModelChange)="CalculateAmount()" clearInput="true" clearOnEdit="true" type="number"></ion-input>
     </ion-item>
 
     <!-- Diesel Calculation -->
-    <ion-grid *ngIf="Entity.p.ExpenseType.includes(MachinaryExpenseRef)">
+    <ion-grid *ngIf="Entity.p.ExpenseTypeArray.includes(MachinaryExpenseRef)">
       <ion-row>
         <ion-col size="12">
           <ion-checkbox [(ngModel)]="Entity.p.IsDieselPaid" (ionChange)="DiselPaid(Entity.p.IsDieselPaid)">Diesel
@@ -630,7 +630,7 @@
         </ion-col>
         <ion-col size="6" *ngIf="!Entity.p.IsInvoiceAutoGenerated">
           <ion-button expand="block" shape="round" color="primary" (click)="SaveInvoiceMaster()"
-            [disabled]="Entity.p.ExpenseType.includes(StockExpenseRef)">
+            [disabled]="Entity.p.ExpenseTypeArray.includes(StockExpenseRef)">
             Save
           </ion-button>
         </ion-col>

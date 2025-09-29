@@ -47,7 +47,7 @@ export class InvoiceDetailsComponent implements OnInit {
   VendorServiceListByVendor: VendorService[] = [];
   isDieselPaid: boolean = false
   RecipientNameReadOnly: boolean = false
-  ExpenseTypeList = DomainEnums.ExpenseTypeList();
+  ExpenseTypeArrayList = DomainEnums.ExpenseTypeList();
   LabourTypeList = DomainEnums.LabourTypesList();
   isSaveDisabled: boolean = false;
   isLabourSaveDisabled: boolean = false;
@@ -142,7 +142,7 @@ export class InvoiceDetailsComponent implements OnInit {
         this.isDieselPaid = true
       }
 
-      if (this.Entity.p.ExpenseType.includes(this.MachinaryExpenseRef) || this.Entity.p.ExpenseType.includes(this.LabourExpenseRef)) {
+      if (this.Entity.p.ExpenseTypeArray.includes(this.MachinaryExpenseRef) || this.Entity.p.ExpenseTypeArray.includes(this.LabourExpenseRef)) {
         this.getVendorServiceListByVendorRef(this.Entity.p.RecipientRef);
       }
       this.getTotalWorkedHours();
@@ -151,7 +151,7 @@ export class InvoiceDetailsComponent implements OnInit {
       this.Entity = Invoice.CreateNewInstance();
       Invoice.SetCurrentInstance(this.Entity);
 
-      this.ExpenseTypeList = this.ExpenseTypeList.filter((data) => data.Ref != this.StockExpenseRef);
+      this.ExpenseTypeArrayList = this.ExpenseTypeArrayList.filter((data) => data.Ref != this.StockExpenseRef);
       this.strCDT = await CurrentDateTimeRequest.GetCurrentDateTime();
       let parts = this.strCDT.substring(0, 16).split('-');
       this.Entity.p.Date = `${parts[0]}-${parts[1]}-${parts[2]}`;
@@ -271,7 +271,7 @@ export class InvoiceDetailsComponent implements OnInit {
       return;
     }
 
-    if (!this.Entity.p.ExpenseType.includes(this.OtherExpenseRef)) {
+    if (!this.Entity.p.ExpenseTypeArray.includes(this.OtherExpenseRef)) {
       return;
     }
 
@@ -324,15 +324,15 @@ export class InvoiceDetailsComponent implements OnInit {
   }
 
   ClearInputsOnExpenseChange = () => {
-    if (this.Entity.p.ExpenseType[0] == this.OtherExpenseRef && this.Entity.p.ExpenseType.length == 2) {
-      let temp = this.Entity.p.ExpenseType[1];
-      this.Entity.p.ExpenseType = [];
-      this.Entity.p.ExpenseType.push(temp);
+    if (this.Entity.p.ExpenseTypeArray[0] == this.OtherExpenseRef && this.Entity.p.ExpenseTypeArray.length == 2) {
+      let temp = this.Entity.p.ExpenseTypeArray[1];
+      this.Entity.p.ExpenseTypeArray = [];
+      this.Entity.p.ExpenseTypeArray.push(temp);
 
     }
-    if (this.Entity.p.ExpenseType.includes(this.OtherExpenseRef)) {
-      this.Entity.p.ExpenseType = [];
-      this.Entity.p.ExpenseType.push(this.OtherExpenseRef);
+    if (this.Entity.p.ExpenseTypeArray.includes(this.OtherExpenseRef)) {
+      this.Entity.p.ExpenseTypeArray = [];
+      this.Entity.p.ExpenseTypeArray.push(this.OtherExpenseRef);
       this.Entity.p.LabourExpenseDetailsArray = [];
       this.Entity.p.MachineUsageDetailsArray = [];
       this.Entity.p.InvoiceItemDetailsArray = [];
@@ -345,13 +345,13 @@ export class InvoiceDetailsComponent implements OnInit {
       this.Entity.p.VendorServiceRef = 0;
       this.Entity.p.VehicleNo = '';
       this.Entity.p.Qty = 0;
-      if (!this.Entity.p.ExpenseType.includes(this.MachinaryExpenseRef)) {
+      if (!this.Entity.p.ExpenseTypeArray.includes(this.MachinaryExpenseRef)) {
         this.Entity.p.Rate = 0;
         this.Entity.p.UnitRef = 0;
       }
       this.DiselPaid(0);
     }
-    if (this.Entity.p.ExpenseType.includes(this.MachinaryExpenseRef)) {
+    if (this.Entity.p.ExpenseTypeArray.includes(this.MachinaryExpenseRef)) {
       this.Entity.p.UnitRef = this.TimeUnitRef;
     }
     this.CalculateAmount();

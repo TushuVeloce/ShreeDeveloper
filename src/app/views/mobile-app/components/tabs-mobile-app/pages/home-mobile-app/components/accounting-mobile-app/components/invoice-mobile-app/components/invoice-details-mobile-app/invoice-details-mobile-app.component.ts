@@ -59,7 +59,7 @@ export class InvoiceDetailsMobileAppComponent implements OnInit {
   ModeofPaymentList = DomainEnums.ModeOfPaymentsList().filter(
     (item) => item.Ref == this.Bill
   );
-  ExpenseTypeList = DomainEnums.ExpenseTypeList();
+  ExpenseTypeArrayList = DomainEnums.ExpenseTypeList();
   LabourTypeList = DomainEnums.LabourTypesList();
   isSaveDisabled: boolean = false;
   DetailsFormTitle: 'New Bill' | 'Edit Bill' = 'New Bill';
@@ -116,7 +116,7 @@ export class InvoiceDetailsMobileAppComponent implements OnInit {
   SubLedgerName: string = '';
   selectedSubLedger: any[] = [];
 
-  ExpenseTypeName: string = '';
+  ExpenseTypeArrayName: string = '';
   selectedExpenseType: any[] = [];
 
   RecipientName: string = '';
@@ -276,16 +276,16 @@ export class InvoiceDetailsMobileAppComponent implements OnInit {
           this.UnitName = this.Entity.p.UnitName;
 
           // ✅ Get names of all selected expense types
-          this.ExpenseTypeName =
-            this.ExpenseTypeList.filter((item) =>
-              this.Entity.p.ExpenseType.includes(item.Ref)
+          this.ExpenseTypeArrayName =
+            this.ExpenseTypeArrayList.filter((item) =>
+              this.Entity.p.ExpenseTypeArray.includes(item.Ref)
             )
               .map((item) => item.Name)
               .join(', ') || '';
 
           // ✅ Set selectedExpenseType in the correct structure
-          this.selectedExpenseType = this.Entity.p.ExpenseType.map((ref) => {
-            const item = this.ExpenseTypeList.find((x) => x.Ref === ref);
+          this.selectedExpenseType = this.Entity.p.ExpenseTypeArray.map((ref) => {
+            const item = this.ExpenseTypeArrayList.find((x) => x.Ref === ref);
             return { p: { Ref: ref, Name: item?.Name ?? '' } };
           });
 
@@ -326,8 +326,8 @@ export class InvoiceDetailsMobileAppComponent implements OnInit {
             this.isDieselPaid = true;
           }
           if (
-            this.Entity.p.ExpenseType.includes(this.MachinaryExpenseRef) ||
-            this.Entity.p.ExpenseType.includes(this.LabourExpenseRef)
+            this.Entity.p.ExpenseTypeArray.includes(this.MachinaryExpenseRef) ||
+            this.Entity.p.ExpenseTypeArray.includes(this.LabourExpenseRef)
           ) {
             await this.getVendorServiceListByVendorRef(
               this.Entity.p.RecipientRef
@@ -358,7 +358,7 @@ export class InvoiceDetailsMobileAppComponent implements OnInit {
               },
             },
           ];
-          this.ExpenseTypeList = this.ExpenseTypeList.filter(
+          this.ExpenseTypeArrayList = this.ExpenseTypeArrayList.filter(
             (data) => data.Ref != this.StockExpenseRef
           );
           this.strCDT = await CurrentDateTimeRequest.GetCurrentDateTime();
@@ -1093,7 +1093,7 @@ export class InvoiceDetailsMobileAppComponent implements OnInit {
     if (this.Entity.p.InvoiceRecipientType <= 0) {
       return;
     }
-    if (!this.Entity.p.ExpenseType.includes(this.OtherExpenseRef)) {
+    if (!this.Entity.p.ExpenseTypeArray.includes(this.OtherExpenseRef)) {
       return;
     }
 
@@ -1396,9 +1396,9 @@ export class InvoiceDetailsMobileAppComponent implements OnInit {
     }
   };
 
-  public selectExpenseTypeBottomsheet = async (): Promise<void> => {
+  public selectExpenseTypeArrayBottomsheet = async (): Promise<void> => {
     try {
-      const options = this.ExpenseTypeList.map((item) => ({ p: item }));
+      const options = this.ExpenseTypeArrayList.map((item) => ({ p: item }));
       this.openSelectModal(
         options,
         this.selectedExpenseType,
@@ -1412,10 +1412,10 @@ export class InvoiceDetailsMobileAppComponent implements OnInit {
           console.log('selected :', selected);
 
           // ✅ Extract all selected Ref values as an array
-          this.Entity.p.ExpenseType = selected.map((s) => s.p.Ref);
+          this.Entity.p.ExpenseTypeArray = selected.map((s) => s.p.Ref);
 
           // ✅ If you want to show joined names
-          this.ExpenseTypeName = selected.map((s) => s.p.Name).join(', ');
+          this.ExpenseTypeArrayName = selected.map((s) => s.p.Name).join(', ');
 
           this.ClearInputsOnExpenseChange();
         }
