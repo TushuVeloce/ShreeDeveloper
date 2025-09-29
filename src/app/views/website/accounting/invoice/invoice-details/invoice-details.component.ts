@@ -671,7 +671,7 @@ export class InvoiceDetailsComponent implements OnInit {
   }
   // ========================================================= End Labour Code =========================================================
 
-  // ========================================================= Start Multiple Code =========================================================
+  // ========================================================= Start Multiple Expense Code =========================================================
 
   CloseMultipleExpenseModal = async () => {
     this.isMultipleExpenseModalOpen = false;
@@ -695,6 +695,9 @@ export class InvoiceDetailsComponent implements OnInit {
   SaveMultipleExpense = async () => {
     if (!this.MultipleExpenseEntity.Description) {
       await this.uiUtils.showErrorMessage('Error', 'Discription is required!');
+      return;
+    } else if (!this.MultipleExpenseEntity.UnitRef) {
+      await this.uiUtils.showErrorMessage('Error', 'Unit is required!');
       return;
     } else if (!this.MultipleExpenseEntity.Rate) {
       await this.uiUtils.showErrorMessage('Error', 'Rate is required!');
@@ -735,7 +738,7 @@ export class InvoiceDetailsComponent implements OnInit {
     this.CalculateAmount()
   }
 
-  // ========================================================= End Multiple Code =========================================================
+  // ========================================================= End Multiple Expense Code =========================================================
 
 
   CalculateAmount = () => {
