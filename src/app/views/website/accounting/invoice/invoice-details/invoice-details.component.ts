@@ -597,17 +597,17 @@ export class InvoiceDetailsComponent implements OnInit {
 
   // ========================================================= Start Labour Code =========================================================
   SaveLabourExpense = async () => {
-    if (!this.LabourTimeEntity.Days) {
-      await this.uiUtils.showErrorMessage('Error', 'Days is required!');
+    if (this.LabourTimeEntity.Days <= 0) {
+      await this.uiUtils.showErrorMessage('Error', 'Days Should be greater then 0');
       return;
     } else if (!this.LabourTimeEntity.LabourRate) {
-      await this.uiUtils.showErrorMessage('Error', 'Rate is required!');
+      await this.uiUtils.showErrorMessage('Error', 'Rate Should be greater then 0');
       return;
     } else if (!this.LabourTimeEntity.LabourType) {
       await this.uiUtils.showErrorMessage('Error', 'Labour Type is required!');
       return;
     } else if (!this.LabourTimeEntity.LabourQty) {
-      await this.uiUtils.showErrorMessage('Error', 'Labour Qty is required!');
+      await this.uiUtils.showErrorMessage('Error', 'Labour Qty Should be greater then 0');
       return;
     }
     this.isLabourSaveDisabled = true;
@@ -752,8 +752,11 @@ export class InvoiceDetailsComponent implements OnInit {
     if (Number(this.Entity.p.Rate / 60) > 0) {
       Rate = Number(this.Entity.p.Rate / 60);
     }
-
-    this.Entity.p.InvoiceAmount = (Math.round(((TotalWorkedHours * Rate) - DieselAmount) * 100) / 100) + (Math.round((TotalLabourAmount) * 100) / 100) + (Math.round(((Qty * this.Entity.p.Rate) - DieselAmount) * 100) / 100) + (Math.round((TotalMultiExpenseAmount) * 100) / 100);
+    if (this.Entity.p.ExpenseTypeArray[0] == this.OtherExpenseRef && this.Entity.p.ExpenseTypeArray.length == 1) {
+      this.Entity.p.InvoiceAmount = (Math.round(((Qty * this.Entity.p.Rate) - DieselAmount) * 100) / 100);
+    } else {
+      this.Entity.p.InvoiceAmount = (Math.round(((TotalWorkedHours * Rate) - DieselAmount) * 100) / 100) + (Math.round((TotalLabourAmount) * 100) / 100) + (Math.round((TotalMultiExpenseAmount) * 100) / 100);
+    }
   }
 
   SaveInvoiceMaster = async () => {
