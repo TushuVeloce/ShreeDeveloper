@@ -66,6 +66,7 @@ export class DashboardComponent implements OnInit {
   BarSiteRef: number = 0
   DoughnutSiteRef: number = 0
   CRMSiteRef: number = 0
+  BillsPayableSiteRef: number = 0
 
   BarFilterType: number = 57
   DoughnutFilterType: number = 57
@@ -387,7 +388,7 @@ export class DashboardComponent implements OnInit {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
-    let lst = await InvoiceSumExpenseSum.FetchEntireListByCompanySiteMonthFilterType(this.companyRef(), this.SelectedBillPayableMonths, this.BillPayableFilterType, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    let lst = await InvoiceSumExpenseSum.FetchEntireListByCompanySiteMonthFilterType(this.companyRef(), this.BillsPayableSiteRef, this.SelectedBillPayableMonths, this.BillPayableFilterType, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.InvoiceSumExpenseSumList = lst;
   }
 

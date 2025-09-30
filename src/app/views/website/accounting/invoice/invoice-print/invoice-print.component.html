@@ -86,22 +86,10 @@
           </tr>
         </table>
       </div>
-
-      <div *ngIf="!Entity.p.ExpenseTypeArray.includes(StockExpenseRef)">
-        <!-- Table Header -->
+      <!-- ==================================================== Labour Bill  ==================================================== -->
+      <div *ngIf="Entity.p.ExpenseTypeArray.includes(LabourExpenseRef)">
         <table style="width: 100%; border-collapse: collapse; text-align: center;">
-          <thead *ngIf="!Entity.p.ExpenseTypeArray.includes(LabourExpenseRef)">
-            <tr style="background-color: maroon; color: white;">
-              <th style="padding: 8px; border: none;">Sr.No</th>
-              <th style="padding: 8px; border: none;">Details</th>
-              <th style="padding: 8px; border: none;">Qty.</th>
-              <th style="padding: 8px; border: none;">
-                UNIT</th>
-              <th style="padding: 8px; border: none;">RATE</th>
-              <th style="padding: 8px; border: none;">AMOUNT</th>
-            </tr>
-          </thead>
-          <thead *ngIf="Entity.p.ExpenseTypeArray.includes(LabourExpenseRef)">
+          <thead>
             <tr style="background-color: maroon; color: white;">
               <th style="padding: 8px; border: none;">Sr.No</th>
               <th style="padding: 8px; border: none;">Labour Type</th>
@@ -112,29 +100,6 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngIf="!Entity.p.ExpenseTypeArray.includes(LabourExpenseRef)">
-              <td style="padding: 8px; border: none;">1.</td>
-              <td style="padding: 8px; border: none;">{{Entity.p.Description}}</td>
-              <td style="padding: 8px; border: none;">
-                {{ Entity.p.Qty ? Entity.p.Qty : DisplayTotalWorkingHrs }}
-              </td>
-              <td style="padding: 8px; border: none;">{{ Entity.p.UnitName }}</td>
-              <td style="padding: 8px; border: none;"> {{ Entity.p.Rate | currency : "INR" }}</td>
-              <td style="padding: 8px; border: none;">
-                {{DisplayTotalWorkingHrs ?
-                ((Entity.p.InvoiceAmount + Entity.p.DieselAmount) | currency:'INR') :
-                ((Entity.p.Qty * Entity.p.Rate) | currency:'INR')
-                }}
-              </td>
-            </tr>
-            <tr *ngIf="Entity.p.DieselQty > 0">
-              <td style="padding: 8px; border: none;">2.</td>
-              <td style="padding: 8px; border: none;">Diesel Supplied by Shree</td>
-              <td style="padding: 8px; border: none;">{{ Entity.p.DieselQty }}</td>
-              <td style="padding: 8px; border: none;">Liter</td>
-              <td style="padding: 8px; border: none;"> {{ Entity.p.DieselRate | currency : "INR" }}</td>
-              <td style="padding: 8px; border: none;"> {{ Entity.p.DieselAmount | currency : "INR" }}</td>
-            </tr>
             <ng-container *ngIf="Entity.p.ExpenseTypeArray.includes(LabourExpenseRef)">
               <tr *ngFor="let time of Entity.p.LabourExpenseDetailsArray; let i = index">
                 <td style="padding: 8px; border: none;">{{ i + 1 }}</td>
@@ -145,11 +110,51 @@
                 <td style="padding: 8px; border: none;">{{ time.LabourAmount}}</td>
               </tr>
             </ng-container>
-
+          </tbody>
+        </table>
+      </div>
+      <!-- ==================================================== Other Bill  ==================================================== -->
+      <div *ngIf="Entity.p.ExpenseTypeArray.includes(OtherExpenseRef)">
+        <table style="width: 100%; border-collapse: collapse; text-align: center;">
+          <thead>
+            <tr style="background-color: maroon; color: white;">
+              <th style="padding: 8px; border: none;">Sr.No</th>
+              <th style="padding: 8px; border: none;">Description</th>
+              <th style="padding: 8px; border: none;">Qty.</th>
+              <th style="padding: 8px; border: none;">
+                UNIT</th>
+              <th style="padding: 8px; border: none;">RATE</th>
+              <th style="padding: 8px; border: none;">Diesel</th>
+              <th style="padding: 8px; border: none;">AMOUNT</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="padding: 8px; border: none;">1.</td>
+              <td style="padding: 8px; border: none;">{{Entity.p.Description}}</td>
+              <td style="padding: 8px; border: none;">
+                {{ Entity.p.Qty}}
+              </td>
+              <td style="padding: 8px; border: none;">{{ Entity.p.UnitName }}</td>
+              <td style="padding: 8px; border: none;"> {{ Entity.p.Rate | currency : "INR" }}</td>
+              <td style="padding: 8px; border: none;">
+                {{ Entity.p.DieselAmount | currency:'INR' }}
+              </td>
+              <td style="padding: 8px; border: none;">
+                {{ Entity.p.InvoiceAmount | currency:'INR' }}
+              </td>
+            </tr>
+            <tr *ngIf="Entity.p.DieselQty > 0">
+              <td style="padding: 8px; border: none;">2.</td>
+              <td style="padding: 8px; border: none;">Diesel Supplied by Shree</td>
+              <td style="padding: 8px; border: none;">{{ Entity.p.DieselQty }}</td>
+              <td style="padding: 8px; border: none;">Liter</td>
+              <td style="padding: 8px; border: none;"> {{ Entity.p.DieselRate | currency : "INR" }}</td>
+              <td style="padding: 8px; border: none;"> {{ Entity.p.DieselAmount | currency : "INR" }}</td>
+            </tr>
 
             <!-- Total -->
             <tr>
-
               <td colspan="5" *ngIf="!Entity.p.ExpenseTypeArray.includes(LabourExpenseRef)"
                 style="padding: 8px; border: none; text-align: center; font-weight: bold; background-color: #fef4d4;">
                 <strong>TOTAL</strong>
@@ -173,6 +178,8 @@
           </tbody>
         </table>
       </div>
+
+      <!-- ==================================================== Stock Bill  ==================================================== -->
 
       <table *ngIf="Entity.p.ExpenseTypeArray.includes(StockExpenseRef)"
         style="width: 100%; border-collapse: collapse; text-align: center;">
@@ -215,10 +222,14 @@
           </tr>
         </tbody>
       </table>
+
+
       <!-- Comments -->
       <div style="margin-top: 5px; ">
-        <p style="background-color: #fef4d4; padding-left: 5%; padding-top: 10px; padding-bottom: 10px;"><strong>OTHER
-            COMMENTS</strong> </p>
+        <p style="background-color: #fef4d4; padding-left: 5%; padding-top: 10px; padding-bottom: 10px;">
+          <strong>OTHER
+            COMMENTS</strong>
+        </p>
         <div style="margin-top: 5px; padding-left: 5%;">
           <p style="line-height: 0.5;">1. वरील तपशिला प्रमाणे माल ताब्यात मिळाला.</p>
           <p style="line-height: 0.5;">2. ही पावती सेवा पुरवठादाराच्या नोंदीसाठी प्रदान करण्यात आली आहे..</p>
@@ -235,14 +246,14 @@
         </p>
       </div>
 
-      <p style="text-align: center; line-height: 0.5;">If you have any questions about this invoice, please contact</p>
+      <p style="text-align: center; line-height: 0.5;">If you have any questions about this invoice, please
+        contact
+      </p>
       <p style="text-align: center; line-height: 0.5;">{{Entity.p.CompanyName}} {{Entity.p.Contacts}} </p>
       <h5 style="text-align: center; line-height: 0.5;"><strong><i>Thank You For Your Business!</i></strong></h5>
       <blockquote style="text-align: center; line-height: 0.5; margin-top: 2%; font-size: 12px;">
         <i>Computer Generated Print</i>
       </blockquote>
-
     </div>
-
   </div>
 </div>

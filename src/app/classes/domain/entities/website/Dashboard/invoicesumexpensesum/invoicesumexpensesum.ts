@@ -29,6 +29,7 @@ export class InvoiceSumExpenseSumProps {
   public RecipientName: string = '';
   public CompanyRef: number = 0;
   public CompanyName: string = '';
+  public SiteName: string = '';
 
   public SiteRef: number = 0;
   public Month: number = 0;
@@ -179,11 +180,14 @@ export class InvoiceSumExpenseSum implements IPersistable<InvoiceSumExpenseSum> 
     return InvoiceSumExpenseSum.ListFromTransportData(tdResponse);
   }
 
-  public static async FetchEntireListByCompanySiteMonthFilterType(CompanyRef: number, Month: number, FilterType: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+  public static async FetchEntireListByCompanySiteMonthFilterType(CompanyRef: number, SiteRef: number, Month: number, FilterType: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let req = new InvoiceSumExpenseSumFetchRequest();
     req.CompanyRef = CompanyRef;
     if (Month) {
       req.Month = Month;
+    }
+    if (SiteRef) {
+      req.SiteRef = SiteRef;
     }
     if (FilterType) {
       req.FilterType = FilterType;

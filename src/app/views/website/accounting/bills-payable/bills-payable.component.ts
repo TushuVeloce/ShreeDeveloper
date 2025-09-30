@@ -42,7 +42,7 @@ export class BillsPayableComponent implements OnInit {
 
   companyRef = this.companystatemanagement.SelectedCompanyRef;
 
-  headers: string[] = ['Sr.No.', 'Vendor Name', 'Bill Amount', 'Given Amount', 'Remaining Amount', 'Total Cash Received', 'Total Cheque Received'];
+  headers: string[] = ['Sr.No.', 'Vendor Name', 'Site Name', 'Bill Amount', 'Given Amount', 'Remaining Amount', 'Total Cash Paid', 'Total Cheque Paid'];
 
   constructor(
     private uiUtils: UIUtils,
@@ -82,8 +82,9 @@ export class BillsPayableComponent implements OnInit {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
-    let lst = await InvoiceSumExpenseSum.FetchEntireListByCompanySiteMonthFilterType(this.companyRef(), this.SelectedBillPayableMonths, this.BillPayableFilterType, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    let lst = await InvoiceSumExpenseSum.FetchEntireListByCompanySiteMonthFilterType(this.companyRef(), this.Entity.p.SiteRef, this.SelectedBillPayableMonths, this.BillPayableFilterType, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.MasterList = lst;
+    console.log('this.MasterList :', this.MasterList);
     this.DisplayMasterList = lst;
     this.loadPaginationData();
   }

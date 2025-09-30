@@ -60,7 +60,7 @@ export class BillPayableReportMobileAppComponent implements OnInit {
     private haptic: HapticService,
     public loadingService: LoadingService,
     private pdfService: PDFService
-  ) {}
+  ) { }
 
   ngOnInit = async () => {
     // ngOnInit should be lean. ionViewWillEnter is better for data loading.
@@ -156,34 +156,34 @@ export class BillPayableReportMobileAppComponent implements OnInit {
   //   this.loadFilters();
   // }
 
-    async onFiltersChanged(updatedFilters: any[]) {
-      for (const filter of updatedFilters) {
-        const selected = filter.selected;
-        const selectedValue =
-          selected === null || selected === undefined ? null : selected;
-  
-        // Save selected value to preserve after reload
-        this.selectedFilterValues[filter.key] = selectedValue ?? null;
-  
-        switch (filter.key) {
-          case 'timeline':
-            this.BillPayableFilterType = selectedValue ?? 0;
-            break;
-  
-          case 'month':
-            this.SelectedBillPayableMonths = selectedValue ?? 0;
-            break;
-        }
+  async onFiltersChanged(updatedFilters: any[]) {
+    for (const filter of updatedFilters) {
+      const selected = filter.selected;
+      const selectedValue =
+        selected === null || selected === undefined ? null : selected;
+
+      // Save selected value to preserve after reload
+      this.selectedFilterValues[filter.key] = selectedValue ?? null;
+
+      switch (filter.key) {
+        case 'timeline':
+          this.BillPayableFilterType = selectedValue ?? 0;
+          break;
+
+        case 'month':
+          this.SelectedBillPayableMonths = selectedValue ?? 0;
+          break;
       }
-  
-      if (this.BillPayableFilterType === 0) {
-        this.BillPayableFilterType = 57;
-      }
-  
-      await this.fetchInvoiceSumExpenseSumList();
-      this.loadFilters(); // Reload filters with updated options & preserve selections
     }
-  
+
+    if (this.BillPayableFilterType === 0) {
+      this.BillPayableFilterType = 57;
+    }
+
+    await this.fetchInvoiceSumExpenseSumList();
+    this.loadFilters(); // Reload filters with updated options & preserve selections
+  }
+
 
 
   private async fetchSiteList() {
@@ -202,7 +202,7 @@ export class BillPayableReportMobileAppComponent implements OnInit {
 
   private async fetchInvoiceSumExpenseSumList() {
     const list =
-      await InvoiceSumExpenseSum.FetchEntireListByCompanySiteMonthFilterType(this.companyRef, this.SelectedBillPayableMonths, this.BillPayableFilterType, 
+      await InvoiceSumExpenseSum.FetchEntireListByCompanySiteMonthFilterType(this.companyRef, this.Entity.p.SiteRef, this.SelectedBillPayableMonths, this.BillPayableFilterType,
         async (errMsg) => {
           await this.toastService.present(
             `Error fetching report: ${errMsg}`,

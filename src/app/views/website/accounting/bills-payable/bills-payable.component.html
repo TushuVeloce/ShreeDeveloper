@@ -16,6 +16,14 @@
 
 <div class="row row-cols-4 g-1">
   <div class="col">
+    <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear nzPlaceHolder="Select"
+      [nzSize]="'large'" name="SiteRef" [(ngModel)]="Entity.p.SiteRef" required id="SiteRef"
+      (ngModelChange)="getInvoiceSumExpenseSumListByCompanySiteMonthFilterType();">
+      <nz-option nzLabel="All Sites" [nzValue]="0"></nz-option>
+      <nz-option *ngFor="let Site of SiteList" [nzValue]="Site.p.Ref" [nzLabel]="Site.p.Name"></nz-option>
+    </nz-select>
+  </div>
+  <div class="col">
     <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
       id="BillPayableFilterType" name="BillPayableFilterType" [nzSize]="'large'" [(ngModel)]="BillPayableFilterType"
       (ngModelChange)="getInvoiceSumExpenseSumListByCompanySiteMonthFilterType()">
@@ -49,6 +57,9 @@
           <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
           <td Class="tbldata">{{ Invoice.p.RecipientName }}</td>
           <td Class="tbldata">
+            {{ Invoice.p.SiteName }}
+          </td>
+          <td Class="tbldata">
             {{ Invoice.p.InvoiceAmount | currency : "INR" }}
           </td>
           <td Class="tbldata">
@@ -65,7 +76,7 @@
           </td>
         </tr>
         <tr>
-          <td class="tbldata" colspan="2"><b>Total</b></td>
+          <td class="tbldata" colspan="3"><b>Total</b></td>
           <td class="tbldata">
             <b>{{ totalInvoiceAmount | currency : "INR" }}</b>
           </td>

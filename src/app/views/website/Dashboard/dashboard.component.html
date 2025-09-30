@@ -42,7 +42,9 @@
     <div class="chart-card">
       <div class="chart-header">
         <p>Income VS Expense <br>
-          <span style="font-size: 13px;">{{this.TotalIncome | currency : "INR"}} VS {{this.TotalExpense | currency : "INR"}}</span></p>
+          <span style="font-size: 13px;">{{this.TotalIncome | currency : "INR"}} VS {{this.TotalExpense | currency :
+            "INR"}}</span>
+        </p>
         <div style="width: 25%;">
           <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear id="BarSiteRef"
             name="BarSiteRef" [nzSize]="'large'" [(ngModel)]="BarSiteRef" (ngModelChange)="getIncomeExpenseGraphList()">
@@ -178,6 +180,14 @@
         <h5 class="text-brown fw-bold mb-0">Bills Payable Summary</h5>
         <div style="width: 25%;">
           <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
+            nzPlaceHolder="Select" [nzSize]="'large'" name="SiteRef" [(ngModel)]="BillsPayableSiteRef" required
+            id="SiteRef" (ngModelChange)="getInvoiceSumExpenseSumListByCompanySiteMonthFilterType();">
+            <nz-option nzLabel="All Sites" [nzValue]="0"></nz-option>
+            <nz-option *ngFor="let Site of SiteList" [nzValue]="Site.p.Ref" [nzLabel]="Site.p.Name"></nz-option>
+          </nz-select>
+        </div>
+        <div style="width: 25%;">
+          <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
             id="BillPayableFilterType" name="BillPayableFilterType" [nzSize]="'large'"
             [(ngModel)]="BillPayableFilterType"
             (ngModelChange)="getInvoiceSumExpenseSumListByCompanySiteMonthFilterType()">
@@ -203,6 +213,7 @@
             <tr>
               <th>Sr. No.</th>
               <th>Vendor Name</th>
+              <th>Site</th>
               <th>Bill Amount</th>
               <th>Given Amount</th>
             </tr>
@@ -210,6 +221,7 @@
           <tbody *ngIf="InvoiceSumExpenseSumList.length > 0">
             <tr *ngFor="let rec of InvoiceSumExpenseSumList; index as i">
               <td>{{ i + 1 }}</td>
+              <td>{{ rec.p.SiteName }}</td>
               <td>{{ rec.p.RecipientName }}</td>
               <td> {{ rec.p.InvoiceAmount | currency : "INR" }}</td>
               <td> {{ rec.p.GivenAmount | currency : "INR" }}</td>
