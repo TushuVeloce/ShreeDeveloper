@@ -1,7 +1,7 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { NgModel } from '@angular/forms';
 import { Router } from '@angular/router';
-import { ExpenseTypeRefs, ValidationMessages, ValidationPatterns } from 'src/app/classes/domain/constants';
+import { ExpenseTypeRefs, UnitRefs, ValidationMessages, ValidationPatterns } from 'src/app/classes/domain/constants';
 import { ExpenseTypes } from 'src/app/classes/domain/domainenums/domainenums';
 import { Invoice } from 'src/app/classes/domain/entities/website/accounting/billing/invoice';
 import { Unit } from 'src/app/classes/domain/entities/website/masters/unit/unit';
@@ -27,11 +27,13 @@ export class InvoicePrintComponent implements OnInit {
   IsDropdownDisabled: boolean = false
   InitialEntity: Invoice = null as any;
   isPrintButtonClicked: boolean = false;
-  MachinaryExpenseRef: number = ExpenseTypeRefs.MachinaryExpense
-  LabourExpenseRef: number = ExpenseTypeRefs.LabourExpense
-  OtherExpenseRef: number = ExpenseTypeRefs.OtherExpense
-  DisplayTotalWorkingHrs: string = ''
+  MachinaryExpenseRef: number = ExpenseTypes.MachinaryExpense
+  LabourExpenseRef: number = ExpenseTypes.LabourExpense
+  MultipleExpenseRef: number = ExpenseTypes.MultipleExpense
+  OtherExpenseRef: number = ExpenseTypes.OtherExpense
   StockExpenseRef: number = ExpenseTypes.StockExpense
+  TimeUnitRef: number = UnitRefs.TimeUnitRef
+  DisplayTotalWorkingHrs: string = ''
 
   materialheaders: string[] = ['Sr.No.', 'Material', 'Unit', 'Order Quantity', 'Rate', 'Discount Rate', 'Delivery Charges', 'Total Amount'];
 
@@ -51,9 +53,8 @@ export class InvoicePrintComponent implements OnInit {
   ngOnInit() {
     this.appStateManage.setDropdownDisabled(true);
     // history.state.myData;
-
-    this.Entity = history.state.printData;
     this.getTotalWorkedHours();
+    this.Entity = history.state.printData;
     this.Entity.p.Date = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.CreatedDate);
     this.InitialEntity = Object.assign(Invoice.CreateNewInstance(), this.utils.DeepCopy(this.Entity)) as Invoice;
   }
@@ -62,24 +63,27 @@ export class InvoicePrintComponent implements OnInit {
     return this.utils.convertNumberToWords(number);
   }
 
-
   // Extracted from services date conversion //
   formatDate = (date: string | Date): string => {
     return this.DateconversionService.formatDate(date);
   }
 
 
+  // getTotalWorkedHours(): string {
+  //   let totalMinutes = this.Entity.p.MachineUsageDetailsArray.reduce((sum: number, item: any) => {
+  //     return sum + parseFloat(item.WorkedHours || 0);
+  //   }, 0);
+
+  //   // Set display value in HH:mm format
+  //   return this.formatMinutesToHourMin(totalMinutes);
+  // }
+
   getTotalWorkedHours(): number {
-    let totalMinutes = this.Entity.p.MachineUsageDetailsArray.reduce((sum: number, item: any) => {
-      return sum + parseFloat(item.WorkedHours || 0);
+    let total = this.Entity.p.MachineUsageDetailsArray.reduce((total: number, item: any) => {
+      return total + Number(item.WorkedHours || 0);
     }, 0);
-
-    // Set display value in HH:mm format
-    this.DisplayTotalWorkingHrs = this.formatMinutesToHourMin(totalMinutes);
-
-    // Return hours as decimal (rounded to 2 decimals)
-    let totalHours = totalMinutes / 60;
-    return Math.round(totalHours * 100) / 100;
+    this.DisplayTotalWorkingHrs = this.formatMinutesToHourMin(total);
+    return total;
   }
 
   formatMinutesToHourMin = (totalMinutes: number): string => {
@@ -87,6 +91,30 @@ export class InvoicePrintComponent implements OnInit {
     const minutes = totalMinutes % 60;
     const formattedMinutes = minutes < 10 ? '0' + minutes : minutes;
     return `${hours}h ${formattedMinutes}m`;
+  }
+
+
+  convertTo12Hour = (time24: string): string => {
+    const [hourStr, minute] = time24.split(":");
+    let hour = parseInt(hourStr, 10);
+    const ampm = hour >= 12 ? "PM" : "AM";
+
+    hour = hour % 12;
+    hour = hour === 0 ? 12 : hour; // Handle midnight (0 -> 12 AM) and noon (12 -> 12 PM)
+
+    return `${hour}:${minute} ${ampm}`;
+  }
+
+  getTotalLabourAmount(): number {
+    return this.Entity.p.LabourExpenseDetailsArray.reduce((total: number, item: any) => {
+      return total + Number(item.LabourAmount || 0);
+    }, 0);
+  }
+
+  getTotalMultiAmountAmount(): number {
+    return this.Entity.p.InvoiceItemDetailsArray.reduce((total: number, item: any) => {
+      return total + Number(item.Amount || 0);
+    }, 0);
   }
 
   printSection() {
