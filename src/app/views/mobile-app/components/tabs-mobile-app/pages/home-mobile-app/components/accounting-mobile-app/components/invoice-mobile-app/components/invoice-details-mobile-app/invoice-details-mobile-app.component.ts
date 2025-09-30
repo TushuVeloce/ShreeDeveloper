@@ -19,6 +19,7 @@ import { Unit } from 'src/app/classes/domain/entities/website/masters/unit/unit'
 import { Vendor } from 'src/app/classes/domain/entities/website/masters/vendor/vendor';
 import { VendorService } from 'src/app/classes/domain/entities/website/masters/vendorservices/vendorservices';
 import { LabourTimeProps } from 'src/app/classes/domain/entities/website/site_management/labourtime/labourtime';
+import { MultipleExpenseProps } from 'src/app/classes/domain/entities/website/site_management/multipleexpense/multipleexpense';
 import { TimeDetailProps } from 'src/app/classes/domain/entities/website/site_management/time/time';
 import { PayloadPacketFacade } from 'src/app/classes/infrastructure/payloadpacket/payloadpacketfacade';
 import { CurrentDateTimeRequest } from 'src/app/classes/infrastructure/request_response/currentdatetimerequest';
@@ -50,6 +51,7 @@ export class InvoiceDetailsMobileAppComponent implements OnInit {
   RecipientNameInput: boolean = false;
   SubLedgerList: SubLedger[] = [];
   UnitList: Unit[] = [];
+  UnitListwithoutHours: Unit[] = [];
   VendorList: Vendor[] = [];
   VendorServiceList: ServiceSuppliedByVendorProps[] = [];
   VendorServiceListByVendor: VendorService[] = [];
@@ -146,6 +148,9 @@ export class InvoiceDetailsMobileAppComponent implements OnInit {
   UnitName: string = '';
   selectedUnit: any[] = [];
 
+  MultipleUnitName: string = '';
+  selectedMultipleUnit: any[] = [];
+
   TotalOrderedQty: number = 0;
 
   errors: string = '';
@@ -162,6 +167,18 @@ export class InvoiceDetailsMobileAppComponent implements OnInit {
   BillingDate: string | null = null;
 
   DisplayTotalWorkingHrs: string = '';
+
+  MultipleExpenseEntity: MultipleExpenseProps = MultipleExpenseProps.Blank();
+  MultipleEditingIndex: null | undefined | number;
+  isMultipleExpenseModalOpen: boolean = false;
+  MultipleHeaders: string[] = [
+    'Discription',
+    'Unit',
+    'Quantity ',
+    'Rate',
+    'Amount',
+  ];
+  MultipleExpenseRef: number = ExpenseTypes.MultipleExpense;
 
   constructor(
     private router: Router,
@@ -206,7 +223,6 @@ export class InvoiceDetailsMobileAppComponent implements OnInit {
           this.IsNewEntity = false;
           this.DetailsFormTitle = this.IsNewEntity ? 'New Bill' : 'Edit Bill';
           this.Entity = Invoice.GetCurrentInstance();
-          console.log('this.Entity :', this.Entity);
           this.appStateManage.StorageKey.removeItem('Editable');
           this.Entity.p.UpdatedBy = Number(
             this.appStateManage.localStorage.getItem('LoginEmployeeRef')
@@ -284,10 +300,12 @@ export class InvoiceDetailsMobileAppComponent implements OnInit {
               .join(', ') || '';
 
           // ✅ Set selectedExpenseType in the correct structure
-          this.selectedExpenseType = this.Entity.p.ExpenseTypeArray.map((ref) => {
-            const item = this.ExpenseTypeArrayList.find((x) => x.Ref === ref);
-            return { p: { Ref: ref, Name: item?.Name ?? '' } };
-          });
+          this.selectedExpenseType = this.Entity.p.ExpenseTypeArray.map(
+            (ref) => {
+              const item = this.ExpenseTypeArrayList.find((x) => x.Ref === ref);
+              return { p: { Ref: ref, Name: item?.Name ?? '' } };
+            }
+          );
 
           this.InvoiceModeOfPaymentName =
             this.ModeofPaymentList.find(
@@ -479,6 +497,9 @@ export class InvoiceDetailsMobileAppComponent implements OnInit {
       await this.haptic.error();
     });
     this.UnitList = lst;
+    this.UnitListwithoutHours = lst.filter(
+      (data) => data.p.Ref != this.TimeUnitRef
+    );
   };
 
   getSiteListByCompanyRef = async () => {
@@ -506,6 +527,84 @@ export class InvoiceDetailsMobileAppComponent implements OnInit {
   cancelRecipientName = () => {
     this.RecipientNameInput = false;
     this.RecipientEntity.p.Name = '';
+  };
+
+  onTypeChange = async () => {
+    this.Entity.p.RecipientRef = 0;
+    this.RecipientNameInput = false;
+  };
+
+  SaveNewRecipientName = async () => {
+    try {
+      await this.loadingService.show();
+      if (this.RecipientEntity.p.Name == '') {
+        await this.toastService.present(
+          'Recipient Name can not be Blank',
+          1000,
+          'warning'
+        );
+        await this.haptic.warning();
+        return;
+      }
+      this.RecipientEntity.p.CompanyRef = this.companyRef;
+      this.RecipientEntity.p.CompanyName =
+        this.companystatemanagement.getCurrentCompanyName();
+      if (this.RecipientEntity.p.CreatedBy == 0) {
+        this.RecipientEntity.p.CreatedBy = Number(
+          this.appStateManage.localStorage.getItem('LoginEmployeeRef')
+        );
+        this.RecipientEntity.p.UpdatedBy = Number(
+          this.appStateManage.localStorage.getItem('LoginEmployeeRef')
+        );
+      }
+      let entityToSave = this.RecipientEntity.GetEditableVersion();
+      let entitiesToSave = [entityToSave];
+      let tr = await this.utils.SavePersistableEntities(entitiesToSave);
+
+      if (!tr.Successful) {
+        this.isSaveDisabled = false;
+        await this.toastService.present(tr.Message, 1000, 'danger');
+        await this.haptic.error();
+        return;
+      } else {
+        this.RecipientNameInput = false;
+        await this.getRecipientListByRecipientTypeRef();
+
+        this.RecipientEntity = Recipient.CreateNewInstance();
+        await this.toastService.present(
+          'Recipient Name saved successfully',
+          1000,
+          'success'
+        );
+        await this.haptic.success();
+      }
+    } catch (error) {
+      await this.toastService.present('Error ' + error, 1000, 'danger');
+      await this.haptic.error();
+    } finally {
+      await this.loadingService.hide();
+    }
+  };
+
+    DiselPaid = (DiselPaid: number) => {
+    if (DiselPaid == 1) {
+      this.isDieselPaid = true;
+      this.Entity.p.IsDieselPaid = 1;
+    } else {
+      this.Entity.p.DieselQty = 0;
+      this.Entity.p.DieselRate = 0;
+      this.Entity.p.DieselAmount = 0;
+      this.Entity.p.IsDieselPaid = 0;
+      this.isDieselPaid = false;
+    }
+    this.CalculateAmount();
+  };
+
+  CalculateDieselAmount = () => {
+    const DieselQty = Number(this.Entity.p.DieselQty);
+    const DieselRate = Number(this.Entity.p.DieselRate);
+    this.Entity.p.DieselAmount = Math.round(DieselQty * DieselRate * 100) / 100;
+    this.CalculateAmount();
   };
 
   getLedgerListByCompanyRef = async () => {
@@ -545,84 +644,7 @@ export class InvoiceDetailsMobileAppComponent implements OnInit {
     this.selectedSubLedger = [];
     this.SubLedgerName = '';
   };
-
-  DiselPaid = (DiselPaid: number) => {
-    if (DiselPaid == 1) {
-      this.isDieselPaid = true;
-      this.Entity.p.IsDieselPaid = 1;
-    } else {
-      this.Entity.p.DieselQty = 0;
-      this.Entity.p.DieselRate = 0;
-      this.Entity.p.DieselAmount = 0;
-      this.Entity.p.IsDieselPaid = 0;
-      this.isDieselPaid = false;
-    }
-    this.CalculateAmount();
-  };
-
-  CalculateDieselAmount = () => {
-    const DieselQty = Number(this.Entity.p.DieselQty);
-    const DieselRate = Number(this.Entity.p.DieselRate);
-    this.Entity.p.DieselAmount = Math.round(DieselQty * DieselRate * 100) / 100;
-    this.CalculateAmount();
-  };
-
-  CalculateAmount = () => {
-    const TotalWorkedHours = this.getTotalWorkedHours();
-    const TotalLabourAmount = this.getTotalLabourAmount();
-    const Qty = Number(this.Entity.p.Qty);
-    const DieselAmount = Number(this.Entity.p.DieselAmount) || 0;
-    if (TotalWorkedHours > 0) {
-      const Rate = Number(this.Entity.p.Rate / 60);
-      this.Entity.p.InvoiceAmount =
-        Math.round((TotalWorkedHours * Rate - DieselAmount) * 100) / 100;
-    } else if (TotalLabourAmount > 0) {
-      this.Entity.p.InvoiceAmount = Math.round(TotalLabourAmount * 100) / 100;
-    } else {
-      this.Entity.p.InvoiceAmount =
-        Math.round((Qty * this.Entity.p.Rate - DieselAmount) * 100) / 100;
-    }
-  };
-
-  getChalanNo = async () => {
-    let req = new InvoiceNoFetchRequest();
-    req.CompanyRef = this.companyRef;
-    let td = req.FormulateTransportData();
-    let pkt = this.payloadPacketFacade.CreateNewPayloadPacket2(td);
-    let tr = await this.serverCommunicator.sendHttpRequest(pkt);
-
-    if (!tr.Successful) {
-      await this.toastService.present(tr.Message, 1000, 'danger');
-      await this.haptic.error();
-      return;
-    }
-
-    let tdResult = JSON.parse(tr.Tag) as TransportData;
-    let collections = tdResult?.MainData?.Collections;
-
-    if (Array.isArray(collections)) {
-      for (const item of collections) {
-        if (
-          item.Name === 'Invoice' &&
-          Array.isArray(item.Entries) &&
-          item.Entries.length > 0
-        ) {
-          const entry = item.Entries[0] as { NextInvoiceNo: number };
-          const NextInvoiceNo = entry.NextInvoiceNo;
-          this.Entity.p.InvoiceNo = NextInvoiceNo;
-          return;
-        }
-      }
-    }
-    await this.toastService.present(
-      'Chalan number could not be retrieved.',
-      1000,
-      'danger'
-    );
-    await this.haptic.error();
-  };
-
-  convertHoursToReadableTime = (decimalHours: number): string => {
+ convertHoursToReadableTime = (decimalHours: number): string => {
     const hours = Math.floor(decimalHours);
     const minutes = Math.round((decimalHours - hours) * 60);
 
@@ -649,32 +671,7 @@ export class InvoiceDetailsMobileAppComponent implements OnInit {
     return `${hours}h ${formattedMinutes}m`;
   };
 
-  getTotalLabourWorkedHours = (): number => {
-    return this.Entity.p.LabourExpenseDetailsArray.reduce(
-      (total: number, item: any) => {
-        return total + Number(item.LabourWorkedHours || 0);
-      },
-      0
-    );
-  };
-  getTotalLabourQuantity = (): number => {
-    return this.Entity.p.LabourExpenseDetailsArray.reduce(
-      (total: number, item: any) => {
-        return total + Number(item.LabourQty || 0);
-      },
-      0
-    );
-  };
-  getTotalLabourAmount = (): number => {
-    return this.Entity.p.LabourExpenseDetailsArray.reduce(
-      (total: number, item: any) => {
-        return total + Number(item.LabourAmount || 0);
-      },
-      0
-    );
-  };
-
-  convertTo12HourFormat = (time: string): string => {
+    convertTo12HourFormat = (time: string): string => {
     const [hourStr, minuteStr] = time.split(':');
     let hour = parseInt(hourStr, 10);
     const minute = parseInt(minuteStr, 10);
@@ -841,6 +838,72 @@ export class InvoiceDetailsMobileAppComponent implements OnInit {
     }
   };
 
+  getChalanNo = async () => {
+    let req = new InvoiceNoFetchRequest();
+    req.CompanyRef = this.companyRef;
+    let td = req.FormulateTransportData();
+    let pkt = this.payloadPacketFacade.CreateNewPayloadPacket2(td);
+    let tr = await this.serverCommunicator.sendHttpRequest(pkt);
+
+    if (!tr.Successful) {
+      await this.toastService.present(tr.Message, 1000, 'danger');
+      await this.haptic.error();
+      return;
+    }
+
+    let tdResult = JSON.parse(tr.Tag) as TransportData;
+    let collections = tdResult?.MainData?.Collections;
+
+    if (Array.isArray(collections)) {
+      for (const item of collections) {
+        if (
+          item.Name === 'Invoice' &&
+          Array.isArray(item.Entries) &&
+          item.Entries.length > 0
+        ) {
+          const entry = item.Entries[0] as { NextInvoiceNo: number };
+          const NextInvoiceNo = entry.NextInvoiceNo;
+          this.Entity.p.InvoiceNo = NextInvoiceNo;
+          return;
+        }
+      }
+    }
+    await this.toastService.present(
+      'Chalan number could not be retrieved.',
+      1000,
+      'danger'
+    );
+    await this.haptic.error();
+  };
+
+  getTotalLabourWorkedHours = (): number => {
+    return this.Entity.p.LabourExpenseDetailsArray.reduce(
+      (total: number, item: any) => {
+        return total + Number(item.LabourWorkedHours || 0);
+      },
+      0
+    );
+  };
+
+  getTotalLabourQuantity = (): number => {
+    return this.Entity.p.LabourExpenseDetailsArray.reduce(
+      (total: number, item: any) => {
+        return total + Number(item.LabourQty || 0);
+      },
+      0
+    );
+  };
+  getTotalLabourAmount = (): number => {
+    return this.Entity.p.LabourExpenseDetailsArray.reduce(
+      (total: number, item: any) => {
+        return total + Number(item.LabourAmount || 0);
+      },
+      0
+    );
+  };
+
+
+
   CloseLabourTimeModal = async (type: number) => {
     if (type === 200) {
       const keysToCheck = ['StartTime', 'EndTime'] as const;
@@ -884,6 +947,7 @@ export class InvoiceDetailsMobileAppComponent implements OnInit {
     }
   };
   calculateLaboursWorkedHours = () => {};
+
   SaveLabourTime = async () => {
     if (!this.LabourTimeEntity.Days) {
       await this.toastService.present('Days is required!', 1000, 'warning');
@@ -974,28 +1038,78 @@ export class InvoiceDetailsMobileAppComponent implements OnInit {
     this.CalculateAmount();
   };
 
+  // ClearInputsOnExpenseChange = () => {
+  //   this.Entity.p.MachineUsageDetailsArray = [];
+  //   this.Entity.p.LabourExpenseDetailsArray = [];
+  //   this.Entity.p.InvoiceRecipientType = 0;
+  //   this.RecipientTypeName = '';
+  //   this.selectedRecipientType = [];
+  //   this.Entity.p.RecipientRef = 0;
+  //   this.RecipientName = '';
+  //   this.selectedRecipientName = [];
+  //   this.RecipientNameInput = false;
+  //   this.Entity.p.RecipientRef = 0;
+  //   this.selectedVendor = [];
+  //   this.VendorName = '';
+  //   this.Entity.p.VendorServiceRef = 0;
+  //   this.selectedVendorService = [];
+  //   this.VendorServiceName = '';
+  //   this.Entity.p.VehicleNo = '';
+  //   this.Entity.p.Qty = 0;
+  //   this.Entity.p.Rate = 0;
+  //   this.CalculateAmount();
+  //   this.DiselPaid(0);
+  // };
   ClearInputsOnExpenseChange = () => {
-    this.Entity.p.MachineUsageDetailsArray = [];
-    this.Entity.p.LabourExpenseDetailsArray = [];
-    this.Entity.p.InvoiceRecipientType = 0;
-    this.RecipientTypeName = '';
-    this.selectedRecipientType = [];
-    this.Entity.p.RecipientRef = 0;
-    this.RecipientName = '';
-    this.selectedRecipientName = [];
-    this.RecipientNameInput = false;
-    this.Entity.p.RecipientRef = 0;
-    this.selectedVendor = [];
-    this.VendorName = '';
-    this.Entity.p.VendorServiceRef = 0;
-    this.selectedVendorService = [];
-    this.VendorServiceName = '';
-    this.Entity.p.VehicleNo = '';
-    this.Entity.p.Qty = 0;
-    this.Entity.p.Rate = 0;
+    if (
+      this.Entity.p.ExpenseTypeArray[0] == this.OtherExpenseRef &&
+      this.Entity.p.ExpenseTypeArray.length == 2
+    ) {
+      let temp = this.Entity.p.ExpenseTypeArray[1];
+      this.Entity.p.ExpenseTypeArray = [];
+      this.Entity.p.ExpenseTypeArray.push(temp);
+    }
+    if (this.Entity.p.ExpenseTypeArray.includes(this.OtherExpenseRef)) {
+      this.Entity.p.ExpenseTypeArray = [];
+      this.Entity.p.ExpenseTypeArray.push(this.OtherExpenseRef);
+      this.Entity.p.LabourExpenseDetailsArray = [];
+      this.Entity.p.MachineUsageDetailsArray = [];
+      this.Entity.p.InvoiceItemDetailsArray = [];
+      this.Entity.p.Rate = 0;
+    } else {
+      this.Entity.p.InvoiceRecipientType = 0;
+      this.RecipientTypeName = '';
+      this.selectedRecipientType = [];
+      this.Entity.p.RecipientRef = 0;
+      this.selectedVendor = [];
+      this.VendorName = '';
+      this.RecipientNameInput = false;
+      this.Entity.p.RecipientRef = 0;
+      this.RecipientName = '';
+      this.selectedRecipientName = [];
+      this.Entity.p.VendorServiceRef = 0;
+      this.selectedVendorService = [];
+      this.VendorServiceName = '';
+      this.Entity.p.VehicleNo = '';
+      this.Entity.p.Qty = 0;
+      if (!this.Entity.p.ExpenseTypeArray.includes(this.MachinaryExpenseRef)) {
+        this.Entity.p.Rate = 0;
+        this.Entity.p.UnitRef = 0;
+      }
+      this.DiselPaid(0);
+    }
+    if (this.Entity.p.ExpenseTypeArray.includes(this.MachinaryExpenseRef)) {
+      this.Entity.p.UnitRef = this.TimeUnitRef;
+      this.UnitName =
+        this.UnitList.find((item) => item.p.Ref == this.Entity.p.UnitRef)?.p
+          .Name ?? '';
+      this.selectedUnit = [
+        { p: { Ref: this.Entity.p.UnitRef, Name: this.UnitName } },
+      ];
+    }
     this.CalculateAmount();
-    this.DiselPaid(0);
   };
+
   ClearMachineTimeTable = () => {
     this.Entity.p.MachineUsageDetailsArray = [];
   };
@@ -1017,6 +1131,110 @@ export class InvoiceDetailsMobileAppComponent implements OnInit {
     const Rate = this.LabourTimeEntity.LabourRate * this.LabourTimeEntity.Days;
     this.LabourTimeEntity.LabourAmount = Math.round(Qty * Rate * 100) / 100;
   };
+
+  // ========================================================= Start Multiple Expense Code =========================================================
+
+  CloseMultipleExpenseModal = async () => {
+    this.isMultipleExpenseModalOpen = false;
+    this.MultipleExpenseEntity = MultipleExpenseProps.Blank();
+  };
+
+  CalculateMultipleExpenseAmount = () => {
+    if (
+      this.MultipleExpenseEntity.Quantity <= 0 ||
+      this.MultipleExpenseEntity.Rate <= 0
+    ) {
+      return;
+    }
+    this.MultipleExpenseEntity.Amount =
+      this.MultipleExpenseEntity.Rate * this.MultipleExpenseEntity.Quantity;
+  };
+
+  getTotalMultipleExpenseAmount(): number {
+    return this.Entity.p.InvoiceItemDetailsArray.reduce(
+      (total: number, item: any) => {
+        return total + Number(item.Amount || 0);
+      },
+      0
+    );
+  }
+
+  SaveMultipleExpense = async () => {
+    if (!this.MultipleExpenseEntity.Description) {
+      await this.toastService.present(
+        'Error: Description is required!',
+        1000,
+        'warning'
+      );
+      await this.haptic.warning();
+      return;
+    } else if (!this.MultipleExpenseEntity.UnitRef) {
+      await this.toastService.present(
+        'Error: Unit is required!',
+        1000,
+        'warning'
+      );
+      await this.haptic.warning();
+      return;
+    } else if (!this.MultipleExpenseEntity.Rate) {
+      await this.toastService.present(
+        'Error: Rate is required!',
+        1000,
+        'warning'
+      );
+      await this.haptic.warning();
+      return;
+    } else if (!this.MultipleExpenseEntity.Quantity) {
+      await this.toastService.present(
+        'Error: Quantity is required!',
+        1000,
+        'warning'
+      );
+      await this.haptic.warning();
+      return;
+    }
+    // this.isMultiSaveDisabled = true;
+    if (this.MultipleExpenseEntity.UnitRef != 0) {
+      const UnitRecord = this.UnitListwithoutHours.find(
+        (item) => item.p.Ref == this.MultipleExpenseEntity.UnitRef
+      );
+      this.MultipleExpenseEntity.UnitName = UnitRecord?.p.Name || '';
+    }
+    if (
+      this.MultipleEditingIndex !== null &&
+      this.MultipleEditingIndex !== undefined &&
+      this.MultipleEditingIndex >= 0
+    ) {
+      this.Entity.p.InvoiceItemDetailsArray[this.MultipleEditingIndex] = {
+        ...this.MultipleExpenseEntity,
+      };
+      this.isMultipleExpenseModalOpen = false;
+    } else {
+      this.MultipleExpenseEntity.InvoiceRef = this.Entity.p.Ref;
+      this.Entity.p.InvoiceItemDetailsArray.push({
+        ...this.MultipleExpenseEntity,
+      });
+      this.isMultipleExpenseModalOpen = false;
+    }
+    this.MultipleExpenseEntity = MultipleExpenseProps.Blank();
+    this.MultipleEditingIndex = null;
+    this.CalculateAmount();
+  };
+
+  EditMultipleExpense(index: number) {
+    this.isMultipleExpenseModalOpen = true;
+    this.MultipleExpenseEntity = {
+      ...this.Entity.p.InvoiceItemDetailsArray[index],
+    };
+    this.MultipleEditingIndex = index;
+  }
+
+  RemoveMultipleExpense(index: number) {
+    this.Entity.p.InvoiceItemDetailsArray.splice(index, 1); // Remove Time
+    this.CalculateAmount();
+  }
+
+  // ========================================================= End Multiple Expense Code =========================================================
 
   // ---------- UTILITY METHODS ----------
 
@@ -1080,10 +1298,6 @@ export class InvoiceDetailsMobileAppComponent implements OnInit {
     this.calculateLaboursWorkedHours();
   };
 
-  onTypeChange = async () => {
-    this.Entity.p.RecipientRef = 0;
-    this.RecipientNameInput = false;
-  };
   getRecipientListByRecipientTypeRef = async () => {
     if (this.companyRef <= 0) {
       await this.toastService.present('Company not Selected', 1000, 'warning');
@@ -1116,57 +1330,24 @@ export class InvoiceDetailsMobileAppComponent implements OnInit {
     input.select();
   };
 
-  SaveNewRecipientName = async () => {
-    try {
-      await this.loadingService.show();
-      if (this.RecipientEntity.p.Name == '') {
-        await this.toastService.present(
-          'Recipient Name can not be Blank',
-          1000,
-          'warning'
-        );
-        await this.haptic.warning();
-        return;
-      }
-      this.RecipientEntity.p.CompanyRef = this.companyRef;
-      this.RecipientEntity.p.CompanyName =
-        this.companystatemanagement.getCurrentCompanyName();
-      if (this.RecipientEntity.p.CreatedBy == 0) {
-        this.RecipientEntity.p.CreatedBy = Number(
-          this.appStateManage.localStorage.getItem('LoginEmployeeRef')
-        );
-        this.RecipientEntity.p.UpdatedBy = Number(
-          this.appStateManage.localStorage.getItem('LoginEmployeeRef')
-        );
-      }
-      let entityToSave = this.RecipientEntity.GetEditableVersion();
-      let entitiesToSave = [entityToSave];
-      let tr = await this.utils.SavePersistableEntities(entitiesToSave);
+   CalculateAmount = () => {
+    const TotalWorkedHours = this.getTotalWorkedHours()
+    const TotalLabourAmount = this.getTotalLabourAmount()
+    const TotalMultiExpenseAmount = this.getTotalMultipleExpenseAmount()
+    const Qty = Number(this.Entity.p.Qty)
+    const DieselAmount = Number(this.Entity.p.DieselAmount) || 0
 
-      if (!tr.Successful) {
-        this.isSaveDisabled = false;
-        await this.toastService.present(tr.Message, 1000, 'danger');
-        await this.haptic.error();
-        return;
-      } else {
-        this.RecipientNameInput = false;
-        await this.getRecipientListByRecipientTypeRef();
-
-        this.RecipientEntity = Recipient.CreateNewInstance();
-        await this.toastService.present(
-          'Recipient Name saved successfully',
-          1000,
-          'success'
-        );
-        await this.haptic.success();
-      }
-    } catch (error) {
-      await this.toastService.present('Error ' + error, 1000, 'danger');
-      await this.haptic.error();
-    } finally {
-      await this.loadingService.hide();
+    let Rate = 0;
+    if (Number(this.Entity.p.Rate / 60) > 0) {
+      Rate = Number(this.Entity.p.Rate / 60);
     }
-  };
+    if (this.Entity.p.ExpenseTypeArray[0] == this.OtherExpenseRef && this.Entity.p.ExpenseTypeArray.length == 1) {
+      this.Entity.p.InvoiceAmount = (Math.round(((Qty * this.Entity.p.Rate) - DieselAmount) * 100) / 100);
+    } else {
+      this.Entity.p.InvoiceAmount = (Math.round(((TotalWorkedHours * Rate) - DieselAmount) * 100) / 100) + (Math.round((TotalLabourAmount) * 100) / 100) + (Math.round((TotalMultiExpenseAmount) * 100) / 100);
+    }
+  }
+
 
   SaveInvoiceMaster = async () => {
     try {
@@ -1270,6 +1451,26 @@ export class InvoiceDetailsMobileAppComponent implements OnInit {
           this.selectedInvoiceModeOfPayment = selected;
           this.Entity.p.InvoiceModeOfPayment = selected[0].p.Ref;
           this.InvoiceModeOfPaymentName = selected[0].p.Name;
+        }
+      );
+    } catch (error) {
+      await this.toastService.present('Error ' + error, 1000, 'danger');
+      await this.haptic.error();
+    }
+  };
+  public selectMultipleUnitBottomsheet = async (): Promise<void> => {
+    try {
+      const options = this.UnitListwithoutHours;
+      this.openSelectModal(
+        options,
+        this.selectedUnit,
+        false,
+        'Select Unit',
+        1,
+        (selected) => {
+          this.selectedMultipleUnit = selected;
+          this.MultipleExpenseEntity.UnitRef = selected[0].p.Ref;
+          this.MultipleUnitName = selected[0].p.Name;
         }
       );
     } catch (error) {
@@ -1408,8 +1609,6 @@ export class InvoiceDetailsMobileAppComponent implements OnInit {
         (selected) => {
           this.selectedExpenseType = selected;
 
-          console.log('this.selectedExpenseType :', this.selectedExpenseType);
-          console.log('selected :', selected);
 
           // ✅ Extract all selected Ref values as an array
           this.Entity.p.ExpenseTypeArray = selected.map((s) => s.p.Ref);

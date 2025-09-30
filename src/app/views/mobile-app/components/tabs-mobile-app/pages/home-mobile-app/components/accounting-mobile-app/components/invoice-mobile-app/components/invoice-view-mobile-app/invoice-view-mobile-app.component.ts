@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { DomainEnums } from 'src/app/classes/domain/domainenums/domainenums';
+import { DomainEnums, ExpenseTypes } from 'src/app/classes/domain/domainenums/domainenums';
 import { Invoice } from 'src/app/classes/domain/entities/website/accounting/billing/invoice';
 import { Ledger } from 'src/app/classes/domain/entities/website/masters/ledgermaster/ledger';
 import { Site } from 'src/app/classes/domain/entities/website/masters/site/site';
@@ -42,6 +42,14 @@ export class InvoiceViewMobileAppComponent implements OnInit {
   RecipientTypesList = DomainEnums.RecipientTypesList();
   // Store current selected values here to preserve selections on filter reload
   selectedFilterValues: Record<string, any> = {};
+  MultipleHeaders: string[] = [
+      'Discription',
+      'Unit',
+      'Quantity ',
+      'Rate',
+      'Amount',
+    ];
+    MultipleExpenseRef: number = ExpenseTypes.MultipleExpense;
 
   constructor(
     private router: Router,
@@ -217,7 +225,6 @@ export class InvoiceViewMobileAppComponent implements OnInit {
 
       this.loadFilters();
     } catch (error) {
-      console.error('Error in loadInvoiceIfEmployeeExists:', error);
       await this.toastService.present('Failed to load Billing', 1000, 'danger');
       await this.haptic.error();
     } finally {
@@ -246,7 +253,6 @@ export class InvoiceViewMobileAppComponent implements OnInit {
         await this.toastService.present(errMsg, 1000, 'danger');
         await this.haptic.error();
       });
-    console.log('lst :', lst);
     this.MasterList = lst;
     this.DisplayMasterList = this.MasterList;
   }
@@ -350,7 +356,6 @@ export class InvoiceViewMobileAppComponent implements OnInit {
             role: 'cancel',
             cssClass: 'custom-cancel',
             handler: () => {
-              console.log('Deletion cancelled.');
             }
           },
           {
@@ -402,7 +407,6 @@ export class InvoiceViewMobileAppComponent implements OnInit {
 
   openModal = (Invoice: any) => {
     this.SelectedInvoice = Invoice;
-    console.log('this.SelectedInvoice :', this.SelectedInvoice);
     this.modalOpen = true;
   }
 

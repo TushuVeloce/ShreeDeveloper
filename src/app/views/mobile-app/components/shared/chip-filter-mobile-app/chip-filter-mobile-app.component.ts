@@ -43,8 +43,7 @@ export class ChipFilterMobileAppComponent  implements OnInit {
   }
 
   onFilterChange(filterKey: string, value: any) {
-  // console.log('value :', value);
-  // console.log('filterKey :', filterKey);
+ 
     const filter = this.filters.find(f => f.key === filterKey);
     filter.selected = value;
     this.emitFilters();
@@ -57,7 +56,6 @@ export class ChipFilterMobileAppComponent  implements OnInit {
 
 
   getSelectedNames(filter: { multi: boolean; label: string; options: FilterOption[]; selected: any }): string {
-    // console.log('FilterOption :', filter.options);
     if (filter.multi) {
       if (!filter.selected || filter.selected.length === 0) return filter.label;
 

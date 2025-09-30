@@ -28,6 +28,10 @@ import {
 import { ExpenseGraph } from 'src/app/classes/domain/entities/website/Dashboard/expensegraph/expensegraph';
 import { IncomeGraph } from 'src/app/classes/domain/entities/website/Dashboard/incomegraph/incomegraph';
 import { WebAttendaneLog } from 'src/app/classes/domain/entities/website/HR_and_Payroll/web_attendance_log/web_attendance_log/webattendancelog';
+import {
+  MenuItem,
+  ValidMenuItemsStateManagementMobileApp,
+} from 'src/app/views/mobile-app/components/core/ValidMenuItemsStateManagementMobileApp';
 
 // Register Chart.js components
 Chart.register(...registerables);
@@ -36,8 +40,8 @@ interface GridItem {
   icon: string;
   label: string;
   routerPath: string;
+  group: number;
 }
-
 
 @Component({
   selector: 'app-home-view-mobile-app',
@@ -51,9 +55,8 @@ export class HomeViewMobileAppComponent
   // === ViewChild for Charts ===
   @ViewChild('incomeExpenseChart') private incomeExpenseChartRef!: ElementRef;
   @ViewChild('bankBalanceChart') private bankBalanceChartRef!: ElementRef;
-  @ViewChild('bankLegend') private bankLegendRef!: ElementRef;
+  @ViewChild('bankLegend') private bankLegendRef!: ElementRef; // === General Dashboard Data ===
 
-  // === General Dashboard Data ===
   public userName: string = 'User'; // Placeholder for user's name
   public currentDate: string = '';
   public selectedIndex = 0;
@@ -71,31 +74,44 @@ export class HomeViewMobileAppComponent
   public TotalIncome: number = 0;
   public LocationType = AttendanceLocationType;
 
-  public gridItems: GridItem[] = [
-    {
-      icon: 'assets/icons/site_management_mobile_app.png',
-      label: 'Site',
-      routerPath: '/mobile-app/tabs/dashboard/site-management',
-    },
-    {
-      icon: 'assets/icons/stock_mobile_app.png',
-      label: 'Stock',
-      routerPath: '/mobile-app/tabs/dashboard/stock-management',
-    },
-    {
-      icon: 'assets/icons/crm_mobile_app.png',
-      label: 'CRM',
-      routerPath: '/mobile-app/tabs/dashboard/customer-relationship-management',
-    },
-    {
-      icon: 'assets/icons/report_mobile_app.png',
-      label: 'Accounting',
-      routerPath: '/mobile-app/tabs/dashboard/accounting',
-    },
-  ];
+  public gridItems: GridItem[] = [];
 
-  // === Admin View Data ===
-  public isAdmin = false; // Set this based on user role
+  private featureMap: {
+    [key: number]: {
+      label: string;
+      icon: string;
+      routerPath: string;
+      group: number;
+    };
+  } = {
+    // FeatureRef: 1900 - AccountingTransaction
+    2200: {
+      label: 'Site',
+      icon: 'assets/icons/site_management_mobile_app.png',
+      routerPath: '/mobile-app/tabs/dashboard/site-management',
+      group: 20,
+    }, // FeatureRef: 1900 - AccountingTransaction
+    1900: {
+      label: 'Accounting',
+      icon: 'assets/icons/report_mobile_app.png',
+      routerPath: '/mobile-app/tabs/dashboard/accounting',
+      group: 20,
+    }, // FeatureRef: 2300 - MaterialTransaction (assuming this maps to 'Stock' quick action)
+    2300: {
+      label: 'Stock',
+      icon: 'assets/icons/stock_mobile_app.png',
+      routerPath: '/mobile-app/tabs/dashboard/stock-management',
+      group: 20,
+    }, // FeatureRef: 1800 - EmployeeMaster (assuming this links to a main HR page)
+    1800: {
+      label: 'CRM',
+      icon: 'assets/icons/crm_mobile_app.png',
+      routerPath: '/mobile-app/tabs/dashboard/customer-relationship-management',
+      group: 20,
+    },
+  }; // === Admin View Data ===
+
+  public isAdmin = false;
   public totalBalance: number = 0;
   public cashBalance: number = 0;
   public peoplePresent: number = 0;
@@ -103,7 +119,7 @@ export class HomeViewMobileAppComponent
   public greeting: string = '';
   private incomeExpenseData: any = [];
 
-  private bankBalanceData: any; // Make it dynamic
+  private bankBalanceData: any;
 
   constructor(
     private router: Router,
@@ -113,11 +129,12 @@ export class HomeViewMobileAppComponent
     private alertService: AlertService,
     private loadingService: LoadingService,
     private dateConversion: DateconversionService,
-    private appState: AppStateManageService
+    private appState: AppStateManageService,
+    private validMenuItemsService: ValidMenuItemsStateManagementMobileApp
   ) {}
 
   ngOnInit(): void {
-    this.initializeData();
+    //     this.initializeData();
     this.backButtonSub = this.platform.backButton.subscribeWithPriority(
       10,
       async () => {
@@ -135,6 +152,9 @@ export class HomeViewMobileAppComponent
     const legendPosition = this.getLegendPosition();
   }
 
+  ionViewWillEnter(): void {
+    this.initializeData();
+  }
   // === Data Fetching and Initialization ===
   async initializeData(): Promise<void> {
     this.userName =
@@ -143,9 +163,355 @@ export class HomeViewMobileAppComponent
     this.companyRef = Number(
       this.appState.localStorage.getItem('SelectedCompanyRef')
     );
+
     await this.fetchServerTime();
-    await this.fetchAdminData();
-    this.setGreeting();
+    this.setGreeting(); // 1. Filter the Quick Actions grid based on permissions
+
+    this.filterGridItems(); // 2. Conditionally fetch data based on user role
+
+    if (this.isAdmin) {
+      await this.fetchAdminData();
+    } else {
+      await this.fetchEmployeeData();
+    }
+  } // Fetch data specific to a regular employee (non-admin)
+
+  private async fetchEmployeeData(): Promise<void> {
+    await this.loadingService.show();
+    try {
+      const employeeRef = Number(
+        this.appState.localStorage.getItem('LoginEmployeeRef')
+      );
+      if (!employeeRef) {
+        this.toastService.present('Employee not identified.', 1000, 'danger');
+        return;
+      } // Fetch all attendance logs for the company today
+
+      let allTodayLogs =
+        await WebAttendaneLog.FetchEntireListByCompanyRefAndAttendanceLogType(
+          this.companyRef,
+          AttendanceLogType.TodaysAttendanceLog,
+          async (errMsg) => {
+            await this.toastService.present(
+              `Failed to load attendance: ${errMsg}`,
+              1000,
+              'danger'
+            );
+            await this.haptic.error();
+          }
+        ); // Filter the list to show only the logged-in employee's log
+
+      // const employeeLog = allTodayLogs.filter(
+      //   (log) => log.p.EmployeeRef === employeeRef
+      // );
+      const employeeLog = allTodayLogs;
+      this.todayAttendanceList = employeeLog; // Set peoplePresent to 1 or 0 based on if the user has a log.
+      this.peoplePresent = this.todayAttendanceList.length;
+    } catch (error) {
+      this.toastService.present(
+        'Failed to load employee data.',
+        1000,
+        'danger'
+      );
+    } finally {
+      this.loadingService.hide();
+    }
+  }
+
+  private async fetchAdminData(): Promise<void> {
+    await this.loadingService.show();
+    try {
+      // Admin fetches ALL financial and attendance data
+      await this.getCurrentBalanceByCompanyRef();
+      await this.getIncomeExpenseGraphList();
+      await this.getTodayAttendanceLogByAttendanceListType(); // Fetches all today's logs and sets peoplePresent
+      this.createIncomeExpenseChart();
+    } catch (error) {
+      console.error('Error fetching admin data:', error);
+      this.toastService.present('Failed to load admin data.', 1000, 'danger');
+    } finally {
+      this.loadingService.hide();
+    }
+  }
+
+  private filterGridItems(): void {
+    // const validMenu = this.validMenuItemsService.getValidMenuItems(); // console.log('validMenu :', validMenu); // Keeping console.log for debugging purposes // 1. Map and return GridItem or null
+    const validMenu = [
+      {
+        FeatureRef: 100,
+        FeatureName: 'UnitMaster',
+        FeatureGroupRef: 10,
+        CanAdd: true,
+        CanEdit: true,
+        CanDelete: true,
+        CanView: true,
+        CanPrint: true,
+        CanExport: true,
+      },
+      {
+        FeatureRef: 200,
+        FeatureName: 'MaterialMaster',
+        FeatureGroupRef: 10,
+        CanAdd: true,
+        CanEdit: true,
+        CanDelete: true,
+        CanView: true,
+        CanPrint: true,
+        CanExport: true,
+      },
+      {
+        FeatureRef: 300,
+        FeatureName: 'StageMaster',
+        FeatureGroupRef: 10,
+        CanAdd: true,
+        CanEdit: true,
+        CanDelete: true,
+        CanView: true,
+        CanPrint: true,
+        CanExport: true,
+      },
+      {
+        FeatureRef: 400,
+        FeatureName: 'MarketingTypeMaster',
+        FeatureGroupRef: 10,
+        CanAdd: true,
+        CanEdit: true,
+        CanDelete: true,
+        CanView: true,
+        CanPrint: true,
+        CanExport: true,
+      },
+      {
+        FeatureRef: 500,
+        FeatureName: 'VendorServicesMaster',
+        FeatureGroupRef: 10,
+        CanAdd: true,
+        CanEdit: true,
+        CanDelete: true,
+        CanView: true,
+        CanPrint: true,
+        CanExport: true,
+      },
+      {
+        FeatureRef: 600,
+        FeatureName: 'VendorMaster',
+        FeatureGroupRef: 10,
+        CanAdd: true,
+        CanEdit: true,
+        CanDelete: true,
+        CanView: true,
+        CanPrint: true,
+        CanExport: true,
+      },
+      {
+        FeatureRef: 700,
+        FeatureName: 'BankAccountMaster',
+        FeatureGroupRef: 10,
+        CanAdd: true,
+        CanEdit: true,
+        CanDelete: true,
+        CanView: true,
+        CanPrint: true,
+        CanExport: true,
+      },
+      {
+        FeatureRef: 800,
+        FeatureName: 'StateMaster',
+        FeatureGroupRef: 10,
+        CanAdd: true,
+        CanEdit: true,
+        CanDelete: true,
+        CanView: true,
+        CanPrint: true,
+        CanExport: true,
+      },
+      {
+        FeatureRef: 900,
+        FeatureName: 'CountryMaster',
+        FeatureGroupRef: 10,
+        CanAdd: true,
+        CanEdit: true,
+        CanDelete: true,
+        CanView: true,
+        CanPrint: true,
+        CanExport: true,
+      },
+      {
+        FeatureRef: 1000,
+        FeatureName: 'CityMaster',
+        FeatureGroupRef: 10,
+        CanAdd: true,
+        CanEdit: true,
+        CanDelete: true,
+        CanView: true,
+        CanPrint: true,
+        CanExport: true,
+      },
+      {
+        FeatureRef: 1100,
+        FeatureName: 'DepartmentMaster',
+        FeatureGroupRef: 10,
+        CanAdd: true,
+        CanEdit: true,
+        CanDelete: true,
+        CanView: true,
+        CanPrint: true,
+        CanExport: true,
+      },
+      {
+        FeatureRef: 1200,
+        FeatureName: 'DesignationMaster',
+        FeatureGroupRef: 10,
+        CanAdd: true,
+        CanEdit: true,
+        CanDelete: true,
+        CanView: true,
+        CanPrint: true,
+        CanExport: true,
+      },
+      {
+        FeatureRef: 1300,
+        FeatureName: 'UserRoleMaster',
+        FeatureGroupRef: 10,
+        CanAdd: true,
+        CanEdit: true,
+        CanDelete: true,
+        CanView: true,
+        CanPrint: true,
+        CanExport: true,
+      },
+      {
+        FeatureRef: 1400,
+        FeatureName: 'UserRoleRight',
+        FeatureGroupRef: 10,
+        CanAdd: true,
+        CanEdit: true,
+        CanDelete: true,
+        CanView: true,
+        CanPrint: true,
+        CanExport: true,
+      },
+      {
+        FeatureRef: 1500,
+        FeatureName: 'ExternalUserMaster',
+        FeatureGroupRef: 10,
+        CanAdd: true,
+        CanEdit: true,
+        CanDelete: true,
+        CanView: true,
+        CanPrint: true,
+        CanExport: true,
+      },
+      {
+        FeatureRef: 1600,
+        FeatureName: 'CompanyMaster',
+        FeatureGroupRef: 10,
+        CanAdd: true,
+        CanEdit: true,
+        CanDelete: true,
+        CanView: true,
+        CanPrint: true,
+        CanExport: true,
+      },
+      {
+        FeatureRef: 1700,
+        FeatureName: 'FinancialYearMaster',
+        FeatureGroupRef: 10,
+        CanAdd: true,
+        CanEdit: true,
+        CanDelete: true,
+        CanView: true,
+        CanPrint: true,
+        CanExport: true,
+      },
+      {
+        FeatureRef: 1800,
+        FeatureName: 'EmployeeMaster',
+        FeatureGroupRef: 10,
+        CanAdd: true,
+        CanEdit: true,
+        CanDelete: true,
+        CanView: true,
+        CanPrint: true,
+        CanExport: true,
+      },
+      {
+        FeatureRef: 1900,
+        FeatureName: 'AccountingTransaction',
+        FeatureGroupRef: 20,
+        CanAdd: true,
+        CanEdit: true,
+        CanDelete: true,
+        CanView: true,
+        CanPrint: true,
+        CanExport: true,
+      },
+      {
+        FeatureRef: 2000,
+        FeatureName: 'VendorReport',
+        FeatureGroupRef: 30,
+        CanAdd: true,
+        CanEdit: true,
+        CanDelete: true,
+        CanView: true,
+        CanPrint: true,
+        CanExport: true,
+      },
+      {
+        FeatureRef: 2100,
+        FeatureName: 'MaterialReport',
+        FeatureGroupRef: 30,
+        CanAdd: true,
+        CanEdit: true,
+        CanDelete: true,
+        CanView: true,
+        CanPrint: true,
+        CanExport: true,
+      },
+      {
+        FeatureRef: 2200,
+        FeatureName: 'EmployeeReport',
+        FeatureGroupRef: 30,
+        CanAdd: true,
+        CanEdit: true,
+        CanDelete: true,
+        CanView: true,
+        CanPrint: true,
+        CanExport: true,
+      },
+      {
+        FeatureRef: 2300,
+        FeatureName: 'MaterialTransaction',
+        FeatureGroupRef: 20,
+        CanAdd: true,
+        CanEdit: true,
+        CanDelete: true,
+        CanView: true,
+        CanPrint: true,
+        CanExport: true,
+      },
+    ];
+    const mappedItems = validMenu
+      .filter((item: MenuItem) => item.CanView) // Must have CanView permission
+      .map((item: MenuItem) => {
+        const mappedFeature = this.featureMap[item.FeatureRef]; // Return null if the feature is not mapped
+
+        if (!mappedFeature) {
+          return null;
+        } // Return the GridItem object
+
+        return {
+          label: mappedFeature.label || item.FeatureName,
+          icon: mappedFeature.icon,
+          routerPath: mappedFeature.routerPath,
+          group: mappedFeature.group,
+        } as GridItem;
+      }); // 2. Filter out null values, filter out group 10 (assuming masters), and sort // console.log('mappedItems :', mappedItems); // Keeping console.log for debugging purposes
+
+    this.gridItems = mappedItems
+      .filter((item): item is GridItem => item !== null) // Type Predicate fix to filter out nulls
+      .filter((item: GridItem) => item.group !== 10) // Further filtering (e.g., hiding masters)
+      .sort((a, b) => a.label.localeCompare(b.label));
   }
 
   setGreeting() {
@@ -160,50 +526,50 @@ export class HomeViewMobileAppComponent
       this.greeting = 'Good Evening.';
     }
   }
-    getStatusColor(Data: WebAttendaneLog): string {
-          let status = '';
-      if (Data.p.IsAttendanceVerified) {
-        status = 'present';
-      } else if (Data.p.IsLeave == true) {
-        status = 'onLeave';
-      } else if (Data.p.IsAbsent == true) {
-        status = 'absent';
-      } else {
-        status = 'present';
-      }
-      switch (status) {
-        case 'present':
-          return 'success';
-        case 'onLeave':
-          return 'Warning';
-        case 'absent':
-          return 'danger';
-        default:
-          return 'success';
-      }
+  getStatusColor(Data: WebAttendaneLog): string {
+    let status = '';
+    if (Data.p.IsAttendanceVerified) {
+      status = 'present';
+    } else if (Data.p.IsLeave == true) {
+      status = 'onLeave';
+    } else if (Data.p.IsAbsent == true) {
+      status = 'absent';
+    } else {
+      status = 'present';
     }
-    getStatusText(Data: WebAttendaneLog): string {
-      let status = '';
-      if (Data.p.IsAttendanceVerified) {
-        status = 'present';
-      } else if (Data.p.IsLeave == true) {
-        status = 'onLeave';
-      } else if (Data.p.IsAbsent == true) {
-        status = 'absent';
-      } else {
-        status = 'present';
-      }
-      switch (status) {
-        case 'present':
-          return 'Present';
-        case 'onLeave':
-          return 'on Leave';
-        case 'absent':
-          return 'Absent';
-        default:
-          return 'Present';
-      }
+    switch (status) {
+      case 'present':
+        return 'success';
+      case 'onLeave':
+        return 'Warning';
+      case 'absent':
+        return 'danger';
+      default:
+        return 'success';
     }
+  }
+  getStatusText(Data: WebAttendaneLog): string {
+    let status = '';
+    if (Data.p.IsAttendanceVerified) {
+      status = 'present';
+    } else if (Data.p.IsLeave == true) {
+      status = 'onLeave';
+    } else if (Data.p.IsAbsent == true) {
+      status = 'absent';
+    } else {
+      status = 'present';
+    }
+    switch (status) {
+      case 'present':
+        return 'Present';
+      case 'onLeave':
+        return 'on Leave';
+      case 'absent':
+        return 'Absent';
+      default:
+        return 'Present';
+    }
+  }
 
   private async fetchServerTime(): Promise<void> {
     try {
@@ -214,38 +580,8 @@ export class HomeViewMobileAppComponent
       this.currentDate = this.formatDate(new Date());
     }
   }
-
-  private async fetchAdminData(): Promise<void> {
-    await this.loadingService.show();
-    try {
-      // this.peoplePresent = 12;
-      // this.todayAttendanceList = [
-      //   { name: 'Alice Johnson', isPresent: true },
-      //   { name: 'Bob Smith', isPresent: true },
-      //   { name: 'Charlie Brown', isPresent: false },
-      //   { name: 'Diana Prince', isPresent: true },
-      //   { name: 'Eve Adams', isPresent: true },
-      //   { name: 'Frank White', isPresent: false },
-      // ];
-      await this.getCurrentBalanceByCompanyRef();
-      await this.getIncomeExpenseGraphList();
-      await this.getTodayAttendanceLogByAttendanceListType();
-
-      // Call the new method to create the chart with the fetched data
-      this.createIncomeExpenseChart();
-    } catch (error) {
-      console.error('Error fetching admin data:', error);
-      await this.toastService.present(
-        'Failed to load admin data.',
-        1000,
-        'danger'
-      );
-    } finally {
-      this.loadingService.hide();
-    }
-  }
-
   // === UI Helper Methods ===
+
   selectItem(index: number): void {
     this.selectedIndex = index;
   }
@@ -275,14 +611,20 @@ export class HomeViewMobileAppComponent
     options: any
   ): void {
     if (chartRef?.nativeElement) {
-      new Chart(chartRef.nativeElement, { type, data, options });
+      const canvas = chartRef.nativeElement;
+
+      const existingChart = Chart.getChart(canvas);
+
+      if (existingChart) {
+        existingChart.destroy();
+      }
+      new Chart(canvas, { type, data, options });
     }
   }
 
-  // === Date Formatting ===
   formatDateString(raw: string): string {
     const parts = raw?.substring(0, 10)?.split('-');
-    if (parts.length === 3) {
+    if (parts && parts.length === 3) {
       return `${parts[2]}/${parts[1]}/${parts[0]}`; // DD/MM/YYYY
     }
     return raw;
@@ -305,12 +647,12 @@ export class HomeViewMobileAppComponent
     );
     this.BalanceList = lst;
     if (lst.length > 0) {
-      this.totalBalance = lst[0].p.ShreesBalance;
+      this.totalBalance = lst[0].p.ShreesBalance ?? 0; // Use nullish coalescing
     }
 
-    let cash = lst.find((data) => data.p.ModeOfPayment == 'Cash');
+    let cash = lst.find((data) => data.p.ModeOfPayment === 'Cash');
     if (cash) {
-      this.cashBalance = cash.p.NetBalance;
+      this.cashBalance = cash.p.NetBalance ?? 0; // Use nullish coalescing
     }
     this.getBankCurrentBalance();
   };
@@ -319,9 +661,8 @@ export class HomeViewMobileAppComponent
     let allBankData = this.BalanceList.filter(
       (item) => item.p.ModeOfPayment.trim() === 'Bank'
     );
-    this.bankBalanceData = this.getBankBalanceChartData(allBankData);
+    this.bankBalanceData = this.getBankBalanceChartData(allBankData); // Now that the data is ready, create the chart
 
-    // Now that the data is ready, create the chart
     setTimeout(() => {
       const legendPosition = this.getLegendPosition();
       this.createChart(
@@ -345,20 +686,19 @@ export class HomeViewMobileAppComponent
       );
     }, 0);
   };
-
   /**
    * Generates dynamic data for the bank balance doughnut chart.
    *
    * @param bankData - An array of Expense objects with a 'Bank' mode of payment.
    * @returns An object formatted for a Chart.js doughnut chart.
    */
+
   private getBankBalanceChartData(bankData: any[]) {
     // Maximum length before wrapping the label text
     const maxLabelLength = 15;
 
     const labels = bankData.map((item) => {
-      const bankName = item.p.BankName || 'Unknown Bank';
-      // Split the label into two lines if it's too long
+      const bankName = item.p.BankName || 'Unknown Bank'; // Split the label into two lines if it's too long
       if (bankName.length > maxLabelLength) {
         const words = bankName.split(' ');
         let line1 = '';
@@ -381,9 +721,8 @@ export class HomeViewMobileAppComponent
       return bankName;
     });
 
-    const data = bankData.map((item) => item.p.NetBalance || 0);
+    const data = bankData.map((item) => item.p.NetBalance || 0); // A predefined palette of colors for the chart
 
-    // A predefined palette of colors for the chart
     const backgroundColors = [
       '#2B6CB0',
       '#F6AD55',
@@ -392,9 +731,8 @@ export class HomeViewMobileAppComponent
       '#805AD5',
       '#319795',
       '#D53F8C',
-    ];
+    ]; // Cycle through the predefined colors for each bank
 
-    // Cycle through the predefined colors for each bank
     const colors = labels.map(
       (_, index) => backgroundColors[index % backgroundColors.length]
     );
@@ -422,9 +760,7 @@ export class HomeViewMobileAppComponent
 
   getExpenseGraphListByCompanySiteMonthFilterType = async () => {
     if (this.companyRef <= 0) {
-      // await this.uiUtils.showErrorToster('Company not Selected');
       await this.toastService.present('Company not Selected', 1000, 'warning');
-
       return;
     }
     let lst = await ExpenseGraph.FetchEntireListByCompanySiteMonthFilterType(
@@ -433,20 +769,18 @@ export class HomeViewMobileAppComponent
       this.SelectedBarMonths,
       this.BarFilterType,
       async (errMsg) => {
-        // await this.uiUtils.showErrorMessage('Error', errMsg)
         await this.toastService.present(errMsg, 1000, 'error');
       }
     );
-    this.ExpenseGraphList = lst.map((item) => item.p.TotalGivenAmount);
+    this.ExpenseGraphList = lst.map((item) => item.p.TotalGivenAmount ?? 0);
     this.TotalExpense = lst.reduce(
-      (sum, item) => sum + (item.p.TotalGivenAmount || 0),
+      (sum, item) => sum + (item.p.TotalGivenAmount ?? 0), // Use nullish coalescing
       0
     );
   };
 
   getIncomeGraphListByCompanySiteMonthFilterType = async () => {
     if (this.companyRef <= 0) {
-      // await this.uiUtils.showErrorToster('Company not Selected');
       await this.toastService.present('Company not Selected', 1000, 'warning');
       return;
     }
@@ -456,18 +790,18 @@ export class HomeViewMobileAppComponent
       this.SelectedBarMonths,
       this.BarFilterType,
       async (errMsg) => {
-        //  await this.uiUtils.showErrorMessage('Error', errMsg)
         await this.toastService.present(errMsg, 1000, 'error');
       }
     );
     this.TotalIncome = lst.reduce(
-      (sum, item) => sum + (item.p.TotalIncomeAmount || 0),
+      (sum, item) => sum + (item.p.TotalIncomeAmount ?? 0), // Use nullish coalescing
       0
     );
-    this.IncomeGraphList = lst.map((item) => item.p.TotalIncomeAmount);
+    this.IncomeGraphList = lst.map((item) => item.p.TotalIncomeAmount ?? 0);
     if (this.BarFilterType == 63 && this.SelectedBarMonths) {
       this.WeekMonthList = lst.map((item) => item.p.WeekName);
     } else if (this.BarFilterType == 63) {
+      // Corrected the month list spelling (Spet -> Sept)
       this.WeekMonthList = [
         'Jan',
         'Feb',
@@ -477,7 +811,7 @@ export class HomeViewMobileAppComponent
         'June',
         'Jul',
         'Aug',
-        'Spet',
+        'Sept',
         'Oct',
         'Nov',
         'Dec',
@@ -485,20 +819,16 @@ export class HomeViewMobileAppComponent
     } else {
       this.WeekMonthList = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
     }
-  };
+  }; // Add a new method to create the income/expense chart
 
-  // Add a new method to create the income/expense chart
   private createIncomeExpenseChart(): void {
-    const legendPosition = this.getLegendPosition();
+    const legendPosition = this.getLegendPosition(); // Find the highest value to set a proper max for the y-axis
 
-    // Find the highest value in both income and expense data to set a proper max for the y-axis
     const maxIncome = Math.max(...this.IncomeGraphList);
     const maxExpense = Math.max(...this.ExpenseGraphList);
-    const maxValue = Math.max(maxIncome, maxExpense);
-    // Round up to the nearest 50,000 to keep the ticks clean
-    const suggestedMax = Math.ceil(maxValue / 50000) * 50000;
+    const maxValue = Math.max(maxIncome, maxExpense); // Round up to the nearest 50,000 to keep the ticks clean
+    const suggestedMax = Math.ceil(maxValue / 50000) * 50000; // Update the data object here
 
-    // Update the data object here
     this.incomeExpenseData = {
       labels: this.WeekMonthList,
       datasets: [
@@ -570,6 +900,7 @@ export class HomeViewMobileAppComponent
           await this.haptic.error();
         }
       );
-    this.todayAttendanceList = TodaysAttendanceLog;
+    this.todayAttendanceList = TodaysAttendanceLog; // Correctly set the people present count for the Admin view
+    this.peoplePresent = this.todayAttendanceList.length;
   };
 }

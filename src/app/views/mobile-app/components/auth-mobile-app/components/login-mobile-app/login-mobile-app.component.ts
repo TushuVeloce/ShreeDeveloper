@@ -59,6 +59,7 @@ export class LoginMobileAppComponent implements OnInit {
     }
 
     // Store login session data
+    console.log('response :', response);
     this.appStateManage.setEmployeeRef(response.LoginEmployeeRef);
     this.appStateManage.setLoginTokenForMobile(response.LoginToken);
     this.companystatemanagement.setCompanyRef(response.LastSelectedCompanyRef, response.CompanyName);
@@ -71,6 +72,7 @@ export class LoginMobileAppComponent implements OnInit {
     storage.setItem('companyName', response.CompanyName);
     storage.setItem('userEmail', response.EMailId);
     storage.setItem('LoginEmployeeRef', response.LoginEmployeeRef.toString());
+    storage.setItem('ValidMenu', JSON.stringify(response.ValidMenuItems));
 
     this.toastService.present('Logged in successfully', 2000, 'success');
     await this.haptic.success();

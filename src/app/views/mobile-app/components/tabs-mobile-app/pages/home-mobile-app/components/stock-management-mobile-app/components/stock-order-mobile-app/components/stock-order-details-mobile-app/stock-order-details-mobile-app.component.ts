@@ -578,7 +578,6 @@ export class StockOrderDetailsMobileAppComponent implements OnInit {
 
   async addOrderMaterial() {
     try {
-      console.log("this.ExpectedDeliveryDate", this.ExpectedDeliveryDate);
       if (this.newOrderMaterial.MaterialQuotationDetailRef == 0) {
         this.toastService.present('Material Name cannot be blank.', 1000, 'warning');
         this.haptic.warning();
@@ -923,7 +922,6 @@ export class StockOrderDetailsMobileAppComponent implements OnInit {
             role: 'cancel',
             cssClass: 'custom-cancel',
             handler: () => {
-              console.log('User cancelled.');
             }
           },
           {
@@ -932,7 +930,6 @@ export class StockOrderDetailsMobileAppComponent implements OnInit {
             handler: () => {
               this.router.navigate(['/mobile-app/tabs/dashboard/stock-management/stock-order'], { replaceUrl: true });
               this.haptic.success();
-              console.log('User confirmed.');
             }
           }
         ]

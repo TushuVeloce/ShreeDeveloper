@@ -181,7 +181,6 @@ export class CustomerFollowupDetailsMobileAppComponent implements OnInit {
         this.DateWithTime = this.Entity.p.TransDateTime;
       }
     } catch (error) {
-    console.log('error :', error);
 
     } finally {
       this.loadingService.hide()
@@ -613,7 +612,6 @@ export class CustomerFollowupDetailsMobileAppComponent implements OnInit {
             role: 'cancel',
             cssClass: 'custom-cancel',
             handler: () => {
-              console.log('Deletion cancelled.');
             }
           },
           {

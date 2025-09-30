@@ -69,7 +69,6 @@ export class SalarySlipRequestViewMobileAppComponent  implements OnInit {
 
       await this.getSalarySlipRequestListByEmployeeRef();
     } catch (error) {
-      // console.error('Error loading salary slips:', error);
     } finally {
       this.loadingService.hide();
     }
@@ -101,7 +100,6 @@ export class SalarySlipRequestViewMobileAppComponent  implements OnInit {
 
       await this.filterSalarySlipsByStatus();
     } catch (error) {
-      // console.error('Error fetching salary slip list:', error);
     }
   }
 
@@ -110,7 +108,6 @@ export class SalarySlipRequestViewMobileAppComponent  implements OnInit {
     try {
       this.router.navigate(['/mobile-app/tabs/attendance/salary-slip-request/print']);
     } catch (error) {
-      // console.error('Error in onPrintClicked:', error);
     }
   }
 
@@ -126,7 +123,6 @@ export class SalarySlipRequestViewMobileAppComponent  implements OnInit {
             role: 'cancel',
             cssClass: 'custom-cancel',
             handler: async () => {
-              // console.log('Delete cancelled.');
             }
           },
           {
@@ -144,7 +140,6 @@ export class SalarySlipRequestViewMobileAppComponent  implements OnInit {
                 });
                 await this.getSalarySlipRequestListByEmployeeRef();
               } catch (error) {
-                // console.error('Error deleting slip:', error);
                 await this.toastService.present('Error deleting salary slip', 1000, 'danger');
                 await this.haptic.error();
               }
@@ -153,7 +148,6 @@ export class SalarySlipRequestViewMobileAppComponent  implements OnInit {
         ]
       });
     } catch (error) {
-      // console.error('Error in onDeleteClicked:', error);
     }
   }
 
@@ -185,7 +179,6 @@ export class SalarySlipRequestViewMobileAppComponent  implements OnInit {
 
       this.router.navigate(['/mobile-app/tabs/attendance/salary-slip-request/add']);
     } catch (error: any) {
-      // console.error('Error navigating to add form:', error);
       await this.toastService.present('Error: ' + (error?.message || 'Failed to open the add form.'), 1000, 'danger');
       await this.haptic.error();
     }

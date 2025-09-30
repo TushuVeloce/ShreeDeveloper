@@ -1,12 +1,8 @@
-<app-header-with-back-handler
-  title="Billing"
-  backRoute="mobile-app/tabs/dashboard/accounting"
-></app-header-with-back-handler>
+<app-header-with-back-handler title="Billing"
+  backRoute="mobile-app/tabs/dashboard/accounting"></app-header-with-back-handler>
 
-<app-chip-filter-mobile-app
-  [filters]="filters"
-  (filtersChanged)="onFiltersChanged($event)"
-></app-chip-filter-mobile-app>
+<app-chip-filter-mobile-app [filters]="filters"
+  (filtersChanged)="onFiltersChanged($event)"></app-chip-filter-mobile-app>
 
 <ion-content class="ion-padding">
   <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
@@ -14,12 +10,7 @@
   </ion-refresher>
 
   <ion-list class="billing-list" [lines]="'none'">
-    <ion-card
-      *ngFor="let invoice of DisplayMasterList"
-      class="billing-card"
-      button
-      (click)="openModal(invoice)"
-    >
+    <ion-card *ngFor="let invoice of DisplayMasterList" class="billing-card" button (click)="openModal(invoice)">
       <ion-card-content>
         <div class="card-header">
           <h3 class="site-name">{{ invoice.p.SiteName || 'Unknown Site' }}</h3>
@@ -38,15 +29,18 @@
         </div>
 
         <div class="card-actions">
-          <ion-button fill="clear" color="tertiary" size="small" (click)="$event.stopPropagation(); onEditClicked(invoice);">
+          <ion-button fill="clear" color="tertiary" size="small"
+            (click)="$event.stopPropagation(); onEditClicked(invoice);">
             <ion-icon name="pencil-outline" slot="start"></ion-icon>
             Edit
           </ion-button>
-          <ion-button fill="clear" color="danger" size="small" (click)="$event.stopPropagation(); onDeleteClicked(invoice);">
+          <ion-button fill="clear" color="danger" size="small"
+            (click)="$event.stopPropagation(); onDeleteClicked(invoice);">
             <ion-icon name="trash-outline" slot="start"></ion-icon>
             Delete
           </ion-button>
-          <ion-button fill="clear" color="primary" size="small" (click)="$event.stopPropagation(); navigateToPrint(invoice);">
+          <ion-button fill="clear" color="primary" size="small"
+            (click)="$event.stopPropagation(); navigateToPrint(invoice);">
             <ion-icon name="print-outline" slot="start"></ion-icon>
             Print
           </ion-button>
@@ -121,7 +115,7 @@
             </div>
           </div>
         </div>
-        
+
         <div class="modal-section" *ngIf="SelectedInvoice.p.LabourExpenseDetailsArray.length > 0">
           <h3>Labour Details</h3>
           <div class="table-container">
@@ -176,7 +170,33 @@
             </div>
           </div>
         </div>
-        
+
+        <div class="modal-section" *ngIf="SelectedInvoice.p.InvoiceItemDetailsArray.length > 0">
+          <h3>Multiple Expense Details</h3>
+          <div class="table-container">
+            <div class="table-scroll">
+              <table class="custom-table">
+                <thead>
+                  <tr>
+                    <th class="sticky-col sticky-header">#</th>
+                    <th *ngFor="let item of MultipleHeaders" class="sticky-header">{{ item }}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let item of SelectedInvoice.p.InvoiceItemDetailsArray; let i = index">
+                    <td class="sticky-col">{{i + 1 }}</td>
+                    <td>{{ item.Description || '-' }}</td>
+                    <td>{{ item.UnitName || '-' }}</td>
+                    <td>{{ item.Quantity || '-' }}</td>
+                    <td>{{ (item.Rate | currency : "INR") || '-' }}</td>
+                    <td>{{ (item.Amount | currency : "INR") || '-' }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
         <div class="modal-section">
           <h3>Billing Summary</h3>
           <div class="detail-row total-amount">

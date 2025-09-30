@@ -363,7 +363,6 @@ export class AttendanceApprovalMobileAppComponent implements OnInit {
         }
       );
     this.DisplayMasterList = TodaysAttendanceLog;
-    console.log('this.DisplayMasterList :', this.DisplayMasterList);
     this.getAttendanceCount(AttendanceLogType.TodaysAttendanceLog);
   };
 
@@ -471,10 +470,6 @@ export class AttendanceApprovalMobileAppComponent implements OnInit {
     this.AttendanceLogCount.p.TotalDaysInWeek = lst[0]?.p?.TotalDaysInWeek;
   };
   getImageURL(Data: string): string {
-    console.log(
-      'url :',
-      `${this.ImageBaseUrl}${Data}/${this.LoginToken}?${this.TimeStamp}`
-    );
     return `${this.ImageBaseUrl}${Data}/${this.LoginToken}?${this.TimeStamp}`;
   }
 

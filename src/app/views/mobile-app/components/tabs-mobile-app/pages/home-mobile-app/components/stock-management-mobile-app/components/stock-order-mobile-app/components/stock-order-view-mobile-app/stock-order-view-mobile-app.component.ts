@@ -288,7 +288,6 @@ export class StockOrderViewMobileAppComponent implements OnInit {
             role: 'cancel',
             cssClass: 'custom-cancel',
             handler: () => {
-              console.log('Deletion cancelled.');
             }
           },
           {

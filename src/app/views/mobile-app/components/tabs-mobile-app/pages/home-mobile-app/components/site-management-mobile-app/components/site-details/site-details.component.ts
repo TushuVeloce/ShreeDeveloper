@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { IonTitle, IonHeader, IonToolbar, IonButtons, IonButton } from "@ionic/angular/standalone";
 import { BookingRemark } from 'src/app/classes/domain/domainenums/domainenums';
 import { Plot } from 'src/app/classes/domain/entities/website/masters/plot/plot';
 import { Site } from 'src/app/classes/domain/entities/website/masters/site/site';

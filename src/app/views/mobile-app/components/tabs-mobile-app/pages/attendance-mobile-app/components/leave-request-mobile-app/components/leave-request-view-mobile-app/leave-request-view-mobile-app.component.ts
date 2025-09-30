@@ -13,9 +13,9 @@ import { ToastService } from 'src/app/views/mobile-app/components/core/toast.ser
   selector: 'app-leave-request-view-mobile-app',
   templateUrl: './leave-request-view-mobile-app.component.html',
   styleUrls: ['./leave-request-view-mobile-app.component.scss'],
-  standalone:false
+  standalone: false,
 })
-export class LeaveRequestViewMobileAppComponent  implements OnInit {
+export class LeaveRequestViewMobileAppComponent implements OnInit {
   leaveRequests: LeaveRequest[] = [];
   filteredRequests: LeaveRequest[] = [];
   selectedLeave: LeaveRequest = LeaveRequest.CreateNewInstance();
@@ -44,7 +44,7 @@ export class LeaveRequestViewMobileAppComponent  implements OnInit {
     private haptic: HapticService,
     private alert: AlertService,
     public loadingService: LoadingService
-  ) { }
+  ) {}
 
   async ngOnInit() {
     await this.initializeLeaveRequests();
@@ -54,7 +54,7 @@ export class LeaveRequestViewMobileAppComponent  implements OnInit {
     await this.initializeLeaveRequests();
   }
 
-  ngOnDestroy() { }
+  ngOnDestroy() {}
 
   async handleRefresh(event: CustomEvent) {
     await this.initializeLeaveRequests();
@@ -66,7 +66,9 @@ export class LeaveRequestViewMobileAppComponent  implements OnInit {
       this.loadingService.show();
       const employeeRef = this.appState.getEmployeeRef();
       this.entity.p.EmployeeRef = employeeRef;
-      this.companyRef = Number(this.appState.localStorage.getItem('SelectedCompanyRef'));
+      this.companyRef = Number(
+        this.appState.localStorage.getItem('SelectedCompanyRef')
+      );
 
       if (employeeRef > 0) {
         await this.fetchLeaveRequests();
@@ -75,7 +77,6 @@ export class LeaveRequestViewMobileAppComponent  implements OnInit {
         await this.haptic.error();
       }
     } catch (err) {
-      console.error(err);
       await this.toast.present('Failed to load data', 1000, 'danger');
       await this.haptic.error();
     } finally {
@@ -101,8 +102,11 @@ export class LeaveRequestViewMobileAppComponent  implements OnInit {
 
       this.filterRequestsByStatus();
     } catch (err) {
-      console.error(err);
-      await this.toast.present('Failed to fetch leave requests', 1000, 'danger');
+      await this.toast.present(
+        'Failed to fetch leave requests',
+        1000,
+        'danger'
+      );
       await this.haptic.error();
     }
   }
@@ -122,10 +126,14 @@ export class LeaveRequestViewMobileAppComponent  implements OnInit {
       if (rejected) this.rejectedCount++;
 
       switch (this.selectedStatus) {
-        case 1: return approved;
-        case 0: return pending;
-        case 2: return rejected;
-        default: return true;
+        case 1:
+          return approved;
+        case 0:
+          return pending;
+        case 2:
+          return rejected;
+        default:
+          return true;
       }
     });
   }
@@ -148,14 +156,18 @@ export class LeaveRequestViewMobileAppComponent  implements OnInit {
       buttons: [
         {
           text: 'Cancel',
-          role: 'cancel'
+          role: 'cancel',
         },
         {
           text: 'Yes, Delete',
           handler: async () => {
             try {
               await request.DeleteInstance(async () => {
-                await this.toast.present(`Deleted leave for ${request.p.EmployeeName}`, 1000, 'success');
+                await this.toast.present(
+                  `Deleted leave for ${request.p.EmployeeName}`,
+                  1000,
+                  'success'
+                );
                 await this.haptic.success();
               });
               await this.fetchLeaveRequests();
@@ -163,9 +175,9 @@ export class LeaveRequestViewMobileAppComponent  implements OnInit {
               await this.toast.present('Deletion failed', 1000, 'danger');
               await this.haptic.error();
             }
-          }
-        }
-      ]
+          },
+        },
+      ],
     });
   }
 

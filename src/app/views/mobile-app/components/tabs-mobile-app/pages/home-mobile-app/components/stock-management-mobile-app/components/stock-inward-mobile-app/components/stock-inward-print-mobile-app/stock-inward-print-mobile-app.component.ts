@@ -15,21 +15,19 @@ import { PDFService } from 'src/app/views/mobile-app/components/core/pdf.service
   selector: 'app-stock-inward-print-mobile-app',
   templateUrl: './stock-inward-print-mobile-app.component.html',
   styleUrls: ['./stock-inward-print-mobile-app.component.scss'],
-  standalone: false
+  standalone: false,
 })
 export class StockInwardPrintMobileAppComponent implements OnInit {
-
   Entity: StockInward = StockInward.CreateNewInstance();
   private IsNewEntity: boolean = true;
   isSaveDisabled: boolean = false;
   DetailsFormTitle = 'Receipt';
-  IsDropdownDisabled: boolean = false
+  IsDropdownDisabled: boolean = false;
   InitialEntity: StockInward = null as any;
   isPrintButtonClicked: boolean = false;
   CompanyEntity: Company = Company.CreateNewInstance();
   VendorEntity: Vendor = Vendor.CreateNewInstance();
   companyRef: number = 0;
-
 
   @ViewChild('PrintContainer')
   PrintContainer!: ElementRef;
@@ -42,29 +40,30 @@ export class StockInwardPrintMobileAppComponent implements OnInit {
     private dtu: DTU,
     private companystatemanagement: CompanyStateManagement,
     private pdfService: PDFService,
-    private DateconversionService: DateconversionService,
-  ) { }
+    private DateconversionService: DateconversionService
+  ) {}
 
   ngOnInit() {
     this.appStateManage.setDropdownDisabled(true);
-    const company = this.appStateManage.localStorage.getItem('SelectedCompanyRef');
+    const company =
+      this.appStateManage.localStorage.getItem('SelectedCompanyRef');
     this.companyRef = Number(company || 0);
     this.getInwardSingleInstanceByInwardRef(history.state.inwardref);
-    // this.Entity = history.state.printData;
-    console.log('this.Entityyyyyyyyyy :', this.Entity);
-    // this.Entity.p.PurchaseOrderDate = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.PurchaseOrderDate);
-    this.InitialEntity = Object.assign(StockInward.CreateNewInstance(), this.utils.DeepCopy(this.Entity)) as StockInward;
-    // this.getCompanySingleRecord()
-    // this.getVendorSingleRecord()
+    this.InitialEntity = Object.assign(
+      StockInward.CreateNewInstance(),
+      this.utils.DeepCopy(this.Entity)
+    ) as StockInward;
   }
 
   @ViewChild('PrintContainer') printContainer!: ElementRef;
 
   async handlePrintOrShare() {
     if (!this.printContainer) return;
-    await this.pdfService.generatePdfAndHandleAction(this.printContainer.nativeElement, `Receipt_${this.Entity.p.Ref}.pdf`);
+    await this.pdfService.generatePdfAndHandleAction(
+      this.printContainer.nativeElement,
+      `Receipt_${this.Entity.p.Ref}.pdf`
+    );
   }
-
 
   //Get Print Data
 
@@ -73,15 +72,20 @@ export class StockInwardPrintMobileAppComponent implements OnInit {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
-    let lst = await StockInward.FetchInstance(InwardRef, this.companyRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-    console.log('lst :', lst);
+    let lst = await StockInward.FetchInstance(
+      InwardRef,
+      this.companyRef,
+      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+    );
     this.Entity = lst;
 
-    this.Entity.p.PurchaseOrderDate = this.dtu.ConvertStringDateToShortFormat(lst.p.PurchaseOrderDate);
+    this.Entity.p.PurchaseOrderDate = this.dtu.ConvertStringDateToShortFormat(
+      lst.p.PurchaseOrderDate
+    );
     if (lst.p.InwardDate) {
-      this.Entity.p.InwardDate = lst.p.InwardDate
+      this.Entity.p.InwardDate = lst.p.InwardDate;
     }
-  }
+  };
 
   totalAmountInWords(number: number): string {
     return this.utils.convertNumberToWords(number);
@@ -89,6 +93,5 @@ export class StockInwardPrintMobileAppComponent implements OnInit {
   // Extracted from services date conversion //
   formatDate = (date: string | Date): string => {
     return this.DateconversionService.formatDate(date);
-  }
-
+  };
 }

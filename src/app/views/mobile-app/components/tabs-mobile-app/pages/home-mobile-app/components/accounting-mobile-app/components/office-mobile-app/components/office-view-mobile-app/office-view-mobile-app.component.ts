@@ -1,6 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { DomSanitizer } from '@angular/platform-browser';
-import { Router } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
 import {
   AccountingReports,
   DomainEnums,
@@ -17,12 +15,7 @@ import { OpeningBalance } from 'src/app/classes/domain/entities/website/masters/
 import { Site } from 'src/app/classes/domain/entities/website/masters/site/site';
 import { SubLedger } from 'src/app/classes/domain/entities/website/masters/subledgermaster/subledger';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
-import { BaseUrlService } from 'src/app/services/baseurl.service';
-import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
 import { DateconversionService } from 'src/app/services/dateconversion.service';
-import { DTU } from 'src/app/services/dtu.service';
-import { Utils } from 'src/app/services/utils.service';
-import { AlertService } from 'src/app/views/mobile-app/components/core/alert.service';
 import { HapticService } from 'src/app/views/mobile-app/components/core/haptic.service';
 import { LoadingService } from 'src/app/views/mobile-app/components/core/loading.service';
 import { PDFService } from 'src/app/views/mobile-app/components/core/pdf.service';

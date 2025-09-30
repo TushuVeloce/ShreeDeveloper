@@ -208,9 +208,7 @@ export class UserProfileMobileAppComponent  implements OnInit {
       }
 
     } catch (error) {
-      // console.error('Image picking error:', error);
-      // this.toastService.present('Error picking image', 1000, 'danger');
-      // await this.haptic.error();
+  
     }
   };
   uriToFile = async (uri: string, fileName: string, mimeType = 'image/jpeg') => {

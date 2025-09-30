@@ -142,7 +142,7 @@ export class ExpensesDetailsMobileAppComponent implements OnInit {
         await this.getUnitList();
         await this.getSiteListByCompanyRef();
         await this.getLedgerListByCompanyRef();
-        this.FormulateBankList();
+        await this.FormulateBankList();
         if (this.appStateManage.StorageKey.getItem('Editable') == 'Edit') {
           this.IsNewEntity = false;
           this.DetailsFormTitle = this.IsNewEntity ? 'New Expense' : 'Edit Expense';
@@ -185,16 +185,16 @@ export class ExpensesDetailsMobileAppComponent implements OnInit {
           }
 
           if (this.Entity.p.IncomeLedgerRef != 0) {
-            this.getSubIncomeLedgerListByIncomeLedgerRef(this.Entity.p.IncomeLedgerRef)
+           await this.getSubIncomeLedgerListByIncomeLedgerRef(this.Entity.p.IncomeLedgerRef)
           }
           if (this.Entity.p.RecipientType != 0) {
-            this.getRecipientListByRecipientTypeRef()
+           await this.getRecipientListByRecipientTypeRef()
           }
           if (this.Entity.p.Date != '') {
             this.Entity.p.Date = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.Date)
             this.ExpenseDate = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.Date);
           }
-          this.getSubLedgerListByLedgerRef(this.Entity.p.LedgerRef);
+          await this.getSubLedgerListByLedgerRef(this.Entity.p.LedgerRef);
           this.Date = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.Date);
           this.Entity.p.UpdatedBy = Number(this.appStateManage.localStorage.getItem('LoginEmployeeRef'));
 
@@ -207,14 +207,17 @@ export class ExpensesDetailsMobileAppComponent implements OnInit {
           this.PaymentTypeName = this.TypeofEmployeePaymentList.find(item => item.Ref == this.PaymentType)?.Name ?? '';
           this.selectedPaymentType = [{ p: { Ref: this.Entity.p.RecipientType, Name: this.PaymentTypeName } }];
 
-          this.BankName = this.BankList.find(item => item.p.Ref == this.Entity.p.BankAccountRef)?.p.BankName ?? '';
-          this.selectedBank = [{ p: { Ref: this.Entity.p.BankAccountRef, Name: this.BankName } }];
-
-          this.BankNameForIncome = this.IncomeBankList.find(item => item.p.Ref == this.Entity.p.IncomeBankRef)?.p.Name ?? '';
-          this.selectedBankForIncome = [{ p: { Ref: this.Entity.p.IncomeBankRef, Name: this.BankNameForIncome } }];
-
-          this.BankNameForNewBank = this.BankList.find(item => item.p.Ref == this.Entity.p.BankAccountRef)?.p.BankName ?? '';
+          this.BankName = this.BankList.find(item => item.p.BankAccountRef == this.Entity.p.BankAccountRef)?.p.BankName ?? '';
+        
+          this.selectedBank = [{ p: { Ref: this.Entity.p.Ref, Name: this.BankName } }];
+          if((this.Entity.p.ModeOfPaymentForIncome != this.Cash && this.Entity.p.ModeOfPaymentForIncome) && this.Entity.p.IsNewBankCreated){
+             this.BankNameForIncome = this.IncomeBankList.find(item => item.p.Ref == this.Entity.p.IncomeBankRef)?.p.Name ?? '';
+             this.selectedBankForIncome = [{ p: { Ref: this.Entity.p.IncomeBankRef, Name: this.BankNameForIncome } }];
+          }
+          if((this.Entity.p.ModeOfPaymentForIncome != this.Cash && this.Entity.p.ModeOfPaymentForIncome) && !this.Entity.p.IsNewBankCreated){
+          this.BankNameForNewBank = this.BankList.find(item => item.p.BankAccountRef == this.Entity.p.IncomeBankRef)?.p.BankName ?? '';
           this.selectedBankForNewBank = [{ p: { Ref: this.Entity.p.BankAccountRef, Name: this.BankNameForNewBank } }];
+          }  
           this.OldGivenAmount = this.Entity.p.GivenAmount;
         } else {
           this.Entity = Expense.CreateNewInstance();
@@ -805,7 +808,6 @@ export class ExpensesDetailsMobileAppComponent implements OnInit {
         this.BankNameForNewBank = selected[0].p.Name;
       });
     } catch (error) {
-      console.error('Error selecting bank:', error);
     }
   }
 
@@ -828,7 +830,6 @@ export class ExpensesDetailsMobileAppComponent implements OnInit {
         this.BankNameForIncome = selected[0].p.Name;
       });
     } catch (error) {
-      console.error('Error selecting bank:', error);
     }
   }
 
@@ -941,7 +942,6 @@ export class ExpensesDetailsMobileAppComponent implements OnInit {
         this.onRecipientChange();
       });
     } catch (error) {
-      console.error('Error selecting recipient:', error);
     }
   }
 

@@ -122,7 +122,6 @@ export class SettingsViewMobileAppComponent implements OnInit {
         }
       }
     } catch (error) {
-      console.error('Failed to fetch user details:', error);
       await this.toastService.present('Failed to load user details', 1000, 'danger');
       await this.haptic.error();
     } finally {
@@ -191,8 +190,6 @@ export class SettingsViewMobileAppComponent implements OnInit {
       try {
         await this.servercommunicator.LogoutUser(req);
       } catch (error) {
-        // Log the error but continue with client-side logout
-        console.error('Logout API call failed:', error);
       }
 
       this.appStateManagement.StorageKey.clear();
@@ -203,7 +200,6 @@ export class SettingsViewMobileAppComponent implements OnInit {
       this.router.navigate(['/mobile-app/auth/login']);
 
     } catch (error) {
-      console.error('Logout process failed:', error);
       await this.toastService.present('Logout failed', 1000, 'danger');
       this.haptic.error();
     } finally {

@@ -40,7 +40,6 @@ export class TabsMobileAppPage implements OnInit {
 
   monitorNetworkConnection() {
     this.networkService.getOnlineStatus().subscribe((connected: boolean) => {
-      // console.log('Network connected:', connected);
 
       if (!connected) {
         this.toastService.presentPersistent(
@@ -88,7 +87,6 @@ export class TabsMobileAppPage implements OnInit {
                 role: 'cancel',
                 cssClass: 'custom-cancel',
                 handler: () => {
-                  // console.log('User cancelled.');
                 }
               },
               {
@@ -96,7 +94,6 @@ export class TabsMobileAppPage implements OnInit {
                 cssClass: 'custom-confirm',
                 handler: () => {
                   this.haptic.success();
-                  // console.log('User confirmed.');
                 }
               }
             ]

@@ -1,12 +1,8 @@
-<app-header-with-back-handler
-  title="Bill Payable Report"
-  backRoute="mobile-app/tabs/dashboard/accounting"
-></app-header-with-back-handler>
+<app-header-with-back-handler title="Bill Payable Report"
+  backRoute="mobile-app/tabs/dashboard/accounting"></app-header-with-back-handler>
 
-<app-chip-filter-mobile-app
-  [filters]="filters"
-  (filtersChanged)="onFiltersChanged($event)"
-></app-chip-filter-mobile-app>
+<app-chip-filter-mobile-app [filters]="filters"
+  (filtersChanged)="onFiltersChanged($event)"></app-chip-filter-mobile-app>
 
 <ion-content class="ion-padding">
   <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
@@ -14,63 +10,57 @@
   </ion-refresher>
 
   <ion-list class="requisition-list" [lines]="'none'">
-    <ion-card
-      *ngFor="let invoice of DisplayMasterList"
-      class="invoice-card"
-      (click)="openModal(invoice)"
-      button
-    >
+    <ion-card *ngFor="let invoice of DisplayMasterList" class="invoice-card" (click)="openModal(invoice)" button>
       <ion-card-content>
         <div class="card-header">
           <h2 class="vendor-name">{{ invoice.p.RecipientName || "N/A" }}</h2>
-          <span class="invoice-amount"
-            >{{ invoice.p.InvoiceAmount | currency : "INR" }}</span
-          >
+          <span class="invoice-amount">
+            {{ invoice.p.InvoiceAmount | currency : "INR" }}
+          </span>
         </div>
 
         <div class="card-details">
           <div class="detail-row">
+            <span class="label">Site:</span>
+            <span class="value">{{
+              invoice.p.SiteName || "N/A"
+              }}</span>
+          </div>
+          <div class="detail-row">
             <span class="label">Given Amount:</span>
             <span class="value">{{
               invoice.p.GivenAmount | currency : "INR"
-            }}</span>
+              }}</span>
           </div>
           <div class="detail-row">
             <span class="label">Remaining:</span>
             <span class="value remaining-amount">{{
               invoice.p.RemainingAmount | currency : "INR"
-            }}</span>
+              }}</span>
           </div>
           <div class="detail-row">
             <span class="label">Cash Received:</span>
             <span class="value">{{
               invoice.p.TotalCashReceived | currency : "INR"
-            }}</span>
+              }}</span>
           </div>
           <div class="detail-row">
             <span class="label">Cheque Received:</span>
             <span class="value">{{
               invoice.p.TotalChequeReceived | currency : "INR"
-            }}</span>
+              }}</span>
           </div>
         </div>
       </ion-card-content>
     </ion-card>
   </ion-list>
 
-  <div
-    *ngIf="DisplayMasterList.length === 0 && !loadingService.isLoaderActive()"
-    class="empty-state"
-  >
+  <div *ngIf="DisplayMasterList.length === 0 && !loadingService.isLoaderActive()" class="empty-state">
     <ion-icon name="alert-circle-outline"></ion-icon>
     <p>No Bill Payable records found for the selected filters.</p>
   </div>
 
-  <ion-modal
-    [isOpen]="modalOpen"
-    (didDismiss)="closeModal()"
-    class="custom-modal-mobile-app"
-  >
+  <ion-modal [isOpen]="modalOpen" (didDismiss)="closeModal()" class="custom-modal-mobile-app">
     <ng-template>
       <ion-header class="modal-toolbar-mobile-app">
         <ion-toolbar color="primary">
@@ -89,48 +79,43 @@
             <span class="label">Recipient Name:</span>
             <span class="value">{{
               SelectedInvoiceSumExpenseSum.p.RecipientName || "-"
-            }}</span>
+              }}</span>
           </div>
           <div class="detail-row">
             <span class="label">Bill Amount:</span>
             <span class="value">{{
               SelectedInvoiceSumExpenseSum.p.InvoiceAmount | currency : "INR"
-            }}</span>
+              }}</span>
           </div>
           <div class="detail-row">
             <span class="label">Given Amount:</span>
             <span class="value">{{
               SelectedInvoiceSumExpenseSum.p.GivenAmount | currency : "INR"
-            }}</span>
+              }}</span>
           </div>
           <div class="detail-row">
             <span class="label">Remaining Amount:</span>
             <span class="value">{{
               SelectedInvoiceSumExpenseSum.p.RemainingAmount | currency : "INR"
-            }}</span>
+              }}</span>
           </div>
           <div class="detail-row">
             <span class="label">Total Cash Received:</span>
             <span class="value">{{
               SelectedInvoiceSumExpenseSum.p.TotalCashReceived | currency : "INR"
-            }}</span>
+              }}</span>
           </div>
           <div class="detail-row">
             <span class="label">Total Cheque Received:</span>
             <span class="value">{{
               SelectedInvoiceSumExpenseSum.p.TotalChequeReceived | currency : "INR"
-            }}</span>
+              }}</span>
           </div>
         </div>
       </ion-content>
 
       <ion-footer class="modal-footer-mobile-app">
-        <ion-button
-          expand="block"
-          color="primary"
-          shape="round"
-          (click)="closeModal()"
-        >
+        <ion-button expand="block" color="primary" shape="round" (click)="closeModal()">
           Close
         </ion-button>
       </ion-footer>

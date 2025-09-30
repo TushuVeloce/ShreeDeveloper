@@ -12,27 +12,56 @@
     <ng-container *ngIf="isAdmin">
       <ion-grid class="main-stats-grid">
         <ion-row>
-          <ion-col size="12" size-md="6">
-            <ion-card class="stat-card">
+          <ion-col size="6" size-md="6" size-lg="3">
+            <ion-card class="stat-card stat-total-balance">
               <ion-card-content>
                 <div class="stat-item">
-                  <ion-icon name="wallet-outline"></ion-icon>
+                  <ion-icon name="wallet-outline" color="light"></ion-icon>
                   <div class="stat-content">
+                    <span class="stat-label">Total Balance  </span>
                     <span class="stat-value">{{ totalBalance | currency:'INR' }}</span>
-                    <span class="stat-label">Total Balance</span>
                   </div>
                 </div>
               </ion-card-content>
             </ion-card>
           </ion-col>
-          <ion-col size="12" size-md="6">
-            <ion-card class="stat-card">
+
+          <ion-col size="6" size-md="6" size-lg="3">
+            <ion-card class="stat-card stat-cash-balance">
               <ion-card-content>
                 <div class="stat-item">
-                  <ion-icon name="cash-outline"></ion-icon>
+                  <ion-icon name="cash-outline" color="light"></ion-icon>
                   <div class="stat-content">
+                    <span class="stat-label">Cash Balance  </span>
                     <span class="stat-value">{{ cashBalance | currency:'INR' }}</span>
-                    <span class="stat-label">Cash Balance</span>
+                  </div>
+                </div>
+              </ion-card-content>
+            </ion-card>
+          </ion-col>
+
+          <ion-col size="6" size-md="6" size-lg="3">
+            <ion-card class="stat-card stat-income">
+              <ion-card-content>
+                <div class="stat-item">
+                  <ion-icon name="trending-up-outline" color="light"></ion-icon>
+                  <div class="stat-content">
+                    <span class="stat-label">Total Income  </span>
+                    <span class="stat-value">{{ TotalIncome | currency:'INR' }}</span>
+                  </div>
+                </div>
+              </ion-card-content>
+            </ion-card>
+          </ion-col>
+
+          <ion-col size="6" size-md="6" size-lg="3">
+            <ion-card class="stat-card stat-expense">
+              <ion-card-content>
+                <div class="stat-item">
+                  <ion-icon name="trending-down-outline" color="light"></ion-icon>
+                  <div class="stat-content">
+                    <span class="stat-label">Total Expense: </span>
+                    <span class="stat-value">{{ TotalExpense | currency:'INR' }}</span>
                   </div>
                 </div>
               </ion-card-content>
@@ -67,8 +96,8 @@
       </ion-grid>
     </ng-container>
 
-    <h2 class="section-title" [class.ion-padding-top]="!isAdmin">Quick Actions</h2>
-    <div class="quick-actions-grid">
+    <h2 class="section-title" [class.ion-padding-top]="gridItems.length===0" *ngIf="gridItems.length>0">Quick Actions</h2>
+    <div class="quick-actions-grid" *ngIf="gridItems.length > 0">
       <ion-grid>
         <ion-row>
           <ion-col *ngFor="let item of gridItems; let i = index" size="6" size-sm="4" size-md="3" size-lg="2">
@@ -87,7 +116,10 @@
         <ion-label>
           <span class="label-heading">Today's Attendance</span>
         </ion-label>
-        <span slot="end" class="attendance-count">{{ peoplePresent }} Present</span>
+        <!-- <span slot="end" class="attendance-count">
+          <ng-container *ngIf="isAdmin">{{ peoplePresent }} Present</ng-container>
+          <ng-container *ngIf="!isAdmin">My Status</ng-container>
+        </span> -->
       </ion-list-header>
 
       <ion-item *ngIf="!todayAttendanceList || todayAttendanceList.length === 0" lines="none" class="no-records-item">
@@ -96,12 +128,14 @@
 
       <ion-item *ngFor="let person of todayAttendanceList" class="attendance-item" lines="none">
         <ion-avatar slot="start">
-          <img [src]="'assets/logos/ShreeIcon.png'" alt="User Profile Picture" />
+          <img [src]="'assets/logos/dp.png'" alt="User Profile Picture" />
         </ion-avatar>
 
         <div class="person-info">
           <div class="person-details">
-            <span class="person-name">{{ person.p.EmployeeName }}</span>
+            <span class="person-name" >{{ person.p.EmployeeName }}</span>
+            <!-- <span class="person-name" *ngIf="!isAdmin">My Log</span> -->
+
             <div class="location-status">
               <ion-icon name="pin-outline" class="location-icon"></ion-icon>
               <span class="location-name">{{ person.p.AttendanceLogDetailsArray[0]?.AttendenceLocationType ===
