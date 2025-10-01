@@ -383,11 +383,11 @@ export class ExpenseDetailsComponent implements OnInit {
   }
 
   CalculateRemainingAmountandBalance = () => {
-    if (this.Entity.p.GivenAmount <= this.Entity.p.InvoiceAmount) {
-      this.Entity.p.RemainingAmount = Number((this.Entity.p.InvoiceAmount - this.Entity.p.GivenAmount).toFixed(2));
-    } else {
-      this.Entity.p.RemainingAmount = 0;
-    }
+    this.Entity.p.RemainingAmount = Number((this.Entity.p.InvoiceAmount - this.Entity.p.GivenAmount).toFixed(2));
+    // if (this.Entity.p.GivenAmount <= this.Entity.p.InvoiceAmount) {
+    // } else {
+    //   this.Entity.p.RemainingAmount = 0;
+    // }
 
     if (this.PaymentType == this.TypeofEmployeePayments.Advance) {
       this.Entity.p.InvoiceAmount = this.Entity.p.GivenAmount;
