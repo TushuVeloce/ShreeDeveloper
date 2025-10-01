@@ -70,16 +70,20 @@ export class IncomeDetailsComponent implements OnInit {
     await this.getUnitList();
     await this.getSiteListByCompanyRef();
     await this.getLedgerListByCompanyRef();
+    await this.getCurrentBalanceByCompanyRef();
     this.FormulateBankList();
     if (this.appStateManage.StorageKey.getItem('Editable') == 'Edit') {
       this.IsNewEntity = false;
       this.DetailsFormTitle = this.IsNewEntity ? 'New Income' : 'Edit Income';
       this.Entity = Income.GetCurrentInstance();
       this.Date = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.Date);
+      await this.getPayerListBySiteAndPayerType()
       this.appStateManage.StorageKey.removeItem('Editable');
       this.PayerPlotNo = this.Entity.p.PlotName;
       await this.getSubLedgerListByLedgerRef(this.Entity.p.LedgerRef);
+      await this.onPayerChange()
       this.OldIncomeAmount = this.Entity.p.IncomeAmount;
+
       this.Entity.p.UpdatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
     } else {
       this.Entity = Income.CreateNewInstance();
@@ -88,8 +92,6 @@ export class IncomeDetailsComponent implements OnInit {
       this.Date = strCDT.substring(0, 10);
     }
 
-    this.getPayerListBySiteAndPayerType()
-    this.getCurrentBalanceByCompanyRef();
     this.InitialEntity = Object.assign(
       Income.CreateNewInstance(),
       this.utils.DeepCopy(this.Entity)
@@ -121,18 +123,30 @@ export class IncomeDetailsComponent implements OnInit {
   }
 
   CalculateShreeBalance = () => {
-    let currentIncomeAmount = 0;
-    this.RemainingPlotAmount = this.Entity.p.RemainingPlotAmount - this.Entity.p.IncomeAmount;
+    // 1. Calculate the New Remaining Plot Amount
+    // The RemainingPlotAmount is the starting balance minus the new income amount.
+    // For an edit, the starting balance is the old remaining amount plus the old income amount.
     if (this.IsNewEntity) {
-      this.Entity.p.ShreesBalance = this.ShreeBalance + this.Entity.p.IncomeAmount;
+      // New entry: RemainingPlotAmount is simply the starting value minus the new income
+      this.Entity.p.RemainingPlotAmount = Number((this.RemainingPlotAmount - this.Entity.p.IncomeAmount).toFixed(2));
     } else {
-      if (this.OldIncomeAmount > this.Entity.p.IncomeAmount) {
-        currentIncomeAmount = this.OldIncomeAmount - this.Entity.p.IncomeAmount;
-        this.Entity.p.ShreesBalance = this.ShreeBalance - currentIncomeAmount;
-      } else {
-        currentIncomeAmount = this.Entity.p.IncomeAmount - this.OldIncomeAmount;
-        this.Entity.p.ShreesBalance = this.ShreeBalance + currentIncomeAmount;
-      }
+      // Edit existing entry:
+      // a) Revert the old transaction: OldRemainingPlotAmount + OldIncomeAmount
+      // b) Apply the new transaction: (Result of 'a') - New IncomeAmount
+      const plotAmountBeforeTransaction = Number((this.RemainingPlotAmount + this.OldIncomeAmount).toFixed(2));
+      this.Entity.p.RemainingPlotAmount = Number((plotAmountBeforeTransaction - this.Entity.p.IncomeAmount).toFixed(2));
+    }
+
+    // 2. Calculate the New Shree's Balance
+    if (this.IsNewEntity) {
+      // New entry: Shree's Balance increases by the new IncomeAmount
+      this.Entity.p.ShreesBalance = Number((this.ShreeBalance + this.Entity.p.IncomeAmount).toFixed(2));
+    } else {
+      // Edit existing entry:
+      // The net change is (New Income - Old Income)
+      const netIncomeChange = Number((this.Entity.p.IncomeAmount - this.OldIncomeAmount).toFixed(2));
+      // Apply the net change to the Shree's Balance before the transaction
+      this.Entity.p.ShreesBalance = Number((this.ShreeBalance + netIncomeChange).toFixed(2));
     }
   }
 

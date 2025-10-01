@@ -29,7 +29,7 @@
           </div>
         </div>
         <div class="col-md-4" style="margin-top: 1rem;">
-          <label>Site Name</label>
+          <label>Expense Site Name</label>
           <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
             nzPlaceHolder="Select" id="SiteRef" name="SiteRef" [nzSize]="'large'" [(ngModel)]="Entity.p.SiteRef"
             (ngModelChange)="getRecipientListByRecipientTypeRef(); onSitechange();">
@@ -37,7 +37,7 @@
           </nz-select>
         </div>
         <div class="col-md-4" style="margin-top: 1rem;">
-          <label>Ledger</label>
+          <label>Expense Ledger</label>
           <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
             nzPlaceHolder="Select" id="LedgerRef" name="LedgerRef" [nzSize]="'large'" [(ngModel)]="Entity.p.LedgerRef"
             (ngModelChange)="getSubLedgerListByLedgerRef(Entity.p.LedgerRef); this.Entity.p.SubLedgerRef = 0;">
@@ -45,7 +45,7 @@
           </nz-select>
         </div>
         <div class="col-md-4" style="margin-top: 1rem;">
-          <label>Sub Ledger</label>
+          <label>Expense Sub Ledger</label>
           <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
             nzPlaceHolder="Select" id="SubLedgerRef" name="SubLedgerRef" [nzSize]="'large'"
             [(ngModel)]="Entity.p.SubLedgerRef">
@@ -73,13 +73,13 @@
         </div>
         <div class="col-md-4" style="margin-top: 1rem;">
           <div>
-            <label>Reason</label>
+            <label>Expense Reason</label>
             <input type="text" [(ngModel)]="Entity.p.Reason" name="Reason" class="form-control" id="Reason" required
               placeholder="Enter Reason" />
           </div>
         </div>
         <div class="col-md-4" style="margin-top: 1rem;">
-          <label>Mode of Payment</label>
+          <label>Expense Mode of Payment</label>
           <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
             nzPlaceHolder="Select" id="ExpenseModeOfPayment" name="ExpenseModeOfPayment" [nzSize]="'large'"
             [(ngModel)]="Entity.p.ExpenseModeOfPayment" (ngModelChange)="OnModeChange()">
@@ -89,13 +89,20 @@
         <div class="col-md-4" style="margin-top: 1rem;"
           *ngIf="Entity.p.ExpenseModeOfPayment != Cash && Entity.p.ExpenseModeOfPayment">
           <div>
-            <label>Bank Name</label>
+            <label>Expense Bank Name</label>
             <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
               nzPlaceHolder="Select" id="BankAccountRef" name="BankAccountRef" [nzSize]="'large'"
               [(ngModel)]="Entity.p.BankAccountRef">
               <nz-option *ngFor="let bank of BankList" [nzValue]="bank.p.BankAccountRef"
                 [nzLabel]="bank.p.BankName"></nz-option>
             </nz-select>
+          </div>
+        </div>
+        <div class="col-md-4" style="margin-top: 1rem;">
+          <div>
+            <label>Narration</label>
+            <input type="text" [(ngModel)]="Entity.p.Narration" name="Narration" class="form-control" id="Narration"
+              required placeholder="Enter Narration" />
           </div>
         </div>
       </div>
@@ -192,10 +199,10 @@
             <label *ngIf="Entity.p.RecipientType == EmployeeType && !Entity.p.IsSalaryExpense">Bill Amount</label>
             <label *ngIf="Entity.p.RecipientType == EmployeeType &&  Entity.p.IsSalaryExpense">Net Salary</label>
             <label *ngIf="Entity.p.RecipientType != EmployeeType">Bill Amount</label>
-            <input type="text" appCommaFormat [(ngModel)]="Entity.p.InvoiceAmount" (ngModelChange)="Entity.p.GivenAmount = 0" name="InvoiceAmount"
-              class="form-control" id="InvoiceAmount" required placeholder="Enter InvoiceAmount"
-              #InvoiceAmountCtrl="ngModel" (blur)="InvoiceAmountCtrl.control.markAsTouched()"
-              (click)="selectAllValue($event)" />
+            <input type="text" appCommaFormat [(ngModel)]="Entity.p.InvoiceAmount"
+              (ngModelChange)="Entity.p.GivenAmount = 0" name="InvoiceAmount" class="form-control" id="InvoiceAmount"
+              required placeholder="Enter InvoiceAmount" #InvoiceAmountCtrl="ngModel"
+              (blur)="InvoiceAmountCtrl.control.markAsTouched()" (click)="selectAllValue($event)" />
             <div *ngIf="(InvoiceAmountCtrl.invalid && (InvoiceAmountCtrl.touched || InvoiceAmountCtrl.dirty))">
               <span class="validation-text" *ngIf="InvoiceAmountCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
             </div>
@@ -237,15 +244,8 @@
             </div>
           </div>
         </div>
-        <div class="col-md-4" style="margin-top: 1rem;">
-          <div>
-            <label>Narration</label>
-            <input type="text" [(ngModel)]="Entity.p.Narration" name="Narration" class="form-control" id="Narration"
-              required placeholder="Enter Narration" />
-          </div>
-        </div>
         <div class="col-md-4" style="margin-top: 1rem;" *ngIf="this.Entity.p.RecipientType == Sites">
-          <label>Mode of Payment</label>
+          <label>Income Mode of Payment</label>
           <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
             nzPlaceHolder="Select" id="ModeOfPaymentForIncome" name="ModeOfPaymentForIncome" [nzSize]="'large'"
             [(ngModel)]="Entity.p.ModeOfPaymentForIncome" (ngModelChange)="OnToModeChange()">
@@ -264,7 +264,7 @@
         <div class="col-md-4" style="margin-top: 1rem;"
           *ngIf="Entity.p.ModeOfPaymentForIncome != Cash && Entity.p.ModeOfPaymentForIncome">
           <div *ngIf="Entity.p.IsNewBankCreated">
-            <label>Bank Name</label>
+            <label>Income Bank Name</label>
             <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
               nzPlaceHolder="Select" id="IncomeBankRef" name="IncomeBankRef" [nzSize]="'large'"
               [(ngModel)]="Entity.p.IncomeBankRef">
@@ -272,7 +272,7 @@
             </nz-select>
           </div>
           <div *ngIf="!Entity.p.IsNewBankCreated">
-            <label>Bank Name</label>
+            <label>Income Bank Name</label>
             <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
               nzPlaceHolder="Select" id="IncomeBankRef" name="IncomeBankRef" [nzSize]="'large'"
               [(ngModel)]="Entity.p.IncomeBankRef">
@@ -283,7 +283,7 @@
         </div>
         <div class="col-md-4" style="margin-top: 1rem;" *ngIf="this.Entity.p.RecipientType == Sites">
           <div>
-            <label>Reason</label>
+            <label>Income Reason</label>
             <input type="text" [(ngModel)]="Entity.p.ReasonForIncome" name="ReasonForIncome" class="form-control"
               id="ReasonForIncome" required placeholder="Enter Reason" />
           </div>

@@ -124,7 +124,7 @@
           *ngIf="Entity.p.PayerType == DealDoneCustomer && Entity.p.PayerRef != 0">
           <div>
             <label>Total Plot Amount</label>
-            <input type="text" [(ngModel)]="Entity.p.TotalPlotAmount" name="Total Plot Amount" class="form-control"
+            <input type="text" appCommaFormat [(ngModel)]="Entity.p.TotalPlotAmount" name="Total Plot Amount" class="form-control"
               id="Total Plot Amount" disabled placeholder="Enter Total Plot Amount" />
           </div>
         </div>
@@ -132,7 +132,7 @@
           *ngIf="Entity.p.PayerType == DealDoneCustomer && Entity.p.PayerRef != 0">
           <div>
             <label>Plot Grand Total</label>
-            <input type="text" [(ngModel)]="Entity.p.PlotGrandTotal" name="PlotGrandTotal" class="form-control"
+            <input type="text" [(ngModel)]="Entity.p.PlotGrandTotal" appCommaFormat name="PlotGrandTotal" class="form-control"
               id="PlotGrandTotal" disabled placeholder="Enter Plot Grand Total" />
           </div>
         </div>
@@ -159,7 +159,7 @@
           *ngIf="Entity.p.PayerType == DealDoneCustomer && Entity.p.PayerRef != 0">
           <div>
             <label>Remaining Plot Amount</label>
-            <input type="text" [(ngModel)]="RemainingPlotAmount" name="RemainingPlotAmount" class="form-control"
+            <input type="text" [(ngModel)]="Entity.p.RemainingPlotAmount" appCommaFormat name="RemainingPlotAmount" class="form-control"
               id="RemainingPlotAmount" disabled placeholder="Enter RemainingPlotAmount" />
           </div>
         </div>
