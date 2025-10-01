@@ -62,7 +62,6 @@ export class HolidaysViewMobileAppComponent implements OnInit {
       );
       this.holidaysList = list;
     } catch (error) {
-      console.error('Failed to load holidays:', error);
       await this.toastService.present('Failed to load company holidays. Please try again.', 1000, 'danger');
       this.holidaysList = []; // Clear the list on fetch failure
     } finally {
@@ -129,7 +128,6 @@ export class HolidaysViewMobileAppComponent implements OnInit {
         }
       );
     } catch (error) {
-      console.error('Deletion failed:', error);
       await this.toastService.present('An unexpected error occurred during deletion.', 1000, 'danger');
     } finally {
       this.loadingService.hide();

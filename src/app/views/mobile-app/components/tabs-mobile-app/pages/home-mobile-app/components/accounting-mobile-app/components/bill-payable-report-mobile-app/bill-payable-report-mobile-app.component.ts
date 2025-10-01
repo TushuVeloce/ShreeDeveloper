@@ -45,6 +45,7 @@ export class BillPayableReportMobileAppComponent implements OnInit {
 
   Printheaders: string[] = [
     'Sr.No.',
+    'Site Name',
     'Vendor Name',
     'Bill Amount',
     'Given Amount',
@@ -60,7 +61,7 @@ export class BillPayableReportMobileAppComponent implements OnInit {
     private haptic: HapticService,
     public loadingService: LoadingService,
     private pdfService: PDFService
-  ) { }
+  ) {}
 
   ngOnInit = async () => {
     // ngOnInit should be lean. ionViewWillEnter is better for data loading.
@@ -104,87 +105,94 @@ export class BillPayableReportMobileAppComponent implements OnInit {
   }
 
   private loadFilters() {
+    // Determine the currently selected timeline value or default to Weekly (57)
+    const selectedTimelineRef =
+      this.selectedFilterValues['timeline'] || this.BillPayableFilterType || 57;
+
     this.filters = [
+      {
+        key: 'site',
+        label: 'Site',
+        multi: false,
+        options: this.SiteList.map((site) => ({
+          Ref: site.p.Ref,
+          Name: site.p.Name,
+        })),
+        // Ensure site filter preserves its value, defaulting to 0 if none
+        selected: this.selectedFilterValues['site'] ?? null,
+      },
       {
         key: 'timeline',
         label: 'Timeline',
         multi: false,
         options: this.timeLineList,
-        selected: this.selectedFilterValues['timeline'] || 57,
+        // Set the current timeline value
+        selected: selectedTimelineRef,
       },
     ];
 
-    if (this.selectedFilterValues['timeline'] == 63) {
+    // Conditionally add the Month filter only if the selected timeline is Monthly (63)
+    if (selectedTimelineRef === 63) {
       this.filters.push({
         key: 'month',
         label: 'Month',
         multi: false,
         options: this.MonthList,
-        selected:
-          this.selectedFilterValues['month'] > 0
-            ? this.selectedFilterValues['month']
-            : null,
+        // Preserve selected month value
+        selected: this.selectedFilterValues['month'] ?? null,
       });
     }
   }
 
-  // async onFiltersChanged(updatedFilters: any[]) {
-  //   await this.loadingService.show();
-  //   try {
-  //     const selectedTimeLineRef = updatedFilters.find(
-  //       (f) => f.key === 'timeline'
-  //     )?.selected;
-  //     this.selectedFilterValues['timeline'] = selectedTimeLineRef;
-
-  //     // this.DisplayMasterList = selectedTimeLineRef
-  //     //   ? this.MasterList.filter((item) => item.p.SiteRef === selectedTimeLineRef)
-  //     //   : [...this.MasterList];
-
-  //     this.Entity.p.SiteRef = selectedTimeLineRef ?? 0;
-  //   } catch (error) {
-  //     await this.toastService.present(
-  //       'Failed to apply filters.',
-  //       1000,
-  //       'danger'
-  //     );
-  //     await this.haptic.error();
-  //   } finally {
-  //     await this.loadingService.hide();
-  //   }
-
-  //   await this.fetchInvoiceSumExpenseSumList();
-  //   this.loadFilters();
-  // }
-
   async onFiltersChanged(updatedFilters: any[]) {
-    for (const filter of updatedFilters) {
-      const selected = filter.selected;
-      const selectedValue =
-        selected === null || selected === undefined ? null : selected;
+    await this.loadingService.show();
+    try {
+      // 1. Process all filter changes and update component state
+      for (const filter of updatedFilters) {
+        const selectedValue = filter.selected;
 
-      // Save selected value to preserve after reload
-      this.selectedFilterValues[filter.key] = selectedValue ?? null;
+        // Save selected value to preserve after reload
+        this.selectedFilterValues[filter.key] = selectedValue ?? null;
 
-      switch (filter.key) {
-        case 'timeline':
-          this.BillPayableFilterType = selectedValue ?? 0;
-          break;
-
-        case 'month':
-          this.SelectedBillPayableMonths = selectedValue ?? 0;
-          break;
+        switch (filter.key) {
+          case 'site':
+            this.Entity.p.SiteRef = selectedValue ?? 0;
+            break;
+          case 'timeline':
+            this.BillPayableFilterType = selectedValue ?? 57;
+            // If timeline changes from Monthly, reset month filter state
+            if (this.BillPayableFilterType !== 63) {
+              this.SelectedBillPayableMonths = 0;
+              this.selectedFilterValues['month'] = null;
+            }
+            break;
+          case 'month':
+            this.SelectedBillPayableMonths = selectedValue ?? 0;
+            break;
+        }
       }
-    }
 
-    if (this.BillPayableFilterType === 0) {
-      this.BillPayableFilterType = 57;
-    }
+      // Default timeline if somehow set to 0
+      if (this.BillPayableFilterType === 0) {
+        this.BillPayableFilterType = 57;
+      }
 
-    await this.fetchInvoiceSumExpenseSumList();
-    this.loadFilters(); // Reload filters with updated options & preserve selections
+      // 2. Reload filters to correctly show/hide the Month filter based on the new Timeline value
+      this.loadFilters();
+
+      // 3. Fetch data based on the updated state
+      await this.fetchInvoiceSumExpenseSumList();
+    } catch (error) {
+      await this.toastService.present(
+        'Failed to apply filters.',
+        1000,
+        'danger'
+      );
+      await this.haptic.error();
+    } finally {
+      await this.loadingService.hide();
+    }
   }
-
-
 
   private async fetchSiteList() {
     this.SiteList = await Site.FetchEntireListByCompanyRef(
@@ -202,7 +210,11 @@ export class BillPayableReportMobileAppComponent implements OnInit {
 
   private async fetchInvoiceSumExpenseSumList() {
     const list =
-      await InvoiceSumExpenseSum.FetchEntireListByCompanySiteMonthFilterType(this.companyRef, this.Entity.p.SiteRef, this.SelectedBillPayableMonths, this.BillPayableFilterType,
+      await InvoiceSumExpenseSum.FetchEntireListByCompanySiteMonthFilterType(
+        this.companyRef,
+        this.Entity.p.SiteRef,
+        this.SelectedBillPayableMonths,
+        this.BillPayableFilterType,
         async (errMsg) => {
           await this.toastService.present(
             `Error fetching report: ${errMsg}`,
@@ -229,6 +241,7 @@ export class BillPayableReportMobileAppComponent implements OnInit {
 
     const data = this.DisplayMasterList.map((m, index) => [
       index + 1,
+      m.p.SiteName || '--',
       m.p.RecipientName || '--',
       m.p.InvoiceAmount || '--',
       m.p.GivenAmount || '--',
@@ -243,7 +256,7 @@ export class BillPayableReportMobileAppComponent implements OnInit {
       { headers: this.Printheaders, data },
       false,
       'l',
-      [3, 4, 5, 6, 7],
+      [4, 5, 6, 7, 8],
       'Office Report'
     );
   }

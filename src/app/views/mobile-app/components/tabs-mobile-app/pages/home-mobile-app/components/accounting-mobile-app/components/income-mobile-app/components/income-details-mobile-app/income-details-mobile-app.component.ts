@@ -122,7 +122,7 @@ export class IncomeDetailsMobileAppComponent implements OnInit {
         await this.getUnitList();
         await this.getSiteListByCompanyRef();
         await this.getLedgerListByCompanyRef();
-        this.FormulateBankList();
+        await this.FormulateBankList();
         if (this.appStateManage.StorageKey.getItem('Editable') == 'Edit') {
           this.IsNewEntity = false;
           this.DetailsFormTitle = this.IsNewEntity ? 'New Income' : 'Edit Income';
@@ -154,7 +154,8 @@ export class IncomeDetailsMobileAppComponent implements OnInit {
           this.ModeOfPaymentName = this.ModeofPaymentList.find(item => item.Ref == this.Entity.p.IncomeModeOfPayment)?.Name ?? '';
           this.selectedModeOfPayment = [{ p: { Ref: this.Entity.p.IncomeModeOfPayment, Name: this.ModeOfPaymentName } }];
 
-          this.BankName = this.BankList.find(item => item.p.Ref == this.Entity.p.BankAccountRef)?.p.BankName ?? '';
+          this.BankName = this.BankList.find(item => item.p.BankAccountRef == this.Entity.p.BankAccountRef)?.p.BankName ?? '';
+    
           this.selectedBank = [{ p: { Ref: this.Entity.p.BankAccountRef, Name: this.BankName } }];
           this.OldIncomeAmount = this.Entity.p.IncomeAmount;
         } else {
@@ -167,8 +168,8 @@ export class IncomeDetailsMobileAppComponent implements OnInit {
           this.IncomeDate = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.Date);
         }
 
-        this.getPayerListBySiteAndPayerType()
-        this.getCurrentBalanceByCompanyRef();
+        await this.getPayerListBySiteAndPayerType()
+        await this.getCurrentBalanceByCompanyRef();
         this.InitialEntity = Object.assign(
           Income.CreateNewInstance(),
           this.utils.DeepCopy(this.Entity)
@@ -466,8 +467,6 @@ export class IncomeDetailsMobileAppComponent implements OnInit {
           Name: bank.p.BankName
         }
       }));
-      console.log('this.BankList :', this.BankList);
-      console.log('options :', options);
       this.openSelectModal(options, this.selectedBank, false, 'Select Bank', 1, (selected) => {
         this.selectedBank = selected;
         this.Entity.p.BankAccountRef = selected[0].p.Ref;
@@ -661,7 +660,7 @@ export class IncomeDetailsMobileAppComponent implements OnInit {
             role: 'cancel',
             cssClass: 'custom-cancel',
             handler: () => {
-              console.log('User cancelled.');
+             
             }
           },
           {
@@ -670,7 +669,7 @@ export class IncomeDetailsMobileAppComponent implements OnInit {
             handler: () => {
               this.router.navigate(['/mobile-app/tabs/dashboard/accounting/income'], { replaceUrl: true });
               this.haptic.success();
-              console.log('User confirmed.');
+            
             }
           }
         ]

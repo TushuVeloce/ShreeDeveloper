@@ -70,27 +70,13 @@ export class IncomeViewMobileAppComponent implements OnInit {
     // await this.loadIncomeIfEmployeeExists();
   };
 
-  // @ViewChild('PrintContainer')
-  // PrintContainer!: ElementRef;
-
-  // async handlePrintOrShare() {
-  //   if (this.DisplayMasterList.length == 0) {
-  //     await this.toastService.present('No Income Records Found', 1000, 'warning');
-  //     await this.haptic.warning();
-  //     return;
-  //   }
-  //   if (!this.PrintContainer) return;
-  //   await this.pdfService.generatePdfAndHandleAction(this.PrintContainer.nativeElement, `Receipt_${this.Entity.p.Ref}.pdf`);
-  // }
   async handlePrintOrShare() {
     if (this.DisplayMasterList.length == 0) {
       await this.toastService.present('No Income Records Found', 1000, 'warning');
       await this.haptic.warning();
       return;
     }
-    // if (!this.PrintContainer) return;
-    // await this.pdfService.generatePdfAndHandleAction(this.PrintContainer.nativeElement, `Receipt_${this.Entity.p.Ref}.pdf`);
-    const headers = this.printheaders;
+      const headers = this.printheaders;
     const data = this.DisplayMasterList.map((m, index) => [
       index + 1,
       this.formatDate(m.p.Date),

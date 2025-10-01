@@ -48,8 +48,6 @@ export class HeaderWithBackHandlerComponent implements OnInit {
     } else {
       this.location.back(); // Fallback
     }
-    // this.navCtrl.back(); 
-    // console.log('this.navCtrl.back();  :');
   }
 
 

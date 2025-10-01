@@ -231,7 +231,6 @@ export class LeaveRequestDetailsMobileAppComponent  implements OnInit {
       await this.haptic.success();
 
     } catch (error) {
-      // console.error('Save error:', error);
     } finally {
       this.loadingService.hide();
     }
@@ -278,7 +277,6 @@ export class LeaveRequestDetailsMobileAppComponent  implements OnInit {
             role: 'cancel',
             cssClass: 'custom-cancel',
             handler: async () => {
-              // console.log('Delete cancelled.');
             }
           },
           {

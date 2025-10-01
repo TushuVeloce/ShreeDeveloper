@@ -595,7 +595,6 @@ export class CustomerEnquiryDetailsMobileAppComponent implements OnInit {
   }
 
   SaveCustomerEnquiry = async () => {
-    console.log('this.Entity :', this.Entity);
     this.Entity.p.CompanyRef = this.companyRef;
     this.Entity.p.CustomerFollowUps[0].Ref =
       await CustomerFollowUp.getPrimaryKeysWithValidValues();

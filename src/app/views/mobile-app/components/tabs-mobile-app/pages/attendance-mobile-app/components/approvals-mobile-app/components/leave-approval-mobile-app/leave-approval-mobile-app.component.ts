@@ -194,8 +194,6 @@ export class LeaveApprovalMobileAppComponent implements OnInit {
     leaveapproval: LeaveRequest,
     selectedStatus: string
   ) => {
-    console.log('selectedStatus :', selectedStatus);
-    console.log('leaveapproval :', leaveapproval);
     this.Entity = leaveapproval;
     // Save original state in case backend fails
     const originalApprovalStatus = this.Entity.p.IsApproved;

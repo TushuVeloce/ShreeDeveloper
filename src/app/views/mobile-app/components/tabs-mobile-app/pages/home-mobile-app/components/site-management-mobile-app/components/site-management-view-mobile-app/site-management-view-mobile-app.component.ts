@@ -118,7 +118,6 @@ closeModal(): void {
       this.appStateManagement.setSiteRefForMobile(0, '');
       await this.getSiteListByCompanyRef();
     } catch (error) {
-      console.error('Error loading site data:', error);
     }
   }
 
@@ -174,7 +173,6 @@ async openLink(url: string | null): Promise<void> {
   try {
     await Browser.open({ url });
   } catch (error) {
-    console.error('Failed to open link:', error);
     await this.toastService.present('Could not open map. Please try again.', 1000, 'danger');
   }
 }
@@ -199,7 +197,6 @@ async openLink(url: string | null): Promise<void> {
       this.MasterList = lst;
       this.DisplayMasterList = lst;
     } catch (error) {
-      console.error('Error fetching site list:', error);
     } finally {
       await this.loadingService.hide();
     }

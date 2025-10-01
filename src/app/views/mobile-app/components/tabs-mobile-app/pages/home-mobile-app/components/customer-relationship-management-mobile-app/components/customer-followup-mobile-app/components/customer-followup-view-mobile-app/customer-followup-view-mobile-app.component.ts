@@ -1,13 +1,9 @@
 import {
   Component,
   OnInit,
-  OnDestroy,
-  ViewChild,
-  ElementRef,
+  OnDestroy
 } from '@angular/core';
 import { Router } from '@angular/router';
-import { DomainEnums } from 'src/app/classes/domain/domainenums/domainenums';
-import { CustomerEnquiry } from 'src/app/classes/domain/entities/website/customer_management/customerenquiry/customerenquiry';
 import { CustomerFollowUp } from 'src/app/classes/domain/entities/website/customer_management/customerfollowup/customerfollowup';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { DateconversionService } from 'src/app/services/dateconversion.service';
@@ -100,7 +96,6 @@ export class CustomerFollowupViewMobileAppComponent
         );
       this.FilterFollowupList = followUps;
     } catch (error) {
-      console.error('Failed to load follow-ups:', error);
       await this.toastService.present(
         'Failed to load follow-up records. Please try again.',
         1000,

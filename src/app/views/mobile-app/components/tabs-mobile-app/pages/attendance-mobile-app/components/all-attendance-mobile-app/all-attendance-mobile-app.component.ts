@@ -1,5 +1,4 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { SegmentValue } from '@ionic/angular';
 import { AttendanceLogType, DomainEnums, LeaveRequestType } from 'src/app/classes/domain/domainenums/domainenums';
 import { AttendanceLogs } from 'src/app/classes/domain/entities/website/HR_and_Payroll/attendancelogs/attendancelogs';
 import { FinancialYear } from 'src/app/classes/domain/entities/website/masters/financialyear/financialyear';
@@ -173,7 +172,6 @@ export class AllAttendanceMobileAppComponent implements OnInit, OnDestroy {
           await this.haptic.error();
         }
       );
-      // console.log('logs :', logs);
 
       this.monthlyAttendanceLogsList = logs;
       this.filteredMonthlyAttendanceLogsList = logs;
@@ -216,7 +214,6 @@ export class AllAttendanceMobileAppComponent implements OnInit, OnDestroy {
   }
 
   private async handleError(error: any, context: string): Promise<void> {
-    // console.error(`${context} failed:`, error);
     await this.toastService.present(`Error: ${error?.message || error}`, 1000, 'danger');
     await this.haptic.error();
   }

@@ -6,10 +6,7 @@ import {
   ElementRef,
 } from '@angular/core';
 import { Router } from '@angular/router';
-import { BookingRemark } from 'src/app/classes/domain/domainenums/domainenums';
 import { CustomerFollowUp } from 'src/app/classes/domain/entities/website/customer_management/customerfollowup/customerfollowup';
-import { Plot } from 'src/app/classes/domain/entities/website/masters/plot/plot';
-import { Site } from 'src/app/classes/domain/entities/website/masters/site/site';
 import { CurrentDateTimeRequest } from 'src/app/classes/infrastructure/request_response/currentdatetimerequest';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { DateconversionService } from 'src/app/services/dateconversion.service';
@@ -201,7 +198,6 @@ export class CustomerRelationshipManagementViewMobileAppComponent
 
       await this.initializeDate();
     } catch (error) {
-      console.error('Error loading CRM data:', error);
       await this.toastService.present(
         'Failed to load dashboard data.',
         1000,
@@ -222,7 +218,6 @@ export class CustomerRelationshipManagementViewMobileAppComponent
         await this.fetchFollowUps();
       }
     } catch (error) {
-      console.error('Failed to initialize date:', error);
     }
   };
 
@@ -238,7 +233,6 @@ export class CustomerRelationshipManagementViewMobileAppComponent
       );
       this.FilterFollowupList = followUps;
     } catch (error) {
-      console.error('Error fetching follow-ups:', error);
     }
   };
 
@@ -264,15 +258,6 @@ export class CustomerRelationshipManagementViewMobileAppComponent
         'mobile-app/tabs/dashboard/customer-relationship-management/customer-followup/add',
       ]);
     } catch (error) {
-      console.error('Navigation to follow-up form failed:', error);
     }
-  };
-
-  private loadSitesByCompanyRef = async () => {
-    // This method isn't used in the provided HTML. Leaving it in for completeness.
-  };
-
-  private loadPlotsBySiteRef = async (siteRef: number) => {
-    // This method isn't used in the provided HTML. Leaving it in for completeness.
   };
 }

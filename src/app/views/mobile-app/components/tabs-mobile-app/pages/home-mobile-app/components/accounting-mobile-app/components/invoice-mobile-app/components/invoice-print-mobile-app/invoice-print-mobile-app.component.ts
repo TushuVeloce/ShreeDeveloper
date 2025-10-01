@@ -1,6 +1,6 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
-import { ExpenseTypeRefs } from 'src/app/classes/domain/constants';
+import { ExpenseTypeRefs, UnitRefs } from 'src/app/classes/domain/constants';
 import { ExpenseTypes } from 'src/app/classes/domain/domainenums/domainenums';
 import { Invoice } from 'src/app/classes/domain/entities/website/accounting/billing/invoice';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
@@ -27,11 +27,13 @@ export class InvoicePrintMobileAppComponent implements OnInit {
   IsDropdownDisabled: boolean = false;
   InitialEntity: Invoice = null as any;
   isPrintButtonClicked: boolean = false;
-  MachinaryExpenseRef: number = ExpenseTypeRefs.MachinaryExpense;
-  LabourExpenseRef: number = ExpenseTypeRefs.LabourExpense;
-  OtherExpenseRef: number = ExpenseTypeRefs.OtherExpense;
+  MachinaryExpenseRef: number = ExpenseTypes.MachinaryExpense
+  LabourExpenseRef: number = ExpenseTypes.LabourExpense
+  MultipleExpenseRef: number = ExpenseTypes.MultipleExpense
+  OtherExpenseRef: number = ExpenseTypes.OtherExpense
+  StockExpenseRef: number = ExpenseTypes.StockExpense
+  TimeUnitRef: number = UnitRefs.TimeUnitRef
   DisplayTotalWorkingHrs: string = '';
-  StockExpenseRef: number = ExpenseTypes.StockExpense;
 
   materialheaders: string[] = ['Sr.No.', 'Material', 'Unit', 'Order Quantity', 'Rate', 'Discount Rate', 'Delivery Charges', 'Total Amount'];
 
@@ -51,7 +53,6 @@ export class InvoicePrintMobileAppComponent implements OnInit {
   ngOnInit() {
     this.appStateManage.setDropdownDisabled(true);
     this.Entity = history.state.printData;
-    console.log('this.Entity :', this.Entity);
     this.Entity.p.Date = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.CreatedDate);
     this.getTotalWorkedHours();
     this.InitialEntity = Object.assign(Invoice.CreateNewInstance(), this.utils.DeepCopy(this.Entity)) as Invoice;
@@ -84,6 +85,45 @@ export class InvoicePrintMobileAppComponent implements OnInit {
     return `${hours}h ${formattedMinutes}m`;
   }
 
+
+  //  getTotalWorkedHours(): number {
+  //   let total = this.Entity.p.MachineUsageDetailsArray.reduce((total: number, item: any) => {
+  //     return total + Number(item.WorkedHours || 0);
+  //   }, 0);
+  //   this.DisplayTotalWorkingHrs = this.formatMinutesToHourMin(total);
+  //   return total;
+  // }
+
+  // formatMinutesToHourMin = (totalMinutes: number): string => {
+  //   const hours = Math.floor(totalMinutes / 60);
+  //   const minutes = totalMinutes % 60;
+  //   const formattedMinutes = minutes < 10 ? '0' + minutes : minutes;
+  //   return `${hours}h ${formattedMinutes}m`;
+  // }
+
+
+  convertTo12Hour = (time24: string): string => {
+    const [hourStr, minute] = time24.split(":");
+    let hour = parseInt(hourStr, 10);
+    const ampm = hour >= 12 ? "PM" : "AM";
+
+    hour = hour % 12;
+    hour = hour === 0 ? 12 : hour; // Handle midnight (0 -> 12 AM) and noon (12 -> 12 PM)
+
+    return `${hour}:${minute} ${ampm}`;
+  }
+
+  getTotalLabourAmount(): number {
+    return this.Entity.p.LabourExpenseDetailsArray.reduce((total: number, item: any) => {
+      return total + Number(item.LabourAmount || 0);
+    }, 0);
+  }
+
+  getTotalMultiAmountAmount(): number {
+    return this.Entity.p.InvoiceItemDetailsArray.reduce((total: number, item: any) => {
+      return total + Number(item.Amount || 0);
+    }, 0);
+  }
   // Extracted from services date conversion //
   formatDate = (date: string | Date): string => {
     return this.DateconversionService.formatDate(date);
@@ -93,7 +133,7 @@ export class InvoicePrintMobileAppComponent implements OnInit {
     // We no longer need the setTimeout, as the *ngIf in the template
     // ensures the element is ready before the button is even clickable
     if (!this.printContainer) {
-      console.error("Print container element not found.");
+      // console.error("Print container element not found.");
       return;
     }
     await this.pdfService.generatePdfAndHandleAction(this.printContainer.nativeElement, `Receipt_${this.Entity.p.Ref}.pdf`);

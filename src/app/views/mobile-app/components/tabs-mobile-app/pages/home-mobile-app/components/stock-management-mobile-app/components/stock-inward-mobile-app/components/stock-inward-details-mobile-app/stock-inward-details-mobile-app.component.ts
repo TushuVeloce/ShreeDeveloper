@@ -610,7 +610,6 @@ export class StockInwardDetailsMobileAppComponent implements OnInit {
               role: 'cancel',
               cssClass: 'custom-cancel',
               handler: () => {
-                console.log('User cancelled.');
               }
             },
             {
@@ -639,7 +638,6 @@ export class StockInwardDetailsMobileAppComponent implements OnInit {
       this.newInward.MaterialRef <= 0 ||
       this.newInward.InwardQty <= 0
     ) {
-      console.log('is.newInward :', this.newInward);
       await this.toastService.present('Inward Quantity must be greater than 0 and material must be selected', 1000, 'warning');
       await this.haptic.warning();
       return;
@@ -715,7 +713,6 @@ export class StockInwardDetailsMobileAppComponent implements OnInit {
           role: 'cancel',
           cssClass: 'custom-cancel',
           handler: () => {
-            console.log('User cancelled.');
           }
         },
         {

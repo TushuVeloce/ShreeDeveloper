@@ -118,7 +118,6 @@ export class SalarySlipRequestDetailsMobileAppComponent  implements OnInit {
   }
 
   handleChipError(msg: string) {
-    // console.warn(msg);
     this.toastService.present(msg, 1000, 'warning');
     this.haptic.warning();
   }
@@ -126,7 +125,6 @@ export class SalarySlipRequestDetailsMobileAppComponent  implements OnInit {
   private async getSingleEmployeeDetails(): Promise<void> {
     try {
       if (this.CompanyRef <= 0) {
-        // await this.uiUtils.showErrorToster('Company not Selected');
         await this.toastService.present('Company not selected', 1000, 'warning');
         await this.haptic.warning();
         return;
@@ -328,7 +326,6 @@ export class SalarySlipRequestDetailsMobileAppComponent  implements OnInit {
             role: 'cancel',
             cssClass: 'custom-cancel',
             handler: () => {
-              console.log('Warning cancelled.');
             }
           },
           {

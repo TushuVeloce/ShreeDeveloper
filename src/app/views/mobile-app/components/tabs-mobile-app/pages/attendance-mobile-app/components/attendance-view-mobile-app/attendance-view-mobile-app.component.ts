@@ -8,7 +8,6 @@ import {
 } from 'src/app/classes/domain/domainenums/domainenums';
 import {
   AttendanceLog,
-  AttendanceLogProps,
 } from 'src/app/classes/domain/entities/mobile-app/attendance-management/attendancelog';
 import { AttendanceLogs } from 'src/app/classes/domain/entities/website/HR_and_Payroll/attendancelogs/attendancelogs';
 import { Site } from 'src/app/classes/domain/entities/website/masters/site/site';

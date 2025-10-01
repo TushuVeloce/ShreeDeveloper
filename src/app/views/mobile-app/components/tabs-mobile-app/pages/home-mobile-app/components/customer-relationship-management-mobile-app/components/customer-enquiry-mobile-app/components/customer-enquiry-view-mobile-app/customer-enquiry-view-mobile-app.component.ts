@@ -129,7 +129,6 @@ export class CustomerEnquiryViewMobileAppComponent implements OnInit {
         }
       );
       this.CustomerEnquiryList = lst;
-      console.log('this.CustomerEnquiryList :', this.CustomerEnquiryList);
       this.CustomerEnquiryList.forEach(e => e.p.CustomerFollowUps.push(CustomerFollowUpProps.Blank()))
       this.FilteredCustomerEnquiryList = this.CustomerEnquiryList;
       this.filterCustomerList();
@@ -172,7 +171,6 @@ export class CustomerEnquiryViewMobileAppComponent implements OnInit {
             role: 'cancel',
             cssClass: 'custom-cancel',
             handler: () => {
-              console.log('Deletion cancelled.');
             }
           },
           {
@@ -200,7 +198,6 @@ export class CustomerEnquiryViewMobileAppComponent implements OnInit {
 
   onViewClicked = async (item: CustomerEnquiry) => {
     this.SelectedCustomerEnquiry = item;
-    console.log('this.SelectedCustomerEnquiry :', this.SelectedCustomerEnquiry);
     this.ModalOpen = true;
   }
 

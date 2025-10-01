@@ -111,48 +111,14 @@ export class CustomerSummaryReportMobileAppComponent implements OnInit {
       });
 
       this.CustomerList = lst;
-      console.log('lst :', lst);
       this.DropdownCustomerList=lst
       this.DropdownCustomerList = lst.filter(item => item.p && item.p.CustID);
-      console.log('DropdownCustomerList :', this.DropdownCustomerList);
       this.CustomerList = lst.filter(item => item.p && item.p.CustID);
-      console.log('CustomerList :', this.CustomerList);
     } catch (error) {
     }finally{
       await this.loadingService.hide();
     }
   }
-
-  // OnCustomerSelection = (ID: number) => {
-  //   let report = this.CustomerList.filter((data) => data.p.CustomerEnquiryRef == ID);
-  //   if (report.length > 0) {
-  //     this.Entity = report[0];
-  //   }
-  // }
-
-
-  // public selectCustomerIDBottomsheet = async (): Promise<void>=> {
-  //   try {
-  //     let options: any[] = [];
-  //     if (options) {
-  //       options = this.DropdownCustomerList.map(item => ({
-  //         p: {
-  //           Ref: item.p.PlotNo,
-  //           Name: item.p.CustID
-  //         }
-  //       }));
-  //     }
-  //     this.openSelectModal(options, this.selectedCustomerID, false, 'Select Customer ID', 1, (selected) => {
-  //       this.selectedCustomerID = selected;
-  //       console.log('selected :', selected);
-  //       this.CustomerIDName = selected[0].p.Name;
-  //       this.CustomerRef = selected[0].p.Ref;
-  //       this.OnCustomerSelection(selected[0].p.Ref);
-  //     });
-  //   } catch (error) {
-
-  //   }
-  // }
 
   public selectCustomerIDBottomsheet = async (): Promise<void> => {
     try {
@@ -183,7 +149,6 @@ export class CustomerSummaryReportMobileAppComponent implements OnInit {
         this.OnCustomerSelection(this.CustomerRef, plotNo);
       });
     } catch (error) {
-      console.error('Error selecting customer ID:', error);
     }
   }
 

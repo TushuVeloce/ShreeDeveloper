@@ -71,7 +71,6 @@ export class EmployeeOvertimeDetailsMobileAppComponent implements OnInit {
           ? 'New Employee Overtime'
           : 'New Employee Overtime';
         this.Entity = EmployeeOvertime.GetCurrentInstance();
-        console.log('this.Entity :', this.Entity);
         this.appStateManage.StorageKey.removeItem('Editable');
         this.Entity.p.UpdatedBy = Number(
           this.appStateManage.StorageKey.getItem('LoginEmployeeRef')
@@ -250,7 +249,6 @@ export class EmployeeOvertimeDetailsMobileAppComponent implements OnInit {
     this.Entity.p.Date = this.dtu.ConvertStringDateToFullFormat(
       this.Date ? this.Date : ''
     );
-    console.log('this.Entity :', this.Entity);
     let entityToSave = this.Entity.GetEditableVersion();
     let entitiesToSave = [entityToSave];
     let tr = await this.utils.SavePersistableEntities(entitiesToSave);
@@ -326,7 +324,6 @@ export class EmployeeOvertimeDetailsMobileAppComponent implements OnInit {
             role: 'cancel',
             cssClass: 'custom-cancel',
             handler: async () => {
-              // console.log('Delete cancelled.');
             },
           },
           {

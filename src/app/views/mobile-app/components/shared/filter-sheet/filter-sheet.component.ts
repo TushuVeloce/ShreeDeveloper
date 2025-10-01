@@ -57,7 +57,6 @@ export class FilterSheetComponent implements OnInit {
 
   DateChange(categoryRef: number, value: string) {
     this.selectedDates[categoryRef] = value;
-    // console.log(`Selected date for ${categoryRef}: ${value}`);
   }
   
 

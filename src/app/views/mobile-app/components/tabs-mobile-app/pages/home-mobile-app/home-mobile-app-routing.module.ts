@@ -20,10 +20,6 @@ const routes: Routes = [
         loadChildren: () => import('./components/stock-management-mobile-app/stock-management-mobile-app.module').then(m => m.StockManagementMobileAppPageModule)
       },
       {
-        path: 'marketing-management',
-        loadChildren: () => import('./components/marketing-management-mobile-app/marketing-management-mobile-app.module').then(m => m.MarketingManagementMobileAppPageModule)
-      },
-      {
         path: 'accounting',
         loadChildren: () => import('./components/accounting-mobile-app/accounting-mobile-app.module').then(m => m.AccountingMobileAppPageModule)
       },

@@ -230,7 +230,7 @@
       <ion-input
         [label]="(Entity.p.RecipientType == EmployeeType && !Entity.p.IsSalaryExpense)?'Bill Amount':(Entity.p.RecipientType == EmployeeType &&  Entity.p.IsSalaryExpense)?'Net Salary':(Entity.p.RecipientType != EmployeeType)?'Bill Amount':'expenese Amount'"
         labelPlacement="floating" placeholder="Enter Expense Amount" [(ngModel)]="Entity.p.InvoiceAmount"
-        [disabled]="'true'"></ion-input>
+        type="number" clearOnEdit="true" clearInput="true"></ion-input>
     </ion-item>
 
     <!-- Given Amount -->
@@ -241,7 +241,7 @@
     </ion-item>
 
     <!-- Remaining Amount -->
-    <ion-item class="input-item">
+    <ion-item class="input-item" *ngIf="!Entity.p.IsAdvancePayment">
       <ion-input label="Remaining Amount" labelPlacement="floating" placeholder="Enter Remaining Amount"
         [(ngModel)]="Entity.p.RemainingAmount" [disabled]="'true'"></ion-input>
     </ion-item>
