@@ -104,7 +104,7 @@ export class ExpensesDetailsMobileAppComponent implements OnInit {
   PaymentTypeName: string = '';
   selectedPaymentType: any[] = [];
 
-  PayerPlotNo: string = '';
+  PayerPlotNo: number = 0;
 
   constructor(
     private router: Router,
@@ -423,7 +423,7 @@ export class ExpensesDetailsMobileAppComponent implements OnInit {
     this.selectedModeOfPayment = [];
     this.Entity.p.IsAutoInvoiceEnabled = 0;
     this.RecipientNameInput = false
-    this.PayerPlotNo = '';
+    this.PayerPlotNo = 0;
     this.Entity.p.PlotName = '';
     this.Entity.p.ModeOfPaymentForIncome = 0;
     this.Entity.p.IsNewBankCreated = false;
@@ -519,6 +519,7 @@ export class ExpensesDetailsMobileAppComponent implements OnInit {
   // }
 
   onRecipientChange = () => {
+    // debugger
     this.Entity.p.TotalAdvance = 0;
     this.Entity.p.RemainingAdvance = 0;
     this.Entity.p.InvoiceAmount = 0;
@@ -545,7 +546,7 @@ export class ExpensesDetailsMobileAppComponent implements OnInit {
     let SingleRecord;
     try {
       if (this.Entity.p.RecipientType == this.DealDoneCustomer) {
-        SingleRecord = this.RecipientList.find((data) => data.p.PlotName == this.PayerPlotNo);
+        SingleRecord = this.RecipientList.find((data, i) => (i + 1) == this.PayerPlotNo);
       } else {
         SingleRecord = this.RecipientList.find((data) => data.p.Ref == this.Entity.p.RecipientRef);
       }
@@ -585,7 +586,7 @@ export class ExpensesDetailsMobileAppComponent implements OnInit {
     this.PaymentType = 0;
     this.Entity.p.RecipientRef = 0;
     this.Entity.p.Reason = '';
-    this.PayerPlotNo = '';
+    this.PayerPlotNo = 0;
     this.Entity.p.PlotName = '';
     this.Entity.p.IsAdvancePayment = 0;
     this.Entity.p.IsSalaryExpense = false;
@@ -634,11 +635,11 @@ export class ExpensesDetailsMobileAppComponent implements OnInit {
   //   }
   // }
     CalculateRemainingAmountandBalance = () => {
-    if (this.Entity.p.GivenAmount <= this.Entity.p.InvoiceAmount) {
-      this.Entity.p.RemainingAmount = Number((this.Entity.p.InvoiceAmount - this.Entity.p.GivenAmount).toFixed(2));
-    } else {
-      this.Entity.p.RemainingAmount = 0;
-    }
+    this.Entity.p.RemainingAmount = Number((this.Entity.p.InvoiceAmount - this.Entity.p.GivenAmount).toFixed(2));
+    // if (this.Entity.p.GivenAmount <= this.Entity.p.InvoiceAmount) {
+    // } else {
+    //   this.Entity.p.RemainingAmount = 0;
+    // }
 
     if (this.PaymentType == this.TypeofEmployeePayments.Advance) {
       this.Entity.p.InvoiceAmount = this.Entity.p.GivenAmount;
@@ -916,34 +917,49 @@ export class ExpensesDetailsMobileAppComponent implements OnInit {
   //   } catch (error) {
   //   }
   // }
-  public async selectRecipientNameBottomsheet(): Promise<void> {
-    try {
-      let options = this.RecipientList.map(item => {
-        let displayName = this.Entity.p.RecipientType === this.DealDoneCustomer
-          ? `${item.p.RecipientName} - ${item.p.PlotName || ''}`.trim()
-          : item.p.RecipientName;
+public async selectRecipientNameBottomsheet(): Promise<void> {
+  try {
+    let options = this.RecipientList.map(item => {
+      let displayName = this.Entity.p.RecipientType === this.DealDoneCustomer
+        ? `${item.p.RecipientName} - ${item.p.PlotName || ''}`.trim()
+        : item.p.RecipientName;
 
-        return {
-          p: {
-            Ref: item.p.Ref,
-            Name: displayName
-          }
-        };
-      });
+      return {
+        p: {
+          Ref: item.p.Ref,
+          Name: displayName,
+          PlotName: item.p.PlotName || ''   // ✅ keep PlotName
+        }
+      };
+    });
 
-      this.openSelectModal(options, this.selectedRecipientName, false, 'Select Recipient Name', 1, (selected) => {
+    this.openSelectModal(
+      options,
+      this.selectedRecipientName,
+      false,
+      'Select Recipient Name',
+      1,
+      (selected) => {
         if (!selected || selected.length === 0) return;
 
         this.selectedRecipientName = selected;
+        console.log('selected :', selected);
         this.Entity.p.RecipientRef = selected[0].p.Ref;
         this.RecipientName = selected[0].p.Name;
+        this.PayerPlotNo = Number(selected[0].p.PlotName) || 0;  // ✅ now you can directly access it
+
+        // If you need numeric
+        // this.PayerPlotNo = Number(this.PlotName) || 0;
 
         this.getTotalInvoiceAmountFromSiteAndRecipientRef();
         this.onRecipientChange();
-      });
-    } catch (error) {
-    }
+      }
+    );
+  } catch (error) {
+    console.error(error);
   }
+}
+
 
 
   public async selectIncomeSubLedgerBottomsheet(): Promise<void> {

@@ -194,7 +194,7 @@
     <!-- Plot Name -->
     <ion-item class="input-item" *ngIf="Entity.p.RecipientType == DealDoneCustomer && Entity.p.RecipientRef != 0">
       <ion-input label="Plot Name" labelPlacement="floating" placeholder="Enter Plot Name"
-        [(ngModel)]="Entity.p.PlotName" clearInput="true"></ion-input>
+        [(ngModel)]="Entity.p.PlotName" clearInput="true" [disabled] = "'true'"></ion-input>
     </ion-item>
 
     <!-- Select Income Ledger -->

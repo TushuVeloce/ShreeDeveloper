@@ -86,7 +86,6 @@ export class IncomeDetailsMobileAppComponent implements OnInit {
   RemainingPlotAmount: number = 0;
   OldIncomeAmount: number = 0;
 
-
   constructor(
     private router: Router,
     private appStateManage: AppStateManageService,
@@ -122,6 +121,7 @@ export class IncomeDetailsMobileAppComponent implements OnInit {
         await this.getUnitList();
         await this.getSiteListByCompanyRef();
         await this.getLedgerListByCompanyRef();
+        await this.getCurrentBalanceByCompanyRef();
         await this.FormulateBankList();
         if (this.appStateManage.StorageKey.getItem('Editable') == 'Edit') {
           this.IsNewEntity = false;
@@ -148,6 +148,9 @@ export class IncomeDetailsMobileAppComponent implements OnInit {
           this.PayerTypeName = this.PayerTypesList.find(item => item.Ref == this.Entity.p.PayerType)?.Name ?? '';
           this.selectedPayerType = [{ p: { Ref: this.Entity.p.PayerType, Name: this.PayerTypeName } }];
 
+          await this.getPayerListBySiteAndPayerType();
+          await this.onPayerChange();  
+          
           this.selectedPayer = [{ p: { Ref: this.Entity.p.PayerRef, Name: this.Entity.p.PayerName } }];
           this.PayerName = this.Entity.p.PayerName;
 
@@ -229,19 +232,31 @@ export class IncomeDetailsMobileAppComponent implements OnInit {
   //   this.Entity.p.ShreesBalance = this.ShreeBalance + this.Entity.p.IncomeAmount;
   //   this.RemainingPlotAmount = this.Entity.p.RemainingPlotAmount - this.Entity.p.IncomeAmount;
   // }
-    CalculateShreeBalance = () => {
-    let currentIncomeAmount = 0;
-    this.RemainingPlotAmount = this.Entity.p.RemainingPlotAmount - this.Entity.p.IncomeAmount;
+  CalculateShreeBalance = () => {
+    // 1. Calculate the New Remaining Plot Amount
+    // The RemainingPlotAmount is the starting balance minus the new income amount.
+    // For an edit, the starting balance is the old remaining amount plus the old income amount.
     if (this.IsNewEntity) {
-      this.Entity.p.ShreesBalance = this.ShreeBalance + this.Entity.p.IncomeAmount;
+      // New entry: RemainingPlotAmount is simply the starting value minus the new income
+      this.Entity.p.RemainingPlotAmount = Number((this.RemainingPlotAmount - this.Entity.p.IncomeAmount).toFixed(2));
     } else {
-      if (this.OldIncomeAmount > this.Entity.p.IncomeAmount) {
-        currentIncomeAmount = this.OldIncomeAmount - this.Entity.p.IncomeAmount;
-        this.Entity.p.ShreesBalance = this.ShreeBalance - currentIncomeAmount;
-      } else {
-        currentIncomeAmount = this.Entity.p.IncomeAmount - this.OldIncomeAmount;
-        this.Entity.p.ShreesBalance = this.ShreeBalance + currentIncomeAmount;
-      }
+      // Edit existing entry:
+      // a) Revert the old transaction: OldRemainingPlotAmount + OldIncomeAmount
+      // b) Apply the new transaction: (Result of 'a') - New IncomeAmount
+      const plotAmountBeforeTransaction = Number((this.RemainingPlotAmount + this.OldIncomeAmount).toFixed(2));
+      this.Entity.p.RemainingPlotAmount = Number((plotAmountBeforeTransaction - this.Entity.p.IncomeAmount).toFixed(2));
+    }
+
+    // 2. Calculate the New Shree's Balance
+    if (this.IsNewEntity) {
+      // New entry: Shree's Balance increases by the new IncomeAmount
+      this.Entity.p.ShreesBalance = Number((this.ShreeBalance + this.Entity.p.IncomeAmount).toFixed(2));
+    } else {
+      // Edit existing entry:
+      // The net change is (New Income - Old Income)
+      const netIncomeChange = Number((this.Entity.p.IncomeAmount - this.OldIncomeAmount).toFixed(2));
+      // Apply the net change to the Shree's Balance before the transaction
+      this.Entity.p.ShreesBalance = Number((this.ShreeBalance + netIncomeChange).toFixed(2));
     }
   }
 
@@ -275,8 +290,8 @@ export class IncomeDetailsMobileAppComponent implements OnInit {
           this.Entity.p.PlotRef = SingleRecord.p.PlotRef;
           this.Entity.p.PlotName = SingleRecord.p.PlotName;
           let lst = await Income.FetchToalAmountByCompanyAndPlotRef(this.companyRef, this.Entity.p.PlotRef, async errMsg => {
-            await this.toastService.present('Error ' + errMsg, 1000, 'danger');
-            await this.haptic.error();
+          await this.toastService.present('Error ' + errMsg, 1000, 'danger');
+          await this.haptic.error();
           });
           if (lst.length > 0) {
             this.Entity.p.TotalPlotAmount = lst[0].p.TotalPlotAmount;
