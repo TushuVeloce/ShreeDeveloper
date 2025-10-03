@@ -519,7 +519,6 @@ export class ExpensesDetailsMobileAppComponent implements OnInit {
   // }
 
   onRecipientChange = () => {
-    // debugger
     this.Entity.p.TotalAdvance = 0;
     this.Entity.p.RemainingAdvance = 0;
     this.Entity.p.InvoiceAmount = 0;
@@ -546,7 +545,7 @@ export class ExpensesDetailsMobileAppComponent implements OnInit {
     let SingleRecord;
     try {
       if (this.Entity.p.RecipientType == this.DealDoneCustomer) {
-        SingleRecord = this.RecipientList.find((data, i) => (i + 1) == this.PayerPlotNo);
+        SingleRecord = this.RecipientList.find((data, i) => Number(data.p.PlotName) == this.PayerPlotNo);
       } else {
         SingleRecord = this.RecipientList.find((data) => data.p.Ref == this.Entity.p.RecipientRef);
       }
