@@ -269,6 +269,7 @@ export class Income implements IPersistable<Income> {
     BankAccountRef: number,
     PayerType: number,
     PayerRef: number,
+    PlotRef: number,
     errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let req = new IncomeFetchRequest();
     req.CompanyRefs.push(CompanyRef);
@@ -297,6 +298,9 @@ export class Income implements IPersistable<Income> {
     }
     if (PayerRef) {
       req.PayerRefs.push(PayerRef);;
+    }
+    if (PlotRef) {
+      req.PlotRefs.push(PlotRef);;
     }
     let tdResponse = await Income.FetchTransportData(req, errorHandler) as TransportData;
     return Income.ListFromTransportData(tdResponse);

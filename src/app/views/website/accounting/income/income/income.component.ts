@@ -113,6 +113,7 @@ export class IncomeComponent implements OnInit {
         this.Entity.p.PayerRef = SingleRecord.p.Ref;
         if (this.Entity.p.PayerType == this.DealDoneCustomer) {
           this.Entity.p.PlotName = SingleRecord.p.PlotName;
+          this.Entity.p.PlotRef = SingleRecord.p.PlotRef;
         }
       }
       this.FetchEntireListByFilters();
@@ -182,6 +183,7 @@ export class IncomeComponent implements OnInit {
       this.Entity.p.BankAccountRef,
       this.Entity.p.PayerType,
       this.Entity.p.PayerRef,
+      this.Entity.p.PlotRef,
       async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.AllList = lst.filter((item) => item.p.Reason != '');
     this.MasterList = lst;

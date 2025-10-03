@@ -76,7 +76,7 @@ export class IncomeViewMobileAppComponent implements OnInit {
       await this.haptic.warning();
       return;
     }
-      const headers = this.printheaders;
+    const headers = this.printheaders;
     const data = this.DisplayMasterList.map((m, index) => [
       index + 1,
       this.formatDate(m.p.Date),
@@ -339,6 +339,7 @@ export class IncomeViewMobileAppComponent implements OnInit {
       this.Entity.p.BankAccountRef,
       this.Entity.p.PayerType,
       this.Entity.p.PayerRef,
+      this.Entity.p.PlotRef,
       async errMsg => {
         await this.toastService.present('Error ' + errMsg, 1000, 'danger');
         await this.haptic.error();
@@ -361,6 +362,7 @@ export class IncomeViewMobileAppComponent implements OnInit {
         this.Entity.p.PayerRef = SingleRecord.p.Ref;
         if (this.Entity.p.PayerType == this.DealDoneCustomer) {
           this.Entity.p.PlotName = SingleRecord.p.PlotName;
+          this.Entity.p.PlotRef = SingleRecord.p.PlotRef;
         }
       }
       this.FetchEntireListByFilters();

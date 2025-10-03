@@ -14,6 +14,7 @@ export class IncomeFetchRequest {
   BankAccountRefs: number[] = [];
   PayerTypes: number[] = [];
   PayerRefs: number[] = [];
+  // PlotRefs: number[] = [];
   CompanyRef: number = 0;
   SiteRef: number = 0;
   SiteRefs: number[] = [];
