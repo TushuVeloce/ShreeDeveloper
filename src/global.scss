@@ -662,6 +662,35 @@ input[type="number"] {
   --moz-appearance: textfield;
 }
 
+/* Base placeholder style */
+input[placeholder]::placeholder,
+textarea[placeholder]::placeholder {
+  font-size: 14px;
+  color: gray;
+}
+
+/* Responsive font-size using media queries */
+@media (min-width: 640px) {
+  input[placeholder]::placeholder,
+  textarea[placeholder]::placeholder {
+    font-size: 12px;
+  }
+}
+
+@media (min-width: 768px) {
+  input[placeholder]::placeholder,
+  textarea[placeholder]::placeholder {
+    font-size: 18px;
+  }
+}
+
+@media (min-width: 1024px) {
+  input[placeholder]::placeholder,
+  textarea[placeholder]::placeholder {
+    font-size: 16px;
+  }
+}
+
 // Mobile app global css
 .no-data-mobile-app {
   display: flex;
@@ -687,11 +716,6 @@ input[type="number"] {
   }
 }
 
-// <!-- Show "Data not found" if list is empty -->
-// <div *ngIf="TodayAttendanceLogList.length === 0 && !isLoading" class="no-data-mobile-app">
-//   <ion-icon name="alert-circle-outline" size="large" color="medium"></ion-icon>
-//   <p>No attendance records found for today.</p>
-// </div>
 .form-container {
   --background: var(--ion-background-color);
   padding: 16px;
@@ -720,17 +744,42 @@ input[type="number"] {
 
   ion-input {
     margin-top: -10px;
+    /* kept for standard ion-input behavior (single line) */
   }
+
+  /* --- START OF FIXES FOR OVERLAP/RESPONSIVENESS --- */
+  /* Ensure the label and status text are within a flex context for proper space distribution */
+  /* Target the internal container of ion-item if necessary, but adjusting the children is often enough */
+  --inner-padding-end: 16px;
 }
+
+/* This allows the label text to wrap to the next line if it is too long */
+.input-item ion-label {
+  color: #333;
+  white-space: normal; /* **KEY FIX: Allows wrapping** */
+  overflow: hidden;
+  text-overflow: ellipsis; /* You can REMOVE this if you want to see all wrapped text */
+  flex-basis: 50%;
+  flex-shrink: 1;
+  min-width: 0;
+}
+
+/* This allows the selected value text to wrap to the next line if it is too long */
+.status-text {
+  white-space: nowrap; /* **KEY FIX: Allows wrapping** */
+  overflow: hidden;
+  text-overflow: ellipsis; /* You can REMOVE this if you want to see all wrapped text */
+  text-align: right;
+  flex-basis: 50%;
+  flex-grow: 1;
+  padding-left: 8px;
+  line-height: 1.2; /* Ensure multiple lines look good */
+}
+/* --- END OF FIXES FOR OVERLAP/RESPONSIVENESS --- */
 
 .input-item:focus-within {
   --border-color: var(--ion-color-primary-shade);
   --box-shadow: 0 0 6px rgba(var(--ion-color-primary-rgb), 0.6);
-}
-
-.input-item ion-label {
-  // font-weight: 600;
-  color: #333;
 }
 
 ion-item.invalid {
@@ -738,23 +787,6 @@ ion-item.invalid {
   border: 1.5px solid red;
   border-radius: 12px;
 }
-
-// .submit-button {
-//   --background: var(--ion-color-primary);
-//   --color: var(--ion-text-color:);
-//   --border-radius: 50px;
-//   --padding-top: 14px;
-//   --padding-bottom: 14px;
-//   transition: --background 0.3s ease;
-// }
-
-// .submit-button:hover {
-//   --background: var(--ion-color-primary-shade);
-// }
-
-// .submit-button:focus {
-//   --background: var(--ion-color-primary-tint);
-// }
 
 ion-item {
   margin-bottom: 16px;
@@ -898,75 +930,6 @@ input[type="time"] {
   height: 40px;
 }
 
-// .grid-mobile-app {
-//   margin: 10px 6px;
-// }
-
-// .grid-row-mobile-app.single-item-mobile-app {
-//   justify-content: center;
-// }
-
-// .grid-item-wrapper-mobile-app {
-//   display: flex;
-//   flex-direction: column;
-//   align-items: center;
-//   justify-content: center;
-//   margin-bottom: -20px;
-// }
-
-// .grid-item-mobile-app {
-//   position: relative;
-//   width: 80%;
-//   padding-top: 80%; // 1:1 ratio
-//   border-radius: 20px;
-//   background-color: var(--ion-card-background-color);
-//   overflow: hidden;
-//   cursor: pointer;
-//   transition: transform 0.3s ease, box-shadow 0.3s ease;
-//   display: flex;
-//   align-items: center;
-//   justify-content: center;
-//   max-width: 120px;
-//   margin: 0 auto;
-//   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
-// }
-
-// .grid-item-mobile-app:hover {
-//   transform: translateY(-3px);
-//   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.25);
-// }
-
-// .grid-item-mobile-app img {
-//   position: absolute;
-//   top: 50%;
-//   left: 50%;
-//   width: 50%;
-//   height: 50%;
-//   transform: translate(-50%, -50%);
-//   object-fit: contain;
-//   filter: brightness(0) invert(1);
-// }
-
-// .grid-label-mobile-app {
-//   font-size: 14px;
-//   color: #333;
-//   margin-top: 6px;
-//   font-weight: 500;
-//   text-align: center;
-//   word-wrap: break-word;
-//   max-width: 90%;
-// }
-
-// @media screen and (min-width: 768px) {
-//   .grid-item-mobile-app {
-//     max-width: 140px;
-//   }
-
-//   .grid-label-mobile-app {
-//     font-size: 14px;
-//   }
-// }
-
 .grid-mobile-app {
   margin: 16px 12px;
 }
@@ -1043,35 +1006,6 @@ input[type="time"] {
 
   .grid-label-mobile-app {
     font-size: 14px;
-  }
-}
-
-/* Base placeholder style */
-input[placeholder]::placeholder,
-textarea[placeholder]::placeholder {
-  font-size: 14px;
-  color: gray;
-}
-
-/* Responsive font-size using media queries */
-@media (min-width: 640px) {
-  input[placeholder]::placeholder,
-  textarea[placeholder]::placeholder {
-    font-size: 12px;
-  }
-}
-
-@media (min-width: 768px) {
-  input[placeholder]::placeholder,
-  textarea[placeholder]::placeholder {
-    font-size: 18px;
-  }
-}
-
-@media (min-width: 1024px) {
-  input[placeholder]::placeholder,
-  textarea[placeholder]::placeholder {
-    font-size: 16px;
   }
 }
 

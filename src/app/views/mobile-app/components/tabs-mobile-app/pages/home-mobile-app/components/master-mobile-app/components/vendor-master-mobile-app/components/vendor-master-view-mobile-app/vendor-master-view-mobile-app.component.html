@@ -1,0 +1,183 @@
+<app-header-with-back-handler title="Vendor Master"
+  backRoute="mobile-app/tabs/dashboard/masters"></app-header-with-back-handler>
+
+<!-- <app-chip-filter-mobile-app [filters]="filters"
+  (filtersChanged)="onFiltersChanged($event)"></app-chip-filter-mobile-app> -->
+
+<ion-content class="ion-padding">
+  <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+  <ion-list class="vendor-list" [lines]="'none'">
+    <ion-card *ngFor="let vendor of DisplayMasterList" class="vendor-card" button (click)="openModal(vendor)">
+      <ion-card-content>
+        <div class="card-header">
+          <h3 class="vendor-name">{{ vendor.p.Name || 'Vendor' }}</h3>
+          <span class="trade-name">{{ vendor.p.TradeName || '-' }}</span>
+        </div>
+
+        <div class="card-details">
+          <div class="detail-row">
+            <ion-icon name="call-outline" slot="start" color="medium"></ion-icon>
+            <span class="value main-contact-value">{{ vendor.p.MobileNo || 'No Contact' }}</span>
+          </div>
+
+          <div class="detail-row address-snippet">
+            <ion-icon name="location-outline" slot="start" color="medium"></ion-icon>
+            <span class="value">{{ vendor.p.CityName || vendor.p.AddressLine1 || 'No Address' }}</span>
+          </div>
+        </div>
+
+        <div class="card-actions">
+          <ion-button fill="clear" color="tertiary" size="small"
+            (click)="$event.stopPropagation(); onEditClicked(vendor);">
+            <ion-icon name="create-outline" slot="start"></ion-icon>
+            Edit
+          </ion-button>
+          <ion-button fill="clear" color="danger" size="small"
+            (click)="$event.stopPropagation(); onDeleteClicked(vendor);">
+            <ion-icon name="trash-outline" slot="start"></ion-icon>
+            Delete
+          </ion-button>
+        </div>
+      </ion-card-content>
+    </ion-card>
+  </ion-list>
+
+  <div *ngIf="DisplayMasterList.length === 0 && !loadingService.isLoaderActive()" class="empty-state">
+    <ion-icon name="alert-circle-outline"></ion-icon>
+    <p>No Vendor records found.</p>
+    <!-- <ion-button (click)="AddVendorForm()" fill="solid" color="primary" class="ion-margin-top">
+      <ion-icon name="add-outline" slot="start"></ion-icon>
+      Add New Vendor
+    </ion-button> -->
+  </div>
+
+  <ion-modal [isOpen]="ModalOpen" (didDismiss)="closeModal()" class="custom-modal-mobile-app">
+    <ng-template>
+      <ion-header>
+        <ion-toolbar color="primary">
+          <ion-title>Vendor Details</ion-title>
+          <ion-buttons slot="end">
+            <ion-button fill="clear" (click)="closeModal()">
+              <ion-icon name="close-outline"></ion-icon>
+            </ion-button>
+          </ion-buttons>
+        </ion-toolbar>
+      </ion-header>
+
+      <ion-content class="ion-padding modal-content">
+
+        <div class="modal-section">
+          <h3>Contact & Identity</h3>
+          <div class="detail-group">
+            <div class="detail-row">
+              <span class="label">Vendor Name:</span>
+              <span class="value primary-name">{{ selectedVendor.p.Name || '-' }}</span>
+            </div>
+            <div class="detail-row">
+              <span class="label">Trade Name:</span>
+              <span class="value">{{ selectedVendor.p.TradeName || '-' }}</span>
+            </div>
+            <div class="detail-row">
+              <span class="label">Mobile Number:</span>
+              <span class="value">{{ selectedVendor.p.MobileNo || '-' }}</span>
+            </div>
+            <div class="detail-row">
+              <span class="label">PAN:</span>
+              <span class="value">{{ selectedVendor.p.Pan || '-'}}</span>
+            </div>
+            <div class="detail-row">
+              <span class="label">GST IN:</span>
+              <span class="value">{{ selectedVendor.p.GSTIN || '-' }}</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-section">
+          <h3>Address Information</h3>
+          <div class="detail-group">
+            <div class="detail-row">
+              <span class="label">Address Line 1:</span>
+              <span class="value">{{ selectedVendor.p.AddressLine1 || '-' }}</span>
+            </div>
+            <div class="detail-row">
+              <span class="label">Address Line 2:</span>
+              <span class="value">{{ selectedVendor.p.AddressLine2 || '-' }}</span>
+            </div>
+            <div class="detail-row">
+              <span class="label">City:</span>
+              <span class="value">{{ selectedVendor.p.CityName || '-' }}</span>
+            </div>
+            <div class="detail-row">
+              <span class="label">State:</span>
+              <span class="value">{{ selectedVendor.p.StateName || '-' }}</span>
+            </div>
+            <div class="detail-row">
+              <span class="label">Country:</span>
+              <span class="value">{{ selectedVendor.p.CountryName || '-' }}</span>
+            </div>
+            <div class="detail-row">
+              <span class="label">Pin Code:</span>
+              <span class="value">{{ selectedVendor.p.PinCode || '-' }}</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-section">
+          <h3>Bank Details</h3>
+          <div class="detail-group">
+            <div class="detail-row">
+              <span class="label">Bank Name:</span>
+              <span class="value">{{ selectedVendor.p.BankName || '-' }}</span>
+            </div>
+            <div class="detail-row">
+              <span class="label">Branch Name:</span>
+              <span class="value">{{ selectedVendor.p.BranchName || '-' }}</span>
+            </div>
+            <div class="detail-row">
+              <span class="label">Account No:</span>
+              <span class="value">{{ selectedVendor.p.AccountNumber || '-' }}</span>
+            </div>
+            <div class="detail-row">
+              <span class="label">IFSC:</span>
+              <span class="value">{{ selectedVendor.p.IFSC || '-' }}</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-section" *ngIf="(selectedVendor.p.MaterialListSuppliedByVendor).length > 0">
+          <h3>Materials Supplied</h3>
+          <div class="chip-list">
+            <ion-chip color="secondary" *ngFor="let item of (selectedVendor.p.MaterialListSuppliedByVendor)">
+              <ion-label>{{ (findMaterialNameByRef(item)) || 'Unknown Material' }}</ion-label>
+            </ion-chip>
+          </div>
+        </div>
+
+        <div class="modal-section" *ngIf="(selectedVendor.p.ServiceListSuppliedByVendor).length > 0">
+          <h3>Services Provided</h3>
+          <div class="chip-list">
+            <ion-chip color="tertiary" *ngFor="let item of (selectedVendor.p.ServiceListSuppliedByVendor)">
+              <ion-label>{{ (findServiceNameByRef(item)) || 'Unknown Service' }}</ion-label>
+            </ion-chip>
+          </div>
+        </div>
+      </ion-content>
+      <ion-footer>
+        <ion-toolbar>
+          <ion-button expand="block" color="medium" shape="round" (click)="closeModal()">
+            Close Details
+          </ion-button>
+        </ion-toolbar>
+      </ion-footer>
+    </ng-template>
+  </ion-modal>
+
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button (click)="AddVendorForm()">
+      <ion-icon name="add-outline"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+</ion-content>

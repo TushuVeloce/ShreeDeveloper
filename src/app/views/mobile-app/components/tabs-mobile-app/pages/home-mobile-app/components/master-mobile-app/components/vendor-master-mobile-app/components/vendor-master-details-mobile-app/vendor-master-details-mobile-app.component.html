@@ -1,0 +1,184 @@
+<app-header-with-back-handler title="{{ DetailsFormTitle }}"
+  backRoute="mobile-app/tabs/dashboard/masters/vendor-master">
+</app-header-with-back-handler>
+
+<ion-content class="vendor-master-content ion-padding" [fullscreen]="true">
+  <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+  <form #vendorForm="ngForm" (ngSubmit)="saveVendorDetails()">
+    <ion-list class="ion-no-margin ion-no-padding" lines="none">
+
+      <ion-list-header>
+        <ion-label color="primary">Vendor Information</ion-label>
+      </ion-list-header>
+
+      <ion-item>
+        <ion-input label="Vendor Name" labelPlacement="stacked" required [(ngModel)]="FormEntity.p.Name"
+          name="vendorName" #vendorName="ngModel" placeholder="Enter Vendor Name" clearInput>
+        </ion-input>
+        <ion-text color="danger">*</ion-text>
+      </ion-item>
+
+      <ion-item>
+        <ion-input label="Trade Name" labelPlacement="stacked" [(ngModel)]="FormEntity.p.TradeName" name="tradeName"
+          placeholder="Enter Trade Name" clearInput></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-select label="Company Type" labelPlacement="stacked" [(ngModel)]="FormEntity.p.CompanyType"
+          name="companyType" required placeholder="Select Company Type">
+          <ion-select-option *ngFor="let type of CompanyTypeList" [value]="type.Ref">
+            {{ type.Name }}
+          </ion-select-option>
+        </ion-select>
+        <ion-text color="danger">*</ion-text>
+      </ion-item>
+
+      <ion-item [class.ion-invalid]="mobileNumber.invalid && mobileNumber.touched">
+        <ion-input label="Mobile Number" labelPlacement="stacked" type="tel" required
+          [(ngModel)]="FormEntity.p.MobileNo" name="mobileNumber" #mobileNumber="ngModel"
+          placeholder="Enter 10 digit number" pattern="[0-9]{10}" maxlength="10" clearInput>
+        </ion-input>
+        <ion-text color="danger">*</ion-text>
+        <ion-note slot="error" *ngIf="mobileNumber.invalid && mobileNumber.touched">
+          Valid 10-digit number required.
+        </ion-note>
+      </ion-item>
+
+      <ion-list-header>
+        <ion-label color="primary">Location & Contact</ion-label>
+      </ion-list-header>
+
+      <ion-item>
+        <ion-input label="Address Line 1" labelPlacement="stacked" required [(ngModel)]="FormEntity.p.AddressLine1"
+          name="address1" placeholder="Street/Building Name" clearInput>
+        </ion-input>
+        <ion-text color="danger">*</ion-text>
+      </ion-item>
+
+      <ion-item>
+        <ion-input label="Address Line 2" labelPlacement="stacked" [(ngModel)]="FormEntity.p.AddressLine2"
+          name="address2" placeholder="Area/Landmark" clearInput></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-select label="Country" labelPlacement="stacked" [(ngModel)]="FormEntity.p.CountryRef" name="country"
+          required placeholder="Select Country" (ngModelChange)="getStateListByCountryRef(FormEntity.p.CountryRef)">
+          <ion-select-option *ngFor="let country of CountryList" [value]="country.p.Ref">
+            {{ country.p.Name }}
+          </ion-select-option>
+        </ion-select>
+        <ion-text color="danger">*</ion-text>
+      </ion-item>
+
+      <ion-item>
+        <ion-select label="State" labelPlacement="stacked" [(ngModel)]="FormEntity.p.StateRef" name="state" required
+          placeholder="Select State" (ngModelChange)="getCityListByStateRef(FormEntity.p.StateRef)">
+          <ion-select-option *ngFor="let state of StateList" [value]="state.p.Ref">
+            {{ state.p.Name }}
+          </ion-select-option>
+        </ion-select>
+        <ion-text color="danger">*</ion-text>
+      </ion-item>
+
+      <ion-item>
+        <ion-select label="City" labelPlacement="stacked" [(ngModel)]="FormEntity.p.CityRef" name="city" required
+          placeholder="Select City">
+          <ion-select-option *ngFor="let city of CityList" [value]="city.p.Ref">
+            {{ city.p.Name }}
+          </ion-select-option>
+        </ion-select>
+        <ion-text color="danger">*</ion-text>
+      </ion-item>
+
+      <ion-item>
+        <ion-input label="Pin Code" labelPlacement="stacked" required [(ngModel)]="FormEntity.p.PinCode" name="pinCode"
+          type="text" maxlength="6" placeholder="Enter Pin Code" clearInput>
+        </ion-input>
+        <!-- <ion-text color="danger">*</ion-text> -->
+      </ion-item>
+
+      <ion-list-header>
+        <ion-label color="primary">Financial & Regulatory</ion-label>
+      </ion-list-header>
+
+      <ion-item [class.ion-invalid]="pan.invalid && pan.touched">
+        <ion-input label="PAN" labelPlacement="stacked" required [(ngModel)]="FormEntity.p.Pan" name="pan"
+          #pan="ngModel" maxlength="10" placeholder="Enter PAN (e.g., ABCDE1234F)" clearInput></ion-input>
+        <ion-note slot="error" *ngIf="pan.invalid && pan.touched">
+          Invalid PAN format.
+        </ion-note>
+        <!-- <ion-text color="danger" slot="end">*</ion-text> -->
+      </ion-item>
+
+      <ion-item [class.ion-invalid]="gstin.invalid && gstin.touched">
+        <ion-input label="GST IN" labelPlacement="stacked" required [(ngModel)]="FormEntity.p.GSTIN" name="gstin"
+          #gstin="ngModel" maxlength="15" placeholder="Enter GSTIN" clearInput></ion-input>
+        <ion-note slot="error" *ngIf="gstin.invalid && gstin.touched">
+          Invalid GSTIN format.
+        </ion-note>
+        <!-- <ion-text color="danger" slot="end">*</ion-text> -->
+      </ion-item>
+
+      <ion-list-header>
+        <ion-label color="primary">Bank Details</ion-label>
+      </ion-list-header>
+
+      <ion-item>
+        <ion-input label="Bank Name" labelPlacement="stacked" [(ngModel)]="FormEntity.p.BankName" name="bankName"
+          placeholder="Enter Bank Name" clearInput></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-input label="Branch Name" labelPlacement="stacked" [(ngModel)]="FormEntity.p.BranchName" name="branchName"
+          placeholder="Enter Branch Name" clearInput></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-input label="Account No" labelPlacement="stacked" type="number" [(ngModel)]="FormEntity.p.AccountNumber"
+          name="accountNo" placeholder="Enter Account Number" clearInput></ion-input>
+      </ion-item>
+
+      <ion-item [class.ion-invalid]="ifsc.invalid && ifsc.touched">
+        <ion-input label="IFSC" labelPlacement="stacked" [(ngModel)]="FormEntity.p.IFSC" name="ifsc" #ifsc="ngModel"
+          maxlength="11" placeholder="Enter IFSC Code" clearInput></ion-input>
+        <ion-note slot="error" *ngIf="ifsc.invalid && ifsc.touched">
+          Invalid IFSC format.
+        </ion-note>
+      </ion-item>
+
+      <ion-list-header>
+        <ion-label color="primary">Supply Capabilities</ion-label>
+      </ion-list-header>
+
+      <ion-item>
+        <ion-select label="Materials Supplied" labelPlacement="stacked" multiple
+          [(ngModel)]="FormEntity.p.MaterialListSuppliedByVendor" name="materialsSupplied"
+          placeholder="Select materials">
+          <ion-select-option *ngFor="let material of MaterialList" [value]="material.p.Ref">
+            {{ material.p.Name }}
+          </ion-select-option>
+        </ion-select>
+        <ion-text color="danger">*</ion-text>
+      </ion-item>
+
+      <ion-item>
+        <ion-select label="Services Provided" labelPlacement="stacked" multiple
+          [(ngModel)]="FormEntity.p.ServiceListSuppliedByVendor" name="servicesProvided" placeholder="Select services">
+          <ion-select-option *ngFor="let service of ServiceList" [value]="service.p.Ref">
+            {{ service.p.Name }}
+          </ion-select-option>
+        </ion-select>
+        <ion-text color="danger">*</ion-text>
+      </ion-item>
+
+    </ion-list>
+    <!-- [disabled]="vendorForm.invalid"  -->
+
+    <ion-button expand="block" shape="round" type="submit" color="primary" class="ion-margin-top ion-margin-bottom">
+      {{ isEditMode ? 'Update Vendor' : 'Save Vendor' }}
+    </ion-button>
+  </form>
+</ion-content>

@@ -84,29 +84,34 @@ export class HomeViewMobileAppComponent
       group: number;
     };
   } = {
-    // FeatureRef: 1900 - AccountingTransaction
-    2200: {
+    100: {
       label: 'Site',
       icon: 'assets/icons/site_management_mobile_app.png',
       routerPath: '/mobile-app/tabs/dashboard/site-management',
       group: 20,
-    }, // FeatureRef: 1900 - AccountingTransaction
-    1900: {
+    }, 
+    200: {
       label: 'Accounting',
       icon: 'assets/icons/report_mobile_app.png',
       routerPath: '/mobile-app/tabs/dashboard/accounting',
       group: 20,
-    }, // FeatureRef: 2300 - MaterialTransaction (assuming this maps to 'Stock' quick action)
-    2300: {
+    }, 
+    300: {
       label: 'Stock',
       icon: 'assets/icons/stock_mobile_app.png',
       routerPath: '/mobile-app/tabs/dashboard/stock-management',
       group: 20,
-    }, // FeatureRef: 1800 - EmployeeMaster (assuming this links to a main HR page)
-    1800: {
+    }, 
+    400: {
       label: 'CRM',
       icon: 'assets/icons/crm_mobile_app.png',
       routerPath: '/mobile-app/tabs/dashboard/customer-relationship-management',
+      group: 20,
+    },
+    500: {
+      label: 'Masters',
+      icon: 'assets/icons/crm_mobile_app.png',
+      routerPath: '/mobile-app/tabs/dashboard/masters',
       group: 20,
     },
   }; // === Admin View Data ===

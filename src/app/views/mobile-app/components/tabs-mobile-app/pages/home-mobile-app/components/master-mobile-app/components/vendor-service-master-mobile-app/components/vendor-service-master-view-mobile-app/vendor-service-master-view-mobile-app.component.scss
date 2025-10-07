@@ -1,0 +1,81 @@
+ion-content {
+  --background: #f4f5f8; /* Soft background */
+}
+
+/* Vendor Service Card Styles */
+.vendor-service-list {
+  background: transparent;
+  padding: 0;
+}
+
+.service-card {
+  --background: #ffffff;
+  margin: 10px 0;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.service-name {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--ion-color-dark);
+  margin: 0;
+}
+
+.card-details {
+  padding-top: 10px;
+  border-top: 1px solid var(--ion-color-step-100);
+  margin-top: 10px;
+}
+
+.detail-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.9rem;
+}
+
+.label {
+  color: var(--ion-color-medium);
+}
+
+.value {
+  font-weight: 500;
+}
+
+.card-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  padding-top: 5px;
+
+  ion-button {
+    text-transform: capitalize;
+    font-size: 0.8rem;
+    height: 30px;
+  }
+}
+
+/* Empty State */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  height: 60vh; /* Takes up most of the view when empty */
+
+  ion-icon {
+    font-size: 3.5rem;
+    color: var(--ion-color-light);
+  }
+  p {
+    color: var(--ion-color-medium);
+  }
+}
+
+/* Pagination Placement */
+.pagination-container {
+  display: flex;
+  justify-content: center;
+  padding: 15px 0;
+}

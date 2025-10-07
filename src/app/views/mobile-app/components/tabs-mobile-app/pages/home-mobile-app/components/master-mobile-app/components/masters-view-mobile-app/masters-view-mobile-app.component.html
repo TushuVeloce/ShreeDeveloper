@@ -1,0 +1,17 @@
+<app-header-with-back-handler title="All Masters" backRoute="mobile-app/tabs/dashboard"></app-header-with-back-handler>
+
+<ion-content [fullscreen]="true" class="ion-padding">
+  <div class="quick-actions-grid" *ngIf="gridItems.length > 0">
+    <ion-grid>
+      <ion-row>
+        <ion-col *ngFor="let item of gridItems; let i = index" size="6" size-sm="4" size-md="3" size-lg="2">
+          <div class="dashboard-item" [routerLink]="item.routerPath" [ngClass]="{ active: i === selectedIndex }"
+            (click)="selectItem(i)">
+            <img [src]="item.icon" alt="{{ item.label }} icon" />
+            <span>{{ item.label }}</span>
+          </div>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
+</ion-content>

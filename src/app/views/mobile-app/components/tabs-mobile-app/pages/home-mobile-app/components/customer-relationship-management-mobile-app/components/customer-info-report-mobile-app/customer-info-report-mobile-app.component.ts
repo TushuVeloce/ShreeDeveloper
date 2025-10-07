@@ -90,10 +90,7 @@ export class CustomerInfoReportMobileAppComponent implements OnInit {
     (event.target as HTMLIonRefresherElement).complete();
   }
 
-  @ViewChild('PrintContainer')
-  PrintContainer!: ElementRef;
-
-  handlePrintOrShare = async () => {
+  async handlePrintOrShare() {
     if (this.DisplayMasterList.length == 0) {
       await this.toastService.present(
         'No Customer Info Records Found',
@@ -103,12 +100,60 @@ export class CustomerInfoReportMobileAppComponent implements OnInit {
       await this.haptic.warning();
       return;
     }
-    if (!this.PrintContainer) return;
-    await this.pdfService.generatePdfAndHandleAction(
-      this.PrintContainer.nativeElement,
-      `Receipt_${this.Entity.p.RegisterDate}.pdf`
+
+    const headers = this.headers; // Assuming this array holds all 35 column headers
+    const data = this.DisplayMasterList.map((m, index) => [
+      index + 1,
+      m.p.CustID ? m.p.CustID : '--',
+      m.p.CustomerName ? m.p.CustomerName : '--',
+      m.p.CustomerAddress ? m.p.CustomerAddress : '--',
+      m.p.ContactNos ? m.p.ContactNos : '--',
+      m.p.PANNo ? m.p.PANNo : '--',
+      m.p.AdharNo ? m.p.AdharNo : '--',
+      m.p.LeadSourceName ? m.p.LeadSourceName : '--',
+      m.p.LeadHandleByName ? m.p.LeadHandleByName : '--',
+      m.p.BrokerName ? m.p.BrokerName : '--',
+      m.p.RegisterCustomerBookingRemarkName
+        ? m.p.RegisterCustomerBookingRemarkName
+        : '--',
+      m.p.PlotNo ? m.p.PlotNo : '--',
+      m.p.AreaInSqm ? m.p.AreaInSqm : '--',
+      m.p.AreaInSqft ? m.p.AreaInSqft : '--',
+      m.p.BasicRate ? m.p.BasicRate : '--',
+      m.p.DiscountedRateOnArea ? m.p.DiscountedRateOnArea : '--',
+      m.p.DiscountOnTotalPlotAmount ? m.p.DiscountOnTotalPlotAmount : '--',
+      m.p.TotalPlotAmount ? m.p.TotalPlotAmount : '--',
+      m.p.GovernmentRecknor ? m.p.GovernmentRecknor : '--',
+      m.p.GovernmentValue ? m.p.GovernmentValue : '--',
+      m.p.ValueOfAgreement ? m.p.ValueOfAgreement : '--',
+      '1%',
+      m.p.RegistrationFees ? m.p.RegistrationFees : '--',
+      m.p.TaxValueInPercentage != null ? m.p.TaxValueInPercentage + '%' : '--',
+      m.p.StampDuties ? m.p.StampDuties : '--',
+      m.p.GoodsServicesTax != null ? m.p.GoodsServicesTax + '%' : '--',
+      m.p.LegalCharges ? m.p.LegalCharges : '--',
+      m.p.TotalExtraCharges ? m.p.TotalExtraCharges : '--',
+      m.p.GrandTotal ? m.p.GrandTotal : '--',
+      m.p.TotalChequeReceived ? m.p.TotalChequeReceived : '--',
+      m.p.TotalCashReceived ? m.p.TotalCashReceived : '--',
+      m.p.TotalAmountReceived ? m.p.TotalAmountReceived : '--',
+      m.p.TotalChequeBalance ? m.p.TotalChequeBalance : '--',
+      m.p.TotalCashBalance ? m.p.TotalCashBalance : '--',
+      m.p.TotalBalance ? m.p.TotalBalance : '--',
+    ]);
+
+    // **REQUIRED INPUTS FOR DYNAMIC SPLIT**
+    const COLUMNS_PER_PAGE = 10; // Set this number based on how many columns fit on a landscape page
+    const ORIENTATION = 'l'; // Use 'l' for Landscape
+
+    await this.pdfService.generateDynamicSplitReport(
+      'Customer Info Report.pdf',
+      { headers, data },
+      COLUMNS_PER_PAGE,
+      ORIENTATION,
+      'Customer Info Report'
     );
-  };
+  }
 
   loadFilters = () => {
     this.filters = [

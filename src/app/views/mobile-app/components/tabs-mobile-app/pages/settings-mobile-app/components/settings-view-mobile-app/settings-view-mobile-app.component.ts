@@ -17,7 +17,7 @@ import { ToastService } from 'src/app/views/mobile-app/components/core/toast.ser
   selector: 'app-settings-view-mobile-app',
   templateUrl: './settings-view-mobile-app.component.html',
   styleUrls: ['./settings-view-mobile-app.component.scss'],
-  standalone: false
+  standalone: false,
 })
 export class SettingsViewMobileAppComponent implements OnInit {
   Entity: Employee = Employee.CreateNewInstance();
@@ -42,10 +42,26 @@ export class SettingsViewMobileAppComponent implements OnInit {
   IsAdmin = false;
 
   profileOptions = [
-    { title: 'Notifications', icon: 'notifications-outline', action: () => this.openNotifications() },
-    { title: 'change password', icon: 'finger-print', action: () => this.openChangePassword() },
-    { title: 'Privacy and Security', icon: 'lock-closed-outline', action: () => this.openPrivacy() },
-    { title: 'Logout', icon: 'log-out-outline', action: () => this.confirmLogout() },
+    {
+      title: 'Notifications',
+      icon: 'notifications-outline',
+      action: () => this.openNotifications(),
+    },
+    {
+      title: 'change password',
+      icon: 'finger-print',
+      action: () => this.openChangePassword(),
+    },
+    {
+      title: 'Privacy and Security',
+      icon: 'lock-closed-outline',
+      action: () => this.openPrivacy(),
+    },
+    {
+      title: 'Logout',
+      icon: 'log-out-outline',
+      action: () => this.confirmLogout(),
+    },
   ];
 
   constructor(
@@ -58,8 +74,8 @@ export class SettingsViewMobileAppComponent implements OnInit {
     private alertService: AlertService,
     public loadingService: LoadingService, // Make public to be used in the template
     private baseUrl: BaseUrlService,
-    private dtu: DTU,
-  ) { }
+    private dtu: DTU
+  ) {}
 
   ngOnInit(): void {
     // ngOnInit is called only once, so `ionViewWillEnter` is better for data fetching on every view entry.
@@ -68,8 +84,12 @@ export class SettingsViewMobileAppComponent implements OnInit {
   ionViewWillEnter = async () => {
     this.employeeName = localStorage.getItem('UserDisplayName') || 'User';
     this.employeeEmail = localStorage.getItem('userEmail') || 'email';
-    this.currentemployee = Number(this.appStateManagement.localStorage.getItem('LoginEmployeeRef'));
-    this.companyRef = Number(this.appStateManagement.localStorage.getItem('SelectedCompanyRef'));
+    this.currentemployee = Number(
+      this.appStateManagement.localStorage.getItem('LoginEmployeeRef')
+    );
+    this.companyRef = Number(
+      this.appStateManagement.localStorage.getItem('SelectedCompanyRef')
+    );
     this.LoginToken = this.appStateManagement.getLoginTokenForMobile();
     this.ImageBaseUrl = this.baseUrl.GenerateImageBaseUrl();
     if (this.currentemployee !== 0) {
@@ -90,23 +110,32 @@ export class SettingsViewMobileAppComponent implements OnInit {
           }
         );
 
-        if (employeeData) { // Check if employeeData is not null or undefined
+        if (employeeData) {
+          // Check if employeeData is not null or undefined
           this.Entity = employeeData;
           this.IsEmployee = true;
           this.IsAdmin = false;
           this.Role = this.Entity.p.DesignationName;
           if (this.Entity.p.DOB) {
-            this.Entity.p.DOB = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.DOB);
+            this.Entity.p.DOB = this.dtu.ConvertStringDateToShortFormat(
+              this.Entity.p.DOB
+            );
           }
           this.imageUrl = this.Entity.p.ProfilePicPath;
           this.loadImageFromBackend(this.imageUrl);
           this.AdminEntity = AdminProfile.CreateNewInstance();
         } else {
           // If no employee data, check for admin
-          const adminData = await AdminProfile.FetchAdminData(async (errMsg) => {
-            await this.toastService.present('Error ' + errMsg, 1000, 'danger');
-            await this.haptic.error();
-          });
+          const adminData = await AdminProfile.FetchAdminData(
+            async (errMsg) => {
+              await this.toastService.present(
+                'Error ' + errMsg,
+                1000,
+                'danger'
+              );
+              await this.haptic.error();
+            }
+          );
 
           if (adminData && adminData[0]) {
             this.AdminEntity = adminData[0];
@@ -114,7 +143,9 @@ export class SettingsViewMobileAppComponent implements OnInit {
             this.IsEmployee = false;
             this.Role = 'Admin';
             if (this.AdminEntity.p.DOB) {
-              this.AdminEntity.p.DOB = this.dtu.ConvertStringDateToShortFormat(this.AdminEntity.p.DOB);
+              this.AdminEntity.p.DOB = this.dtu.ConvertStringDateToShortFormat(
+                this.AdminEntity.p.DOB
+              );
             }
             this.imageUrl = this.AdminEntity.p.ProfilePicPath;
             this.loadImageFromBackend(this.imageUrl);
@@ -122,13 +153,16 @@ export class SettingsViewMobileAppComponent implements OnInit {
         }
       }
     } catch (error) {
-      await this.toastService.present('Failed to load user details', 1000, 'danger');
+      await this.toastService.present(
+        'Failed to load user details',
+        1000,
+        'danger'
+      );
       await this.haptic.error();
     } finally {
       await this.loadingService.hide();
     }
   };
-
 
   loadImageFromBackend(imageUrl: string | null): void {
     if (imageUrl) {
@@ -165,40 +199,73 @@ export class SettingsViewMobileAppComponent implements OnInit {
           text: 'Cancel',
           role: 'cancel',
           cssClass: 'custom-cancel',
-          handler: () => {
-          }
+          handler: () => {},
         },
         {
           text: 'Yes, Logout',
           cssClass: 'custom-confirm',
           handler: () => {
             this.logout();
-          }
-        }
-      ]
+          },
+        },
+      ],
     });
   };
 
+  // logout = async () => {
+  //   await this.loadingService.show();
+  //   try {
+  //     const req = new UserLogoutRequest();
+  //     req.LoginToken = this.appStateManagement.localStorage.getItem('CurrentLoginToken') || '';
+  //     req.LastSelectedCompanyRef = Number(this.appStateManagement.localStorage.getItem('SelectedCompanyRef'));
+  //     req.EmployeeRef = Number(this.appStateManagement.localStorage.getItem('LoginEmployeeRef'));
+
+  //     try {
+  //       await this.servercommunicator.LogoutUser(req);
+  //     } catch (error) {
+  //     }
+
+  //     this.appStateManagement.StorageKey.clear();
+  //     localStorage.clear();
+
+  //     await this.toastService.present('Logout successfully', 1000, 'danger');
+  //     this.haptic.success();
+  //     this.router.navigate(['/mobile-app/auth/login']);
+
+  //   } catch (error) {
+  //     await this.toastService.present('Logout failed', 1000, 'danger');
+  //     this.haptic.error();
+  //   } finally {
+  //     await this.loadingService.hide();
+  //   }
+  // };
   logout = async () => {
     await this.loadingService.show();
     try {
-      const req = new UserLogoutRequest();
-      req.LoginToken = this.appStateManagement.localStorage.getItem('CurrentLoginToken') || '';
-      req.LastSelectedCompanyRef = Number(this.appStateManagement.localStorage.getItem('SelectedCompanyRef'));
-      req.EmployeeRef = Number(this.appStateManagement.localStorage.getItem('LoginEmployeeRef'));
+      const req = new UserLogoutRequest(); // Using appStateManagement.localStorage is better for consistency
+      req.LoginToken =
+        this.appStateManagement.localStorage.getItem('CurrentLoginToken') || '';
+      req.LastSelectedCompanyRef = Number(
+        this.appStateManagement.localStorage.getItem('SelectedCompanyRef')
+      );
+      req.EmployeeRef = Number(
+        this.appStateManagement.localStorage.getItem('LoginEmployeeRef')
+      );
 
       try {
+        // Attempt server logout, but don't fail the client logout if this fails
         await this.servercommunicator.LogoutUser(req);
       } catch (error) {
-      }
+        // Server logout failed, but continue with client-side cleanup
+      } // CRITICAL: Clear all client-side storage
 
       this.appStateManagement.StorageKey.clear();
-      localStorage.clear();
+      localStorage.clear(); // Use navigate with a hard refresh strategy to clear component history/cache
 
       await this.toastService.present('Logout successfully', 1000, 'danger');
       this.haptic.success();
-      this.router.navigate(['/mobile-app/auth/login']);
-
+      // Use router.navigate with replaceUrl to clear the history stack
+      this.router.navigate(['/mobile-app/auth/login'], { replaceUrl: true });
     } catch (error) {
       await this.toastService.present('Logout failed', 1000, 'danger');
       this.haptic.error();

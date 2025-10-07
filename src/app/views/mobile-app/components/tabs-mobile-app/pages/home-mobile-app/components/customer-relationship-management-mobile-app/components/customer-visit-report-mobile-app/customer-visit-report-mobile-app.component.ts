@@ -87,18 +87,39 @@ export class CustomerVisitReportMobileAppComponent implements OnInit {
     await this.getInwardListBySiteRef();
     this.loadFilters(); // Reload filters with updated options & preserve selections
   }
-
-  @ViewChild('PrintContainer')
-  PrintContainer!: ElementRef;
-
-  handlePrintOrShare = async () => {
+    async handlePrintOrShare() {
     if (this.DisplayMasterList.length == 0) {
-      await this.toastService.present('No Customer visit Records Found', 1000, 'warning');
+      await this.toastService.present(
+        'No Customer visit Records Found',
+        1000,
+        'warning'
+      );
       await this.haptic.warning();
       return;
     }
-    if (!this.PrintContainer) return;
-    await this.pdfService.generatePdfAndHandleAction(this.PrintContainer.nativeElement, `Receipt_${this.Entity.p.Ref}.pdf`);
+    // if (!this.PrintContainer) return;
+    // await this.pdfService.generatePdfAndHandleAction(this.PrintContainer.nativeElement, `Receipt_${this.Entity.p.Ref}.pdf`);
+    const headers = this.Printheaders;
+    const data = this.DisplayMasterList.map((m, index) => [
+      index + 1,
+      this.formatDate(m.p.TransDateTime),
+      m.p.SiteName ? m.p.SiteName : '--',
+      m.p.PlotNo ? m.p.PlotNo : '--',
+      m.p.CustomerName ? m.p.CustomerName : '--',
+      m.p.CustomerAddress ? m.p.CustomerAddress : '--',
+      m.p.CustomerPhoneNo ? m.p.CustomerPhoneNo : '--',
+      m.p.CustomerRequirement ? m.p.CustomerRequirement : '--',
+    ]);
+
+    await this.pdfService.generatePdfAndHandleAction(
+      null,
+      'Customer Visit Report.pdf',
+      { headers, data },
+      false,
+      'l',
+      [],
+      'Customer Visit Report'
+    );
   }
 
   private loadCustomerVisitReportIfEmployeeExists = async () => {

@@ -1,0 +1,9 @@
+<app-header-with-back-handler
+  title="Vendor Service Details"
+  backRoute="mobile-app/tabs/dashboard/masters/vendor-service-master"
+></app-header-with-back-handler>
+<ion-content class="vendor-service-master-content">
+  <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+</ion-content>

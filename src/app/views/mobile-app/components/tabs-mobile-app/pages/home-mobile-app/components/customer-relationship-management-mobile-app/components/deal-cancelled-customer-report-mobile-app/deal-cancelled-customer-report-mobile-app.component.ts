@@ -57,20 +57,53 @@ export class DealCancelledCustomerReportMobileAppComponent implements OnInit {
     (event.target as HTMLIonRefresherElement).complete();
   };
 
-  handlePrintOrShare = async (): Promise<void> => {
-    if (this.DisplayMasterList.length === 0) {
-      await this.toastService.present('No Customer Info Records Found', 1000, 'warning');
+  // handlePrintOrShare = async (): Promise<void> => {
+  //   if (this.DisplayMasterList.length === 0) {
+  //     await this.toastService.present('No Customer Info Records Found', 1000, 'warning');
+  //     await this.haptic.warning();
+  //     return;
+  //   }
+  //   if (!this.PrintContainer?.nativeElement) return;
+
+  //   const fileName = this.Entity.p.CustomerName
+  //     ? `Receipt_${this.Entity.p.CustomerName}.pdf`
+  //     : `DealCancelledCustomers.pdf`;
+
+  //   await this.pdfService.generatePdfAndHandleAction(this.PrintContainer.nativeElement, fileName);
+  // };
+
+    async handlePrintOrShare() {
+    if (this.DisplayMasterList.length == 0) {
+      await this.toastService.present(
+        'No Customer visit Records Found',
+        1000,
+        'warning'
+      );
       await this.haptic.warning();
       return;
     }
-    if (!this.PrintContainer?.nativeElement) return;
+    const headers = this.headers;
+    const data = this.DisplayMasterList.map((m, index) => [
+      index + 1,
+      m.p.SiteName ? m.p.SiteName : '--',
+      m.p.PlotNo ? m.p.PlotNo : '--',
+      m.p.CustomerName ? m.p.CustomerName : '--',
+      m.p.Address ? m.p.Address : '--',
+      m.p.CityName ? m.p.CityName : '--',
+      m.p.ContactNos ? m.p.ContactNos : '--',
+      m.p.Reason ? m.p.Reason : '--',
+    ]);
 
-    const fileName = this.Entity.p.CustomerName
-      ? `Receipt_${this.Entity.p.CustomerName}.pdf`
-      : `DealCancelledCustomers.pdf`;
-
-    await this.pdfService.generatePdfAndHandleAction(this.PrintContainer.nativeElement, fileName);
-  };
+    await this.pdfService.generatePdfAndHandleAction(
+      null,
+      'Deal Cancelled Customer Report.pdf',
+      { headers, data },
+      false,
+      'l',
+      [],
+      'Deal Cancelled Customer Report'
+    );
+  }
 
   loadFilters = (): void => {
     this.filters = [

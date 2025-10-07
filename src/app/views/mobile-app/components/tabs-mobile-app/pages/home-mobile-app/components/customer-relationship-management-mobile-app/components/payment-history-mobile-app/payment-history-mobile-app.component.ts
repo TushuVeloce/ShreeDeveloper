@@ -15,26 +15,43 @@ import { FilterItem } from 'src/app/views/mobile-app/components/shared/chip-filt
   selector: 'app-payment-history-mobile-app',
   templateUrl: './payment-history-mobile-app.component.html',
   styleUrls: ['./payment-history-mobile-app.component.scss'],
-  standalone: false
+  standalone: false,
 })
 export class PaymentHistoryMobileAppComponent implements OnInit {
   Entity: Income = Income.CreateNewInstance();
   MasterList: Income[] = [];
   DisplayMasterList: Income[] = [];
-  list: [] = []
+  list: [] = [];
   SiteList: Site[] = [];
   PlotList: Plot[] = [];
   SearchString: string = '';
   SelectedIncome: Income = Income.CreateNewInstance();
   CustomerRef: number = 0;
   companyRef: number = 0;
-  Printheaders: string[] = ['Sr.No.', 'Date', 'Site', 'Plot', 'Payer Name', 'Amount', 'Mode of Payment', 'Reason'];
-  headers: string[] = ['Sr.No.', 'Date', 'Site', 'Plot', 'Payer Name', 'Amount', 'Mode of Payment', 'Reason'];
+  Printheaders: string[] = [
+    'Sr.No.',
+    'Date',
+    'Site',
+    'Plot',
+    'Payer Name',
+    'Amount',
+    'Mode of Payment',
+    'Reason',
+  ];
+  headers: string[] = [
+    'Sr.No.',
+    'Date',
+    'Site',
+    'Plot',
+    'Payer Name',
+    'Amount',
+    'Mode of Payment',
+    'Reason',
+  ];
   modalOpen = false;
 
   filters: FilterItem[] = [];
   selectedFilterValues: Record<string, any> = {};
-
 
   constructor(
     private appStateManage: AppStateManageService,
@@ -43,7 +60,7 @@ export class PaymentHistoryMobileAppComponent implements OnInit {
     private haptic: HapticService,
     public loadingService: LoadingService,
     private pdfService: PDFService
-  ) { }
+  ) {}
 
   ngOnInit = async () => {
     // await this.loadPaymentHistoryReportIfEmployeeExists();
@@ -58,7 +75,7 @@ export class PaymentHistoryMobileAppComponent implements OnInit {
     await this.loadPaymentHistoryReportIfEmployeeExists();
     this.loadFilters();
     (event.target as HTMLIonRefresherElement).complete();
-  }
+  };
 
   loadFilters = () => {
     this.filters = [
@@ -66,11 +83,13 @@ export class PaymentHistoryMobileAppComponent implements OnInit {
         key: 'site',
         label: 'Site',
         multi: false,
-        options: this.SiteList.map(item => ({
+        options: this.SiteList.map((item) => ({
           Ref: item.p.Ref,
           Name: item.p.Name,
         })),
-        selected: this.SiteList.find(item => item.p.Ref === this.selectedFilterValues['site'])
+        selected: this.SiteList.find(
+          (item) => item.p.Ref === this.selectedFilterValues['site']
+        )
           ? this.selectedFilterValues['site']
           : null,
       },
@@ -78,21 +97,24 @@ export class PaymentHistoryMobileAppComponent implements OnInit {
         key: 'plot',
         label: 'Plot No.',
         multi: false,
-        options: this.PlotList.map(item => ({
+        options: this.PlotList.map((item) => ({
           Ref: item.p.Ref,
           Name: item.p.PlotNo,
         })),
-        selected: this.PlotList.find(item => item.p.Ref === this.selectedFilterValues['plot'])
+        selected: this.PlotList.find(
+          (item) => item.p.Ref === this.selectedFilterValues['plot']
+        )
           ? this.selectedFilterValues['plot']
           : null,
       },
     ];
-  }
+  };
 
   onFiltersChanged = async (updatedFilters: any[]) => {
     for (const filter of updatedFilters) {
       const selected = filter.selected;
-      const selectedValue = (selected === null || selected === undefined) ? null : selected;
+      const selectedValue =
+        selected === null || selected === undefined ? null : selected;
 
       // Save selected value to preserve after reload
       this.selectedFilterValues[filter.key] = selectedValue ?? null;
@@ -115,70 +137,106 @@ export class PaymentHistoryMobileAppComponent implements OnInit {
     }
     if (this.Entity.p.SiteRef > 0) {
       await this.getPaymentHistoryListBySiteRefAndPlotRef();
-    }else {
+    } else {
       await this.getPaymentHistoryListByCompanyRef();
     }
     this.loadFilters(); // Reload filters with updated options & preserve selections
-  }
+  };
 
-  @ViewChild('PrintContainer')
-  PrintContainer!: ElementRef;
-
-  handlePrintOrShare = async () => {
+  async handlePrintOrShare() {
     if (this.DisplayMasterList.length == 0) {
-      await this.toastService.present('No Payment History Records Found', 1000, 'warning');
+      await this.toastService.present(
+        'No Customer visit Records Found',
+        1000,
+        'warning'
+      );
       await this.haptic.warning();
       return;
     }
-    if (!this.PrintContainer) return;
-    await this.pdfService.generatePdfAndHandleAction(this.PrintContainer.nativeElement, `Payment-History-Report.pdf`);
+
+    const headers = this.Printheaders;
+    const data = this.DisplayMasterList.map((m, index) => [
+      index + 1,
+      this.formatDate(m.p.Date),
+      m.p.SiteName ? m.p.SiteName : '--',
+      m.p.PlotName ? m.p.PlotName : '--',
+      m.p.PayerName ? m.p.PayerName : '--',
+      m.p.IncomeAmount ? m.p.IncomeAmount : '--',
+      m.p.ModeOfPaymentName ? m.p.ModeOfPaymentName : '--',
+      m.p.Reason ? m.p.Reason : '--',
+    ]);
+
+    await this.pdfService.generatePdfAndHandleAction(
+      null,
+      'Payment History Report.pdf',
+      { headers, data },
+      false,
+      'l',
+      [5],
+      'Payment History Report'
+    );
   }
 
   private loadPaymentHistoryReportIfEmployeeExists = async () => {
     try {
       await this.loadingService.show();
 
-      const company = this.appStateManage.localStorage.getItem('SelectedCompanyRef');
+      const company =
+        this.appStateManage.localStorage.getItem('SelectedCompanyRef');
       this.companyRef = Number(company || 0);
 
       if (this.companyRef <= 0) {
-        await this.toastService.present('Company not selected', 1000, 'warning');
+        await this.toastService.present(
+          'Company not selected',
+          1000,
+          'warning'
+        );
         await this.haptic.warning();
         return;
       }
       await this.getSiteListByCompanyRef();
       await this.getPaymentHistoryListByCompanyRef();
     } catch (error) {
-      await this.toastService.present('Failed to load Payment History Report', 1000, 'danger');
+      await this.toastService.present(
+        'Failed to load Payment History Report',
+        1000,
+        'danger'
+      );
       await this.haptic.error();
     } finally {
       await this.loadingService.hide();
     }
-  }
+  };
   getSiteListByCompanyRef = async () => {
     if (this.companyRef <= 0) {
       await this.toastService.present('Company not Selected', 1000, 'warning');
       await this.haptic.warning();
       return;
     }
-    this.Entity.p.SiteRef = 0
-    let lst = await Site.FetchEntireListByCompanyRef(this.companyRef, async errMsg => {
+    this.Entity.p.SiteRef = 0;
+    let lst = await Site.FetchEntireListByCompanyRef(
+      this.companyRef,
+      async (errMsg) => {
+        await this.toastService.present(errMsg, 1000, 'danger');
+        await this.haptic.error();
+      }
+    );
+    this.SiteList = lst;
+  };
+  getPlotListBySiteRef = async (siteref: number) => {
+    this.Entity.p.PlotRef = 0;
+    this.PlotList = [];
+    let lst = await Plot.FetchEntireListBySiteRef(siteref, async (errMsg) => {
       await this.toastService.present(errMsg, 1000, 'danger');
       await this.haptic.error();
     });
-    this.SiteList = lst;
-  }
-  getPlotListBySiteRef = async (siteref: number) => {
-        this.Entity.p.PlotRef = 0
-        this.PlotList = [];
-        let lst = await Plot.FetchEntireListBySiteRef(siteref, async errMsg =>{
-          await this.toastService.present(errMsg, 1000, 'danger');
-          await this.haptic.error();
-          });
-        // this.PlotList = lst;
-        this.PlotList = lst.filter(data => data.p.CurrentBookingRemark != BookingRemarks.Plot_Of_Owner && data.p.CurrentBookingRemark != BookingRemarks.Plot_Of_Shree);
-        
-      }
+    // this.PlotList = lst;
+    this.PlotList = lst.filter(
+      (data) =>
+        data.p.CurrentBookingRemark != BookingRemarks.Plot_Of_Owner &&
+        data.p.CurrentBookingRemark != BookingRemarks.Plot_Of_Shree
+    );
+  };
 
   getPaymentHistoryListByCompanyRef = async () => {
     this.MasterList = [];
@@ -188,7 +246,8 @@ export class PaymentHistoryMobileAppComponent implements OnInit {
       await this.haptic.warning();
       return;
     }
-    let lst = await Income.FetchEntireListByCompanyRef(this.companyRef,
+    let lst = await Income.FetchEntireListByCompanyRef(
+      this.companyRef,
       async (errMsg) => {
         await this.toastService.present(errMsg, 1000, 'danger');
         await this.haptic.error();
@@ -196,19 +255,24 @@ export class PaymentHistoryMobileAppComponent implements OnInit {
     );
     this.MasterList = lst;
     // this.DisplayMasterList = this.MasterList;
-    this.DisplayMasterList = this.MasterList.filter(data => data.p.PlotName != '');
+    this.DisplayMasterList = this.MasterList.filter(
+      (data) => data.p.PlotName != ''
+    );
   };
 
   getPaymentHistoryListBySiteRefAndPlotRef = async () => {
     this.MasterList = [];
     this.DisplayMasterList = [];
     if (this.Entity.p.SiteRef == null) {
-      this.Entity.p.SiteRef = 0
-      this.Entity.p.PlotRef = 0
+      this.Entity.p.SiteRef = 0;
+      this.Entity.p.PlotRef = 0;
     } else if (this.Entity.p.PlotRef == null) {
-      this.Entity.p.PlotRef = 0
+      this.Entity.p.PlotRef = 0;
     }
-    let lst = await Income.FetchEntireListBySiteRef(this.Entity.p.SiteRef,this.Entity.p.PlotRef, this.companyRef,
+    let lst = await Income.FetchEntireListBySiteRef(
+      this.Entity.p.SiteRef,
+      this.Entity.p.PlotRef,
+      this.companyRef,
       async (errMsg) => {
         await this.toastService.present(errMsg, 1000, 'danger');
         await this.haptic.error();
@@ -216,20 +280,22 @@ export class PaymentHistoryMobileAppComponent implements OnInit {
     );
     this.MasterList = lst;
     // this.DisplayMasterList = this.MasterList;
-    this.DisplayMasterList = this.MasterList.filter(data => data.p.PlotName != '');
+    this.DisplayMasterList = this.MasterList.filter(
+      (data) => data.p.PlotName != ''
+    );
   };
 
   formatDate = (date: string | Date): string => {
     return this.DateconversionService.formatDate(date);
-  }
+  };
 
   openModal = (Income: any) => {
     this.SelectedIncome = Income;
     this.modalOpen = true;
-  }
+  };
 
   closeModal = () => {
     this.modalOpen = false;
     this.SelectedIncome = Income.CreateNewInstance();
-  }
+  };
 }

@@ -1,57 +1,50 @@
-<ion-header class="ion-no-border modern-header">
+<ion-header class="ion-no-border">
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-button fill="clear" color="medium" (click)="close()">
-        <ion-icon name="close-outline" size="large"></ion-icon>
+      <ion-button (click)="close()" fill="clear" color="medium">
+        <ion-icon name="close" size="large"></ion-icon>
       </ion-button>
     </ion-buttons>
-    <ion-title class="custom-title">{{bottomsheetTitle}}</ion-title>
+
+    <ion-title class="modern-title">{{ bottomsheetTitle }}</ion-title>
+
     <ion-buttons slot="end">
-      <ion-button fill="clear" color="medium" (click)="confirmSelection()" *ngIf="multiSelect">
-        <ion-icon name="checkmark-done-outline" size="large"></ion-icon>
+      <ion-button (click)="confirmSelection()" *ngIf="multiSelect" [disabled]="selectedOptions.length === 0">
+        <ion-icon name="checkmark-done" size="large"></ion-icon>
       </ion-button>
     </ion-buttons>
+  </ion-toolbar>
+
+  <ion-toolbar class="search-toolbar">
+    <ion-searchbar debounce="300" (ionInput)="filterOptions($event)" placeholder="Search options..."
+      color="light" mode="ios"></ion-searchbar>
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding">
-  <!-- Search Bar -->
-  <ion-searchbar debounce="300" (ionInput)="filterOptions($event)" placeholder="Search..."
-    class="custom-search"></ion-searchbar>
-
-  <!-- List of Options -->
-  <ion-list class="custom-list">
-    <ion-item *ngFor="let option of loadedOptions" (click)="selectOption(option)" class="custom-item">
-      <ion-label class="custom-label" [ngClass]="{
-        'selected': isSelected(option),
-        'SiteSelected': isSiteSelected(option)
-      }">
-        {{ option?.p?.Name || option?.p?.PlotNo || option?.p?.MaterialName || option?.p?.VendorName || 'Unnamed' }}
+<ion-content>
+  <ion-list lines="none" class="selection-list">
+    <ion-item button *ngFor="let option of loadedOptions; trackBy: trackByRef" (click)="selectOption(option)"
+      [class.is-selected]="isSelected(option)" [class.is-site-selected]="isSiteSelected(option)" detail="false">
+      
+      <ion-label>
+        {{ option?.p?.Name || option?.p?.PlotNo || option?.p?.MaterialName || option?.p?.VendorName || 'Unnamed Option' }}
       </ion-label>
 
-      <ion-checkbox *ngIf="multiSelect" slot="end" [checked]="isSelected(option)"
-        [disabled]="isDisabled(option)"></ion-checkbox>
+      <ion-checkbox *ngIf="multiSelect" slot="end" [checked]="isSelected(option)" [disabled]="isDisabled(option)"
+        aria-label="Select option"></ion-checkbox>
+        
+      <ion-icon *ngIf="!multiSelect && isSelected(option)" slot="end" name="checkmark-circle-outline" color="primary"></ion-icon>
+
     </ion-item>
   </ion-list>
 
-
-  <!-- No Data Message -->
-  <div *ngIf="loadedOptions.length === 0" class="no-data">
+  <div *ngIf="loadedOptions.length === 0" class="no-data-message">
     <ion-text color="medium">
-      <p style="text-align: center; margin-top: 20px;">No options available</p>
+      <p>No options match your search or are currently available.</p>
     </ion-text>
   </div>
 
-
-  <!-- Infinite Scroll -->
   <ion-infinite-scroll (ionInfinite)="loadMore($event)">
-    <ion-infinite-scroll-content loadingSpinner="bubbles"></ion-infinite-scroll-content>
+    <ion-infinite-scroll-content loadingSpinner="crescent" loadingText="Loading more..."></ion-infinite-scroll-content>
   </ion-infinite-scroll>
 </ion-content>
-
-<!-- Confirm Button for Multi-Select -->
-<!-- <ion-footer *ngIf="multiSelect">
-  <ion-toolbar>
-    <ion-button expand="full" color="primary" (click)="confirmSelection()">Confirm</ion-button>
-  </ion-toolbar>
-</ion-footer> -->

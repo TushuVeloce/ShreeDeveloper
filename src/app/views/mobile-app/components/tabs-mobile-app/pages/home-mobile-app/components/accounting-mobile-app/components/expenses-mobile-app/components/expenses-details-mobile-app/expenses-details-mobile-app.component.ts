@@ -104,7 +104,7 @@ export class ExpensesDetailsMobileAppComponent implements OnInit {
   PaymentTypeName: string = '';
   selectedPaymentType: any[] = [];
 
-  PayerPlotNo: number = 0;
+  PayerPlotNo: string = '';
 
   constructor(
     private router: Router,
@@ -423,7 +423,7 @@ export class ExpensesDetailsMobileAppComponent implements OnInit {
     this.selectedModeOfPayment = [];
     this.Entity.p.IsAutoInvoiceEnabled = 0;
     this.RecipientNameInput = false
-    this.PayerPlotNo = 0;
+    this.PayerPlotNo = '';
     this.Entity.p.PlotName = '';
     this.Entity.p.ModeOfPaymentForIncome = 0;
     this.Entity.p.IsNewBankCreated = false;
@@ -545,7 +545,7 @@ export class ExpensesDetailsMobileAppComponent implements OnInit {
     let SingleRecord;
     try {
       if (this.Entity.p.RecipientType == this.DealDoneCustomer) {
-        SingleRecord = this.RecipientList.find((data, i) => Number(data.p.PlotName) == this.PayerPlotNo);
+        SingleRecord = this.RecipientList.find((data, i) => data.p.PlotName == this.PayerPlotNo);
       } else {
         SingleRecord = this.RecipientList.find((data) => data.p.Ref == this.Entity.p.RecipientRef);
       }
@@ -585,7 +585,7 @@ export class ExpensesDetailsMobileAppComponent implements OnInit {
     this.PaymentType = 0;
     this.Entity.p.RecipientRef = 0;
     this.Entity.p.Reason = '';
-    this.PayerPlotNo = 0;
+    this.PayerPlotNo = '';
     this.Entity.p.PlotName = '';
     this.Entity.p.IsAdvancePayment = 0;
     this.Entity.p.IsSalaryExpense = false;
@@ -945,7 +945,7 @@ public async selectRecipientNameBottomsheet(): Promise<void> {
         console.log('selected :', selected);
         this.Entity.p.RecipientRef = selected[0].p.Ref;
         this.RecipientName = selected[0].p.Name;
-        this.PayerPlotNo = Number(selected[0].p.PlotName) || 0;  // ✅ now you can directly access it
+        this.PayerPlotNo = selected[0].p.PlotName || '';  // ✅ now you can directly access it
 
         // If you need numeric
         // this.PayerPlotNo = Number(this.PlotName) || 0;
