@@ -98,12 +98,12 @@
             <td style="padding: 4px; border: none;">{{ material.OrderedQty }}</td>
             <td style="padding: 4px; border: none;">{{
               !material.DiscountedRate
-              ? (material.Rate | currency : "INR")
-              : (material.DiscountedRate| currency : "INR")
+              ? (material.Rate | currency:'INR':'symbol':'1.2-2':'en-IN')
+              : (material.DiscountedRate| currency:'INR':'symbol':'1.2-2':'en-IN')
               }}</td>
             <td style="padding: 4px; border: none;">{{ material.Gst }}</td>
-            <td style="padding: 4px; border: none;">{{ material.DeliveryCharges | currency : "INR" }}</td>
-            <td style="padding: 4px; border: none;">{{ material.TotalAmount | currency : "INR" }}</td>
+            <td style="padding: 4px; border: none;">{{ material.DeliveryCharges | currency:'INR':'symbol':'1.2-2':'en-IN' }}</td>
+            <td style="padding: 4px; border: none;">{{ material.TotalAmount | currency:'INR':'symbol':'1.2-2':'en-IN' }}</td>
           </tr>
           <!-- Total -->
           <tr>
@@ -117,7 +117,7 @@
               <strong>TOTAL</strong>
             </td>
             <td style="padding: 2px; border: none; font-weight: bold; background-color: #fef4d4;"><strong>
-                {{Entity.p.GrandTotal | currency : "INR"}}</strong>
+                {{Entity.p.GrandTotal | currency:'INR':'symbol':'1.2-2':'en-IN'}}</strong>
             </td>
           </tr>
           <!-- In Words -->

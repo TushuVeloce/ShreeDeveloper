@@ -20,7 +20,7 @@
         <div class="card-details">
           <div class="detail-row">
             <span class="label">Billing Amount:</span>
-            <span class="value amount-positive">{{ invoice.p.InvoiceAmount | currency : "INR" }}</span>
+            <span class="value amount-positive">{{ invoice.p.InvoiceAmount | currency:'INR':'symbol':'1.2-2':'en-IN' }}</span>
           </div>
           <div class="detail-row">
             <span class="label">Recipient:</span>
@@ -133,8 +133,8 @@
                     <td>{{ item.LabourTypeName || '-' }}</td>
                     <td>{{ item.Days || '-' }}</td>
                     <td>{{ item.LabourQty || '-' }}</td>
-                    <td>{{ (item.LabourRate | currency : "INR") || '-' }}</td>
-                    <td>{{ (item.LabourAmount | currency : "INR") || '-' }}</td>
+                    <td>{{ (item.LabourRate | currency:'INR':'symbol':'1.2-2':'en-IN') || '-' }}</td>
+                    <td>{{ (item.LabourAmount | currency:'INR':'symbol':'1.2-2':'en-IN') || '-' }}</td>
                   </tr>
                 </tbody>
               </table>
@@ -159,11 +159,11 @@
                     <td>{{ item.MaterialName || '-' }}</td>
                     <td>{{ item.UnitName || '-' }}</td>
                     <td>{{ item.TotalOrderedQty || '-' }}</td>
-                    <td>{{ (item.Rate | currency : "INR") || '-' }}</td>
-                    <td>{{ (item.DiscountedRate | currency : "INR") || '-' }}</td>
+                    <td>{{ (item.Rate | currency:'INR':'symbol':'1.2-2':'en-IN') || '-' }}</td>
+                    <td>{{ (item.DiscountedRate | currency:'INR':'symbol':'1.2-2':'en-IN') || '-' }}</td>
                     <td>{{ item.Gst || '-' }}</td>
-                    <td>{{ (item.DeliveryCharges | currency : "INR") || '-' }}</td>
-                    <td>{{ (item.TotalAmount | currency : "INR") || '-' }}</td>
+                    <td>{{ (item.DeliveryCharges | currency:'INR':'symbol':'1.2-2':'en-IN') || '-' }}</td>
+                    <td>{{ (item.TotalAmount | currency:'INR':'symbol':'1.2-2':'en-IN') || '-' }}</td>
                   </tr>
                 </tbody>
               </table>
@@ -188,8 +188,8 @@
                     <td>{{ item.Description || '-' }}</td>
                     <td>{{ item.UnitName || '-' }}</td>
                     <td>{{ item.Quantity || '-' }}</td>
-                    <td>{{ (item.Rate | currency : "INR") || '-' }}</td>
-                    <td>{{ (item.Amount | currency : "INR") || '-' }}</td>
+                    <td>{{ (item.Rate | currency:'INR':'symbol':'1.2-2':'en-IN') || '-' }}</td>
+                    <td>{{ (item.Amount | currency:'INR':'symbol':'1.2-2':'en-IN') || '-' }}</td>
                   </tr>
                 </tbody>
               </table>
@@ -201,7 +201,7 @@
           <h3>Billing Summary</h3>
           <div class="detail-row total-amount">
             <span class="label">Total Billing Amount:</span>
-            <span class="value">{{ (SelectedInvoice.p.InvoiceAmount | currency : "INR") || '-' }}</span>
+            <span class="value">{{ (SelectedInvoice.p.InvoiceAmount | currency:'INR':'symbol':'1.2-2':'en-IN') || '-' }}</span>
           </div>
         </div>
       </ion-content>

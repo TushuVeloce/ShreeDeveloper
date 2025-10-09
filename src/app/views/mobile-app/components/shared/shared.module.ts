@@ -37,7 +37,7 @@ import { ImageViewerModalComponent } from './image-viewer-modal/image-viewer-mod
     PhoneCommaFormatDirective,
     AmountCommaFormatDirective,
     SafeAreaDirective,
-    ImageViewerModalComponent
+    ImageViewerModalComponent,
   ],
   imports: [
     CommonModule,

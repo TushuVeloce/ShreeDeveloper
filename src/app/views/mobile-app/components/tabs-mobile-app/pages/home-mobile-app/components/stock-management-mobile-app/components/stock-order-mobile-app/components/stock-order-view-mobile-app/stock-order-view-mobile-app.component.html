@@ -114,13 +114,13 @@
                                         <td>{{ item.RequisitionQty || '-' }}</td>
                                         <td>{{ item.OrderedQty || '-' }}</td>
                                         <td>{{ item.RequisitionRemainingQty || '-' }}</td>
-                                        <td>{{ item.Rate | currency : "INR" }}</td>
-                                        <td>{{ item.DiscountedRate | currency : "INR" }}</td>
+                                        <td>{{ item.Rate | currency:'INR':'symbol':'1.2-2':'en-IN' }}</td>
+                                        <td>{{ item.DiscountedRate | currency:'INR':'symbol':'1.2-2':'en-IN' }}</td>
                                         <td>{{ item.Gst || '-' }}</td>
-                                        <td>{{ item.DeliveryCharges | currency : "INR" }}</td>
+                                        <td>{{ item.DeliveryCharges | currency:'INR':'symbol':'1.2-2':'en-IN' }}</td>
                                         <td>{{ formatDate(item.ExpectedDeliveryDate) || '-' }}</td>
-                                        <td>{{ item.NetAmount | currency : "INR" }}</td>
-                                        <td>{{ item.TotalAmount | currency : "INR" }}</td>
+                                        <td>{{ item.NetAmount | currency:'INR':'symbol':'1.2-2':'en-IN' }}</td>
+                                        <td>{{ item.TotalAmount | currency:'INR':'symbol':'1.2-2':'en-IN' }}</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -131,7 +131,7 @@
                     <h3>Summary</h3>
                     <div class="detail-row">
                         <span class="label">Grand Total:</span>
-                        <span class="value">{{ (SelectedOrder.p.GrandTotal | currency : "INR") || '-' }}</span>
+                        <span class="value">{{ (SelectedOrder.p.GrandTotal | currency:'INR':'symbol':'1.2-2':'en-IN') || '-' }}</span>
                     </div>
                     <div class="detail-row">
                         <span class="label">Status:</span>

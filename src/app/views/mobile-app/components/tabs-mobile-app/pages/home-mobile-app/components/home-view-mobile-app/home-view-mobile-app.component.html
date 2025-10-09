@@ -19,7 +19,7 @@
                   <ion-icon name="wallet-outline" color="light"></ion-icon>
                   <div class="stat-content">
                     <span class="stat-label">Total Balance  </span>
-                    <span class="stat-value">{{ totalBalance | currency:'INR' }}</span>
+                    <span class="stat-value">{{ totalBalance | currency:'INR':'symbol':'1.2-2':'en-IN' }}</span>
                   </div>
                 </div>
               </ion-card-content>
@@ -33,7 +33,7 @@
                   <ion-icon name="cash-outline" color="light"></ion-icon>
                   <div class="stat-content">
                     <span class="stat-label">Cash Balance  </span>
-                    <span class="stat-value">{{ cashBalance | currency:'INR' }}</span>
+                    <span class="stat-value">{{ cashBalance | currency:'INR':'symbol':'1.2-2':'en-IN' }}</span>
                   </div>
                 </div>
               </ion-card-content>
@@ -47,7 +47,7 @@
                   <ion-icon name="trending-up-outline" color="light"></ion-icon>
                   <div class="stat-content">
                     <span class="stat-label">Total Income  </span>
-                    <span class="stat-value">{{ TotalIncome | currency:'INR' }}</span>
+                    <span class="stat-value">{{ TotalIncome | currency:'INR':'symbol':'1.2-2':'en-IN' }}</span>
                   </div>
                 </div>
               </ion-card-content>
@@ -61,7 +61,7 @@
                   <ion-icon name="trending-down-outline" color="light"></ion-icon>
                   <div class="stat-content">
                     <span class="stat-label">Total Expense: </span>
-                    <span class="stat-value">{{ TotalExpense | currency:'INR' }}</span>
+                    <span class="stat-value">{{ TotalExpense | currency:'INR':'symbol':'1.2-2':'en-IN' }}</span>
                   </div>
                 </div>
               </ion-card-content>

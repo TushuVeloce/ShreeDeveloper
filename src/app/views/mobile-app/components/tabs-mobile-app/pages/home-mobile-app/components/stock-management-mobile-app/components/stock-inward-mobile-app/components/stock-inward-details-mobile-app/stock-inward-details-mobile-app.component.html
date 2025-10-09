@@ -132,25 +132,25 @@
                     {{ item.PurchaseOrderRemainingQty || '-' }}
                   </td>
                   <td>
-                    {{ (item.Rate| currency : "INR") || '-' }}
+                    {{ (item.Rate| currency:'INR':'symbol':'1.2-2':'en-IN') || '-' }}
                   </td>
                   <td>
-                    {{ (item.DiscountedRate| currency : "INR") || '-' }}
+                    {{ (item.DiscountedRate| currency:'INR':'symbol':'1.2-2':'en-IN') || '-' }}
                   </td>
                   <td>
                     {{ item.Gst || '-' }}
                   </td>
                   <td>
-                    {{ (item.DeliveryCharges| currency : "INR") || '-' }}
+                    {{ (item.DeliveryCharges| currency:'INR':'symbol':'1.2-2':'en-IN') || '-' }}
                   </td>
                   <td>
-                    {{ (item.DiscountOnNetAmount| currency : "INR") || '-' }}
+                    {{ (item.DiscountOnNetAmount| currency:'INR':'symbol':'1.2-2':'en-IN') || '-' }}
                   </td>
                   <td>
-                    {{ (item.NetAmount| currency : "INR") || '-' }}
+                    {{ (item.NetAmount| currency:'INR':'symbol':'1.2-2':'en-IN') || '-' }}
                   </td>
                   <td>
-                    {{ (item.TotalAmount| currency : "INR") || '-' }}
+                    {{ (item.TotalAmount| currency:'INR':'symbol':'1.2-2':'en-IN') || '-' }}
                   </td>
                   <td>
                     <!-- <ion-icon name="create-outline" color="warning" size="small"
@@ -160,7 +160,7 @@
                   </td>
                 </tr>
                 <tr>
-                  <td class="sticky-col" colspan="2"><b>Grand Total</b> : <b>{{ getGrandTotal() | currency : "INR"}}</b></td>
+                  <td class="sticky-col" colspan="2"><b>Grand Total</b> : <b>{{ getGrandTotal() | currency:'INR':'symbol':'1.2-2':'en-IN'}}</b></td>
                 </tr>
               </tbody>
             </table>

@@ -15,7 +15,7 @@
         <div class="card-header">
           <h2 class="vendor-name">{{ invoice.p.RecipientName || "N/A" }}</h2>
           <span class="invoice-amount">
-            {{ invoice.p.InvoiceAmount | currency : "INR" }}
+            {{ invoice.p.InvoiceAmount | currency:'INR':'symbol':'1.2-2':'en-IN' }}
           </span>
         </div>
 
@@ -29,25 +29,25 @@
           <div class="detail-row">
             <span class="label">Given Amount:</span>
             <span class="value">{{
-              invoice.p.GivenAmount | currency : "INR"
+              invoice.p.GivenAmount | currency:'INR':'symbol':'1.2-2':'en-IN'
               }}</span>
           </div>
           <div class="detail-row">
             <span class="label">Remaining:</span>
             <span class="value remaining-amount">{{
-              invoice.p.RemainingAmount | currency : "INR"
+              invoice.p.RemainingAmount | currency:'INR':'symbol':'1.2-2':'en-IN'
               }}</span>
           </div>
           <div class="detail-row">
             <span class="label">Cash Paid:</span>
             <span class="value">{{
-              invoice.p.TotalCashReceived | currency : "INR"
+              invoice.p.TotalCashReceived | currency:'INR':'symbol':'1.2-2':'en-IN'
               }}</span>
           </div>
           <div class="detail-row">
             <span class="label">Cheque Paid:</span>
             <span class="value">{{
-              invoice.p.TotalChequeReceived | currency : "INR"
+              invoice.p.TotalChequeReceived | currency:'INR':'symbol':'1.2-2':'en-IN'
               }}</span>
           </div>
         </div>
@@ -84,31 +84,31 @@
           <div class="detail-row">
             <span class="label">Bill Amount:</span>
             <span class="value">{{
-              SelectedInvoiceSumExpenseSum.p.InvoiceAmount | currency : "INR"
+              SelectedInvoiceSumExpenseSum.p.InvoiceAmount | currency:'INR':'symbol':'1.2-2':'en-IN'
               }}</span>
           </div>
           <div class="detail-row">
             <span class="label">Given Amount:</span>
             <span class="value">{{
-              SelectedInvoiceSumExpenseSum.p.GivenAmount | currency : "INR"
+              SelectedInvoiceSumExpenseSum.p.GivenAmount | currency:'INR':'symbol':'1.2-2':'en-IN'
               }}</span>
           </div>
           <div class="detail-row">
             <span class="label">Remaining Amount:</span>
             <span class="value">{{
-              SelectedInvoiceSumExpenseSum.p.RemainingAmount | currency : "INR"
+              SelectedInvoiceSumExpenseSum.p.RemainingAmount | currency:'INR':'symbol':'1.2-2':'en-IN'
               }}</span>
           </div>
           <div class="detail-row">
             <span class="label">Total Cash Paid:</span>
             <span class="value">{{
-              SelectedInvoiceSumExpenseSum.p.TotalCashReceived | currency : "INR"
+              SelectedInvoiceSumExpenseSum.p.TotalCashReceived | currency:'INR':'symbol':'1.2-2':'en-IN'
               }}</span>
           </div>
           <div class="detail-row">
             <span class="label">Total Cheque Paid:</span>
             <span class="value">{{
-              SelectedInvoiceSumExpenseSum.p.TotalChequeReceived | currency : "INR"
+              SelectedInvoiceSumExpenseSum.p.TotalChequeReceived | currency:'INR':'symbol':'1.2-2':'en-IN'
               }}</span>
           </div>
         </div>

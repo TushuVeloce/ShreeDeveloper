@@ -17,15 +17,15 @@
       <ion-card-content>
         <div class="card-info-row">
           <span class="label">Total Amount:</span>
-          <span class="value total-amount">{{ (item.p.GrandTotal | currency : "INR") || '-' }}</span>
+          <span class="value total-amount">{{ (item.p.GrandTotal | currency:'INR':'symbol':'1.2-2':'en-IN') || '-' }}</span>
         </div>
         <div class="card-info-row">
           <span class="label">Amount Received:</span>
-          <span class="value received-amount">{{ (item.p.TotalAmountReceived | currency : "INR") || '-' }}</span>
+          <span class="value received-amount">{{ (item.p.TotalAmountReceived | currency:'INR':'symbol':'1.2-2':'en-IN') || '-' }}</span>
         </div>
         <div class="card-info-row">
           <span class="label">Balance:</span>
-          <span class="value balance-amount">{{ (item.p.TotalBalance | currency : "INR") || '-' }}</span>
+          <span class="value balance-amount">{{ (item.p.TotalBalance | currency:'INR':'symbol':'1.2-2':'en-IN') || '-' }}</span>
         </div>
       </ion-card-content>
     </ion-card>
@@ -60,27 +60,27 @@
               <td>{{ item.p.PlotNo || '-' }}</td>
               <td>{{ item.p.AreaInSqm || '-' }}</td>
               <td>{{ item.p.AreaInSqft || '-' }}</td>
-              <td>{{ (item.p.BasicRate | currency : "INR") || '-' }}</td>
-              <td>{{ (item.p.DiscountedRateOnArea | currency : "INR") || '-' }}</td>
-              <td>{{ (item.p.DiscountOnTotalPlotAmount | currency : "INR") || '-' }}</td>
-              <td>{{ (item.p.TotalPlotAmount | currency : "INR") || '-' }}</td>
-              <td>{{ (item.p.GovernmentRecknor | currency : "INR") || '-' }}</td>
-              <td>{{ (item.p.GovernmentValue | currency : "INR") || '-' }}</td>
-              <td>{{ (item.p.ValueOfAgreement | currency : "INR") || '-' }}</td>
+              <td>{{ (item.p.BasicRate | currency:'INR':'symbol':'1.2-2':'en-IN') || '-' }}</td>
+              <td>{{ (item.p.DiscountedRateOnArea | currency:'INR':'symbol':'1.2-2':'en-IN') || '-' }}</td>
+              <td>{{ (item.p.DiscountOnTotalPlotAmount | currency:'INR':'symbol':'1.2-2':'en-IN') || '-' }}</td>
+              <td>{{ (item.p.TotalPlotAmount | currency:'INR':'symbol':'1.2-2':'en-IN') || '-' }}</td>
+              <td>{{ (item.p.GovernmentRecknor | currency:'INR':'symbol':'1.2-2':'en-IN') || '-' }}</td>
+              <td>{{ (item.p.GovernmentValue | currency:'INR':'symbol':'1.2-2':'en-IN') || '-' }}</td>
+              <td>{{ (item.p.ValueOfAgreement | currency:'INR':'symbol':'1.2-2':'en-IN') || '-' }}</td>
               <td>{{ '1%' }}</td>
-              <td>{{ (item.p.RegistrationFees | currency : "INR") || '-' }}</td>
+              <td>{{ (item.p.RegistrationFees | currency:'INR':'symbol':'1.2-2':'en-IN') || '-' }}</td>
               <td>{{ item.p.TaxValueInPercentage != null ? item.p.TaxValueInPercentage + '%' : '-' }}</td>
-              <td>{{ (item.p.StampDuties | currency : "INR") || '-' }}</td>
+              <td>{{ (item.p.StampDuties | currency:'INR':'symbol':'1.2-2':'en-IN') || '-' }}</td>
               <td>{{ item.p.GoodsServicesTax != null ? item.p.GoodsServicesTax + '%' : '-' }}</td>
-              <td>{{ (item.p.LegalCharges | currency : "INR") || '-' }}</td>
-              <td>{{ (item.p.TotalExtraCharges | currency : "INR") || '-' }}</td>
-              <td>{{ (item.p.GrandTotal | currency : "INR") || '-' }}</td>
-              <td>{{ (item.p.TotalChequeReceived | currency : "INR") || '-' }}</td>
-              <td>{{ (item.p.TotalCashReceived | currency : "INR") || '-' }}</td>
-              <td>{{ (item.p.TotalAmountReceived | currency : "INR") || '-' }}</td>
-              <td>{{ (item.p.TotalChequeBalance | currency : "INR") || '-' }}</td>
-              <td>{{ (item.p.TotalCashBalance | currency : "INR") || '-' }}</td>
-              <td>{{ (item.p.TotalBalance | currency : "INR") || '-' }}</td>
+              <td>{{ (item.p.LegalCharges | currency:'INR':'symbol':'1.2-2':'en-IN') || '-' }}</td>
+              <td>{{ (item.p.TotalExtraCharges | currency:'INR':'symbol':'1.2-2':'en-IN') || '-' }}</td>
+              <td>{{ (item.p.GrandTotal | currency:'INR':'symbol':'1.2-2':'en-IN') || '-' }}</td>
+              <td>{{ (item.p.TotalChequeReceived | currency:'INR':'symbol':'1.2-2':'en-IN') || '-' }}</td>
+              <td>{{ (item.p.TotalCashReceived | currency:'INR':'symbol':'1.2-2':'en-IN') || '-' }}</td>
+              <td>{{ (item.p.TotalAmountReceived | currency:'INR':'symbol':'1.2-2':'en-IN') || '-' }}</td>
+              <td>{{ (item.p.TotalChequeBalance | currency:'INR':'symbol':'1.2-2':'en-IN') || '-' }}</td>
+              <td>{{ (item.p.TotalCashBalance | currency:'INR':'symbol':'1.2-2':'en-IN') || '-' }}</td>
+              <td>{{ (item.p.TotalBalance | currency:'INR':'symbol':'1.2-2':'en-IN') || '-' }}</td>
               <td>
                 <ion-button size="small" fill="outline" (click)="onViewClicked(item)">
                   View

@@ -111,11 +111,11 @@
               <td style="padding:4px;font-size:10px;border:1px solid #ddd;">{{ material.InwardQty }}</td>
               <td style="padding:4px;font-size:10px;border:1px solid #ddd;">{{ material.PurchaseOrderRemainingQty }}
               </td>
-              <td style="padding:4px;font-size:10px;border:1px solid #ddd;">{{ material.DiscountOnNetAmount | currency : "INR"}}</td>
-              <td style="padding:4px;font-size:10px;border:1px solid #ddd;">{{ material.NetAmount | currency : "INR"}}</td>
+              <td style="padding:4px;font-size:10px;border:1px solid #ddd;">{{ material.DiscountOnNetAmount | currency:'INR':'symbol':'1.2-2':'en-IN'}}</td>
+              <td style="padding:4px;font-size:10px;border:1px solid #ddd;">{{ material.NetAmount | currency:'INR':'symbol':'1.2-2':'en-IN'}}</td>
               <td style="padding:4px;font-size:10px;border:1px solid #ddd;">{{ material.Gst }}</td>
-              <td style="padding:4px;font-size:10px;border:1px solid #ddd;">{{ material.DeliveryCharges | currency : "INR"}}</td>
-              <td style="padding:4px;font-size:10px;border:1px solid #ddd;">{{ material.TotalAmount | currency : "INR"}}</td>
+              <td style="padding:4px;font-size:10px;border:1px solid #ddd;">{{ material.DeliveryCharges | currency:'INR':'symbol':'1.2-2':'en-IN'}}</td>
+              <td style="padding:4px;font-size:10px;border:1px solid #ddd;">{{ material.TotalAmount | currency:'INR':'symbol':'1.2-2':'en-IN'}}</td>
             </tr>
 
             <!-- Total -->

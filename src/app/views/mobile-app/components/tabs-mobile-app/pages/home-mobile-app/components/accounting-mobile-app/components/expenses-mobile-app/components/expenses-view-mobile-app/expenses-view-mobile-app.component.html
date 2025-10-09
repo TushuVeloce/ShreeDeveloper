@@ -18,7 +18,7 @@
         <ion-card-content>
           <div class="card-header">
             <h2 class="site-name">{{ expense.p.SiteName || 'Unknown Site' }}</h2>
-            <span class="given-amount">{{ (expense.p.GivenAmount| currency : "INR") || '-' }}</span>
+            <span class="given-amount">{{ (expense.p.GivenAmount| currency:'INR':'symbol':'1.2-2':'en-IN') || '-' }}</span>
           </div>
           <div class="card-details">
             <div class="detail-row">
@@ -117,19 +117,19 @@
           <h3>Financials</h3>
           <div class="detail-row">
             <span class="label">Bill Amount:</span>
-            <span class="value">{{ (SelectedExpense.p.InvoiceAmount| currency : "INR") || '-' }}</span>
+            <span class="value">{{ (SelectedExpense.p.InvoiceAmount| currency:'INR':'symbol':'1.2-2':'en-IN') || '-' }}</span>
           </div>
           <div class="detail-row">
             <span class="label">Given Amount:</span>
-            <span class="value">{{ (SelectedExpense.p.GivenAmount| currency : "INR") || '-' }}</span>
+            <span class="value">{{ (SelectedExpense.p.GivenAmount| currency:'INR':'symbol':'1.2-2':'en-IN') || '-' }}</span>
           </div>
           <div class="detail-row">
             <span class="label">Remaining Amount:</span>
-            <span class="value">{{ (SelectedExpense.p.RemainingAmount| currency : "INR") || '-' }}</span>
+            <span class="value">{{ (SelectedExpense.p.RemainingAmount| currency:'INR':'symbol':'1.2-2':'en-IN') || '-' }}</span>
           </div>
           <div class="detail-row">
             <span class="label">Shree's Balance:</span>
-            <span class="value balance">{{ (SelectedExpense.p.ShreesBalance| currency : "INR") || '-' }}</span>
+            <span class="value balance">{{ (SelectedExpense.p.ShreesBalance| currency:'INR':'symbol':'1.2-2':'en-IN') || '-' }}</span>
           </div>
           <div class="detail-row">
             <span class="label">Payment Mode:</span>

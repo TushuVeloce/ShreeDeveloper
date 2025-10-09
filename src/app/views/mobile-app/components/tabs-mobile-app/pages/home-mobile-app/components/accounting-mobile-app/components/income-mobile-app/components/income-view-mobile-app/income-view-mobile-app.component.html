@@ -23,7 +23,7 @@
       <ion-card-content>
         <div class="card-header">
           <h2 class="site-name">{{ income.p.SiteName || 'Unknown Site' }}</h2>
-          <span class="income-amount">{{ income.p.IncomeAmount | currency : "INR" }}</span>
+          <span class="income-amount">{{ income.p.IncomeAmount | currency:'INR':'symbol':'1.2-2':'en-IN' }}</span>
         </div>
         <div class="card-details">
           <div class="detail-row">
@@ -109,11 +109,11 @@
           <h3>Financial Details</h3>
           <div class="detail-row">
             <span class="label">Income Amount:</span>
-            <span class="value">{{ SelectedIncome.p.IncomeAmount | currency : "INR" }}</span>
+            <span class="value">{{ SelectedIncome.p.IncomeAmount | currency:'INR':'symbol':'1.2-2':'en-IN' }}</span>
           </div>
           <div class="detail-row">
             <span class="label">Balance:</span>
-            <span class="value balance">{{ SelectedIncome.p.ShreesBalance | currency : "INR" }}</span>
+            <span class="value balance">{{ SelectedIncome.p.ShreesBalance | currency:'INR':'symbol':'1.2-2':'en-IN' }}</span>
           </div>
         </div>
 
