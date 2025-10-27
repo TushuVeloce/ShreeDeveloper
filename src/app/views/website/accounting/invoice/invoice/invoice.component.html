@@ -104,7 +104,8 @@
           <td Class="tbldata">{{ Invoice.p.SiteName }}</td>
           <td Class="tbldata">{{ Invoice.p.LedgerName }}</td>
           <td Class="tbldata">{{ Invoice.p.SubLedgerName }}</td>
-          <td Class="tbldata">{{ Invoice.p.Description }}</td>
+          <!-- <td Class="tbldata">{{ Invoice.p.Description }}</td> -->
+          <td Class="tbldata">{{ Invoice.p.Reason }}</td>
           <td class="tbldata"> {{ Invoice.p.RecipientName }}</td>
           <td Class="tbldata">
             {{ Invoice.p.InvoiceAmount | currency : "INR" }}

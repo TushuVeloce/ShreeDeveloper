@@ -38,15 +38,28 @@
           <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
           <td Class="tbldata">{{material.p.SiteName}}</td>
           <td Class="tbldata">{{material.p.MaterialName}}</td>
-          <td Class="tbldata">{{material.p.TotalRequisitionQty}}</td>
-          <td Class="tbldata">{{material.p.TotalOrderQtyPerMaterial}}</td>
-          <td Class="tbldata">{{material.p.TotalExtraOrderQty}}</td>
-          <td Class="tbldata">{{material.p.TotalInwardQty }}</td>
-          <td Class="tbldata">{{material.p.InwardRemainingQty}}</td>
-          <td Class="tbldata">{{material.p.TotalConsumedQty}}</td>
-          <td Class="tbldata">{{material.p.TotalTransferredOutQty }}</td>
-          <td Class="tbldata">{{material.p.CurrentStock}}</td>
-          <td Class="tbldata">{{material.p.OrderedRemainingQty}}</td>
+          <td Class="tbldata">{{material.p.TotalRequisitionQty | number:'1.2-2'}}</td>
+          <td Class="tbldata">{{material.p.TotalOrderQtyPerMaterial | number:'1.2-2'}}</td>
+          <td Class="tbldata">{{material.p.TotalExtraOrderQty | number:'1.2-2'}}</td>
+          <td Class="tbldata">{{material.p.TotalInwardQty | number:'1.2-2'}}</td>
+          <td Class="tbldata">{{material.p.InwardRemainingQty| number:'1.2-2'}}</td>
+          <td Class="tbldata">{{material.p.TotalConsumedQty| number:'1.2-2'}}</td>
+          <td Class="tbldata">{{material.p.TotalTransferredOutQty | number:'1.2-2'}}</td>
+          <td Class="tbldata">{{material.p.CurrentStock| number:'1.2-2'}}</td>
+          <td Class="tbldata">{{material.p.OrderedRemainingQty| number:'1.2-2'}}</td>
+        </tr>
+          <!-- ✅ Totals Row -->
+        <tr class="totals-row">
+          <td class="tbldata" colspan="3"><b>Total</b></td>
+          <td class="tbldata"><b>{{ getColumnTotal('TotalRequisitionQty') | number:'1.2-2' }}</b></td>
+          <td class="tbldata"><b>{{ getColumnTotal('TotalOrderQtyPerMaterial') | number:'1.2-2' }}</b></td>
+          <td class="tbldata"><b>{{ getColumnTotal('TotalExtraOrderQty') | number:'1.2-2' }}</b></td>
+          <td class="tbldata"><b>{{ getColumnTotal('TotalInwardQty') | number:'1.2-2' }}</b></td>
+          <td class="tbldata"><b>{{ getColumnTotal('InwardRemainingQty') | number:'1.2-2' }}</b></td>
+          <td class="tbldata"><b>{{ getColumnTotal('TotalConsumedQty') | number:'1.2-2' }}</b></td>
+          <td class="tbldata"><b>{{ getColumnTotal('TotalTransferredOutQty') | number:'1.2-2' }}</b></td>
+          <td class="tbldata"><b>{{ getColumnTotal('CurrentStock') | number:'1.2-2' }}</b></td>
+          <td class="tbldata"><b>{{ getColumnTotal('OrderedRemainingQty') | number:'1.2-2' }}</b></td>
         </tr>
       </tbody>
     </nz-table>

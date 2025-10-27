@@ -15,7 +15,6 @@ import { UIUtils } from 'src/app/services/uiutils.service';
   styleUrls: ['./stock-summary.component.scss'],
 })
 export class StockSummaryComponent implements OnInit {
-
   Entity: StockSummary = StockSummary.CreateNewInstance();
   MasterList: StockSummary[] = [];
   DisplayMasterList: StockSummary[] = [];
@@ -28,14 +27,32 @@ export class StockSummaryComponent implements OnInit {
   total = 0;
   companyRef = this.companystatemanagement.SelectedCompanyRef;
 
-  headers: string[] = ['Sr.No.', 'Site Name', 'Material', 'Total Requisition Qty', 'Ordered Qty', 'Extra Ordered Qty', 'Total Inward Qty ', 'Inward Remaining Qty', 'Total Consumed Qty ', 'Transferred Out Qty ', 'Current Stock ', 'Ordered Remaining Qty'];
+  headers: string[] = [
+    'Sr.No.',
+    'Site Name',
+    'Material',
+    'Total Requisition Qty',
+    'Ordered Qty',
+    'Extra Ordered Qty',
+    'Total Inward Qty ',
+    'Inward Remaining Qty',
+    'Total Consumed Qty ',
+    'Transferred Out Qty ',
+    'Current Stock ',
+    'Ordered Remaining Qty',
+  ];
 
-
-  constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private DateconversionService: DateconversionService, private screenSizeService: ScreenSizeService,
+  constructor(
+    private uiUtils: UIUtils,
+    private router: Router,
+    private appStateManage: AppStateManageService,
+    private DateconversionService: DateconversionService,
+    private screenSizeService: ScreenSizeService,
     private companystatemanagement: CompanyStateManagement
   ) {
     effect(async () => {
-      await this.getStockSummaryListByCompanyRef(); await this.getSiteListByCompanyRef();
+      await this.getStockSummaryListByCompanyRef();
+      await this.getSiteListByCompanyRef();
     });
   }
 
@@ -45,15 +62,25 @@ export class StockSummaryComponent implements OnInit {
     this.pageSize = this.screenSizeService.getPageSize('withDropdown');
   }
 
+  getColumnTotal(field: string): number {
+    return this.DisplayMasterList.reduce((sum, item) => {
+      const value = parseFloat((item.p as any)[field]) || 0;
+      return sum + value;
+    }, 0);
+  }
+
   getSiteListByCompanyRef = async () => {
-    this.Entity.p.SiteRef = 0
+    this.Entity.p.SiteRef = 0;
     if (this.companyRef() <= 0) {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
-    let lst = await Site.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    let lst = await Site.FetchEntireListByCompanyRef(
+      this.companyRef(),
+      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+    );
     this.SiteList = lst;
-  }
+  };
 
   getStockSummaryListByCompanyRef = async () => {
     this.MasterList = [];
@@ -62,11 +89,14 @@ export class StockSummaryComponent implements OnInit {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
-    let lst = await StockSummary.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    let lst = await StockSummary.FetchEntireListByCompanyRef(
+      this.companyRef(),
+      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+    );
     this.MasterList = lst;
     this.DisplayMasterList = this.MasterList;
     this.loadPaginationData();
-  }
+  };
 
   getStockSummaryListByCompanyRefAndSiteRef = async () => {
     this.MasterList = [];
@@ -75,7 +105,9 @@ export class StockSummaryComponent implements OnInit {
       this.getStockSummaryListByCompanyRef();
       return;
     }
-    let lst = await StockSummary.FetchEntireListByCompanyRefAndSiteRef(this.companyRef(), this.Entity.p.SiteRef,
+    let lst = await StockSummary.FetchEntireListByCompanyRefAndSiteRef(
+      this.companyRef(),
+      this.Entity.p.SiteRef,
       async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
     );
     this.MasterList = lst;
@@ -86,7 +118,7 @@ export class StockSummaryComponent implements OnInit {
   // Extracted from services date conversion //
   formatDate = (date: string | Date): string => {
     return this.DateconversionService.formatDate(date);
-  }
+  };
 
   // For Pagination  start ----
   loadPaginationData = () => {
@@ -96,12 +128,12 @@ export class StockSummaryComponent implements OnInit {
   paginatedList = () => {
     const start = (this.currentPage - 1) * this.pageSize;
     return this.DisplayMasterList.slice(start, start + this.pageSize);
-  }
+  };
 
   // 🔑 Whenever filteredList event is received
   onFilteredList(list: any[]) {
     this.DisplayMasterList = list;
-    this.currentPage = 1;   // reset to first page after filtering
+    this.currentPage = 1; // reset to first page after filtering
 
     this.loadPaginationData();
   }
@@ -110,4 +142,3 @@ export class StockSummaryComponent implements OnInit {
     this.currentPage = pageIndex; // Update the current page
   };
 }
-

@@ -1,7 +1,19 @@
-import { ChangeDetectorRef, Component, ElementRef, OnInit, Renderer2, ViewChild } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  HostListener,
+  OnInit,
+  Renderer2,
+  ViewChild,
+} from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { NavigationEnd, Router, RouterLink, RouterOutlet } from '@angular/router';
-import { NzIconModule } from 'ng-zorro-antd/icon';
+import {
+  NavigationEnd,
+  Router,
+  RouterLink,
+  RouterOutlet,
+} from '@angular/router';
 import { NzLayoutModule } from 'ng-zorro-antd/layout';
 import { NzMenuModule } from 'ng-zorro-antd/menu';
 import { CommonModule, formatDate, WeekDay } from '@angular/common';
@@ -14,10 +26,9 @@ import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
 import { NzModalModule } from 'ng-zorro-antd/modal';
 import { Subscription } from 'rxjs';
 import { UserLogoutRequest } from 'src/app/classes/infrastructure/request_response/userlogoutrequest';
-import * as bootstrap from 'bootstrap';
-import { Modal } from 'bootstrap';
+// Removed: * as bootstrap, Modal from 'bootstrap' (if not used for other modals)
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { DomainEnums } from 'src/app/classes/domain/domainenums/domainenums';
+// Removed: DomainEnums (if unused)
 import { NzSelectModule } from 'ng-zorro-antd/select';
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
 import { Company } from 'src/app/classes/domain/entities/website/masters/company/company';
@@ -25,7 +36,9 @@ import { Employee } from 'src/app/classes/domain/entities/website/masters/employ
 import { AdminProfile } from 'src/app/classes/domain/entities/website/profile/adminprofile/adminprofile';
 import { DTU } from 'src/app/services/dtu.service';
 import { BaseUrlService } from 'src/app/services/baseurl.service';
-
+import { NzAvatarModule } from 'ng-zorro-antd/avatar';
+import { NzBadgeModule } from 'ng-zorro-antd/badge';
+import { NzIconModule } from 'ng-zorro-antd/icon';
 
 interface SubModule {
   Name: string;
@@ -40,53 +53,123 @@ interface module {
   SubModuleList?: SubModule[];
 }
 
-
+interface notificationType {
+  title: string;
+  time: string;
+}
 @Component({
   selector: 'app-sidebarlayout',
   templateUrl: './sidebarlayout.component.html',
   styleUrls: ['./sidebarlayout.component.scss'],
-  imports: [CommonModule, RouterLink, RouterOutlet, NzIconModule, NzLayoutModule,
-    NzMenuModule, NzDropDownModule, NzModalModule, FormsModule, FontAwesomeModule, NzSelectModule]
+  imports: [
+    CommonModule,
+    RouterLink,
+    RouterOutlet,
+    NzIconModule,
+    NzLayoutModule,
+    NzMenuModule,
+    NzDropDownModule,
+    NzModalModule,
+    FormsModule,
+    FontAwesomeModule,
+    NzSelectModule,
+    NzAvatarModule,
+    NzDropDownModule,
+    NzBadgeModule,
+  ],
+  standalone: true,
 })
+
 export class SidebarlayoutComponent implements OnInit {
-  isDarkMode: boolean = false; // Two-way binding to checkbox
+  isCollapsed = false;
+  protected readonly date = new Date();
+
+  companies = ['Company A', 'Company B', 'Company C'];
+  selectedCompany = 'Company A'; 
+
+  userAvatar = 'https://i.pravatar.cc/150?img=12'; 
+
+  isDarkMode: boolean = false;
   themeLabel: string = '';
   theme: string = '';
-  isCollapsed: boolean = false;
   isVisible: boolean = false;
+  isMenuFolded: boolean = false;
+  showNotifications = false;
+  notifications: notificationType[] = [
+    // { title: 'New Task Assigned', time: '2 min ago' },
+    // { title: 'Project Updated', time: '1 hr ago' },
+  ];
+
+  toggleNotification() {
+    this.showNotifications = !this.showNotifications;
+  }
+
+  clearNotifications(event: MouseEvent) {
+    event.stopPropagation(); // Prevent the click from bubbling
+    this.notifications = [];
+    this.showNotifications = false; // Close dropdown
+  }
+
+  notificationItemClick() {
+    // Perform any action here
+    this.showNotifications = false; // Close dropdown
+  }
+
+  // Close dropdown when clicking outside
+  @HostListener('document:click', ['$event'])
+  clickOutside(event: Event) {
+    const target = event.target as HTMLElement;
+    if (!target.closest('.notification-wrapper')) {
+      this.showNotifications = false;
+    }
+  }
+
   currentRoute: string = '';
   routerChangedSubscription: Subscription | undefined;
-  activeModule: string | null = null; // Tracks the active module
-  activeSubmodule: string | null = null; // Tracks the active submodule
+  activeModule: string | null = null; 
+  activeSubmodule: string | null = null;
+
   CompanyList: Company[] = [];
   CompanyRef: number = 0;
   isDropdownDisabled: boolean = false;
-  isShow = true;
   isModalOpen: boolean = false;
   companyRef = this.companystatemanagement.SelectedCompanyRef;
-  currentemployee: number = 0
+  companyName = "Shree Developer's";
+
+  currentemployee: number = 0;
   imagePreviewUrl: string | null = null;
   selectedFileName: string | null = null;
-  TimeStamp = Date.now()
-  ImageBaseUrl: string = "";
+  TimeStamp = Date.now();
+  ImageBaseUrl: string = '';
   LoginToken = '';
   file: File | null = null;
-  imageUrl: string | null = null;  // Add imageUrl to bind to src
+  imageUrl: string | null = null;
   errors = { profile_image: '' };
-  ProfilePicFile: File = null as any
+  ProfilePicFile: File = null as any;
   allowedImageTypes = ['image/jpeg', 'image/png', 'image/gif'];
-  IsEmployee: boolean = false
-  IsAdmin: boolean = false
+  IsEmployee: boolean = false;
+  IsAdmin: boolean = false;
   Entity: Employee = Employee.CreateNewInstance();
   AdminEntity: AdminProfile = AdminProfile.CreateNewInstance();
 
-  // Name: string = 'Veloce Tech';
+  // previousActiveSubmodule: string | null = null;
+  // previousActiveModule: string | null = null;
+  // previousRoute: string = '';
+  // isShow = true;
+  // isShow1: boolean = false;
+  // count = true;
+  // newModulename: string = '';
+  // oldModulename: string = '';
+  // BrowserBack: boolean = false;
 
-  previousActiveSubmodule: string | null = null; // Tracks the active module
-  previousActiveModule: string | null = null; // Tracks the active module
-  @ViewChild('menuDiv', { static: true }) menuDiv!: ElementRef;
+  ModuleList: module[] = [];
 
-  previousRoute: string = '';
+  // Date/Time
+  myDate = formatDate(new Date(), 'dd/MM/yyyy', 'en');
+  d = new Date();
+  myDay = WeekDay[this.d.getDay()];
+
+  @ViewChild('menuDiv', { static: true }) menuDiv!: ElementRef; // Kept as it might be used in the template
 
   constructor(
     public router: Router,
@@ -102,104 +185,182 @@ export class SidebarlayoutComponent implements OnInit {
     private servercommunicator: ServerCommunicatorService,
     private dtu: DTU,
     private appStateManage: AppStateManageService,
+    private elRef: ElementRef
   ) {
-
-
-    this.routerChangedSubscription = this.router.events.subscribe(event => {
+    this.routerChangedSubscription = this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
-        this.previousRoute = this.currentRoute;
+        // this.previousRoute = this.currentRoute;
         this.currentRoute = event.urlAfterRedirects;
         this.updateActiveModuleAndSubmodule(); // Update the active module and submodule
       }
     });
   }
 
+  // --- Utility Methods ---
 
+  selectCompany(company: string) {
+    this.selectedCompany = company;
+    // console.log('Selected Company:', company);
+  }
 
+  goToProfile() {
+    // console.log('Go to User Profile');
+  }
 
-  // navigateTo(route: string, disableDropdown: boolean = false) {
-  //   this.appStateManagement.setDropdownDisabled(disableDropdown);
-  //   this.router.navigate([route]);
-  // }
-
-  ModuleList: module[] = [];
-  BrowserBack: boolean = false;
-
-
-  myDate = formatDate(new Date(), 'dd/MM/yyyy', 'en');
-  d = new Date();
-  myDay = WeekDay[this.d.getDay()];
-
-  isMenuFolded: boolean = false; // Tracks whether the menu is folded
+  changePassword() {
+    // console.log('Change Password');
+  }
 
   toggleMenu(): void {
     this.isMenuFolded = !this.isMenuFolded; // Toggles the menu state
   }
+
+  onThemeToggle() {
+    const theme = this.isDarkMode ? 'dark' : 'light';
+    this.themeLabel = theme === 'dark' ? 'Dark' : 'Light';
+    this.themeService.toggleTheme(theme);
+    this.appStateManagement.setTheme(theme);
+    this.themeService.theme = theme;
+  }
+
+  isRouteActive(routeLink: string): boolean {
+    if (!routeLink) return false;
+    return this.router.url.toLowerCase() === routeLink.toLowerCase();
+  }
+
+
+  isSubmenuOpen(module: module): boolean {
+    if (!module.SubModuleList) return false;
+    return module.SubModuleList.some((submodule: SubModule) =>
+      this.isRouteActive(submodule.RouterLink)
+    );
+  }
+
+  /**
+   * Navigates to a route and triggers the state update via the router subscription.
+   */
+  NavigationFromLogo(RouterLink: any) {
+    if (RouterLink != '') {
+      this.router.navigate([RouterLink]);
+    }
+  }
+
+  updateActiveModuleAndSubmodule(): void {
+    this.activeModule = null;
+    this.activeSubmodule = null;
+    let routeFound = false;
+
+    // 1. Iterate through all modules to find a match
+    for (const module of this.ModuleList) {
+      // Case A: Module is a direct link (no submodules)
+      if (!module.SubModuleList || module.SubModuleList.length === 0) {
+        if (this.isRouteActive(module.RouterLink)) {
+          this.activeModule = module.Name;
+          this.activeSubmodule = module.Name;
+          routeFound = true;
+          break; 
+        }
+      }
+      else {
+        const activeSubmodule = module.SubModuleList.find((submodule) =>
+          this.isRouteActive(submodule.RouterLink)
+        );
+
+        if (activeSubmodule) {
+          this.activeModule = module.Name;
+          this.activeSubmodule = activeSubmodule.Name;
+          routeFound = true;
+          break; 
+        }
+      }
+    }
+    // 2. If no route matched, redirect to Dashboard
+    const dashboardRoute = '/homepage/Website/';
+    if (
+      !routeFound &&
+      this.currentRoute !== dashboardRoute &&
+      this.currentRoute !== '/' &&
+      !this.router.url.startsWith(dashboardRoute)
+    ) {
+      // Use router.navigate with skipLocationChange to avoid adding the bad route to history,
+      // but standard navigate is often simpler and works for the ** redirect.
+      // console.log('No matching route found. Redirecting to Dashboard.');
+      this.router.navigate([dashboardRoute], { replaceUrl: true });
+    }
+  }
+
+  // --- Lifecycle and Backend Logic (Retained) ---
+
   async ngOnInit() {
-    await this.ongetcompany()
+    await this.ongetcompany();
     this.appStateManagement.companyInit$.subscribe(() => {
-      this.ongetcompany(); // Called after login
+      this.ongetcompany();
     });
     this.isDarkMode = this.appStateManagement.getTheme() === 'dark';
     this.onThemeToggle();
 
     this.GenerateAndSetMenuItemModuleList();
-    this.isDarkMode = this.appStateManagement.getTheme() === 'dark'
-    this.onThemeToggle();
     this.FormulateCompanyList();
-    const savedSubmodule = localStorage.getItem('activeSubmodule');
-    if (savedSubmodule) {
-      this.activeSubmodule = savedSubmodule;
-    }
 
-    const savedModule = localStorage.getItem('activeModule');
-    if (savedModule) {
-      this.newModulename = savedModule;
-      this.isShow = true;
-    }
-
-    // Listen to browser back button events
-    // this.location.subscribe(event => {
-    //   if (event.pop) {
-    //     this.BrowserBack = true; // Flag browser back event
-    //     this.resetSelectedMenu();
-    //   }
-    // });
-    this.currentemployee = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'));
+    
+    this.currentemployee = Number(
+      this.appStateManage.StorageKey.getItem('LoginEmployeeRef')
+    );
     this.LoginToken = this.appStateManage.getLoginToken();
     this.ImageBaseUrl = this.baseUrl.GenerateImageBaseUrl();
     if (this.currentemployee != 0) {
-      this.getEmployeeDetails()
+      this.getEmployeeDetails();
     }
 
+    // Initialize active state based on the current URL immediately
+    this.updateActiveModuleAndSubmodule();
+    this.companyName = this.companystatemanagement.getCurrentCompanyName();
   }
+
+  ngOnDestroy(): void {
+    if (this.routerChangedSubscription) {
+      this.routerChangedSubscription.unsubscribe();
+    }
+  }
+
+  // --- Backend/Data Methods (Unchanged) ---
 
   getEmployeeDetails = async () => {
     if (this.currentemployee && this.companyRef()) {
-      let EmployeeData = await Employee.FetchInstance(this.currentemployee, this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+      let EmployeeData = await Employee.FetchInstance(
+        this.currentemployee,
+        this.companyRef(),
+        async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+      );
       if (EmployeeData == null) {
-        let AdminData = await AdminProfile.FetchAdminData(async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-        this.IsAdmin = true
-        this.IsEmployee = false
-        this.AdminEntity = AdminData[0]
+        let AdminData = await AdminProfile.FetchAdminData(
+          async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+        );
+        this.IsAdmin = true;
+        this.IsEmployee = false;
+        this.AdminEntity = AdminData[0];
         if (this.AdminEntity.p.DOB != '') {
-          this.AdminEntity.p.DOB = this.dtu.ConvertStringDateToShortFormat(this.AdminEntity.p.DOB)
+          this.AdminEntity.p.DOB = this.dtu.ConvertStringDateToShortFormat(
+            this.AdminEntity.p.DOB
+          );
         }
         this.imageUrl = this.AdminEntity.p.ProfilePicPath;
-        this.loadImageFromBackend(this.AdminEntity.p.ProfilePicPath)
+        this.loadImageFromBackend(this.AdminEntity.p.ProfilePicPath);
       } else {
-        this.IsAdmin = false
-        this.IsEmployee = true
-        this.Entity = EmployeeData
+        this.IsAdmin = false;
+        this.IsEmployee = true;
+        this.Entity = EmployeeData;
         if (this.Entity.p.DOB != '') {
-          this.Entity.p.DOB = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.DOB)
+          this.Entity.p.DOB = this.dtu.ConvertStringDateToShortFormat(
+            this.Entity.p.DOB
+          );
         }
         this.imageUrl = this.Entity.p.ProfilePicPath;
-        this.loadImageFromBackend(this.Entity.p.ProfilePicPath)
+        this.loadImageFromBackend(this.Entity.p.ProfilePicPath);
         this.AdminEntity = [] as any;
       }
     }
-  }
+  };
 
   loadImageFromBackend(imageUrl: string): void {
     if (imageUrl) {
@@ -210,161 +371,32 @@ export class SidebarlayoutComponent implements OnInit {
     }
   }
 
-
-  // Method to clear active menu selections
-  resetSelectedMenu(): void {
-    this.activeModule = null;
-    this.activeSubmodule = null;
-    this.BrowserBack = true;
-
-    // Force Angular to detect changes
-    this.cdr.detectChanges();
-
-    // Reset the flag after rendering to prevent CSS conflicts
-    setTimeout(() => (this.BrowserBack = false), 100);
-  }
-  onMenuItemClick(submoduleName: string): void {
-    this.activeSubmodule = submoduleName;
-    // this.BrowserBack = false;
-    localStorage.setItem('activeSubmodule', submoduleName);
-  }
-
-  newModulename: string = '';
-  oldModulename: string = '';
-  isShow1: boolean = false;
-  count = true;
-
-  // updateActiveModuleAndSubmodule(): void {
-  //   // Clear previous selections
-  //   this.activeModule = null;
-  //   this.activeSubmodule = null;
-
-  //   this.previousActiveModule = null; // Add these to track previous
-  //   this.previousActiveSubmodule = null;
-
-  //   // Find the current module
-  //   const currentModule = this.ModuleList.filter(module =>
-  //     module.SubModuleList?.find(submodule => submodule.RouterLink === this.currentRoute)
-  //   );
-
-  //   const previousModule = this.ModuleList.filter(module =>
-  //     module.SubModuleList?.find(submodule => submodule.RouterLink === this.previousRoute)
-  //   );
-
-  //   if (currentModule.length > 0) {
-  //     // Update the active module
-  //     this.activeModule = currentModule[0].Name;
-
-  //     // Find the current submodule
-  //     const currentSubmodule = currentModule[0]?.SubModuleList?.find(
-  //       (submodule: SubModule) => this.currentRoute === submodule.RouterLink
-  //     );
-
-  //     if (currentSubmodule) {
-  //       this.activeSubmodule = currentSubmodule.Name;
-  //     }
-  //   }
-
-  //   if (previousModule.length > 0) {
-  //     // Update the previous module
-  //     this.previousActiveModule = previousModule[0].Name;
-  //     // Find the previous submodule
-  //     const previousSubmodule = previousModule[0]?.SubModuleList?.find(
-  //       (submodule: SubModule) => this.previousRoute === submodule.RouterLink
-  //     );
-
-  //     if (this.previousActiveModule == this.activeModule) {
-  //       return
-  //     } else if (this.previousActiveModule != this.activeModule && this.BrowserBack) {
-  //       if (this.activeModule) {
-  //         this.SideMenuHideShowForModule(this.activeModule, true)
-  //       }
-  //     }
-  //   }
-  // }
-
-  // isRouteActive(route: string, ModuleName: string) {
-  //   return this.currentRoute === route;
-  // }
-
-  updateActiveModuleAndSubmodule(): void {
-    this.activeModule = null;
-    this.activeSubmodule = null;
-
-    this.previousActiveModule = null;
-    this.previousActiveSubmodule = null;
-
-    // Find the current module and submodule by matching if currentRoute starts with submodule's RouterLink
-    const currentModule = this.ModuleList.filter(module =>
-      module.SubModuleList?.some(submodule => this.currentRoute.startsWith(submodule.RouterLink))
-    );
-
-    const previousModule = this.ModuleList.filter(module =>
-      module.SubModuleList?.some(submodule => this.previousRoute.startsWith(submodule.RouterLink))
-    );
-
-    if (currentModule.length > 0) {
-      this.activeModule = currentModule[0].Name;
-
-      const currentSubmodule = currentModule[0]?.SubModuleList?.find(
-        (submodule: SubModule) => this.currentRoute.startsWith(submodule.RouterLink)
-      );
-
-      if (currentSubmodule) {
-        this.activeSubmodule = currentSubmodule.Name;
-      }
-    }
-
-    if (previousModule.length > 0) {
-      this.previousActiveModule = previousModule[0].Name;
-
-      const previousSubmodule = previousModule[0]?.SubModuleList?.find(
-        (submodule: SubModule) => this.previousRoute.startsWith(submodule.RouterLink)
-      );
-
-      if (this.previousActiveModule === this.activeModule) {
-        return;
-      } else if (this.previousActiveModule !== this.activeModule && this.BrowserBack) {
-        if (this.activeModule) {
-          this.SideMenuHideShowForModule(this.activeModule, true);
-        }
-      }
-    }
-  }
-
-  // Also update your isRouteActive() to use startsWith:
-  isRouteActive(route: string, ModuleName: string) {
-    return this.currentRoute.startsWith(route);
-  }
-
-  ngOnDestroy(): void {
-    if (this.routerChangedSubscription) {
-      this.routerChangedSubscription.unsubscribe();
-    }
-  }
-
   logout = async () => {
-    await this.uiUtils.showConfirmationMessage('Log Out', 'Are you sure you want to Log Out?',
+    await this.uiUtils.showConfirmationMessage(
+      'Log Out',
+      'Are you sure you want to Log Out?',
       async () => {
         let req = new UserLogoutRequest();
         req.LoginToken = this.sessionValues.CurrentLoginToken;
-        req.LastSelectedCompanyRef = Number(this.appStateManagement.StorageKey.getItem('SelectedCompanyRef'));
+        req.LastSelectedCompanyRef = Number(
+          this.appStateManagement.StorageKey.getItem('SelectedCompanyRef')
+        );
         req.EmployeeRef = this.appStateManagement.getEmployeeRef();
         localStorage.removeItem('activeSubmodule');
         localStorage.removeItem('activeModule');
-        this.isCollapsed = false
-        this.activeModule = null
-        let _ = await this.servercommunicator.LogoutUser(req)
+        this.isCollapsed = false;
+        this.activeModule = null;
+        let _ = await this.servercommunicator.LogoutUser(req);
         await this.router.navigate(['/']);
-      });
-  }
+      }
+    );
+  };
 
   openMap: { [name: string]: boolean } = {
     sub1: true,
     sub2: false,
     sub3: false,
   };
-
   openHandler(value: string): void {
     for (const key in this.openMap) {
       if (key !== value) {
@@ -373,53 +405,65 @@ export class SidebarlayoutComponent implements OnInit {
     }
   }
 
-  toggleCollapsed(): void {
-    this.isCollapsed = !this.isCollapsed;
+  openModal(): void {
+    // const modalElement = document.getElementById('sidebarModal');
+    // if (modalElement) {
+    //   const modal = new Modal(modalElement);
+    //   modal.show();
+    // }
+    this.isModalOpen = true;
   }
 
-  // SideMenuHideShowForModule = (ModuleName: string, value: boolean) => {
-  //   this.isShow = value;
-  //   this.isShow1 = false;
-  //   if (this.oldModulename == ModuleName && this.count) {
-  //     this.isShow = false;
-  //     this.count = false;
-  //   } else {
-  //     this.count = true;
-  //   }
-  //   this.newModulename = ModuleName;
-  //   this.oldModulename = this.newModulename;
-  // };
+  closeModal() {
+    this.isModalOpen = false; 
+    // const modalElement = document.getElementById('sidebarModal'); // if (modalElement) { //   // Bootstrap method to hide the modal //   const modalInstance = bootstrap.Modal.getInstance(modalElement); //   if (modalInstance) { //     modalInstance.hide(); //   } // }
+  }
 
-  SideMenuHideShowForModule(moduleName: string, show: boolean): void {
-    if (this.newModulename === moduleName) {
-      // Toggle collapse if the same module is clicked again
-      this.isShow = !this.isShow;
+  navigatetodashboard() {
+    this.router.navigate(['/homepage/hotel/dashboard']);
+  }
 
-      // If collapsing, clear activeModule from localStorage
-      if (!this.isShow) {
-        localStorage.removeItem('activeModule');
-      }
+  private async FormulateCompanyList() {
+    let lst = await Company.FetchEntireList(
+      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+    );
+    this.CompanyList = lst;
+    this.ongetcompany();
+  }
+
+  async ongetcompany() {
+    const storedCompanyRef =
+      this.appStateManagement.StorageKey.getItem('SelectedCompanyRef');
+    const storedCompanyName =
+      this.appStateManagement.StorageKey.getItem('companyName');
+    if (storedCompanyRef && storedCompanyName) {
+      const ref = Number(storedCompanyRef);
+      this.CompanyRef = ref;
+      this.companystatemanagement.setCompanyRef(ref, storedCompanyName);
+    } else if (this.CompanyList && this.CompanyList.length > 0) {
+      const firstCompany = this.CompanyList[0];
+      if (this.CompanyList.length == 1)
+        await this.changecompany(firstCompany.p.Ref); // Assuming changecompany is also async
+    }
+  }
+  changecompany(ref: number) {
+    const selectedCompany = this.CompanyList.find(
+      (company) => company.p.Ref === ref
+    );
+    if (selectedCompany) {
+      this.appStateManagement.StorageKey.setItem(
+        'SelectedCompanyRef',
+        selectedCompany.p.Ref.toString()
+      );
+      this.appStateManagement.StorageKey.setItem(
+        'companyName',
+        selectedCompany.p.Name
+      );
+      this.companystatemanagement.setCompanyRef(ref, selectedCompany.p.Name);
+      this.CompanyRef = ref;
     } else {
-      // New module clicked → set it as active and expand it
-      this.newModulename = moduleName;
-      this.isShow = true;
-      localStorage.setItem('activeModule', moduleName);
+      // console.warn('Selected company not found');
     }
-  }
-
-
-  NavigationFromLogo(RouterLink: any) {
-    if (RouterLink != '') {
-      this.router.navigate([RouterLink]);
-    }
-  }
-
-  onThemeToggle() {
-    const theme = this.isDarkMode ? 'dark' : 'light';
-    this.themeLabel = theme === 'dark' ? 'Dark' : 'Light'; // Update label
-    this.themeService.toggleTheme(theme); // Call service method to toggle theme
-    this.appStateManagement.setTheme(theme)
-    this.themeService.theme = theme;
   }
 
   private GenerateAndSetMenuItemModuleList = () => {
@@ -431,10 +475,9 @@ export class SidebarlayoutComponent implements OnInit {
         RouterLink: '/homepage/Website/',
         LogoPath: '/assets/icons/Material Master.png',
       },
-    ]
+    ];
 
     let MasterSubModuleList = [
-
       {
         Name: 'Company',
         RouterLink: '/homepage/Website/Company_Master',
@@ -514,87 +557,18 @@ export class SidebarlayoutComponent implements OnInit {
         Name: 'Vendor',
         RouterLink: '/homepage/Website/Vendor_Master',
         LogoPath: '/assets/icons/Vendor Master.png',
-      },
-
-      // {
-      //   Name: 'Sub Stage Master',
-      //   RouterLink: '/homepage/Website/Sub_Stage_Master',
-      //   LogoPath: '/assets/icons/Sub Stage Master.png',
-      // },
-      // {
-      //   Name: 'Expense Type Master',
-      //   RouterLink: '/homepage/Website/Expense_Type_Master',
-      //   LogoPath: '/assets/icons/Expense Type.png',
-      // },
-
-
-      // {
-      //   Name: 'Marketing Type Master',
-      //   RouterLink: '/homepage/Website/Marketing_Type_Master',
-      //   LogoPath: '/assets/icons/Marketing Type Master.png',
-      // },
-
-
-      // {
-      //   Name: 'Vehicle Master',
-      //   RouterLink: '/homepage/Website/Vehicle_Master',
-      //  LogoPath:'/assets/icons/Material Master.png',
-      // },
-
-
-      // {
-      //   Name: 'Country Master',
-      //   RouterLink: '/homepage/Website/Country',
-      //   LogoPath: '/assets/icons/Country Master.png',
-      // },
-      // {
-      //   Name: 'State Master',
-      //   RouterLink: '/homepage/Website/State',
-      //   LogoPath: '/assets/icons/State Master.png',
-      // },
-      // {
-      //   Name: 'City Master',
-      //   RouterLink: '/homepage/Website/City',
-      //   LogoPath: '/assets/icons/Material Master.png',
-      // },
-
-      // {
-      //   Name: 'User Role Master',
-      //   RouterLink: '/homepage/Website/User_Role_Master',
-      //  LogoPath:'/assets/icons/Material Master.png',
-      // },
-
-      // {
-      //   Name: 'External Users',
-      //   RouterLink: '/homepage/Website/External_Users',
-      //  LogoPath:'/assets/icons/Material Master.png',
-      // },
-
-
-
+      }, // { //   Name: 'Sub Stage Master', //   RouterLink: '/homepage/Website/Sub_Stage_Master', //   LogoPath: '/assets/icons/Sub Stage Master.png', // }, // { //   Name: 'Expense Type Master', //   RouterLink: '/homepage/Website/Expense_Type_Master', //   LogoPath: '/assets/icons/Expense Type.png', // }, // { //   Name: 'Marketing Type Master', //   RouterLink: '/homepage/Website/Marketing_Type_Master', //   LogoPath: '/assets/icons/Marketing Type Master.png', // }, // { //   Name: 'Vehicle Master', //   RouterLink: '/homepage/Website/Vehicle_Master', //  LogoPath:'/assets/icons/Material Master.png', // }, // { //   Name: 'Country Master', //   RouterLink: '/homepage/Website/Country', //   LogoPath: '/assets/icons/Country Master.png', // }, // { //   Name: 'State Master', //   RouterLink: '/homepage/Website/State', //   LogoPath: '/assets/icons/State Master.png', // }, // { //   Name: 'City Master', //   RouterLink: '/homepage/Website/City', //   LogoPath: '/assets/icons/Material Master.png', // }, // { //   Name: 'User Role Master', //   RouterLink: '/homepage/Website/User_Role_Master', //  LogoPath:'/assets/icons/Material Master.png', // }, // { //   Name: 'External Users', //   RouterLink: '/homepage/Website/External_Users', //  LogoPath:'/assets/icons/Material Master.png', // },
       {
         Name: 'Recipient',
         RouterLink: '/homepage/Website/Recipient_Master',
         LogoPath: '/assets/icons/Employee Master.png',
       },
-
       {
         Name: 'Payer',
         RouterLink: '/homepage/Website/Payer_Master',
         LogoPath: '/assets/icons/payer_master.png',
-      },
-      // {
-      //   Name: 'Employee Appraisal Master',
-      //   RouterLink: '/homepage/Website/Employee_Appraisal_Master',
-      //  LogoPath:'/assets/icons/Employee Appraisal Master.png',
-      // },
-      // {
-      //   Name: 'Employee Exit Master',
-      //   RouterLink: '/homepage/Website/Employee_Exit_Master',
-      //  LogoPath:'/assets/icons/Employee Exit Master.png',
-      // },
-
-    ]
+      }, // { //   Name: 'Employee Appraisal Master', //   RouterLink: '/homepage/Website/Employee_Appraisal_Master', //  LogoPath:'/assets/icons/Employee Appraisal Master.png', // }, // { //   Name: 'Employee Exit Master', //   RouterLink: '/homepage/Website/Employee_Exit_Master', //  LogoPath:'/assets/icons/Employee Exit Master.png', // },
+    ];
 
     let SiteManagementSubModuleList = [
       {
@@ -606,30 +580,15 @@ export class SidebarlayoutComponent implements OnInit {
         Name: 'Plot Details',
         RouterLink: '/homepage/Website/Plot_Master',
         LogoPath: '/assets/icons/Plot Details.png',
-      },
-      // {
-      //   Name: 'Actual Stage',
-      //   RouterLink: '/homepage/Website/Actual_Stage',
-      //   LogoPath: '/assets/icons/Actual Stages.png',
-      // },
-      // {
-      //   Name: 'Estimate Stage',
-      //   RouterLink: '/homepage/Website/Estimate_Stages',
-      //   LogoPath: '/assets/icons/Estimated Stages.png',
-      // },
-    ]
+      }, // { //   Name: 'Actual Stage', //   RouterLink: '/homepage/Website/Actual_Stage', //   LogoPath: '/assets/icons/Actual Stages.png', // }, // { //   Name: 'Estimate Stage', //   RouterLink: '/homepage/Website/Estimate_Stages', //   LogoPath: '/assets/icons/Estimated Stages.png', // },
+    ];
 
     let StockManagementSubModuleList = [
       {
         Name: 'Material Requisition',
         RouterLink: '/homepage/Website/Material_Requisition',
         LogoPath: '/assets/icons/material_requisition.png',
-      },
-      // {
-      //   Name: 'Quotation',
-      //   RouterLink: '/homepage/Website/Quotation',
-      //   LogoPath: '/assets/icons/Office Duty_Time.png',
-      // },
+      }, // { //   Name: 'Quotation', //   RouterLink: '/homepage/Website/Quotation', //   LogoPath: '/assets/icons/Office Duty_Time.png', // },
       {
         Name: 'Stock Order',
         RouterLink: '/homepage/Website/Stock_Order',
@@ -655,7 +614,7 @@ export class SidebarlayoutComponent implements OnInit {
         RouterLink: '/homepage/Website/Stock_Summary',
         LogoPath: '/assets/icons/stock_summary.png',
       },
-    ]
+    ];
 
     let CustomerManagementSubModuleList = [
       {
@@ -702,24 +661,24 @@ export class SidebarlayoutComponent implements OnInit {
         Name: 'Payment History Report',
         RouterLink: '/homepage/Website/Payment_History_Report',
         LogoPath: '/assets/icons/Payment_History_Report.png',
-      }
-    ]
+      },
+    ];
 
     let GovernmentOfficeSubModuleList = [
       // {
-      //   Name: 'Site Work Group',
-      //   RouterLink: '/homepage/Website/Site_Work_Group',
-      //   LogoPath: '/assets/icons/Site Work Group.png',
+      //   Name: 'Site Work Group',
+      //   RouterLink: '/homepage/Website/Site_Work_Group',
+      //   LogoPath: '/assets/icons/Site Work Group.png',
       // },
       // {
-      //   Name: 'Site Work Master',
-      //   RouterLink: '/homepage/Website/Site_Work_Master',
-      //   LogoPath: '/assets/icons/Site Work Master.png',
+      //   Name: 'Site Work Master',
+      //   RouterLink: '/homepage/Website/Site_Work_Master',
+      //   LogoPath: '/assets/icons/Site Work Master.png',
       // },
       // {
-      //   Name: 'Site Work Done',
-      //   RouterLink: '/homepage/Website/Site_Work_Done',
-      //   LogoPath: '/assets/icons/Site Work Done.png',
+      //   Name: 'Site Work Done',
+      //   RouterLink: '/homepage/Website/Site_Work_Done',
+      //   LogoPath: '/assets/icons/Site Work Done.png',
       // },
       {
         Name: 'Progress Report',
@@ -730,28 +689,8 @@ export class SidebarlayoutComponent implements OnInit {
         Name: 'Document List',
         RouterLink: '/homepage/Website/Document',
         LogoPath: '/assets/icons/Document List.png',
-      },
-      // {
-      //   Name: 'Government Transaction',
-      //   RouterLink: '/homepage/Website/Government_Transaction',
-      //  LogoPath:'/assets/icons/Material Master.png',
-      // },
-    ]
-    // let RegistrarOfficeSubModuleList = [
-    //   {
-    //     Name: 'Registrar Office',
-    //     RouterLink: '/homepage/Website/Registrar_Office',
-    //    LogoPath:'/assets/icons/Material Master.png',
-    //   },
-    // ]
-    // let MarketingManagementSubModuleList = [
-    //   {
-    //     Name: 'Marketing Management',
-    //     RouterLink: '/homepage/Website/Marketing_Management',
-    //    LogoPath:'/assets/icons/Material Master.png',
-    //   },
-    // ]
-
+      }, // { //   Name: 'Government Transaction', //   RouterLink: '/homepage/Website/Government_Transaction', //  LogoPath:'/assets/icons/Material Master.png', // },
+    ]; // let RegistrarOfficeSubModuleList = [ //   { //     Name: 'Registrar Office', //     RouterLink: '/homepage/Website/Registrar_Office', //    LogoPath:'/assets/icons/Material Master.png', //   }, // ] // let MarketingManagementSubModuleList = [ //   { //     Name: 'Marketing Management', //     RouterLink: '/homepage/Website/Marketing_Management', //    LogoPath:'/assets/icons/Material Master.png', //   }, // ]
     let HrPayrollManagement = [
       {
         Name: 'Office Duty & Time',
@@ -787,17 +726,8 @@ export class SidebarlayoutComponent implements OnInit {
         Name: 'Company Holidays',
         RouterLink: '/homepage/Website/Company_Holidays',
         LogoPath: '/assets/icons/holiday.png',
-      }
-
-    ]
-
-    // let StockManagement = [
-    //   {
-    //     Name: 'Material Requisition',
-    //     RouterLink: '/homepage/Website/material_requisition',
-    //     LogoPath: '/assets/icons/Office Duty_Time.png',
-    //   },
-    // ]
+      },
+    ]; // let StockManagement = [ //   { //     Name: 'Material Requisition', //     RouterLink: '/homepage/Website/material_requisition', //     LogoPath: '/assets/icons/Office Duty_Time.png', //   }, // ]
 
     let RequestSubModulelist = [
       {
@@ -814,16 +744,8 @@ export class SidebarlayoutComponent implements OnInit {
         Name: 'Salary Slip Request',
         RouterLink: '/homepage/Website/Salary_Slip_Request',
         LogoPath: '/assets/icons/Salary Slip Request.png',
-      }
-    ]
-    // let RazorpaySubModulelist = [
-    //   {
-    //     Name: 'Razorpay',
-    //     RouterLink: '/homepage/Website/Razorpay',
-    //     LogoPath: '/assets/icons/Material Master.png',
-    //   }
-    // ]
-
+      },
+    ]; // let RazorpaySubModulelist = [ //   { //     Name: 'Razorpay', //     RouterLink: '/homepage/Website/Razorpay', //     LogoPath: '/assets/icons/Material Master.png', //   } // ]
     let AccountingSubModuleList = [
       {
         Name: 'Billing',
@@ -850,14 +772,13 @@ export class SidebarlayoutComponent implements OnInit {
         RouterLink: '/homepage/Website/Bill_Payable_Report',
         LogoPath: '/assets/icons/office_report.png',
       },
-    ]
+    ];
 
     let moduleListInternal = [
       {
         Name: 'Dashboards',
         RouterLink: '/homepage/Website/',
-        WhiteLogo: '/assets/icons/dashboard.png',
-        // SubModuleList: DashboardsSubModuleList,
+        WhiteLogo: '/assets/icons/dashboard.png', // SubModuleList: DashboardsSubModuleList,
       },
       {
         Name: 'Master',
@@ -892,8 +813,7 @@ export class SidebarlayoutComponent implements OnInit {
       {
         Name: 'Registrar Office',
         RouterLink: '/homepage/Website/Registrar_Office',
-        WhiteLogo: '/assets/icons/Registrar Office.png',
-        // SubModuleList: RegistrarOfficeSubModuleList,
+        WhiteLogo: '/assets/icons/Registrar Office.png', // SubModuleList: RegistrarOfficeSubModuleList,
       },
       {
         Name: 'Employee Request',
@@ -907,125 +827,13 @@ export class SidebarlayoutComponent implements OnInit {
         WhiteLogo: '/assets/icons/Hr-Payroll Management.png',
         SubModuleList: HrPayrollManagement,
       },
-
       {
         Name: 'Accounting',
         RouterLink: '',
         WhiteLogo: '/assets/icons/Expense Type.png',
         SubModuleList: AccountingSubModuleList,
-      },
-
-
-      // {
-      //   Name: 'Marketing Management',
-      //   RouterLink: '/homepage/Website/Marketing_Management',
-      //   WhiteLogo: '/assets/icons/Marketing Management.png',
-      //   // SubModuleList: MarketingManagementSubModuleList,
-      // },
-
-
-
-
-      // {
-      //   Name: 'RazorPay',
-      //   RouterLink: '/homepage/Website/Razorpay',
-      //   WhiteLogo: '/assets/icons/Razorpay.png',
-      //   // SubModuleList: RazorpaySubModulelist,
-      // },
-    ]
-
+      }, // { //   Name: 'Marketing Management', //   RouterLink: '/homepage/Website/Marketing_Management', //   WhiteLogo: '/assets/icons/Marketing Management.png', //   // SubModuleList: MarketingManagementSubModuleList, // }, // { //   Name: 'RazorPay', //   RouterLink: '/homepage/Website/Razorpay', //   WhiteLogo: '/assets/icons/Razorpay.png', //   // SubModuleList: RazorpaySubModulelist, // },
+    ];
     this.ModuleList = moduleListInternal;
-  }
-
-  openModal(): void {
-    // const modalElement = document.getElementById('sidebarModal');
-    // if (modalElement) {
-    //   const modal = new Modal(modalElement);
-    //   modal.show();
-    // }
-    this.isModalOpen = true;
-  }
-
-  closeModal() {
-    this.isModalOpen = false;
-    // const modalElement = document.getElementById('sidebarModal');
-    // if (modalElement) {
-    //   // Bootstrap method to hide the modal
-    //   const modalInstance = bootstrap.Modal.getInstance(modalElement);
-    //   if (modalInstance) {
-    //     modalInstance.hide();
-    //   }
-    // }
-  }
-
-  navigatetodashboard() {
-    this.router.navigate(['/homepage/hotel/dashboard']);
-  }
-
-
-  private async FormulateCompanyList() {
-    let lst = await Company.FetchEntireList(async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-    this.CompanyList = lst;
-
-    // Set default selection if there is no stored value
-    this.ongetcompany();
-  }
-
-  async ongetcompany() {
-    const storedCompanyRef = this.appStateManagement.StorageKey.getItem('SelectedCompanyRef');
-    const storedCompanyName = this.appStateManagement.StorageKey.getItem('companyName');
-
-    if (storedCompanyRef && storedCompanyName) {
-      const ref = Number(storedCompanyRef);
-      this.CompanyRef = ref;
-      this.companystatemanagement.setCompanyRef(ref, storedCompanyName);
-    } else if (this.CompanyList && this.CompanyList.length > 0) {
-      // Select first company if no stored value is found
-      const firstCompany = this.CompanyList[0];
-      if (this.CompanyList.length == 1)
-        await this.changecompany(firstCompany.p.Ref); // Assuming changecompany is also async
-    }
-  }
-
-
-  changecompany(ref: number) {
-    const selectedCompany = this.CompanyList.find(company => company.p.Ref === ref);
-    if (selectedCompany) {
-      this.appStateManagement.StorageKey.setItem('SelectedCompanyRef', selectedCompany.p.Ref.toString());
-      this.appStateManagement.StorageKey.setItem('companyName', selectedCompany.p.Name);
-
-      this.companystatemanagement.setCompanyRef(ref, selectedCompany.p.Name);
-      this.CompanyRef = ref;
-    } else {
-      console.warn('Selected company not found');
-    }
-  }
-
-  //  private FormulateCompanyList = async () => {
-  //     let lst = await Company.FetchEntireList(async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-  //     this.CompanyList = lst;
-  //   }
-
-  //   changecompany(ref: number) {
-  //     const selectedCompany = this.CompanyList.find(company => company.p.Ref === ref);
-  //     if (selectedCompany) {
-  //       this.appStateManagement.StorageKey.setItem('SelectedCompanyRef',selectedCompany.p.Ref.toString());
-  //       this.appStateManagement.StorageKey.setItem('companyName', selectedCompany.p.Name);
-  //       this.companystatemanagement.setCompanyRef(ref, selectedCompany.p.Name);
-  //     this.CompanyRef = ref;
-  //     }else {
-  //       console.warn('Selected company not found');
-  //     }
-
-  //   }
-
-  //   ongetcompany(){
-  //     const storedCompanyRef =  this.appStateManagement.StorageKey.getItem('SelectedCompanyRef');
-  //     const storedCompanyName =  this.appStateManagement.StorageKey.getItem('companyName');
-  //     if (storedCompanyRef && storedCompanyName) {
-  //       const ref = Number(storedCompanyRef);
-  //       this.CompanyRef = ref;
-  //       this.companystatemanagement.setCompanyRef(ref, storedCompanyName);
-  //     }
-  //   }
+  };
 }

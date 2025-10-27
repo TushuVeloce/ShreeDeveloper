@@ -31,7 +31,12 @@
           <td class="tbldata">{{ formatToFixed(site.p.TotalLandAreaInSqft) }}</td>
           <td Class="tbldata">{{formatDate(site.p.EstimatedStartingDate)}}</td>
           <td Class="tbldata">{{formatDate(site.p.EstimatedEndDate)}}</td>
-          <td Class="tbldata">{{site.p.AddressLine2}}</td>
+          <td Class="tbldata">
+            <a class="link-value" (click)="openLink(site.p.AddressLine2)">
+              <ion-icon name="navigate-circle-outline"></ion-icon>
+              View on Map
+            </a>
+          </td>
           <td Class="tbldata">
             <button class="status" *ngIf="!site.p.IsSiteCompleted" (click)="handleApproval(site)" ngClass="pending">
               In Process

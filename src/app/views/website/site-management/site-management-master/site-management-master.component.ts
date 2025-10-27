@@ -1,5 +1,6 @@
 import { Component, effect, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { Browser } from '@capacitor/browser';
 import { Site } from 'src/app/classes/domain/entities/website/masters/site/site';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
@@ -46,6 +47,19 @@ export class SiteManagementMasterComponent implements OnInit {
     this.appStateManage.setDropdownDisabled();
     this.pageSize = this.screenSizeService.getPageSize('withoutDropdown');
   }
+
+  async openLink(url: string | null): Promise<void> {
+  if (!url) {
+    await this.uiUtils.showErrorToster('Location link not available.');
+    return;
+  }
+
+  try {
+    await Browser.open({ url });
+  } catch (error) {
+    await this.uiUtils.showErrorToster('Could not open map. Please try again.');
+  }
+}
 
   // Extracted from services date conversion //
   formatDate = (date: string | Date): string => {

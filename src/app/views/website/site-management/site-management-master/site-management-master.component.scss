@@ -38,3 +38,13 @@
     background-color: #ffe6e6;
   }
 }
+
+
+  .link-value {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  color: var(--ion-color-primary); /* Style the link with your primary color */
+  text-decoration: none; /* Remove underline */
+  font-weight: bold;
+}
