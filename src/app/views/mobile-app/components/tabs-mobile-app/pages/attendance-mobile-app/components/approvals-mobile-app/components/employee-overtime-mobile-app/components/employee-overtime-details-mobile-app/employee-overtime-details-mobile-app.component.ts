@@ -78,18 +78,25 @@ export class EmployeeOvertimeDetailsMobileAppComponent implements OnInit {
         this.Date = this.Entity.p.Date
           ? this.dtu.ConvertStringDateToShortFormat(this.Entity.p.Date)
           : null;
-        this.FromTime = this.convertHHMMToISOString(this.Entity.p.FromTime);
-        this.ToTime = this.convertHHMMToISOString(this.Entity.p.ToTime);
+        this.FromTime = this.Entity.p.FromTime
+          ? this.convertHHMMToISOString(this.Entity.p.FromTime)
+          : null;
+        this.ToTime = this.Entity.p.ToTime
+          ? this.convertHHMMToISOString(this.Entity.p.ToTime)
+          : null;
         this.calculateOvertimeHours();
+        this.EmployeeName =
+          this.EmployeeList.find(
+            (item) => item.p.Ref == this.Entity.p.EmployeeRef
+          )?.p.Name ?? '';
         this.selectedEmployee = [
           {
             p: {
               Ref: this.Entity.p.EmployeeRef,
-              Name: this.Entity.p.EmployeeRef,
+              Name: this.EmployeeName,
             },
           },
         ];
-        this.EmployeeName = this.Entity.p.EmployeeName;
       } else {
         this.strCDT = await CurrentDateTimeRequest.GetCurrentDateTime();
         let parts = this.strCDT.substring(0, 16).split('-');
@@ -234,6 +241,22 @@ export class EmployeeOvertimeDetailsMobileAppComponent implements OnInit {
   };
 
   SaveEmployeeOvertime = async () => {
+    if (this.Entity.p.ToTime == '') {
+      await this.toastService.present(
+        'Please select To Time before saving.',
+        1000,
+        'warning'
+      );
+      return;
+    }
+    if (this.Entity.p.FromTime == '') {
+      await this.toastService.present(
+        'Please select From Time before saving.',
+        1000,
+        'warning'
+      );
+      return;
+    }
     this.isSaveDisabled = true;
     this.Entity.p.CompanyRef = Number(
       this.appStateManage.localStorage.getItem('SelectedCompanyRef')
@@ -323,8 +346,7 @@ export class EmployeeOvertimeDetailsMobileAppComponent implements OnInit {
             text: 'Cancel',
             role: 'cancel',
             cssClass: 'custom-cancel',
-            handler: async () => {
-            },
+            handler: async () => {},
           },
           {
             text: 'Yes, Close',

@@ -15,10 +15,9 @@ import { ToastService } from 'src/app/views/mobile-app/components/core/toast.ser
   selector: 'app-employee-overtime-view-mobile-app',
   templateUrl: './employee-overtime-view-mobile-app.component.html',
   styleUrls: ['./employee-overtime-view-mobile-app.component.scss'],
-  standalone:false
+  standalone: false,
 })
-export class EmployeeOvertimeViewMobileAppComponent  implements OnInit {
-
+export class EmployeeOvertimeViewMobileAppComponent implements OnInit {
   isAdmin = false;
   employeeRef = 0;
   companyRef = 0;
@@ -190,11 +189,13 @@ export class EmployeeOvertimeViewMobileAppComponent  implements OnInit {
   //   await this.router.navigate(['mobile-app/tabs/attendance/approvals/employee-overtime/edit']);
   // }
 
-    onEditClicked = async (item: EmployeeOvertime) => {
+  onEditClicked = async (item: EmployeeOvertime) => {
     const selectedItem = item.GetEditableVersion();
     EmployeeOvertime.SetCurrentInstance(selectedItem);
     this.appStateManagement.StorageKey.setItem('Editable', 'Edit');
-    await this.router.navigate(['/mobile-app/tabs/attendance/approvals/employee-overtime/edit']);
+    await this.router.navigate([
+      '/mobile-app/tabs/attendance/approvals/employee-overtime/edit',
+    ]);
   };
 
   async ChangeOvertimeStatus(Entity: EmployeeOvertime): Promise<void> {
@@ -270,6 +271,8 @@ export class EmployeeOvertimeViewMobileAppComponent  implements OnInit {
       this.toastService.present('Please select a company.', 1000, 'warning');
       return;
     }
-    await this.router.navigate(['mobile-app/tabs/attendance/approvals/employee-overtime/add']);
+    await this.router.navigate([
+      'mobile-app/tabs/attendance/approvals/employee-overtime/add',
+    ]);
   };
 }
