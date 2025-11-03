@@ -138,19 +138,19 @@
           <nz-button nz-button class="btn1" (click)="openModal()">Add Attendance</nz-button>
         </div>
       </div>
-      <div class="table-wrapper" class="tblcard_light" style="margin-top: 2rem"
+      <div class="table-wrapper tblcard_light"
         *ngIf="Entity.p.AttendanceLogDetailsArray.length > 0">
-        <div class="table-container" style="margin-top: 2rem">
-          <div class="row">
+        <div class="table-container">
+          <!-- <div class="row">
             <div class="col-12">
               <h3 class="TableHeading">Attendance Log Details</h3>
             </div>
-          </div>
+          </div> -->
           <nz-table #basicTable nzSize="small" class="no-hover-table bgtable_light" [nzScroll]="{ x: 'auto' }"
             nzFrontPagination="false" [nzShowSizeChanger]="false" [nzData]="Entity.p.AttendanceLogDetailsArray">
             <thead>
               <tr>
-                <th *ngFor="let header of baseHeaders" class="tblsubheader">
+                <th *ngFor="let header of baseHeaders" class="tblheader">
                   {{ header }}
                 </th>
               </tr>
