@@ -24,7 +24,7 @@
 <ng-template #noDataTpl>
   <div style="text-align: center; color: rgba(0, 0, 0, 0.25)">No Data</div>
 </ng-template>
-<div class="row row-cols-5 g-1">
+<div class="row row-cols-1 row-cols-md-4 g-2 filter-row">
   <div class="col">
     <label for="StartDate"><b>From Date</b></label>
     <input type="date" [(ngModel)]="StartDate" name="StartDate" class="form-control" id="StartDate"
@@ -114,7 +114,7 @@
     </nz-select>
   </div>
 </div>
-<div class="table-wrapper" class="tblcard_light" style="margin-top: 2rem" *ngIf="DisplayMasterList.length > 0">
+<div class="table-wrapper tblcard_light" *ngIf="DisplayMasterList.length > 0">
   <div class="table-container">
     <nz-table #basicTable nzSize="small" class="no-hover-table bgtable_light" [nzData]="paginatedList()"
       [nzScroll]="{ x: 'auto' }" nzFrontPagination="false" [nzShowSizeChanger]="false">
@@ -137,9 +137,13 @@
           <td Class="tbldata"> {{ Expense.p.RemainingAmount | currency : "INR" }}</td>
           <td Class="tbldata"> {{ Expense.p.ShreesBalance | currency : "INR" }}</td>
           <td Class="tbldata">{{ Expense.p.ModeOfPaymentName }}</td>
-          <td class="tbldata">
+          <!-- <td class="tbldata">
             <Edit-Icon (editClick)="onEditClicked(Expense)" />
             <Delete-Icon (deleteClicked)="onDeleteClicked(Expense)" />
+          </td> -->
+          <td class="tbldata action-column">
+            <Edit-Icon class="action-btn edit" (editClick)="onEditClicked(Expense)" />
+            <Delete-Icon class="action-btn delete" (deleteClicked)="onDeleteClicked(Expense)" />
           </td>
         </tr>
         <tr>

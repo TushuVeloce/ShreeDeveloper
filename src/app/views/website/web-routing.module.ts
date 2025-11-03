@@ -12,14 +12,6 @@ import { CompanyMasterDetailsComponent } from './Masters/company/company-master-
 import { VendorMasterComponent } from './Masters/vendor/vendor-master/vendor-master.component';
 import { VendorMasterDetailsComponent } from './Masters/vendor/vendor-master-details/vendor-master-details.component';
 import { SiteManagementDetailsComponent } from './site-management/site-management-details/site-management-details.component';
-import { BookingReportComponent } from './Reports/booking-report/booking-report.component';
-import { StockReportComponent } from './Reports/stock-report/stock-report.component';
-// import { CrmReportComponent } from './Reports/crm-report/crm-report.component';
-import { FollowUpReportComponent } from './Reports/follow-up-report/follow-up-report.component';
-import { EmployeeReportComponent } from './Reports/employee-report/employee-report.component';
-import { MarketingReportComponent } from './Reports/marketing-report/marketing-report.component';
-import { StagesReportComponent } from './Reports/stages-report/stages-report.component';
-import { AccountReportComponent } from './Reports/account-report/account-report.component';
 import { VehicleMasterComponent } from './Masters/vehicle/vehicle-master/vehicle-master.component';
 import { VehicleMasterDetailsComponent } from './Masters/vehicle/vehicle-master-details/vehicle-master-details.component';
 import { MaterialMasterComponent } from './Masters/material/material-master/material-master.component';
@@ -139,7 +131,7 @@ import { RecipientMasterComponent } from './Masters/recipient_name/recipient-nam
 import { RecipientMasterDetailsComponent } from './Masters/recipient_name/recipient-name-master-details/recipient-name-master-details.component';
 import { PayerComponent } from './Masters/payer/payer/payer.component';
 import { PayerDetailsComponent } from './Masters/payer/payer-details/payer-details.component';
-import { CrmReportComponent } from './Reports/crm-report/crm-report.component';
+// import { CrmReportComponent } from './Reports/crm-report/crm-report.component';
 import { AccountingReportComponent } from './accounting/accounting_report/accounting-report/accounting-report.component';
 import { InvoicePrintComponent } from './accounting/invoice/invoice-print/invoice-print.component';
 import { OpeningBalanceComponent } from './Masters/opening_balance/opening-balance/opening-balance.component';
@@ -341,14 +333,6 @@ const routes: Routes = [
 
 
       // Reports
-      { path: 'Booking_Report', component: BookingReportComponent },
-      { path: 'Stock_Report', component: StockReportComponent },
-      { path: 'CRM_Report', component: CrmReportComponent },
-      { path: 'Follow_Up_Report', component: FollowUpReportComponent },
-      { path: 'Employee_Report', component: EmployeeReportComponent },
-      { path: 'Marketing_Report', component: MarketingReportComponent },
-      { path: 'Stages_Report', component: StagesReportComponent },
-      { path: 'Account_Report', component: AccountReportComponent },
 
       // HR Payroll Management
 

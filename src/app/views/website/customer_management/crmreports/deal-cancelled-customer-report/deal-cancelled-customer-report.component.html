@@ -12,9 +12,8 @@
       style="cursor: pointer; padding-top: 4px;" (click)="printReport()" />
   </div>
 </div>
-<div class="row" style="margin-top: 1rem;">
-  <div class="col-md-4">
-    <div>
+<div class="row row-cols-1 row-cols-md-6 g-2 filter-row">
+    <div class="col">
       <label for="SiteRef"><b>Site</b></label>
       <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear nzPlaceHolder="Select"
         [nzSize]="'large'" name="SiteRef" [(ngModel)]="Entity.p.SiteRef" required id="SiteRef"
@@ -23,12 +22,11 @@
         <nz-option *ngFor="let Site of SiteList" [nzValue]="Site.p.Ref" [nzLabel]="Site.p.Name"></nz-option>
       </nz-select>
     </div>
-  </div>
 </div>
 <ng-template #noDataTpl>
   <div class="no-data-text">Data Not Found</div>
 </ng-template>
-<div class="table-wrapper" class="tblcard_light" style="margin-top: 2rem" *ngIf="DisplayMasterList.length > 0">
+<div class="table-wrapper tblcard_light" style="margin-top: 2rem" *ngIf="DisplayMasterList.length > 0">
   <div class="table-container">
     <nz-table #basicTable nzSize="small" class="no-hover-table bgtable_light" [nzData]="paginatedList"
       [nzScroll]="{x:'auto' }" nzFrontPagination="false" [nzShowSizeChanger]="false">

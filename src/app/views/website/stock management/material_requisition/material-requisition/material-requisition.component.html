@@ -28,7 +28,7 @@
 <ng-template #noDataTpl>
   <div class="no-data-text">Data Not Found</div>
 </ng-template>
-<div class="table-wrapper" class="tblcard_light" style="margin-top: 2rem" *ngIf="DisplayMasterList.length > 0">
+<div class="table-wrapper tblcard_light" *ngIf="DisplayMasterList.length > 0">
   <div class="table-container">
     <nz-table #basicTable nzSize="small" class="no-hover-table bgtable_light" [nzData]="paginatedList"
       [nzScroll]="{x:'auto' }" nzFrontPagination="false" [nzShowSizeChanger]="false">
@@ -79,11 +79,13 @@
               </td>
               <!-- Actions -->
               <td class="tbldata">
-                <span style="margin-left: 9px;" (click)="onEditClicked(requisition)">
-                  <img src="/assets/icons/edit.png" alt="Edit" title="Edit" width="20px" height="20px" />
+                <span style="margin-left: 9px;" (click)="isAnyMaterialPending(requisition) ? onEditClicked(requisition) : null">
+                  <img src="/assets/icons/edit.png" alt="Edit" title="Edit" width="20px" height="20px" *ngIf="isAnyMaterialPending(requisition)"/>
+                  <img src="/assets/icons/GrayEditIcon.png" alt="Edit" title="Edit" width="20px" height="20px" *ngIf="!isAnyMaterialPending(requisition)"/>
                 </span>
-                <span style="margin-left: 9px;" (click)="onDeleteClicked(requisition)">
-                  <img src="/assets/icons/delete.png" alt="Delete" title="Delete" width="20px" height="20px" />
+                <span style="margin-left: 9px;" (click)="isAnyMaterialPending(requisition) ? onDeleteClicked(requisition) : null">
+                  <img src="/assets/icons/delete.png" alt="Delete" title="Delete" width="20px" height="20px" *ngIf="isAnyMaterialPending(requisition)" />
+                  <img src="/assets/icons/GreyDustbin.png" alt="Delete" title="Delete" width="20px" height="20px" *ngIf="!isAnyMaterialPending(requisition)"/>
                 </span>
               </td>
             </tr>

@@ -17,7 +17,7 @@
   <div style="text-align: center; color: rgba(0, 0, 0, 0.25)">No Data</div>
 </ng-template>
 
-<div class="row row-cols-4 g-1">
+<div class="row row-cols-1 row-cols-md-4 g-2 filter-row">
   <div class="col">
     <label for="StartDate"><b>From Date</b></label>
     <input type="date" [(ngModel)]="Entity.p.StartDate" name="StartDate" class="form-control" id="StartDate"
@@ -87,7 +87,7 @@
   </div>
 </div>
 
-<div class="table-wrapper" class="tblcard_light" style="margin-top: 2rem" *ngIf="DisplayMasterList.length > 0">
+<div class="table-wrapper tblcard_light" style="margin-top: 2rem" *ngIf="DisplayMasterList.length > 0">
   <div class="table-container">
     <nz-table #basicTable nzSize="small" class="no-hover-table bgtable_light" [nzData]="paginatedList()"
       [nzScroll]="{ x: 'auto' }" nzFrontPagination="false" [nzShowSizeChanger]="false">
@@ -110,9 +110,15 @@
           <td Class="tbldata">
             {{ Invoice.p.InvoiceAmount | currency : "INR" }}
           </td>
-          <td class="tbldata">
+          <!-- <td class="tbldata">
             <Edit-Icon (editClick)="onEditClicked(Invoice)" />
             <Delete-Icon (deleteClicked)="onDeleteClicked(Invoice)" />
+            <span style="margin-left: 9px; cursor: pointer" (click)="navigateToPrint(Invoice)">
+              <img src="\assets\icons\printer.png" alt="logo" title="Print" width="20px" height="20px" /></span>
+          </td> -->
+          <td class="tbldata action-column">
+            <Edit-Icon class="action-btn edit" (editClick)="onEditClicked(Invoice)" />
+            <Delete-Icon class="action-btn delete" (deleteClicked)="onDeleteClicked(Invoice)" />
             <span style="margin-left: 9px; cursor: pointer" (click)="navigateToPrint(Invoice)">
               <img src="\assets\icons\printer.png" alt="logo" title="Print" width="20px" height="20px" /></span>
           </td>

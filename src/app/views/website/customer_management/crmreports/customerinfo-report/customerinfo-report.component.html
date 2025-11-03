@@ -19,8 +19,8 @@
 </div>
 <div class="card-body">
   <form autocomplete="off">
-    <div class="row gy-3">
-      <div class="col-md-4 col-6">
+    <div class="row row-cols-1 row-cols-md-4 g-2 filter-row">
+      <div class="col">
         <label for="SiteRef"><b>Site</b></label>
         <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
           nzPlaceHolder="Select" id="SiteRef" name="SiteRef" [nzSize]="'large'" [(ngModel)]="SiteRef"
@@ -32,113 +32,115 @@
     </div>
   </form>
 
-  <div class="table-wrapper" class="tblcard_light" *ngIf="DisplayMasterList.length > 0">
-    <nz-table #basicTable nzSize="small" class="no-hover-table bgtable_light" [nzScroll]="{x:'auto' }"
-      nzFrontPagination="false" [nzShowSizeChanger]="false" [nzData]="paginatedList()"
-      (nzPageIndexChange)="onPageChange($event)">
-      <thead>
-        <tr>
-          <th *ngFor="let header of headers" class="tblheader">{{ header }}</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let customer of paginatedList(); index as i">
-          <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
-          <td Class="tbldata">{{customer.p.CustID ? customer.p.CustID : '--'}}</td>
-          <td Class="tbldata">{{customer.p.CustomerName}}</td>
-          <td Class="tbldata">{{customer.p.CustomerAddress}}</td>
-          <td Class="tbldata">{{customer.p.ContactNos}}</td>
-          <td Class="tbldata">{{customer.p.PANNo ? customer.p.PANNo : '--'}}</td>
-          <td Class="tbldata">{{customer.p.AdharNo ? customer.p.AdharNo : '--'}}</td>
-          <td Class="tbldata">{{customer.p.LeadSourceName}}</td>
-          <td Class="tbldata">{{customer.p.LeadHandleByName}}</td>
-          <td Class="tbldata">{{customer.p.BrokerName ? customer.p.BrokerName : '--'}}</td>
-          <td Class="tbldata">{{customer.p.RegisterCustomerBookingRemarkName ?
-            customer.p.RegisterCustomerBookingRemarkName : '--'}}</td>
-          <td Class="tbldata">{{customer.p.PlotNo}}</td>
-          <td Class="tbldata">{{customer.p.AreaInSqm}}</td>
-          <td Class="tbldata">{{customer.p.AreaInSqft}}</td>
-          <td Class="tbldata">{{customer.p.BasicRate | currency : "INR"}}</td>
-          <td Class="tbldata">{{customer.p.DiscountedRateOnArea | currency : "INR"}}</td>
-          <td Class="tbldata">{{customer.p.DiscountOnTotalPlotAmount | currency : "INR"}}</td>
-          <td Class="tbldata">{{customer.p.TotalPlotAmount | currency : "INR"}}</td>
-          <td Class="tbldata">{{customer.p.GovernmentRecknor | currency : "INR"}}</td>
-          <td Class="tbldata">{{customer.p.GovernmentValue | currency : "INR"}}</td>
-          <td Class="tbldata">{{customer.p.ValueOfAgreement | currency : "INR"}}</td>
-          <td Class="tbldata">1%</td>
-          <td Class="tbldata">{{customer.p.RegistrationFees}}</td>
-          <td Class="tbldata">{{customer.p.TaxValueInPercentage }}%</td>
-          <td Class="tbldata">{{customer.p.StampDuties | currency : "INR"}}</td>
-          <td Class="tbldata">{{customer.p.GoodsServicesTax }}%</td>
-          <td Class="tbldata">{{customer.p.LegalCharges | currency : "INR"}}</td>
-          <td Class="tbldata">{{customer.p.TotalExtraCharges | currency : "INR"}}</td>
-          <td Class="tbldata">{{customer.p.GrandTotal | currency : "INR"}}</td>
-          <td Class="tbldata">{{customer.p.TotalChequeReceived | currency : "INR"}}</td>
-          <td Class="tbldata">{{customer.p.TotalCashReceived | currency : "INR"}}</td>
-          <td Class="tbldata">{{customer.p.TotalAmountReceived | currency : "INR"}}</td>
-          <td Class="tbldata">{{customer.p.TotalChequeBalance | currency : "INR"}}</td>
-          <td Class="tbldata">{{customer.p.TotalCashBalance | currency : "INR"}}</td>
-          <td Class="tbldata">{{customer.p.TotalBalance | currency : "INR"}}</td>
-        </tr>
-        <tr>
-          <td class="tbldata"><b>Total Amount</b></td>
-          <td class="tbldata" colspan="11"></td>
-          <td class="tbldata">
-            <b>{{ getTotalAreaInSqm() }}</b>
-          </td>
-          <td class="tbldata">
-            <b>{{ getTotalAreaInSqft() }}</b>
-          </td>
-          <td class="tbldata" colspan="3"></td>
-          <td class="tbldata">
-            <b>{{ getTotalPlotAmount() | currency : "INR" }}</b>
-          </td>
-          <td class="tbldata"></td>
-          <td class="tbldata">
-            <b>{{ getTotalGovernmentValue() | currency : "INR" }}</b>
-          </td>
-          <td class="tbldata">
-            <b>{{ getTotalValueOfAgreement() | currency : "INR" }}</b>
-          </td>
-          <td class="tbldata"></td>
-          <td class="tbldata">
-            <b>{{ getTotalRegistrationFees() | currency : "INR" }}</b>
-          </td>
-          <td class="tbldata"></td>
-          <td class="tbldata">
-            <b>{{ getTotalStampDuties() | currency : "INR" }}</b>
-          </td>
-          <td class="tbldata"></td>
-          <td class="tbldata">
-            <b>{{ getTotalLegalCharges() | currency : "INR" }}</b>
-          </td>
-          <td class="tbldata">
-            <b>{{ getTotalExtraCharges() | currency : "INR" }}</b>
-          </td>
-          <td class="tbldata">
-            <b>{{ getTotalGrandTotal() | currency : "INR" }}</b>
-          </td>
-          <td Class="tbldata">
-            <b>{{getTotalChequeReceived() | currency : "INR"}}</b>
-          </td>
-          <td Class="tbldata">
-            <b>{{getTotalCashReceived() | currency : "INR"}}</b>
-          </td>
-          <td Class="tbldata">
-            <b>{{getTotalAmountReceived() | currency : "INR"}}</b>
-          </td>
-          <td Class="tbldata">
-            <b>{{getTotalChequeBalance() | currency : "INR"}}</b>
-          </td>
-          <td Class="tbldata">
-            <b>{{getTotalCashBalance() | currency : "INR"}}</b>
-          </td>
-          <td Class="tbldata">
-            <b>{{getTotalBalance() | currency : "INR"}}</b>
-          </td>
-        </tr>
-      </tbody>
-    </nz-table>
+  <div class="table-wrapper tblcard_light" *ngIf="DisplayMasterList.length > 0">
+    <div class="table-container">
+      <nz-table #basicTable nzSize="small" class="no-hover-table bgtable_light" [nzScroll]="{x:'auto' }"
+        nzFrontPagination="false" [nzShowSizeChanger]="false" [nzData]="paginatedList()"
+        (nzPageIndexChange)="onPageChange($event)">
+        <thead>
+          <tr>
+            <th *ngFor="let header of headers" class="tblheader">{{ header }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let customer of paginatedList(); index as i">
+            <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
+            <td Class="tbldata">{{customer.p.CustID ? customer.p.CustID : '--'}}</td>
+            <td Class="tbldata">{{customer.p.CustomerName}}</td>
+            <td Class="tbldata">{{customer.p.CustomerAddress}}</td>
+            <td Class="tbldata">{{customer.p.ContactNos}}</td>
+            <td Class="tbldata">{{customer.p.PANNo ? customer.p.PANNo : '--'}}</td>
+            <td Class="tbldata">{{customer.p.AdharNo ? customer.p.AdharNo : '--'}}</td>
+            <td Class="tbldata">{{customer.p.LeadSourceName}}</td>
+            <td Class="tbldata">{{customer.p.LeadHandleByName}}</td>
+            <td Class="tbldata">{{customer.p.BrokerName ? customer.p.BrokerName : '--'}}</td>
+            <td Class="tbldata">{{customer.p.RegisterCustomerBookingRemarkName ?
+              customer.p.RegisterCustomerBookingRemarkName : '--'}}</td>
+            <td Class="tbldata">{{customer.p.PlotNo}}</td>
+            <td Class="tbldata">{{customer.p.AreaInSqm}}</td>
+            <td Class="tbldata">{{customer.p.AreaInSqft}}</td>
+            <td Class="tbldata">{{customer.p.BasicRate | currency : "INR"}}</td>
+            <td Class="tbldata">{{customer.p.DiscountedRateOnArea | currency : "INR"}}</td>
+            <td Class="tbldata">{{customer.p.DiscountOnTotalPlotAmount | currency : "INR"}}</td>
+            <td Class="tbldata">{{customer.p.TotalPlotAmount | currency : "INR"}}</td>
+            <td Class="tbldata">{{customer.p.GovernmentRecknor | currency : "INR"}}</td>
+            <td Class="tbldata">{{customer.p.GovernmentValue | currency : "INR"}}</td>
+            <td Class="tbldata">{{customer.p.ValueOfAgreement | currency : "INR"}}</td>
+            <td Class="tbldata">1%</td>
+            <td Class="tbldata">{{customer.p.RegistrationFees}}</td>
+            <td Class="tbldata">{{customer.p.TaxValueInPercentage }}%</td>
+            <td Class="tbldata">{{customer.p.StampDuties | currency : "INR"}}</td>
+            <td Class="tbldata">{{customer.p.GoodsServicesTax }}%</td>
+            <td Class="tbldata">{{customer.p.LegalCharges | currency : "INR"}}</td>
+            <td Class="tbldata">{{customer.p.TotalExtraCharges | currency : "INR"}}</td>
+            <td Class="tbldata">{{customer.p.GrandTotal | currency : "INR"}}</td>
+            <td Class="tbldata">{{customer.p.TotalChequeReceived | currency : "INR"}}</td>
+            <td Class="tbldata">{{customer.p.TotalCashReceived | currency : "INR"}}</td>
+            <td Class="tbldata">{{customer.p.TotalAmountReceived | currency : "INR"}}</td>
+            <td Class="tbldata">{{customer.p.TotalChequeBalance | currency : "INR"}}</td>
+            <td Class="tbldata">{{customer.p.TotalCashBalance | currency : "INR"}}</td>
+            <td Class="tbldata">{{customer.p.TotalBalance | currency : "INR"}}</td>
+          </tr>
+          <tr>
+            <td class="tbldata"><b>Total Amount</b></td>
+            <td class="tbldata" colspan="11"></td>
+            <td class="tbldata">
+              <b>{{ getTotalAreaInSqm() }}</b>
+            </td>
+            <td class="tbldata">
+              <b>{{ getTotalAreaInSqft() }}</b>
+            </td>
+            <td class="tbldata" colspan="3"></td>
+            <td class="tbldata">
+              <b>{{ getTotalPlotAmount() | currency : "INR" }}</b>
+            </td>
+            <td class="tbldata"></td>
+            <td class="tbldata">
+              <b>{{ getTotalGovernmentValue() | currency : "INR" }}</b>
+            </td>
+            <td class="tbldata">
+              <b>{{ getTotalValueOfAgreement() | currency : "INR" }}</b>
+            </td>
+            <td class="tbldata"></td>
+            <td class="tbldata">
+              <b>{{ getTotalRegistrationFees() | currency : "INR" }}</b>
+            </td>
+            <td class="tbldata"></td>
+            <td class="tbldata">
+              <b>{{ getTotalStampDuties() | currency : "INR" }}</b>
+            </td>
+            <td class="tbldata"></td>
+            <td class="tbldata">
+              <b>{{ getTotalLegalCharges() | currency : "INR" }}</b>
+            </td>
+            <td class="tbldata">
+              <b>{{ getTotalExtraCharges() | currency : "INR" }}</b>
+            </td>
+            <td class="tbldata">
+              <b>{{ getTotalGrandTotal() | currency : "INR" }}</b>
+            </td>
+            <td Class="tbldata">
+              <b>{{getTotalChequeReceived() | currency : "INR"}}</b>
+            </td>
+            <td Class="tbldata">
+              <b>{{getTotalCashReceived() | currency : "INR"}}</b>
+            </td>
+            <td Class="tbldata">
+              <b>{{getTotalAmountReceived() | currency : "INR"}}</b>
+            </td>
+            <td Class="tbldata">
+              <b>{{getTotalChequeBalance() | currency : "INR"}}</b>
+            </td>
+            <td Class="tbldata">
+              <b>{{getTotalCashBalance() | currency : "INR"}}</b>
+            </td>
+            <td Class="tbldata">
+              <b>{{getTotalBalance() | currency : "INR"}}</b>
+            </td>
+          </tr>
+        </tbody>
+      </nz-table>
+    </div>
   </div>
   <div class="fixed-pagination">
     <nz-pagination class="try light-theme" [nzPageSize]="pageSize" [nzTotal]="total" [(nzPageIndex)]="currentPage"

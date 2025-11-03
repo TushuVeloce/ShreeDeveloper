@@ -40,68 +40,69 @@
 // global css for Table
 * {
   font-family: "Poppins";
+  text-transform: uppercase;
 }
 
-.bgtable_light {
-  background-color: rgb(229, 231, 235);
-}
-
-.tblheader {
-  text-align: center !important;
-  font-weight: bold !important;
-  background-color: var(--ion-color-primary-tint) !important;
-  color: white !important;
-  font-size: 14px !important;
-}
+// .bgtable_light {
+//   background-color: rgb(229, 231, 235);
+// }
 
 // .tblheader {
 //   text-align: center !important;
 //   font-weight: bold !important;
-//   background: linear-gradient(to top, #7c2424, #fc4935) !important;
+//   background-color: var(--ion-color-primary-tint) !important;
 //   color: white !important;
 //   font-size: 14px !important;
 // }
 
-.tblsubheader {
-  text-align: center !important;
-  font-weight: bold !important;
-  background-color: #fff2cc !important;
-  color: black !important;
-  font-size: 14px !important;
-}
+// // .tblheader {
+// //   text-align: center !important;
+// //   font-weight: bold !important;
+// //   background: linear-gradient(to top, #7c2424, #fc4935) !important;
+// //   color: white !important;
+// //   font-size: 14px !important;
+// // }
 
-.tbldata {
-  text-align: center !important;
-  font-size: small !important;
-  border-bottom: 1.5px solid rgba(200, 186, 186, 0.2) !important;
-  background-color: white !important;
-  color: black !important;
-}
+// .tblsubheader {
+//   text-align: center !important;
+//   font-weight: bold !important;
+//   background-color: #fff2cc !important;
+//   color: black !important;
+//   font-size: 14px !important;
+// }
 
-/* Add this for hover */
-::ng-deep nz-table tbody tr:hover {
-  background-color: rgb(243, 244, 246);
-  /* or use .bgtable_light color */
-}
+// .tbldata {
+//   text-align: center !important;
+//   font-size: small !important;
+//   border-bottom: 1.5px solid rgba(200, 186, 186, 0.2) !important;
+//   background-color: white !important;
+//   color: black !important;
+// }
 
-// Alignment classes
-.left-align {
-  padding-left: 10px !important;
-  font-size: medium !important;
-  border-bottom: 1.5px solid rgba(200, 186, 186, 0.2) !important;
-  background-color: white !important;
-  color: black !important;
-  text-align: left !important;
-}
+// /* Add this for hover */
+// ::ng-deep nz-table tbody tr:hover {
+//   background-color: rgb(243, 244, 246);
+//   /* or use .bgtable_light color */
+// }
 
-.right-align {
-  padding-left: 10px !important;
-  font-size: medium !important;
-  border-bottom: 1.5px solid rgba(200, 186, 186, 0.2) !important;
-  background-color: white !important;
-  color: black !important;
-  text-align: right !important;
-}
+// // Alignment classes
+// .left-align {
+//   padding-left: 10px !important;
+//   font-size: medium !important;
+//   border-bottom: 1.5px solid rgba(200, 186, 186, 0.2) !important;
+//   background-color: white !important;
+//   color: black !important;
+//   text-align: left !important;
+// }
+
+// .right-align {
+//   padding-left: 10px !important;
+//   font-size: medium !important;
+//   border-bottom: 1.5px solid rgba(200, 186, 186, 0.2) !important;
+//   background-color: white !important;
+//   color: black !important;
+//   text-align: right !important;
+// }
 
 .btn {
   background-color: var(--ion-color-primary-tint) !important;
@@ -123,6 +124,208 @@
 .btn:hover {
   transform: translateY(-3px) !important;
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3) !important;
+}
+
+/* ===========================================================
+   🌐 GLOBAL TABLE & LAYOUT THEME
+   Works for all master tables across the app
+   Brand color: #701f1f
+   =========================================================== */
+
+/* ---------- 🌈 Color Palette ---------- */
+:root {
+  --color-primary: #701f1f;
+  --color-primary-hover: #8a2b2b;
+  --color-primary-light: #a03a3a;
+  --color-bg-light: #ffffff;
+  --color-bg-muted: #fafafa;
+  --color-border: #f0f0f0;
+  --color-text-dark: #262626;
+  --color-text-medium: #595959;
+  --color-danger: #ff4d4f;
+}
+
+/* ---------- 🌍 Global Layout Wrappers ---------- */
+.table-wrapper {
+  background: var(--color-bg-light);
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  padding: 1rem;
+  margin-top: 1.5rem;
+  overflow: hidden;
+}
+
+.table-container {
+  width: 100%;
+  overflow-x: auto; /* ✅ Enables horizontal scroll if too many columns */
+  overflow-y: hidden;
+  border-radius: 8px;
+}
+
+/* Smooth scroll for better UX */
+.table-container::-webkit-scrollbar {
+  height: 8px;
+}
+.table-container::-webkit-scrollbar-thumb {
+  background: var(--color-primary);
+  border-radius: 4px;
+}
+.table-container::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+/* ---------- 📋 Table Design ---------- */
+nz-table,
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: var(--color-bg-light);
+}
+
+th.tblheader {
+  background-color: var(--color-primary) !important;
+  color: #fff !important;
+  font-weight: 600;
+  padding: 10px 12px !important;
+  white-space: nowrap;
+  text-align: center !important;
+}
+
+td.tbldata {
+  padding: 8px 12px !important;
+  color: var(--color-text-medium);
+  vertical-align: middle !important;
+  border-bottom: 1px solid var(--color-border) !important;
+  white-space: nowrap; /* Prevents text wrapping in tight columns */
+  text-align: center !important;
+  color: black !important;
+}
+
+tr.table-row:hover {
+  background-color: #fef4f4 !important;
+  transition: --background 0.2s ease-in-out;
+}
+
+/* ---------- ⚙️ Action Buttons ---------- */
+.action-column {
+  text-align: center;
+  min-width: 120px;
+}
+
+.action-btn {
+  margin: 0 4px;
+  cursor: pointer;
+  transition: color 0.2s ease, transform 0.1s ease;
+
+  &.edit {
+    color: var(--color-primary);
+  }
+  &.edit:hover {
+    color: var(--color-primary-hover);
+    transform: scale(1.1);
+  }
+
+  &.delete {
+    color: var(--color-danger);
+  }
+  &.delete:hover {
+    color: #ff7875;
+    transform: scale(1.1);
+  }
+}
+
+/* ---------- 🧭 Pagination ---------- */
+.pagination-wrapper {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 16px;
+}
+
+/* ---------- 🪶 Add Button Styling ---------- */
+button[nz-button].btn1 {
+  background-color: var(--color-primary);
+  color: #fff;
+  font-weight: 500;
+  border: none;
+  border-radius: 20px;
+  padding: 0 18px;
+  height: 36px;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background-color: var(--color-primary-hover);
+    transform: translateY(-1px);
+  }
+
+  &:active {
+    background-color: var(--color-primary-light);
+    transform: translateY(0);
+  }
+}
+
+/* ---------- 📱 Responsive Design ---------- */
+@media (max-width: 992px) {
+  .table-wrapper {
+    padding: 0.75rem;
+  }
+
+  th.tblheader,
+  td.tbldata {
+    padding: 8px 10px !important;
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 768px) {
+  .page-title {
+    text-align: center;
+    font-size: 1.4rem;
+  }
+
+  .btn1 {
+    width: 100%;
+    border-radius: 6px !important;
+  }
+
+  .table-wrapper {
+    box-shadow: none;
+    border-radius: 0;
+    padding: 0.5rem;
+  }
+
+  .table-container {
+    overflow-x: auto;
+    display: block;
+  }
+
+  th.tblheader,
+  td.tbldata {
+    font-size: 12px;
+  }
+
+  .pagination-wrapper {
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  th.tblheader,
+  td.tbldata {
+    font-size: 11px;
+    padding: 6px;
+  }
+}
+
+.filter-row {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  label {
+    font-size: 0.9rem;
+    color: var(--color-text-dark);
+  }
+  .form-control, nz-select {
+    border-radius: 6px;
+  }
 }
 
 // ========================== Input, textarea, nz-select Class CSS Start =========================== //

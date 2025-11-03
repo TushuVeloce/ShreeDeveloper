@@ -147,7 +147,7 @@ nz-content::-webkit-scrollbar {
   display: flex;
   align-items: center;
   gap: 6px;
-  font-size: 14px;
+  font-size: 18px;
   font-weight: 500;
 }
 
@@ -283,7 +283,7 @@ nz-content::-webkit-scrollbar {
   align-items: center;
   padding: 10px 12px;
   border-bottom: 1px solid #f0f0f0;
-  transition: background 0.2s;
+  transition: --background 0.2s;
 }
 
 .notification-item:hover {

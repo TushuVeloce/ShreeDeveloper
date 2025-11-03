@@ -78,42 +78,77 @@ body {
 /* Responsive Text */
 @media (max-width: 767px) {
   .section-header {
-    font-size: 0.9rem;
+    font-size: 0.85rem;
   }
 
   .table-cell {
-    font-size: 0.85rem;
+    font-size: 0.8rem;
   }
 }
 
 @media print {
+  /* Hide everything by default */
   body * {
-    visibility: hidden;
+    visibility: hidden !important;
   }
 
+  /* Show only the print section */
   #print-section,
   #print-section * {
-    visibility: visible;
+    visibility: visible !important;
   }
 
   #print-section {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    background: white !important;
+    z-index: 999999 !important;
+    padding: 0 !important;
+    margin: 0 !important;
   }
 
+  /* Force-hide framework shells, overlays, and navs */
+  ion-app,
+  ion-router-outlet,
+  app-sidebarlayout,
+  app-header,
+  app-footer,
+  app-sidebar,
+  nz-sider,
+  .ant-layout-sider,
+  .ant-menu,
+  .sidebar-menu-wrapper,
+  header,
+  footer,
+  nav,
+  aside,
+  .sidebar,
+  .navbar,
+  .sidenav,
+  .ant-layout-header,
+  .ant-layout-footer,
+  .ant-layout-content > *:not(#print-section),
   .no-print {
     display: none !important;
+    visibility: hidden !important;
   }
 
-  /* Preserve box styling */
+  /* Remove layout wrappers entirely */
+  .ant-layout,
+  .ant-layout-content {
+    all: unset !important;
+    display: block !important;
+  }
+
+  /* Reset background and shadow */
   .tblcard_light {
-    box-shadow: none;
-    border: none;
+    box-shadow: none !important;
+    border: none !important;
   }
 
-  /* Force background and color printing for headings and highlights */
+  /* Keep color accuracy */
   .section-header,
   .bg-brown,
   .highlight-yellow,
@@ -123,11 +158,9 @@ body {
     print-color-adjust: exact !important;
   }
 
-  /* Optional: Fix padding/font-size during print */
-  .table-cell,
-  .table-cell-heading {
-    padding: 6px;
-    font-size: 0.9rem;
+  /* Page setup */
+  @page {
+    size: A4 portrait;
+    margin: 10mm;
   }
 }
-

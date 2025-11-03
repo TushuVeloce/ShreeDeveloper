@@ -13,7 +13,7 @@
     </nz-button>
   </div>
 </div>
-<div class="table-wrapper" class="tblcard_light" style="margin-top: 2rem" *ngIf="DisplayMasterList.length > 0">
+<div class="table-wrapper tblcard_light" *ngIf="DisplayMasterList.length > 0">
   <div class="table-container">
     <nz-table #basicTable nzSize="small" class="no-hover-table bgtable_light" [nzData]="paginatedList()"
       [nzScroll]="{x:'auto' }" nzFrontPagination="false" [nzShowSizeChanger]="false"
@@ -39,13 +39,17 @@
           <td Class="tbldata">{{company.p.OwnerName }}</td>
           <td Class="tbldata">{{company.p.Contacts }}</td>
           <td Class="tbldata">{{company.p.EmailId}}</td>
-          <td class="tbldata">
+          <!-- <td class="tbldata">
             <span style="margin-left: 9px;" (click)="onEditClicked(company);">
               <img src="\assets\icons\edit.png" alt="logo" title="Edit" width="20px" height="20px" />
             </span>
             <span style="margin-left: 9px;" (click)="onDeleteClicked(company);">
               <img src="\assets\icons\delete.png" alt="logo" title="Delete" width="20px" height="20px" /></span>
-          </td>
+          </td> -->
+           <td class="tbldata action-column">
+              <Edit-Icon class="action-btn edit" (editClick)="onEditClicked(company)" />
+              <Delete-Icon class="action-btn delete" (deleteClicked)="onDeleteClicked(company)" />
+            </td>
         </tr>
       </tbody>
     </nz-table>

@@ -805,7 +805,7 @@ export class SidebarlayoutComponent implements OnInit {
         SubModuleList: GovernmentOfficeSubModuleList,
       },
       {
-        Name: 'Customer Management',
+        Name: 'CRM',
         RouterLink: '',
         WhiteLogo: '/assets/icons/Customer-Management.png',
         SubModuleList: CustomerManagementSubModuleList,

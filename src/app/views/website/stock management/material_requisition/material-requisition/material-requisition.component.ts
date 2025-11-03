@@ -100,6 +100,12 @@ export class MaterialRequisitionComponent implements OnInit {
     return this.DateconversionService.formatDate(date);
   }
 
+    isAnyMaterialPending(requisition: MaterialRequisition): boolean {
+    return requisition.p.MaterialRequisitionDetailsArray?.some(
+      item => item.MaterialStatus === MaterialRequisitionStatuses.Pending
+    );
+  }
+  
   AddMaterialRequisition = async () => {
     if (this.companyRef() <= 0) {
       this.uiUtils.showWarningToster('Please select company');

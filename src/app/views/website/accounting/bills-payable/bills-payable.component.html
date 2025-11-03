@@ -14,7 +14,7 @@
   <div style="text-align: center; color: rgba(0, 0, 0, 0.25)">No Data</div>
 </ng-template>
 
-<div class="row row-cols-4 g-1">
+<div class="row row-cols-1 row-cols-md-4 g-2 filter-row">
   <div class="col">
     <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear nzPlaceHolder="Select"
       [nzSize]="'large'" name="SiteRef" [(ngModel)]="Entity.p.SiteRef" required id="SiteRef"
@@ -43,7 +43,7 @@
   </div>
 </div>
 
-<div class="table-wrapper" class="tblcard_light" style="margin-top: 1rem" *ngIf="DisplayMasterList.length > 0">
+<div class="table-wrapper tblcard_light" *ngIf="DisplayMasterList.length > 0">
   <div class="table-container">
     <nz-table #basicTable nzSize="small" class="no-hover-table bgtable_light" [nzData]="paginatedList()"
       [nzScroll]="{ x: 'auto' }" nzFrontPagination="false" [nzShowSizeChanger]="false">

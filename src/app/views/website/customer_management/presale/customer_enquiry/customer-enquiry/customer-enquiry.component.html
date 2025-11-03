@@ -18,8 +18,8 @@
   <ng-template #noDataTpl>
     <div class="no-data-text">Data Not Found</div>
   </ng-template>
-  <div class="row" style="margin-top: 1rem">
-    <div class="col-md-4">
+  <div class="row row-cols-1 row-cols-md-6 g-2 filter-row">
+    <div class="col">
       <div>
         <label for="SiteRef"><b>Site</b></label>
         <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
@@ -30,7 +30,7 @@
         </nz-select>
       </div>
     </div>
-    <div class="col-md-4">
+    <div class="col">
       <div>
         <label for="CustomerProgress"><b>Customer Progress</b></label>
         <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
@@ -42,7 +42,8 @@
       </div>
     </div>
   </div>
-  <div class="table-wrapper" class="tblcard_light" style="margin-top: 2rem" *ngIf="DisplayMasterList.length > 0">
+  <div class="table-wrapper tblcard_light" *ngIf="DisplayMasterList.length > 0">
+     <div class="table-container">
     <nz-table #basicTable nzSize="small" class="no-hover-table bgtable_light" [nzScroll]="{x:'auto' }"
       nzFrontPagination="false" [nzShowSizeChanger]="false" [nzData]="paginatedList"
       (nzPageIndexChange)="onPageChange($event)">
@@ -59,15 +60,18 @@
           <td Class="tbldata">{{customerenquiry.p.CityName}}</td>
           <td Class="tbldata">{{customerenquiry.p.PinCode}}</td>
           <td Class="tbldata">{{customerenquiry.p.Address}}</td>
-          <td class="tbldata">
+          <!-- <td class="tbldata">
             <span style="margin-left: 9px;" (click)="onEditClicked(customerenquiry);">
               <img src="\assets\icons\edit.png" alt="logo" title="Edit" width="20px" height="20px" />
             </span>
-
+          </td> -->
+          <td class="tbldata action-column">
+            <Edit-Icon class="action-btn edit" (editClick)="onEditClicked(customerenquiry)" />
           </td>
         </tr>
       </tbody>
     </nz-table>
+  </div>
   </div>
   <div class="fixed-pagination">
     <nz-pagination class="try light-theme" [nzPageSize]="pageSize" [nzTotal]="total" [(nzPageIndex)]="currentPage"

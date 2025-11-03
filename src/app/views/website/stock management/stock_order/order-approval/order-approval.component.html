@@ -99,19 +99,19 @@
         </div>
       </div>
 
-      <div class="table-wrapper" class="tblcard_light" style="margin-top: 2rem"
+      <div class="table-wrapper tblcard_light"
         *ngIf="Entity.p.MaterialPurchaseOrderDetailsArray">
-        <div class="table-container" style="margin-top: 2rem">
-          <div class="row">
+        <div class="table-container">
+          <!-- <div class="row">
             <div class="col-12">
               <h3 class="TableHeading">Ordered Material Details</h3>
             </div>
-          </div>
+          </div> -->
           <nz-table #basicTable nzSize="small" class="no-hover-table bgtable_light" [nzScroll]="{ x: 'auto' }"
             nzFrontPagination="false" [nzShowSizeChanger]="false" [nzData]="Entity.p.MaterialPurchaseOrderDetailsArray">
             <thead>
               <tr>
-                <th *ngFor="let header of QuotedMaterialheaders" class="tblsubheader">
+                <th *ngFor="let header of QuotedMaterialheaders" class="tblheader">
                   {{ header }}
                 </th>
               </tr>

@@ -165,19 +165,19 @@
         </div>
       </div>
 
-      <div class="table-wrapper" class="tblcard_light" style="margin-top: 2rem"
+      <div class="table-wrapper tblcard_light"
         *ngIf="Entity.p.MaterialPurchaseOrderDetailsArray.length > 0">
-        <div class="table-container" style="margin-top: 2rem">
-          <div class="row">
+        <div class="table-container">
+          <!-- <div class="row">
             <div class="col-12">
               <h3 class="TableHeading">Order Material Details</h3>
             </div>
-          </div>
+          </div> -->
           <nz-table #basicTable nzSize="small" class="no-hover-table bgtable_light" [nzScroll]="{ x: 'auto' }"
             nzFrontPagination="false" [nzShowSizeChanger]="false" [nzData]="Entity.p.MaterialPurchaseOrderDetailsArray">
             <thead>
               <tr>
-                <th *ngFor="let header of OrderMaterialheaders" class="tblsubheader">
+                <th *ngFor="let header of OrderMaterialheaders" class="tblheader">
                   {{ header }}
                 </th>
               </tr>
@@ -208,22 +208,22 @@
                 <td Class="tbldata">{{ material.DiscountOnNetAmount | currency : "INR"}}</td>
                 <td Class="tbldata">{{ material.NetAmount | currency : "INR"}}</td>
                 <td Class="tbldata">{{ material.TotalAmount | currency : "INR"}}</td>
-                <td class="tbldata">
+                <td class="tbldata action-column">
                   <span *ngIf="material.MaterialPurchaseDetailStatus != MaterialOrderStatus.Ordered"
-                    style="margin-left: 9px" (click)="editOrderMaterial(i)">
+                    style="margin-left: 9px" (click)="editOrderMaterial(i)" class="action-btn edit">
                     <img src="\assets\icons\edit.png" alt="logo" title="Edit" width="20px" height="20px" />
                   </span>
                   <span *ngIf="material.MaterialPurchaseDetailStatus != MaterialOrderStatus.Ordered"
-                    style="margin-left: 9px" (click)="removeOrderMaterial(i)">
+                    style="margin-left: 9px" (click)="removeOrderMaterial(i)" class="action-btn delete">
                     <img src="\assets\icons\delete.png" alt="logo" title="Delete" width="20px" height="20px" />
                   </span>
                   <span style="margin-left: 9px;"
-                    *ngIf="material.MaterialPurchaseDetailStatus == MaterialOrderStatus.Ordered">
+                    *ngIf="material.MaterialPurchaseDetailStatus == MaterialOrderStatus.Ordered" class="action-btn edit">
                     <img src="/assets/icons/GrayEditIcon.png" alt="Edit" title="Disable Edit" width="20px"
                       height="20px" />
                   </span>
                   <span style="margin-left: 9px;"
-                    *ngIf="material.MaterialPurchaseDetailStatus == MaterialOrderStatus.Ordered">
+                    *ngIf="material.MaterialPurchaseDetailStatus == MaterialOrderStatus.Ordered" class="action-btn delete">
                     <img src="/assets/icons/GreyDustbin.png" alt="Delete" title="Disable Delete" width="20px"
                       height="20px" />
                   </span>

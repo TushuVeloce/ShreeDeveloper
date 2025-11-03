@@ -21,18 +21,18 @@
     No Data
   </div>
 </ng-template>
-<div class="row" style="margin-top: 1rem;">
-  <div class="col-lg-2 col-md-3 col-6 g-1">
+<div class="row row-cols-1 row-cols-md-6 g-2 filter-row">
+  <div class="col">
     <label for="StartDate"><b>From Date</b></label>
     <input type="date" [(ngModel)]="Entity.p.StartDate" name="StartDate" class="form-control" id="StartDate"
       placeholder="Enter Start Date" (ngModelChange)="getEntireListByFilters()" />
   </div>
-  <div class="col-lg-2 col-md-3 col-6 g-1">
+  <div class="col">
     <label for="EndDate"><b>To Date</b></label>
     <input type="date" [(ngModel)]="Entity.p.EndDate" name="EndDate" class="form-control" id="EndDate"
       placeholder="Enter End Date" (ngModelChange)="getEntireListByFilters()" />
   </div>
-  <div class="col-lg-2 col-md-3 col-6 g-1">
+  <div class="col">
     <label for="SiteRef"><b>Site</b></label>
     <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear nzPlaceHolder="Select"
       [nzSize]="'large'" name="SiteRef" [(ngModel)]="Entity.p.SiteRef" required id="SiteRef"
@@ -41,7 +41,7 @@
       <nz-option *ngFor="let Site of SiteList" [nzValue]="Site.p.Ref" [nzLabel]="Site.p.Name"></nz-option>
     </nz-select>
   </div>
-  <div class="col-lg-2 col-md-3 col-6 g-1">
+  <div class="col">
     <label><b>Mode of Payment</b></label>
     <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear nzPlaceHolder="Select"
       id="ModeOfPayment" name="ModeOfPayment" [nzSize]="'large'" [(ngModel)]="Entity.p.ModeOfPayment"
@@ -61,7 +61,7 @@
       </nz-select>
     </div>
   </div>
-  <div class="col-lg-2 col-md-3 col-6 g-1">
+  <div class="col">
     <label><b>Accounting Report</b></label>
     <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="AccountingReport"
       name="AccountingReport" [nzSize]="'large'" [(ngModel)]="Entity.p.AccountingReport"
@@ -69,7 +69,7 @@
       <nz-option *ngFor="let mode of AccountingReportList" [nzValue]="mode.Ref" [nzLabel]="mode.Name"></nz-option>
     </nz-select>
   </div>
-  <div class="col-lg-2 col-md-3 col-6 g-1">
+  <div class="col">
     <label><b>Ledger</b></label>
     <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear nzPlaceHolder="Select"
       id="LedgerRef" name="LedgerRef" [nzSize]="'large'" [(ngModel)]="Entity.p.LedgerRef"
@@ -77,7 +77,7 @@
       <nz-option *ngFor="let ledger of LedgerList" [nzValue]="ledger.p.Ref" [nzLabel]="ledger.p.Name"></nz-option>
     </nz-select>
   </div>
-  <div class="col-lg-2 col-md-3 col-6 g-1" style="margin-top: 1rem;">
+  <div class="col" style="margin-top: 1rem;">
     <label><b>Sub Ledger</b></label>
     <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear nzPlaceHolder="Select"
       id="SubLedgerRef" name="SubLedgerRef" [nzSize]="'large'" [(ngModel)]="Entity.p.SubLedgerRef"
@@ -85,7 +85,7 @@
       <nz-option *ngFor=" let sub of SubLedgerList" [nzValue]="sub.p.Ref" [nzLabel]="sub.p.Name"></nz-option>
     </nz-select>
   </div>
-  <div class="col-lg-2 col-md-3 col-6 g-1" style="margin-top: 1rem;">
+  <div class="col" style="margin-top: 1rem;">
     <label><b>To Whom Type</b></label>
     <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear nzPlaceHolder="Select"
       id="RecipientType" name="RecipientType" [nzSize]="'large'" [(ngModel)]="Entity.p.RecipientType"
@@ -93,7 +93,7 @@
       <nz-option *ngFor=" let type of RecipientTypesList" [nzValue]="type.Ref" [nzLabel]="type.Name"></nz-option>
     </nz-select>
   </div>
-  <div class="col-lg-2 col-md-3 col-6 g-1" style="margin-top: 1rem">
+  <div class="col" style="margin-top: 1rem">
     <label><b>To Whom</b></label>
     <div class="d-flex align-items-center">
       <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear nzPlaceHolder="Select"
@@ -108,7 +108,7 @@
       </nz-select>
     </div>
   </div>
-  <div class="col-lg-2 col-md-3 col-6 g-1" style="margin-top: 1rem;">
+  <div class="col" style="margin-top: 1rem;">
     <label><b>From Whom Type</b> </label>
     <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear nzPlaceHolder="Select"
       id="PayerType" name="PayerType" [nzSize]="'large'" [(ngModel)]="Entity.p.PayerType"
@@ -116,7 +116,7 @@
       <nz-option *ngFor="let type of PayerTypesList" [nzValue]="type.Ref" [nzLabel]="type.Name"></nz-option>
     </nz-select>
   </div>
-  <div class="col-lg-2 col-md-3 col-6 g-1" style="margin-top: 1rem">
+  <div class="col" style="margin-top: 1rem">
     <label><b>Received By</b></label>
     <div class="d-flex align-items-center">
       <nz-select *ngIf="Entity.p.PayerType == DealDoneCustomer" class="nzSelect-light" [nzNotFoundContent]="noDataTpl"

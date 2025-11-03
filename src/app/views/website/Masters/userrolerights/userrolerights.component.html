@@ -46,7 +46,7 @@
   </div>
 
   <!-- table start  -->
-  <div class="table-wrapper" class="tblcard_light" style="margin-top: 2rem" *ngIf="FeatureGroupRef > 0">
+  <div class="table-wrapper tblcard_light" *ngIf="FeatureGroupRef > 0">
     <div class="table-container">
       <nz-table #basicTable nzSize="small" class="no-hover-table bgtable_light" [nzScroll]="{ x: 'auto' }"
         nzFrontPagination="false" [nzShowSizeChanger]="false" [nzData]="DisplayFeature">
@@ -89,8 +89,8 @@
   </div>
   <!-- table end -->
   <div class="row align-items-center justify-content-center" style="margin-top: 2rem">
-    <button type="button" class="btn btn-sm btn-primary custom-btn" (click)="SaveUserRoleRights()">
+    <nz-button nz-button class="btn1 btn-sm btn-primary custom-btn text-center" (click)='SaveUserRoleRights()'>
       Save
-    </button>
+    </nz-button>
   </div>
 </div>

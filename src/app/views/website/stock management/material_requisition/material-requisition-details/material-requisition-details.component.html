@@ -44,19 +44,19 @@
         </div>
       </div>
 
-      <div class="table-wrapper" class="tblcard_light" style="margin-top: 2rem"
+      <div class="table-wrapper tblcard_light"
         *ngIf="Entity.p.MaterialRequisitionDetailsArray.length > 0">
-        <div class="table-container" style="margin-top: 2rem">
-          <div class="row">
+                  <!-- <div class="row">
             <div class="col-12">
               <h3 class="TableHeading">Materials Details</h3>
             </div>
-          </div>
+          </div> -->
+        <div class="table-container">
           <nz-table #basicTable nzSize="small" class="no-hover-table bgtable_light" [nzScroll]="{ x: 'auto' }"
             nzFrontPagination="false" [nzShowSizeChanger]="false" [nzData]="Entity.p.MaterialRequisitionDetailsArray">
             <thead>
               <tr>
-                <th *ngFor="let header of materialheaders" class="tblsubheader">
+                <th *ngFor="let header of materialheaders" class="tblheader">
                   {{ header }}
                 </th>
               </tr>
