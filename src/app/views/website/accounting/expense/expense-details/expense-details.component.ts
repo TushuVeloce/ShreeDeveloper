@@ -357,7 +357,7 @@ export class ExpenseDetailsComponent implements OnInit {
     this.Entity.p.IncomeBankRef = 0;
     this.Entity.p.ModeOfPaymentForIncome = 0;
     this.Entity.p.IsNewBankCreated = false;
-    this.Entity.p.Narration = '';
+    // this.Entity.p.Narration = '';
     this.Entity.p.IsAutoInvoiceEnabled = 0;
     this.RecipientNameInput = false;
     this.getCurrentBalanceByCompanyRef()

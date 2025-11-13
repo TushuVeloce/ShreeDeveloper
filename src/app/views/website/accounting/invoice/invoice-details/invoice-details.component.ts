@@ -141,8 +141,8 @@ export class InvoiceDetailsComponent implements OnInit {
       if (this.Entity.p.IsDieselPaid == 1) {
         this.isDieselPaid = true
       }
-
-      if (this.Entity.p.ExpenseTypeArray.includes(this.MachinaryExpenseRef) || this.Entity.p.ExpenseTypeArray.includes(this.LabourExpenseRef)) {
+      
+      if (this.Entity.p.ExpenseTypeArray.includes(this.MachinaryExpenseRef) || this.Entity.p.ExpenseTypeArray.includes(this.LabourExpenseRef) || this.Entity.p.ExpenseTypeArray.includes(this.MultipleExpenseRef)) {
         this.getVendorServiceListByVendorRef(this.Entity.p.RecipientRef);
       }
       this.getTotalWorkedHours();

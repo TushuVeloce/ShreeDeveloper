@@ -345,7 +345,7 @@ export class InvoiceDetailsMobileAppComponent implements OnInit {
           }
           if (
             this.Entity.p.ExpenseTypeArray.includes(this.MachinaryExpenseRef) ||
-            this.Entity.p.ExpenseTypeArray.includes(this.LabourExpenseRef)
+            this.Entity.p.ExpenseTypeArray.includes(this.LabourExpenseRef)|| this.Entity.p.ExpenseTypeArray.includes(this.MultipleExpenseRef)
           ) {
             await this.getVendorServiceListByVendorRef(
               this.Entity.p.RecipientRef
@@ -1226,6 +1226,15 @@ export class InvoiceDetailsMobileAppComponent implements OnInit {
     this.MultipleExpenseEntity = {
       ...this.Entity.p.InvoiceItemDetailsArray[index],
     };
+    this.MultipleUnitName = this.UnitList.find((item) => item.p.Ref == this.Entity.p.InvoiceItemDetailsArray[index].UnitRef)?.p.Name ?? '';
+    this.selectedMultipleUnit = [
+      {
+        p: {
+          Ref: this.Entity.p.InvoiceItemDetailsArray[index].UnitRef,
+          Name: this.MultipleUnitName,
+        },
+      },
+    ];
     this.MultipleEditingIndex = index;
   }
 

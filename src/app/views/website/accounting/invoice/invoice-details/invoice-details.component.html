@@ -135,7 +135,7 @@
       </div>
       <div class="row">
         <div class="col-md-4" style="margin-top: 1rem"
-          *ngIf="Entity.p.ExpenseTypeArray.includes(MachinaryExpenseRef) || Entity.p.ExpenseTypeArray.includes(LabourExpenseRef)">
+          *ngIf="Entity.p.ExpenseTypeArray.includes(MachinaryExpenseRef) || Entity.p.ExpenseTypeArray.includes(LabourExpenseRef) || Entity.p.ExpenseTypeArray.includes(MultipleExpenseRef)">
           <label>Vendor</label>
           <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
             nzPlaceHolder="Select" id="RecipientRef" name="RecipientRef" [nzSize]="'large'"
@@ -145,7 +145,7 @@
           </nz-select>
         </div>
         <div class="col-md-4" style="margin-top: 1rem"
-          *ngIf="Entity.p.ExpenseTypeArray.includes(MachinaryExpenseRef) || Entity.p.ExpenseTypeArray.includes(LabourExpenseRef)">
+          *ngIf="Entity.p.ExpenseTypeArray.includes(MachinaryExpenseRef) || Entity.p.ExpenseTypeArray.includes(LabourExpenseRef) || Entity.p.ExpenseTypeArray.includes(MultipleExpenseRef)">
           <label>Vendor Service</label>
           <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl"
             [disabled]="VendorServiceListByVendor.length == 0" nzShowSearch nzAllowClear nzPlaceHolder="Select"
