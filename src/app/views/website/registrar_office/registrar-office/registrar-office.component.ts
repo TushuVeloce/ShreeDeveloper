@@ -34,7 +34,7 @@ export class RegistrarOfficeComponent implements OnInit {
   CustomerName = '';
 
   companyRef = this.companystatemanagement.SelectedCompanyRef;
-  headers: string[] = ['Sr.No.', 'Customer', 'Registration Person One', 'Registration Person Two', 'Plot Name', 'Bank', 'Witness', 'Agreement to Sale', 'Sale Deed', 'Talathi', '7/12	', 'Spiral', 'Client Submit	', 'Action'];
+  headers: string[] = ['Customer', 'Registration Person One', 'Registration Person Two', 'Plot Name', 'Bank', 'Witness', 'Agreement to Sale', 'Sale Deed', 'Talathi', '7/12	', 'Spiral', 'Client Submit	', 'Action'];
 
   constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private companystatemanagement: CompanyStateManagement, private screenSizeService: ScreenSizeService) {
     effect(() => {

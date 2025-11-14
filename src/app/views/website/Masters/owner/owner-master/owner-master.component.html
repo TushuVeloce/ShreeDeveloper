@@ -24,6 +24,7 @@
         [nzScroll]="{ x: 'auto' }" nzFrontPagination="false" [nzShowSizeChanger]="false">
         <thead>
           <tr>
+            <th class="tblheader" nzLeft>{{ "SR.NO." }}</th>
             <th *ngFor="let header of headers" class="tblheader">
               {{ header }}
             </th>
@@ -31,7 +32,7 @@
         </thead>
         <tbody>
           <tr *ngFor="let owner of paginatedList(); index as i">
-            <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
+            <td Class="tbldata" nzLeft>{{ (currentPage - 1) * pageSize + i + 1 }}</td>
             <td Class="tbldata text-capitalize">{{ owner.p.Name }}</td>
             <td class="tbldata">
               <Edit-Icon (editClick)="onEditClicked(owner)" />

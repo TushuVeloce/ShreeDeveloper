@@ -30,7 +30,7 @@ export class AttendanceLogsComponent implements OnInit {
   SelectedAttendance: WebAttendaneLog = WebAttendaneLog.CreateNewInstance();
 
   // headers as per required
-  baseHeaders: string[] = ['Sr. no', 'Employee Name', 'Location', 'Date', 'First Check In', 'Last Check Out', 'Total Time', 'Is Late', 'Is Half Day'];
+  baseHeaders: string[] = ['Employee Name', 'Location', 'Date', 'First Check In', 'Last Check Out', 'Total Time', 'Is Late', 'Is Half Day'];
 
   pageSize = 10; // Items per page
   currentPage = 1; // Initialize current page

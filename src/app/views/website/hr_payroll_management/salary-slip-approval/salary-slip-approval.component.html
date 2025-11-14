@@ -33,12 +33,13 @@
         [nzScroll]="{x:'auto' }" nzFrontPagination="false" [nzShowSizeChanger]="false">
         <thead>
           <tr>
+            <th class="tblheader" nzLeft>{{ "SR.No." }}</th>
             <th *ngFor="let header of headers" class="tblheader">{{ header }}</th>
           </tr>
         </thead>
         <tbody>
           <tr *ngFor="let salaryslipapproval of paginatedList(); index as i">
-            <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
+            <td Class="tbldata" nzLeft>{{ (currentPage - 1) * pageSize + i + 1 }}</td>
             <td Class="tbldata">{{salaryslipapproval.p.EmployeeName}}</td>
             <td Class="tbldata">{{salaryslipapproval.p.Year}}</td>
             <td Class="tbldata"> <b *ngFor="let month of salaryslipapproval.p.SelectedMonthsName">{{ month + ' ' }}</b>

@@ -28,7 +28,7 @@ export class SiteManagementMasterComponent implements OnInit {
   isApprovalDisabled: boolean = false;
   total = 0;
   companyRef = this.companystatemanagement.SelectedCompanyRef;
-  headers: string[] = ['Sr.No.', 'Site Name', 'No of Plots', 'Area in Sq/m', 'Area in Sq/ft', 'Starting Date', 'Estimated End Date', 'Site Location', 'Status', 'Action'];
+  headers: string[] = ['Site Name', 'No of Plots', 'Area in Sq/m', 'Area in Sq/ft', 'Starting Date', 'Estimated End Date', 'Site Location', 'Status', 'Action'];
   constructor(
     private uiUtils: UIUtils,
     private utils: Utils,

@@ -41,12 +41,13 @@
       [nzScroll]="{x:'auto' }" nzFrontPagination="false" [nzShowSizeChanger]="false">
       <thead>
         <tr>
+          <th class="tblheader" nzLeft>{{ "SR.NO." }}</th>
           <th *ngFor="let header of headers" class="tblheader">{{ header }}</th>
         </tr>
       </thead>
       <tbody>
         <tr *ngFor="let consume of paginatedList(); index as i">
-          <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
+          <td Class="tbldata" nzLeft>{{ (currentPage - 1) * pageSize + i + 1 }}</td>
           <td Class="tbldata">{{formatDate(consume.p.Date)}}</td>
           <td Class="tbldata">{{consume.p.FromSiteName}}</td>
           <td Class="tbldata">{{consume.p.ToSiteName}}</td>

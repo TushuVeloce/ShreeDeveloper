@@ -27,7 +27,7 @@ export class MarketingTypeMasterComponent implements OnInit {
 
   MarketingTypeModesList = DomainEnums.MarketingModesList(true, '--Select Modes Type--');
 
-  headers: string[] = ['Sr.No.', 'Marketing Type', 'Description', 'Action'];
+  headers: string[] = ['Marketing Type', 'Description', 'Action'];
 
   constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private companystatemanagement: CompanyStateManagement) {
     effect(() => {

@@ -48,7 +48,7 @@ export class FinancialYearMasterComponent implements OnInit {
 
   RequiredFieldMsg: string = ValidationMessages.RequiredFieldMsg
 
-  headers: string[] = ['Sr.No.', 'From Date', 'To Date', 'Status'];
+  headers: string[] = [ 'From Date', 'To Date', 'Status'];
   constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private utils: Utils,
     private dtu: DTU, private datePipe: DatePipe, private companystatemanagement: CompanyStateManagement, private payloadPacketFacade: PayloadPacketFacade,
     private serverCommunicator: ServerCommunicatorService, private screenSizeService: ScreenSizeService

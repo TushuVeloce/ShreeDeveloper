@@ -49,12 +49,13 @@
       [nzScroll]="{ x: 'auto' }" nzFrontPagination="false" [nzShowSizeChanger]="false">
       <thead>
         <tr>
+           <th class="tblheader" nzLeft>{{ 'SR.NO.' }}</th>
           <th *ngFor="let header of headers" class="tblheader">{{ header }}</th>
         </tr>
       </thead>
       <tbody>
         <tr *ngFor="let Invoice of paginatedList(); index as i">
-          <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
+          <td Class="tbldata" nzLeft>{{ (currentPage - 1) * pageSize + i + 1 }}</td>
           <td Class="tbldata">{{ Invoice.p.RecipientName }}</td>
           <td Class="tbldata">
             {{ Invoice.p.SiteName }}
@@ -76,7 +77,8 @@
           </td>
         </tr>
         <tr>
-          <td class="tbldata" colspan="3"><b>Total</b></td>
+          <td class="tbldata" nzLeft><b>Total</b></td>
+          <td class="tbldata" colspan="2"></td>
           <td class="tbldata">
             <b>{{ totalInvoiceAmount | currency : "INR" }}</b>
           </td>

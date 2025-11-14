@@ -26,7 +26,7 @@ export class EstimateStagesComponent implements OnInit {
   pageSize = 8; // Items per page
   currentPage = 1; // Initialize current page
   total = 0;
-  headers: string[] = ['Sr.No.', 'Site Name', 'Stage Name', 'Description', 'Amount', 'Action'];
+  headers: string[] = ['Site Name', 'Stage Name', 'Description', 'Amount', 'Action'];
   companyRef = this.companystatemanagement.SelectedCompanyRef;
   SiteRef: number = 0
   shouldDestroy: boolean = true;

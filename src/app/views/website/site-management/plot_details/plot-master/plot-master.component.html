@@ -45,17 +45,18 @@
   </form>
 </div>
 <div class="table-wrapper tblcard_light" *ngIf="DisplayMasterList.length > 0">
-  <div class="table-container" style="margin-top: 2rem;">
+  <div class="table-container">
     <nz-table #basicTable nzSize="small" class="no-hover-table bgtable_light" [nzData]="paginatedList"
       [nzScroll]="{x:'auto' }" nzFrontPagination="false" [nzShowSizeChanger]="false" [nzData]="paginatedList">
       <thead>
         <tr>
+          <th class="tblheader" nzLeft>{{ "SR.NO." }}</th>
           <th *ngFor="let header of headers" class="tblheader">{{ header }}</th>
         </tr>
       </thead>
       <tbody>
         <tr *ngFor="let plot of paginatedList; index as i">
-          <td Class="tbldata">{{ (currentPage - 1) *
+          <td Class="tbldata" nzLeft>{{ (currentPage - 1) *
             pageSize + i + 1 }}</td>
           <td Class="tbldata">{{plot.p.PlotNo}}</td>
           <td Class="tbldata">
@@ -71,7 +72,7 @@
               {{plot.p.BookingRemarkName}}
             </span>
           </td>
-          <td class="tbldata">
+          <td class="tbldata action-column">
             <span style="margin-left: 9px;" (click)="onEditClicked(plot);">
               <img src="\assets\icons\edit.png" alt="logo" title="Edit" width="20px" height="20px" />
             </span>

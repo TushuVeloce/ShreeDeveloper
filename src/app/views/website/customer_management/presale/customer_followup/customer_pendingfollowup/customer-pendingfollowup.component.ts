@@ -48,7 +48,6 @@ export class CustomerPendingFollowupComponent implements OnInit {
   );
 
   headers: string[] = [
-    'Sr.No.',
     'Name',
     'Contact No',
     'Date',

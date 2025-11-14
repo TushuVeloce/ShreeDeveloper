@@ -49,12 +49,13 @@
       (nzPageIndexChange)="onPageChange($event)">
       <thead>
         <tr>
+          <th class="tblheader" nzLeft>{{ 'SR.NO.' }}</th>
           <th *ngFor="let header of headers" class="tblheader">{{ header }}</th>
         </tr>
       </thead>
       <tbody>
         <tr *ngFor="let customerenquiry of paginatedList; index as i">
-          <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
+          <td Class="tbldata" nzLeft>{{ (currentPage - 1) * pageSize + i + 1 }}</td>
           <td Class="tbldata">{{customerenquiry.p.Name}}</td>
           <td Class="tbldata">{{customerenquiry.p.ContactNos}}</td>
           <td Class="tbldata">{{customerenquiry.p.CityName}}</td>

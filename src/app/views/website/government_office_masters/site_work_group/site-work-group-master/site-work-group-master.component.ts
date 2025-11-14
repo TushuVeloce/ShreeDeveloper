@@ -24,7 +24,7 @@ export class SiteWorkGroupMasterComponent implements OnInit {
   total = 0;
   companyRef = this.companystatemanagement.SelectedCompanyRef;
 
-  headers: string[] = ['Sr.No.', 'Site Work Group', 'Display Order', 'Action'];
+  headers: string[] = ['Site Work Group', 'Display Order', 'Action'];
   constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private screenSizeService: ScreenSizeService, private companystatemanagement: CompanyStateManagement,) { }
 
   async ngOnInit() {

@@ -50,7 +50,7 @@ export class IncomeComponent implements OnInit {
 
   companyRef = this.companystatemanagement.SelectedCompanyRef;
 
-  headers: string[] = ['Sr.No.', 'Date', 'Site Name', 'Ledger', 'Sub Ledger', 'Received By', 'Reason', 'Income Amount', 'Shree Balance', 'Mode of Payment', 'Action'];
+  headers: string[] = ['Date', 'Site Name', 'Ledger', 'Sub Ledger', 'Received By', 'Reason', 'Income Amount', 'Shree Balance', 'Mode of Payment', 'Action'];
   printheaders: string[] = ['Sr.No.', 'Date', 'Site Name', 'Ledger', 'Sub Ledger', 'Received By', 'Reason', 'Income Amount', 'Shree Balance', 'Mode of Payment'];
   constructor(
     private uiUtils: UIUtils,

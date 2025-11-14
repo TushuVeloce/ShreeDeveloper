@@ -25,7 +25,7 @@ export class DepartmentMasterComponent implements OnInit {
   total = 0;
   companyRef = this.companystatemanagement.SelectedCompanyRef;
 
-  headers: string[] = ['Sr.No.', 'Name', 'Action'];
+  headers: string[] = [ 'Name', 'Action'];
 
   constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private companystatemanagement: CompanyStateManagement, private screenSizeService: ScreenSizeService) {
     effect(() => {

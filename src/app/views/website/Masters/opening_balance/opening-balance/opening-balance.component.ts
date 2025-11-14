@@ -30,7 +30,7 @@ export class OpeningBalanceComponent implements OnInit {
 
   companyRef = this.companystatemanagement.SelectedCompanyRef;
 
-  headers: string[] = ['Sr.No.', 'Opening Date', 'Mode of Payment', 'Bank Name', 'Opening Bal. Amount', 'Initial Balance'];
+  headers: string[] = [ 'Opening Date', 'Mode of Payment', 'Bank Name', 'Opening Bal. Amount', 'Initial Balance'];
   constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private screenSizeService: ScreenSizeService,
     private companystatemanagement: CompanyStateManagement, private DateconversionService: DateconversionService,
   ) {

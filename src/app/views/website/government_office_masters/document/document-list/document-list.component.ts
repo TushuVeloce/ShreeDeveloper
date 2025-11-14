@@ -26,7 +26,7 @@ export class DocumentListComponent implements OnInit {
 
   companyRef = this.companystatemanagement.SelectedCompanyRef;
 
-  headers: string[] = ['Sr.No.', 'Document Name', 'Office Name', 'Action'];
+  headers: string[] = ['Document Name', 'Office Name', 'Action'];
   constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private screenSizeService: ScreenSizeService,
     private companystatemanagement: CompanyStateManagement
   ) {

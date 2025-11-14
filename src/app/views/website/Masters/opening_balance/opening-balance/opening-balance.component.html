@@ -21,12 +21,13 @@
       [nzScroll]="{x:'auto' }" nzFrontPagination="false" [nzShowSizeChanger]="false">
       <thead>
         <tr>
+          <th class="tblheader" nzLeft>{{ "SR.NO." }}</th>
           <th *ngFor="let header of headers" class="tblheader">{{ header }}</th>
         </tr>
       </thead>
       <tbody>
         <tr *ngFor="let OpeningBalance of paginatedList(); index as i">
-          <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
+          <td Class="tbldata" nzLeft>{{ (currentPage - 1) * pageSize + i + 1 }}</td>
           <td class="tbldata">{{ formatDate(OpeningBalance.p.TransDateTime) }}</td>
           <td Class="tbldata">{{OpeningBalance.p.ModeOfPayment == Cash ? 'Cash' : 'Bank'}}</td>
           <td Class="tbldata">{{OpeningBalance.p.BankName? OpeningBalance.p.BankName : '--'}}</td>
@@ -37,8 +38,8 @@
           </td> -->
         </tr>
         <tr *ngIf="paginatedList().length > 0">
+          <td class="tbldata" nzLeft><b>Total</b></td>
           <td class="tbldata" colspan="3"></td>
-          <td class="tbldata"><b>Total</b></td>
           <td class="tbldata"><b>{{ totalOpeningBalanceAmount | currency: 'INR' }}</b></td>
           <td class="tbldata"><b>{{totalInitailBalanceAmount| currency: 'INR' }}</b></td>
         </tr>

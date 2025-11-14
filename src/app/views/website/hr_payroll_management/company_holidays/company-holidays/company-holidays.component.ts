@@ -25,7 +25,7 @@ export class CompanyHolidaysComponent implements OnInit {
   total = 0;
   companyRef = this.companystatemanagement.SelectedCompanyRef;
 
-  headers: string[] = ['Sr.No.', 'Date', 'Reason', 'Action'];
+  headers: string[] = ['Date', 'Reason', 'Action'];
   constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private screenSizeService: ScreenSizeService,
     private companystatemanagement: CompanyStateManagement, private DateconversionService: DateconversionService,
   ) {

@@ -34,9 +34,11 @@
       [nzScroll]="{x:'auto' }" nzFrontPagination="false" [nzShowSizeChanger]="false">
       <thead>
         <tr *ngIf="!Entity.p.SiteRef">
+          <th class="tblheader" nzLeft>{{ "SR.NO." }}</th>
           <th *ngFor="let header of headers" class="tblheader">{{ header }}</th>
         </tr>
         <tr *ngIf="Entity.p.SiteRef">
+          <th class="tblheader" nzLeft>{{ "SR.NO." }}</th>
           <th *ngFor="let header of headerswithoutsite" class="tblheader">{{ header }}</th>
         </tr>
       </thead>
@@ -44,7 +46,7 @@
         <ng-container *ngFor="let Order of paginatedList; let i = index">
           <ng-container *ngFor="let detail of Order.p.MaterialPurchaseOrderDetailsArray; let j = index">
             <tr>
-              <td class="tbldata" *ngIf="j === 0" [attr.rowspan]="Order.p.MaterialPurchaseOrderDetailsArray.length">
+              <td class="tbldata" nzLeft  *ngIf="j === 0" [attr.rowspan]="Order.p.MaterialPurchaseOrderDetailsArray.length">
                 {{ (currentPage - 1) * pageSize + i + 1 }}
               </td>
               <td class="tbldata" *ngIf="j === 0 && !Entity.p.SiteRef"

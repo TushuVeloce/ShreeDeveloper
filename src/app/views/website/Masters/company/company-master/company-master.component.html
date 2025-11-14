@@ -20,12 +20,13 @@
       (nzPageIndexChange)="onPageChange($event)">
       <thead>
         <tr>
+          <th class="tblheader" nzLeft>{{ "SR.NO." }}</th>
           <th *ngFor="let header of headers" class="tblheader">{{ header }}</th>
         </tr>
       </thead>
       <tbody>
         <tr *ngFor="let company of paginatedList(); index as i">
-          <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
+          <td Class="tbldata" nzLeft>{{ (currentPage - 1) * pageSize + i + 1 }}</td>
           <td Class="tbldata">
             <ng-container *ngIf="company.p.LogoPath; else defaultImage">
               <img [src]="loadImageFromBackend(company.p.LogoPath)" alt="Company Logo" class="Company-Logo" />

@@ -29,12 +29,14 @@
 <div class="table-wrapper tblcard_light" *ngIf="DisplayMasterList.length > 0">
   <div class="table-container">
     <nz-table #basicTable nzSize="small" class="no-hover-table bgtable_light" [nzData]="paginatedList"
-      [nzScroll]="{x:'auto' }" nzFrontPagination="false" [nzShowSizeChanger]="false">
+      [nzScroll]="{x:'auto' }" nzFrontPagination="false" [nzShowSizeChanger]="false" >
       <thead>
         <tr *ngIf="!Entity.p.SiteRef">
+          <th class="tblheader" nzLeft>{{ "SR.NO." }}</th>
           <th *ngFor="let header of headers" class="tblheader">{{ header }}</th>
         </tr>
         <tr *ngIf="Entity.p.SiteRef">
+          <th class="tblheader" nzLeft>{{ "SR.NO." }}</th>
           <th *ngFor="let header of headerswithoutsite" class="tblheader">{{ header }}</th>
         </tr>
       </thead>
@@ -42,10 +44,10 @@
         <ng-container *ngFor="let Quotation of paginatedList; let i = index">
           <ng-container *ngFor="let detail of Quotation.p.MaterialQuotationDetailsArray; let j = index">
             <tr>
-              <td class="tbldata" *ngIf="j === 0" [attr.rowspan]="Quotation.p.MaterialQuotationDetailsArray.length">
+              <td class="tbldata" nzLeft *ngIf="j === 0" [attr.rowspan]="Quotation.p.MaterialQuotationDetailsArray.length">
                 {{ (currentPage - 1) * pageSize + i + 1 }}
               </td>
-              <td class="tbldata" *ngIf="j === 0 && !Entity.p.SiteRef"
+              <td class="tbldata" nzLeft *ngIf="j === 0 && !Entity.p.SiteRef"
                 [attr.rowspan]="Quotation.p.MaterialQuotationDetailsArray.length">
                 {{ Quotation.p.SiteName }}
               </td>

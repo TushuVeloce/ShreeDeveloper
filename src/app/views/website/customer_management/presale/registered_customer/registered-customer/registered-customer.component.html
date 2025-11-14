@@ -34,6 +34,7 @@
         [nzScroll]="{ x: 'auto' }" nzFrontPagination="false" [nzShowSizeChanger]="false">
         <thead>
           <tr>
+            <th class="tblheader" nzLeft>{{ 'SR.NO.' }}</th>
             <th *ngFor="let header of headers" class="tblheader">
               {{ header }}
             </th>
@@ -41,7 +42,7 @@
         </thead>
         <tbody>
           <tr *ngFor="let registercustomer of paginatedList; index as i">
-            <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
+            <td Class="tbldata" nzLeft>{{ (currentPage - 1) * pageSize + i + 1 }}</td>
             <td Class="tbldata">{{ registercustomer.p.SiteName }}</td>
             <td Class="tbldata">{{ registercustomer.p.PlotName }}</td>
             <td Class="tbldata">{{ registercustomer.p.CustomerName }}</td>

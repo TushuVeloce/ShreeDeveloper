@@ -39,7 +39,7 @@ export class InvoiceComponent implements OnInit {
 
   companyRef = this.companystatemanagement.SelectedCompanyRef;
 
-  headers: string[] = ['Sr.No.', 'Date', 'Bill No', 'Site Name', 'Ledger', 'Sub Ledger', 'Reason', 'Recipient Name', 'Bill Amount', 'Action'];
+  headers: string[] = ['Date', 'Bill No', 'Site Name', 'Ledger', 'Sub Ledger', 'Reason', 'Recipient Name', 'Bill Amount'];
   constructor(
     private uiUtils: UIUtils,
     private router: Router,

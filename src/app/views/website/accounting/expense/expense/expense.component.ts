@@ -60,7 +60,7 @@ export class ExpenseComponent implements OnInit {
   DealDoneCustomer = PayerTypes.DealDoneCustomer;
   PayerPlotNo: string = '';
 
-  headers: string[] = ['Sr.No.', 'Date', 'Site Name', 'Ledger', 'Sub Ledger', 'Recipient Name', 'Reason', 'Bill Amount', 'Given Amount', 'Remaining Amount', 'Shree Balance', 'Mode of Payment', 'Action'];
+  headers: string[] = ['Date', 'Site Name', 'Ledger', 'Sub Ledger', 'Recipient Name', 'Reason', 'Bill Amount', 'Given Amount', 'Remaining Amount', 'Shree Balance', 'Mode of Payment', 'Action'];
   printheaders: string[] = ['Sr.No.', 'Date', 'Site Name', 'Ledger', 'Sub Ledger', 'Recipient Name', 'Reason', 'Bill Amount', 'Given Amount', 'Remaining Amount', 'Shree Balance', 'Mode of Payment'];
   constructor(
     private uiUtils: UIUtils,

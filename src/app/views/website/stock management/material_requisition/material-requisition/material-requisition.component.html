@@ -34,6 +34,7 @@
       [nzScroll]="{x:'auto' }" nzFrontPagination="false" [nzShowSizeChanger]="false">
       <thead>
         <tr>
+          <th class="tblheader" nzLeft>{{ "SR.NO." }}</th>
           <th *ngFor="let header of headers" class="tblheader">{{ header }}</th>
         </tr>
       </thead>
@@ -42,7 +43,7 @@
           <ng-container
             *ngFor="let detail of requisition.p.MaterialRequisitionDetailsArray; let materialRowIndex = index">
             <tr>
-              <td class="tbldata">{{ (currentPage - 1) * pageSize + materialRowIndex + 1 }}</td>
+              <td class="tbldata" nzLeft>{{ (currentPage - 1) * pageSize + materialRowIndex + 1 }}</td>
               <!-- Requisition level data -->
               <td class="tbldata">{{ formatDate(requisition.p.Date) }}</td>
               <td class="tbldata">{{ requisition.p.SiteName }}</td>
@@ -78,7 +79,7 @@
                 </span>
               </td>
               <!-- Actions -->
-              <td class="tbldata">
+              <td class="tbldata action-column">
                 <span style="margin-left: 9px;" (click)="isAnyMaterialPending(requisition) ? onEditClicked(requisition) : null">
                   <img src="/assets/icons/edit.png" alt="Edit" title="Edit" width="20px" height="20px" *ngIf="isAnyMaterialPending(requisition)"/>
                   <img src="/assets/icons/GrayEditIcon.png" alt="Edit" title="Edit" width="20px" height="20px" *ngIf="!isAnyMaterialPending(requisition)"/>

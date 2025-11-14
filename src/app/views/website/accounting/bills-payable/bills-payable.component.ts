@@ -42,7 +42,7 @@ export class BillsPayableComponent implements OnInit {
 
   companyRef = this.companystatemanagement.SelectedCompanyRef;
 
-  headers: string[] = ['Sr.No.', 'Vendor Name', 'Site Name', 'Bill Amount', 'Given Amount', 'Remaining Amount', 'Total Cash Paid', 'Total Cheque Paid'];
+  headers: string[] = ['Vendor Name', 'Site Name', 'Bill Amount', 'Given Amount', 'Remaining Amount', 'Total Cash Paid', 'Total Cheque Paid'];
 
   constructor(
     private uiUtils: UIUtils,

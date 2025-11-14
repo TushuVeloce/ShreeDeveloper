@@ -34,7 +34,6 @@ export class CustomerEnquiryComponent implements OnInit {
   companyRef = this.companystatemanagement.SelectedCompanyRef;
 
   headers: string[] = [
-    'Sr.No.',
     'Name',
     'Contact No',
     'City',

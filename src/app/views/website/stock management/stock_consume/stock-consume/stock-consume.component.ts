@@ -30,7 +30,7 @@ export class StockConsumeComponent implements OnInit {
 
   companyRef = this.companystatemanagement.SelectedCompanyRef;
 
-  headers: string[] = ['Sr.No.', 'Site Name', 'Consumption Date', 'Material Name', 'Unit', 'Current Qty.', 'Consumption Qty.', 'Remaining Qty.', 'Stage Name', 'Description', 'Remark', 'Action'];
+  headers: string[] = ['Site Name', 'Consumption Date', 'Material Name', 'Unit', 'Current Qty.', 'Consumption Qty.', 'Remaining Qty.', 'Stage Name', 'Description', 'Remark', 'Action'];
   constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private screenSizeService: ScreenSizeService,
     private companystatemanagement: CompanyStateManagement, private DateconversionService: DateconversionService,
   ) {

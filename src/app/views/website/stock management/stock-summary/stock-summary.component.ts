@@ -28,7 +28,6 @@ export class StockSummaryComponent implements OnInit {
   companyRef = this.companystatemanagement.SelectedCompanyRef;
 
   headers: string[] = [
-    'Sr.No.',
     'Site Name',
     'Material',
     'Total Requisition Qty',

@@ -40,6 +40,7 @@
       [nzScroll]="{ x: 'auto' }" nzFrontPagination="false" [nzShowSizeChanger]="false">
       <thead>
         <tr>
+          <th class="tblheader" nzLeft>{{ 'SR.NO.' }}</th>
           <th *ngFor="let header of headers" class="tblheader">
             {{ header }}
           </th>
@@ -47,7 +48,7 @@
       </thead>
       <tbody>
         <tr *ngFor="let estimatestage of paginatedList; index as i">
-          <td class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
+          <td class="tbldata" nzLeft>{{ (currentPage - 1) * pageSize + i + 1 }}</td>
           <td class="tbldata">{{ estimatestage.p.SiteName }}</td>
           <td class="tbldata">{{ estimatestage.p.StageName }}</td>
           <td Class="tbldata" style="cursor: pointer;" [nzTooltipTitle]="estimatestage.p.Description"
@@ -62,8 +63,8 @@
           </td>
         </tr>
         <tr>
+          <td class="tbldata" nzLeft><b>Total</b></td>
           <td class="tbldata" colspan="3"></td>
-          <td class="tbldata"><b>Total</b></td>
           <td class="tbldata"><b> {{ totalAmount | currency : "INR" }}</b></td>
         </tr>
         <tr>

@@ -31,7 +31,7 @@ export class EmployeeAttendanceLogsComponent implements OnInit {
   LocationType = AttendanceLocationType;
 
   // headers as per required
-  baseHeaders: string[] = ['Sr. No', 'Location', 'Date', 'First Check In', 'Last Check Out', 'Total Time', 'Is Late', 'Is Half Day'];
+  baseHeaders: string[] = ['Location', 'Date', 'First Check In', 'Last Check Out', 'Total Time', 'Is Late', 'Is Half Day'];
 
   pageSize = 10; // Items per page
   currentPage = 1; // Initialize current page

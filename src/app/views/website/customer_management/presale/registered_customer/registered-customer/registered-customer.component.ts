@@ -33,7 +33,6 @@ export class RegisteredCustomerComponent implements OnInit {
   companyRef = this.companystatemanagement.SelectedCompanyRef;
 
   headers: string[] = [
-    'Sr.No.',
     'Site Name',
     'Plot No',
     'Customer Name',

@@ -22,7 +22,7 @@ export class EmployeeExitMasterComponent implements OnInit {
   total = 0;
   companyRef = this.companystatemanagement.SelectedCompanyRef;
 
-  headers: string[] = ['Sr.No.', 'Name', 'Company Name', 'Exit Date', 'Employee Name', 'Action'];
+  headers: string[] = ['Name', 'Company Name', 'Exit Date', 'Employee Name', 'Action'];
 
   constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private companystatemanagement: CompanyStateManagement) {
     effect(() => {

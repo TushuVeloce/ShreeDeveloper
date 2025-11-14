@@ -20,7 +20,7 @@ export class CountryComponent implements OnInit {
   pageSize = 10; // Items per page
   currentPage = 1; // Initialize current page
   total = 0;
-  headers: string[] = ['Sr.No.', 'Country Name'];
+  headers: string[] = ['Country Name'];
 
   constructor(
     private uiUtils: UIUtils,

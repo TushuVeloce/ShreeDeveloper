@@ -34,7 +34,7 @@ export class MaterialRequisitionComponent implements OnInit {
   MaterialRequisitionStatuses = MaterialRequisitionStatuses
 
   companyRef = this.companystatemanagement.SelectedCompanyRef;
-  headers: string[] = ['Sr.No.', 'Date', 'Site Name', 'Material Name', 'Unit', 'Required Qty.', 'Status', 'Action'];
+  headers: string[] = ['Date', 'Site Name', 'Material Name', 'Unit', 'Required Qty.', 'Status', 'Action'];
   constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private screenSizeService: ScreenSizeService,
     private companystatemanagement: CompanyStateManagement, private DateconversionService: DateconversionService, private dtu: DTU,
   ) {

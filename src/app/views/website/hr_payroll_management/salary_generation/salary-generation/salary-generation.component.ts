@@ -46,7 +46,7 @@ export class SalaryGenerationComponent implements OnInit {
   UserDisplayName = this.appStateManage.StorageKey.getItem('UserDisplayName');
 
 
-  headers: string[] = ['Sr.No.', 'Employee Name', 'Month', 'Total Working Days', 'Basic Salary', 'Gross Total', 'Total Deduction', 'Net Salary', 'Action'];
+  headers: string[] = ['Employee Name', 'Month', 'Total Working Days', 'Basic Salary', 'Gross Total', 'Total Deduction', 'Net Salary', 'Action'];
 
   constructor(
     private uiUtils: UIUtils,

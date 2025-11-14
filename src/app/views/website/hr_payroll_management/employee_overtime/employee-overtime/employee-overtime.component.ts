@@ -26,7 +26,7 @@ export class EmployeeOvertimeComponent implements OnInit {
   total = 0;
   companyRef = this.companystatemanagement.SelectedCompanyRef;
 
-  headers: string[] = ['Sr.No.', 'Date', 'Employee Name', 'From Time', 'To Time', 'Total Over Time', 'Status', 'Action'];
+  headers: string[] = ['Date', 'Employee Name', 'From Time', 'To Time', 'Total Over Time', 'Status', 'Action'];
   constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private screenSizeService: ScreenSizeService,
     private companystatemanagement: CompanyStateManagement, private utils: Utils, private DateconversionService: DateconversionService,
   ) {

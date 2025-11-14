@@ -25,7 +25,7 @@ export class AccountMainLedgerComponent implements OnInit {
 
   companyRef = this.companystatemanagement.SelectedCompanyRef;
 
-  headers: string[] = ['Sr.No.', 'Ledger Name', 'Action'];
+  headers: string[] = ['Ledger Name', 'Action'];
   constructor(
     private uiUtils: UIUtils,
     private router: Router,

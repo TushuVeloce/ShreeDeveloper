@@ -29,7 +29,7 @@ export class DealCancelledCustomerReportComponent implements OnInit {
   total = 0;
   companyRef = this.companystatemanagement.SelectedCompanyRef;
 
-  headers: string[] = ['Sr.No.', 'Site Name', 'Plot No', 'Customer Name', 'Address', 'City', 'Contact No', 'Reason '];
+  headers: string[] = ['Site Name', 'Plot No', 'Customer Name', 'Address', 'City', 'Contact No', 'Reason '];
 
   constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private screenSizeService: ScreenSizeService, private companystatemanagement: CompanyStateManagement, private DateconversionService: DateconversionService, private dtu: DTU,
   ) {

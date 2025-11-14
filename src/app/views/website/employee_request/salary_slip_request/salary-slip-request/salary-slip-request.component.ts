@@ -31,7 +31,7 @@ export class SalarySlipRequestComponent implements OnInit {
 
   companyRef = this.companystatemanagement.SelectedCompanyRef;
 
-  headers: string[] = ['Sr.No.', 'Year', 'Months', 'Approval Status', 'Action'];
+  headers: string[] = ['Year', 'Months', 'Approval Status', 'Action'];
   constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private screenSizeService: ScreenSizeService,
     private companystatemanagement: CompanyStateManagement
   ) {

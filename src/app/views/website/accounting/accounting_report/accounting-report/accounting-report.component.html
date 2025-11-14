@@ -160,12 +160,13 @@
       [nzScroll]="{ x: 'auto' }" nzFrontPagination="false" [nzShowSizeChanger]="false">
       <thead>
         <tr>
+           <th class="tblheader" nzLeft>{{ 'SR.NO.' }}</th>
           <th *ngFor="let header of headers" class="tblheader">{{ header }}</th>
         </tr>
       </thead>
       <tbody>
         <tr *ngFor="let report of paginatedList(); index as i">
-          <td class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
+          <td class="tbldata" nzLeft>{{ (currentPage - 1) * pageSize + i + 1 }}</td>
           <td class="tbldata" style="white-space: nowrap;">{{ formatDate(report.p.TransDateTime) }}</td>
           <td class="tbldata">{{ report.p.PayerName? (report.p.PayerName | titleCase) : '--' }} </td>
           <td class="tbldata">{{ report.p.RecipientName? (report.p.RecipientName | titleCase) : '--' }}</td>
@@ -180,8 +181,8 @@
           <td class="tbldata">{{ report.p.Narration }}</td>
         </tr>
         <tr *ngIf="DisplayMasterList.length > 0">
+          <td class="tbldata" nzLeft><b>Total</b></td>
           <td class="tbldata" colspan="5"></td>
-          <td class="tbldata"><b>Total</b></td>
           <td class="tbldata"><b>{{ totalTotalIncome | currency: 'INR' }}</b></td>
           <td class="tbldata"><b>{{ totalTotalExpense | currency: 'INR' }}</b></td>
           <td class="tbldata"></td>

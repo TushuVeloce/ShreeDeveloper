@@ -28,7 +28,7 @@ export class BankAccountMasterComponent implements OnInit {
   companyRef = this.companystatemanagement.SelectedCompanyRef;
 
 
-  headers: string[] = ['Sr.No.', 'Bank Name', 'Branch Name', 'Account No', 'IFSC Code', 'Date of Opening', 'Action'];
+  headers: string[] = ['Bank Name', 'Branch Name', 'Account No', 'IFSC Code', 'Date of Opening', 'Action'];
 
   constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private companystatemanagement: CompanyStateManagement, private dtu: DTU,
     private datePipe: DatePipe, private DateconversionService: DateconversionService, private screenSizeService: ScreenSizeService) {

@@ -34,7 +34,7 @@ export class CompanyMasterComponent implements OnInit {
   ImageBaseUrl: string = "";
   TimeStamp = Date.now()
   LoginToken = '';
-  headers: string[] = ['Sr.No.', 'Logo', 'Company Name', 'Owner Name', 'Contact No', 'Company Email ID', 'Action'];
+  headers: string[] = ['Logo', 'Company Name', 'Owner Name', 'Contact No', 'Company Email ID', 'Action'];
 
   constructor(
     private uiUtils: UIUtils,

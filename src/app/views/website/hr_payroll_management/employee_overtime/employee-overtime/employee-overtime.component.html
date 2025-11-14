@@ -22,12 +22,13 @@
         [nzScroll]="{x:'auto' }" nzFrontPagination="false" [nzShowSizeChanger]="false">
         <thead>
           <tr>
+            <th class="tblheader" nzLeft>{{ "SR.No." }}</th>
             <th *ngFor="let header of headers" class="tblheader">{{header }}</th>
           </tr>
         </thead>
         <tbody>
           <tr *ngFor="let overtime of paginatedList(); index as i">
-            <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
+            <td Class="tbldata" nzLeft>{{ (currentPage - 1) * pageSize + i + 1 }}</td>
             <td Class="tbldata" style="white-space: nowrap;">{{formatDate(overtime.p.Date)}}</td>
             <td Class="tbldata">{{overtime.p.EmployeeName}}</td>
             <td Class="tbldata">{{convertTo12Hour(overtime.p.FromTime)}}</td>
@@ -45,7 +46,7 @@
                 Approved
               </span>
             </td>
-            <td class="tbldata">
+            <td class="tbldata action-column">
               <span style="margin-left: 9px;" (click)="onEditClicked(overtime);">
                 <img src="\assets\icons\edit.png" alt="logo" title="Edit" width="20px" height="20px" />
               </span>

@@ -105,12 +105,13 @@
         [nzScroll]="{x:'auto' }" nzFrontPagination="false" [nzShowSizeChanger]="false">
         <thead>
           <tr>
+            <th class="tblheader" nzLeft>{{ 'SR.NO.' }}</th>
             <th *ngFor="let header of headers" class="tblheader">{{ header }}</th>
           </tr>
         </thead>
         <tbody>
           <tr *ngFor="let attendancelog of paginatedList(); let i = index">
-            <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
+            <td Class="tbldata" nzLeft>{{ (currentPage - 1) * pageSize + i + 1 }}</td>
             <td Class="tbldata">{{attendancelog.p.EmployeeName}}</td>
             <td Class="tbldata">{{attendancelog.p.AttendanceLogDetailsArray.length > 0 ?
               (attendancelog.p.AttendanceLogDetailsArray[0].AttendenceLocationType == LocationType.Office ? 'Office'
@@ -167,7 +168,7 @@
                 Absent
               </span>
             </td>
-            <td Class="tbldata">
+            <td Class="tbldata action-column">
               <span style="margin-left: 9px;" (click)="onEditClicked(attendancelog)">
                 <img src="/assets/icons/edit.png" alt="Edit" title="Edit" width="20px" height="20px" />
               </span>

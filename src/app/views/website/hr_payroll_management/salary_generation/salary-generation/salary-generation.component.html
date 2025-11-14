@@ -46,12 +46,13 @@
         [nzScroll]="{x:'auto' }" nzFrontPagination="false" [nzShowSizeChanger]="false">
         <thead>
           <tr>
+            <th class="tblheader" nzLeft>{{ "SR.No." }}</th>
             <th *ngFor="let header of headers" class="tblheader">{{ header }}</th>
           </tr>
         </thead>
         <tbody>
           <tr *ngFor="let salary of paginatedList(); index as i">
-            <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
+            <td Class="tbldata" nzLeft>{{ (currentPage - 1) * pageSize + i + 1 }}</td>
             <td Class="tbldata">{{salary.p.EmployeeName}}</td>
             <td Class="tbldata">{{salary.p.MonthName}}</td>
             <td Class="tbldata">{{salary.p.TotalWorkingDays}}</td>
@@ -59,7 +60,7 @@
             <td Class="tbldata">{{salary.p.GrossTotal | currency : "INR" }}</td>
             <td Class="tbldata">{{salary.p.TotalDeduction | currency : "INR" }}</td>
             <td Class="tbldata">{{salary.p.NetSalary | currency : "INR" }}</td>
-            <td class="tbldata">
+            <td class="tbldata action-column">
               <span style="margin-left: 9px;" (click)="onEditClicked(salary);">
                 <img src="\assets\icons\edit.png" alt="logo" title="Edit" width="20px" height="20px" />
               </span>
@@ -70,8 +71,8 @@
             </td>
           </tr>
           <tr>
-            <td class="tbldata" colspan="2"><b>Total Salary</b></td>
-            <td class="tbldata" colspan="5"></td>
+            <td class="tbldata" nzLeft><b>Total Salary</b></td>
+            <td class="tbldata" colspan="6"></td>
             <td class="tbldata">
               <b>{{ getTotalSalary() | currency : "INR" }}</b>
             </td>
