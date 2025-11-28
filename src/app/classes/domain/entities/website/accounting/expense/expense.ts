@@ -70,6 +70,7 @@ export class ExpenseProps {
   public PayerType: number = 0
 
   public GivenAmount: number = 0
+  public DiscountAmount: number = 0
   public TotalAdvance: number = 0
   public RemainingAmount: number = 0
   public ShreesBalance: number = 0

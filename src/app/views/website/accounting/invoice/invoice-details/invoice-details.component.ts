@@ -18,8 +18,16 @@ import { InvoiceNoFetchRequest } from 'src/app/classes/domain/entities/website/a
 import { TransportData } from 'src/app/classes/infrastructure/transportdata';
 import { PayloadPacketFacade } from 'src/app/classes/infrastructure/payloadpacket/payloadpacketfacade';
 import { ServerCommunicatorService } from 'src/app/services/server-communicator.service';
-import { DomainEnums, ExpenseTypes, ModeOfPayments, RecipientTypes } from 'src/app/classes/domain/domainenums/domainenums';
-import { ServiceSuppliedByVendorProps, Vendor } from 'src/app/classes/domain/entities/website/masters/vendor/vendor';
+import {
+  DomainEnums,
+  ExpenseTypes,
+  ModeOfPayments,
+  RecipientTypes,
+} from 'src/app/classes/domain/domainenums/domainenums';
+import {
+  ServiceSuppliedByVendorProps,
+  Vendor,
+} from 'src/app/classes/domain/entities/website/masters/vendor/vendor';
 import { VendorService } from 'src/app/classes/domain/entities/website/masters/vendorservices/vendorservices';
 import { TimeDetailProps } from 'src/app/classes/domain/entities/website/site_management/time/time';
 import { LabourTimeProps } from 'src/app/classes/domain/entities/website/site_management/labourtime/labourtime';
@@ -38,15 +46,16 @@ export class InvoiceDetailsComponent implements OnInit {
   IsNewEntity: boolean = true;
   SiteList: Site[] = [];
   RecipientList: Invoice[] = [];
-  RecipientNameInput: boolean = false
+  RecipientNameInput: boolean = false;
   SubLedgerList: SubLedger[] = [];
   UnitList: Unit[] = [];
   UnitListwithoutHours: Unit[] = [];
   VendorList: Vendor[] = [];
   VendorServiceList: ServiceSuppliedByVendorProps[] = [];
   VendorServiceListByVendor: VendorService[] = [];
-  isDieselPaid: boolean = false
-  RecipientNameReadOnly: boolean = false
+  isDieselPaid: boolean = false;
+  isMessPaid: boolean = false;
+  RecipientNameReadOnly: boolean = false;
   ExpenseTypeArrayList = DomainEnums.ExpenseTypeList();
   LabourTypeList = DomainEnums.LabourTypesList();
   isSaveDisabled: boolean = false;
@@ -58,32 +67,34 @@ export class InvoiceDetailsComponent implements OnInit {
   IsDropdownDisabled: boolean = false;
   InitialEntity: Invoice = null as any;
   LedgerList: Ledger[] = [];
-  strCDT: string = ''
-  DisplayTotalWorkingHrs: string = ''
+  strCDT: string = '';
+  DisplayTotalWorkingHrs: string = '';
 
-  MachinaryExpenseRef: number = ExpenseTypes.MachinaryExpense
-  LabourExpenseRef: number = ExpenseTypes.LabourExpense
-  MultipleExpenseRef: number = ExpenseTypes.MultipleExpense
-  OtherExpenseRef: number = ExpenseTypes.OtherExpense
-  StockExpenseRef: number = ExpenseTypes.StockExpense
-  TimeUnitRef: number = UnitRefs.TimeUnitRef
+  MachinaryExpenseRef: number = ExpenseTypes.MachinaryExpense;
+  LabourExpenseRef: number = ExpenseTypes.LabourExpense;
+  MultipleExpenseRef: number = ExpenseTypes.MultipleExpense;
+  OtherExpenseRef: number = ExpenseTypes.OtherExpense;
+  StockExpenseRef: number = ExpenseTypes.StockExpense;
+  TimeUnitRef: number = UnitRefs.TimeUnitRef;
 
   MachineTimeEntity: TimeDetailProps = TimeDetailProps.Blank();
-  MachineEditingIndex: null | undefined | number
+  MachineEditingIndex: null | undefined | number;
   isTimeModalOpen: boolean = false;
 
   LabourTimeEntity: LabourTimeProps = LabourTimeProps.Blank();
-  LabourEditingIndex: null | undefined | number
+  LabourEditingIndex: null | undefined | number;
   isLabourTimeModalOpen: boolean = false;
 
   MultipleExpenseEntity: MultipleExpenseProps = MultipleExpenseProps.Blank();
-  MultipleEditingIndex: null | undefined | number
+  MultipleEditingIndex: null | undefined | number;
   isMultipleExpenseModalOpen: boolean = false;
 
-  Bill = ModeOfPayments.Bill
-  TypeRecipient = RecipientTypes.Recipient
-  TypeRecipientVendor = RecipientTypes.Vendor
-  ModeofPaymentList = DomainEnums.ModeOfPaymentsList().filter(item => item.Ref == this.Bill);
+  Bill = ModeOfPayments.Bill;
+  TypeRecipient = RecipientTypes.Recipient;
+  TypeRecipientVendor = RecipientTypes.Vendor;
+  ModeofPaymentList = DomainEnums.ModeOfPaymentsList().filter(
+    (item) => item.Ref == this.Bill
+  );
   RecipientTypesList = DomainEnums.RecipientTypesList();
 
   LabourFromTime: Date | null = null;
@@ -93,11 +104,43 @@ export class InvoiceDetailsComponent implements OnInit {
   EndTime: Date | null = null;
 
   companyRef = this.companystatemanagement.SelectedCompanyRef;
-  timeheaders: string[] = ['Sr.No.', 'Start Time ', 'End Time', 'Worked Hours', 'Action'];
-  labourtimeheaders: string[] = ['Sr.No.', 'Labour Type', 'Days', 'Quantity ', 'Rate', 'Amount', 'Action'];
-  Multipleheaders: string[] = ['Sr.No.', 'Discription', 'Unit', 'Quantity ', 'Rate', 'Amount', 'Action'];
-  materialheaders: string[] = ['Sr.No.', 'Material', 'Unit', 'Order Quantity', 'Rate', 'Discount Rate', 'GST', 'Delivery Charges', 'Total Amount'];
-  RequiredFieldMsg: string = ValidationMessages.RequiredFieldMsg
+  timeheaders: string[] = [
+    'Sr.No.',
+    'Start Time ',
+    'End Time',
+    'Worked Hours',
+    'Action',
+  ];
+  labourtimeheaders: string[] = [
+    'Sr.No.',
+    'Labour Type',
+    'Days',
+    'Quantity ',
+    'Rate',
+    'Amount',
+    'Action',
+  ];
+  Multipleheaders: string[] = [
+    'Sr.No.',
+    'Discription',
+    'Unit',
+    'Quantity ',
+    'Rate',
+    'Amount',
+    'Action',
+  ];
+  materialheaders: string[] = [
+    'Sr.No.',
+    'Material',
+    'Unit',
+    'Order Quantity',
+    'Rate',
+    'Discount Rate',
+    'GST',
+    'Delivery Charges',
+    'Total Amount',
+  ];
+  RequiredFieldMsg: string = ValidationMessages.RequiredFieldMsg;
 
   // @ViewChild('invoiceForm') invoiceForm!: NgForm;
   @ViewChild('DateCtrl') DateInputControl!: NgModel;
@@ -117,32 +160,43 @@ export class InvoiceDetailsComponent implements OnInit {
     private dtu: DTU,
     private DateconversionService: DateconversionService,
     private payloadPacketFacade: PayloadPacketFacade,
-    private serverCommunicator: ServerCommunicatorService,
-  ) { }
+    private serverCommunicator: ServerCommunicatorService
+  ) {}
 
   async ngOnInit() {
     await this.appStateManage.setDropdownDisabled(true);
     await this.getVendorListByCompanyRef();
-    this.getSiteListByCompanyRef()
-    this.getLedgerListByCompanyRef()
-    await this.getUnitList()
+    this.getSiteListByCompanyRef();
+    this.getLedgerListByCompanyRef();
+    await this.getUnitList();
     if (this.appStateManage.StorageKey.getItem('Editable') == 'Edit') {
       this.IsNewEntity = false;
       this.DetailsFormTitle = this.IsNewEntity ? 'New Bill' : 'Edit Bill';
       this.Entity = Invoice.GetCurrentInstance();
       this.appStateManage.StorageKey.removeItem('Editable');
-      this.Entity.p.UpdatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
+      this.Entity.p.UpdatedBy = Number(
+        this.appStateManage.StorageKey.getItem('LoginEmployeeRef')
+      );
       if (this.Entity.p.LedgerRef) {
-        await this.getSubLedgerListByLedgerRef(this.Entity.p.LedgerRef)
+        await this.getSubLedgerListByLedgerRef(this.Entity.p.LedgerRef);
       }
       if (this.Entity.p.Date != '') {
-        this.Entity.p.Date = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.Date)
+        this.Entity.p.Date = this.dtu.ConvertStringDateToShortFormat(
+          this.Entity.p.Date
+        );
       }
       if (this.Entity.p.IsDieselPaid == 1) {
-        this.isDieselPaid = true
+        this.isDieselPaid = true;
       }
-      
-      if (this.Entity.p.ExpenseTypeArray.includes(this.MachinaryExpenseRef) || this.Entity.p.ExpenseTypeArray.includes(this.LabourExpenseRef) || this.Entity.p.ExpenseTypeArray.includes(this.MultipleExpenseRef)) {
+      if (this.Entity.p.IsMessPaid == 1) {
+        this.isMessPaid = true;
+      }
+
+      if (
+        this.Entity.p.ExpenseTypeArray.includes(this.MachinaryExpenseRef) ||
+        this.Entity.p.ExpenseTypeArray.includes(this.LabourExpenseRef) ||
+        this.Entity.p.ExpenseTypeArray.includes(this.MultipleExpenseRef)
+      ) {
         this.getVendorServiceListByVendorRef(this.Entity.p.RecipientRef);
       }
       this.getTotalWorkedHours();
@@ -151,16 +205,18 @@ export class InvoiceDetailsComponent implements OnInit {
       this.Entity = Invoice.CreateNewInstance();
       Invoice.SetCurrentInstance(this.Entity);
 
-      this.ExpenseTypeArrayList = this.ExpenseTypeArrayList.filter((data) => data.Ref != this.StockExpenseRef);
+      this.ExpenseTypeArrayList = this.ExpenseTypeArrayList.filter(
+        (data) => data.Ref != this.StockExpenseRef
+      );
       this.strCDT = await CurrentDateTimeRequest.GetCurrentDateTime();
       let parts = this.strCDT.substring(0, 16).split('-');
       this.Entity.p.Date = `${parts[0]}-${parts[1]}-${parts[2]}`;
       this.strCDT = `${parts[0]}-${parts[1]}-${parts[2]}-00-00-00-000`;
-      await this.getChalanNo()
+      await this.getChalanNo();
     }
     // this.getRecipientListByCompanyRef()
     if (this.Entity.p.InvoiceRecipientType != 0) {
-      this.getRecipientListByRecipientTypeRef()
+      this.getRecipientListByRecipientTypeRef();
     }
     this.InitialEntity = Object.assign(
       Invoice.CreateNewInstance(),
@@ -194,12 +250,15 @@ export class InvoiceDetailsComponent implements OnInit {
         ) {
           const entry = item.Entries[0] as { NextInvoiceNo: number };
           const NextInvoiceNo = entry.NextInvoiceNo;
-          this.Entity.p.InvoiceNo = NextInvoiceNo
+          this.Entity.p.InvoiceNo = NextInvoiceNo;
           return;
         }
       }
     }
-    await this.uiUtils.showErrorMessage('Error', 'Chalan number could not be retrieved.');
+    await this.uiUtils.showErrorMessage(
+      'Error',
+      'Chalan number could not be retrieved.'
+    );
   };
 
   getVendorListByCompanyRef = async () => {
@@ -207,18 +266,22 @@ export class InvoiceDetailsComponent implements OnInit {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
-    this.VendorList = []
-    let lst = await Vendor.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    this.VendorList = [];
+    let lst = await Vendor.FetchEntireListByCompanyRef(
+      this.companyRef(),
+      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+    );
     this.VendorList = lst;
-  }
+  };
 
   private FormulateVendorServiceList = async () => {
     if (this.companyRef() <= 0) {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
-    this.VendorServiceListByVendor = []
-    let lst = await VendorService.FetchEntireListByCompanyRef(this.companyRef(),
+    this.VendorServiceListByVendor = [];
+    let lst = await VendorService.FetchEntireListByCompanyRef(
+      this.companyRef(),
       async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
     );
     this.VendorServiceListByVendor = lst;
@@ -226,9 +289,9 @@ export class InvoiceDetailsComponent implements OnInit {
 
   getVendorServiceListByVendorRef = async (VendorRef: number) => {
     if (this.IsNewEntity) {
-      this.Entity.p.VendorServiceRef = 0
+      this.Entity.p.VendorServiceRef = 0;
     }
-    this.VendorServiceList = []
+    this.VendorServiceList = [];
     if (this.companyRef() <= 0) {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
@@ -236,31 +299,44 @@ export class InvoiceDetailsComponent implements OnInit {
     if (VendorRef <= 0) {
       return;
     }
-    let lst = await Vendor.FetchInstance(VendorRef, this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    let lst = await Vendor.FetchInstance(
+      VendorRef,
+      this.companyRef(),
+      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+    );
     this.VendorServiceList = lst.p.ServiceListSuppliedByVendor;
     this.VendorServiceListByVendor = []; // Clear existing list first
     if (this.VendorServiceList.length > 0) {
       await this.FormulateVendorServiceList();
-      const refArray = this.VendorServiceList.map(s => Number(s));
-      const matched = this.VendorServiceListByVendor.filter(service => refArray.includes(service.p.Ref));
+      const refArray = this.VendorServiceList.map((s) => Number(s));
+      const matched = this.VendorServiceListByVendor.filter((service) =>
+        refArray.includes(service.p.Ref)
+      );
       this.VendorServiceListByVendor = matched; // Either matched list or stays empty
     }
-  }
+  };
 
   getUnitList = async () => {
-    let lst = await Unit.FetchEntireList(async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    let lst = await Unit.FetchEntireList(
+      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+    );
     this.UnitList = lst;
-    this.UnitListwithoutHours = lst.filter((data) => data.p.Ref != this.TimeUnitRef);
-  }
+    this.UnitListwithoutHours = lst.filter(
+      (data) => data.p.Ref != this.TimeUnitRef
+    );
+  };
 
   getSiteListByCompanyRef = async () => {
     if (this.companyRef() <= 0) {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
-    let lst = await Site.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    let lst = await Site.FetchEntireListByCompanyRef(
+      this.companyRef(),
+      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+    );
     this.SiteList = lst;
-  }
+  };
 
   getRecipientListByRecipientTypeRef = async () => {
     if (this.companyRef() <= 0) {
@@ -276,19 +352,25 @@ export class InvoiceDetailsComponent implements OnInit {
     }
 
     this.RecipientList = [];
-    let lst = await Invoice.FetchRecipientByRecipientTypeRef(this.companyRef(), this.Entity.p.SiteRef, this.Entity.p.InvoiceRecipientType, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    let lst = await Invoice.FetchRecipientByRecipientTypeRef(
+      this.companyRef(),
+      this.Entity.p.SiteRef,
+      this.Entity.p.InvoiceRecipientType,
+      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+    );
     this.RecipientList = lst;
-  }
+  };
 
   getLedgerListByCompanyRef = async () => {
     if (this.companyRef() <= 0) {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
-    let lst = await Ledger.FetchEntireListByCompanyRef(this.companyRef(),
+    let lst = await Ledger.FetchEntireListByCompanyRef(
+      this.companyRef(),
       async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
     );
-    this.LedgerList = lst
+    this.LedgerList = lst;
   };
 
   getSubLedgerListByLedgerRef = async (ledgerref: number) => {
@@ -296,32 +378,34 @@ export class InvoiceDetailsComponent implements OnInit {
       await this.uiUtils.showErrorToster('Ledger not Selected');
       return;
     }
-    let lst = await SubLedger.FetchEntireListByLedgerRef(ledgerref, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    let lst = await SubLedger.FetchEntireListByLedgerRef(
+      ledgerref,
+      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+    );
     this.SubLedgerList = lst;
-  }
+  };
   // ========================================================= End All API Calls Code =========================================================
-
 
   // ========================================================= Start Comman Code =========================================================
   focusInput = () => {
     let txtName = document.getElementById('SiteRef')!;
     txtName.focus();
-  }
+  };
 
   // for value 0 selected while click on Input //
   selectAllValue = (event: MouseEvent): void => {
     const input = event.target as HTMLInputElement;
     input.select();
-  }
+  };
 
   // Extracted from services date conversion //
   formatDate = (date: string | Date): string => {
     return this.DateconversionService.formatDate(date);
-  }
+  };
 
   OnLedgerChange = () => {
-    this.Entity.p.SubLedgerRef = 0
-  }
+    this.Entity.p.SubLedgerRef = 0;
+  };
 
   ClearInputsOnExpenseChange = () => {
     if (!this.Entity.p.ExpenseTypeArray.includes(this.LabourExpenseRef)) {
@@ -333,7 +417,10 @@ export class InvoiceDetailsComponent implements OnInit {
     if (!this.Entity.p.ExpenseTypeArray.includes(this.MultipleExpenseRef)) {
       this.Entity.p.InvoiceItemDetailsArray = [];
     }
-    if (this.Entity.p.ExpenseTypeArray[0] == this.OtherExpenseRef && this.Entity.p.ExpenseTypeArray.length == 2) {
+    if (
+      this.Entity.p.ExpenseTypeArray[0] == this.OtherExpenseRef &&
+      this.Entity.p.ExpenseTypeArray.length == 2
+    ) {
       let temp = this.Entity.p.ExpenseTypeArray[1];
       this.Entity.p.ExpenseTypeArray = [];
       this.Entity.p.ExpenseTypeArray.push(temp);
@@ -370,44 +457,49 @@ export class InvoiceDetailsComponent implements OnInit {
       this.Entity.p.UnitRef = this.TimeUnitRef;
     }
     this.CalculateAmount();
-  }
+  };
   // ========================================================= end Comman Code =========================================================
-
 
   // ========================================================= Start Recipient Code =========================================================
   onRecipientTypeVendor = () => {
     if (this.Entity.p.InvoiceRecipientType == this.TypeRecipientVendor) {
       this.Entity.p.RecipientRef = this.Entity.p.RecipientRef;
     }
-  }
+  };
 
   AddRecipientName = () => {
-    this.Entity.p.RecipientRef = 0
-    this.RecipientEntity.p.Name = ''
-    this.RecipientNameInput = true
-  }
+    this.Entity.p.RecipientRef = 0;
+    this.RecipientEntity.p.Name = '';
+    this.RecipientNameInput = true;
+  };
 
   cancelRecipientName = () => {
-    this.RecipientNameInput = false
-    this.RecipientEntity.p.Name = ''
-  }
+    this.RecipientNameInput = false;
+    this.RecipientEntity.p.Name = '';
+  };
 
   onTypeChange = async () => {
     this.Entity.p.RecipientRef = 0;
-    this.RecipientNameInput = false
-  }
+    this.RecipientNameInput = false;
+  };
 
   SaveNewRecipientName = async () => {
     if (this.RecipientEntity.p.Name == '') {
       this.uiUtils.showErrorToster('Recipient Name can not be Blank');
-      return
+      return;
     }
     this.isRecipientSaveDisabled = true;
-    this.RecipientEntity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef();
-    this.RecipientEntity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName();
+    this.RecipientEntity.p.CompanyRef =
+      this.companystatemanagement.getCurrentCompanyRef();
+    this.RecipientEntity.p.CompanyName =
+      this.companystatemanagement.getCurrentCompanyName();
     if (this.RecipientEntity.p.CreatedBy == 0) {
-      this.RecipientEntity.p.CreatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
-      this.RecipientEntity.p.UpdatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
+      this.RecipientEntity.p.CreatedBy = Number(
+        this.appStateManage.StorageKey.getItem('LoginEmployeeRef')
+      );
+      this.RecipientEntity.p.UpdatedBy = Number(
+        this.appStateManage.StorageKey.getItem('LoginEmployeeRef')
+      );
     }
     let entityToSave = this.RecipientEntity.GetEditableVersion();
     let entitiesToSave = [entityToSave];
@@ -420,41 +512,60 @@ export class InvoiceDetailsComponent implements OnInit {
     } else {
       await this.uiUtils.showSuccessToster('Recipient Name saved successfully');
       this.isRecipientSaveDisabled = false;
-      this.RecipientNameInput = false
+      this.RecipientNameInput = false;
       this.RecipientEntity = Recipient.CreateNewInstance();
       // await this.getRecipientListByCompanyRef()
-      await this.getRecipientListByRecipientTypeRef()
+      await this.getRecipientListByRecipientTypeRef();
     }
   };
   // ========================================================= End Recipient Code =========================================================
 
-
   // ========================================================= Start Machine Code =========================================================
   DiselPaid = (DiselPaid: number) => {
     if (DiselPaid == 1) {
-      this.isDieselPaid = true
+      this.isDieselPaid = true;
       this.Entity.p.IsDieselPaid = 1;
     } else {
       this.Entity.p.DieselQty = 0;
       this.Entity.p.DieselRate = 0;
       this.Entity.p.DieselAmount = 0;
       this.Entity.p.IsDieselPaid = 0;
-      this.isDieselPaid = false
+      this.isDieselPaid = false;
     }
-    this.CalculateAmount()
-  }
-
+    this.CalculateAmount();
+  };
   CalculateDieselAmount = () => {
-    const DieselQty = Number(this.Entity.p.DieselQty)
-    const DieselRate = Number(this.Entity.p.DieselRate)
+    const DieselQty = Number(this.Entity.p.DieselQty);
+    const DieselRate = Number(this.Entity.p.DieselRate);
     this.Entity.p.DieselAmount = Math.round(DieselQty * DieselRate * 100) / 100;
-    this.CalculateAmount()
-  }
+    this.CalculateAmount();
+  };
+
+  MessPaid = (MessPaid: number) => {
+    if (MessPaid == 1) {
+      this.isMessPaid = true;
+      this.Entity.p.IsMessPaid = 1;
+    } else {
+      this.Entity.p.MessAmount = 0;
+      this.Entity.p.IsMessPaid = 0;
+      this.isMessPaid = false;
+    }
+    this.CalculateAmount();
+  };
+  CalculateMessAmount = () => {
+    const DieselQty = Number(this.Entity.p.DieselQty);
+    const DieselRate = Number(this.Entity.p.DieselRate);
+    this.Entity.p.DieselAmount = Math.round(DieselQty * DieselRate * 100) / 100;
+    this.CalculateAmount();
+  };
 
   getTotalWorkedHours(): number {
-    let total = this.Entity.p.MachineUsageDetailsArray.reduce((total: number, item: any) => {
-      return total + Number(item.WorkedHours || 0);
-    }, 0);
+    let total = this.Entity.p.MachineUsageDetailsArray.reduce(
+      (total: number, item: any) => {
+        return total + Number(item.WorkedHours || 0);
+      },
+      0
+    );
     this.DisplayTotalWorkingHrs = this.formatMinutesToHourMin(total);
     return total;
   }
@@ -464,18 +575,18 @@ export class InvoiceDetailsComponent implements OnInit {
     const minutes = totalMinutes % 60;
     const formattedMinutes = minutes < 10 ? '0' + minutes : minutes;
     return `${hours}h ${formattedMinutes}m`;
-  }
+  };
 
   convertTo12Hour = (time24: string): string => {
-    const [hourStr, minute] = time24.split(":");
+    const [hourStr, minute] = time24.split(':');
     let hour = parseInt(hourStr, 10);
-    const ampm = hour >= 12 ? "PM" : "AM";
+    const ampm = hour >= 12 ? 'PM' : 'AM';
 
     hour = hour % 12;
     hour = hour === 0 ? 12 : hour; // Handle midnight (0 -> 12 AM) and noon (12 -> 12 PM)
 
     return `${hour}:${minute} ${ampm}`;
-  }
+  };
 
   convertIOS12To24HoursFormat = (value: Date | null) => {
     if (value) {
@@ -491,21 +602,34 @@ export class InvoiceDetailsComponent implements OnInit {
     if (!this.StartTime) return;
     if (!this.EndTime) return;
 
-    this.MachineTimeEntity.StartTime = this.convertIOS12To24HoursFormat(this.StartTime);
-    this.MachineTimeEntity.EndTime = this.convertIOS12To24HoursFormat(this.EndTime);
+    this.MachineTimeEntity.StartTime = this.convertIOS12To24HoursFormat(
+      this.StartTime
+    );
+    this.MachineTimeEntity.EndTime = this.convertIOS12To24HoursFormat(
+      this.EndTime
+    );
 
     // Fallback to "00:00" if either is missing or invalid
-    if (!this.MachineTimeEntity.StartTime || !this.MachineTimeEntity.StartTime.includes(":")) return 0;
+    if (
+      !this.MachineTimeEntity.StartTime ||
+      !this.MachineTimeEntity.StartTime.includes(':')
+    )
+      return 0;
 
-    const [inHour, inMin] = this.MachineTimeEntity.StartTime.split(':').map(Number);
+    const [inHour, inMin] =
+      this.MachineTimeEntity.StartTime.split(':').map(Number);
     const [outHour, outMin] = (
-      this.MachineTimeEntity.EndTime && this.MachineTimeEntity.EndTime.includes(":")
+      this.MachineTimeEntity.EndTime &&
+      this.MachineTimeEntity.EndTime.includes(':')
         ? this.MachineTimeEntity.EndTime
-        : "00:00"
-    ).split(':').map(Number);
+        : '00:00'
+    )
+      .split(':')
+      .map(Number);
 
     // Check for invalid numbers
-    if (isNaN(inHour) || isNaN(inMin) || isNaN(outHour) || isNaN(outMin)) return 0;
+    if (isNaN(inHour) || isNaN(inMin) || isNaN(outHour) || isNaN(outMin))
+      return 0;
 
     const inDate = new Date();
     inDate.setHours(inHour, inMin, 0, 0);
@@ -519,7 +643,7 @@ export class InvoiceDetailsComponent implements OnInit {
     }
 
     const diffMs = outDate.getTime() - inDate.getTime();
-    const diffMinutes = Math.floor(diffMs / 60000);  // 💡 Minutes difference
+    const diffMinutes = Math.floor(diffMs / 60000); // 💡 Minutes difference
 
     // 🔁 Assign minutes directly instead of decimal hours
     this.MachineTimeEntity.WorkedHours = diffMinutes;
@@ -528,25 +652,40 @@ export class InvoiceDetailsComponent implements OnInit {
     const hours = Math.floor(diffMinutes / 60);
     const minutes = diffMinutes % 60;
 
-    this.MachineTimeEntity.DisplayWorkedHours = `${hours}h ${minutes.toString().padStart(2, '0')}m`;
+    this.MachineTimeEntity.DisplayWorkedHours = `${hours}h ${minutes
+      .toString()
+      .padStart(2, '0')}m`;
     return;
   }
 
   async SaveTime() {
     if (!this.MachineTimeEntity.StartTime || !this.MachineTimeEntity.EndTime) {
-      await this.uiUtils.showErrorMessage('Error', 'Start Time and End Time are required!');
+      await this.uiUtils.showErrorMessage(
+        'Error',
+        'Start Time and End Time are required!'
+      );
       return;
     }
 
     this.isMachineSaveDisabled = true;
 
-    if (this.MachineEditingIndex !== null && this.MachineEditingIndex !== undefined && this.MachineEditingIndex >= 0) {
-      this.Entity.p.MachineUsageDetailsArray[this.MachineEditingIndex] = { ...this.MachineTimeEntity };
-      await this.uiUtils.showSuccessToster('Machinary Time updated successfully');
+    if (
+      this.MachineEditingIndex !== null &&
+      this.MachineEditingIndex !== undefined &&
+      this.MachineEditingIndex >= 0
+    ) {
+      this.Entity.p.MachineUsageDetailsArray[this.MachineEditingIndex] = {
+        ...this.MachineTimeEntity,
+      };
+      await this.uiUtils.showSuccessToster(
+        'Machinary Time updated successfully'
+      );
       this.isTimeModalOpen = false;
     } else {
       this.MachineTimeEntity.InvoiceRef = this.Entity.p.Ref;
-      this.Entity.p.MachineUsageDetailsArray.push({ ...this.MachineTimeEntity });
+      this.Entity.p.MachineUsageDetailsArray.push({
+        ...this.MachineTimeEntity,
+      });
       await this.uiUtils.showSuccessToster('Machinary Time added successfully');
       this.isTimeModalOpen = false;
     }
@@ -554,8 +693,8 @@ export class InvoiceDetailsComponent implements OnInit {
 
     this.MachineTimeEntity = TimeDetailProps.Blank();
     this.MachineEditingIndex = null;
-    this.StartTime = null
-    this.EndTime = null
+    this.StartTime = null;
+    this.EndTime = null;
     this.getTotalWorkedHours();
     this.CalculateAmount();
   }
@@ -563,12 +702,21 @@ export class InvoiceDetailsComponent implements OnInit {
   convertToFullTime(timeStr: string): Date {
     const [hours, minutes] = timeStr.split(':').map(Number);
     const now = new Date();
-    return new Date(now.getFullYear(), now.getMonth(), now.getDate(), hours, minutes, 0);
+    return new Date(
+      now.getFullYear(),
+      now.getMonth(),
+      now.getDate(),
+      hours,
+      minutes,
+      0
+    );
   }
 
   EditTime(index: number) {
-    this.isTimeModalOpen = true
-    this.MachineTimeEntity = { ...this.Entity.p.MachineUsageDetailsArray[index] }
+    this.isTimeModalOpen = true;
+    this.MachineTimeEntity = {
+      ...this.Entity.p.MachineUsageDetailsArray[index],
+    };
     this.StartTime = this.convertToFullTime(this.MachineTimeEntity.StartTime);
     this.EndTime = this.convertToFullTime(this.MachineTimeEntity.EndTime);
     this.MachineEditingIndex = index;
@@ -576,19 +724,19 @@ export class InvoiceDetailsComponent implements OnInit {
 
   RemoveTime(index: number) {
     this.Entity.p.MachineUsageDetailsArray.splice(index, 1); // Remove Time
-    this.CalculateAmount()
+    this.CalculateAmount();
   }
 
   ClearMachineTimeTable = () => {
-    this.Entity.p.MachineUsageDetailsArray = []
-  }
+    this.Entity.p.MachineUsageDetailsArray = [];
+  };
 
   CloseTimeModal = async (type: string) => {
     if (type === 'machinetime') {
       const keysToCheck = ['StartTime', 'EndTime'] as const;
 
-      const hasData = keysToCheck.some(
-        key => (this.MachineTimeEntity as any)[key]?.toString().trim()
+      const hasData = keysToCheck.some((key) =>
+        (this.MachineTimeEntity as any)[key]?.toString().trim()
       );
 
       if (hasData) {
@@ -609,54 +757,74 @@ export class InvoiceDetailsComponent implements OnInit {
   };
   // ========================================================= End Machine Code =========================================================
 
-
   // ========================================================= Start Labour Code =========================================================
   SaveLabourExpense = async () => {
     if (this.LabourTimeEntity.Days <= 0) {
-      await this.uiUtils.showErrorMessage('Error', 'Days Should be greater then 0');
+      await this.uiUtils.showErrorMessage(
+        'Error',
+        'Days Should be greater then 0'
+      );
       return;
     } else if (!this.LabourTimeEntity.LabourRate) {
-      await this.uiUtils.showErrorMessage('Error', 'Rate Should be greater then 0');
+      await this.uiUtils.showErrorMessage(
+        'Error',
+        'Rate Should be greater then 0'
+      );
       return;
     } else if (!this.LabourTimeEntity.LabourType) {
       await this.uiUtils.showErrorMessage('Error', 'Labour Type is required!');
       return;
     } else if (!this.LabourTimeEntity.LabourQty) {
-      await this.uiUtils.showErrorMessage('Error', 'Labour Qty Should be greater then 0');
+      await this.uiUtils.showErrorMessage(
+        'Error',
+        'Labour Qty Should be greater then 0'
+      );
       return;
     }
     this.isLabourSaveDisabled = true;
     if (this.LabourTimeEntity.LabourType != 0) {
-      const labourtype = this.LabourTypeList.find(item => item.Ref == this.LabourTimeEntity.LabourType)
-      this.LabourTimeEntity.LabourTypeName = labourtype?.Name || ''
+      const labourtype = this.LabourTypeList.find(
+        (item) => item.Ref == this.LabourTimeEntity.LabourType
+      );
+      this.LabourTimeEntity.LabourTypeName = labourtype?.Name || '';
     }
-    if (this.LabourEditingIndex !== null && this.LabourEditingIndex !== undefined && this.LabourEditingIndex >= 0) {
-      this.Entity.p.LabourExpenseDetailsArray[this.LabourEditingIndex] = { ...this.LabourTimeEntity };
+    if (
+      this.LabourEditingIndex !== null &&
+      this.LabourEditingIndex !== undefined &&
+      this.LabourEditingIndex >= 0
+    ) {
+      this.Entity.p.LabourExpenseDetailsArray[this.LabourEditingIndex] = {
+        ...this.LabourTimeEntity,
+      };
       await this.uiUtils.showSuccessToster('Labour Time updated successfully');
       this.isLabourTimeModalOpen = false;
     } else {
       this.LabourTimeEntity.InvoiceRef = this.Entity.p.Ref;
-      this.Entity.p.LabourExpenseDetailsArray.push({ ...this.LabourTimeEntity });
+      this.Entity.p.LabourExpenseDetailsArray.push({
+        ...this.LabourTimeEntity,
+      });
       await this.uiUtils.showSuccessToster('Labour Time added successfully');
       this.isLabourTimeModalOpen = false;
     }
     this.isLabourSaveDisabled = false;
     this.LabourTimeEntity = LabourTimeProps.Blank();
-    this.LabourFromTime = null
-    this.LabourToTime = null
+    this.LabourFromTime = null;
+    this.LabourToTime = null;
     this.LabourEditingIndex = null;
-    this.CalculateAmount()
-  }
+    this.CalculateAmount();
+  };
 
   EditLabourExpense(index: number) {
-    this.isLabourTimeModalOpen = true
-    this.LabourTimeEntity = { ...this.Entity.p.LabourExpenseDetailsArray[index] }
+    this.isLabourTimeModalOpen = true;
+    this.LabourTimeEntity = {
+      ...this.Entity.p.LabourExpenseDetailsArray[index],
+    };
     this.LabourEditingIndex = index;
   }
 
   RemoveLabourExpense(index: number) {
     this.Entity.p.LabourExpenseDetailsArray.splice(index, 1); // Remove Time
-    this.CalculateAmount()
+    this.CalculateAmount();
   }
 
   CloseLabourExpenseModal = async () => {
@@ -665,24 +833,31 @@ export class InvoiceDetailsComponent implements OnInit {
   };
 
   ClearInputsOnLabourType = () => {
-    this.LabourTimeEntity.LabourQty = 0
-    this.LabourTimeEntity.LabourRate = 0
-    this.LabourTimeEntity.LabourAmount = 0
-  }
+    this.LabourTimeEntity.LabourQty = 0;
+    this.LabourTimeEntity.LabourRate = 0;
+    this.LabourTimeEntity.LabourAmount = 0;
+  };
 
   CalculateLabourAmount = () => {
-    if (this.LabourTimeEntity.Days == 0 || !this.LabourTimeEntity.LabourRate || !this.LabourTimeEntity.LabourQty) {
+    if (
+      this.LabourTimeEntity.Days == 0 ||
+      !this.LabourTimeEntity.LabourRate ||
+      !this.LabourTimeEntity.LabourQty
+    ) {
       return;
     }
-    const Qty = this.LabourTimeEntity.LabourQty
+    const Qty = this.LabourTimeEntity.LabourQty;
     const Rate = this.LabourTimeEntity.LabourRate * this.LabourTimeEntity.Days;
     this.LabourTimeEntity.LabourAmount = Math.round(Qty * Rate * 100) / 100;
-  }
+  };
 
   getTotalLabourAmount(): number {
-    return this.Entity.p.LabourExpenseDetailsArray.reduce((total: number, item: any) => {
-      return total + Number(item.LabourAmount || 0);
-    }, 0);
+    return this.Entity.p.LabourExpenseDetailsArray.reduce(
+      (total: number, item: any) => {
+        return total + Number(item.LabourAmount || 0);
+      },
+      0
+    );
   }
   // ========================================================= End Labour Code =========================================================
 
@@ -693,18 +868,24 @@ export class InvoiceDetailsComponent implements OnInit {
     this.MultipleExpenseEntity = MultipleExpenseProps.Blank();
   };
 
-
   CalculateMultipleExpenseAmount = () => {
-    if (this.MultipleExpenseEntity.Quantity <= 0 || this.MultipleExpenseEntity.Rate <= 0) {
+    if (
+      this.MultipleExpenseEntity.Quantity <= 0 ||
+      this.MultipleExpenseEntity.Rate <= 0
+    ) {
       return;
     }
-    this.MultipleExpenseEntity.Amount = this.MultipleExpenseEntity.Rate * this.MultipleExpenseEntity.Quantity;
-  }
+    this.MultipleExpenseEntity.Amount =
+      this.MultipleExpenseEntity.Rate * this.MultipleExpenseEntity.Quantity;
+  };
 
   getTotalMultipleExpenseAmount(): number {
-    return this.Entity.p.InvoiceItemDetailsArray.reduce((total: number, item: any) => {
-      return total + Number(item.Amount || 0);
-    }, 0);
+    return this.Entity.p.InvoiceItemDetailsArray.reduce(
+      (total: number, item: any) => {
+        return total + Number(item.Amount || 0);
+      },
+      0
+    );
   }
 
   SaveMultipleExpense = async () => {
@@ -723,70 +904,109 @@ export class InvoiceDetailsComponent implements OnInit {
     }
     this.isMultiSaveDisabled = true;
     if (this.MultipleExpenseEntity.UnitRef != 0) {
-      const UnitRecord = this.UnitListwithoutHours.find(item => item.p.Ref == this.MultipleExpenseEntity.UnitRef)
-      this.MultipleExpenseEntity.UnitName = UnitRecord?.p.Name || ''
+      const UnitRecord = this.UnitListwithoutHours.find(
+        (item) => item.p.Ref == this.MultipleExpenseEntity.UnitRef
+      );
+      this.MultipleExpenseEntity.UnitName = UnitRecord?.p.Name || '';
     }
-    if (this.MultipleEditingIndex !== null && this.MultipleEditingIndex !== undefined && this.MultipleEditingIndex >= 0) {
-      this.Entity.p.InvoiceItemDetailsArray[this.MultipleEditingIndex] = { ...this.MultipleExpenseEntity };
-      await this.uiUtils.showSuccessToster('Multiple Expense updated successfully');
+    if (
+      this.MultipleEditingIndex !== null &&
+      this.MultipleEditingIndex !== undefined &&
+      this.MultipleEditingIndex >= 0
+    ) {
+      this.Entity.p.InvoiceItemDetailsArray[this.MultipleEditingIndex] = {
+        ...this.MultipleExpenseEntity,
+      };
+      await this.uiUtils.showSuccessToster(
+        'Multiple Expense updated successfully'
+      );
       this.isMultipleExpenseModalOpen = false;
     } else {
       this.MultipleExpenseEntity.InvoiceRef = this.Entity.p.Ref;
-      this.Entity.p.InvoiceItemDetailsArray.push({ ...this.MultipleExpenseEntity });
-      await this.uiUtils.showSuccessToster('Multiple Expense added successfully');
+      this.Entity.p.InvoiceItemDetailsArray.push({
+        ...this.MultipleExpenseEntity,
+      });
+      await this.uiUtils.showSuccessToster(
+        'Multiple Expense added successfully'
+      );
       this.isMultipleExpenseModalOpen = false;
     }
     this.isMultiSaveDisabled = false;
     this.MultipleExpenseEntity = MultipleExpenseProps.Blank();
     this.MultipleEditingIndex = null;
-    this.CalculateAmount()
-  }
+    this.CalculateAmount();
+  };
 
   EditMultipleExpense(index: number) {
-    this.isMultipleExpenseModalOpen = true
-    this.MultipleExpenseEntity = { ...this.Entity.p.InvoiceItemDetailsArray[index] }
+    this.isMultipleExpenseModalOpen = true;
+    this.MultipleExpenseEntity = {
+      ...this.Entity.p.InvoiceItemDetailsArray[index],
+    };
     this.MultipleEditingIndex = index;
   }
 
   RemoveMultipleExpense(index: number) {
     this.Entity.p.InvoiceItemDetailsArray.splice(index, 1); // Remove Time
-    this.CalculateAmount()
+    this.CalculateAmount();
   }
 
   // ========================================================= End Multiple Expense Code =========================================================
 
-
   CalculateAmount = () => {
-    const TotalWorkedHours = this.getTotalWorkedHours()
-    const TotalLabourAmount = this.getTotalLabourAmount()
-    const TotalMultiExpenseAmount = this.getTotalMultipleExpenseAmount()
-    const Qty = Number(this.Entity.p.Qty)
-    const DieselAmount = Number(this.Entity.p.DieselAmount) || 0
+    const TotalWorkedHours = this.getTotalWorkedHours();
+    const TotalLabourAmount = this.getTotalLabourAmount();
+    const TotalMultiExpenseAmount = this.getTotalMultipleExpenseAmount();
+    const Qty = Number(this.Entity.p.Qty);
+    const DieselAmount = Number(this.Entity.p.DieselAmount) || 0;
+    const MessAmount = Number(this.Entity.p.MessAmount) || 0;
 
     let Rate = 0;
     if (Number(this.Entity.p.Rate / 60) > 0) {
       Rate = Number(this.Entity.p.Rate / 60);
     }
-    if (this.Entity.p.ExpenseTypeArray[0] == this.OtherExpenseRef && this.Entity.p.ExpenseTypeArray.length == 1) {
-      this.Entity.p.InvoiceAmount = (Math.round(((Qty * this.Entity.p.Rate) - DieselAmount) * 100) / 100);
+    if (
+      this.Entity.p.ExpenseTypeArray[0] == this.OtherExpenseRef &&
+      this.Entity.p.ExpenseTypeArray.length == 1
+    ) {
+      this.Entity.p.InvoiceAmount =
+        Math.round(
+          (Qty * this.Entity.p.Rate - DieselAmount - MessAmount) * 100
+        ) / 100;
     } else {
-      this.Entity.p.InvoiceAmount = (Math.round(((TotalWorkedHours * Rate) - DieselAmount) * 100) / 100) + (Math.round((TotalLabourAmount) * 100) / 100) + (Math.round((TotalMultiExpenseAmount) * 100) / 100);
+      this.Entity.p.InvoiceAmount =
+        Math.round(
+          (TotalWorkedHours * Rate - DieselAmount - MessAmount) * 100
+        ) /
+          100 +
+        Math.round(TotalLabourAmount * 100) / 100 +
+        Math.round(TotalMultiExpenseAmount * 100) / 100;
     }
-  }
+  };
 
   SaveInvoiceMaster = async () => {
     if (this.Entity.p.InvoiceAmount < 0) {
-      await this.uiUtils.showErrorMessage('Error', 'Bill amount should be greater than zero.');
+      await this.uiUtils.showErrorMessage(
+        'Error',
+        'Bill amount should be greater than zero.'
+      );
       return;
     }
-    this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef();
-    this.Entity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName();
+    this.Entity.p.CompanyRef =
+      this.companystatemanagement.getCurrentCompanyRef();
+    this.Entity.p.CompanyName =
+      this.companystatemanagement.getCurrentCompanyName();
     if (this.Entity.p.CreatedBy == 0) {
-      this.Entity.p.CreatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
-      this.Entity.p.UpdatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
+      this.Entity.p.CreatedBy = Number(
+        this.appStateManage.StorageKey.getItem('LoginEmployeeRef')
+      );
+      this.Entity.p.UpdatedBy = Number(
+        this.appStateManage.StorageKey.getItem('LoginEmployeeRef')
+      );
     }
     this.isSaveDisabled = true;
-    this.Entity.p.Date = this.dtu.ConvertStringDateToFullFormat(this.Entity.p.Date)
+    this.Entity.p.Date = this.dtu.ConvertStringDateToFullFormat(
+      this.Entity.p.Date
+    );
     let entityToSave = this.Entity.GetEditableVersion();
     let entitiesToSave = [entityToSave];
     let tr = await this.utils.SavePersistableEntities(entitiesToSave);
@@ -805,7 +1025,7 @@ export class InvoiceDetailsComponent implements OnInit {
         this.Entity.p.Date = `${parts[0]}-${parts[1]}-${parts[2]}`;
         this.strCDT = `${parts[0]}-${parts[1]}-${parts[2]}-00-00-00-000`;
         await this.resetAllControls();
-        this.isDieselPaid = false
+        this.isDieselPaid = false;
       } else {
         await this.uiUtils.showSuccessToster('Bill Updated successfully');
         await this.router.navigate(['/homepage/Website/Billing']);
@@ -815,17 +1035,19 @@ export class InvoiceDetailsComponent implements OnInit {
 
   BackInvoice = async () => {
     if (!this.utils.AreEqual(this.InitialEntity, this.Entity)) {
-      await this.uiUtils.showConfirmationMessage('Cancel',
+      await this.uiUtils.showConfirmationMessage(
+        'Cancel',
         `This process is IRREVERSIBLE!
       <br/>
       Are you sure that you want to Cancel this Billing Form?`,
         async () => {
           await this.router.navigate(['/homepage/Website/Billing']);
-        });
+        }
+      );
     } else {
       await this.router.navigate(['/homepage/Website/Billing']);
     }
-  }
+  };
 
   resetAllControls = async () => {
     // reset touched
@@ -845,6 +1067,5 @@ export class InvoiceDetailsComponent implements OnInit {
     this.RateInputControl.control.markAsPristine();
     this.DieselQtyInputControl.control.markAsPristine();
     this.DieselRateInputControl.control.markAsPristine();
-  }
+  };
 }
-

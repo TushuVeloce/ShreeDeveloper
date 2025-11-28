@@ -2,7 +2,14 @@ import { Component, effect, OnInit, ViewChild } from '@angular/core';
 import { NgModel } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ValidationMessages } from 'src/app/classes/domain/constants';
-import { DomainEnums, ModeOfPayments, OpeningBalanceModeOfPayments, PayerTypes, RecipientTypes, TypeOfEmployeePayments, } from 'src/app/classes/domain/domainenums/domainenums';
+import {
+  DomainEnums,
+  ModeOfPayments,
+  OpeningBalanceModeOfPayments,
+  PayerTypes,
+  RecipientTypes,
+  TypeOfEmployeePayments,
+} from 'src/app/classes/domain/domainenums/domainenums';
 import { Invoice } from 'src/app/classes/domain/entities/website/accounting/billing/invoice';
 import { Expense } from 'src/app/classes/domain/entities/website/accounting/expense/expense';
 import { BankAccount } from 'src/app/classes/domain/entities/website/masters/bankaccount/banckaccount';
@@ -26,7 +33,6 @@ import { Utils } from 'src/app/services/utils.service';
   templateUrl: './expense-details.component.html',
   styleUrls: ['./expense-details.component.scss'],
 })
-
 export class ExpenseDetailsComponent implements OnInit {
   Entity: Expense = Expense.CreateNewInstance();
   RecipientEntity: Recipient = Recipient.CreateNewInstance();
@@ -37,7 +43,7 @@ export class ExpenseDetailsComponent implements OnInit {
   SubLedgerList: SubLedger[] = [];
   IncomeSubLedgerList: SubLedger[] = [];
   UnitList: Unit[] = [];
-  RecipientNameInput: boolean = false
+  RecipientNameInput: boolean = false;
   isSaveDisabled: boolean = false;
   isRecipientSaveDisabled: boolean = false;
   ShreeBalance: number = 0;
@@ -47,12 +53,14 @@ export class ExpenseDetailsComponent implements OnInit {
   InitialEntity: Expense = null as any;
   companyRef = this.companystatemanagement.SelectedCompanyRef;
   BankList: OpeningBalance[] = [];
-  Cash = ModeOfPayments.Cash
-  Bill = ModeOfPayments.Bill
-  RecipientType = RecipientTypes.Recipient
-  SiteType = RecipientTypes.Sites
-  EmployeeType = RecipientTypes.Employee
-  ModeofPaymentList = DomainEnums.ModeOfPaymentsList().filter(item => item.Ref !== this.Bill);
+  Cash = ModeOfPayments.Cash;
+  Bill = ModeOfPayments.Bill;
+  RecipientType = RecipientTypes.Recipient;
+  SiteType = RecipientTypes.Sites;
+  EmployeeType = RecipientTypes.Employee;
+  ModeofPaymentList = DomainEnums.ModeOfPaymentsList().filter(
+    (item) => item.Ref !== this.Bill
+  );
   TypeofEmployeePaymentList = DomainEnums.TypeOfEmployeePaymentsList();
   TypeofEmployeePayments = TypeOfEmployeePayments;
   RecipientTypesList = DomainEnums.RecipientTypesList();
@@ -64,8 +72,7 @@ export class ExpenseDetailsComponent implements OnInit {
   OldGivenAmount: number = 0;
   IncomeBankList: BankAccount[] = [];
 
-
-  RequiredFieldMsg: string = ValidationMessages.RequiredFieldMsg
+  RequiredFieldMsg: string = ValidationMessages.RequiredFieldMsg;
 
   @ViewChild('ReasonCtrl') ReasonInputControl!: NgModel;
   @ViewChild('NarrationCtrl') NarrationInputControl!: NgModel;
@@ -77,7 +84,7 @@ export class ExpenseDetailsComponent implements OnInit {
     private utils: Utils,
     private dtu: DTU,
     private companystatemanagement: CompanyStateManagement
-  ) { }
+  ) {}
 
   async ngOnInit() {
     this.appStateManage.setDropdownDisabled(true);
@@ -92,7 +99,10 @@ export class ExpenseDetailsComponent implements OnInit {
       this.Entity = Expense.GetCurrentInstance();
       if (this.Entity.p.IsAdvancePayment && this.Entity.p.IsSalaryExpense) {
         this.PaymentType = this.TypeofEmployeePayments.Advance;
-      } else if (!this.Entity.p.IsAdvancePayment && this.Entity.p.IsSalaryExpense) {
+      } else if (
+        !this.Entity.p.IsAdvancePayment &&
+        this.Entity.p.IsSalaryExpense
+      ) {
         this.PaymentType = this.TypeofEmployeePayments.Salary;
       } else {
         this.PaymentType = this.TypeofEmployeePayments.Other;
@@ -104,12 +114,16 @@ export class ExpenseDetailsComponent implements OnInit {
       this.getSubLedgerListByLedgerRef(this.Entity.p.LedgerRef);
       this.Date = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.Date);
       this.appStateManage.StorageKey.removeItem('Editable');
-      this.Entity.p.UpdatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
+      this.Entity.p.UpdatedBy = Number(
+        this.appStateManage.StorageKey.getItem('LoginEmployeeRef')
+      );
       if (this.Entity.p.IncomeLedgerRef != 0) {
-        this.getSubIncomeLedgerListByIncomeLedgerRef(this.Entity.p.IncomeLedgerRef)
+        this.getSubIncomeLedgerListByIncomeLedgerRef(
+          this.Entity.p.IncomeLedgerRef
+        );
       }
       if (this.Entity.p.RecipientType != 0) {
-        this.getRecipientListByRecipientTypeRef()
+        this.getRecipientListByRecipientTypeRef();
       }
     } else {
       this.Entity = Expense.CreateNewInstance();
@@ -128,21 +142,30 @@ export class ExpenseDetailsComponent implements OnInit {
   focusInput = () => {
     let txtName = document.getElementById('Date')!;
     txtName.focus();
-  }
+  };
 
   getUnitList = async () => {
-    let lst = await Unit.FetchEntireList(async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    let lst = await Unit.FetchEntireList(
+      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+    );
     this.UnitList = lst;
-  }
+  };
 
   public FormulateBankList = async () => {
     if (this.companyRef() <= 0) {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
-    let lst = await OpeningBalance.FetchEntireListByCompanyRef(this.companyRef(), async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg));
-    this.BankList = lst.filter((item) => item.p.BankAccountRef > 0 && (item.p.OpeningBalanceAmount > 0 || item.p.InitialBalance > 0));
-    this.getBankListByCompanyRef()
+    let lst = await OpeningBalance.FetchEntireListByCompanyRef(
+      this.companyRef(),
+      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+    );
+    this.BankList = lst.filter(
+      (item) =>
+        item.p.BankAccountRef > 0 &&
+        (item.p.OpeningBalanceAmount > 0 || item.p.InitialBalance > 0)
+    );
+    this.getBankListByCompanyRef();
   };
 
   getBankListByCompanyRef = async () => {
@@ -150,12 +173,16 @@ export class ExpenseDetailsComponent implements OnInit {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
-    let lst = await BankAccount.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-
-    this.IncomeBankList = lst.filter(bank =>
-      !this.BankList.some(item => item.p.BankAccountRef === bank.p.Ref)
+    let lst = await BankAccount.FetchEntireListByCompanyRef(
+      this.companyRef(),
+      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
     );
-  }
+
+    this.IncomeBankList = lst.filter(
+      (bank) =>
+        !this.BankList.some((item) => item.p.BankAccountRef === bank.p.Ref)
+    );
+  };
 
   onPaymentTypeSelection = () => {
     this.Entity.p.RecipientRef = 0;
@@ -170,36 +197,40 @@ export class ExpenseDetailsComponent implements OnInit {
       this.Entity.p.IsAdvancePayment = 0;
       this.Entity.p.IsSalaryExpense = false;
     }
-  }
+  };
 
   OnModeChange = () => {
-    this.Entity.p.BankAccountRef = 0
-  }
+    this.Entity.p.BankAccountRef = 0;
+  };
 
   OnToModeChange = () => {
     this.Entity.p.IncomeBankRef = 0;
     this.Entity.p.IsNewBankCreated = false;
-  }
+  };
 
   getSiteListByCompanyRef = async () => {
     if (this.companyRef() <= 0) {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
-    let lst = await Site.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    let lst = await Site.FetchEntireListByCompanyRef(
+      this.companyRef(),
+      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+    );
     this.SiteList = lst;
-  }
+  };
 
   getLedgerListByCompanyRef = async () => {
     if (this.companyRef() <= 0) {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
-    this.Entity.p.SubLedgerRef = 0
-    let lst = await Ledger.FetchEntireListByCompanyRef(this.companyRef(),
+    this.Entity.p.SubLedgerRef = 0;
+    let lst = await Ledger.FetchEntireListByCompanyRef(
+      this.companyRef(),
       async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
     );
-    this.LedgerList = lst
+    this.LedgerList = lst;
   };
 
   getSubLedgerListByLedgerRef = async (ledgerref: number) => {
@@ -207,18 +238,24 @@ export class ExpenseDetailsComponent implements OnInit {
       await this.uiUtils.showErrorToster('Ledger not Selected');
       return;
     }
-    let lst = await SubLedger.FetchEntireListByLedgerRef(ledgerref, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    let lst = await SubLedger.FetchEntireListByLedgerRef(
+      ledgerref,
+      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+    );
     this.SubLedgerList = lst;
-  }
+  };
 
   getSubIncomeLedgerListByIncomeLedgerRef = async (ledgerref: number) => {
     if (ledgerref <= 0) {
       await this.uiUtils.showErrorToster('Ledger not Selected');
       return;
     }
-    let lst = await SubLedger.FetchEntireListByLedgerRef(ledgerref, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    let lst = await SubLedger.FetchEntireListByLedgerRef(
+      ledgerref,
+      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+    );
     this.IncomeSubLedgerList = lst;
-  }
+  };
 
   getRecipientListByRecipientTypeRef = async () => {
     if (this.companyRef() <= 0) {
@@ -230,9 +267,14 @@ export class ExpenseDetailsComponent implements OnInit {
     }
 
     this.RecipientList = [];
-    let lst = await Invoice.FetchRecipientByRecipientTypeRef(this.companyRef(), this.Entity.p.SiteRef, this.Entity.p.RecipientType, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    let lst = await Invoice.FetchRecipientByRecipientTypeRef(
+      this.companyRef(),
+      this.Entity.p.SiteRef,
+      this.Entity.p.RecipientType,
+      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+    );
     this.RecipientList = lst;
-  }
+  };
 
   onSitechange = () => {
     this.Entity.p.LedgerRef = 0;
@@ -241,7 +283,7 @@ export class ExpenseDetailsComponent implements OnInit {
     this.RecipientList = [];
     this.Entity.p.Reason = '';
     this.Entity.p.ExpenseModeOfPayment = 0;
-    this.Entity.p.BankAccountRef = 0
+    this.Entity.p.BankAccountRef = 0;
     this.PaymentType = 0;
     this.Entity.p.IsAdvancePayment = 0;
     this.Entity.p.IsSalaryExpense = false;
@@ -255,20 +297,20 @@ export class ExpenseDetailsComponent implements OnInit {
     this.Entity.p.RemainingAdvance = 0;
     this.Entity.p.InvoiceAmount = 0;
     this.Entity.p.RemainingAmount = 0;
-    this.Entity.p.GivenAmount = 0
+    this.Entity.p.GivenAmount = 0;
     this.Entity.p.Narration = '';
     this.Entity.p.ModeOfPaymentForIncome = 0;
     this.Entity.p.IsNewBankCreated = false;
     this.Entity.p.IncomeBankRef = 0;
     this.Entity.p.IsAutoInvoiceEnabled = 0;
     this.RecipientNameInput = false;
-    this.getCurrentBalanceByCompanyRef()
-  }
+    this.getCurrentBalanceByCompanyRef();
+  };
 
   onTypeChange = async () => {
     this.Entity.p.Reason = '';
     this.Entity.p.ExpenseModeOfPayment = 0;
-    this.Entity.p.BankAccountRef = 0
+    this.Entity.p.BankAccountRef = 0;
     this.PaymentType = 0;
     this.Entity.p.IsAdvancePayment = 0;
     this.Entity.p.IsSalaryExpense = false;
@@ -282,19 +324,19 @@ export class ExpenseDetailsComponent implements OnInit {
     this.Entity.p.RemainingAdvance = 0;
     this.Entity.p.InvoiceAmount = 0;
     this.Entity.p.RemainingAmount = 0;
-    this.Entity.p.GivenAmount = 0
+    this.Entity.p.GivenAmount = 0;
     this.Entity.p.Narration = '';
     this.Entity.p.ModeOfPaymentForIncome = 0;
     this.Entity.p.IsNewBankCreated = false;
     this.Entity.p.IncomeBankRef = 0;
     this.Entity.p.IsAutoInvoiceEnabled = 0;
     this.RecipientNameInput = false;
-    this.getCurrentBalanceByCompanyRef()
-  }
+    this.getCurrentBalanceByCompanyRef();
+  };
 
   onChangeIncomeLedger = () => {
     this.Entity.p.IncomeSubLedgerRef = 0;
-  }
+  };
 
   getTotalInvoiceAmountFromSiteAndRecipientRef = async () => {
     if (this.companyRef() <= 0) {
@@ -319,7 +361,14 @@ export class ExpenseDetailsComponent implements OnInit {
       return;
     }
 
-    let lst = await Expense.FetchTotalInvoiceAmountFromSiteAndRecipient(this.companyRef(), this.Entity.p.SiteRef, this.Entity.p.RecipientType, this.Entity.p.RecipientRef, this.Entity.p.IsSalaryExpense, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    let lst = await Expense.FetchTotalInvoiceAmountFromSiteAndRecipient(
+      this.companyRef(),
+      this.Entity.p.SiteRef,
+      this.Entity.p.RecipientType,
+      this.Entity.p.RecipientRef,
+      this.Entity.p.IsSalaryExpense,
+      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+    );
 
     if (lst.length > 0) {
       if (lst[0].p.InvoiceAmount < 0) {
@@ -332,19 +381,22 @@ export class ExpenseDetailsComponent implements OnInit {
       this.Entity.p.RemainingAdvance = lst[0].p.RemainingAdvance;
     }
     // this.RecipientList = lst;
-  }
+  };
 
   getCurrentBalanceByCompanyRef = async () => {
     if (this.companyRef() <= 0) {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
-    let lst = await Expense.FetchCurrentBalanceByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    let lst = await Expense.FetchCurrentBalanceByCompanyRef(
+      this.companyRef(),
+      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+    );
     if (lst.length > 0) {
       this.Entity.p.ShreesBalance = lst[0].p.ShreesBalance;
       this.ShreeBalance = lst[0].p.ShreesBalance;
     }
-  }
+  };
 
   onRecipientChange = () => {
     this.Entity.p.TotalAdvance = 0;
@@ -360,17 +412,22 @@ export class ExpenseDetailsComponent implements OnInit {
     // this.Entity.p.Narration = '';
     this.Entity.p.IsAutoInvoiceEnabled = 0;
     this.RecipientNameInput = false;
-    this.getCurrentBalanceByCompanyRef()
+    this.getCurrentBalanceByCompanyRef();
 
     let SingleRecord;
     try {
       if (this.Entity.p.RecipientType == this.DealDoneCustomer) {
-        SingleRecord = this.RecipientList.find((data, i) => (i + 1) == this.PayerPlotNo);
+        SingleRecord = this.RecipientList.find(
+          (data, i) => i + 1 == this.PayerPlotNo
+        );
       } else {
-        SingleRecord = this.RecipientList.find((data) => data.p.Ref == this.Entity.p.RecipientRef);
+        SingleRecord = this.RecipientList.find(
+          (data) => data.p.Ref == this.Entity.p.RecipientRef
+        );
       }
       if (SingleRecord?.p) {
-        this.Entity.p.IsRegisterCustomerRef = SingleRecord.p.IsRegisterCustomerRef;
+        this.Entity.p.IsRegisterCustomerRef =
+          SingleRecord.p.IsRegisterCustomerRef;
         this.Entity.p.RecipientRef = SingleRecord.p.Ref;
         if (this.Entity.p.RecipientType == this.DealDoneCustomer) {
           this.Entity.p.PlotRef = SingleRecord.p.PlotRef;
@@ -378,12 +435,11 @@ export class ExpenseDetailsComponent implements OnInit {
         }
       }
       this.getTotalInvoiceAmountFromSiteAndRecipientRef();
-    } catch (error) {
-    }
-  }
+    } catch (error) {}
+  };
 
   CalculateRemainingAmountandBalance = () => {
-    this.Entity.p.RemainingAmount = Number((this.Entity.p.InvoiceAmount - this.Entity.p.GivenAmount).toFixed(2));
+    this.Entity.p.RemainingAmount = Number((this.Entity.p.InvoiceAmount - this.Entity.p.DiscountAmount - this.Entity.p.GivenAmount).toFixed(2));
     // if (this.Entity.p.GivenAmount <= this.Entity.p.InvoiceAmount) {
     // } else {
     //   this.Entity.p.RemainingAmount = 0;
@@ -417,36 +473,93 @@ export class ExpenseDetailsComponent implements OnInit {
     }
   }
 
+  // CalculateRemainingAmountandBalance = () => {
+  //   const invoice = Number(this.Entity.p.InvoiceAmount) || 0;
+  //   const given = Number(this.Entity.p.GivenAmount) || 0;
+  //   const discount = Number(this.Entity.p.DiscountAmount) || 0;
+
+  //   // 1️⃣ Actual Payable After Discount
+  //   const payableAmount = invoice - discount;
+
+  //   // 2️⃣ Remaining Amount
+  //   this.Entity.p.RemainingAmount = Number((payableAmount - given).toFixed(2));
+  //   if (this.Entity.p.RemainingAmount < 0) this.Entity.p.RemainingAmount = 0;
+
+  //   // 3️⃣ If Advance Payment, invoice becomes given
+  //   if (this.PaymentType == this.TypeofEmployeePayments.Advance) {
+  //     this.Entity.p.InvoiceAmount = this.Entity.p.GivenAmount;
+  //   }
+
+  //   // 4️⃣ Shree Balance Logic
+  //   if (this.IsNewEntity) {
+  //     if (given <= this.Entity.p.ShreesBalance) {
+  //       this.Entity.p.ShreesBalance = Number(
+  //         (this.ShreeBalance - given).toFixed(2)
+  //       );
+  //     } else {
+  //       this.Entity.p.ShreesBalance = -Number(
+  //         (given - this.ShreeBalance).toFixed(2)
+  //       );
+  //     }
+  //   } else {
+  //     let currentExpenseAmount = 0;
+
+  //     if (given > this.OldGivenAmount) {
+  //       currentExpenseAmount = given - this.OldGivenAmount;
+  //       this.Entity.p.ShreesBalance = Number(
+  //         (this.ShreeBalance - currentExpenseAmount).toFixed(2)
+  //       );
+  //     } else {
+  //       currentExpenseAmount = this.OldGivenAmount - given;
+  //       this.Entity.p.ShreesBalance = Number(
+  //         (this.ShreeBalance + currentExpenseAmount).toFixed(2)
+  //       );
+  //     }
+  //   }
+
+  //   // 5️⃣ Advance
+  //   if (this.Entity.p.IsAdvancePayment) {
+  //     this.Entity.p.TotalAdvance =
+  //       this.Entity.p.RemainingAdvance + this.Entity.p.GivenAmount;
+  //   }
+  // };
+
   AddRecipientName = () => {
-    this.Entity.p.RecipientRef = 0
-    this.RecipientEntity.p.Name = ''
-    this.RecipientNameInput = true
-  }
+    this.Entity.p.RecipientRef = 0;
+    this.RecipientEntity.p.Name = '';
+    this.RecipientNameInput = true;
+  };
 
   cancelRecipientName = () => {
-    this.RecipientNameInput = false
-    this.RecipientEntity.p.Name = ''
-  }
+    this.RecipientNameInput = false;
+    this.RecipientEntity.p.Name = '';
+  };
 
   SaveRecipientName = () => {
-    this.RecipientNameInput = false
-    this.Entity.p.RecipientName = ''
-  }
+    this.RecipientNameInput = false;
+    this.Entity.p.RecipientName = '';
+  };
 
   SaveNewRecipientName = async () => {
     if (this.RecipientEntity.p.Name == '') {
       this.uiUtils.showErrorToster('Recipient Name can not be Blank');
-      return
+      return;
     }
     if (this.isRecipientSaveDisabled == true) {
-      return
+      return;
     }
     this.isRecipientSaveDisabled = true;
-    this.RecipientEntity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef();
-    this.RecipientEntity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName();
+    this.RecipientEntity.p.CompanyRef =
+      this.companystatemanagement.getCurrentCompanyRef();
+    this.RecipientEntity.p.CompanyName =
+      this.companystatemanagement.getCurrentCompanyName();
     if (this.RecipientEntity.p.CreatedBy == 0) {
-      this.RecipientEntity.p.CreatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
-      this.RecipientEntity.p.UpdatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
+      this.RecipientEntity.p.CreatedBy = Number(
+        this.appStateManage.StorageKey.getItem('LoginEmployeeRef')
+      );
+      this.RecipientEntity.p.UpdatedBy = Number(
+        this.appStateManage.StorageKey.getItem('LoginEmployeeRef')
+      );
     }
     let entityToSave = this.RecipientEntity.GetEditableVersion();
     let entitiesToSave = [entityToSave];
@@ -459,24 +572,36 @@ export class ExpenseDetailsComponent implements OnInit {
     } else {
       this.isRecipientSaveDisabled = false;
       await this.uiUtils.showSuccessToster('Recipient Name saved successfully');
-      this.RecipientNameInput = false
+      this.RecipientNameInput = false;
       this.RecipientEntity = Recipient.CreateNewInstance();
-      await this.getRecipientListByRecipientTypeRef()
+      await this.getRecipientListByRecipientTypeRef();
     }
   };
 
   SaveExpense = async () => {
-    this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef();
-    this.Entity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName();
+    this.Entity.p.CompanyRef =
+      this.companystatemanagement.getCurrentCompanyRef();
+    this.Entity.p.CompanyName =
+      this.companystatemanagement.getCurrentCompanyName();
 
     if (this.Entity.p.RecipientType == this.Sites) {
       if (this.Entity.p.SiteRef == this.Entity.p.RecipientRef) {
-        if (this.Entity.p.ExpenseModeOfPayment == this.Cash && this.Entity.p.ModeOfPaymentForIncome == this.Cash) {
-          await this.uiUtils.showWarningToster("Cash trasanction in Same Sites not allowed");
+        if (
+          this.Entity.p.ExpenseModeOfPayment == this.Cash &&
+          this.Entity.p.ModeOfPaymentForIncome == this.Cash
+        ) {
+          await this.uiUtils.showWarningToster(
+            'Cash trasanction in Same Sites not allowed'
+          );
           return;
-        } else if (this.Entity.p.ExpenseModeOfPayment == this.Entity.p.ModeOfPaymentForIncome) {
+        } else if (
+          this.Entity.p.ExpenseModeOfPayment ==
+          this.Entity.p.ModeOfPaymentForIncome
+        ) {
           if (this.Entity.p.BankAccountRef == this.Entity.p.IncomeBankRef) {
-            await this.uiUtils.showWarningToster("Same Sites & Same Banks not allowed");
+            await this.uiUtils.showWarningToster(
+              'Same Sites & Same Banks not allowed'
+            );
             return;
           }
         }
@@ -486,9 +611,13 @@ export class ExpenseDetailsComponent implements OnInit {
     this.isSaveDisabled = true;
 
     if (this.Entity.p.CreatedBy == 0) {
-      this.Entity.p.CreatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
+      this.Entity.p.CreatedBy = Number(
+        this.appStateManage.StorageKey.getItem('LoginEmployeeRef')
+      );
     }
-    this.Entity.p.UpdatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
+    this.Entity.p.UpdatedBy = Number(
+      this.appStateManage.StorageKey.getItem('LoginEmployeeRef')
+    );
     this.Entity.p.Date = this.dtu.ConvertStringDateToFullFormat(this.Date);
     let entityToSave = this.Entity.GetEditableVersion();
     let entitiesToSave = [entityToSave];
@@ -503,8 +632,8 @@ export class ExpenseDetailsComponent implements OnInit {
       if (this.IsNewEntity) {
         await this.uiUtils.showSuccessToster('Expense saved successfully');
         this.Entity = Expense.CreateNewInstance();
-        this.PaymentType = 0
-        await this.getCurrentBalanceByCompanyRef()
+        this.PaymentType = 0;
+        await this.getCurrentBalanceByCompanyRef();
       } else {
         await this.uiUtils.showSuccessToster('Expense Updated successfully');
         await this.router.navigate(['/homepage/Website/Expense']);
@@ -514,14 +643,13 @@ export class ExpenseDetailsComponent implements OnInit {
 
   IsAdvancePayment = async () => {
     if (this.Entity.p.IsAdvancePayment == 1) {
-      this.Entity.p.InvoiceAmount = 0
+      this.Entity.p.InvoiceAmount = 0;
     } else {
-      await this.getTotalInvoiceAmountFromSiteAndRecipientRef()
+      await this.getTotalInvoiceAmountFromSiteAndRecipientRef();
     }
-    this.Entity.p.GivenAmount = 0
-    this.Entity.p.TotalAdvance = 0
-  }
-
+    this.Entity.p.GivenAmount = 0;
+    this.Entity.p.TotalAdvance = 0;
+  };
 
   selectAllValue(event: MouseEvent): void {
     const input = event.target as HTMLInputElement;
@@ -530,6 +658,5 @@ export class ExpenseDetailsComponent implements OnInit {
 
   BackExpense = async () => {
     await this.router.navigate(['/homepage/Website/Expense']);
-  }
+  };
 }
-

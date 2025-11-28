@@ -220,7 +220,8 @@
             </nz-table>
           </div>
         </div>
-        <div *ngIf="Entity.p.LabourExpenseDetailsArray.length === 0 && Entity.p.ExpenseTypeArray.includes(LabourExpenseRef)"
+        <div
+          *ngIf="Entity.p.LabourExpenseDetailsArray.length === 0 && Entity.p.ExpenseTypeArray.includes(LabourExpenseRef)"
           class="card-body_light">
           <div style="height: 200px; background-color: white" class="d-flex align-items-center justify-content-center">
             <span class="title_light"> Data Not Found</span>
@@ -281,7 +282,8 @@
             </nz-table>
           </div>
         </div>
-        <div *ngIf="Entity.p.InvoiceItemDetailsArray.length === 0 && Entity.p.ExpenseTypeArray.includes(MultipleExpenseRef)"
+        <div
+          *ngIf="Entity.p.InvoiceItemDetailsArray.length === 0 && Entity.p.ExpenseTypeArray.includes(MultipleExpenseRef)"
           class="card-body_light">
           <div style="height: 200px; background-color: white" class="d-flex align-items-center justify-content-center">
             <span class="title_light"> Data Not Found</span>
@@ -395,7 +397,8 @@
             </nz-table>
           </div>
         </div>
-        <div *ngIf="Entity.p.MaterialInvoiceDetailsArray.length === 0 && Entity.p.ExpenseTypeArray.includes(StockExpenseRef)"
+        <div
+          *ngIf="Entity.p.MaterialInvoiceDetailsArray.length === 0 && Entity.p.ExpenseTypeArray.includes(StockExpenseRef)"
           class="card-body_light">
           <div style="height: 200px; background-color: white" class="d-flex align-items-center justify-content-center">
             <span class="title_light"> Data Not Found</span>
@@ -465,6 +468,29 @@
           <label>Diesel Amount</label>
           <input type="text" appCommaFormat [(ngModel)]="Entity.p.DieselAmount" disabled name="DieselAmount"
             class="form-control" id="DieselAmount" required placeholder="Diesel Amount" />
+        </div>
+
+        <!-- Mess -->
+        <div style="margin-top: 2.6rem" *ngIf="Entity.p.ExpenseTypeArray.includes(MachinaryExpenseRef)">
+          <div class="d-flex align-items-center mb-2">
+            <label for="IsMessPaid"><b>Mess Paid</b></label>
+            <input type="checkbox" id="IsMessPaid" [(ngModel)]="Entity.p.IsMessPaid" name="IsMessPaid"
+              class="form-check-input me-4 mb-2 large-dark-checkbox" (ngModelChange)="MessPaid(Entity.p.IsMessPaid)"
+              style="width: 20px; height: 20px; margin-left: 1rem" />
+          </div>
+        </div>
+        <div class="col-md-4" style="margin-top: 1rem" *ngIf="isMessPaid">
+          <label>Mess Rate</label>
+          <input type="text" appCommaFormat [(ngModel)]="Entity.p.MessAmount" name="MessAmount" class="form-control"
+            id="MessAmount" required placeholder="Enter Mess Rate" #MessAmountCtrl="ngModel"
+            (blur)="MessAmountCtrl.control.markAsTouched()" (click)="selectAllValue($event)"
+            (ngModelChange)="CalculateMessAmount()" />
+          <div *ngIf="
+              MessAmountCtrl.invalid &&
+              (MessAmountCtrl.touched || MessAmountCtrl.dirty)
+            ">
+            <span class="validation-text" *ngIf="MessAmountCtrl.errors?.['required']">{{ RequiredFieldMsg }}</span>
+          </div>
         </div>
       </div>
       <div style="width: 100%" class="d-flex justify-content-center">

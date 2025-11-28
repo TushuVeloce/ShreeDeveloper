@@ -56,9 +56,11 @@ export class InvoiceProps {
   public IsSiteRef: number = 0
   public Reason: string = ''
   public IsDieselPaid: number = 0
+  public IsMessPaid: number = 0
   public DieselQty: number = 0
   public DieselRate: number = 0
   public DieselAmount: number = 0
+  public MessAmount: number = 0
   public Qty: number = 0
   public UnitRef: number = 0
   public readonly UnitName: string = ''

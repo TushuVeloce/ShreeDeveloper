@@ -194,9 +194,9 @@ export class AttendanceDetailsComponent implements OnInit {
 
   SiteFileNavigation = (File: string) => {
     if (File) {
-      window.open(this.imagePostSelfieView, '_blank');
+      window.open(this.imagePostSiteView, '_blank');
     } else {
-      window.open(this.imagePostSiteViewUrl, '_blank');
+      window.open(this.imagePostSiteView, '_blank');
     }
   }
 
