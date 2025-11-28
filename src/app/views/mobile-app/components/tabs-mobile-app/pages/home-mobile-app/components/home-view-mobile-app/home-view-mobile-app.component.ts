@@ -25,8 +25,8 @@ import {
   AttendanceLogType,
   DomainEnums,
 } from 'src/app/classes/domain/domainenums/domainenums';
-import { ExpenseGraph } from 'src/app/classes/domain/entities/website/Dashboard/expensegraph/expensegraph';
-import { IncomeGraph } from 'src/app/classes/domain/entities/website/Dashboard/incomegraph/incomegraph';
+// import { ExpenseGraph } from 'src/app/classes/domain/entities/website/Dashboard/expensegraph/expensegraph';
+// import { IncomeGraph } from 'src/app/classes/domain/entities/website/Dashboard/incomegraph/incomegraph';
 import { WebAttendaneLog } from 'src/app/classes/domain/entities/website/HR_and_Payroll/web_attendance_log/web_attendance_log/webattendancelog';
 import {
   MenuItem,
@@ -228,7 +228,7 @@ export class HomeViewMobileAppComponent
     try {
       // Admin fetches ALL financial and attendance data
       await this.getCurrentBalanceByCompanyRef();
-      await this.getIncomeExpenseGraphList();
+      // await this.getIncomeExpenseGraphList();
       await this.getTodayAttendanceLogByAttendanceListType(); // Fetches all today's logs and sets peoplePresent
       this.createIncomeExpenseChart();
     } catch (error) {
@@ -758,73 +758,73 @@ export class HomeViewMobileAppComponent
     return window.innerWidth >= 768 ? 'right' : 'bottom';
   }
 
-  getIncomeExpenseGraphList = async () => {
-    await this.getExpenseGraphListByCompanySiteMonthFilterType();
-    await this.getIncomeGraphListByCompanySiteMonthFilterType();
-  };
+  // getIncomeExpenseGraphList = async () => {
+  //   await this.getExpenseGraphListByCompanySiteMonthFilterType();
+  //   await this.getIncomeGraphListByCompanySiteMonthFilterType();
+  // };
 
-  getExpenseGraphListByCompanySiteMonthFilterType = async () => {
-    if (this.companyRef <= 0) {
-      await this.toastService.present('Company not Selected', 1000, 'warning');
-      return;
-    }
-    let lst = await ExpenseGraph.FetchEntireListByCompanySiteMonthFilterType(
-      this.companyRef,
-      this.BarSiteRef,
-      this.SelectedBarMonths,
-      this.BarFilterType,
-      async (errMsg) => {
-        await this.toastService.present(errMsg, 1000, 'error');
-      }
-    );
-    this.ExpenseGraphList = lst.map((item) => item.p.TotalGivenAmount ?? 0);
-    this.TotalExpense = lst.reduce(
-      (sum, item) => sum + (item.p.TotalGivenAmount ?? 0), // Use nullish coalescing
-      0
-    );
-  };
+  // getExpenseGraphListByCompanySiteMonthFilterType = async () => {
+  //   if (this.companyRef <= 0) {
+  //     await this.toastService.present('Company not Selected', 1000, 'warning');
+  //     return;
+  //   }
+  //   let lst = await ExpenseGraph.FetchEntireListByCompanySiteMonthFilterType(
+  //     this.companyRef,
+  //     this.BarSiteRef,
+  //     this.SelectedBarMonths,
+  //     this.BarFilterType,
+  //     async (errMsg) => {
+  //       await this.toastService.present(errMsg, 1000, 'error');
+  //     }
+  //   );
+  //   this.ExpenseGraphList = lst.map((item) => item.p.TotalGivenAmount ?? 0);
+  //   this.TotalExpense = lst.reduce(
+  //     (sum, item) => sum + (item.p.TotalGivenAmount ?? 0), // Use nullish coalescing
+  //     0
+  //   );
+  // };
 
-  getIncomeGraphListByCompanySiteMonthFilterType = async () => {
-    if (this.companyRef <= 0) {
-      await this.toastService.present('Company not Selected', 1000, 'warning');
-      return;
-    }
-    let lst = await IncomeGraph.FetchEntireListByCompanySiteMonthFilterType(
-      this.companyRef,
-      this.BarSiteRef,
-      this.SelectedBarMonths,
-      this.BarFilterType,
-      async (errMsg) => {
-        await this.toastService.present(errMsg, 1000, 'error');
-      }
-    );
-    this.TotalIncome = lst.reduce(
-      (sum, item) => sum + (item.p.TotalIncomeAmount ?? 0), // Use nullish coalescing
-      0
-    );
-    this.IncomeGraphList = lst.map((item) => item.p.TotalIncomeAmount ?? 0);
-    if (this.BarFilterType == 63 && this.SelectedBarMonths) {
-      this.WeekMonthList = lst.map((item) => item.p.WeekName);
-    } else if (this.BarFilterType == 63) {
-      // Corrected the month list spelling (Spet -> Sept)
-      this.WeekMonthList = [
-        'Jan',
-        'Feb',
-        'Mar',
-        'Apr',
-        'May',
-        'June',
-        'Jul',
-        'Aug',
-        'Sept',
-        'Oct',
-        'Nov',
-        'Dec',
-      ];
-    } else {
-      this.WeekMonthList = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
-    }
-  }; // Add a new method to create the income/expense chart
+  // getIncomeGraphListByCompanySiteMonthFilterType = async () => {
+  //   if (this.companyRef <= 0) {
+  //     await this.toastService.present('Company not Selected', 1000, 'warning');
+  //     return;
+  //   }
+  //   let lst = await IncomeGraph.FetchEntireListByCompanySiteMonthFilterType(
+  //     this.companyRef,
+  //     this.BarSiteRef,
+  //     this.SelectedBarMonths,
+  //     this.BarFilterType,
+  //     async (errMsg) => {
+  //       await this.toastService.present(errMsg, 1000, 'error');
+  //     }
+  //   );
+  //   this.TotalIncome = lst.reduce(
+  //     (sum, item) => sum + (item.p.TotalIncomeAmount ?? 0), // Use nullish coalescing
+  //     0
+  //   );
+  //   this.IncomeGraphList = lst.map((item) => item.p.TotalIncomeAmount ?? 0);
+  //   if (this.BarFilterType == 63 && this.SelectedBarMonths) {
+  //     this.WeekMonthList = lst.map((item) => item.p.WeekName);
+  //   } else if (this.BarFilterType == 63) {
+  //     // Corrected the month list spelling (Spet -> Sept)
+  //     this.WeekMonthList = [
+  //       'Jan',
+  //       'Feb',
+  //       'Mar',
+  //       'Apr',
+  //       'May',
+  //       'June',
+  //       'Jul',
+  //       'Aug',
+  //       'Sept',
+  //       'Oct',
+  //       'Nov',
+  //       'Dec',
+  //     ];
+  //   } else {
+  //     this.WeekMonthList = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+  //   }
+  // }; // Add a new method to create the income/expense chart
 
   private createIncomeExpenseChart(): void {
     const legendPosition = this.getLegendPosition(); // Find the highest value to set a proper max for the y-axis

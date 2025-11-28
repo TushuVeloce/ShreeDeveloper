@@ -392,6 +392,7 @@ export class ExpenseDetailsComponent implements OnInit {
       this.companyRef(),
       async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
     );
+    console.log('shree lst :', lst);
     if (lst.length > 0) {
       this.Entity.p.ShreesBalance = lst[0].p.ShreesBalance;
       this.ShreeBalance = lst[0].p.ShreesBalance;

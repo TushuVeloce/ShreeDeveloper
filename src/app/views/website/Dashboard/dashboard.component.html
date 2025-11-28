@@ -47,7 +47,7 @@
         </p>
         <div style="width: 25%;">
           <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear id="BarSiteRef"
-            name="BarSiteRef" [nzSize]="'large'" [(ngModel)]="BarSiteRef" (ngModelChange)="getIncomeExpenseGraphList()">
+            name="BarSiteRef" [nzSize]="'large'" [(ngModel)]="BarSiteRef" (ngModelChange)="getDashboardStats()">
             <nz-option [nzValue]="0" [nzLabel]="'All Site'">
             </nz-option>
             <nz-option *ngFor="let site of SiteList" [nzValue]="site.p.Ref" [nzLabel]="site.p.Name">
@@ -57,7 +57,7 @@
         <div style="width: 25%;">
           <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear id="BarFilterType"
             name="BarFilterType" [nzSize]="'large'" [(ngModel)]="BarFilterType"
-            (ngModelChange)="getIncomeExpenseGraphList()">
+            (ngModelChange)="getDashboardStats()">
             <nz-option [nzValue]="57" [nzLabel]="'Weekly'"> </nz-option>
             <nz-option [nzValue]="63" [nzLabel]="'Monthly'"> </nz-option>
           </nz-select>
@@ -65,7 +65,7 @@
         <div *ngIf="BarFilterType == 63" style="width: 20%;">
           <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
             id="SelectedBarMonths" name="SelectedBarMonths" [nzSize]="'large'" [(ngModel)]="SelectedBarMonths"
-            (ngModelChange)="getIncomeExpenseGraphList()">
+            (ngModelChange)="getDashboardStats()">
             <nz-option *ngFor="let SelectedBarMonths of MonthList" [nzValue]="SelectedBarMonths.Ref"
               [nzLabel]="SelectedBarMonths.Name">
             </nz-option>
@@ -82,7 +82,7 @@
         <div style="width: 25%;">
           <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
             id="DoughnutSiteRef" name="DoughnutSiteRef" [nzSize]="'large'" [(ngModel)]="DoughnutSiteRef"
-            (ngModelChange)="getExpenseBreakdownListByCompanySiteMonthFilterType()">
+            (ngModelChange)="getDashboardStats()">
             <nz-option [nzValue]="0" [nzLabel]="'All Site'">
             </nz-option>
             <nz-option *ngFor="let site of SiteList" [nzValue]="site.p.Ref" [nzLabel]="site.p.Name">
@@ -91,7 +91,7 @@
         </div>
         <div style="width: 25%;">
           <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear id="DoughnutMonth"
-            name="DoughnutMonth" [nzSize]="'large'" [(ngModel)]="DoughnutFilterType">
+            name="DoughnutMonth" [nzSize]="'large'" [(ngModel)]="DoughnutFilterType" (ngModelChange)="getDashboardStats()">
             <nz-option [nzValue]="57" [nzLabel]="'Weekly'"> </nz-option>
             <nz-option [nzValue]="63" [nzLabel]="'Monthly'"> </nz-option>
           </nz-select>
@@ -100,7 +100,7 @@
           <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
             id="SelectedDoughnutMonths" name="SelectedDoughnutMonths" [nzSize]="'large'"
             [(ngModel)]="SelectedDoughnutMonths"
-            (ngModelChange)="getExpenseBreakdownListByCompanySiteMonthFilterType()">
+            (ngModelChange)="getDashboardStats()">
             <nz-option *ngFor="let SelectedDoughnutMonths of MonthList" [nzValue]="SelectedDoughnutMonths.Ref"
               [nzLabel]="SelectedDoughnutMonths.Name">
             </nz-option>
@@ -120,7 +120,7 @@
         <div style="width: 25%;">
           <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear id="CRMSiteRef"
             name="CRMSiteRef" [nzSize]="'large'" [(ngModel)]="CRMSiteRef"
-            (ngModelChange)="getCRMFunnelListByCompanySiteMonthFilterType()">
+            (ngModelChange)="getDashboardStats()">
             <nz-option [nzValue]="0" [nzLabel]="'All Site'">
             </nz-option>
             <nz-option *ngFor="let site of SiteList" [nzValue]="site.p.Ref" [nzLabel]="site.p.Name">
@@ -130,7 +130,7 @@
         <div style="width: 25%;">
           <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear id="CRMFilterType"
             name="CRMFilterType" [nzSize]="'large'" [(ngModel)]="CRMFilterType"
-            (ngModelChange)="getCRMFunnelListByCompanySiteMonthFilterType()">
+            (ngModelChange)="getDashboardStats()">
             <nz-option [nzValue]="57" [nzLabel]="'Weekly'"> </nz-option>
             <nz-option [nzValue]="63" [nzLabel]="'Monthly'"> </nz-option>
           </nz-select>
@@ -138,7 +138,7 @@
         <div *ngIf="CRMFilterType == 63" style="width: 20%;">
           <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
             id="SelectedCRMMonths" name="SelectedCRMMonths" [nzSize]="'large'" [(ngModel)]="SelectedCRMMonths"
-            (ngModelChange)="getCRMFunnelListByCompanySiteMonthFilterType()">
+            (ngModelChange)="getDashboardStats()">
             <nz-option *ngFor="let SelectedCRMMonths of MonthList" [nzValue]="SelectedCRMMonths.Ref"
               [nzLabel]="SelectedCRMMonths.Name">
             </nz-option>
@@ -181,7 +181,7 @@
         <div style="width: 25%;">
           <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
             nzPlaceHolder="Select" [nzSize]="'large'" name="SiteRef" [(ngModel)]="BillsPayableSiteRef" required
-            id="SiteRef" (ngModelChange)="getInvoiceSumExpenseSumListByCompanySiteMonthFilterType();">
+            id="SiteRef" (ngModelChange)="'getInvoiceSumExpenseSumListByCompanySiteMonthFilterType()';">
             <nz-option nzLabel="All Sites" [nzValue]="0"></nz-option>
             <nz-option *ngFor="let Site of SiteList" [nzValue]="Site.p.Ref" [nzLabel]="Site.p.Name"></nz-option>
           </nz-select>
@@ -190,7 +190,7 @@
           <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
             id="BillPayableFilterType" name="BillPayableFilterType" [nzSize]="'large'"
             [(ngModel)]="BillPayableFilterType"
-            (ngModelChange)="getInvoiceSumExpenseSumListByCompanySiteMonthFilterType()">
+            (ngModelChange)="'getInvoiceSumExpenseSumListByCompanySiteMonthFilterType()'">
             <nz-option [nzValue]="57" [nzLabel]="'Weekly'"> </nz-option>
             <nz-option [nzValue]="63" [nzLabel]="'Monthly'"> </nz-option>
           </nz-select>
@@ -199,7 +199,7 @@
           <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
             id="SelectedBillPayableMonths" name="SelectedBillPayableMonths" [nzSize]="'large'"
             [(ngModel)]="SelectedBillPayableMonths"
-            (ngModelChange)="getInvoiceSumExpenseSumListByCompanySiteMonthFilterType()">
+            (ngModelChange)="'getInvoiceSumExpenseSumListByCompanySiteMonthFilterType()'">
             <nz-option *ngFor="let SelectedBillPayableMonths of MonthList" [nzValue]="SelectedBillPayableMonths.Ref"
               [nzLabel]="SelectedBillPayableMonths.Name">
             </nz-option>
