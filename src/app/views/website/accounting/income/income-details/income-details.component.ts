@@ -48,6 +48,7 @@ export class IncomeDetailsComponent implements OnInit {
   ModeofPaymentList = DomainEnums.ModeOfPaymentsList().filter(item => item.Ref !== this.Bill);
   PayerTypesList = DomainEnums.PayerTypesList();
   DealDoneCustomer = PayerTypes.DealDoneCustomer;
+  EmployeeType = PayerTypes.Employee;
   PayerPlotNo: string = '';
   RemainingPlotAmount: number = 0;
   OldIncomeAmount: number = 0;
@@ -172,6 +173,7 @@ export class IncomeDetailsComponent implements OnInit {
     }
     let lst = await Income.FetchPayerNameByPayerTypeRef(this.Entity.p.SiteRef, this.companyRef(), this.Entity.p.PayerType, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.PayerList = lst;
+    console.log(' PayerList lst :', lst);
   }
 
   onPayerChange = async () => {

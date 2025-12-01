@@ -124,16 +124,16 @@
           *ngIf="Entity.p.PayerType == DealDoneCustomer && Entity.p.PayerRef != 0">
           <div>
             <label>Total Plot Amount</label>
-            <input type="text" appCommaFormat [(ngModel)]="Entity.p.TotalPlotAmount" name="Total Plot Amount" class="form-control"
-              id="Total Plot Amount" disabled placeholder="Enter Total Plot Amount" />
+            <input type="text" appCommaFormat [(ngModel)]="Entity.p.TotalPlotAmount" name="Total Plot Amount"
+              class="form-control" id="Total Plot Amount" disabled placeholder="Enter Total Plot Amount" />
           </div>
         </div>
         <div class="col-md-4" style="margin-top: 1rem;"
           *ngIf="Entity.p.PayerType == DealDoneCustomer && Entity.p.PayerRef != 0">
           <div>
             <label>Plot Grand Total</label>
-            <input type="text" [(ngModel)]="Entity.p.PlotGrandTotal" appCommaFormat name="PlotGrandTotal" class="form-control"
-              id="PlotGrandTotal" disabled placeholder="Enter Plot Grand Total" />
+            <input type="text" [(ngModel)]="Entity.p.PlotGrandTotal" appCommaFormat name="PlotGrandTotal"
+              class="form-control" id="PlotGrandTotal" disabled placeholder="Enter Plot Grand Total" />
           </div>
         </div>
         <div class="col-md-4" style="margin-top: 1rem;">
@@ -143,9 +143,27 @@
               placeholder="Enter Reason" />
           </div>
         </div>
+        <!-- <div class="col-md-4" style="margin-top: 1rem;" *ngIf="this.Entity.p.PayerType == EmployeeType">
+          <div>
+            <label>Balance Advance Amount</label>
+            <input type="text" [(ngModel)]="Entity.p.RemainingAdvance" name="RemainingAdvance" class="form-control"
+              id="RemainingAdvance" disabled placeholder="Enter Remaining Advance" />
+          </div>
+        </div> -->
+        <div class="" style="margin-top: 1rem">
+          <div class="d-flex align-items-center mb-2">
+            <label for="IsSalaryAdvanceReturn"><b>Salary Advance Return</b></label>
+            <input type="checkbox" id="IsSalaryAdvanceReturn" [(ngModel)]="Entity.p.IsSalaryAdvanceReturn"
+              name="IsSalaryAdvanceReturn" class="form-check-input me-4 mb-2 large-dark-checkbox"
+              style="width: 20px; height: 20px; margin-left: 1rem" />
+          </div>
+        </div>
         <div class="col-md-4" style="margin-top: 1rem;">
           <div>
-            <label>Income Amount</label>
+            <!-- <label>Income Amount</label> -->
+            <label *ngIf="!Entity.p.IsSalaryAdvanceReturn">Income Amount</label>
+            <label *ngIf="Entity.p.PayerType == EmployeeType && Entity.p.IsSalaryAdvanceReturn">Salary Advance Return
+              Amount</label>
             <input type="text" appCommaFormat [(ngModel)]="Entity.p.IncomeAmount" name="IncomeAmount"
               class="form-control" id="IncomeAmount" required placeholder="Enter Income Amount"
               #IncomeAmountCtrl="ngModel" (blur)="IncomeAmountCtrl.control.markAsTouched()"
@@ -159,8 +177,8 @@
           *ngIf="Entity.p.PayerType == DealDoneCustomer && Entity.p.PayerRef != 0">
           <div>
             <label>Remaining Plot Amount</label>
-            <input type="text" [(ngModel)]="Entity.p.RemainingPlotAmount" appCommaFormat name="RemainingPlotAmount" class="form-control"
-              id="RemainingPlotAmount" disabled placeholder="Enter RemainingPlotAmount" />
+            <input type="text" [(ngModel)]="Entity.p.RemainingPlotAmount" appCommaFormat name="RemainingPlotAmount"
+              class="form-control" id="RemainingPlotAmount" disabled placeholder="Enter RemainingPlotAmount" />
           </div>
         </div>
         <div class="col-md-4" style="margin-top: 1rem;">
