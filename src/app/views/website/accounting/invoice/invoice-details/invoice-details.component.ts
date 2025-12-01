@@ -556,9 +556,9 @@ export class InvoiceDetailsComponent implements OnInit {
     this.CalculateAmount();
   };
   CalculateMessAmount = () => {
-    const DieselQty = Number(this.Entity.p.DieselQty);
-    const DieselRate = Number(this.Entity.p.DieselRate);
-    this.Entity.p.DieselAmount = Math.round(DieselQty * DieselRate * 100) / 100;
+    // const DieselQty = Number(this.Entity.p.DieselQty);
+    // const DieselRate = Number(this.Entity.p.DieselRate);
+    // this.Entity.p.DieselAmount = Math.round(DieselQty * DieselRate * 100) / 100;
     this.CalculateAmount();
   };
 

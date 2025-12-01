@@ -480,7 +480,7 @@
           </div>
         </div>
         <div class="col-md-4" style="margin-top: 1rem" *ngIf="isMessPaid">
-          <label>Mess Rate</label>
+          <label>Mess Amount</label>
           <input type="text" appCommaFormat [(ngModel)]="Entity.p.MessAmount" name="MessAmount" class="form-control"
             id="MessAmount" required placeholder="Enter Mess Rate" #MessAmountCtrl="ngModel"
             (blur)="MessAmountCtrl.control.markAsTouched()" (click)="selectAllValue($event)"

@@ -134,10 +134,16 @@
         clearInput="true"></ion-input>
     </ion-item>
 
+    <!-- Salary Advance Return Amount -->
+    <ion-item class="input-item">
+      <ion-checkbox [(ngModel)]="Entity.p.IsSalaryAdvanceReturn">Salary Advance Return</ion-checkbox>
+    </ion-item>
+
     <!-- Income Amount -->
     <ion-item class="input-item">
-      <ion-input label="Income Amount" labelPlacement="floating" placeholder="Enter Income Amount"
-        [(ngModel)]="Entity.p.IncomeAmount" (ngModelChange)="CalculateShreeBalance()" type="number"></ion-input>
+      <ion-input [label]="Entity.p.IsSalaryAdvanceReturn ? 'Salary Advance Return Amount':'Income Amount'"
+        labelPlacement="floating" placeholder="Enter Salary Advance Return Amount" [(ngModel)]="Entity.p.IncomeAmount"
+        (ngModelChange)="CalculateShreeBalance()" type="number"></ion-input>
     </ion-item>
 
     <!-- Remaining Plot Amount -->

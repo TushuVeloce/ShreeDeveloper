@@ -194,7 +194,7 @@
     <!-- Plot Name -->
     <ion-item class="input-item" *ngIf="Entity.p.RecipientType == DealDoneCustomer && Entity.p.RecipientRef != 0">
       <ion-input label="Plot Name" labelPlacement="floating" placeholder="Enter Plot Name"
-        [(ngModel)]="Entity.p.PlotName" clearInput="true" [disabled] = "'true'"></ion-input>
+        [(ngModel)]="Entity.p.PlotName" clearInput="true" [disabled]="'true'"></ion-input>
     </ion-item>
 
     <!-- Select Income Ledger -->
@@ -229,14 +229,21 @@
     <ion-item class="input-item" *ngIf="!Entity.p.IsAdvancePayment">
       <ion-input
         [label]="(Entity.p.RecipientType == EmployeeType && !Entity.p.IsSalaryExpense)?'Bill Amount':(Entity.p.RecipientType == EmployeeType &&  Entity.p.IsSalaryExpense)?'Net Salary':(Entity.p.RecipientType != EmployeeType)?'Bill Amount':'expenese Amount'"
-        labelPlacement="floating" placeholder="Enter Expense Amount" [(ngModel)]="Entity.p.InvoiceAmount"
-        type="number" clearOnEdit="true" clearInput="true"></ion-input>
+        labelPlacement="floating" placeholder="Enter Expense Amount" [(ngModel)]="Entity.p.InvoiceAmount" (ngModelChange)="Entity.p.GivenAmount = 0; Entity.p.DiscountAmount = 0" type="number"
+        clearOnEdit="true" clearInput="true"></ion-input>
     </ion-item>
 
     <!-- Given Amount -->
     <ion-item class="input-item">
       <ion-input label="Given Amount" labelPlacement="floating" placeholder="Enter Given Amount"
         [(ngModel)]="Entity.p.GivenAmount" (ngModelChange)="CalculateRemainingAmountandBalance()" type="number"
+        clearOnEdit="true" clearInput="true"></ion-input>
+    </ion-item>
+
+    <!-- Discount Amount -->
+    <ion-item class="input-item">
+      <ion-input label="Discount Amount" labelPlacement="floating" placeholder="Enter Discount Amount"
+        [(ngModel)]="Entity.p.DiscountAmount" (ngModelChange)="CalculateRemainingAmountandBalance()" type="number"
         clearOnEdit="true" clearInput="true"></ion-input>
     </ion-item>
 
@@ -287,7 +294,8 @@
     </ion-item>
 
     <!-- Bank -->
-    <ion-item class="input-item" button (click)="selectBankBottomsheetNewBank()"  *ngIf="(Entity.p.ModeOfPaymentForIncome != Cash && Entity.p.ModeOfPaymentForIncome) && !Entity.p.IsNewBankCreated"
+    <ion-item class="input-item" button (click)="selectBankBottomsheetNewBank()"
+      *ngIf="(Entity.p.ModeOfPaymentForIncome != Cash && Entity.p.ModeOfPaymentForIncome) && !Entity.p.IsNewBankCreated"
       [disabled]="BankList.length==0">
       <ion-label>Bank</ion-label>
 

@@ -56,6 +56,7 @@ export class InvoiceDetailsMobileAppComponent implements OnInit {
   VendorServiceList: ServiceSuppliedByVendorProps[] = [];
   VendorServiceListByVendor: VendorService[] = [];
   isDieselPaid: boolean = false;
+  isMessPaid: boolean = false;
   RecipientNameReadOnly: boolean = false;
   Bill = ModeOfPayments.Bill;
   ModeofPaymentList = DomainEnums.ModeOfPaymentsList().filter(
@@ -343,9 +344,13 @@ export class InvoiceDetailsMobileAppComponent implements OnInit {
           if (this.Entity.p.IsDieselPaid == 1) {
             this.isDieselPaid = true;
           }
+          if (this.Entity.p.IsMessPaid == 1) {
+            this.isMessPaid = true;
+          }
           if (
             this.Entity.p.ExpenseTypeArray.includes(this.MachinaryExpenseRef) ||
-            this.Entity.p.ExpenseTypeArray.includes(this.LabourExpenseRef)|| this.Entity.p.ExpenseTypeArray.includes(this.MultipleExpenseRef)
+            this.Entity.p.ExpenseTypeArray.includes(this.LabourExpenseRef) ||
+            this.Entity.p.ExpenseTypeArray.includes(this.MultipleExpenseRef)
           ) {
             await this.getVendorServiceListByVendorRef(
               this.Entity.p.RecipientRef
@@ -586,7 +591,7 @@ export class InvoiceDetailsMobileAppComponent implements OnInit {
     }
   };
 
-    DiselPaid = (DiselPaid: number) => {
+  DiselPaid = (DiselPaid: number) => {
     if (DiselPaid == 1) {
       this.isDieselPaid = true;
       this.Entity.p.IsDieselPaid = 1;
@@ -600,10 +605,29 @@ export class InvoiceDetailsMobileAppComponent implements OnInit {
     this.CalculateAmount();
   };
 
+  MessPaid = (MessPaid: number) => {
+    if (MessPaid == 1) {
+      this.isMessPaid = true;
+      this.Entity.p.IsMessPaid = 1;
+    } else {
+      this.Entity.p.MessAmount = 0;
+      this.Entity.p.IsMessPaid = 0;
+      this.isMessPaid = false;
+    }
+    this.CalculateAmount();
+  };
+
   CalculateDieselAmount = () => {
     const DieselQty = Number(this.Entity.p.DieselQty);
     const DieselRate = Number(this.Entity.p.DieselRate);
     this.Entity.p.DieselAmount = Math.round(DieselQty * DieselRate * 100) / 100;
+    this.CalculateAmount();
+  };
+
+  CalculateMessAmount = () => {
+    // const DieselQty = Number(this.Entity.p.DieselQty);
+    // const DieselRate = Number(this.Entity.p.DieselRate);
+    // this.Entity.p.DieselAmount = Math.round(DieselQty * DieselRate * 100) / 100;
     this.CalculateAmount();
   };
 
@@ -644,7 +668,7 @@ export class InvoiceDetailsMobileAppComponent implements OnInit {
     this.selectedSubLedger = [];
     this.SubLedgerName = '';
   };
- convertHoursToReadableTime = (decimalHours: number): string => {
+  convertHoursToReadableTime = (decimalHours: number): string => {
     const hours = Math.floor(decimalHours);
     const minutes = Math.round((decimalHours - hours) * 60);
 
@@ -671,7 +695,7 @@ export class InvoiceDetailsMobileAppComponent implements OnInit {
     return `${hours}h ${formattedMinutes}m`;
   };
 
-    convertTo12HourFormat = (time: string): string => {
+  convertTo12HourFormat = (time: string): string => {
     const [hourStr, minuteStr] = time.split(':');
     let hour = parseInt(hourStr, 10);
     const minute = parseInt(minuteStr, 10);
@@ -901,8 +925,6 @@ export class InvoiceDetailsMobileAppComponent implements OnInit {
       0
     );
   };
-
-
 
   CloseLabourTimeModal = async (type: number) => {
     if (type === 200) {
@@ -1226,7 +1248,11 @@ export class InvoiceDetailsMobileAppComponent implements OnInit {
     this.MultipleExpenseEntity = {
       ...this.Entity.p.InvoiceItemDetailsArray[index],
     };
-    this.MultipleUnitName = this.UnitList.find((item) => item.p.Ref == this.Entity.p.InvoiceItemDetailsArray[index].UnitRef)?.p.Name ?? '';
+    this.MultipleUnitName =
+      this.UnitList.find(
+        (item) =>
+          item.p.Ref == this.Entity.p.InvoiceItemDetailsArray[index].UnitRef
+      )?.p.Name ?? '';
     this.selectedMultipleUnit = [
       {
         p: {
@@ -1339,24 +1365,60 @@ export class InvoiceDetailsMobileAppComponent implements OnInit {
     input.select();
   };
 
-   CalculateAmount = () => {
-    const TotalWorkedHours = this.getTotalWorkedHours()
-    const TotalLabourAmount = this.getTotalLabourAmount()
-    const TotalMultiExpenseAmount = this.getTotalMultipleExpenseAmount()
-    const Qty = Number(this.Entity.p.Qty)
-    const DieselAmount = Number(this.Entity.p.DieselAmount) || 0
+  // CalculateAmount = () => {
+  //   const TotalWorkedHours = this.getTotalWorkedHours();
+  //   const TotalLabourAmount = this.getTotalLabourAmount();
+  //   const TotalMultiExpenseAmount = this.getTotalMultipleExpenseAmount();
+  //   const Qty = Number(this.Entity.p.Qty);
+  //   const DieselAmount = Number(this.Entity.p.DieselAmount) || 0;
+
+  //   let Rate = 0;
+  //   if (Number(this.Entity.p.Rate / 60) > 0) {
+  //     Rate = Number(this.Entity.p.Rate / 60);
+  //   }
+  //   if (
+  //     this.Entity.p.ExpenseTypeArray[0] == this.OtherExpenseRef &&
+  //     this.Entity.p.ExpenseTypeArray.length == 1
+  //   ) {
+  //     this.Entity.p.InvoiceAmount =
+  //       Math.round((Qty * this.Entity.p.Rate - DieselAmount) * 100) / 100;
+  //   } else {
+  //     this.Entity.p.InvoiceAmount =
+  //       Math.round((TotalWorkedHours * Rate - DieselAmount) * 100) / 100 +
+  //       Math.round(TotalLabourAmount * 100) / 100 +
+  //       Math.round(TotalMultiExpenseAmount * 100) / 100;
+  //   }
+  // };
+  CalculateAmount = () => {
+    const TotalWorkedHours = this.getTotalWorkedHours();
+    const TotalLabourAmount = this.getTotalLabourAmount();
+    const TotalMultiExpenseAmount = this.getTotalMultipleExpenseAmount();
+    const Qty = Number(this.Entity.p.Qty);
+    const DieselAmount = Number(this.Entity.p.DieselAmount) || 0;
+    const MessAmount = Number(this.Entity.p.MessAmount) || 0;
 
     let Rate = 0;
     if (Number(this.Entity.p.Rate / 60) > 0) {
       Rate = Number(this.Entity.p.Rate / 60);
     }
-    if (this.Entity.p.ExpenseTypeArray[0] == this.OtherExpenseRef && this.Entity.p.ExpenseTypeArray.length == 1) {
-      this.Entity.p.InvoiceAmount = (Math.round(((Qty * this.Entity.p.Rate) - DieselAmount) * 100) / 100);
+    if (
+      this.Entity.p.ExpenseTypeArray[0] == this.OtherExpenseRef &&
+      this.Entity.p.ExpenseTypeArray.length == 1
+    ) {
+      this.Entity.p.InvoiceAmount =
+        Math.round(
+          (Qty * this.Entity.p.Rate - DieselAmount - MessAmount) * 100
+        ) / 100;
     } else {
-      this.Entity.p.InvoiceAmount = (Math.round(((TotalWorkedHours * Rate) - DieselAmount) * 100) / 100) + (Math.round((TotalLabourAmount) * 100) / 100) + (Math.round((TotalMultiExpenseAmount) * 100) / 100);
+      this.Entity.p.InvoiceAmount =
+        Math.round(
+          (TotalWorkedHours * Rate - DieselAmount - MessAmount) * 100
+        ) /
+          100 +
+        Math.round(TotalLabourAmount * 100) / 100 +
+        Math.round(TotalMultiExpenseAmount * 100) / 100;
     }
-  }
-
+  };
 
   SaveInvoiceMaster = async () => {
     try {
@@ -1617,7 +1679,6 @@ export class InvoiceDetailsMobileAppComponent implements OnInit {
         4,
         (selected) => {
           this.selectedExpenseType = selected;
-
 
           // ✅ Extract all selected Ref values as an array
           this.Entity.p.ExpenseTypeArray = selected.map((s) => s.p.Ref);

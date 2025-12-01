@@ -633,8 +633,43 @@ export class ExpensesDetailsMobileAppComponent implements OnInit {
   //     this.Entity.p.TotalAdvance = this.Entity.p.RemainingAdvance + this.Entity.p.GivenAmount
   //   }
   // }
+  //   CalculateRemainingAmountandBalance = () => {
+  //   this.Entity.p.RemainingAmount = Number((this.Entity.p.InvoiceAmount - this.Entity.p.GivenAmount).toFixed(2));
+  //   // if (this.Entity.p.GivenAmount <= this.Entity.p.InvoiceAmount) {
+  //   // } else {
+  //   //   this.Entity.p.RemainingAmount = 0;
+  //   // }
+
+  //   if (this.PaymentType == this.TypeofEmployeePayments.Advance) {
+  //     this.Entity.p.InvoiceAmount = this.Entity.p.GivenAmount;
+  //   }
+
+  //   if (this.IsNewEntity) {
+  //     if (this.Entity.p.GivenAmount <= this.Entity.p.ShreesBalance) {
+  //       this.Entity.p.ShreesBalance = Number((this.ShreeBalance - this.Entity.p.GivenAmount).toFixed(2));
+  //     } else {
+  //       this.Entity.p.ShreesBalance = -Number((this.Entity.p.GivenAmount - this.ShreeBalance).toFixed(2));
+  //     }
+  //   } else {
+
+  //     let currentExpenseAmount = 0;
+
+  //     if (this.Entity.p.GivenAmount > this.OldGivenAmount) {
+  //       currentExpenseAmount = this.Entity.p.GivenAmount - this.OldGivenAmount;
+  //       this.Entity.p.ShreesBalance = Number((this.ShreeBalance - currentExpenseAmount).toFixed(2));
+  //     } else {
+  //       currentExpenseAmount = this.OldGivenAmount - this.Entity.p.GivenAmount;
+  //       this.Entity.p.ShreesBalance = Number((this.ShreeBalance + currentExpenseAmount).toFixed(2));
+  //     }
+  //   }
+
+  //   if (this.Entity.p.IsAdvancePayment) {
+  //     this.Entity.p.TotalAdvance = this.Entity.p.RemainingAdvance + this.Entity.p.GivenAmount
+  //   }
+  // }
+
     CalculateRemainingAmountandBalance = () => {
-    this.Entity.p.RemainingAmount = Number((this.Entity.p.InvoiceAmount - this.Entity.p.GivenAmount).toFixed(2));
+    this.Entity.p.RemainingAmount = Number((this.Entity.p.InvoiceAmount - this.Entity.p.DiscountAmount - this.Entity.p.GivenAmount).toFixed(2));
     // if (this.Entity.p.GivenAmount <= this.Entity.p.InvoiceAmount) {
     // } else {
     //   this.Entity.p.RemainingAmount = 0;
