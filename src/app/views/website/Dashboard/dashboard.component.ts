@@ -130,11 +130,15 @@ export class DashboardComponent implements OnInit {
     // this.getIncomeExpenseGraphList();
     // this.getCRMFunnelListByCompanySiteMonthFilterType();
 
-    // this.getInvoiceSumExpenseSumListByCompanySiteMonthFilterType();
+    this.getInvoiceSumExpenseSumListByCompanySiteMonthFilterType();
 
     if (this.BarFilterType == 57) {
       this.WeekMonthList = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
     }
+  }
+
+  goToBillsPayablePage() {
+    this.router.navigate(['homepage/Website/Bill_Payable_Report']); // your full list page route
   }
 
   setIncomeExpenseChart = () => {
@@ -342,38 +346,81 @@ export class DashboardComponent implements OnInit {
       this.SelectedBarMonths || 0,
       async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
     );
+    console.log('this.companyRef() :', this.companyRef());
+    console.log('this.SelectedCRMMonths :', this.SelectedCRMMonths);
+    console.log('this.CRMSiteRef :', this.CRMSiteRef);
+    console.log('this.CRMFilterType :', this.CRMFilterType);
+    console.log('this.companyRef() :', this.companyRef());
+    console.log('this.DoughnutSiteRef :', this.DoughnutSiteRef);
+    console.log('this.DoughnutFilterType :', this.DoughnutFilterType);
+    console.log('this.SelectedDoughnutMonths :', this.SelectedDoughnutMonths);
+    console.log('this.companyRef() :', this.companyRef());
+    console.log('this.BarSiteRef :', this.BarSiteRef);
+    console.log('this.BarFilterType :', this.BarFilterType);
+    console.log('this.SelectedBarMonths :', this.SelectedBarMonths);
+
     this.DashboardStatsList = lst;
     console.log('lst :', lst);
     this.TotalEnquiries = lst[0].p.TotalEnquiries;
     this.TotalNoOfPlots = lst[0].p.TotalNoOfPlots;
     this.TotalNoOfSoldPlots = lst[0].p.TotalNoOfSoldPlots;
     this.TotalRevenueGenerated = lst[0].p.TotalRevenueGenerated;
-    
-    this.ExpenseGraphList = lst[0].p.ExpenseBreakDownResponseList.map(item => item.TotalGivenAmount);
-    this.TotalExpense = lst[0].p.ExpenseBreakDownResponseList.reduce((sum, item) => sum + (item.TotalGivenAmount || 0), 0);
+
+    this.ExpenseGraphList = lst[0].p.ExpenseBreakDownResponseList.map(
+      (item) => item.TotalGivenAmount
+    );
+    this.TotalExpense = lst[0].p.ExpenseBreakDownResponseList.reduce(
+      (sum, item) => sum + (item.TotalGivenAmount || 0),
+      0
+    );
     this.setIncomeExpenseChart();
 
-    this.TotalIncome = lst[0].p.IncomeExpenseAmountByPeriodList.reduce((sum, item) => sum + (item.TotalIncomeAmount || 0), 0);
-    this.IncomeGraphList = lst[0].p.IncomeExpenseAmountByPeriodList.map(item => item.TotalIncomeAmount);
+    this.TotalIncome = lst[0].p.IncomeExpenseAmountByPeriodList.reduce(
+      (sum, item) => sum + (item.TotalIncomeAmount || 0),
+      0
+    );
+    this.IncomeGraphList = lst[0].p.IncomeExpenseAmountByPeriodList.map(
+      (item) => item.TotalIncomeAmount
+    );
     if (this.BarFilterType == 63 && this.SelectedBarMonths) {
-      this.WeekMonthList = lst[0].p.IncomeExpenseAmountByPeriodList.map(item => item.WeekName);
+      this.WeekMonthList = lst[0].p.IncomeExpenseAmountByPeriodList.map(
+        (item) => item.WeekName
+      );
     } else if (this.BarFilterType == 63) {
-      this.WeekMonthList = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'Jul', 'Aug', 'Spet', 'Oct', 'Nov', 'Dec']
+      this.WeekMonthList = [
+        'Jan',
+        'Feb',
+        'Mar',
+        'Apr',
+        'May',
+        'June',
+        'Jul',
+        'Aug',
+        'Spet',
+        'Oct',
+        'Nov',
+        'Dec',
+      ];
     } else {
-      this.WeekMonthList = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+      this.WeekMonthList = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
     }
     this.setIncomeExpenseChart();
 
-    this.LedgerColorShadesList = this.generateShades((lst[0].p.ExpenseBreakDownResponseList).length);
+    this.LedgerColorShadesList = this.generateShades(
+      lst[0].p.ExpenseBreakDownResponseList.length
+    );
     if (lst.length > 0) {
-      this.isLoading = false; 
-      this.LedgerList = lst[0].p.ExpenseBreakDownResponseList.map(item => item.LedgerName);
-      this.ExpenseBreakdownList = lst[0].p.ExpenseBreakDownResponseList.map(item => item.TotalGivenAmount);
+      this.isLoading = false;
+      this.LedgerList = lst[0].p.ExpenseBreakDownResponseList.map(
+        (item) => item.LedgerName
+      );
+      this.ExpenseBreakdownList = lst[0].p.ExpenseBreakDownResponseList.map(
+        (item) => item.TotalGivenAmount
+      );
       this.setDoughnutChart();
-    }
-    else {
-      this.LedgerList = []
-      this.ExpenseBreakdownList = []
+    } else {
+      this.LedgerList = [];
+      this.ExpenseBreakdownList = [];
       this.setDoughnutChart();
     }
   };
@@ -420,5 +467,9 @@ export class DashboardComponent implements OnInit {
         async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
       );
     this.InvoiceSumExpenseSumList = lst;
+    console.log(
+      'this.InvoiceSumExpenseSumList :',
+      this.InvoiceSumExpenseSumList
+    );
   };
 }
