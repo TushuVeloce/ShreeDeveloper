@@ -24,7 +24,7 @@ import { Utils } from 'src/app/services/utils.service';
 })
 export class AttendanceDetailsComponent implements OnInit {
   Entity: WebAttendaneLog = WebAttendaneLog.CreateNewInstance();
-  private IsNewEntity: boolean = true;
+  public IsNewEntity: boolean = true;
   isSaveDisabled: boolean = false;
   DetailsFormTitle: 'New Attendance' | 'Edit Attendance' = 'New Attendance';
   IsDropdownDisabled: boolean = false
@@ -66,8 +66,8 @@ export class AttendanceDetailsComponent implements OnInit {
   CheckInTime: Date | null = null;
   CheckOutTime: Date | null = null;
 
-  FirstCheckInTime: string = '';
-  LastCheckOutTime: string = '';
+  FirstCheckInTime: Date | null = null;
+  LastCheckOutTime: Date | null = null;
 
   baseHeaders: string[] = ['Sr. No', 'Site Name', 'Check In Time', 'Check Out Time', 'Working Hours', 'Action'];
 
@@ -112,12 +112,13 @@ export class AttendanceDetailsComponent implements OnInit {
         this.Entity.p.AttendanceLogPath2 = this.Entity.p.AttendanceLogDetailsArray[this.Entity.p.AttendanceLogDetailsArray.length - 1].AttendanceLogPath2;
       }
       if (this.Entity.p.FirstCheckInTime) {
-        this.FirstCheckInTime = this.convertTo12Hour(this.Entity.p.FirstCheckInTime);
+        this.FirstCheckInTime = this.convertToFullTime(this.Entity.p.FirstCheckInTime);
       }
 
       if (this.Entity.p.FirstCheckInTime) {
-        this.LastCheckOutTime = this.convertTo12Hour(this.Entity.p.LastCheckOutTime);
+        this.LastCheckOutTime = this.convertToFullTime(this.Entity.p.LastCheckOutTime);
       }
+      this.calculateFirstLastCheckInOutWorkingHours()
       this.getDefaultWorkingHrsByEmployeeRef();
     } else {
       this.Entity = WebAttendaneLog.CreateNewInstance();
@@ -281,6 +282,49 @@ export class AttendanceDetailsComponent implements OnInit {
     return new Date(now.getFullYear(), now.getMonth(), now.getDate(), hours, minutes, 0);
   }
 
+    calculateFirstLastCheckInOutWorkingHours = () => {
+    if (!this.FirstCheckInTime) {
+      return
+    }
+
+    this.Entity.p.FirstCheckInTime = this.convertIOS12To24HoursFormat(this.FirstCheckInTime);
+    this.Entity.p.LastCheckOutTime = this.convertIOS12To24HoursFormat(this.LastCheckOutTime);
+
+    // Fallback to "00:00" if either is missing or invalid
+    if (!this.Entity.p.FirstCheckInTime || !this.Entity.p.LastCheckOutTime.includes(":")) return 0;
+
+    const [inHour, inMin] = this.Entity.p.FirstCheckInTime.split(':').map(Number);
+    const [outHour, outMin] = (this.Entity.p.LastCheckOutTime && this.Entity.p.LastCheckOutTime.includes(":") ? this.Entity.p.LastCheckOutTime : "00:00").split(':').map(Number);
+
+    // Check for invalid numbers
+    if (isNaN(inHour) || isNaN(inMin) || isNaN(outHour) || isNaN(outMin)) return 0;
+
+    const inDate = new Date();
+    inDate.setHours(inHour, inMin, 0, 0);
+
+    const outDate = new Date();
+    outDate.setHours(outHour, outMin, 0, 0);
+
+    // Handle overnight shift
+    if (outDate <= inDate) {
+      outDate.setDate(outDate.getDate() + 1);
+    }
+
+    const diffMs = outDate.getTime() - inDate.getTime();
+    const diffMinutes = Math.floor(diffMs / 60000);
+
+    const decimalHours = diffMinutes / 60;
+
+    this.Entity.p.TotalWorkingHrs = parseFloat(decimalHours.toFixed(2));
+
+    // HH:mm format
+    const hours = Math.floor(diffMinutes / 60);
+    const minutes = diffMinutes % 60;
+
+    this.Entity.p.DisplayTotalWorkingHrs = `${hours}h ${minutes.toString().padStart(2, '0')}m`;
+    return;
+  }
+
   calculateWorkingHours = () => {
     if (!this.CheckOutTime) {
       return
@@ -441,8 +485,8 @@ export class AttendanceDetailsComponent implements OnInit {
     this.Entity.p.FirstCheckInTime = this.Entity.p.AttendanceLogDetailsArray[0].CheckInTime;
     this.Entity.p.LastCheckOutTime = this.Entity.p.AttendanceLogDetailsArray[this.Entity.p.AttendanceLogDetailsArray.length - 1].CheckOutTime;
 
-    this.FirstCheckInTime = this.convertTo12Hour(this.Entity.p.FirstCheckInTime);
-    this.LastCheckOutTime = this.convertTo12Hour(this.Entity.p.LastCheckOutTime);
+    this.FirstCheckInTime = this.convertToFullTime(this.Entity.p.FirstCheckInTime);
+    this.LastCheckOutTime = this.convertToFullTime(this.Entity.p.LastCheckOutTime);
 
     this.IsLateMarkChange();
     if (!this.Entity.p.IsHalfDay) {
@@ -461,6 +505,7 @@ export class AttendanceDetailsComponent implements OnInit {
     this.Entity.p.IsAttendanceVerified = true;
 
     this.Entity.p.TransDateTime = this.dtu.ConvertStringDateToFullFormat(this.Date);
+    console.log('this.Entity :', this.Entity);
     let entityToSave = this.Entity.GetEditableVersion();
     let entitiesToSave = [entityToSave]
     let tr = await this.utils.SavePersistableEntities(entitiesToSave);
