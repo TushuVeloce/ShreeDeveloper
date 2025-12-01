@@ -36,10 +36,8 @@ export enum BookingRemarks {
   Shree_Booked = 40,
   Owner_Saledeed = 50,
   Shree_Saledeed = 60,
-  Booked = 70
+  Booked = 70,
 }
-
-
 
 export enum MarketingModes {
   None = 0,
@@ -99,31 +97,72 @@ export enum SiteWorkApplicableTypes {
 
 export enum ApplicationFeatures {
   None = 0,
-  UnitMaster = 100,
-  MaterialMaster = 200,
-  StageMaster = 300,
-  MarketingTypeMaster = 400,
-  VendorServicesMaster = 500,
-  VendorMaster = 600,
-  BankAccountMaster = 700,
-  CountryMaster = 800,
-  StateMaster = 900,
-  CityMaster = 1000,
-  DepartmentMaster = 1100,
-  DesignationMaster = 1200,
-  UserRoleMaster = 1300,
-  UserRoleRight = 1400,
-  ExternalUserMaster = 1500,
-  CompanyMaster = 1600,
-  FinancialYearMaster = 1700,
-  EmployeeMaster = 1800,
 
-  AccountingTransaction = 1900,
-  VendorReport = 2000,
-  MaterialReport = 2100,
-  EmployeeReport = 2200,
-  MaterialTransaction = 2300,
+  // ---------- MASTERS ----------
+  CompanyMaster = 100,
+  OwnerMaster = 110,
+  DepartmentMaster = 120,
+  DesignationMaster = 130,
+  UserRoleRightMaster = 140,
+  EmployeeMaster = 150,
+  BankAccountMaster = 160,
+  OpeningBalanceMaster = 170,
+  FinancialYearMaster = 180,
+  MainLedgerMaster = 190,
+  SubLedgerMaster = 200,
+  StageMaster = 210,
+  UnitMaster = 220,
+  MaterialMaster = 230,
+  VendorServicesMaster = 240,
+  VendorMaster = 250,
+  RecipientMaster = 260,
+  PayerMaster = 270,
+
+  // ---------- TRANSACTIONS ----------
+  NewSite = 300,
+  PlotDetails = 310,
+
+  MaterialRequisition = 320,
+  StockOrder = 330,
+  StockInward = 340,
+  StockConsume = 350,
+  StockTransfer = 360,
+  StockSummary = 370,
+
+  GovProgressReport = 380,
+  DocumentList = 390,
+
+  CustomerEnquiry = 400,
+  CustomerFollowUp = 410,
+  PendingFollowUp = 420,
+  RegisteredCustomer = 430,
+  CustomerSummary = 440,
+  CustomerInfo = 450,
+  CustomerVisitReport = 460,
+  DealCancelledCustomer = 470,
+  PaymentHistoryReport = 480,
+
+  RegistrarOffice = 490,
+
+  EmployeeAttendance = 500,
+  EmployeeLeaveRequest = 510,
+  EmployeeSalarySlipRequest = 520,
+
+  OfficeDutyTime = 530,
+  HRAttendance = 540,
+  SalaryGeneration = 550,
+  LeaveApproval = 560,
+  SalarySlipApproval = 570,
+  EmployeeOvertime = 580,
+  CompanyHolidays = 590,
+
+  Billing = 600,
+  Expense = 610,
+  Income = 620,
+  OfficeReport = 630,
+  BillPayableReport = 640,
 }
+
 // export enum LoginStatusModes {
 //   None = 0,
 //   Enable = 'true',
@@ -916,57 +955,125 @@ export class DomainEnums {
   }
 
   // For Feature
-
-  public static ApplicationFeatureName(
-    ApplicationFeature: ApplicationFeatures
-  ) {
-    switch (ApplicationFeature) {
-      case ApplicationFeatures.UnitMaster:
-        return 'Unit Master';
-      case ApplicationFeatures.MaterialMaster:
-        return 'Material Master';
-      case ApplicationFeatures.StageMaster:
-        return 'Stage Master';
-      case ApplicationFeatures.MarketingTypeMaster:
-        return 'Marketing Type Master';
-      case ApplicationFeatures.VendorServicesMaster:
-        return 'Vendor Services Master';
-      case ApplicationFeatures.VendorMaster:
-        return 'Vendor Master';
-      case ApplicationFeatures.BankAccountMaster:
-        return 'Bank Account Master';
-      case ApplicationFeatures.CountryMaster:
-        return 'Country Master';
-      case ApplicationFeatures.StateMaster:
-        return 'State Master';
-      case ApplicationFeatures.CityMaster:
-        return 'City Master';
+  public static ApplicationFeatureName(feature: ApplicationFeatures) {
+    switch (feature) {
+      // -------- Masters ----------
+      case ApplicationFeatures.CompanyMaster:
+        return 'Company Master';
+      case ApplicationFeatures.OwnerMaster:
+        return 'Owner Master';
       case ApplicationFeatures.DepartmentMaster:
         return 'Department Master';
       case ApplicationFeatures.DesignationMaster:
         return 'Designation Master';
-      case ApplicationFeatures.UserRoleMaster:
-        return 'User Role Master';
-      case ApplicationFeatures.UserRoleRight:
+      case ApplicationFeatures.UserRoleRightMaster:
         return 'User Role Right Master';
-      case ApplicationFeatures.ExternalUserMaster:
-        return 'External User Master';
-      case ApplicationFeatures.CompanyMaster:
-        return 'Company Master';
-      case ApplicationFeatures.FinancialYearMaster:
-        return 'Financial Year Master';
       case ApplicationFeatures.EmployeeMaster:
         return 'Employee Master';
+      case ApplicationFeatures.BankAccountMaster:
+        return 'Bank Account Master';
+      case ApplicationFeatures.OpeningBalanceMaster:
+        return 'Opening Balance Master';
+      case ApplicationFeatures.FinancialYearMaster:
+        return 'Financial Year Master';
+      case ApplicationFeatures.MainLedgerMaster:
+        return 'Main Ledger Master';
+      case ApplicationFeatures.SubLedgerMaster:
+        return 'Sub Ledger Master';
+      case ApplicationFeatures.StageMaster:
+        return 'Stage Master';
+      case ApplicationFeatures.UnitMaster:
+        return 'Unit Master';
+      case ApplicationFeatures.MaterialMaster:
+        return 'Material Master';
+      case ApplicationFeatures.VendorServicesMaster:
+        return 'Vendor Services Master';
+      case ApplicationFeatures.VendorMaster:
+        return 'Vendor Master';
+      case ApplicationFeatures.RecipientMaster:
+        return 'Recipient Master';
+      case ApplicationFeatures.PayerMaster:
+        return 'Payer Master';
 
-      case ApplicationFeatures.AccountingTransaction:
-        return 'Accounting Transaction';
-      case ApplicationFeatures.MaterialTransaction:
-        return 'Material Transaction';
+      // -------- Transactions ----------
+      case ApplicationFeatures.NewSite:
+        return 'New Site';
+      case ApplicationFeatures.PlotDetails:
+        return 'Plot Details';
 
-      case ApplicationFeatures.VendorReport:
-        return 'Vendor Report';
-      case ApplicationFeatures.EmployeeReport:
-        return 'Employee Report';
+      case ApplicationFeatures.MaterialRequisition:
+        return 'Material Requisition';
+      case ApplicationFeatures.StockOrder:
+        return 'Stock Order';
+      case ApplicationFeatures.StockInward:
+        return 'Stock Inward';
+      case ApplicationFeatures.StockConsume:
+        return 'Stock Consume';
+      case ApplicationFeatures.StockTransfer:
+        return 'Stock Transfer';
+      case ApplicationFeatures.StockSummary:
+        return 'Stock Summary';
+
+      case ApplicationFeatures.GovProgressReport:
+        return 'Gov Progress Report';
+      case ApplicationFeatures.DocumentList:
+        return 'Document List';
+
+      case ApplicationFeatures.CustomerEnquiry:
+        return 'Customer Enquiry';
+      case ApplicationFeatures.CustomerFollowUp:
+        return 'Customer Follow Up';
+      case ApplicationFeatures.PendingFollowUp:
+        return 'Pending Follow Up';
+      case ApplicationFeatures.RegisteredCustomer:
+        return 'Registered Customer';
+      case ApplicationFeatures.CustomerSummary:
+        return 'Customer Summary';
+      case ApplicationFeatures.CustomerInfo:
+        return 'Customer Info';
+      case ApplicationFeatures.CustomerVisitReport:
+        return 'Customer Visit Report';
+      case ApplicationFeatures.DealCancelledCustomer:
+        return 'Deal Cancelled Customer';
+      case ApplicationFeatures.PaymentHistoryReport:
+        return 'Payment History Report';
+
+      case ApplicationFeatures.RegistrarOffice:
+        return 'Registrar Office';
+
+      case ApplicationFeatures.EmployeeAttendance:
+        return 'Employee Attendance';
+      case ApplicationFeatures.EmployeeLeaveRequest:
+        return 'Employee Leave Request';
+      case ApplicationFeatures.EmployeeSalarySlipRequest:
+        return 'Salary Slip Request';
+
+      case ApplicationFeatures.OfficeDutyTime:
+        return 'Office Duty & Time';
+      case ApplicationFeatures.HRAttendance:
+        return 'HR Attendance';
+      case ApplicationFeatures.SalaryGeneration:
+        return 'Salary Generation';
+      case ApplicationFeatures.LeaveApproval:
+        return 'Leave Approval';
+      case ApplicationFeatures.SalarySlipApproval:
+        return 'Salary Slip Approval';
+      case ApplicationFeatures.EmployeeOvertime:
+        return 'Employee Overtime';
+      case ApplicationFeatures.CompanyHolidays:
+        return 'Company Holidays';
+
+      case ApplicationFeatures.Billing:
+        return 'Billing';
+      case ApplicationFeatures.Expense:
+        return 'Expense';
+      case ApplicationFeatures.Income:
+        return 'Income';
+      case ApplicationFeatures.OfficeReport:
+        return 'Office Report';
+      case ApplicationFeatures.BillPayableReport:
+        return 'Bill Payable Report';
+
       default:
         return '';
     }
@@ -977,281 +1084,606 @@ export class DomainEnums {
     allOptionName: string = '<All>'
   ) {
     let result = [
+      // Masters
+      {
+        Ref: ApplicationFeatures.CompanyMaster,
+        Name: this.ApplicationFeatureName(ApplicationFeatures.CompanyMaster),
+      },
+      {
+        Ref: ApplicationFeatures.OwnerMaster,
+        Name: this.ApplicationFeatureName(ApplicationFeatures.OwnerMaster),
+      },
+      {
+        Ref: ApplicationFeatures.DepartmentMaster,
+        Name: this.ApplicationFeatureName(ApplicationFeatures.DepartmentMaster),
+      },
+      {
+        Ref: ApplicationFeatures.DesignationMaster,
+        Name: this.ApplicationFeatureName(
+          ApplicationFeatures.DesignationMaster
+        ),
+      },
+      {
+        Ref: ApplicationFeatures.UserRoleRightMaster,
+        Name: this.ApplicationFeatureName(
+          ApplicationFeatures.UserRoleRightMaster
+        ),
+      },
+      {
+        Ref: ApplicationFeatures.EmployeeMaster,
+        Name: this.ApplicationFeatureName(ApplicationFeatures.EmployeeMaster),
+      },
+      {
+        Ref: ApplicationFeatures.BankAccountMaster,
+        Name: this.ApplicationFeatureName(
+          ApplicationFeatures.BankAccountMaster
+        ),
+      },
+      {
+        Ref: ApplicationFeatures.OpeningBalanceMaster,
+        Name: this.ApplicationFeatureName(
+          ApplicationFeatures.OpeningBalanceMaster
+        ),
+      },
+      {
+        Ref: ApplicationFeatures.FinancialYearMaster,
+        Name: this.ApplicationFeatureName(
+          ApplicationFeatures.FinancialYearMaster
+        ),
+      },
+      {
+        Ref: ApplicationFeatures.MainLedgerMaster,
+        Name: this.ApplicationFeatureName(ApplicationFeatures.MainLedgerMaster),
+      },
+      {
+        Ref: ApplicationFeatures.SubLedgerMaster,
+        Name: this.ApplicationFeatureName(ApplicationFeatures.SubLedgerMaster),
+      },
+      {
+        Ref: ApplicationFeatures.StageMaster,
+        Name: this.ApplicationFeatureName(ApplicationFeatures.StageMaster),
+      },
       {
         Ref: ApplicationFeatures.UnitMaster,
-        Name: DomainEnums.ApplicationFeatureName(
-          ApplicationFeatures.UnitMaster
-        ),
+        Name: this.ApplicationFeatureName(ApplicationFeatures.UnitMaster),
       },
       {
         Ref: ApplicationFeatures.MaterialMaster,
-        Name: DomainEnums.ApplicationFeatureName(
-          ApplicationFeatures.MaterialMaster
-        ),
-      },
-
-      // New Start
-
-      {
-        Ref: ApplicationFeatures.StageMaster,
-        Name: DomainEnums.ApplicationFeatureName(
-          ApplicationFeatures.StageMaster
-        ),
-      },
-      {
-        Ref: ApplicationFeatures.MarketingTypeMaster,
-        Name: DomainEnums.ApplicationFeatureName(
-          ApplicationFeatures.MarketingTypeMaster
-        ),
+        Name: this.ApplicationFeatureName(ApplicationFeatures.MaterialMaster),
       },
       {
         Ref: ApplicationFeatures.VendorServicesMaster,
-        Name: DomainEnums.ApplicationFeatureName(
+        Name: this.ApplicationFeatureName(
           ApplicationFeatures.VendorServicesMaster
         ),
       },
       {
         Ref: ApplicationFeatures.VendorMaster,
-        Name: DomainEnums.ApplicationFeatureName(
-          ApplicationFeatures.VendorMaster
+        Name: this.ApplicationFeatureName(ApplicationFeatures.VendorMaster),
+      },
+      {
+        Ref: ApplicationFeatures.RecipientMaster,
+        Name: this.ApplicationFeatureName(ApplicationFeatures.RecipientMaster),
+      },
+      {
+        Ref: ApplicationFeatures.PayerMaster,
+        Name: this.ApplicationFeatureName(ApplicationFeatures.PayerMaster),
+      },
+
+      // Transactions
+      {
+        Ref: ApplicationFeatures.NewSite,
+        Name: this.ApplicationFeatureName(ApplicationFeatures.NewSite),
+      },
+      {
+        Ref: ApplicationFeatures.PlotDetails,
+        Name: this.ApplicationFeatureName(ApplicationFeatures.PlotDetails),
+      },
+
+      // Inventory
+      {
+        Ref: ApplicationFeatures.MaterialRequisition,
+        Name: this.ApplicationFeatureName(
+          ApplicationFeatures.MaterialRequisition
         ),
       },
       {
-        Ref: ApplicationFeatures.DepartmentMaster,
-        Name: DomainEnums.ApplicationFeatureName(
-          ApplicationFeatures.DepartmentMaster
+        Ref: ApplicationFeatures.StockOrder,
+        Name: this.ApplicationFeatureName(ApplicationFeatures.StockOrder),
+      },
+      {
+        Ref: ApplicationFeatures.StockInward,
+        Name: this.ApplicationFeatureName(ApplicationFeatures.StockInward),
+      },
+      {
+        Ref: ApplicationFeatures.StockConsume,
+        Name: this.ApplicationFeatureName(ApplicationFeatures.StockConsume),
+      },
+      {
+        Ref: ApplicationFeatures.StockTransfer,
+        Name: this.ApplicationFeatureName(ApplicationFeatures.StockTransfer),
+      },
+      {
+        Ref: ApplicationFeatures.StockSummary,
+        Name: this.ApplicationFeatureName(ApplicationFeatures.StockSummary),
+      },
+
+      // Government
+      {
+        Ref: ApplicationFeatures.GovProgressReport,
+        Name: this.ApplicationFeatureName(
+          ApplicationFeatures.GovProgressReport
         ),
       },
       {
-        Ref: ApplicationFeatures.DesignationMaster,
-        Name: DomainEnums.ApplicationFeatureName(
-          ApplicationFeatures.DesignationMaster
+        Ref: ApplicationFeatures.DocumentList,
+        Name: this.ApplicationFeatureName(ApplicationFeatures.DocumentList),
+      },
+
+      // Customer
+      {
+        Ref: ApplicationFeatures.CustomerEnquiry,
+        Name: this.ApplicationFeatureName(ApplicationFeatures.CustomerEnquiry),
+      },
+      {
+        Ref: ApplicationFeatures.CustomerFollowUp,
+        Name: this.ApplicationFeatureName(ApplicationFeatures.CustomerFollowUp),
+      },
+      {
+        Ref: ApplicationFeatures.PendingFollowUp,
+        Name: this.ApplicationFeatureName(ApplicationFeatures.PendingFollowUp),
+      },
+      {
+        Ref: ApplicationFeatures.RegisteredCustomer,
+        Name: this.ApplicationFeatureName(
+          ApplicationFeatures.RegisteredCustomer
         ),
       },
       {
-        Ref: ApplicationFeatures.UserRoleMaster,
-        Name: DomainEnums.ApplicationFeatureName(
-          ApplicationFeatures.UserRoleMaster
+        Ref: ApplicationFeatures.CustomerSummary,
+        Name: this.ApplicationFeatureName(ApplicationFeatures.CustomerSummary),
+      },
+      {
+        Ref: ApplicationFeatures.CustomerInfo,
+        Name: this.ApplicationFeatureName(ApplicationFeatures.CustomerInfo),
+      },
+      {
+        Ref: ApplicationFeatures.CustomerVisitReport,
+        Name: this.ApplicationFeatureName(
+          ApplicationFeatures.CustomerVisitReport
         ),
       },
       {
-        Ref: ApplicationFeatures.UserRoleRight,
-        Name: DomainEnums.ApplicationFeatureName(
-          ApplicationFeatures.UserRoleRight
+        Ref: ApplicationFeatures.DealCancelledCustomer,
+        Name: this.ApplicationFeatureName(
+          ApplicationFeatures.DealCancelledCustomer
+        ),
+      },
+      {
+        Ref: ApplicationFeatures.PaymentHistoryReport,
+        Name: this.ApplicationFeatureName(
+          ApplicationFeatures.PaymentHistoryReport
         ),
       },
 
+      // Registrar office
       {
-        Ref: ApplicationFeatures.ExternalUserMaster,
-        Name: DomainEnums.ApplicationFeatureName(
-          ApplicationFeatures.ExternalUserMaster
-        ),
-      },
-      {
-        Ref: ApplicationFeatures.CompanyMaster,
-        Name: DomainEnums.ApplicationFeatureName(
-          ApplicationFeatures.CompanyMaster
-        ),
-      },
-      {
-        Ref: ApplicationFeatures.FinancialYearMaster,
-        Name: DomainEnums.ApplicationFeatureName(
-          ApplicationFeatures.FinancialYearMaster
-        ),
-      },
-      {
-        Ref: ApplicationFeatures.EmployeeMaster,
-        Name: DomainEnums.ApplicationFeatureName(
-          ApplicationFeatures.EmployeeMaster
-        ),
+        Ref: ApplicationFeatures.RegistrarOffice,
+        Name: this.ApplicationFeatureName(ApplicationFeatures.RegistrarOffice),
       },
 
-      // New End
+      // HR
+      {
+        Ref: ApplicationFeatures.EmployeeAttendance,
+        Name: this.ApplicationFeatureName(
+          ApplicationFeatures.EmployeeAttendance
+        ),
+      },
+      {
+        Ref: ApplicationFeatures.EmployeeLeaveRequest,
+        Name: this.ApplicationFeatureName(
+          ApplicationFeatures.EmployeeLeaveRequest
+        ),
+      },
+      {
+        Ref: ApplicationFeatures.EmployeeSalarySlipRequest,
+        Name: this.ApplicationFeatureName(
+          ApplicationFeatures.EmployeeSalarySlipRequest
+        ),
+      },
+      {
+        Ref: ApplicationFeatures.OfficeDutyTime,
+        Name: this.ApplicationFeatureName(ApplicationFeatures.OfficeDutyTime),
+      },
+      {
+        Ref: ApplicationFeatures.HRAttendance,
+        Name: this.ApplicationFeatureName(ApplicationFeatures.HRAttendance),
+      },
+      {
+        Ref: ApplicationFeatures.SalaryGeneration,
+        Name: this.ApplicationFeatureName(ApplicationFeatures.SalaryGeneration),
+      },
+      {
+        Ref: ApplicationFeatures.LeaveApproval,
+        Name: this.ApplicationFeatureName(ApplicationFeatures.LeaveApproval),
+      },
+      {
+        Ref: ApplicationFeatures.SalarySlipApproval,
+        Name: this.ApplicationFeatureName(
+          ApplicationFeatures.SalarySlipApproval
+        ),
+      },
+      {
+        Ref: ApplicationFeatures.EmployeeOvertime,
+        Name: this.ApplicationFeatureName(ApplicationFeatures.EmployeeOvertime),
+      },
+      {
+        Ref: ApplicationFeatures.CompanyHolidays,
+        Name: this.ApplicationFeatureName(ApplicationFeatures.CompanyHolidays),
+      },
 
-      // for transaction
+      // Billing
       {
-        Ref: ApplicationFeatures.AccountingTransaction,
-        Name: DomainEnums.ApplicationFeatureName(
-          ApplicationFeatures.AccountingTransaction
-        ),
+        Ref: ApplicationFeatures.Billing,
+        Name: this.ApplicationFeatureName(ApplicationFeatures.Billing),
       },
       {
-        Ref: ApplicationFeatures.MaterialTransaction,
-        Name: DomainEnums.ApplicationFeatureName(
-          ApplicationFeatures.MaterialTransaction
-        ),
-      },
-      // For Report
-      {
-        Ref: ApplicationFeatures.EmployeeReport,
-        Name: DomainEnums.ApplicationFeatureName(
-          ApplicationFeatures.EmployeeReport
-        ),
+        Ref: ApplicationFeatures.Expense,
+        Name: this.ApplicationFeatureName(ApplicationFeatures.Expense),
       },
       {
-        Ref: ApplicationFeatures.VendorReport,
-        Name: DomainEnums.ApplicationFeatureName(
-          ApplicationFeatures.VendorReport
+        Ref: ApplicationFeatures.Income,
+        Name: this.ApplicationFeatureName(ApplicationFeatures.Income),
+      },
+      {
+        Ref: ApplicationFeatures.OfficeReport,
+        Name: this.ApplicationFeatureName(ApplicationFeatures.OfficeReport),
+      },
+      {
+        Ref: ApplicationFeatures.BillPayableReport,
+        Name: this.ApplicationFeatureName(
+          ApplicationFeatures.BillPayableReport
         ),
       },
     ];
+
     if (withAllOption) {
-      let allEntry = {
-        Ref: ApplicationFeatures.None,
-        Name: allOptionName,
-      };
-      result.unshift(allEntry);
+      result.unshift({ Ref: ApplicationFeatures.None, Name: allOptionName });
     }
+
     return result;
   }
-  // creating a map list for Feature Group
 
+  // creating a map list for Feature Group
   public static FeatureToFeatureGroupMapList(
     withAllOption: boolean = false,
     allOptionName: string = '<All>'
   ) {
     let result = [
+      // -------------------- MASTER --------------------
+      {
+        Ref: ApplicationFeatures.CompanyMaster,
+        FeatureGroupRef: ApplicationFeatureGroups.Master,
+        Name: this.ApplicationFeatureName(ApplicationFeatures.CompanyMaster),
+      },
+      {
+        Ref: ApplicationFeatures.OwnerMaster,
+        FeatureGroupRef: ApplicationFeatureGroups.Master,
+        Name: this.ApplicationFeatureName(ApplicationFeatures.OwnerMaster),
+      },
+      {
+        Ref: ApplicationFeatures.DepartmentMaster,
+        FeatureGroupRef: ApplicationFeatureGroups.Master,
+        Name: this.ApplicationFeatureName(ApplicationFeatures.DepartmentMaster),
+      },
+      {
+        Ref: ApplicationFeatures.DesignationMaster,
+        FeatureGroupRef: ApplicationFeatureGroups.Master,
+        Name: this.ApplicationFeatureName(
+          ApplicationFeatures.DesignationMaster
+        ),
+      },
+      {
+        Ref: ApplicationFeatures.UserRoleRightMaster,
+        FeatureGroupRef: ApplicationFeatureGroups.Master,
+        Name: this.ApplicationFeatureName(
+          ApplicationFeatures.UserRoleRightMaster
+        ),
+      },
+      {
+        Ref: ApplicationFeatures.EmployeeMaster,
+        FeatureGroupRef: ApplicationFeatureGroups.Master,
+        Name: this.ApplicationFeatureName(ApplicationFeatures.EmployeeMaster),
+      },
+      {
+        Ref: ApplicationFeatures.BankAccountMaster,
+        FeatureGroupRef: ApplicationFeatureGroups.Master,
+        Name: this.ApplicationFeatureName(
+          ApplicationFeatures.BankAccountMaster
+        ),
+      },
+      {
+        Ref: ApplicationFeatures.OpeningBalanceMaster,
+        FeatureGroupRef: ApplicationFeatureGroups.Master,
+        Name: this.ApplicationFeatureName(
+          ApplicationFeatures.OpeningBalanceMaster
+        ),
+      },
+      {
+        Ref: ApplicationFeatures.FinancialYearMaster,
+        FeatureGroupRef: ApplicationFeatureGroups.Master,
+        Name: this.ApplicationFeatureName(
+          ApplicationFeatures.FinancialYearMaster
+        ),
+      },
+      {
+        Ref: ApplicationFeatures.MainLedgerMaster,
+        FeatureGroupRef: ApplicationFeatureGroups.Master,
+        Name: this.ApplicationFeatureName(ApplicationFeatures.MainLedgerMaster),
+      },
+      {
+        Ref: ApplicationFeatures.SubLedgerMaster,
+        FeatureGroupRef: ApplicationFeatureGroups.Master,
+        Name: this.ApplicationFeatureName(ApplicationFeatures.SubLedgerMaster),
+      },
+      {
+        Ref: ApplicationFeatures.StageMaster,
+        FeatureGroupRef: ApplicationFeatureGroups.Master,
+        Name: this.ApplicationFeatureName(ApplicationFeatures.StageMaster),
+      },
       {
         Ref: ApplicationFeatures.UnitMaster,
         FeatureGroupRef: ApplicationFeatureGroups.Master,
-        Name: DomainEnums.ApplicationFeatureName(
-          ApplicationFeatures.UnitMaster
-        ),
+        Name: this.ApplicationFeatureName(ApplicationFeatures.UnitMaster),
       },
       {
         Ref: ApplicationFeatures.MaterialMaster,
         FeatureGroupRef: ApplicationFeatureGroups.Master,
-        Name: DomainEnums.ApplicationFeatureName(
-          ApplicationFeatures.MaterialMaster
-        ),
-      },
-
-      // New start
-      {
-        Ref: ApplicationFeatures.StageMaster,
-        FeatureGroupRef: ApplicationFeatureGroups.Master,
-        Name: DomainEnums.ApplicationFeatureName(
-          ApplicationFeatures.StageMaster
-        ),
-      },
-      {
-        Ref: ApplicationFeatures.MarketingTypeMaster,
-        FeatureGroupRef: ApplicationFeatureGroups.Master,
-        Name: DomainEnums.ApplicationFeatureName(
-          ApplicationFeatures.MarketingTypeMaster
-        ),
+        Name: this.ApplicationFeatureName(ApplicationFeatures.MaterialMaster),
       },
       {
         Ref: ApplicationFeatures.VendorServicesMaster,
         FeatureGroupRef: ApplicationFeatureGroups.Master,
-        Name: DomainEnums.ApplicationFeatureName(
+        Name: this.ApplicationFeatureName(
           ApplicationFeatures.VendorServicesMaster
         ),
       },
       {
         Ref: ApplicationFeatures.VendorMaster,
         FeatureGroupRef: ApplicationFeatureGroups.Master,
-        Name: DomainEnums.ApplicationFeatureName(
-          ApplicationFeatures.VendorMaster
-        ),
+        Name: this.ApplicationFeatureName(ApplicationFeatures.VendorMaster),
       },
       {
-        Ref: ApplicationFeatures.DepartmentMaster,
+        Ref: ApplicationFeatures.RecipientMaster,
         FeatureGroupRef: ApplicationFeatureGroups.Master,
-        Name: DomainEnums.ApplicationFeatureName(
-          ApplicationFeatures.DepartmentMaster
-        ),
+        Name: this.ApplicationFeatureName(ApplicationFeatures.RecipientMaster),
       },
       {
-        Ref: ApplicationFeatures.DesignationMaster,
+        Ref: ApplicationFeatures.PayerMaster,
         FeatureGroupRef: ApplicationFeatureGroups.Master,
-        Name: DomainEnums.ApplicationFeatureName(
-          ApplicationFeatures.DesignationMaster
-        ),
-      },
-      {
-        Ref: ApplicationFeatures.UserRoleMaster,
-        FeatureGroupRef: ApplicationFeatureGroups.Master,
-        Name: DomainEnums.ApplicationFeatureName(
-          ApplicationFeatures.UserRoleMaster
-        ),
-      },
-      {
-        Ref: ApplicationFeatures.UserRoleRight,
-        FeatureGroupRef: ApplicationFeatureGroups.Master,
-        Name: DomainEnums.ApplicationFeatureName(
-          ApplicationFeatures.UserRoleRight
-        ),
+        Name: this.ApplicationFeatureName(ApplicationFeatures.PayerMaster),
       },
 
+      // -------------------- TRANSACTION --------------------
       {
-        Ref: ApplicationFeatures.ExternalUserMaster,
-        FeatureGroupRef: ApplicationFeatureGroups.Master,
-        Name: DomainEnums.ApplicationFeatureName(
-          ApplicationFeatures.ExternalUserMaster
-        ),
-      },
-      {
-        Ref: ApplicationFeatures.CompanyMaster,
-        FeatureGroupRef: ApplicationFeatureGroups.Master,
-        Name: DomainEnums.ApplicationFeatureName(
-          ApplicationFeatures.CompanyMaster
-        ),
-      },
-      {
-        Ref: ApplicationFeatures.FinancialYearMaster,
-        FeatureGroupRef: ApplicationFeatureGroups.Master,
-        Name: DomainEnums.ApplicationFeatureName(
-          ApplicationFeatures.FinancialYearMaster
-        ),
-      },
-      {
-        Ref: ApplicationFeatures.EmployeeMaster,
-        FeatureGroupRef: ApplicationFeatureGroups.Master,
-        Name: DomainEnums.ApplicationFeatureName(
-          ApplicationFeatures.EmployeeMaster
-        ),
-      },
-
-      // New End
-
-      {
-        Ref: ApplicationFeatures.AccountingTransaction,
+        Ref: ApplicationFeatures.NewSite,
         FeatureGroupRef: ApplicationFeatureGroups.Transaction,
-        Name: DomainEnums.ApplicationFeatureName(
-          ApplicationFeatures.AccountingTransaction
-        ),
+        Name: this.ApplicationFeatureName(ApplicationFeatures.NewSite),
       },
       {
-        Ref: ApplicationFeatures.MaterialTransaction,
+        Ref: ApplicationFeatures.PlotDetails,
         FeatureGroupRef: ApplicationFeatureGroups.Transaction,
-        Name: DomainEnums.ApplicationFeatureName(
-          ApplicationFeatures.MaterialTransaction
+        Name: this.ApplicationFeatureName(ApplicationFeatures.PlotDetails),
+      },
+
+      // -------------------- INVENTORY --------------------
+      {
+        Ref: ApplicationFeatures.MaterialRequisition,
+        FeatureGroupRef: ApplicationFeatureGroups.Transaction,
+        Name: this.ApplicationFeatureName(
+          ApplicationFeatures.MaterialRequisition
         ),
       },
       {
-        Ref: ApplicationFeatures.EmployeeReport,
+        Ref: ApplicationFeatures.StockOrder,
+        FeatureGroupRef: ApplicationFeatureGroups.Transaction,
+        Name: this.ApplicationFeatureName(ApplicationFeatures.StockOrder),
+      },
+      {
+        Ref: ApplicationFeatures.StockInward,
+        FeatureGroupRef: ApplicationFeatureGroups.Transaction,
+        Name: this.ApplicationFeatureName(ApplicationFeatures.StockInward),
+      },
+      {
+        Ref: ApplicationFeatures.StockConsume,
+        FeatureGroupRef: ApplicationFeatureGroups.Transaction,
+        Name: this.ApplicationFeatureName(ApplicationFeatures.StockConsume),
+      },
+      {
+        Ref: ApplicationFeatures.StockTransfer,
+        FeatureGroupRef: ApplicationFeatureGroups.Transaction,
+        Name: this.ApplicationFeatureName(ApplicationFeatures.StockTransfer),
+      },
+      {
+        Ref: ApplicationFeatures.StockSummary,
         FeatureGroupRef: ApplicationFeatureGroups.Report,
-        Name: DomainEnums.ApplicationFeatureName(
-          ApplicationFeatures.EmployeeReport
+        Name: this.ApplicationFeatureName(ApplicationFeatures.StockSummary),
+      },
+
+      // -------------------- GOVERNMENT REPORT --------------------
+      {
+        Ref: ApplicationFeatures.GovProgressReport,
+        FeatureGroupRef: ApplicationFeatureGroups.Transaction,
+        Name: this.ApplicationFeatureName(
+          ApplicationFeatures.GovProgressReport
         ),
       },
       {
-        Ref: ApplicationFeatures.VendorReport,
+        Ref: ApplicationFeatures.DocumentList,
+        FeatureGroupRef: ApplicationFeatureGroups.Transaction,
+        Name: this.ApplicationFeatureName(ApplicationFeatures.DocumentList),
+      },
+
+      // -------------------- CUSTOMER --------------------
+      {
+        Ref: ApplicationFeatures.CustomerEnquiry,
+        FeatureGroupRef: ApplicationFeatureGroups.Transaction,
+        Name: this.ApplicationFeatureName(ApplicationFeatures.CustomerEnquiry),
+      },
+      {
+        Ref: ApplicationFeatures.CustomerFollowUp,
+        FeatureGroupRef: ApplicationFeatureGroups.Transaction,
+        Name: this.ApplicationFeatureName(ApplicationFeatures.CustomerFollowUp),
+      },
+      {
+        Ref: ApplicationFeatures.PendingFollowUp,
+        FeatureGroupRef: ApplicationFeatureGroups.Transaction,
+        Name: this.ApplicationFeatureName(ApplicationFeatures.PendingFollowUp),
+      },
+      {
+        Ref: ApplicationFeatures.RegisteredCustomer,
+        FeatureGroupRef: ApplicationFeatureGroups.Transaction,
+        Name: this.ApplicationFeatureName(
+          ApplicationFeatures.RegisteredCustomer
+        ),
+      },
+      {
+        Ref: ApplicationFeatures.CustomerSummary,
         FeatureGroupRef: ApplicationFeatureGroups.Report,
-        Name: DomainEnums.ApplicationFeatureName(
-          ApplicationFeatures.VendorReport
+        Name: this.ApplicationFeatureName(ApplicationFeatures.CustomerSummary),
+      },
+      {
+        Ref: ApplicationFeatures.CustomerInfo,
+        FeatureGroupRef: ApplicationFeatureGroups.Report,
+        Name: this.ApplicationFeatureName(ApplicationFeatures.CustomerInfo),
+      },
+      {
+        Ref: ApplicationFeatures.CustomerVisitReport,
+        FeatureGroupRef: ApplicationFeatureGroups.Report,
+        Name: this.ApplicationFeatureName(
+          ApplicationFeatures.CustomerVisitReport
+        ),
+      },
+      {
+        Ref: ApplicationFeatures.DealCancelledCustomer,
+        FeatureGroupRef: ApplicationFeatureGroups.Report,
+        Name: this.ApplicationFeatureName(
+          ApplicationFeatures.DealCancelledCustomer
+        ),
+      },
+      {
+        Ref: ApplicationFeatures.PaymentHistoryReport,
+        FeatureGroupRef: ApplicationFeatureGroups.Report,
+        Name: this.ApplicationFeatureName(
+          ApplicationFeatures.PaymentHistoryReport
+        ),
+      },
+
+      // -------------------- REGISTRAR OFFICE --------------------
+      {
+        Ref: ApplicationFeatures.RegistrarOffice,
+        FeatureGroupRef: ApplicationFeatureGroups.Transaction,
+        Name: this.ApplicationFeatureName(ApplicationFeatures.RegistrarOffice),
+      },
+
+      // -------------------- HR --------------------
+      {
+        Ref: ApplicationFeatures.EmployeeAttendance,
+        FeatureGroupRef: ApplicationFeatureGroups.Transaction,
+        Name: this.ApplicationFeatureName(
+          ApplicationFeatures.EmployeeAttendance
+        ),
+      },
+      {
+        Ref: ApplicationFeatures.EmployeeLeaveRequest,
+        FeatureGroupRef: ApplicationFeatureGroups.Transaction,
+        Name: this.ApplicationFeatureName(
+          ApplicationFeatures.EmployeeLeaveRequest
+        ),
+      },
+      {
+        Ref: ApplicationFeatures.EmployeeSalarySlipRequest,
+        FeatureGroupRef: ApplicationFeatureGroups.Transaction,
+        Name: this.ApplicationFeatureName(
+          ApplicationFeatures.EmployeeSalarySlipRequest
+        ),
+      },
+      {
+        Ref: ApplicationFeatures.OfficeDutyTime,
+        FeatureGroupRef: ApplicationFeatureGroups.Master,
+        Name: this.ApplicationFeatureName(ApplicationFeatures.OfficeDutyTime),
+      },
+      {
+        Ref: ApplicationFeatures.HRAttendance,
+        FeatureGroupRef: ApplicationFeatureGroups.Transaction,
+        Name: this.ApplicationFeatureName(ApplicationFeatures.HRAttendance),
+      },
+      {
+        Ref: ApplicationFeatures.SalaryGeneration,
+        FeatureGroupRef: ApplicationFeatureGroups.Transaction,
+        Name: this.ApplicationFeatureName(ApplicationFeatures.SalaryGeneration),
+      },
+      {
+        Ref: ApplicationFeatures.LeaveApproval,
+        FeatureGroupRef: ApplicationFeatureGroups.Transaction,
+        Name: this.ApplicationFeatureName(ApplicationFeatures.LeaveApproval),
+      },
+      {
+        Ref: ApplicationFeatures.SalarySlipApproval,
+        FeatureGroupRef: ApplicationFeatureGroups.Transaction,
+        Name: this.ApplicationFeatureName(
+          ApplicationFeatures.SalarySlipApproval
+        ),
+      },
+      {
+        Ref: ApplicationFeatures.EmployeeOvertime,
+        FeatureGroupRef: ApplicationFeatureGroups.Transaction,
+        Name: this.ApplicationFeatureName(ApplicationFeatures.EmployeeOvertime),
+      },
+      {
+        Ref: ApplicationFeatures.CompanyHolidays,
+        FeatureGroupRef: ApplicationFeatureGroups.Transaction,
+        Name: this.ApplicationFeatureName(ApplicationFeatures.CompanyHolidays),
+      },
+
+      // -------------------- BILLING --------------------
+      {
+        Ref: ApplicationFeatures.Billing,
+        FeatureGroupRef: ApplicationFeatureGroups.Transaction,
+        Name: this.ApplicationFeatureName(ApplicationFeatures.Billing),
+      },
+      {
+        Ref: ApplicationFeatures.Expense,
+        FeatureGroupRef: ApplicationFeatureGroups.Transaction,
+        Name: this.ApplicationFeatureName(ApplicationFeatures.Expense),
+      },
+      {
+        Ref: ApplicationFeatures.Income,
+        FeatureGroupRef: ApplicationFeatureGroups.Transaction,
+        Name: this.ApplicationFeatureName(ApplicationFeatures.Income),
+      },
+      {
+        Ref: ApplicationFeatures.OfficeReport,
+        FeatureGroupRef: ApplicationFeatureGroups.Report,
+        Name: this.ApplicationFeatureName(ApplicationFeatures.OfficeReport),
+      },
+      {
+        Ref: ApplicationFeatures.BillPayableReport,
+        FeatureGroupRef: ApplicationFeatureGroups.Report,
+        Name: this.ApplicationFeatureName(
+          ApplicationFeatures.BillPayableReport
         ),
       },
     ];
+
     if (withAllOption) {
-      let allEntry = {
+      result.unshift({
         Ref: ApplicationFeatures.None,
         FeatureGroupRef: ApplicationFeatureGroups.None,
         Name: allOptionName,
-      };
-      result.unshift(allEntry);
+      });
     }
+
     return result;
   }
 
@@ -1732,7 +2164,9 @@ export class DomainEnums {
     return result;
   }
 
-  public static MaterialRequisitionStatusesName(itemType: MaterialRequisitionStatuses) {
+  public static MaterialRequisitionStatusesName(
+    itemType: MaterialRequisitionStatuses
+  ) {
     switch (itemType) {
       case MaterialRequisitionStatuses.Approved:
         return 'Approved';
@@ -1758,27 +2192,39 @@ export class DomainEnums {
     let result = [
       {
         Ref: MaterialRequisitionStatuses.Approved,
-        Name: DomainEnums.MaterialRequisitionStatusesName(MaterialRequisitionStatuses.Approved),
+        Name: DomainEnums.MaterialRequisitionStatusesName(
+          MaterialRequisitionStatuses.Approved
+        ),
       },
       {
         Ref: MaterialRequisitionStatuses.Rejected,
-        Name: DomainEnums.MaterialRequisitionStatusesName(MaterialRequisitionStatuses.Rejected),
+        Name: DomainEnums.MaterialRequisitionStatusesName(
+          MaterialRequisitionStatuses.Rejected
+        ),
       },
       {
         Ref: MaterialRequisitionStatuses.Pending,
-        Name: DomainEnums.MaterialRequisitionStatusesName(MaterialRequisitionStatuses.Pending),
+        Name: DomainEnums.MaterialRequisitionStatusesName(
+          MaterialRequisitionStatuses.Pending
+        ),
       },
       {
         Ref: MaterialRequisitionStatuses.Completed,
-        Name: DomainEnums.MaterialRequisitionStatusesName(MaterialRequisitionStatuses.Completed),
+        Name: DomainEnums.MaterialRequisitionStatusesName(
+          MaterialRequisitionStatuses.Completed
+        ),
       },
       {
         Ref: MaterialRequisitionStatuses.Incomplete,
-        Name: DomainEnums.MaterialRequisitionStatusesName(MaterialRequisitionStatuses.Incomplete),
+        Name: DomainEnums.MaterialRequisitionStatusesName(
+          MaterialRequisitionStatuses.Incomplete
+        ),
       },
       {
         Ref: MaterialRequisitionStatuses.Ordered,
-        Name: DomainEnums.MaterialRequisitionStatusesName(MaterialRequisitionStatuses.Ordered),
+        Name: DomainEnums.MaterialRequisitionStatusesName(
+          MaterialRequisitionStatuses.Ordered
+        ),
       },
     ];
     if (withAllOption) {
@@ -1832,7 +2278,7 @@ export class DomainEnums {
       {
         Ref: ModeOfPayments.GpayPhonePay,
         Name: DomainEnums.ModeOfPaymentsName(ModeOfPayments.GpayPhonePay),
-      }
+      },
     ];
     if (withAllOption) {
       let allEntry = {
@@ -1864,15 +2310,21 @@ export class DomainEnums {
     let result = [
       {
         Ref: TypeOfEmployeePayments.Advance,
-        Name: DomainEnums.TypeOfEmployeePaymentsName(TypeOfEmployeePayments.Advance),
+        Name: DomainEnums.TypeOfEmployeePaymentsName(
+          TypeOfEmployeePayments.Advance
+        ),
       },
       {
         Ref: TypeOfEmployeePayments.Salary,
-        Name: DomainEnums.TypeOfEmployeePaymentsName(TypeOfEmployeePayments.Salary),
+        Name: DomainEnums.TypeOfEmployeePaymentsName(
+          TypeOfEmployeePayments.Salary
+        ),
       },
       {
         Ref: TypeOfEmployeePayments.Other,
-        Name: DomainEnums.TypeOfEmployeePaymentsName(TypeOfEmployeePayments.Other),
+        Name: DomainEnums.TypeOfEmployeePaymentsName(
+          TypeOfEmployeePayments.Other
+        ),
       },
     ];
     if (withAllOption) {
@@ -1885,7 +2337,9 @@ export class DomainEnums {
     return result;
   }
 
-  public static OpeningBalanceModeOfPaymentsName(itemType: OpeningBalanceModeOfPayments) {
+  public static OpeningBalanceModeOfPaymentsName(
+    itemType: OpeningBalanceModeOfPayments
+  ) {
     switch (itemType) {
       case OpeningBalanceModeOfPayments.Cash:
         return 'Cash';
@@ -1903,11 +2357,15 @@ export class DomainEnums {
     let result = [
       {
         Ref: OpeningBalanceModeOfPayments.Cash,
-        Name: DomainEnums.OpeningBalanceModeOfPaymentsName(OpeningBalanceModeOfPayments.Cash),
+        Name: DomainEnums.OpeningBalanceModeOfPaymentsName(
+          OpeningBalanceModeOfPayments.Cash
+        ),
       },
       {
         Ref: OpeningBalanceModeOfPayments.Cheque,
-        Name: DomainEnums.OpeningBalanceModeOfPaymentsName(OpeningBalanceModeOfPayments.Cheque),
+        Name: DomainEnums.OpeningBalanceModeOfPaymentsName(
+          OpeningBalanceModeOfPayments.Cheque
+        ),
       },
     ];
     if (withAllOption) {
@@ -1942,8 +2400,10 @@ export class DomainEnums {
       },
       {
         Ref: AccountingReports.CurrentFinancialYear,
-        Name: DomainEnums.AccountingReportName(AccountingReports.CurrentFinancialYear),
-      }
+        Name: DomainEnums.AccountingReportName(
+          AccountingReports.CurrentFinancialYear
+        ),
+      },
     ];
     if (withAllOption) {
       let allEntry = {
@@ -1996,7 +2456,7 @@ export class DomainEnums {
       {
         Ref: ExpenseTypes.MultipleExpense,
         Name: DomainEnums.ExpenseTypeName(ExpenseTypes.MultipleExpense),
-      }
+      },
     ];
     if (withAllOption) {
       let allEntry = {
@@ -2037,7 +2497,7 @@ export class DomainEnums {
       {
         Ref: LabourTypes.WomenLabour,
         Name: DomainEnums.LabourTypesName(LabourTypes.WomenLabour),
-      }
+      },
     ];
     if (withAllOption) {
       let allEntry = {
@@ -2083,7 +2543,9 @@ export class DomainEnums {
       },
       {
         Ref: RecipientTypes.DealCancelledCustomer,
-        Name: DomainEnums.RecipientTypesName(RecipientTypes.DealCancelledCustomer),
+        Name: DomainEnums.RecipientTypesName(
+          RecipientTypes.DealCancelledCustomer
+        ),
       },
       {
         Ref: RecipientTypes.Employee,
@@ -2189,19 +2651,27 @@ export class DomainEnums {
     let result = [
       {
         Ref: CustomerProgress.OnGoingCustomer,
-        Name: DomainEnums.CustomerProgressName(CustomerProgress.OnGoingCustomer),
+        Name: DomainEnums.CustomerProgressName(
+          CustomerProgress.OnGoingCustomer
+        ),
       },
       {
         Ref: CustomerProgress.DealCancelCustomer,
-        Name: DomainEnums.CustomerProgressName(CustomerProgress.DealCancelCustomer),
+        Name: DomainEnums.CustomerProgressName(
+          CustomerProgress.DealCancelCustomer
+        ),
       },
       {
         Ref: CustomerProgress.DealDoneCustomer,
-        Name: DomainEnums.CustomerProgressName(CustomerProgress.DealDoneCustomer),
+        Name: DomainEnums.CustomerProgressName(
+          CustomerProgress.DealDoneCustomer
+        ),
       },
       {
         Ref: CustomerProgress.LeadClosedCustomer,
-        Name: DomainEnums.CustomerProgressName(CustomerProgress.LeadClosedCustomer),
+        Name: DomainEnums.CustomerProgressName(
+          CustomerProgress.LeadClosedCustomer
+        ),
       },
     ];
     if (withAllOption) {
