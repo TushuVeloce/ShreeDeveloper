@@ -366,10 +366,10 @@ export class DashboardComponent implements OnInit {
     this.TotalNoOfSoldPlots = lst[0].p.TotalNoOfSoldPlots;
     this.TotalRevenueGenerated = lst[0].p.TotalRevenueGenerated;
 
-    this.ExpenseGraphList = lst[0].p.ExpenseBreakDownResponseList.map(
+    this.ExpenseGraphList = lst[0].p.IncomeExpenseAmountByPeriodList.map(
       (item) => item.TotalGivenAmount
     );
-    this.TotalExpense = lst[0].p.ExpenseBreakDownResponseList.reduce(
+    this.TotalExpense = lst[0].p.IncomeExpenseAmountByPeriodList.reduce(
       (sum, item) => sum + (item.TotalGivenAmount || 0),
       0
     );
@@ -382,6 +382,7 @@ export class DashboardComponent implements OnInit {
     this.IncomeGraphList = lst[0].p.IncomeExpenseAmountByPeriodList.map(
       (item) => item.TotalIncomeAmount
     );
+
     if (this.BarFilterType == 63 && this.SelectedBarMonths) {
       this.WeekMonthList = lst[0].p.IncomeExpenseAmountByPeriodList.map(
         (item) => item.WeekName

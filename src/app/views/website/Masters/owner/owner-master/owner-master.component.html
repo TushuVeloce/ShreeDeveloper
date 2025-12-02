@@ -33,7 +33,7 @@
         <tbody>
           <tr *ngFor="let owner of paginatedList(); index as i">
             <td Class="tbldata" nzLeft>{{ (currentPage - 1) * pageSize + i + 1 }}</td>
-            <td Class="tbldata text-capitalize">{{ owner.p.Name }}</td>
+            <td Class="tbldata">{{ owner.p.Name }}</td>
             <td class="tbldata">
               <Edit-Icon (editClick)="onEditClicked(owner)" />
               <Delete-Icon (deleteClicked)="onDeleteClicked(owner)" />

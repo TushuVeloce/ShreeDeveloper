@@ -32,6 +32,7 @@ import {
   MenuItem,
   ValidMenuItemsStateManagementMobileApp,
 } from 'src/app/views/mobile-app/components/core/ValidMenuItemsStateManagementMobileApp';
+import { DashboardStats } from 'src/app/classes/domain/entities/website/Dashboard/stats/dashboardstats';
 
 // Register Chart.js components
 Chart.register(...registerables);
@@ -89,19 +90,19 @@ export class HomeViewMobileAppComponent
       icon: 'assets/icons/site_management_mobile_app.png',
       routerPath: '/mobile-app/tabs/dashboard/site-management',
       group: 20,
-    }, 
+    },
     200: {
       label: 'Accounting',
       icon: 'assets/icons/report_mobile_app.png',
       routerPath: '/mobile-app/tabs/dashboard/accounting',
       group: 20,
-    }, 
+    },
     300: {
       label: 'Stock',
       icon: 'assets/icons/stock_mobile_app.png',
       routerPath: '/mobile-app/tabs/dashboard/stock-management',
       group: 20,
-    }, 
+    },
     400: {
       label: 'CRM',
       icon: 'assets/icons/crm_mobile_app.png',
@@ -125,6 +126,7 @@ export class HomeViewMobileAppComponent
   private incomeExpenseData: any = [];
 
   private bankBalanceData: any;
+  DashboardStatsList: DashboardStats[] = [];
 
   constructor(
     private router: Router,
@@ -229,6 +231,7 @@ export class HomeViewMobileAppComponent
       // Admin fetches ALL financial and attendance data
       await this.getCurrentBalanceByCompanyRef();
       // await this.getIncomeExpenseGraphList();
+      await this.getDashboardStats();
       await this.getTodayAttendanceLogByAttendanceListType(); // Fetches all today's logs and sets peoplePresent
       this.createIncomeExpenseChart();
     } catch (error) {
@@ -825,6 +828,74 @@ export class HomeViewMobileAppComponent
   //     this.WeekMonthList = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
   //   }
   // }; // Add a new method to create the income/expense chart
+
+  getDashboardStats = async () => {
+    if (this.companyRef <= 0) {
+      await this.toastService.present('Company not Selected', 1000, 'warning');
+      return;
+    }
+    let lst = await DashboardStats.FetchEntireListByAll(
+      this.companyRef || 0,
+      0,
+      0,
+      0,
+      this.companyRef || 0,
+      0,
+      0,
+      0,
+      this.companyRef || 0,
+      this.BarSiteRef || 0,
+      this.BarFilterType || 0,
+      this.SelectedBarMonths || 0,
+      async (errMsg) => {
+        await this.toastService.present(errMsg, 1000, 'error');
+      }
+    );
+
+    this.DashboardStatsList = lst;
+    console.log('lst :', lst);
+
+    this.ExpenseGraphList = lst[0].p.IncomeExpenseAmountByPeriodList.map(
+      (item) => item.TotalGivenAmount
+    );
+    this.TotalExpense = lst[0].p.IncomeExpenseAmountByPeriodList.reduce(
+      (sum, item) => sum + (item.TotalGivenAmount || 0),
+      0
+    );
+    // this.setIncomeExpenseChart();
+
+    this.TotalIncome = lst[0].p.IncomeExpenseAmountByPeriodList.reduce(
+      (sum, item) => sum + (item.TotalIncomeAmount || 0),
+      0
+    );
+    this.IncomeGraphList = lst[0].p.IncomeExpenseAmountByPeriodList.map(
+      (item) => item.TotalIncomeAmount
+    );
+
+    if (this.BarFilterType == 63 && this.SelectedBarMonths) {
+      this.WeekMonthList = lst[0].p.IncomeExpenseAmountByPeriodList.map(
+        (item) => item.WeekName
+      );
+    } else if (this.BarFilterType == 63) {
+      this.WeekMonthList = [
+        'Jan',
+        'Feb',
+        'Mar',
+        'Apr',
+        'May',
+        'June',
+        'Jul',
+        'Aug',
+        'Spet',
+        'Oct',
+        'Nov',
+        'Dec',
+      ];
+    } else {
+      this.WeekMonthList = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+    }
+    // this.setIncomeExpenseChart();
+  };
 
   private createIncomeExpenseChart(): void {
     const legendPosition = this.getLegendPosition(); // Find the highest value to set a proper max for the y-axis
