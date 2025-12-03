@@ -1,8 +1,10 @@
 import { Component, effect, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { ApplicationFeatures } from 'src/app/classes/domain/domainenums/domainenums';
 import { Document } from 'src/app/classes/domain/entities/website/government_office/document/document';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
+import { FeatureAccessService } from 'src/app/services/feature-access.service';
 import { ScreenSizeService } from 'src/app/services/screensize.service';
 import { UIUtils } from 'src/app/services/uiutils.service';
 
@@ -13,7 +15,6 @@ import { UIUtils } from 'src/app/services/uiutils.service';
   styleUrls: ['./document-list.component.scss'],
 })
 export class DocumentListComponent implements OnInit {
-
   Entity: Document = Document.CreateNewInstance();
   MasterList: Document[] = [];
   DisplayMasterList: Document[] = [];
@@ -26,22 +27,36 @@ export class DocumentListComponent implements OnInit {
 
   companyRef = this.companystatemanagement.SelectedCompanyRef;
 
-  headers: string[] = ['Document Name', 'Office Name', 'Action'];
-  constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private screenSizeService: ScreenSizeService,
-    private companystatemanagement: CompanyStateManagement
+  // headers: string[] = ['Document Name', 'Office Name', 'Action'];
+  headers: string[] = [];
+  featureRef: ApplicationFeatures = ApplicationFeatures.DocumentList;
+  showActionColumn = false;
+  constructor(
+    private uiUtils: UIUtils,
+    private router: Router,
+    private appStateManage: AppStateManageService,
+    private screenSizeService: ScreenSizeService,
+    private companystatemanagement: CompanyStateManagement,
+    public access: FeatureAccessService
   ) {
     effect(() => {
       this.getDocumentListByCompanyRef();
     });
   }
 
-
-
-
   async ngOnInit() {
     this.appStateManage.setDropdownDisabled();
     this.loadPaginationData();
     this.pageSize = this.screenSizeService.getPageSize('withoutDropdown');
+    this.access.refresh();
+    this.showActionColumn =
+      this.access.canEdit(this.featureRef) ||
+      this.access.canDelete(this.featureRef);
+    this.headers = [
+      'Document Name',
+      'Office Name',
+      ...(this.showActionColumn ? ['Action'] : []),
+    ];
   }
 
   getDocumentListByCompanyRef = async () => {
@@ -51,12 +66,15 @@ export class DocumentListComponent implements OnInit {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
-    let lst = await Document.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    let lst = await Document.FetchEntireListByCompanyRef(
+      this.companyRef(),
+      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+    );
     this.MasterList = lst;
 
     this.DisplayMasterList = this.MasterList;
     this.loadPaginationData();
-  }
+  };
 
   onEditClicked = async (item: Document) => {
     this.SelectedDocument = item.GetEditableVersion();
@@ -81,7 +99,6 @@ export class DocumentListComponent implements OnInit {
           await this.getDocumentListByCompanyRef();
           this.SearchString = '';
           this.loadPaginationData();
-
         });
       }
     );
@@ -99,7 +116,7 @@ export class DocumentListComponent implements OnInit {
   // 🔑 Whenever filteredList event is received
   onFilteredList(list: any[]) {
     this.DisplayMasterList = list;
-    this.currentPage = 1;   // reset to first page after filtering
+    this.currentPage = 1; // reset to first page after filtering
 
     this.loadPaginationData();
   }

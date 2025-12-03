@@ -1,6 +1,9 @@
 import { Component, effect, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { MaterialRequisitionStatuses } from 'src/app/classes/domain/domainenums/domainenums';
+import {
+  ApplicationFeatures,
+  MaterialRequisitionStatuses,
+} from 'src/app/classes/domain/domainenums/domainenums';
 import { Site } from 'src/app/classes/domain/entities/website/masters/site/site';
 import { Vendor } from 'src/app/classes/domain/entities/website/masters/vendor/vendor';
 import { StockInward } from 'src/app/classes/domain/entities/website/stock_management/stock_inward/stockinward';
@@ -8,6 +11,7 @@ import { AppStateManageService } from 'src/app/services/app-state-manage.service
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
 import { DateconversionService } from 'src/app/services/dateconversion.service';
 import { DTU } from 'src/app/services/dtu.service';
+import { FeatureAccessService } from 'src/app/services/feature-access.service';
 import { ScreenSizeService } from 'src/app/services/screensize.service';
 import { UIUtils } from 'src/app/services/uiutils.service';
 
@@ -18,11 +22,10 @@ import { UIUtils } from 'src/app/services/uiutils.service';
   styleUrls: ['./stock-inward.component.scss'],
 })
 export class StockInwardComponent implements OnInit {
-
   Entity: StockInward = StockInward.CreateNewInstance();
   MasterList: StockInward[] = [];
   DisplayMasterList: StockInward[] = [];
-  list: [] = []
+  list: [] = [];
   SiteList: Site[] = [];
   VendorList: Vendor[] = [];
   SearchString: string = '';
@@ -33,13 +36,22 @@ export class StockInwardComponent implements OnInit {
   total = 0;
   MaterialInwardStatus = MaterialRequisitionStatuses;
 
-
   companyRef = this.companystatemanagement.SelectedCompanyRef;
 
-  headers: string[] = ['Chalan No', 'PO ID', 'Site', 'Vendor', 'Material', 'Unit', 'Ordered Qty', 'Total Inward Qty', 'Remaining Qty', 'Inward Date', 'Action & Print'];
+  // headers: string[] = ['Chalan No', 'PO ID', 'Site', 'Vendor', 'Material', 'Unit', 'Ordered Qty', 'Total Inward Qty', 'Remaining Qty', 'Inward Date', 'Action & Print'];
+  headers: string[] = [];
+  featureRef: ApplicationFeatures = ApplicationFeatures.StockInward;
+  showActionColumn = false;
 
-  constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private screenSizeService: ScreenSizeService,
-    private companystatemanagement: CompanyStateManagement, private DateconversionService: DateconversionService, private dtu: DTU,
+  constructor(
+    private uiUtils: UIUtils,
+    private router: Router,
+    private appStateManage: AppStateManageService,
+    private screenSizeService: ScreenSizeService,
+    private companystatemanagement: CompanyStateManagement,
+    private DateconversionService: DateconversionService,
+    private dtu: DTU,
+    public access: FeatureAccessService
   ) {
     effect(async () => {
       await this.getInwardListByCompanySiteAndVendorRef();
@@ -51,6 +63,23 @@ export class StockInwardComponent implements OnInit {
   ngOnInit() {
     this.appStateManage.setDropdownDisabled();
     this.pageSize = this.screenSizeService.getPageSize('withDropdown');
+    this.access.refresh();
+    this.showActionColumn =
+      this.access.canEdit(this.featureRef) ||
+      this.access.canDelete(this.featureRef) || this.access.canPrint(this.featureRef);
+    this.headers = [
+      'Chalan No',
+      'PO ID',
+      'Site',
+      'Vendor',
+      'Material',
+      'Unit',
+      'Ordered Qty',
+      'Total Inward Qty',
+      'Remaining Qty',
+      'Inward Date',
+      ...(this.showActionColumn ? ['Action'] : []),
+    ];
   }
 
   getSiteListByCompanyRef = async () => {
@@ -58,36 +87,45 @@ export class StockInwardComponent implements OnInit {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
-    this.Entity.p.SiteRef = 0
-    let lst = await Site.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    this.Entity.p.SiteRef = 0;
+    let lst = await Site.FetchEntireListByCompanyRef(
+      this.companyRef(),
+      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+    );
     this.SiteList = lst;
     if (this.SiteList.length > 0) {
-      this.Entity.p.SiteRef = 0
+      this.Entity.p.SiteRef = 0;
     }
-  }
+  };
 
   getVendorListByCompanyRef = async () => {
     if (this.companyRef() <= 0) {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
-    this.Entity.p.VendorRef = 0
-    let lst = await Vendor.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    this.Entity.p.VendorRef = 0;
+    let lst = await Vendor.FetchEntireListByCompanyRef(
+      this.companyRef(),
+      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+    );
     this.VendorList = lst;
     if (this.VendorList.length > 0) {
-      this.Entity.p.VendorRef = 0
+      this.Entity.p.VendorRef = 0;
     }
-  }
+  };
 
   // Extracted from services date conversion //
   formatDate = (date: string | Date): string => {
     return this.DateconversionService.formatDate(date);
-  }
+  };
 
   getInwardListByCompanySiteAndVendorRef = async () => {
     this.MasterList = [];
     this.DisplayMasterList = [];
-    let lst = await StockInward.FetchEntireListByCompanyRefSiteAndVendorRef(this.companyRef(), this.Entity.p.SiteRef, this.Entity.p.VendorRef,
+    let lst = await StockInward.FetchEntireListByCompanyRefSiteAndVendorRef(
+      this.companyRef(),
+      this.Entity.p.SiteRef,
+      this.Entity.p.VendorRef,
       async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
     );
     this.MasterList = lst;
@@ -101,7 +139,7 @@ export class StockInwardComponent implements OnInit {
       return;
     }
     await this.router.navigate(['/homepage/Website/Stock_Inward_Details']);
-  }
+  };
 
   // onEditClicked = async (item: StockInward) => {
   //   this.router.navigate(['/homepage/Website/Stock_Inward_Details'], {
@@ -118,9 +156,9 @@ export class StockInwardComponent implements OnInit {
 
   navigateToPrint = async (item: StockInward) => {
     this.router.navigate(['/homepage/Website/Stock_Inward_Print'], {
-      state: { inwardref: item.p.Ref }
+      state: { inwardref: item.p.Ref },
     });
-  }
+  };
 
   onDeleteClicked = async (StockInward: StockInward) => {
     await this.uiUtils.showConfirmationMessage(
@@ -144,7 +182,6 @@ export class StockInwardComponent implements OnInit {
     );
   };
 
-
   // For Pagination  start ----
   loadPaginationData = () => {
     this.total = this.DisplayMasterList.length; // Update total based on loaded data
@@ -158,7 +195,7 @@ export class StockInwardComponent implements OnInit {
   // 🔑 Whenever filteredList event is received
   onFilteredList(list: any[]) {
     this.DisplayMasterList = list;
-    this.currentPage = 1;   // reset to first page after filtering
+    this.currentPage = 1; // reset to first page after filtering
 
     this.loadPaginationData();
   }

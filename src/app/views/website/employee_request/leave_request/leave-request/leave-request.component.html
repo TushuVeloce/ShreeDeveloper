@@ -8,7 +8,7 @@
         [filterFields]="['LeaveRequestName', 'Description', 'FromDate', 'ToDate', 'HalfDayDate', 'Days']"
         (filteredList)="onFilteredList($event)"></app-shared-filter>
     </div>
-    <div class="col-4 mb-2" routerLinkActive="active">
+    <div class="col-4 mb-2" routerLinkActive="active" *ngIf="access.canAdd(featureRef)">
       <nz-button nz-button class="btn1" (click)='AddLeaveRequest()'>
         Add Request
       </nz-button>
@@ -52,7 +52,7 @@
                 Rejected
               </span>
             </td>
-            <td class="tbldata">
+            <td class="tbldata" *ngIf="showActionColumn">
               <span style="margin-left: 9px;" *ngIf="!leaverequest.p.IsApproved && !leaverequest.p.IsCancelled"
                 (click)="onDeleteClicked(leaverequest);">
                 <img src="\assets\icons\delete.png" alt="logo" style="cursor: pointer;" title="Delete" width="20px"

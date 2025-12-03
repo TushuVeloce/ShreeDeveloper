@@ -18,7 +18,7 @@
             <input type="text" [(ngModel)]="Entity.p.Name" name="Name" class="form-control" id="Name" required
               placeholder="Enter Name" #NameCtrl="ngModel" required (blur)="NameCtrl.control.markAsTouched()" />
             <div *ngIf="(NameCtrl.invalid && (NameCtrl.touched || NameCtrl.dirty))">
-              <span class="validation-text" *ngIf="NameCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
+              <!-- <span class="validation-text" *ngIf="NameCtrl.errors?.['required']">{{RequiredFieldMsg}}</span> -->
             </div>
           </div>
         </div>
@@ -29,8 +29,8 @@
               placeholder="Enter Office Name" pattern="{{NameWithNos}}" #OfficeNameCtrl="ngModel" required
               (blur)="OfficeNameCtrl.control.markAsTouched()" />
             <div *ngIf="(OfficeNameCtrl.invalid && (OfficeNameCtrl.touched || OfficeNameCtrl.dirty))">
-              <span class="validation-text" *ngIf="OfficeNameCtrl.errors?.['pattern']">{{NameWithNosMsg}}</span>
-              <span class="validation-text" *ngIf="OfficeNameCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
+              <!-- <span class="validation-text" *ngIf="OfficeNameCtrl.errors?.['pattern']">{{NameWithNosMsg}}</span> -->
+              <!-- <span class="validation-text" *ngIf="OfficeNameCtrl.errors?.['required']">{{RequiredFieldMsg}}</span> -->
             </div>
           </div>
         </div>

@@ -6,6 +6,8 @@ import { CompanyStateManagement } from 'src/app/services/companystatemanagement'
 import { ScreenSizeService } from 'src/app/services/screensize.service';
 import { UIUtils } from 'src/app/services/uiutils.service';
 import { Department } from 'src/app/classes/domain/entities/website/masters/department/department';
+import { ApplicationFeatures } from 'src/app/classes/domain/domainenums/domainenums';
+import { FeatureAccessService } from 'src/app/services/feature-access.service';
 
 @Component({
   selector: 'app-designation-master',
@@ -14,7 +16,6 @@ import { Department } from 'src/app/classes/domain/entities/website/masters/depa
   styleUrls: ['./designation-master.component.scss'],
 })
 export class DesignationMasterComponent implements OnInit {
-
   Entity: Designation = Designation.CreateNewInstance();
   MasterList: Designation[] = [];
   DisplayMasterList: Designation[] = [];
@@ -28,9 +29,17 @@ export class DesignationMasterComponent implements OnInit {
 
   companyRef = this.companystatemanagement.SelectedCompanyRef;
 
-  headers: string[] = [ 'Designation', 'Seniority Level', 'Action'];
-  constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private screenSizeService: ScreenSizeService,
-    private companystatemanagement: CompanyStateManagement
+  // headers: string[] = [ 'Designation', 'Seniority Level', 'Action'];
+  headers: string[] = [];
+  featureRef: ApplicationFeatures = ApplicationFeatures.DesignationMaster;
+  showActionColumn = false;
+  constructor(
+    private uiUtils: UIUtils,
+    private router: Router,
+    private appStateManage: AppStateManageService,
+    private screenSizeService: ScreenSizeService,
+    private companystatemanagement: CompanyStateManagement,
+    public access: FeatureAccessService
   ) {
     effect(() => {
       this.getDepartmentListByCompanyRef();
@@ -41,6 +50,15 @@ export class DesignationMasterComponent implements OnInit {
     this.appStateManage.setDropdownDisabled();
     this.loadPaginationData();
     this.pageSize = this.screenSizeService.getPageSize('withDropdown');
+    this.access.refresh();
+    this.showActionColumn =
+      this.access.canEdit(this.featureRef) ||
+      this.access.canDelete(this.featureRef);
+    this.headers = [
+      'Designation',
+      'Seniority Level',
+      ...(this.showActionColumn ? ['Action'] : []),
+    ];
   }
   public getDepartmentListByCompanyRef = async () => {
     this.Entity.p.DepartmentRef = 0;
@@ -48,7 +66,8 @@ export class DesignationMasterComponent implements OnInit {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
-    let lst = await Department.FetchEntireListByCompanyRef(this.companyRef(),
+    let lst = await Department.FetchEntireListByCompanyRef(
+      this.companyRef(),
       async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
     );
     this.DepartmentList = lst;
@@ -67,11 +86,14 @@ export class DesignationMasterComponent implements OnInit {
       await this.uiUtils.showErrorToster('Department not Selected');
       return;
     }
-    let lst = await Designation.FetchEntireListByDepartmentRef(this.Entity.p.DepartmentRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    let lst = await Designation.FetchEntireListByDepartmentRef(
+      this.Entity.p.DepartmentRef,
+      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+    );
     this.MasterList = lst;
     this.DisplayMasterList = this.MasterList;
     this.loadPaginationData();
-  }
+  };
 
   onEditClicked = async (item: Designation) => {
     // let props = Object.assign(DesignationProps.Blank(),item.p);
@@ -83,7 +105,9 @@ export class DesignationMasterComponent implements OnInit {
 
     this.appStateManage.StorageKey.setItem('Editable', 'Edit');
 
-    await this.router.navigate(['/homepage/Website/Designation_Master_Details']);
+    await this.router.navigate([
+      '/homepage/Website/Designation_Master_Details',
+    ]);
   };
 
   onDeleteClicked = async (Designation: Designation) => {
@@ -100,7 +124,6 @@ export class DesignationMasterComponent implements OnInit {
           this.SearchString = '';
           this.loadPaginationData();
           // await this.FormulateDesignationList();
-
         });
       }
     );
@@ -114,12 +137,12 @@ export class DesignationMasterComponent implements OnInit {
   paginatedList = () => {
     const start = (this.currentPage - 1) * this.pageSize;
     return this.DisplayMasterList.slice(start, start + this.pageSize);
-  }
+  };
 
   // 🔑 Whenever filteredList event is received
   onFilteredList(list: any[]) {
     this.DisplayMasterList = list;
-    this.currentPage = 1;   // reset to first page after filtering
+    this.currentPage = 1; // reset to first page after filtering
 
     this.loadPaginationData();
   }
@@ -134,5 +157,5 @@ export class DesignationMasterComponent implements OnInit {
       return;
     }
     this.router.navigate(['/homepage/Website/Designation_Master_Details']);
-  }
+  };
 }

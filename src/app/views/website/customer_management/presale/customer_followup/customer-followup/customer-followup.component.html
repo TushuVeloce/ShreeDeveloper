@@ -53,7 +53,7 @@
           <td class="tbldata">{{formatDate(followup.p.ReminderDate)}}</td>
 
           <td Class="tbldata">{{followup.p.CustomerStatusName}}</td>
-          <td class="tbldata d-flex justify-content-center">
+          <td class="tbldata d-flex justify-content-center" *ngIf="showActionColumn">
             <nz-button nz-button class="btn2" (click)="onEditClicked(followup)">
               Follow Up
             </nz-button>

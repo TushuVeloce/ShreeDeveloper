@@ -6,7 +6,7 @@
     <app-shared-filter [masterList]="MasterList" [filterFields]="['Name']"
       (filteredList)="onFilteredList($event)"></app-shared-filter>
   </div>
-  <div class="col-4 mb-2" routerLinkActive="active">
+  <div class="col-4 mb-2" routerLinkActive="active" *ngIf="access.canAdd(featureRef)">
     <nz-button nz-button class="btn1" (click)='AddUnit()'>
       Add Unit
     </nz-button>
@@ -26,9 +26,11 @@
         <tr class="tbldata">
           <td class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
           <td class="tbldata">{{Unit.p.Name}}</td>
-          <td class="tbldata">
-            <Edit-Icon (editClick)="onEditClicked(Unit)" [class.disabled-icon]="Unit.p.Ref === TimeUnitRef" />
-            <Delete-Icon (deleteClicked)="onDeleteClicked(Unit)" [class.disabled-icon]="Unit.p.Ref === TimeUnitRef" />
+          <td class="tbldata" *ngIf="showActionColumn">
+            <Edit-Icon (editClick)="onEditClicked(Unit)" [class.disabled-icon]="Unit.p.Ref === TimeUnitRef"
+              *ngIf="access.canEdit(featureRef)" />
+            <Delete-Icon (deleteClicked)="onDeleteClicked(Unit)" [class.disabled-icon]="Unit.p.Ref === TimeUnitRef"
+              *ngIf="access.canDelete(featureRef)" />
           </td>
         </tr>
         }

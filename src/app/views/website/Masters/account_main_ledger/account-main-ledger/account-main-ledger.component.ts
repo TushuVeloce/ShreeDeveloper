@@ -1,8 +1,10 @@
 import { Component, effect, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { ApplicationFeatures } from 'src/app/classes/domain/domainenums/domainenums';
 import { Ledger } from 'src/app/classes/domain/entities/website/masters/ledgermaster/ledger';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
+import { FeatureAccessService } from 'src/app/services/feature-access.service';
 import { ScreenSizeService } from 'src/app/services/screensize.service';
 import { UIUtils } from 'src/app/services/uiutils.service';
 
@@ -25,13 +27,18 @@ export class AccountMainLedgerComponent implements OnInit {
 
   companyRef = this.companystatemanagement.SelectedCompanyRef;
 
-  headers: string[] = ['Ledger Name', 'Action'];
+  // headers: string[] = ['Ledger Name', 'Action'];
+    headers: string[] = [];
+    featureRef: ApplicationFeatures = ApplicationFeatures.MainLedgerMaster;
+    showActionColumn = false;
+  
   constructor(
     private uiUtils: UIUtils,
     private router: Router,
     private appStateManage: AppStateManageService,
     private screenSizeService: ScreenSizeService,
-    private companystatemanagement: CompanyStateManagement
+    private companystatemanagement: CompanyStateManagement,
+    public access: FeatureAccessService
   ) {
     effect(async () => {
       await this.getLedgerListByCompanyRef();
@@ -42,6 +49,12 @@ export class AccountMainLedgerComponent implements OnInit {
     this.appStateManage.setDropdownDisabled();
     this.loadPaginationData();
     this.pageSize = this.screenSizeService.getPageSize('withoutDropdown');
+        this.access.refresh()
+    this.showActionColumn = this.access.canEdit(this.featureRef) || this.access.canDelete(this.featureRef);
+    this.headers = [
+    'Ledger Name',
+      ...(this.showActionColumn ? ['Action'] : []),
+    ];
   }
 
   getLedgerListByCompanyRef = async () => {

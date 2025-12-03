@@ -1,6 +1,10 @@
 import { Component, effect, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { DomainEnums, MaterialRequisitionStatuses } from 'src/app/classes/domain/domainenums/domainenums';
+import {
+  ApplicationFeatures,
+  DomainEnums,
+  MaterialRequisitionStatuses,
+} from 'src/app/classes/domain/domainenums/domainenums';
 import { Site } from 'src/app/classes/domain/entities/website/masters/site/site';
 import { MaterialRequisition } from 'src/app/classes/domain/entities/website/stock_management/material_requisition/materialrequisition';
 import { RequiredMaterial } from 'src/app/classes/domain/entities/website/stock_management/material_requisition/requiredmaterial/requiredmaterial';
@@ -8,6 +12,7 @@ import { AppStateManageService } from 'src/app/services/app-state-manage.service
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
 import { DateconversionService } from 'src/app/services/dateconversion.service';
 import { DTU } from 'src/app/services/dtu.service';
+import { FeatureAccessService } from 'src/app/services/feature-access.service';
 import { ScreenSizeService } from 'src/app/services/screensize.service';
 import { UIUtils } from 'src/app/services/uiutils.service';
 
@@ -18,28 +23,38 @@ import { UIUtils } from 'src/app/services/uiutils.service';
   standalone: false,
 })
 export class MaterialRequisitionComponent implements OnInit {
-
   Entity: MaterialRequisition = MaterialRequisition.CreateNewInstance();
   MasterList: MaterialRequisition[] = [];
   DisplayMasterList: MaterialRequisition[] = [];
-  list: [] = []
+  list: [] = [];
   SiteList: Site[] = [];
   SearchString: string = '';
-  SelectedMaterialRequisition: MaterialRequisition = MaterialRequisition.CreateNewInstance();
-  StatusList = DomainEnums.MaterialRequisitionStatusesList(true,);
+  SelectedMaterialRequisition: MaterialRequisition =
+    MaterialRequisition.CreateNewInstance();
+  StatusList = DomainEnums.MaterialRequisitionStatusesList(true);
   CustomerRef: number = 0;
   pageSize = 10;
   currentPage = 1;
   total = 0;
-  MaterialRequisitionStatuses = MaterialRequisitionStatuses
+  MaterialRequisitionStatuses = MaterialRequisitionStatuses;
 
   companyRef = this.companystatemanagement.SelectedCompanyRef;
-  headers: string[] = ['Date', 'Site Name', 'Material Name', 'Unit', 'Required Qty.', 'Status', 'Action'];
-  constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private screenSizeService: ScreenSizeService,
-    private companystatemanagement: CompanyStateManagement, private DateconversionService: DateconversionService, private dtu: DTU,
+  // headers: string[] = ['Date', 'Site Name', 'Material Name', 'Unit', 'Required Qty.', 'Status', 'Action'];
+  headers: string[] = [];
+  featureRef: ApplicationFeatures = ApplicationFeatures.MaterialRequisition;
+  showActionColumn = false;
+  constructor(
+    private uiUtils: UIUtils,
+    private router: Router,
+    private appStateManage: AppStateManageService,
+    private screenSizeService: ScreenSizeService,
+    private companystatemanagement: CompanyStateManagement,
+    private DateconversionService: DateconversionService,
+    private dtu: DTU,
+    public access: FeatureAccessService
   ) {
     effect(async () => {
-      this.getSiteListByCompanyRef()
+      this.getSiteListByCompanyRef();
       await this.getMaterialRequisitionListByCompanyRef();
     });
   }
@@ -47,6 +62,19 @@ export class MaterialRequisitionComponent implements OnInit {
   ngOnInit() {
     this.appStateManage.setDropdownDisabled();
     this.pageSize = this.screenSizeService.getPageSize('withDropdown');
+    this.access.refresh();
+    this.showActionColumn =
+      this.access.canEdit(this.featureRef) ||
+      this.access.canDelete(this.featureRef);
+    this.headers = [
+      'Date',
+      'Site Name',
+      'Material Name',
+      'Unit',
+      'Required Qty.',
+      'Status',
+      ...(this.showActionColumn ? ['Action'] : []),
+    ];
   }
 
   getSiteListByCompanyRef = async () => {
@@ -54,15 +82,18 @@ export class MaterialRequisitionComponent implements OnInit {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
-    this.Entity.p.SiteRef = 0
-    let lst = await Site.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    this.Entity.p.SiteRef = 0;
+    let lst = await Site.FetchEntireListByCompanyRef(
+      this.companyRef(),
+      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+    );
     this.SiteList = lst;
     if (this.SiteList.length > 0) {
-      this.Entity.p.SiteRef = 0
+      this.Entity.p.SiteRef = 0;
     }
-    this.Entity.p.Status = 0
-    this.getRequisitionListByAllFilters()
-  }
+    this.Entity.p.Status = 0;
+    this.getRequisitionListByAllFilters();
+  };
 
   getMaterialRequisitionListByCompanyRef = async () => {
     this.MasterList = [];
@@ -71,16 +102,19 @@ export class MaterialRequisitionComponent implements OnInit {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
-    let lst = await MaterialRequisition.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    let lst = await MaterialRequisition.FetchEntireListByCompanyRef(
+      this.companyRef(),
+      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+    );
     this.MasterList = lst;
     this.DisplayMasterList = this.MasterList;
     this.loadPaginationData();
-  }
+  };
 
   onSiteChange = async () => {
-    this.Entity.p.Status = 0
-    this.getRequisitionListByAllFilters()
-  }
+    this.Entity.p.Status = 0;
+    this.getRequisitionListByAllFilters();
+  };
 
   getRequisitionListByAllFilters = async () => {
     this.MasterList = [];
@@ -89,36 +123,45 @@ export class MaterialRequisitionComponent implements OnInit {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
-    let lst = await MaterialRequisition.FetchEntireListByAllFilters(this.companyRef(), this.Entity.p.Status, this.Entity.p.SiteRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    let lst = await MaterialRequisition.FetchEntireListByAllFilters(
+      this.companyRef(),
+      this.Entity.p.Status,
+      this.Entity.p.SiteRef,
+      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+    );
     this.MasterList = lst;
     this.DisplayMasterList = this.MasterList;
     this.loadPaginationData();
-  }
+  };
 
   // Extracted from services date conversion //
   formatDate = (date: string | Date): string => {
     return this.DateconversionService.formatDate(date);
-  }
+  };
 
-    isAnyMaterialPending(requisition: MaterialRequisition): boolean {
+  isAnyMaterialPending(requisition: MaterialRequisition): boolean {
     return requisition.p.MaterialRequisitionDetailsArray?.some(
-      item => item.MaterialStatus === MaterialRequisitionStatuses.Pending
+      (item) => item.MaterialStatus === MaterialRequisitionStatuses.Pending
     );
   }
-  
+
   AddMaterialRequisition = async () => {
     if (this.companyRef() <= 0) {
       this.uiUtils.showWarningToster('Please select company');
       return;
     }
-    await this.router.navigate(['/homepage/Website/Material_Requisition_Details']);
-  }
+    await this.router.navigate([
+      '/homepage/Website/Material_Requisition_Details',
+    ]);
+  };
 
   onEditClicked = async (item: MaterialRequisition) => {
     this.SelectedMaterialRequisition = item.GetEditableVersion();
     MaterialRequisition.SetCurrentInstance(this.SelectedMaterialRequisition);
     this.appStateManage.StorageKey.setItem('Editable', 'Edit');
-    await this.router.navigate(['/homepage/Website/Material_Requisition_Details']);
+    await this.router.navigate([
+      '/homepage/Website/Material_Requisition_Details',
+    ]);
   };
 
   onDeleteClicked = async (MaterialRequisition: MaterialRequisition) => {
@@ -135,12 +178,10 @@ export class MaterialRequisitionComponent implements OnInit {
           this.SearchString = '';
           this.loadPaginationData();
           // await this.FormulateMaterialList();
-
         });
       }
     );
   };
-
 
   // For Pagination  start ----
   loadPaginationData = () => {
@@ -155,7 +196,7 @@ export class MaterialRequisitionComponent implements OnInit {
   // 🔑 Whenever filteredList event is received
   onFilteredList(list: any[]) {
     this.DisplayMasterList = list;
-    this.currentPage = 1;   // reset to first page after filtering
+    this.currentPage = 1; // reset to first page after filtering
 
     this.loadPaginationData();
   }

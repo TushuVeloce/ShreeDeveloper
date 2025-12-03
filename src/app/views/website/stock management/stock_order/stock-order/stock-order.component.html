@@ -6,7 +6,7 @@
     <app-shared-filter [masterList]="MasterList" [filterFields]="['SiteName', 'PurchaseOrderDate', 'VendorName']"
       (filteredList)="onFilteredList($event)"></app-shared-filter>
   </div>
-  <div class="col-4" routerLinkActive="active">
+  <div class="col-4" routerLinkActive="active" *ngIf="access.canAdd(featureRef)">
     <nz-button nz-button class="btn1" (click)='AddOrder()'>
       Add Order
     </nz-button>
@@ -124,27 +124,27 @@
                 </span>
               </td>
 
-              <td class="tbldata" *ngIf="j === 0" [attr.rowspan]="Order.p.MaterialPurchaseOrderDetailsArray.length">
+              <td class="tbldata" *ngIf="j === 0 && showActionColumn" [attr.rowspan]="Order.p.MaterialPurchaseOrderDetailsArray.length">
                 <!-- <span style="margin-left: 5px; margin-right: 5px; cursor: pointer;" (click)="navigateToPrint(Order)">
                   <img src="\assets\icons\printer.png" alt="logo" title="Print" width="20px" height="20px" />
                 </span> -->
                 <span style="margin-left: 5px;"
-                  *ngIf="Order.p.MaterialPurchaseOrderStatus == MaterialPurchaseOrderStatus.Pending"
+                  *ngIf="Order.p.MaterialPurchaseOrderStatus == MaterialPurchaseOrderStatus.Pending && access.canEdit(featureRef)"
                   (click)="onEditClicked(Order)">
                   <img src="/assets/icons/edit.png" alt="Edit" title="Edit" width="20px" height="20px" />
                 </span>
                 <span style="margin-left: 5px;"
-                  *ngIf="Order.p.MaterialPurchaseOrderStatus == MaterialPurchaseOrderStatus.Pending"
+                  *ngIf="Order.p.MaterialPurchaseOrderStatus == MaterialPurchaseOrderStatus.Pending && access.canDelete(featureRef)"
                   (click)="onDeleteClicked(Order)">
                   <img src="/assets/icons/delete.png" alt="Delete" title="Delete" width="20px" height="20px" />
                 </span>
                 <span style="margin-left: 5px;"
-                  *ngIf="Order.p.MaterialPurchaseOrderStatus != MaterialPurchaseOrderStatus.Pending">
+                  *ngIf="Order.p.MaterialPurchaseOrderStatus != MaterialPurchaseOrderStatus.Pending && access.canEdit(featureRef)">
                   <img src="/assets/icons/GrayEditIcon.png" alt="Edit" title="Disable Edit" width="20px"
                     height="20px" />
                 </span>
                 <span style="margin-left: 5px;"
-                  *ngIf="Order.p.MaterialPurchaseOrderStatus != MaterialPurchaseOrderStatus.Pending">
+                  *ngIf="Order.p.MaterialPurchaseOrderStatus != MaterialPurchaseOrderStatus.Pending && access.canDelete(featureRef)">
                   <img src="/assets/icons/GreyDustbin.png" alt="Delete" title="Disable Delete" width="20px"
                     height="20px" />
                 </span>

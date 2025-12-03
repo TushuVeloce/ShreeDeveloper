@@ -8,16 +8,18 @@ import { UIUtils } from 'src/app/services/uiutils.service';
 import { EmployeeMasterComponent } from '../../../Masters/employee/employee-master/employee-master.component';
 import { Employee } from 'src/app/classes/domain/entities/website/masters/employee/employee';
 import { DateconversionService } from 'src/app/services/dateconversion.service';
-import { LeaveRequestType } from 'src/app/classes/domain/domainenums/domainenums';
+import {
+  ApplicationFeatures,
+  LeaveRequestType,
+} from 'src/app/classes/domain/domainenums/domainenums';
+import { FeatureAccessService } from 'src/app/services/feature-access.service';
 
 @Component({
   selector: 'app-leave-request',
   standalone: false,
   templateUrl: './leave-request.component.html',
   styleUrls: ['./leave-request.component.scss'],
-
 })
-
 export class LeaveRequestComponent implements OnInit {
   Entity: LeaveRequest = LeaveRequest.CreateNewInstance();
   MasterList: LeaveRequest[] = [];
@@ -31,16 +33,20 @@ export class LeaveRequestComponent implements OnInit {
   total = 0;
   LeaveRequesttype = LeaveRequestType;
 
-
   companyRef = this.companystatemanagement.SelectedCompanyRef;
 
-  headers: string[] = ['Leave Request Type', 'Description', 'Date', 'Days', 'Approval Status', 'Action'];
-  constructor(private uiUtils: UIUtils,
+  // headers: string[] = ['Leave Request Type', 'Description', 'Date', 'Days', 'Approval Status', 'Action'];
+  headers: string[] = [];
+  featureRef: ApplicationFeatures = ApplicationFeatures.EmployeeLeaveRequest;
+  showActionColumn = false;
+  constructor(
+    private uiUtils: UIUtils,
     private router: Router,
     private appStateManage: AppStateManageService,
     private screenSizeService: ScreenSizeService,
     private companystatemanagement: CompanyStateManagement,
-    private DateconversionService: DateconversionService
+    private DateconversionService: DateconversionService,
+    public access: FeatureAccessService
   ) {
     effect(async () => {
       await this.getLeaveRequestListByEmployeeRef();
@@ -50,8 +56,18 @@ export class LeaveRequestComponent implements OnInit {
   async ngOnInit() {
     this.appStateManage.setDropdownDisabled();
     this.Entity.p.EmployeeRef = this.appStateManage.getEmployeeRef();
-    this.getLeaveRequestListByEmployeeRef()
+    this.getLeaveRequestListByEmployeeRef();
     this.pageSize = this.screenSizeService.getPageSize('withoutDropdown');
+    this.access.refresh();
+    this.showActionColumn = this.access.canDelete(this.featureRef);
+    this.headers = [
+      'Leave Request Type',
+      'Description',
+      'Date',
+      'Days',
+      'Approval Status',
+      ...(this.showActionColumn ? ['Action'] : []),
+    ];
   }
 
   getLeaveRequestListByEmployeeRef = async () => {
@@ -61,16 +77,19 @@ export class LeaveRequestComponent implements OnInit {
       await this.uiUtils.showErrorToster('Employee not Selected');
       return;
     }
-    let lst = await LeaveRequest.FetchEntireListByEmployeeRef(this.Entity.p.EmployeeRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    let lst = await LeaveRequest.FetchEntireListByEmployeeRef(
+      this.Entity.p.EmployeeRef,
+      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+    );
     this.MasterList = lst;
     this.DisplayMasterList = this.MasterList;
     this.loadPaginationData();
-  }
+  };
 
   // Extracted from services date conversion //
   formatDate = (date: string | Date): string => {
     return this.DateconversionService.formatDate(date);
-  }
+  };
 
   onDeleteClicked = async (leaverequest: LeaveRequest) => {
     await this.uiUtils.showConfirmationMessage(
@@ -98,12 +117,12 @@ export class LeaveRequestComponent implements OnInit {
   paginatedList = () => {
     const start = (this.currentPage - 1) * this.pageSize;
     return this.DisplayMasterList.slice(start, start + this.pageSize);
-  }
+  };
 
   // 🔑 Whenever filteredList event is received
   onFilteredList(list: any[]) {
     this.DisplayMasterList = list;
-    this.currentPage = 1;   // reset to first page after filtering
+    this.currentPage = 1; // reset to first page after filtering
 
     this.loadPaginationData();
   }
@@ -118,5 +137,5 @@ export class LeaveRequestComponent implements OnInit {
       return;
     }
     this.router.navigate(['/homepage/Website/Leave_Request_Details']);
-  }
+  };
 }

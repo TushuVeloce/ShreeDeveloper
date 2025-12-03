@@ -1,11 +1,13 @@
 import { Component, effect, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { ApplicationFeatures } from 'src/app/classes/domain/domainenums/domainenums';
 import { Payer } from 'src/app/classes/domain/entities/website/masters/payer/payer';
 import { Stage } from 'src/app/classes/domain/entities/website/masters/stage/stage';
 import { PayloadPacketFacade } from 'src/app/classes/infrastructure/payloadpacket/payloadpacketfacade';
 import { TransportData } from 'src/app/classes/infrastructure/transportdata';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
+import { FeatureAccessService } from 'src/app/services/feature-access.service';
 import { ScreenSizeService } from 'src/app/services/screensize.service';
 import { ServerCommunicatorService } from 'src/app/services/server-communicator.service';
 import { UIUtils } from 'src/app/services/uiutils.service';
@@ -32,10 +34,13 @@ export class PayerComponent implements OnInit {
 
   companyRef = this.companystatemanagement.SelectedCompanyRef;
 
-  headers: string[] = [ 'Name', 'Action'];
+  // headers: string[] = [ 'Name', 'Action'];
+    headers: string[] = [];
+    featureRef: ApplicationFeatures = ApplicationFeatures.PayerMaster;
+    showActionColumn = false;
 
   constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private screenSizeService: ScreenSizeService,
-    private companystatemanagement: CompanyStateManagement) {
+    private companystatemanagement: CompanyStateManagement, public access: FeatureAccessService) {
     effect(async () => {
       await this.getPayerListByCompanyRef();
     });
@@ -45,6 +50,12 @@ export class PayerComponent implements OnInit {
     this.appStateManage.setDropdownDisabled();
     this.loadPaginationData();
     this.pageSize = this.screenSizeService.getPageSize('withoutDropdown');
+        this.access.refresh()
+    this.showActionColumn = this.access.canEdit(this.featureRef) || this.access.canDelete(this.featureRef);
+    this.headers = [
+      'Name',
+      ...(this.showActionColumn ? ['Action'] : []),
+    ];
   }
 
 

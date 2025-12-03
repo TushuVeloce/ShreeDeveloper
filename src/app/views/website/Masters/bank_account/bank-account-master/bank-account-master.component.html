@@ -7,7 +7,7 @@
       [filterFields]="['Name', 'BranchName', 'AccountNumber', 'IFSCCode', 'DateofOpening']"
       (filteredList)="onFilteredList($event)"></app-shared-filter>
   </div>
-    <div class="col-4 mb-2" routerLinkActive="active">
+    <div class="col-4 mb-2" routerLinkActive="active" *ngIf="access.canAdd(featureRef)">
     <nz-button nz-button class="btn1" (click)='AddBankAccount()'>
       Add Bank Account
     </nz-button>
@@ -31,11 +31,11 @@
           <td Class="tbldata">{{bank.p.AccountNumber}}</td>
           <td Class="tbldata">{{bank.p.IFSCCode}}</td>
           <td class="tbldata">{{ formatDate(bank.p.DateofOpening) }}</td>
-          <td class="tbldata">
-            <span style="margin-left: 9px;" (click)="onEditClicked(bank);">
-              <img src="\assets\icons\edit.png" alt="logo" title="Edit" width="20px" height="20px" />
+          <td class="tbldata" *ngIf="showActionColumn">
+            <span style="margin-left: 9px;" (click)="onEditClicked(bank);" *ngIf="access.canEdit(featureRef)">
+              <img src="\assets\icons\edit.png" alt="logo" title="Edit" width="20px" height="20px"/>
             </span>
-            <span style="margin-left: 9px;" (click)="onDeleteClicked(bank);">
+            <span style="margin-left: 9px;" (click)="onDeleteClicked(bank);" *ngIf="access.canDelete(featureRef)">
               <img src="\assets\icons\delete.png" alt="logo" title="Delete" width="20px" height="20px" /></span>
           </td>
         </tr>

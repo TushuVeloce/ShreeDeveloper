@@ -438,6 +438,7 @@ export class CustomerFollowupDetailsComponent implements OnInit {
       return;
     }
     // return
+    console.log('this.Entity :', this.Entity);
     let entityToSave = this.Entity.GetEditableVersion();
     let entitiesToSave = [entityToSave];
 

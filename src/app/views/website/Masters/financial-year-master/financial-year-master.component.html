@@ -7,7 +7,7 @@
       [filterFields]="['FromDate', 'ToDate']"
       (filteredList)="onFilteredList($event)"></app-shared-filter>
   </div>
-  <div class="col-4 mb-2" routerLinkActive="active">
+  <div class="col-4 mb-2" routerLinkActive="active" *ngIf="access.canAdd(featureRef)">
     <nz-button nz-button class="btn1" (click)="isPasswordModalOpen = true">
       Create New Financial Year
     </nz-button>

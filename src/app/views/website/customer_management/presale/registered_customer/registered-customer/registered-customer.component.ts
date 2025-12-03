@@ -11,7 +11,8 @@ import { TransportData } from 'src/app/classes/infrastructure/transportdata';
 import { Utils } from 'src/app/services/utils.service';
 import { CancelDealCustomRequest } from 'src/app/classes/domain/entities/website/customer_management/registeredcustomer/custom_process/CancelDealCustomRequest';
 import { Site } from 'src/app/classes/domain/entities/website/masters/site/site';
-
+import { ApplicationFeatures } from 'src/app/classes/domain/domainenums/domainenums';
+import { FeatureAccessService } from 'src/app/services/feature-access.service';
 
 @Component({
   selector: 'app-registered-customer',
@@ -20,53 +21,82 @@ import { Site } from 'src/app/classes/domain/entities/website/masters/site/site'
   styleUrls: ['./registered-customer.component.scss'],
 })
 export class RegisteredCustomerComponent implements OnInit {
-
   Entity: RegisteredCustomer = RegisteredCustomer.CreateNewInstance();
   MasterList: RegisteredCustomer[] = [];
   DisplayMasterList: RegisteredCustomer[] = [];
   SiteList: Site[] = [];
   SearchString: string = '';
-  SelectedRegisteredCustomer: RegisteredCustomer = RegisteredCustomer.CreateNewInstance();
+  SelectedRegisteredCustomer: RegisteredCustomer =
+    RegisteredCustomer.CreateNewInstance();
   pageSize = 10; // Items per page
   currentPage = 1; // Initialize current page
   total = 0;
   companyRef = this.companystatemanagement.SelectedCompanyRef;
 
-  headers: string[] = [
-    'Site Name',
-    'Plot No',
-    'Customer Name',
-    'Registration Person One',
-    'Registration Person Two',
-    'Mobile No',
-    'Address',
-    'Action',
-    'Deal Cancel'
-  ]; constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private screenSizeService: ScreenSizeService,
-    private companystatemanagement: CompanyStateManagement, private payloadPacketFacade: PayloadPacketFacade,
-    private serverCommunicator: ServerCommunicatorService
+  // headers: string[] = [
+  //   'Site Name',
+  //   'Plot No',
+  //   'Customer Name',
+  //   'Registration Person One',
+  //   'Registration Person Two',
+  //   'Mobile No',
+  //   'Address',
+  //   'Action',
+  //   'Deal Cancel',
+  // ];
+  headers: string[] = [];
+  featureRef: ApplicationFeatures = ApplicationFeatures.RegisteredCustomer;
+  showActionColumn = false;
+  showDealCancelledColumn = false;
+
+  constructor(
+    private uiUtils: UIUtils,
+    private router: Router,
+    private appStateManage: AppStateManageService,
+    private screenSizeService: ScreenSizeService,
+    private companystatemanagement: CompanyStateManagement,
+    private payloadPacketFacade: PayloadPacketFacade,
+    private serverCommunicator: ServerCommunicatorService,
+    public access: FeatureAccessService
   ) {
     effect(async () => {
-      await this.getRegisterCustomerListByCompanyRef(); await this.getSiteListByCompanyRef();
+      await this.getRegisterCustomerListByCompanyRef();
+      await this.getSiteListByCompanyRef();
     });
   }
-
 
   async ngOnInit() {
     this.appStateManage.setDropdownDisabled();
     this.loadPaginationData();
     this.pageSize = this.screenSizeService.getPageSize('withDropdown');
+    this.access.refresh();
+    this.showActionColumn = this.access.canEdit(this.featureRef);
+    this.showDealCancelledColumn = this.access.canDelete(this.featureRef);
+    this.headers = [
+      'Site Name',
+      'Plot No',
+      'Customer Name',
+      'Registration Person One',
+      'Registration Person Two',
+      'Mobile No',
+      'Address',
+      ...(this.showActionColumn ? ['Action'] : []),
+      ...(this.showDealCancelledColumn ? [ 'Deal Cancel'] : []),
+    ];
   }
 
   getSiteListByCompanyRef = async () => {
-    this.Entity.p.SiteRef = 0
+    this.Entity.p.SiteRef = 0;
     if (this.companyRef() <= 0) {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
-    let lst = await Site.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    let lst = await Site.FetchEntireListByCompanyRef(
+      this.companyRef(),
+      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+    );
     this.SiteList = lst;
-  }
+  };
 
   getRegisterCustomerListByCompanyRef = async () => {
     this.MasterList = [];
@@ -75,7 +105,10 @@ export class RegisteredCustomerComponent implements OnInit {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
-    let lst = await RegisteredCustomer.FetchEntireListByCompanyRef(this.companyRef(), async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg));
+    let lst = await RegisteredCustomer.FetchEntireListByCompanyRef(
+      this.companyRef(),
+      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+    );
     this.MasterList = lst;
     this.DisplayMasterList = this.MasterList;
     this.loadPaginationData();
@@ -88,7 +121,9 @@ export class RegisteredCustomerComponent implements OnInit {
       this.getRegisterCustomerListByCompanyRef();
       return;
     }
-    let lst = await RegisteredCustomer.FetchEntireListByCompanyRefAndSiteRef(this.companyRef(), this.Entity.p.SiteRef,
+    let lst = await RegisteredCustomer.FetchEntireListByCompanyRefAndSiteRef(
+      this.companyRef(),
+      this.Entity.p.SiteRef,
       async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
     );
     this.MasterList = lst;
@@ -97,26 +132,38 @@ export class RegisteredCustomerComponent implements OnInit {
   };
 
   IsFilled = (registercustomer: RegisteredCustomer) => {
-    if (registercustomer.p.RegisterCustomerBookingRemark && registercustomer.p.RegisterDate && registercustomer.p.RegisterBy && registercustomer.p.ValueOfAgreement && registercustomer.p.LegalCharges) {
+    if (
+      registercustomer.p.RegisterCustomerBookingRemark &&
+      registercustomer.p.RegisterDate &&
+      registercustomer.p.RegisterBy &&
+      registercustomer.p.ValueOfAgreement &&
+      registercustomer.p.LegalCharges
+    ) {
       return 'filled';
-    } else if (registercustomer.p.DiscountedRateOnArea || registercustomer.p.DiscountOnTotalPlotAmount) {
+    } else if (
+      registercustomer.p.DiscountedRateOnArea ||
+      registercustomer.p.DiscountOnTotalPlotAmount
+    ) {
       return 'halffilled';
     } else {
       return 'unfilled';
     }
-  }
+  };
 
   onEditClicked = async (item: RegisteredCustomer) => {
-
     this.SelectedRegisteredCustomer = item.GetEditableVersion();
     RegisteredCustomer.SetCurrentInstance(this.SelectedRegisteredCustomer);
 
     this.appStateManage.StorageKey.setItem('Editable', 'Edit');
-    await this.router.navigate(['/homepage/Website/Registered_Customer_Details']);
+    await this.router.navigate([
+      '/homepage/Website/Registered_Customer_Details',
+    ]);
   };
 
   CancelDeal = async (registercustomer: RegisteredCustomer) => {
-    let confirm = await this.uiUtils.showConfirmationMessage('Confirmation', 'Are you sure you want to cancel this Deal?',
+    let confirm = await this.uiUtils.showConfirmationMessage(
+      'Confirmation',
+      'Are you sure you want to cancel this Deal?',
       async () => {
         let req = new CancelDealCustomRequest();
         req.RegisterCustomerRef = registercustomer.p.Ref;
@@ -133,10 +180,9 @@ export class RegisteredCustomerComponent implements OnInit {
         let tdResult = JSON.parse(tr.Tag) as TransportData;
       }
     );
-    this.getRegisterCustomerListByCompanyRefAndSiteRef()
-    this.loadPaginationData()
+    this.getRegisterCustomerListByCompanyRefAndSiteRef();
+    this.loadPaginationData();
   };
-
 
   // For Pagination  start ----
 
@@ -151,7 +197,7 @@ export class RegisteredCustomerComponent implements OnInit {
   // 🔑 Whenever filteredList event is received
   onFilteredList(list: any[]) {
     this.DisplayMasterList = list;
-    this.currentPage = 1;   // reset to first page after filtering
+    this.currentPage = 1; // reset to first page after filtering
 
     this.loadPaginationData();
   }

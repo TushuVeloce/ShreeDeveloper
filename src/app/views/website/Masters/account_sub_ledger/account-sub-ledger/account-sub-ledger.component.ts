@@ -1,9 +1,11 @@
 import { Component, effect, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { ApplicationFeatures } from 'src/app/classes/domain/domainenums/domainenums';
 import { Ledger } from 'src/app/classes/domain/entities/website/masters/ledgermaster/ledger';
 import { SubLedger } from 'src/app/classes/domain/entities/website/masters/subledgermaster/subledger';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
+import { FeatureAccessService } from 'src/app/services/feature-access.service';
 import { ScreenSizeService } from 'src/app/services/screensize.service';
 import { UIUtils } from 'src/app/services/uiutils.service';
 
@@ -26,9 +28,18 @@ export class AccountSubLedgerComponent implements OnInit {
   total = 0;
   companyRef = this.companystatemanagement.SelectedCompanyRef;
 
-  headers: string[] = ['Ledger Name', 'Sub Ledger Name', 'Action'];
-  constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private screenSizeService: ScreenSizeService,
-    private companystatemanagement: CompanyStateManagement
+  // headers: string[] = ['Ledger Name', 'Sub Ledger Name', 'Action'];
+  headers: string[] = [];
+  featureRef: ApplicationFeatures = ApplicationFeatures.SubLedgerMaster;
+  showActionColumn = false;
+
+  constructor(
+    private uiUtils: UIUtils,
+    private router: Router,
+    private appStateManage: AppStateManageService,
+    private screenSizeService: ScreenSizeService,
+    private companystatemanagement: CompanyStateManagement,
+    public access: FeatureAccessService
   ) {
     effect(async () => {
       await this.FormulateLedgerList();
@@ -39,6 +50,15 @@ export class AccountSubLedgerComponent implements OnInit {
     this.appStateManage.setDropdownDisabled();
     this.loadPaginationData();
     this.pageSize = this.screenSizeService.getPageSize('withDropdown');
+    this.access.refresh();
+    this.showActionColumn =
+      this.access.canEdit(this.featureRef) ||
+      this.access.canDelete(this.featureRef);
+    this.headers = [
+      'Ledger Name',
+      'Sub Ledger Name',
+      ...(this.showActionColumn ? ['Action'] : []),
+    ];
   }
 
   // getSubLedgerListByCompanyRef = async () => {
@@ -55,18 +75,19 @@ export class AccountSubLedgerComponent implements OnInit {
   // }
 
   public FormulateLedgerList = async () => {
-    this.Entity.p.LedgerRef = 0
+    this.Entity.p.LedgerRef = 0;
     if (this.companyRef() <= 0) {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
-    let lst = await Ledger.FetchEntireListByCompanyRef(this.companyRef(),
+    let lst = await Ledger.FetchEntireListByCompanyRef(
+      this.companyRef(),
       async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
     );
-    this.LedgerList = lst
+    this.LedgerList = lst;
     if (this.LedgerList.length > 0) {
-      this.Entity.p.LedgerRef = this.LedgerList[0].p.Ref
-      await this.getSubLedgerListByLedgerRef(this.Entity.p.LedgerRef)
+      this.Entity.p.LedgerRef = this.LedgerList[0].p.Ref;
+      await this.getSubLedgerListByLedgerRef(this.Entity.p.LedgerRef);
     } else {
       this.DisplayMasterList = [];
     }
@@ -79,17 +100,22 @@ export class AccountSubLedgerComponent implements OnInit {
       await this.uiUtils.showErrorToster('Ledger not Selected');
       return;
     }
-    let lst = await SubLedger.FetchEntireListByLedgerRef(ledgerref, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    let lst = await SubLedger.FetchEntireListByLedgerRef(
+      ledgerref,
+      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+    );
     this.MasterList = lst;
     this.DisplayMasterList = this.MasterList;
     this.loadPaginationData();
-  }
+  };
 
   onEditClicked = async (item: SubLedger) => {
     this.SelectedSubLedger = item.GetEditableVersion();
     SubLedger.SetCurrentInstance(this.SelectedSubLedger);
     this.appStateManage.StorageKey.setItem('Editable', 'Edit');
-    await this.router.navigate(['/homepage/Website/Account_Sub_Ledger_Details']);
+    await this.router.navigate([
+      '/homepage/Website/Account_Sub_Ledger_Details',
+    ]);
   };
 
   onDeleteClicked = async (SubLedger: SubLedger) => {
@@ -104,7 +130,7 @@ export class AccountSubLedgerComponent implements OnInit {
           );
           this.SearchString = '';
           this.loadPaginationData();
-          this.getSubLedgerListByLedgerRef(this.Entity.p.LedgerRef)
+          this.getSubLedgerListByLedgerRef(this.Entity.p.LedgerRef);
         });
       }
     );
@@ -118,12 +144,12 @@ export class AccountSubLedgerComponent implements OnInit {
   paginatedList = () => {
     const start = (this.currentPage - 1) * this.pageSize;
     return this.DisplayMasterList.slice(start, start + this.pageSize);
-  }
+  };
 
   // 🔑 Whenever filteredList event is received
   onFilteredList(list: any[]) {
     this.DisplayMasterList = list;
-    this.currentPage = 1;   // reset to first page after filtering
+    this.currentPage = 1; // reset to first page after filtering
 
     this.loadPaginationData();
   }
@@ -138,6 +164,5 @@ export class AccountSubLedgerComponent implements OnInit {
       return;
     }
     this.router.navigate(['/homepage/Website/Account_Sub_Ledger_Details']);
-  }
+  };
 }
-

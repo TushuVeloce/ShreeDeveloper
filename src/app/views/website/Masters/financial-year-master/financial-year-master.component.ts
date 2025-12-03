@@ -2,7 +2,11 @@ import { DatePipe } from '@angular/common';
 import { Component, effect, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ValidationMessages } from 'src/app/classes/domain/constants';
-import { FinancialYear, FinancialYearProps } from 'src/app/classes/domain/entities/website/masters/financialyear/financialyear';
+import { ApplicationFeatures } from 'src/app/classes/domain/domainenums/domainenums';
+import {
+  FinancialYear,
+  FinancialYearProps,
+} from 'src/app/classes/domain/entities/website/masters/financialyear/financialyear';
 import { GenerateNewFinancialYearCustomRequest } from 'src/app/classes/domain/entities/website/masters/financialyear/FinancialYearUserCustomRequest';
 import { SetCurrentFinancialYearCustomRequest } from 'src/app/classes/domain/entities/website/masters/financialyear/SetCurrentFinancialYearCustomRequest';
 import { PayloadPacketFacade } from 'src/app/classes/infrastructure/payloadpacket/payloadpacketfacade';
@@ -10,6 +14,7 @@ import { TransportData } from 'src/app/classes/infrastructure/transportdata';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
 import { DTU } from 'src/app/services/dtu.service';
+import { FeatureAccessService } from 'src/app/services/feature-access.service';
 import { ScreenSizeService } from 'src/app/services/screensize.service';
 import { ServerCommunicatorService } from 'src/app/services/server-communicator.service';
 import { UIUtils } from 'src/app/services/uiutils.service';
@@ -43,18 +48,28 @@ export class FinancialYearMasterComponent implements OnInit {
   localpassword: string = '';
   showPassword: boolean = false;
 
-  localRef: number = 0
+  localRef: number = 0;
 
+  RequiredFieldMsg: string = ValidationMessages.RequiredFieldMsg;
 
-  RequiredFieldMsg: string = ValidationMessages.RequiredFieldMsg
-
-  headers: string[] = [ 'From Date', 'To Date', 'Status'];
-  constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private utils: Utils,
-    private dtu: DTU, private datePipe: DatePipe, private companystatemanagement: CompanyStateManagement, private payloadPacketFacade: PayloadPacketFacade,
-    private serverCommunicator: ServerCommunicatorService, private screenSizeService: ScreenSizeService
+  // headers: string[] = [ 'From Date', 'To Date', 'Status'];
+  headers: string[] = [];
+  featureRef: ApplicationFeatures = ApplicationFeatures.FinancialYearMaster;
+  constructor(
+    private uiUtils: UIUtils,
+    private router: Router,
+    private appStateManage: AppStateManageService,
+    private utils: Utils,
+    private dtu: DTU,
+    private datePipe: DatePipe,
+    private companystatemanagement: CompanyStateManagement,
+    private payloadPacketFacade: PayloadPacketFacade,
+    private serverCommunicator: ServerCommunicatorService,
+    private screenSizeService: ScreenSizeService,
+    public access: FeatureAccessService
   ) {
     effect(() => {
-      this.getFinancialYearListByCompanyRef()
+      this.getFinancialYearListByCompanyRef();
     });
   }
 
@@ -62,6 +77,8 @@ export class FinancialYearMasterComponent implements OnInit {
     this.appStateManage.setDropdownDisabled(false);
     this.pageSize = this.screenSizeService.getPageSize('withoutDropdown');
     // await this.FormulateMasterList();
+    this.access.refresh();
+    this.headers = ['From Date', 'To Date', 'Status'];
   }
 
   getFinancialYearListByCompanyRef = async () => {
@@ -71,25 +88,28 @@ export class FinancialYearMasterComponent implements OnInit {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
-    let lst = await FinancialYear.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    let lst = await FinancialYear.FetchEntireListByCompanyRef(
+      this.companyRef(),
+      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+    );
     this.MasterList = lst;
     this.DisplayMasterList = this.MasterList;
     this.loadPaginationData();
     this.convertdate();
-  }
+  };
 
   convertdate = () => {
-    this.MasterList.forEach(item => {
-      let convertedDate = this.dtu.GetIndianDate(item.p.FromDate,);
+    this.MasterList.forEach((item) => {
+      let convertedDate = this.dtu.GetIndianDate(item.p.FromDate);
       this.FromDates.push(convertedDate);
       item.p.FromDate = convertedDate;
     });
-    this.MasterList.forEach(item => {
-      let convertedDate = this.dtu.GetIndianDate(item.p.ToDate,);
+    this.MasterList.forEach((item) => {
+      let convertedDate = this.dtu.GetIndianDate(item.p.ToDate);
       this.ToDates.push(convertedDate);
       item.p.ToDate = convertedDate;
     });
-  }
+  };
 
   openModal(type: string) {
     if (type === 'password') this.isPasswordModalOpen = true;
@@ -101,8 +121,6 @@ export class FinancialYearMasterComponent implements OnInit {
     this.isSetFinancialYearModalOpen = false;
     this.localpassword = '';
   };
-
-
 
   // for value 0 selected while click on Input //
   selectAllValue(event: MouseEvent): void {
@@ -126,12 +144,11 @@ export class FinancialYearMasterComponent implements OnInit {
   onSelectedFinanacialYear = async (item: FinancialYear) => {
     this.SelectedFinancialYear = item.GetEditableVersion();
     FinancialYear.SetCurrentInstance(this.SelectedFinancialYear);
-  }
+  };
 
   // To Create New Financial Year Custom Request
   AddNewFinancialYear = async () => {
     if (this.localpassword.trim().length > 0) {
-
       let req = new GenerateNewFinancialYearCustomRequest();
       req.CompanyRef = this.companyRef();
       req.Password = this.localpassword;
@@ -149,26 +166,24 @@ export class FinancialYearMasterComponent implements OnInit {
       let tdResult = JSON.parse(tr.Tag) as TransportData;
       let NewFinancialYear = this.utils.GetString(tdResult);
       this.Entity.p.FromDate = NewFinancialYear;
-      await this.uiUtils.showSuccessToster('New Financial Year Created Successfully');
+      await this.uiUtils.showSuccessToster(
+        'New Financial Year Created Successfully'
+      );
 
       this.closeModal('password');
       this.getFinancialYearListByCompanyRef();
-    }
-    else {
+    } else {
       await this.uiUtils.showWarningToster('Password Required');
     }
-  }
-
+  };
 
   // To Set New Financial Year Custom Request
   SetNewFinancialYear = async () => {
-
     if (this.localpassword.trim().length > 0) {
-
       let req = new SetCurrentFinancialYearCustomRequest();
-      this.Entity = FinancialYear.GetCurrentInstance()
+      this.Entity = FinancialYear.GetCurrentInstance();
 
-      req.FinancialYearRef = this.Entity.p.Ref
+      req.FinancialYearRef = this.Entity.p.Ref;
       req.CompanyRef = this.companyRef();
 
       req.Password = this.localpassword;
@@ -187,33 +202,34 @@ export class FinancialYearMasterComponent implements OnInit {
       let NewFinancialYear = this.utils.GetString(tdResult);
       this.Entity.p.FromDate = NewFinancialYear;
       this.closeModal('password');
-      await this.uiUtils.showSuccessToster('This Financial Year Set Successfully');
+      await this.uiUtils.showSuccessToster(
+        'This Financial Year Set Successfully'
+      );
       this.getFinancialYearListByCompanyRef();
-    }
-    else {
+    } else {
       await this.uiUtils.showWarningToster('Password Required');
     }
-  }
+  };
 
   // For Pagination  start ----
   loadPaginationData = () => {
     this.total = this.DisplayMasterList.length; // Update total based on loaded data
-  }
+  };
 
   paginatedList = () => {
     const start = (this.currentPage - 1) * this.pageSize;
     return this.DisplayMasterList.slice(start, start + this.pageSize);
-  }
+  };
 
   // 🔑 Whenever filteredList event is received
   onFilteredList(list: any[]) {
     this.DisplayMasterList = list;
-    this.currentPage = 1;   // reset to first page after filtering
+    this.currentPage = 1; // reset to first page after filtering
 
     this.loadPaginationData();
   }
 
   onPageChange = (pageIndex: number): void => {
     this.currentPage = pageIndex; // Update the current page
-  }
+  };
 }

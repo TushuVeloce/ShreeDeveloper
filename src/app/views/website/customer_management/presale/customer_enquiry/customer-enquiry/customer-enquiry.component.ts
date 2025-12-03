@@ -1,12 +1,19 @@
 import { Component, effect, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { DomainEnums } from 'src/app/classes/domain/domainenums/domainenums';
+import {
+  ApplicationFeatures,
+  DomainEnums,
+} from 'src/app/classes/domain/domainenums/domainenums';
 import { CustomerEnquiry } from 'src/app/classes/domain/entities/website/customer_management/customerenquiry/customerenquiry';
-import { CustomerFollowUp, CustomerFollowUpProps } from 'src/app/classes/domain/entities/website/customer_management/customerfollowup/customerfollowup';
+import {
+  CustomerFollowUp,
+  CustomerFollowUpProps,
+} from 'src/app/classes/domain/entities/website/customer_management/customerfollowup/customerfollowup';
 import { Site } from 'src/app/classes/domain/entities/website/masters/site/site';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
 import { DateconversionService } from 'src/app/services/dateconversion.service';
+import { FeatureAccessService } from 'src/app/services/feature-access.service';
 import { ScreenSizeService } from 'src/app/services/screensize.service';
 import { UIUtils } from 'src/app/services/uiutils.service';
 
@@ -21,11 +28,12 @@ export class CustomerEnquiryComponent implements OnInit {
   MasterList: CustomerEnquiry[] = [];
   DisplayMasterList: CustomerEnquiry[] = [];
   SearchString: string = '';
-  SelectedCustomerEnquiry: CustomerEnquiry = CustomerEnquiry.CreateNewInstance();
+  SelectedCustomerEnquiry: CustomerEnquiry =
+    CustomerEnquiry.CreateNewInstance();
   CustomerRef: number = 0;
   SiteRef: number = 0;
   CustomerProgress: number = 0;
-  CustomerProgressList = DomainEnums.CustomerProgressList()
+  CustomerProgressList = DomainEnums.CustomerProgressList();
   SiteList: Site[] = [];
   pageSize = 5; // Items per page
   currentPage = 1; // Initialize current page
@@ -33,22 +41,26 @@ export class CustomerEnquiryComponent implements OnInit {
 
   companyRef = this.companystatemanagement.SelectedCompanyRef;
 
-  headers: string[] = [
-    'Name',
-    'Contact No',
-    'City',
-    'Pincode',
-    'Address',
-    'Action',
-  ];
+  // headers: string[] = [
+  //   'Name',
+  //   'Contact No',
+  //   'City',
+  //   'Pincode',
+  //   'Address',
+  //   'Action',
+  // ];
 
+  headers: string[] = [];
+  featureRef: ApplicationFeatures = ApplicationFeatures.CustomerEnquiry;
+  showActionColumn = false;
   constructor(
     private uiUtils: UIUtils,
     private router: Router,
     private appStateManage: AppStateManageService,
     private screenSizeService: ScreenSizeService,
     private companystatemanagement: CompanyStateManagement,
-    private DateconversionService: DateconversionService
+    private DateconversionService: DateconversionService,
+    public access: FeatureAccessService
   ) {
     effect(() => {
       this.getRegisterCustomerListByCompanySiteAndcustomerProgressEnum();
@@ -59,12 +71,24 @@ export class CustomerEnquiryComponent implements OnInit {
     this.appStateManage.setDropdownDisabled();
     this.loadPaginationData();
     this.pageSize = this.screenSizeService.getPageSize('withoutDropdown');
+    this.access.refresh();
+    this.showActionColumn =
+      this.access.canEdit(this.featureRef) ||
+      this.access.canDelete(this.featureRef);
+    this.headers = [
+      'Name',
+      'Contact No',
+      'City',
+      'PinCode',
+      'Address',
+      ...(this.showActionColumn ? ['Action'] : []),
+    ];
   }
 
   // Extracted from services date conversion //
   formatDate = (date: string | Date): string => {
     return this.DateconversionService.formatDate(date);
-  }
+  };
 
   // getCustomerEnquiryListByCompanyRef = async () => {
   //   this.MasterList = [];
@@ -86,9 +110,13 @@ export class CustomerEnquiryComponent implements OnInit {
   getRegisterCustomerListByCompanySiteAndcustomerProgressEnum = async () => {
     this.MasterList = [];
     this.DisplayMasterList = [];
-    let lst = await CustomerEnquiry.FetchEntireListByCompanySiteAndcustomerProgressEnum(this.companyRef(), this.SiteRef, this.CustomerProgress,
-      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
-    );
+    let lst =
+      await CustomerEnquiry.FetchEntireListByCompanySiteAndcustomerProgressEnum(
+        this.companyRef(),
+        this.SiteRef,
+        this.CustomerProgress,
+        async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+      );
     this.MasterList = lst;
     this.DisplayMasterList = this.MasterList;
     this.loadPaginationData();
@@ -96,7 +124,7 @@ export class CustomerEnquiryComponent implements OnInit {
 
   onEditClicked = async (item: CustomerEnquiry) => {
     item.p.CustomerFollowUps = [];
-    item.p.CustomerFollowUps.push(CustomerFollowUpProps.Blank())
+    item.p.CustomerFollowUps.push(CustomerFollowUpProps.Blank());
 
     this.SelectedCustomerEnquiry = item.GetEditableVersion();
 
@@ -128,7 +156,7 @@ export class CustomerEnquiryComponent implements OnInit {
   // For Pagination  start ----
   loadPaginationData = () => {
     this.total = this.DisplayMasterList.length; // Update total based on loaded data
-  }
+  };
 
   get paginatedList() {
     const start = (this.currentPage - 1) * this.pageSize;
@@ -138,14 +166,14 @@ export class CustomerEnquiryComponent implements OnInit {
   // 🔑 Whenever filteredList event is received
   onFilteredList(list: any[]) {
     this.DisplayMasterList = list;
-    this.currentPage = 1;   // reset to first page after filtering
+    this.currentPage = 1; // reset to first page after filtering
 
     this.loadPaginationData();
   }
 
   onPageChange = (pageIndex: number): void => {
     this.currentPage = pageIndex; // Update the current page
-  }
+  };
 
   async AddCustomerEnquiryForm() {
     if (this.companyRef() <= 0) {

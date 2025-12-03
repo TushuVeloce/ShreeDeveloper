@@ -9,7 +9,7 @@
       <app-shared-filter [masterList]="MasterList" [filterFields]="['Name']"
         (filteredList)="onFilteredList($event)"></app-shared-filter>
     </div>
-    <div class="col-4 mb-2" routerLinkActive="active">
+    <div class="col-4 mb-2" routerLinkActive="active" *ngIf="access.canAdd(featureRef)">
       <nz-button nz-button class="btn1" (click)="AddRecipient()">
         Add Recipient
       </nz-button>
@@ -33,10 +33,10 @@
         <tbody>
           <tr *ngFor="let recipient of paginatedList(); index as i">
             <td Class="tbldata" nzLeft>{{ (currentPage - 1) * pageSize + i + 1 }}</td>
-            <td Class="tbldata text-capitalize">{{ recipient.p.Name }}</td>
-            <td class="tbldata">
-              <Edit-Icon (editClick)="onEditClicked(recipient)" />
-              <Delete-Icon (deleteClicked)="onDeleteClicked(recipient)" />
+            <td Class="tbldata">{{ recipient.p.Name }}</td>
+            <td class="tbldata" *ngIf="showActionColumn">
+              <Edit-Icon (editClick)="onEditClicked(recipient)" *ngIf="access.canEdit(featureRef)"/>
+              <Delete-Icon (deleteClicked)="onDeleteClicked(recipient)" *ngIf="access.canDelete(featureRef)" />
             </td>
           </tr>
         </tbody>

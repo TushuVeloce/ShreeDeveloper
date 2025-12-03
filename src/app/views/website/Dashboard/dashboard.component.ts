@@ -90,6 +90,7 @@ export class DashboardComponent implements OnInit {
   isLoading = true; // ✅ stop loading once data arrives
 
   private duration: number = 2000; // total duration in ms
+  refreshInterval: any;
 
   constructor(
     private uiUtils: UIUtils,
@@ -122,6 +123,11 @@ export class DashboardComponent implements OnInit {
         }
       },
     });
+    this.startAutoRefresh();
+    this.loadData();
+  }
+
+  loadData = async () => {
     this.getDashboardStats();
     this.getCurrentBalanceByCompanyRef();
     // this.getExpenseBreakdownListByCompanySiteMonthFilterType();
@@ -134,6 +140,22 @@ export class DashboardComponent implements OnInit {
 
     if (this.BarFilterType == 57) {
       this.WeekMonthList = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+    }
+  };
+
+  startAutoRefresh() {
+    // Call immediately when user opens page
+    this.loadData();
+
+    // Then call every 1 minute (60000 ms)
+    this.refreshInterval = setInterval(() => {
+      this.loadData();
+    }, 60000);
+  }
+
+  stopAutoRefresh() {
+    if (this.refreshInterval) {
+      clearInterval(this.refreshInterval);
     }
   }
 
@@ -324,6 +346,7 @@ export class DashboardComponent implements OnInit {
     if (this.barChart) {
       this.barChart.destroy();
     }
+    this.stopAutoRefresh();
   }
 
   getDashboardStats = async () => {

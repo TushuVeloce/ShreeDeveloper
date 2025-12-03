@@ -1,8 +1,10 @@
 import { Component, effect, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { ApplicationFeatures } from 'src/app/classes/domain/domainenums/domainenums';
 import { OfficeDutyandTime } from 'src/app/classes/domain/entities/website/HR_and_Payroll/Office_Duty_and_Time/officedutyandtime';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
+import { FeatureAccessService } from 'src/app/services/feature-access.service';
 import { ScreenSizeService } from 'src/app/services/screensize.service';
 import { UIUtils } from 'src/app/services/uiutils.service';
 
@@ -24,9 +26,17 @@ export class OfficeDutyTimeComponent implements OnInit {
   total = 0;
   companyRef = this.companystatemanagement.SelectedCompanyRef;
 
-  headers: string[] = ['Working Time From', 'Working Time To', 'Late Mark Grace Time', 'Action'];
-  constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private screenSizeService: ScreenSizeService,
-    private companystatemanagement: CompanyStateManagement
+  // headers: string[] = ['Working Time From', 'Working Time To', 'Late Mark Grace Time', 'Action'];
+  headers: string[] = [];
+  featureRef: ApplicationFeatures = ApplicationFeatures.OfficeDutyTime;
+  showActionColumn = false;
+  constructor(
+    private uiUtils: UIUtils,
+    private router: Router,
+    private appStateManage: AppStateManageService,
+    private screenSizeService: ScreenSizeService,
+    private companystatemanagement: CompanyStateManagement,
+    public access: FeatureAccessService
   ) {
     effect(async () => {
       await this.getOfficeDutyandTimeListByCompanyRef();
@@ -36,6 +46,16 @@ export class OfficeDutyTimeComponent implements OnInit {
     this.appStateManage.setDropdownDisabled();
     this.loadPaginationData();
     this.pageSize = this.screenSizeService.getPageSize('withoutDropdown');
+    this.access.refresh();
+    this.showActionColumn =
+      this.access.canEdit(this.featureRef) ||
+      this.access.canDelete(this.featureRef);
+    this.headers = [
+      'Working Time From',
+      'Working Time To',
+      'Late Mark Grace Time',
+      ...(this.showActionColumn ? ['Action'] : []),
+    ];
   }
 
   getFormattedTime(time: string): string {
@@ -48,14 +68,16 @@ export class OfficeDutyTimeComponent implements OnInit {
     const options: Intl.DateTimeFormatOptions = {
       hour: '2-digit',
       minute: '2-digit',
-      hour12: this.isSystemUsing12HourFormat()
+      hour12: this.isSystemUsing12HourFormat(),
     };
 
     return date.toLocaleTimeString([], options);
   }
 
   isSystemUsing12HourFormat(): boolean {
-    const format = new Intl.DateTimeFormat([], { hour: 'numeric' }).format(new Date(2020, 0, 1, 13));
+    const format = new Intl.DateTimeFormat([], { hour: 'numeric' }).format(
+      new Date(2020, 0, 1, 13)
+    );
     return format.includes('PM') || format.includes('pm');
   }
 
@@ -66,12 +88,15 @@ export class OfficeDutyTimeComponent implements OnInit {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
-    let lst = await OfficeDutyandTime.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    let lst = await OfficeDutyandTime.FetchEntireListByCompanyRef(
+      this.companyRef(),
+      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+    );
     this.MasterList = lst;
 
     this.DisplayMasterList = this.MasterList;
     this.loadPaginationData();
-  }
+  };
 
   onEditClicked = async (item: OfficeDutyandTime) => {
     this.SelectedTime = item.GetEditableVersion();
@@ -106,12 +131,12 @@ export class OfficeDutyTimeComponent implements OnInit {
   paginatedList = () => {
     const start = (this.currentPage - 1) * this.pageSize;
     return this.DisplayMasterList.slice(start, start + this.pageSize);
-  }
+  };
 
   // 🔑 Whenever filteredList event is received
   onFilteredList(list: any[]) {
     this.DisplayMasterList = list;
-    this.currentPage = 1;   // reset to first page after filtering
+    this.currentPage = 1; // reset to first page after filtering
 
     this.loadPaginationData();
   }
@@ -126,5 +151,5 @@ export class OfficeDutyTimeComponent implements OnInit {
       return;
     }
     this.router.navigate(['/homepage/Website/Office_Duty_Time_Details']);
-  }
+  };
 }

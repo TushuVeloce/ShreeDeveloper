@@ -1,11 +1,13 @@
 import { Component, effect, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { ApplicationFeatures } from 'src/app/classes/domain/domainenums/domainenums';
 import { Site } from 'src/app/classes/domain/entities/website/masters/site/site';
 import { Stage } from 'src/app/classes/domain/entities/website/masters/stage/stage';
 import { StockConsume } from 'src/app/classes/domain/entities/website/stock_management/stock_consume/stockconsume';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
 import { DateconversionService } from 'src/app/services/dateconversion.service';
+import { FeatureAccessService } from 'src/app/services/feature-access.service';
 import { ScreenSizeService } from 'src/app/services/screensize.service';
 import { UIUtils } from 'src/app/services/uiutils.service';
 
@@ -30,9 +32,18 @@ export class StockConsumeComponent implements OnInit {
 
   companyRef = this.companystatemanagement.SelectedCompanyRef;
 
-  headers: string[] = ['Site Name', 'Consumption Date', 'Material Name', 'Unit', 'Current Qty.', 'Consumption Qty.', 'Remaining Qty.', 'Stage Name', 'Description', 'Remark', 'Action'];
-  constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private screenSizeService: ScreenSizeService,
-    private companystatemanagement: CompanyStateManagement, private DateconversionService: DateconversionService,
+  // headers: string[] = ['Site Name', 'Consumption Date', 'Material Name', 'Unit', 'Current Qty.', 'Consumption Qty.', 'Remaining Qty.', 'Stage Name', 'Description', 'Remark', 'Action'];
+  headers: string[] = [];
+  featureRef: ApplicationFeatures = ApplicationFeatures.StockConsume;
+  showActionColumn = false;
+  constructor(
+    private uiUtils: UIUtils,
+    private router: Router,
+    private appStateManage: AppStateManageService,
+    private screenSizeService: ScreenSizeService,
+    private companystatemanagement: CompanyStateManagement,
+    private DateconversionService: DateconversionService,
+    public access: FeatureAccessService
   ) {
     effect(async () => {
       this.getSiteListByCompanyRef();
@@ -45,6 +56,23 @@ export class StockConsumeComponent implements OnInit {
     this.appStateManage.setDropdownDisabled();
     this.loadPaginationData();
     this.pageSize = this.screenSizeService.getPageSize('withDropdown');
+    this.access.refresh();
+    this.showActionColumn =
+      this.access.canEdit(this.featureRef) ||
+      this.access.canDelete(this.featureRef);
+    this.headers = [
+      'Site Name',
+      'Consumption Date',
+      'Material Name',
+      'Unit',
+      'Current Qty.',
+      'Consumption Qty.',
+      'Remaining Qty.',
+      'Stage Name',
+      'Description',
+      'Remark',
+      ...(this.showActionColumn ? ['Action'] : []),
+    ];
   }
 
   getStageListByCompanyRef = async () => {
@@ -65,13 +93,16 @@ export class StockConsumeComponent implements OnInit {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
-    this.Entity.p.SiteRef = 0
-    let lst = await Site.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    this.Entity.p.SiteRef = 0;
+    let lst = await Site.FetchEntireListByCompanyRef(
+      this.companyRef(),
+      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+    );
     this.SiteList = lst;
     if (this.SiteList.length > 0) {
-      this.Entity.p.SiteRef = 0
+      this.Entity.p.SiteRef = 0;
     }
-  }
+  };
 
   getConsumeListByCompanySiteAndVendorRef = async () => {
     this.MasterList = [];
@@ -80,16 +111,21 @@ export class StockConsumeComponent implements OnInit {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
-    let lst = await StockConsume.FetchEntireListByCompanySiteAndVendorRef(this.companyRef(), this.Entity.p.SiteRef, this.Entity.p.StageRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    let lst = await StockConsume.FetchEntireListByCompanySiteAndVendorRef(
+      this.companyRef(),
+      this.Entity.p.SiteRef,
+      this.Entity.p.StageRef,
+      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+    );
     this.MasterList = lst;
     this.DisplayMasterList = this.MasterList;
     this.loadPaginationData();
-  }
+  };
 
   // Extracted from services date conversion //
   formatDate = (date: string | Date): string => {
     return this.DateconversionService.formatDate(date);
-  }
+  };
 
   onEditClicked = async (item: StockConsume) => {
     this.SelectedStockConsume = item.GetEditableVersion();
@@ -125,12 +161,12 @@ export class StockConsumeComponent implements OnInit {
   paginatedList = () => {
     const start = (this.currentPage - 1) * this.pageSize;
     return this.DisplayMasterList.slice(start, start + this.pageSize);
-  }
+  };
 
   // 🔑 Whenever filteredList event is received
   onFilteredList(list: any[]) {
     this.DisplayMasterList = list;
-    this.currentPage = 1;   // reset to first page after filtering
+    this.currentPage = 1; // reset to first page after filtering
 
     this.loadPaginationData();
   }
@@ -145,5 +181,5 @@ export class StockConsumeComponent implements OnInit {
       return;
     }
     this.router.navigate(['/homepage/Website/Stock_Consume_Details']);
-  }
+  };
 }

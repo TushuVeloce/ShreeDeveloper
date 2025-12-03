@@ -54,7 +54,7 @@ export class IncomeDetailsMobileAppComponent implements OnInit {
   PayerTypesList = DomainEnums.PayerTypesList();
   DealDoneCustomer = PayerTypes.DealDoneCustomer;
   payerTypeRecipient = PayerTypes.Payers
-
+  EmployeeType = PayerTypes.Employee;
   Date: string = '';
 
   IncomeDate: string | null = null;

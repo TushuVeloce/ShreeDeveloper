@@ -7,7 +7,7 @@
       <app-shared-filter [masterList]="MasterList" [filterFields]="['Year']"
         (filteredList)="onFilteredList($event)"></app-shared-filter>
     </div>
-    <div class="col-4 mb-2" routerLinkActive="active">
+    <div class="col-4 mb-2" routerLinkActive="active" *ngIf="access.canAdd(featureRef)">
       <nz-button *ngIf="Entity.p.EmployeeRef != 1001" nz-button class="btn1" (click)='AddSalarySlipRequest()'>
         Add Request
       </nz-button>
@@ -37,7 +37,7 @@
                 Approved
               </span>
             </td>
-            <td class="tbldata">
+            <td class="tbldata" *ngIf="showActionColumn">
               <span style="margin-left: 9px;" (click)="onDeleteClicked(salarysliprequest);"
                 *ngIf="!salarysliprequest.p.IsApproved">
                 <img src="\assets\icons\delete.png" alt="logo" style="cursor: pointer;" title="Delete" width="20px"

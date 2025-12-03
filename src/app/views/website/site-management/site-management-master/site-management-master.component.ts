@@ -1,10 +1,12 @@
 import { Component, effect, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Browser } from '@capacitor/browser';
+import { ApplicationFeatures } from 'src/app/classes/domain/domainenums/domainenums';
 import { Site } from 'src/app/classes/domain/entities/website/masters/site/site';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
 import { DateconversionService } from 'src/app/services/dateconversion.service';
+import { FeatureAccessService } from 'src/app/services/feature-access.service';
 import { ScreenSizeService } from 'src/app/services/screensize.service';
 import { UIUtils } from 'src/app/services/uiutils.service';
 import { Utils } from 'src/app/services/utils.service';
@@ -16,7 +18,6 @@ import { Utils } from 'src/app/services/utils.service';
   standalone: false,
 })
 export class SiteManagementMasterComponent implements OnInit {
-
   Entity: Site = Site.CreateNewInstance();
   MasterList: Site[] = [];
   DisplayMasterList: Site[] = [];
@@ -28,7 +29,10 @@ export class SiteManagementMasterComponent implements OnInit {
   isApprovalDisabled: boolean = false;
   total = 0;
   companyRef = this.companystatemanagement.SelectedCompanyRef;
-  headers: string[] = ['Site Name', 'No of Plots', 'Area in Sq/m', 'Area in Sq/ft', 'Starting Date', 'Estimated End Date', 'Site Location', 'Status', 'Action'];
+  // headers: string[] = ['Site Name', 'No of Plots', 'Area in Sq/m', 'Area in Sq/ft', 'Starting Date', 'Estimated End Date', 'Site Location', 'Status', 'Action'];
+  headers: string[] = [];
+  featureRef: ApplicationFeatures = ApplicationFeatures.NewSite;
+  showActionColumn = false;
   constructor(
     private uiUtils: UIUtils,
     private utils: Utils,
@@ -37,6 +41,7 @@ export class SiteManagementMasterComponent implements OnInit {
     private screenSizeService: ScreenSizeService,
     private companystatemanagement: CompanyStateManagement,
     private DateconversionService: DateconversionService,
+    public access: FeatureAccessService
   ) {
     effect(async () => {
       // this.getMaterialListByCompanyRef()
@@ -46,25 +51,42 @@ export class SiteManagementMasterComponent implements OnInit {
   ngOnInit() {
     this.appStateManage.setDropdownDisabled();
     this.pageSize = this.screenSizeService.getPageSize('withoutDropdown');
+    this.access.refresh();
+    this.showActionColumn =
+      this.access.canEdit(this.featureRef) ||
+      this.access.canDelete(this.featureRef);
+    this.headers = [
+      'Site Name',
+      'No of Plots',
+      'Area in Sq/m',
+      'Area in Sq/ft',
+      'Starting Date',
+      'Estimated End Date',
+      'Site Location',
+      'Status',
+      ...(this.showActionColumn ? ['Action'] : []),
+    ];
   }
 
   async openLink(url: string | null): Promise<void> {
-  if (!url) {
-    await this.uiUtils.showErrorToster('Location link not available.');
-    return;
-  }
+    if (!url) {
+      await this.uiUtils.showErrorToster('Location link not available.');
+      return;
+    }
 
-  try {
-    await Browser.open({ url });
-  } catch (error) {
-    await this.uiUtils.showErrorToster('Could not open map. Please try again.');
+    try {
+      await Browser.open({ url });
+    } catch (error) {
+      await this.uiUtils.showErrorToster(
+        'Could not open map. Please try again.'
+      );
+    }
   }
-}
 
   // Extracted from services date conversion //
   formatDate = (date: string | Date): string => {
     return this.DateconversionService.formatDate(date);
-  }
+  };
 
   formatToFixed(value: number): string {
     if (value == null) return '0';
@@ -81,17 +103,21 @@ export class SiteManagementMasterComponent implements OnInit {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
-    let lst = await Site.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    let lst = await Site.FetchEntireListByCompanyRef(
+      this.companyRef(),
+      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+    );
     this.MasterList = lst;
     this.DisplayMasterList = this.MasterList;
     this.loadPaginationData();
-  }
+  };
 
   handleApproval = async (site: Site) => {
     await this.uiUtils.showStatusConfirmationMessage(
       'Approval',
       `This process is <strong>IRREVERSIBLE!</strong> <br/>
-        Are you sure that you want to Change Site Complete Status?`, ['Approved'],
+        Are you sure that you want to Change Site Complete Status?`,
+      ['Approved'],
       async () => {
         this.Entity = site;
         this.Entity.p.IsSiteCompleted = true;
@@ -110,7 +136,7 @@ export class SiteManagementMasterComponent implements OnInit {
         this.getSiteListByCompanyRef();
       }
     );
-  }
+  };
 
   AddSite = async () => {
     if (this.companyRef() <= 0) {
@@ -118,7 +144,7 @@ export class SiteManagementMasterComponent implements OnInit {
       return;
     }
     await this.router.navigate(['/homepage/Website/Site_Management_Details']);
-  }
+  };
 
   onEditClicked = async (item: Site) => {
     this.SelectedSite = item.GetEditableVersion();
@@ -141,7 +167,6 @@ export class SiteManagementMasterComponent implements OnInit {
           this.SearchString = '';
           this.loadPaginationData();
           // await this.FormulateMaterialList();
-
         });
       }
     );
@@ -160,7 +185,7 @@ export class SiteManagementMasterComponent implements OnInit {
   // 🔑 Whenever filteredList event is received
   onFilteredList(list: any[]) {
     this.DisplayMasterList = list;
-    this.currentPage = 1;   // reset to first page after filtering
+    this.currentPage = 1; // reset to first page after filtering
 
     this.loadPaginationData();
   }

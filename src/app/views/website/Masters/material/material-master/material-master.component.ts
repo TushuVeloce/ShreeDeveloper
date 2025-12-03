@@ -1,8 +1,10 @@
 import { Component, effect, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { ApplicationFeatures } from 'src/app/classes/domain/domainenums/domainenums';
 import { Material } from 'src/app/classes/domain/entities/website/masters/material/material';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
+import { FeatureAccessService } from 'src/app/services/feature-access.service';
 import { ScreenSizeService } from 'src/app/services/screensize.service';
 import { UIUtils } from 'src/app/services/uiutils.service';
 
@@ -12,7 +14,6 @@ import { UIUtils } from 'src/app/services/uiutils.service';
   templateUrl: './material-master.component.html',
   styleUrls: ['./material-master.component.scss'],
 })
-
 export class MaterialMasterComponent implements OnInit {
   Entity: Material = Material.CreateNewInstance();
   MasterList: Material[] = [];
@@ -25,10 +26,18 @@ export class MaterialMasterComponent implements OnInit {
   total = 0;
   companyRef = this.companystatemanagement.SelectedCompanyRef;
 
-  headers: string[] = [ 'Material Name', 'Material Unit', 'Action'];
+  // headers: string[] = [ 'Material Name', 'Material Unit', 'Action'];
+  headers: string[] = [];
+  featureRef: ApplicationFeatures = ApplicationFeatures.MaterialMaster;
+  showActionColumn = false;
 
-  constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private screenSizeService: ScreenSizeService,
-    private companystatemanagement: CompanyStateManagement
+  constructor(
+    private uiUtils: UIUtils,
+    private router: Router,
+    private appStateManage: AppStateManageService,
+    private screenSizeService: ScreenSizeService,
+    private companystatemanagement: CompanyStateManagement,
+    public access: FeatureAccessService
   ) {
     effect(async () => {
       await this.getMaterialListByCompanyRef();
@@ -39,6 +48,15 @@ export class MaterialMasterComponent implements OnInit {
     this.appStateManage.setDropdownDisabled();
     this.loadPaginationData();
     this.pageSize = this.screenSizeService.getPageSize('withoutDropdown');
+    this.access.refresh();
+    this.showActionColumn =
+      this.access.canEdit(this.featureRef) ||
+      this.access.canDelete(this.featureRef);
+    this.headers = [
+      'Material Name',
+      'Material Unit',
+      ...(this.showActionColumn ? ['Action'] : []),
+    ];
   }
 
   getMaterialListByCompanyRef = async () => {
@@ -48,11 +66,14 @@ export class MaterialMasterComponent implements OnInit {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
-    let lst = await Material.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    let lst = await Material.FetchEntireListByCompanyRef(
+      this.companyRef(),
+      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+    );
     this.MasterList = lst;
     this.DisplayMasterList = this.MasterList;
     this.loadPaginationData();
-  }
+  };
 
   onEditClicked = async (item: Material) => {
     this.SelectedMaterial = item.GetEditableVersion();
@@ -87,12 +108,12 @@ export class MaterialMasterComponent implements OnInit {
   paginatedList = () => {
     const start = (this.currentPage - 1) * this.pageSize;
     return this.DisplayMasterList.slice(start, start + this.pageSize);
-  }
+  };
 
   // 🔑 Whenever filteredList event is received
   onFilteredList(list: any[]) {
     this.DisplayMasterList = list;
-    this.currentPage = 1;   // reset to first page after filtering
+    this.currentPage = 1; // reset to first page after filtering
 
     this.loadPaginationData();
   }
@@ -101,12 +122,11 @@ export class MaterialMasterComponent implements OnInit {
     this.currentPage = pageIndex; // Update the current page
   };
 
-
   AddMaterial = () => {
     if (this.companyRef() <= 0) {
       this.uiUtils.showWarningToster('Please select company');
       return;
     }
     this.router.navigate(['/homepage/Website/Material_Master_Details']);
-  }
+  };
 }

@@ -1,11 +1,15 @@
 import { Component, effect, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { OpeningBalanceModeOfPayments } from 'src/app/classes/domain/domainenums/domainenums';
+import {
+  ApplicationFeatures,
+  OpeningBalanceModeOfPayments,
+} from 'src/app/classes/domain/domainenums/domainenums';
 import { Expense } from 'src/app/classes/domain/entities/website/accounting/expense/expense';
 import { OpeningBalance } from 'src/app/classes/domain/entities/website/masters/openingbalance/openingbalance';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
 import { DateconversionService } from 'src/app/services/dateconversion.service';
+import { FeatureAccessService } from 'src/app/services/feature-access.service';
 import { ScreenSizeService } from 'src/app/services/screensize.service';
 import { UIUtils } from 'src/app/services/uiutils.service';
 
@@ -25,17 +29,26 @@ export class OpeningBalanceComponent implements OnInit {
   pageSize = 10; // Items per page
   currentPage = 1; // Initialize current page
   total = 0;
-  Cash = OpeningBalanceModeOfPayments.Cash
-  Cheque = OpeningBalanceModeOfPayments.Cheque
+  Cash = OpeningBalanceModeOfPayments.Cash;
+  Cheque = OpeningBalanceModeOfPayments.Cheque;
 
   companyRef = this.companystatemanagement.SelectedCompanyRef;
 
-  headers: string[] = [ 'Opening Date', 'Mode of Payment', 'Bank Name', 'Opening Bal. Amount', 'Initial Balance'];
-  constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private screenSizeService: ScreenSizeService,
-    private companystatemanagement: CompanyStateManagement, private DateconversionService: DateconversionService,
+  // headers: string[] = [ 'Opening Date', 'Mode of Payment', 'Bank Name', 'Opening Bal. Amount', 'Initial Balance'];
+  headers: string[] = [];
+  featureRef: ApplicationFeatures = ApplicationFeatures.OpeningBalanceMaster;
+  constructor(
+    private uiUtils: UIUtils,
+    private router: Router,
+    private appStateManage: AppStateManageService,
+    private screenSizeService: ScreenSizeService,
+    private companystatemanagement: CompanyStateManagement,
+    private DateconversionService: DateconversionService,
+    public access: FeatureAccessService
   ) {
     effect(async () => {
-      await this.getOpeningBalanceListByCompanyRef(); await this.getCurrentBalanceByCompanyRef();
+      await this.getOpeningBalanceListByCompanyRef();
+      await this.getCurrentBalanceByCompanyRef();
     });
   }
 
@@ -43,6 +56,14 @@ export class OpeningBalanceComponent implements OnInit {
     this.appStateManage.setDropdownDisabled();
     this.loadPaginationData();
     this.pageSize = this.screenSizeService.getPageSize('withDropdown');
+    this.access.refresh();
+    this.headers = [
+      'Opening Date',
+      'Mode of Payment',
+      'Bank Name',
+      'Opening Bal. Amount',
+      'Initial Balance',
+    ];
   }
 
   getOpeningBalanceListByCompanyRef = async () => {
@@ -52,30 +73,41 @@ export class OpeningBalanceComponent implements OnInit {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
-    let lst = await OpeningBalance.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    let lst = await OpeningBalance.FetchEntireListByCompanyRef(
+      this.companyRef(),
+      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+    );
     this.MasterList = lst;
     this.DisplayMasterList = this.MasterList;
     this.loadPaginationData();
-  }
+  };
 
   // Extracted from services date conversion //
   formatDate = (date: string | Date): string => {
     return this.DateconversionService.formatDate(date);
-  }
+  };
 
   onEditClicked = async (item: OpeningBalance) => {
     this.SelectedOpeningBalance = item.GetEditableVersion();
     OpeningBalance.SetCurrentInstance(this.SelectedOpeningBalance);
     this.appStateManage.StorageKey.setItem('Editable', 'Edit');
-    await this.router.navigate(['/homepage/Website/Opening_Balance_Master_Details']);
+    await this.router.navigate([
+      '/homepage/Website/Opening_Balance_Master_Details',
+    ]);
   };
 
   get totalOpeningBalanceAmount(): number {
-    return this.DisplayMasterList.reduce((sum, item) => sum + (item.p.OpeningBalanceAmount || 0), 0);
+    return this.DisplayMasterList.reduce(
+      (sum, item) => sum + (item.p.OpeningBalanceAmount || 0),
+      0
+    );
   }
 
   get totalInitailBalanceAmount(): number {
-    return this.DisplayMasterList.reduce((sum, item) => sum + (item.p.InitialBalance || 0), 0);
+    return this.DisplayMasterList.reduce(
+      (sum, item) => sum + (item.p.InitialBalance || 0),
+      0
+    );
   }
 
   getCurrentBalanceByCompanyRef = async () => {
@@ -83,11 +115,14 @@ export class OpeningBalanceComponent implements OnInit {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
-    let lst = await Expense.FetchCurrentBalanceByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    let lst = await Expense.FetchCurrentBalanceByCompanyRef(
+      this.companyRef(),
+      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+    );
     if (lst.length > 0) {
       this.Entity.p.ShreesBalance = lst[0].p.ShreesBalance;
     }
-  }
+  };
 
   onDeleteClicked = async (OpeningBalance: OpeningBalance) => {
     await this.uiUtils.showConfirmationMessage(
@@ -116,12 +151,12 @@ export class OpeningBalanceComponent implements OnInit {
   paginatedList = () => {
     const start = (this.currentPage - 1) * this.pageSize;
     return this.DisplayMasterList.slice(start, start + this.pageSize);
-  }
+  };
 
   // 🔑 Whenever filteredList event is received
   onFilteredList(list: any[]) {
     this.DisplayMasterList = list;
-    this.currentPage = 1;   // reset to first page after filtering
+    this.currentPage = 1; // reset to first page after filtering
 
     this.loadPaginationData();
   }
@@ -136,6 +171,5 @@ export class OpeningBalanceComponent implements OnInit {
       return;
     }
     this.router.navigate(['/homepage/Website/Opening_Balance_Master_Details']);
-  }
+  };
 }
-

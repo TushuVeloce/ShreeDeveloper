@@ -7,7 +7,7 @@
       [filterFields]="['Name', 'NumberOfPlots', 'EstimatedStartingDate', 'EstimatedEndDate','AddressLine2']"
       (filteredList)="onFilteredList($event)"></app-shared-filter>
   </div>
-  <div class="col-4 mb-2" routerLinkActive="active">
+  <div class="col-4 mb-2" routerLinkActive="active" *ngIf="access.canAdd(featureRef)">
     <nz-button nz-button class="btn1" (click)='AddSite()'>
       Add Site
     </nz-button>
@@ -46,11 +46,11 @@
               Approved
             </button>
           </td>
-          <td class="tbldata">
-            <span style="margin-left: 9px;" (click)="onEditClicked(site);">
+          <td class="tbldata" *ngIf="showActionColumn">
+            <span style="margin-left: 9px;" (click)="onEditClicked(site);" *ngIf="access.canEdit(featureRef)">
               <img src="\assets\icons\edit.png" alt="logo" title="Edit" width="20px" height="20px" />
             </span>
-            <span style="margin-left: 9px;" (click)="onDeleteClicked(site);">
+            <span style="margin-left: 9px;" (click)="onDeleteClicked(site);" *ngIf="access.canDelete(featureRef)">
               <img src="\assets\icons\delete.png" alt="logo" title="Delete" width="20px" height="20px" /></span>
           </td>
         </tr>

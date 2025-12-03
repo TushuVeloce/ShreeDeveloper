@@ -6,22 +6,25 @@ import { CompanyStateManagement } from 'src/app/services/companystatemanagement'
 import { ScreenSizeService } from 'src/app/services/screensize.service';
 import { UIUtils } from 'src/app/services/uiutils.service';
 import { Employee } from 'src/app/classes/domain/entities/website/masters/employee/employee';
-import { DomainEnums } from 'src/app/classes/domain/domainenums/domainenums';
+import {
+  ApplicationFeatures,
+  DomainEnums,
+} from 'src/app/classes/domain/domainenums/domainenums';
+import { FeatureAccessService } from 'src/app/services/feature-access.service';
 
 @Component({
   selector: 'app-salarysliprequest-master',
   standalone: false,
   templateUrl: './salary-slip-request.component.html',
   styleUrls: ['./salary-slip-request.component.scss'],
-
 })
-
 export class SalarySlipRequestComponent implements OnInit {
   Entity: SalarySlipRequest = SalarySlipRequest.CreateNewInstance();
   MasterList: SalarySlipRequest[] = [];
   DisplayMasterList: SalarySlipRequest[] = [];
   SearchString: string = '';
-  SelectedSalarySlipRequest: SalarySlipRequest = SalarySlipRequest.CreateNewInstance();
+  SelectedSalarySlipRequest: SalarySlipRequest =
+    SalarySlipRequest.CreateNewInstance();
   CustomerRef: number = 0;
   EmployeeList: Employee[] = [];
   MonthList = DomainEnums.MonthList(true, '--Select Month Type--');
@@ -31,9 +34,19 @@ export class SalarySlipRequestComponent implements OnInit {
 
   companyRef = this.companystatemanagement.SelectedCompanyRef;
 
-  headers: string[] = ['Year', 'Months', 'Approval Status', 'Action'];
-  constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private screenSizeService: ScreenSizeService,
-    private companystatemanagement: CompanyStateManagement
+  // headers: string[] = ['Year', 'Months', 'Approval Status', 'Action'];
+  headers: string[] = [];
+  featureRef: ApplicationFeatures =
+    ApplicationFeatures.EmployeeSalarySlipRequest;
+  showActionColumn = false;
+
+  constructor(
+    private uiUtils: UIUtils,
+    private router: Router,
+    private appStateManage: AppStateManageService,
+    private screenSizeService: ScreenSizeService,
+    private companystatemanagement: CompanyStateManagement,
+    public access: FeatureAccessService
   ) {
     effect(async () => {
       await this.getSalarySlipRequestListByEmployeeRef();
@@ -45,6 +58,14 @@ export class SalarySlipRequestComponent implements OnInit {
     this.Entity.p.EmployeeRef = this.appStateManage.getEmployeeRef();
     this.loadPaginationData();
     this.pageSize = this.screenSizeService.getPageSize('withoutDropdown');
+    this.access.refresh();
+    this.showActionColumn = this.access.canDelete(this.featureRef);
+    this.headers = [
+      'Year',
+      'Months',
+      'Approval Status',
+      ...(this.showActionColumn ? ['Action'] : []),
+    ];
   }
 
   getMonthName(): string {
@@ -58,12 +79,15 @@ export class SalarySlipRequestComponent implements OnInit {
       await this.uiUtils.showErrorToster('Employee not Selected');
       return;
     }
-    let lst = await SalarySlipRequest.FetchEntireListByEmployeeRef(this.Entity.p.EmployeeRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    let lst = await SalarySlipRequest.FetchEntireListByEmployeeRef(
+      this.Entity.p.EmployeeRef,
+      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+    );
     this.MasterList = lst;
 
     this.DisplayMasterList = this.MasterList;
     this.loadPaginationData();
-  }
+  };
 
   onDeleteClicked = async (salarysliprequest: SalarySlipRequest) => {
     await this.uiUtils.showConfirmationMessage(
@@ -91,12 +115,12 @@ export class SalarySlipRequestComponent implements OnInit {
   paginatedList = () => {
     const start = (this.currentPage - 1) * this.pageSize;
     return this.DisplayMasterList.slice(start, start + this.pageSize);
-  }
+  };
 
   // 🔑 Whenever filteredList event is received
   onFilteredList(list: any[]) {
     this.DisplayMasterList = list;
-    this.currentPage = 1;   // reset to first page after filtering
+    this.currentPage = 1; // reset to first page after filtering
 
     this.loadPaginationData();
   }
@@ -111,5 +135,5 @@ export class SalarySlipRequestComponent implements OnInit {
       return;
     }
     this.router.navigate(['/homepage/Website/Salary_Slip_Request_Details']);
-  }
+  };
 }

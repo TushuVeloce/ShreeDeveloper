@@ -135,7 +135,7 @@
     </ion-item>
 
     <!-- Salary Advance Return Amount -->
-    <ion-item class="input-item">
+    <ion-item class="input-item"  *ngIf="Entity.p.PayerType == EmployeeType">
       <ion-checkbox [(ngModel)]="Entity.p.IsSalaryAdvanceReturn">Salary Advance Return</ion-checkbox>
     </ion-item>
 

@@ -6,7 +6,7 @@
     <app-shared-filter [masterList]="MasterList" [filterFields]="['Code', 'Name', 'UnitName']"
       (filteredList)="onFilteredList($event)"></app-shared-filter>
   </div>
-  <div class="col-4 mb-2" routerLinkActive="active">
+  <div class="col-4 mb-2" routerLinkActive="active" *ngIf="access.canAdd(featureRef)">
     <nz-button nz-button class="btn1" (click)='AddMaterial()'>
       Add Material
     </nz-button>
@@ -27,9 +27,9 @@
           <td Class="tbldata" nzLeft>{{ (currentPage - 1) * pageSize + i + 1 }}</td>
           <td Class="tbldata">{{material.p.Name}}</td>
           <td Class="tbldata">{{material.p.UnitName}}</td>
-          <td class="tbldata">
-            <Edit-Icon (editClick)="onEditClicked(material)" />
-            <Delete-Icon (deleteClicked)="onDeleteClicked(material)" />
+          <td class="tbldata" *ngIf="showActionColumn">
+            <Edit-Icon (editClick)="onEditClicked(material)" *ngIf="access.canEdit(featureRef)" />
+            <Delete-Icon (deleteClicked)="onDeleteClicked(material)" *ngIf="access.canDelete(featureRef)"/>
           </td>
         </tr>
       </tbody>

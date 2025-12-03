@@ -129,9 +129,9 @@
             <h3 class="TableHeading">Follow Up Plots</h3>
           </div>
         </div>
-        <nz-table #basicTable [nzNoResult]="noDataTpl" [nzData]="Entity.p.CustomerFollowUpPlotDetails" nzSize="small"
-          class="no-hover-table bgtable_light" [nzScroll]="{ x: 'auto' }" nzFrontPagination="false"
-          [nzShowSizeChanger]="false">
+        <nz-table nzSize="small" class="bgtable_light no-hover-table" [nzData]="Entity.p.CustomerFollowUpPlotDetails"
+          [nzNoResult]="noDataTpl" nzFrontPagination="false" [nzShowSizeChanger]="false" [nzScroll]="{ x: 'auto' }">
+
           <thead>
             <tr>
               <th *ngFor="let header of Plotheaders" class="tblsubheader">
@@ -139,36 +139,48 @@
               </th>
             </tr>
           </thead>
+
           <tbody>
             <tr *ngFor="let plot of Entity.p.CustomerFollowUpPlotDetails; let i = index">
-              <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
-              <td Class="tbldata">{{ plot.SiteName }}</td>
-              <td Class="tbldata">{{ plot.PlotName }}</td>
-              <td Class="tbldata">{{ plot.PlotAreaInSqm }}</td>
-              <td Class="tbldata">{{ plot.PlotAreaInSqft }}</td>
-              <td class="tbldata">
-                <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
-                  nzPlaceHolder="Select" name="{{plot.PlotName.trim() + '_' + i + 100}}"
-                  [(ngModel)]="plot.CustomerStatus" [nzSize]="'large'" (ngModelChange)="onCustomerStatusChange(plot)">
-                  <nz-option *ngFor="let customerstatus of CustomerStatusList" [nzValue]="customerstatus.Ref"
-                    [nzLabel]="customerstatus.Name"></nz-option>
+              <td>{{ (currentPage - 1) * pageSize + i + 1 }}</td>
+              <td>{{ plot.SiteName }}</td>
+              <td>{{ plot.PlotName }}</td>
+              <td>{{ plot.PlotAreaInSqm }}</td>
+              <td>{{ plot.PlotAreaInSqft }}</td>
+
+              <!-- Customer Status -->
+              <td>
+                <nz-select nzShowSearch nzAllowClear nzSize="large" class="nzSelect-light"
+                  [(ngModel)]="plot.CustomerStatus" name="{{plot.PlotName + '_' + i}}"
+                  (ngModelChange)="onCustomerStatusChange(plot)">
+                  <nz-option *ngFor="let s of CustomerStatusList" [nzValue]="s.Ref" [nzLabel]="s.Name">
+                  </nz-option>
                 </nz-select>
               </td>
-              <td class="tbldata">
-                <input type="text" name="{{plot.PlotName.trim() + '_' + i + 1000}}" class="form-control"
-                  [(ngModel)]="plot.Reason" required placeholder="Enter Reason" />
+
+              <!-- Reason -->
+              <td>
+                <input type="text" class="form-control" [(ngModel)]="plot.Reason" name="reason_{{i}}"
+                  placeholder="Enter Reason" />
               </td>
-              <td class="tbldata" *ngIf="plot.CustomerStatus == CustomerStatusEnum.ConvertToDeal">
-                <input type="text" name="" class="form-control" [(ngModel)]="plot.CustID" required
-                  placeholder="Cust ID" />
+
+              <!-- Cust ID (Only if convert to deal) -->
+              <td *ngIf="plot.CustomerStatus == CustomerStatusEnum.ConvertToDeal">
+                <input class="form-control" [(ngModel)]="plot.CustID" name="cust_{{i}}" placeholder="Cust ID" />
               </td>
-              <td Class="tbldata" *ngIf="plot.CustomerStatus !== CustomerStatusEnum.ConvertToDeal"> -- </td>
-              <td class="tbldata">
-                <span style="margin-left: 9px" (click)="removePlot(i)">
-                  <img src="\assets\icons\delete.png" alt="logo" title="Delete" width="20px" height="20px" /></span>
+
+              <td *ngIf="plot.CustomerStatus !== CustomerStatusEnum.ConvertToDeal">
+                --
+              </td>
+
+              <!-- Delete -->
+              <td>
+                <img src="/assets/icons/delete.png" class="delete-icon" (click)="removePlot(i)" width="20"
+                  height="20" />
               </td>
             </tr>
           </tbody>
+
         </nz-table>
       </div>
 

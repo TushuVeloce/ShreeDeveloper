@@ -41,17 +41,6 @@ export class UserrolerightsComponent implements OnInit {
   DepartmentRef: number = 0;
   hideEditDelete: boolean = false;
 
-  // headers: string[] = ['Features', 'Add', 'Edit', 'Delete', 'View', 'Print', 'Exports',];
-  // modules: { FeatureName: string; CanAdd: boolean; CanEdit: boolean; CanDelete: boolean; CanView: boolean; CanPrint: boolean; CanExport: boolean }[] = [{
-  //   FeatureName: '',
-  //   CanAdd: false,
-  //   CanEdit: false,
-  //   CanDelete: false,
-  //   CanView: false,
-  //   CanPrint: false,
-  //   CanExport: false
-  // }];
-  // Feature: FeatureO[] = [];
   DisplayFeature: FeatureProps[] = [];
   Feature: FeatureProps[] = [];
 

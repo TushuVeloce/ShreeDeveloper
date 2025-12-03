@@ -7,7 +7,7 @@
       [filterFields]="['Name', 'OwnerName', 'Contacts', 'CountryName', 'StateName', 'CityName', 'GSTIN', 'Pan']"
       (filteredList)="onFilteredList($event)"></app-shared-filter>
   </div>
-    <div class="col-4 mb-2" routerLinkActive="active">
+    <div class="col-4 mb-2" routerLinkActive="active" *ngIf="access.canAdd(featureRef)">
     <nz-button nz-button class="btn1" (click)='AddCompany()'>
       Add Company
     </nz-button>
@@ -47,9 +47,9 @@
             <span style="margin-left: 9px;" (click)="onDeleteClicked(company);">
               <img src="\assets\icons\delete.png" alt="logo" title="Delete" width="20px" height="20px" /></span>
           </td> -->
-           <td class="tbldata action-column">
-              <Edit-Icon class="action-btn edit" (editClick)="onEditClicked(company)" />
-              <Delete-Icon class="action-btn delete" (deleteClicked)="onDeleteClicked(company)" />
+           <td class="tbldata action-column" *ngIf="showActionColumn">
+              <Edit-Icon class="action-btn edit" (editClick)="onEditClicked(company)" *ngIf="access.canEdit(featureRef)" />
+              <Delete-Icon class="action-btn delete" (deleteClicked)="onDeleteClicked(company)" *ngIf="access.canDelete(featureRef)"/>
             </td>
         </tr>
       </tbody>

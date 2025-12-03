@@ -8,7 +8,7 @@
         [filterFields]="['FromTime', 'ToTime', 'LateMarkGraceTimeInMins']"
         (filteredList)="onFilteredList($event)"></app-shared-filter>
     </div>
-    <div class="col-4 mb-2" routerLinkActive="active">
+    <div class="col-4 mb-2" routerLinkActive="active" *ngIf="access.canAdd(featureRef)">
       <nz-button nz-button class="btn1" (click)='AddOfficeTime()'>
         Add Office Time
       </nz-button>
@@ -32,11 +32,11 @@
             <td Class="tbldata">{{getFormattedTime(workingtime.p.FromTime)}}</td>
             <td Class="tbldata">{{getFormattedTime(workingtime.p.ToTime)}}</td>
             <td Class="tbldata">{{workingtime.p.LateMarkGraceTimeInMins}}</td>
-            <td class="tbldata action-column">
-              <span style="margin-left: 9px;" (click)="onEditClicked(workingtime);">
+            <td class="tbldata action-column" *ngIf="showActionColumn">
+              <span style="margin-left: 9px;" (click)="onEditClicked(workingtime);" *ngIf="access.canEdit(featureRef)">
                 <img src="\assets\icons\edit.png" alt="logo" title="Edit" width="20px" height="20px" />
               </span>
-              <span style="margin-left: 9px;" (click)="onDeleteClicked(workingtime);">
+              <span style="margin-left: 9px;" (click)="onDeleteClicked(workingtime);" *ngIf="access.canDelete(featureRef)">
                 <img src="\assets\icons\delete.png" alt="logo" title="Delete" width="20px" height="20px" /></span>
             </td>
           </tr>

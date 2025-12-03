@@ -7,7 +7,7 @@
       [filterFields]="['Name', 'ContactNos', 'AddressLine1', 'DepartmentName', 'DesignationName']"
       (filteredList)="onFilteredList($event)"></app-shared-filter>
   </div>
-  <div class="col-4 mb-2" routerLinkActive="active">
+  <div class="col-4 mb-2" routerLinkActive="active" *ngIf="access.canAdd(featureRef)">
     <nz-button nz-button class="btn1" (click)='AddEmployee()'>
       Add Employee
     </nz-button>
@@ -31,11 +31,11 @@
           <td Class="tbldata">{{employee.p.AddressLine1 }}</td>
           <td Class="tbldata">{{employee.p.DepartmentName }}</td>
           <td Class="tbldata">{{employee.p.DesignationName }}</td>
-          <td class="tbldata">
-            <span style="margin-left: 9px;" (click)="onEditClicked(employee);">
+          <td class="tbldata" *ngIf="showActionColumn">
+            <span style="margin-left: 9px;" (click)="onEditClicked(employee);" *ngIf="access.canEdit(featureRef)">
               <img src="\assets\icons\edit.png" alt="logo" title="Edit" width="20px" height="20px" />
             </span>
-            <span style="margin-left: 9px;" (click)="onDeleteClicked(employee);">
+            <span style="margin-left: 9px;" (click)="onDeleteClicked(employee);" *ngIf="access.canDelete(featureRef)">
               <img src="\assets\icons\delete.png" alt="logo" title="Delete" width="20px" height="20px" /></span>
           </td>
         </tr>

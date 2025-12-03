@@ -50,14 +50,14 @@
             <td Class="tbldata">{{ registercustomer.p.RegistrationNameofPersonTwo }}</td>
             <td Class="tbldata">{{ registercustomer.p.CustomerMobileNo }}</td>
             <td Class="tbldata">{{ registercustomer.p.CustomerAddress }}</td>
-            <td class="tbldata">
+            <td class="tbldata" *ngIf="showActionColumn">
               <span class="status" [ngClass]="IsFilled(registercustomer)" style="margin-left: 9px"
                 (click)="onEditClicked(registercustomer)">
                 <!-- <img src="\assets\icons\edit.png" alt="logo" title="Edit" width="20px" height="20px" /> -->
                 Edit
               </span>
             </td>
-            <td class="tbldata">
+            <td class="tbldata" *ngIf="showDealCancelledColumn">
               <span style="margin-left: 9px" (click)="CancelDeal(registercustomer)">
                 <img src="/assets/icons/Cancel.png" alt="logo" title="Edit" width="20px" height="20px" />
               </span>

@@ -51,46 +51,103 @@ export class LoginPageComponent implements OnInit {
     let a = 1;
   }
 
+  // Login = async () => {
+  //   if (this.UserId === '') {
+  //     this.uiUtils.showErrorMessage('Error', 'Please Enter Email ID');
+  //     return
+  //   } else if (this.Password === '') {
+  //     this.uiUtils.showErrorMessage('Error', 'Please Enter Password');
+  //     return
+  //   }
+
+  //   let req = new UserLoginRequest();
+  //   req.UserId = this.UserId;
+  //   req.Password = this.Password;
+  //   req.LoginDeviceId = this.sessionValues.LoginDeviceId;
+
+  //   const response = await this.servercommunicator.LoginUser(req);
+  //   console.log('response :', response);
+  //   this.appStateManage.setEmployeeRef(response.LoginEmployeeRef)
+  //   this.appStateManage.setLoginToken(response.LoginToken)
+  //   this.validmenuitemsstatemanagement.setValidMenuItems(response.ValidMenuItems)
+  //   this.appStateManage.StorageKey.setItem("ValidMenuItems", JSON.stringify(response.ValidMenuItems));
+  //   this.appStateManage.StorageKey.setItem("IsDefaultUser", response.IsDefault.toString())
+  //   this.appStateManage.StorageKey.setItem("UserDisplayName", response.UserDisplayName)
+  //   this.appStateManage.StorageKey.setItem('SelectedCompanyRef', response.LastSelectedCompanyRef.toString());
+  //   this.appStateManage.StorageKey.setItem('companyName', response.CompanyName);
+  //   this.appStateManage.StorageKey.setItem('LoginEmployeeRef', response.LoginEmployeeRef.toString());
+  //   this.companystatemanagement.setCompanyRef(response.LastSelectedCompanyRef, response.CompanyName)
+
+  //   if (!response.Successful) {
+  //     await this.uiUtils.showErrorMessage('Error', response.Message);
+  //     return
+  //   } else {
+  //     if (this.isMobile) {
+  //       await this.router.navigate(['/homepage']);  // Navigate to web
+  //     } else if (response.LoginForFirstTime == 0) {
+  //       this.router.navigate(['/create_password']);
+  //     } else {
+  //       await this.router.navigate(['/homepage/Website']);  // Navigate to web
+  //       this.appStateManage.triggerCompanyInit();
+  //     }
+  //   }
+  // }
+
   Login = async () => {
-    if (this.UserId === '') {
-      this.uiUtils.showErrorMessage('Error', 'Please Enter Email ID');
-      return
-    } else if (this.Password === '') {
-      this.uiUtils.showErrorMessage('Error', 'Please Enter Password');
-      return
-    }
-
-    let req = new UserLoginRequest();
-    req.UserId = this.UserId;
-    req.Password = this.Password;
-    req.LoginDeviceId = this.sessionValues.LoginDeviceId;
-
-    const response = await this.servercommunicator.LoginUser(req);
-    this.appStateManage.setEmployeeRef(response.LoginEmployeeRef)
-    this.appStateManage.setLoginToken(response.LoginToken)
-    this.validmenuitemsstatemanagement.setValidMenuItems(response.ValidMenuItems)
-    this.appStateManage.StorageKey.setItem("ValidMenuItems", JSON.stringify(response.ValidMenuItems));
-    this.appStateManage.StorageKey.setItem("IsDefaultUser", response.IsDefault.toString())
-    this.appStateManage.StorageKey.setItem("UserDisplayName", response.UserDisplayName)
-    this.appStateManage.StorageKey.setItem('SelectedCompanyRef', response.LastSelectedCompanyRef.toString());
-    this.appStateManage.StorageKey.setItem('companyName', response.CompanyName);
-    this.appStateManage.StorageKey.setItem('LoginEmployeeRef', response.LoginEmployeeRef.toString());
-    this.companystatemanagement.setCompanyRef(response.LastSelectedCompanyRef, response.CompanyName)
-
-    if (!response.Successful) {
-      await this.uiUtils.showErrorMessage('Error', response.Message);
-      return
-    } else {
-      if (this.isMobile) {
-        await this.router.navigate(['/homepage']);  // Navigate to web
-      } else if (response.LoginForFirstTime == 0) {
-        this.router.navigate(['/create_password']);
-      } else {
-        await this.router.navigate(['/homepage/Website']);  // Navigate to web
-        this.appStateManage.triggerCompanyInit();
-      }
-    }
+  if (!this.UserId) {
+    return this.uiUtils.showErrorMessage('Error', 'Please Enter Email ID');
   }
+  if (!this.Password) {
+    return this.uiUtils.showErrorMessage('Error', 'Please Enter Password');
+  }
+
+  let req = new UserLoginRequest();
+  req.UserId = this.UserId;
+  req.Password = this.Password;
+  req.LoginDeviceId = this.sessionValues.LoginDeviceId;
+
+  const response = await this.servercommunicator.LoginUser(req);
+  console.log('response :', response);
+
+  if (!response.Successful) {
+    return this.uiUtils.showErrorMessage('Error', response.Message);
+  }
+
+  // 👉 Save Login Token
+  this.appStateManage.setLoginToken(response.LoginToken);
+
+  // 👉 Save Logged In Employee (User)
+  this.appStateManage.setEmployeeRef(response.LoginEmployeeRef);
+
+  // 👉 Save Role
+  // this.appStateManage.StorageKey.setItem("UserRole", response.Role.toString());
+
+  // 👉 Save Feature Rights (Menu Items)
+  this.validmenuitemsstatemanagement.setValidMenuItems(response.ValidMenuItems);
+  this.appStateManage.StorageKey.setItem("ValidMenuItems", JSON.stringify(response.ValidMenuItems));
+
+  // 👉 Save Company Mapping
+  this.appStateManage.StorageKey.setItem("SelectedCompanyRef", response.LastSelectedCompanyRef.toString());
+  this.appStateManage.StorageKey.setItem("companyName", response.CompanyName);
+  this.companystatemanagement.setCompanyRef(response.LastSelectedCompanyRef, response.CompanyName);
+
+  // 👉 Save User Name
+  this.appStateManage.StorageKey.setItem("UserDisplayName", response.UserDisplayName);
+
+  // 👉 Save Default User Flag
+  this.appStateManage.StorageKey.setItem("IsDefaultUser", response.IsDefault.toString());
+
+  // 👉 Navigation
+  if (this.isMobile) {
+    await this.router.navigate(['/homepage']);
+  } else if (response.LoginForFirstTime == 0) {
+    this.router.navigate(['/create_password']);
+  } else {
+    await this.router.navigate(['/homepage/Website']);
+    this.appStateManage.triggerCompanyInit();
+  }
+}
+
 
   ForgetPassword = async () => {
     let body = {

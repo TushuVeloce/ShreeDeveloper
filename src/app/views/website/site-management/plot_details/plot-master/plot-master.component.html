@@ -7,7 +7,7 @@
       [filterFields]="['PlotNo', 'AreaInSqm', 'AreaInSqft', 'GovermentRatePerSqm', 'BasicRatePerSqft', 'BookingRemarkName']"
       (filteredList)="onFilteredList($event)"></app-shared-filter>
   </div>
-  <div class="col-4 mb-2" routerLinkActive="active">
+  <div class="col-4 mb-2" routerLinkActive="active" *ngIf="access.canAdd(featureRef)">
     <nz-button nz-button class="btn1" (click)="AddPlot()">
       Add Plot
     </nz-button>
@@ -72,11 +72,11 @@
               {{plot.p.BookingRemarkName}}
             </span>
           </td>
-          <td class="tbldata action-column">
-            <span style="margin-left: 9px;" (click)="onEditClicked(plot);">
+          <td class="tbldata action-column" *ngIf="showActionColumn">
+            <span style="margin-left: 9px;" (click)="onEditClicked(plot);" *ngIf="access.canEdit(featureRef)">
               <img src="\assets\icons\edit.png" alt="logo" title="Edit" width="20px" height="20px" />
             </span>
-            <span style="margin-left: 9px;" (click)="onDeleteClicked(plot);">
+            <span style="margin-left: 9px;" (click)="onDeleteClicked(plot);" *ngIf="access.canDelete(featureRef)">
               <img src="\assets\icons\delete.png" alt="logo" title="Delete" width="20px" height="20px" /></span>
           </td>
         </tr>

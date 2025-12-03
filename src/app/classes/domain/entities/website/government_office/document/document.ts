@@ -67,8 +67,8 @@ export class Document implements IPersistable<Document> {
 
   public CheckSaveValidity(_td: TransportData, vra: ValidationResultAccumulator): void {
     if (!this.AllowEdit) vra.add('', 'This object is not editable and hence cannot be saved.');
-    // if (this.p.Name == '') vra.add('Name', 'Name cannot be blank.');
-    // if (this.p.Date == '') vra.add('Date', 'Date cannot be blank.');
+    if (this.p.Name == '') vra.add('Name', 'Name cannot be blank.');
+    if (this.p.OfficeName == '') vra.add('Office', 'Office cannot be blank.');
     // if (this.p.ContactNos == '') vra.add('OwnerName', 'Owner Name cannot be blank.');
     // if (this.p.EmailId == '') vra.add('EmailId', 'Email Id cannot be blank.');
     // if (this.p.PinCode == '') vra.add('PinCode', 'Pin code cannot be blank.');

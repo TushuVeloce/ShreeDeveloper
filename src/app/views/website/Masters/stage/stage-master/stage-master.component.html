@@ -6,7 +6,7 @@
     <app-shared-filter [masterList]="MasterList" [filterFields]="['DisplayOrder', 'Name']"
       (filteredList)="onFilteredList($event)"></app-shared-filter>
   </div>
-    <div class="col-4 mb-2" routerLinkActive="active">
+    <div class="col-4 mb-2" routerLinkActive="active" *ngIf="access.canAdd(featureRef)">
     <nz-button nz-button class="btn1" (click)='AddStage()'>
       Add Stage
     </nz-button>
@@ -26,11 +26,11 @@
         <tr *ngFor="let stage of paginatedList(); index as i">
           <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
           <td Class="tbldata">{{stage.p.Name}}</td>
-          <td class="tbldata">
-            <span style="margin-left: 9px;" (click)="onEditClicked(stage);">
+          <td class="tbldata" *ngIf="showActionColumn">
+            <span style="margin-left: 9px;" (click)="onEditClicked(stage);" *ngIf="access.canEdit(featureRef)">
               <img src="\assets\icons\edit.png" alt="logo" title="Edit" width="20px" height="20px" />
             </span>
-            <span style="margin-left: 9px;" (click)="onDeleteClicked(stage);">
+            <span style="margin-left: 9px;" (click)="onDeleteClicked(stage);" *ngIf="access.canDelete(featureRef)">
               <img src="\assets\icons\delete.png" alt="logo" title="Delete" width="20px" height="20px" /></span>
           </td>
         </tr>

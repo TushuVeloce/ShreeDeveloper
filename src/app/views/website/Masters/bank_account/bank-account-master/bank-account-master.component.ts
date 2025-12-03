@@ -1,11 +1,13 @@
 import { DatePipe } from '@angular/common';
 import { Component, effect, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { ApplicationFeatures } from 'src/app/classes/domain/domainenums/domainenums';
 import { BankAccount } from 'src/app/classes/domain/entities/website/masters/bankaccount/banckaccount';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
 import { DateconversionService } from 'src/app/services/dateconversion.service';
 import { DTU } from 'src/app/services/dtu.service';
+import { FeatureAccessService } from 'src/app/services/feature-access.service';
 import { ScreenSizeService } from 'src/app/services/screensize.service';
 import { UIUtils } from 'src/app/services/uiutils.service';
 
@@ -16,7 +18,6 @@ import { UIUtils } from 'src/app/services/uiutils.service';
   styleUrls: ['./bank-account-master.component.scss'],
 })
 export class BankAccountMasterComponent implements OnInit {
-
   Entity: BankAccount = BankAccount.CreateNewInstance();
   MasterList: BankAccount[] = [];
   DisplayMasterList: BankAccount[] = [];
@@ -27,13 +28,24 @@ export class BankAccountMasterComponent implements OnInit {
   total = 0;
   companyRef = this.companystatemanagement.SelectedCompanyRef;
 
+  // headers: string[] = ['Bank Name', 'Branch Name', 'Account No', 'IFSC Code', 'Date of Opening', 'Action'];
+  headers: string[] = [];
+  featureRef: ApplicationFeatures = ApplicationFeatures.BankAccountMaster;
+  showActionColumn = false;
 
-  headers: string[] = ['Bank Name', 'Branch Name', 'Account No', 'IFSC Code', 'Date of Opening', 'Action'];
-
-  constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private companystatemanagement: CompanyStateManagement, private dtu: DTU,
-    private datePipe: DatePipe, private DateconversionService: DateconversionService, private screenSizeService: ScreenSizeService) {
+  constructor(
+    private uiUtils: UIUtils,
+    private router: Router,
+    private appStateManage: AppStateManageService,
+    private companystatemanagement: CompanyStateManagement,
+    private dtu: DTU,
+    private datePipe: DatePipe,
+    private DateconversionService: DateconversionService,
+    private screenSizeService: ScreenSizeService,
+    public access: FeatureAccessService
+  ) {
     effect(() => {
-      this.getBankListByCompanyRef()
+      this.getBankListByCompanyRef();
     });
   }
 
@@ -42,6 +54,18 @@ export class BankAccountMasterComponent implements OnInit {
     await this.getBankListByCompanyRef();
     this.loadPaginationData();
     this.pageSize = this.screenSizeService.getPageSize('withoutDropdown');
+    this.access.refresh();
+    this.showActionColumn =
+      this.access.canEdit(this.featureRef) ||
+      this.access.canDelete(this.featureRef);
+    this.headers = [
+      'Bank Name',
+      'Branch Name',
+      'Account No',
+      'IFSC Code',
+      'Date of Opening',
+      ...(this.showActionColumn ? ['Action'] : []),
+    ];
   }
 
   getBankListByCompanyRef = async () => {
@@ -51,59 +75,68 @@ export class BankAccountMasterComponent implements OnInit {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
-    let lst = await BankAccount.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    let lst = await BankAccount.FetchEntireListByCompanyRef(
+      this.companyRef(),
+      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+    );
     this.MasterList = lst;
     this.DisplayMasterList = this.MasterList;
     this.loadPaginationData();
-  }
+  };
 
   // Extracted from services date conversion //
   formatDate = (date: string | Date): string => {
     return this.DateconversionService.formatDate(date);
-  }
+  };
 
   onEditClicked = async (item: BankAccount) => {
     this.SelectedBankAccount = item.GetEditableVersion();
     BankAccount.SetCurrentInstance(this.SelectedBankAccount);
     this.appStateManage.StorageKey.setItem('Editable', 'Edit');
-    await this.router.navigate(['/homepage/Website/Bank_Account_Master_Details']);
-  }
+    await this.router.navigate([
+      '/homepage/Website/Bank_Account_Master_Details',
+    ]);
+  };
 
   onDeleteClicked = async (BankAccount: BankAccount) => {
-    await this.uiUtils.showConfirmationMessage('Delete',
+    await this.uiUtils.showConfirmationMessage(
+      'Delete',
       `This process is <strong>IRREVERSIBLE!</strong> <br/>
       Are you sure that you want to DELETE this Bank Account?`,
       async () => {
         await BankAccount.DeleteInstance(async () => {
-          await this.uiUtils.showSuccessToster(`Bank Account ${BankAccount.p.Name} has been deleted!`);
+          await this.uiUtils.showSuccessToster(
+            `Bank Account ${BankAccount.p.Name} has been deleted!`
+          );
           await this.getBankListByCompanyRef();
           this.SearchString = '';
           this.loadPaginationData();
         });
-      });
-  }
+      }
+    );
+  };
 
   // For Pagination  start ----
   loadPaginationData = () => {
     this.total = this.DisplayMasterList.length; // Update total based on loaded data
-  }
+  };
 
   paginatedList = () => {
     const start = (this.currentPage - 1) * this.pageSize;
     return this.DisplayMasterList.slice(start, start + this.pageSize);
-  }
+  };
 
   // 🔑 Whenever filteredList event is received
   onFilteredList(list: any[]) {
     this.DisplayMasterList = list;
-    this.currentPage = 1;   // reset to first page after filtering
+    this.currentPage = 1; // reset to first page after filtering
 
     this.loadPaginationData();
   }
 
   onPageChange = (pageIndex: number): void => {
     this.currentPage = pageIndex; // Update the current page
-  }
+  };
 
   AddBankAccount = () => {
     if (this.companyRef() <= 0) {
@@ -111,7 +144,7 @@ export class BankAccountMasterComponent implements OnInit {
       return;
     }
     this.router.navigate(['/homepage/Website/Bank_Account_Master_Details']);
-  }
+  };
 
   // without using services date conersion into dd-mm-yyyy //
   // formatDate(dateValue: string | Date): string {

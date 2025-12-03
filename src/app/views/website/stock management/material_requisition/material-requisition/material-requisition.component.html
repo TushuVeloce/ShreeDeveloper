@@ -6,7 +6,7 @@
     <app-shared-filter [masterList]="MasterList" [filterFields]="['Date', 'SiteName', 'MaterialName', 'UnitName', 'RequisitionQty']"
       (filteredList)="onFilteredList($event)"></app-shared-filter>
   </div>
-  <div class="col-4 mb-2" routerLinkActive="active">
+  <div class="col-4 mb-2" routerLinkActive="active" *ngIf="access.canAdd(featureRef)">
     <nz-button nz-button class="btn1" (click)='AddMaterialRequisition()'>
       Add Requisition
     </nz-button>
@@ -79,12 +79,12 @@
                 </span>
               </td>
               <!-- Actions -->
-              <td class="tbldata action-column">
-                <span style="margin-left: 9px;" (click)="isAnyMaterialPending(requisition) ? onEditClicked(requisition) : null">
+              <td class="tbldata action-column" *ngIf="showActionColumn">
+                <span style="margin-left: 9px;" (click)="isAnyMaterialPending(requisition) ? onEditClicked(requisition) : null" *ngIf="access.canEdit(featureRef)">
                   <img src="/assets/icons/edit.png" alt="Edit" title="Edit" width="20px" height="20px" *ngIf="isAnyMaterialPending(requisition)"/>
                   <img src="/assets/icons/GrayEditIcon.png" alt="Edit" title="Edit" width="20px" height="20px" *ngIf="!isAnyMaterialPending(requisition)"/>
                 </span>
-                <span style="margin-left: 9px;" (click)="isAnyMaterialPending(requisition) ? onDeleteClicked(requisition) : null">
+                <span style="margin-left: 9px;" (click)="isAnyMaterialPending(requisition) ? onDeleteClicked(requisition) : null" *ngIf="access.canDelete(featureRef)">
                   <img src="/assets/icons/delete.png" alt="Delete" title="Delete" width="20px" height="20px" *ngIf="isAnyMaterialPending(requisition)" />
                   <img src="/assets/icons/GreyDustbin.png" alt="Delete" title="Delete" width="20px" height="20px" *ngIf="!isAnyMaterialPending(requisition)"/>
                 </span>

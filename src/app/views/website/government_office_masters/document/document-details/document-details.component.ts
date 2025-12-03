@@ -27,7 +27,7 @@ export class DocumentDetailsComponent implements OnInit {
   companyRef = this.companystatemanagement.SelectedCompanyRef;
   NameWithNos: string = ValidationPatterns.NameWithNos
 
-  NameWithNosMsg: string = ValidationMessages.NameWithNosMsg
+  // NameWithNosMsg: string = ValidationMessages.NameWithNosMsg
   RequiredFieldMsg: string = ValidationMessages.RequiredFieldMsg
 
   @ViewChild('NameCtrl') NameInputControl!: NgModel;
@@ -123,4 +123,5 @@ export class DocumentDetailsComponent implements OnInit {
     this.NameInputControl.control.markAsPristine();
     this.CodeInputControl.control.markAsPristine();
   }
+  
 }

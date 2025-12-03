@@ -11,8 +11,8 @@ import { Utils } from 'src/app/services/utils.service';
 import { BaseUrlService } from 'src/app/services/baseurl.service';
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
 import { ScreenSizeService } from 'src/app/services/screensize.service';
-
-
+import { FeatureAccessService } from 'src/app/services/feature-access.service';
+import { ApplicationFeatures } from 'src/app/classes/domain/domainenums/domainenums';
 
 @Component({
   selector: 'app-company-master',
@@ -21,7 +21,6 @@ import { ScreenSizeService } from 'src/app/services/screensize.service';
   styleUrls: ['./company-master.component.scss'],
 })
 export class CompanyMasterComponent implements OnInit {
-
   Entity: Company = Company.CreateNewInstance();
   MasterList: Company[] = [];
   DisplayMasterList: Company[] = [];
@@ -31,10 +30,12 @@ export class CompanyMasterComponent implements OnInit {
   currentPage = 1; // Initialize current page
   total = 0;
   imagePreviewUrl: string | null = null;
-  ImageBaseUrl: string = "";
-  TimeStamp = Date.now()
+  ImageBaseUrl: string = '';
+  TimeStamp = Date.now();
   LoginToken = '';
-  headers: string[] = ['Logo', 'Company Name', 'Owner Name', 'Contact No', 'Company Email ID', 'Action'];
+  headers: string[] = [];
+  featureRef: ApplicationFeatures = ApplicationFeatures.CompanyMaster;
+  showActionColumn = false;
 
   constructor(
     private uiUtils: UIUtils,
@@ -44,8 +45,9 @@ export class CompanyMasterComponent implements OnInit {
     private baseUrl: BaseUrlService,
     public appStateManagement: AppStateManageService,
     private companystatemanagement: CompanyStateManagement,
-    private screenSizeService: ScreenSizeService
-  ) { }
+    private screenSizeService: ScreenSizeService,
+    public access: FeatureAccessService
+  ) {}
 
   ngOnInit() {
     this.appStateManage.setDropdownDisabled(true);
@@ -54,29 +56,44 @@ export class CompanyMasterComponent implements OnInit {
     this.ImageBaseUrl = this.baseUrl.GenerateImageBaseUrl();
     this.LoginToken = this.appStateManage.getLoginToken();
     this.pageSize = this.screenSizeService.getPageSize('withoutDropdown');
+    this.access.refresh()
+    this.showActionColumn = this.access.canEdit(this.featureRef) || this.access.canDelete(this.featureRef);
+    this.headers = [
+      'Logo',
+      'Company Name',
+      'Owner Name',
+      'Contact No',
+      'Company Email ID',
+      ...(this.showActionColumn ? ['Action'] : []),
+    ];
   }
 
   private FormulateCompanyMasterList = async () => {
-    let lst = await Company.FetchEntireList(async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    let lst = await Company.FetchEntireList(
+      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+    );
     this.MasterList = lst;
     this.DisplayMasterList = this.MasterList;
     this.loadPaginationData();
-  }
+  };
 
   onEditClicked = async (item: Company) => {
     this.SelectedCompany = item.GetEditableVersion();
     Company.SetCurrentInstance(this.SelectedCompany);
     this.appStateManage.StorageKey.setItem('Editable', 'Edit');
     await this.router.navigate(['/homepage/Website/Company_Master_Details']);
-  }
+  };
 
   onDeleteClicked = async (Company: Company) => {
-    await this.uiUtils.showConfirmationMessage('Delete',
+    await this.uiUtils.showConfirmationMessage(
+      'Delete',
       `This process is <strong>IRREVERSIBLE!</strong> <br/>
       Are you sure that you want to DELETE this Company?`,
       async () => {
         await Company.DeleteInstance(async () => {
-          await this.uiUtils.showSuccessToster(`Company ${Company.p.Name} has been deleted!`);
+          await this.uiUtils.showSuccessToster(
+            `Company ${Company.p.Name} has been deleted!`
+          );
           this.SearchString = '';
           this.loadPaginationData();
           this.FormulateCompanyMasterList();
@@ -84,16 +101,19 @@ export class CompanyMasterComponent implements OnInit {
             window.location.reload();
           }, 100);
         });
-      });
-  }
+      }
+    );
+  };
 
   OnDownloadDocument = async (company: Company) => {
-    await this.uiUtils.showConfirmationMessage('Download',
+    await this.uiUtils.showConfirmationMessage(
+      'Download',
       `Are you sure that you want to Download?`,
       async () => {
-        await this.downloadDocument(company)
-      });
-  }
+        await this.downloadDocument(company);
+      }
+    );
+  };
 
   loadImageFromBackend = (imageUrl: string) => {
     if (imageUrl) {
@@ -101,16 +121,18 @@ export class CompanyMasterComponent implements OnInit {
     } else {
       return null;
     }
-  }
+  };
 
   downloadDocument = async (SelectItem: Company) => {
     // code for download image
     try {
-
-      let blobResponse = await this.serverCommunicatorService.DownloadDocument(SelectItem.p.LogoPath, this.appStateManage.getLoginToken())
+      let blobResponse = await this.serverCommunicatorService.DownloadDocument(
+        SelectItem.p.LogoPath,
+        this.appStateManage.getLoginToken()
+      );
       if (blobResponse == null || undefined) {
-        alert("Error to get file")
-        return
+        alert('Error to get file');
+        return;
       }
 
       const platformInfo = await Device.getInfo();
@@ -126,16 +148,14 @@ export class CompanyMasterComponent implements OnInit {
           path: customPath,
           data: base64Data,
           directory: Directory.Documents,
-          recursive: true
+          recursive: true,
         });
         alert(`File saved to Documents folder: ${fileName}`);
       }
-
     } catch (error) {
       console.error('Download error:', error);
-
     }
-  }
+  };
 
   private downloadInBrowser = (blob: Blob, filename: string) => {
     const url = window.URL.createObjectURL(blob);
@@ -144,7 +164,7 @@ export class CompanyMasterComponent implements OnInit {
     a.download = filename;
     a.click();
     window.URL.revokeObjectURL(url);
-  }
+  };
 
   private convertBlobToBase64 = (blob: Blob): Promise<string> => {
     const reader = new FileReader();
@@ -156,31 +176,31 @@ export class CompanyMasterComponent implements OnInit {
       };
       reader.readAsDataURL(blob);
     });
-  }
+  };
 
   // For Pagination  start ----
   loadPaginationData = () => {
     this.total = this.DisplayMasterList.length; // Update total based on loaded data
-  }
+  };
 
   paginatedList = () => {
     const start = (this.currentPage - 1) * this.pageSize;
     return this.DisplayMasterList.slice(start, start + this.pageSize);
-  }
+  };
 
   // 🔑 Whenever filteredList event is received
   onFilteredList(list: any[]) {
     this.DisplayMasterList = list;
-    this.currentPage = 1;   // reset to first page after filtering
+    this.currentPage = 1; // reset to first page after filtering
 
     this.loadPaginationData();
   }
 
   onPageChange = (pageIndex: number): void => {
     this.currentPage = pageIndex; // Update the current page
-  }
+  };
 
   AddCompany = () => {
     this.router.navigate(['/homepage/Website/Company_Master_Details']);
-  }
+  };
 }
