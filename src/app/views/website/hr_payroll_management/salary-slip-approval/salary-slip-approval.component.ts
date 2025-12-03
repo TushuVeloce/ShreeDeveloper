@@ -6,21 +6,22 @@ import { ScreenSizeService } from 'src/app/services/screensize.service';
 import { UIUtils } from 'src/app/services/uiutils.service';
 import { Employee } from 'src/app/classes/domain/entities/website/masters/employee/employee';
 import { Utils } from 'src/app/services/utils.service';
+import { ApplicationFeatures, DomainEnums } from 'src/app/classes/domain/domainenums/domainenums';
+import { FeatureAccessService } from 'src/app/services/feature-access.service';
 
 @Component({
   selector: 'app-salary-slip-approval',
   standalone: false,
   templateUrl: './salary-slip-approval.component.html',
   styleUrls: ['./salary-slip-approval.component.scss'],
-
 })
-
 export class SalarySlipApprovalComponent implements OnInit {
   Entity: SalarySlipRequest = SalarySlipRequest.CreateNewInstance();
   MasterList: SalarySlipRequest[] = [];
   DisplayMasterList: SalarySlipRequest[] = [];
   SearchString: string = '';
-  SelectedSalarySlipApproval: SalarySlipRequest = SalarySlipRequest.CreateNewInstance();
+  SelectedSalarySlipApproval: SalarySlipRequest =
+    SalarySlipRequest.CreateNewInstance();
   CustomerRef: number = 0;
   isApprovalDisabled: boolean = false;
   EmployeeList: Employee[] = [];
@@ -30,7 +31,11 @@ export class SalarySlipApprovalComponent implements OnInit {
 
   companyRef = this.companystatemanagement.SelectedCompanyRef;
 
-  headers: string[] = ['Employee', 'Year', 'Month', 'Approval Status'];
+  // headers: string[] = ['Employee', 'Year', 'Month', 'Approval Status'];
+  headers: string[] = [];
+  featureRef: ApplicationFeatures = ApplicationFeatures.SalarySlipApproval;
+  showActionColumn = false;
+  monthList = DomainEnums.MonthList();
 
   constructor(
     private uiUtils: UIUtils,
@@ -38,6 +43,7 @@ export class SalarySlipApprovalComponent implements OnInit {
     private screenSizeService: ScreenSizeService,
     private companystatemanagement: CompanyStateManagement,
     private utils: Utils,
+    public access: FeatureAccessService
   ) {
     effect(async () => {
       await this.getEmployeeListByCompanyRef();
@@ -49,6 +55,18 @@ export class SalarySlipApprovalComponent implements OnInit {
     this.loadPaginationData();
     this.getSalarySlipApprovalListByCompanyRef();
     this.pageSize = this.screenSizeService.getPageSize('withDropdown');
+    this.access.refresh();
+    this.showActionColumn =
+      this.access.canApprove(this.featureRef);
+    this.headers = [
+      'Employee',
+      'Year',
+      'Month',
+      'Approval Status'
+    ];
+  }
+  noAccess(){
+    this.uiUtils.showWarningToster("You Don't have access of this feature")
   }
 
   getEmployeeListByCompanyRef = async () => {
@@ -56,9 +74,12 @@ export class SalarySlipApprovalComponent implements OnInit {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
-    let lst = await Employee.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    let lst = await Employee.FetchEntireListByCompanyRef(
+      this.companyRef(),
+      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+    );
     this.EmployeeList = lst;
-  }
+  };
 
   getSalarySlipApprovalListByCompanyRef = async () => {
     this.MasterList = [];
@@ -67,13 +88,20 @@ export class SalarySlipApprovalComponent implements OnInit {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
-    let lst = await SalarySlipRequest.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    let lst = await SalarySlipRequest.FetchEntireListByCompanyRef(
+      this.companyRef(),
+      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+    );
     this.MasterList = lst;
+    console.log('lst :', lst);
 
     this.DisplayMasterList = this.MasterList;
     this.loadPaginationData();
-  }
+  };
 
+   getMonthName = (ref: number) => {
+    return this.monthList.find((m) => m.Ref === ref)?.Name || '';
+  };
   getSalarySlipApprovalListByEmployeeRef = async () => {
     this.MasterList = [];
     this.DisplayMasterList = [];
@@ -81,19 +109,22 @@ export class SalarySlipApprovalComponent implements OnInit {
       await this.uiUtils.showErrorToster('Employee not Selected');
       return;
     }
-    let lst = await SalarySlipRequest.FetchEntireListByEmployeeRef(this.Entity.p.EmployeeRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    let lst = await SalarySlipRequest.FetchEntireListByEmployeeRef(
+      this.Entity.p.EmployeeRef,
+      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+    );
     this.MasterList = lst;
 
     this.DisplayMasterList = this.MasterList;
     this.loadPaginationData();
-  }
-
+  };
 
   handleApproval = async (salaryslipapproval: SalarySlipRequest) => {
     await this.uiUtils.showStatusConfirmationMessage(
       'Approval',
       `This process is <strong>IRREVERSIBLE!</strong> <br/>
-      Are you sure that you want to Approve this Salary Slip?`, ['Approved'],
+      Are you sure that you want to Approve this Salary Slip?`,
+      ['Approved'],
       async () => {
         this.Entity = salaryslipapproval;
         this.Entity.p.IsApproved = 1;
@@ -110,12 +141,14 @@ export class SalarySlipApprovalComponent implements OnInit {
           return;
         } else {
           this.isApprovalDisabled = false;
-          await this.uiUtils.showSuccessToster('Leave Approval Successfully Approved');
+          await this.uiUtils.showSuccessToster(
+            'Leave Approval Successfully Approved'
+          );
           this.getSalarySlipApprovalListByEmployeeRef();
         }
       }
     );
-  }
+  };
 
   onDeleteClicked = async (salaryslipapproval: SalarySlipRequest) => {
     await this.uiUtils.showConfirmationMessage(
@@ -143,12 +176,12 @@ export class SalarySlipApprovalComponent implements OnInit {
   paginatedList = () => {
     const start = (this.currentPage - 1) * this.pageSize;
     return this.DisplayMasterList.slice(start, start + this.pageSize);
-  }
+  };
 
   // 🔑 Whenever filteredList event is received
   onFilteredList(list: any[]) {
     this.DisplayMasterList = list;
-    this.currentPage = 1;   // reset to first page after filtering
+    this.currentPage = 1; // reset to first page after filtering
 
     this.loadPaginationData();
   }

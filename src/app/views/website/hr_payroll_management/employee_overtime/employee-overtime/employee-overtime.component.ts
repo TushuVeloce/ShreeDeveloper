@@ -1,9 +1,11 @@
 import { Component, effect, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { ApplicationFeatures } from 'src/app/classes/domain/domainenums/domainenums';
 import { EmployeeOvertime } from 'src/app/classes/domain/entities/website/HR_and_Payroll/Employee_Overtime/employeeovertime';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
 import { DateconversionService } from 'src/app/services/dateconversion.service';
+import { FeatureAccessService } from 'src/app/services/feature-access.service';
 import { ScreenSizeService } from 'src/app/services/screensize.service';
 import { UIUtils } from 'src/app/services/uiutils.service';
 import { Utils } from 'src/app/services/utils.service';
@@ -26,9 +28,19 @@ export class EmployeeOvertimeComponent implements OnInit {
   total = 0;
   companyRef = this.companystatemanagement.SelectedCompanyRef;
 
-  headers: string[] = ['Date', 'Employee Name', 'From Time', 'To Time', 'Total Over Time', 'Status', 'Action'];
-  constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private screenSizeService: ScreenSizeService,
-    private companystatemanagement: CompanyStateManagement, private utils: Utils, private DateconversionService: DateconversionService,
+  // headers: string[] = ['Date', 'Employee Name', 'From Time', 'To Time', 'Total Over Time', 'Status', 'Action'];
+  headers: string[] = [];
+  featureRef: ApplicationFeatures = ApplicationFeatures.EmployeeOvertime;
+  showActionColumn = false;
+  constructor(
+    private uiUtils: UIUtils,
+    private router: Router,
+    private appStateManage: AppStateManageService,
+    private screenSizeService: ScreenSizeService,
+    private companystatemanagement: CompanyStateManagement,
+    private utils: Utils,
+    private DateconversionService: DateconversionService,
+    public access: FeatureAccessService
   ) {
     effect(async () => {
       await this.getEmployeeOvertimeListByCompanyRef();
@@ -38,6 +50,21 @@ export class EmployeeOvertimeComponent implements OnInit {
     this.appStateManage.setDropdownDisabled();
     this.loadPaginationData();
     this.pageSize = this.screenSizeService.getPageSize('withoutDropdown');
+    this.access.refresh();
+    this.showActionColumn = this.access.canEdit(this.featureRef) || this.access.canDelete(this.featureRef);
+    this.headers = [
+      'Date',
+      'Employee Name',
+      'From Time',
+      'To Time',
+      'Total Over Time',
+      'Status',
+      ...(this.showActionColumn ? ['Action'] : []),
+    ];
+  }
+
+  noAccess(){
+    this.uiUtils.showWarningToster("You Don't have access of this feature")
   }
 
   getEmployeeOvertimeListByCompanyRef = async () => {
@@ -47,22 +74,25 @@ export class EmployeeOvertimeComponent implements OnInit {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
-    let lst = await EmployeeOvertime.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    let lst = await EmployeeOvertime.FetchEntireListByCompanyRef(
+      this.companyRef(),
+      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+    );
     this.MasterList = lst;
     this.DisplayMasterList = this.MasterList;
     this.loadPaginationData();
-  }
+  };
 
   convertTo12Hour = (time24: string): string => {
-    const [hourStr, minute] = time24.split(":");
+    const [hourStr, minute] = time24.split(':');
     let hour = parseInt(hourStr, 10);
-    const ampm = hour >= 12 ? "PM" : "AM";
+    const ampm = hour >= 12 ? 'PM' : 'AM';
 
     hour = hour % 12;
     hour = hour === 0 ? 12 : hour; // Handle midnight (0 -> 12 AM) and noon (12 -> 12 PM)
 
     return `${hour}:${minute} ${ampm}`;
-  }
+  };
 
   onEditClicked = async (item: EmployeeOvertime) => {
     this.SelectedTime = item.GetEditableVersion();
@@ -78,22 +108,25 @@ export class EmployeeOvertimeComponent implements OnInit {
         Are you sure that you want to Approve this Overtime?`,
       async () => {
         this.Entity = Entity;
-        this.Entity.p.UpdatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
+        this.Entity.p.UpdatedBy = Number(
+          this.appStateManage.StorageKey.getItem('LoginEmployeeRef')
+        );
         this.Entity.p.IsOverTimeVerified = true;
         let entityToSave = this.Entity.GetEditableVersion();
-        let entitiesToSave = [entityToSave]
+        let entitiesToSave = [entityToSave];
         let tr = await this.utils.SavePersistableEntities(entitiesToSave);
         if (!tr.Successful) {
           this.uiUtils.showErrorMessage('Error', tr.Message);
           Entity.p.IsOverTimeVerified = false;
-          return
-        }
-        else {
-          await this.uiUtils.showSuccessToster('Attendance Updated successfully');
+          return;
+        } else {
+          await this.uiUtils.showSuccessToster(
+            'Attendance Updated successfully'
+          );
         }
       }
     );
-  }
+  };
 
   onDeleteClicked = async (EmployeeOvertime: EmployeeOvertime) => {
     await this.uiUtils.showConfirmationMessage(
@@ -102,7 +135,9 @@ export class EmployeeOvertimeComponent implements OnInit {
       Are you sure that you want to DELETE this Overtime?`,
       async () => {
         await EmployeeOvertime.DeleteInstance(async () => {
-          await this.uiUtils.showSuccessToster(`${EmployeeOvertime.p.EmployeeRef} has been deleted!`);
+          await this.uiUtils.showSuccessToster(
+            `${EmployeeOvertime.p.EmployeeRef} has been deleted!`
+          );
           await this.getEmployeeOvertimeListByCompanyRef();
           this.SearchString = '';
           this.loadPaginationData();
@@ -119,17 +154,17 @@ export class EmployeeOvertimeComponent implements OnInit {
   // Extracted from services date conversion //
   formatDate = (date: string | Date): string => {
     return this.DateconversionService.formatDate(date);
-  }
+  };
 
   paginatedList = () => {
     const start = (this.currentPage - 1) * this.pageSize;
     return this.DisplayMasterList.slice(start, start + this.pageSize);
-  }
+  };
 
   // 🔑 Whenever filteredList event is received
   onFilteredList(list: any[]) {
     this.DisplayMasterList = list;
-    this.currentPage = 1;   // reset to first page after filtering
+    this.currentPage = 1; // reset to first page after filtering
 
     this.loadPaginationData();
   }
@@ -144,5 +179,5 @@ export class EmployeeOvertimeComponent implements OnInit {
       return;
     }
     this.router.navigate(['/homepage/Website/Employee_Overtime_Details']);
-  }
+  };
 }

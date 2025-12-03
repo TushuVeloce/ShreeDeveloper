@@ -1,11 +1,13 @@
 import { Injectable } from '@angular/core';
-import { ApplicationFeatureGroups, ApplicationFeatures } from '../classes/domain/domainenums/domainenums';
+import {
+  ApplicationFeatureGroups,
+  ApplicationFeatures,
+} from '../classes/domain/domainenums/domainenums';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class FeatureAccessService {
-
   private features: any[] = [];
   public readonly StorageKey = sessionStorage;
 
@@ -26,54 +28,72 @@ export class FeatureAccessService {
   // ✔ CHECK ENTIRE FEATURE GROUP
   // ------------------------------------------------------------------
   isFeatureGroupEnabled(groupRef: ApplicationFeatureGroups): boolean {
-    return this.features.some(f => f.FeatureGroupRef === groupRef);
+    return this.features.some((f) => f.FeatureGroupRef === groupRef);
   }
 
   // ------------------------------------------------------------------
   // ✔ CHECK SPECIFIC FEATURE (existence only)
   // ------------------------------------------------------------------
   hasFeature(featureRef: ApplicationFeatures): boolean {
-    return this.features.some(f => f.FeatureRef === featureRef);
+    return this.features.some((f) => f.FeatureRef === featureRef);
   }
 
   // ------------------------------------------------------------------
   // ✔ GET FULL RIGHTS FOR A FEATURE
   // ------------------------------------------------------------------
   getFeatureRights(featureRef: ApplicationFeatures) {
-    return this.features.find(f => f.FeatureRef === featureRef) || null;
+    return this.features.find((f) => f.FeatureRef === featureRef) || null;
   }
 
   // ------------------------------------------------------------------
   // ✔ INDIVIDUAL RIGHTS CHECK
   // ------------------------------------------------------------------
   canAdd(featureRef: ApplicationFeatures): boolean {
-    return this.hasFeature(featureRef) &&
-      this.getFeatureRights(featureRef).CanAdd === true;
+    return (
+      this.hasFeature(featureRef) &&
+      this.getFeatureRights(featureRef).CanAdd === true
+    );
   }
 
   canEdit(featureRef: ApplicationFeatures): boolean {
-    return this.hasFeature(featureRef) &&
-      this.getFeatureRights(featureRef).CanEdit === true;
+    return (
+      this.hasFeature(featureRef) &&
+      this.getFeatureRights(featureRef).CanEdit === true
+    );
   }
 
   canDelete(featureRef: ApplicationFeatures): boolean {
-    return this.hasFeature(featureRef) &&
-      this.getFeatureRights(featureRef).CanDelete === true;
+    return (
+      this.hasFeature(featureRef) &&
+      this.getFeatureRights(featureRef).CanDelete === true
+    );
   }
 
   canView(featureRef: ApplicationFeatures): boolean {
-    return this.hasFeature(featureRef) &&
-      this.getFeatureRights(featureRef).CanView === true;
+    return (
+      this.hasFeature(featureRef) &&
+      this.getFeatureRights(featureRef).CanView === true
+    );
   }
 
   canPrint(featureRef: ApplicationFeatures): boolean {
-    return this.hasFeature(featureRef) &&
-      this.getFeatureRights(featureRef).CanPrint === true;
+    return (
+      this.hasFeature(featureRef) &&
+      this.getFeatureRights(featureRef).CanPrint === true
+    );
   }
 
   canExport(featureRef: ApplicationFeatures): boolean {
-    return this.hasFeature(featureRef) &&
-      this.getFeatureRights(featureRef).CanExport === true;
+    return (
+      this.hasFeature(featureRef) &&
+      this.getFeatureRights(featureRef).CanExport === true
+    );
+  }
+  canApprove(featureRef: ApplicationFeatures): boolean {
+    return (
+      this.hasFeature(featureRef) &&
+      this.getFeatureRights(featureRef).CanApprove === true
+    );
   }
 
   // ------------------------------------------------------------------
@@ -88,6 +108,7 @@ export class FeatureAccessService {
       rights.CanEdit ||
       rights.CanDelete ||
       rights.CanView ||
+      rights.CanApprove ||
       rights.CanPrint ||
       rights.CanExport
     );

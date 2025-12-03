@@ -24,7 +24,7 @@
         </div>
         <div class="col-4 mb-2 text-end">
           <img class="no-print" src="/assets/icons/printer.png" alt="Print" title="Print" width="30px" height="30px"
-            style="cursor: pointer; padding-top: 4px" (click)="printReport()" />
+            style="cursor: pointer; padding-top: 4px" (click)="printReport()" *ngIf="access.canPrint(featureRef)"/>
         </div>
       </div>
     </form>

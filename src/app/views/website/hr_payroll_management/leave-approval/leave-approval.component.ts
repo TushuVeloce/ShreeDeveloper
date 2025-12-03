@@ -8,16 +8,18 @@ import { UIUtils } from 'src/app/services/uiutils.service';
 import { Employee } from 'src/app/classes/domain/entities/website/masters/employee/employee';
 import { DateconversionService } from 'src/app/services/dateconversion.service';
 import { Utils } from 'src/app/services/utils.service';
-import { LeaveRequestType } from 'src/app/classes/domain/domainenums/domainenums';
+import {
+  ApplicationFeatures,
+  LeaveRequestType,
+} from 'src/app/classes/domain/domainenums/domainenums';
+import { FeatureAccessService } from 'src/app/services/feature-access.service';
 
 @Component({
   selector: 'app-leave-approval',
   standalone: false,
   templateUrl: './leave-approval.component.html',
   styleUrls: ['./leave-approval.component.scss'],
-
 })
-
 export class LeaveApprovalComponent implements OnInit {
   Entity: LeaveRequest = LeaveRequest.CreateNewInstance();
   MasterList: LeaveRequest[] = [];
@@ -33,8 +35,10 @@ export class LeaveApprovalComponent implements OnInit {
 
   companyRef = this.companystatemanagement.SelectedCompanyRef;
 
-  headers: string[] = ['Employee', 'Leave Request Type', 'Description', 'Date', 'Days', 'Approval Status'];
-
+  // headers: string[] = ['Employee', 'Leave Request Type', 'Description', 'Date', 'Days', 'Approval Status'];
+  headers: string[] = [];
+  featureRef: ApplicationFeatures = ApplicationFeatures.LeaveApproval;
+  showActionColumn = false;
   constructor(
     private uiUtils: UIUtils,
     private appStateManage: AppStateManageService,
@@ -42,6 +46,7 @@ export class LeaveApprovalComponent implements OnInit {
     private companystatemanagement: CompanyStateManagement,
     private DateconversionService: DateconversionService,
     private utils: Utils,
+    public access: FeatureAccessService
   ) {
     effect(async () => {
       await this.getEmployeeListByCompanyRef();
@@ -53,21 +58,37 @@ export class LeaveApprovalComponent implements OnInit {
     this.loadPaginationData();
     this.pageSize = this.screenSizeService.getPageSize('withDropdown');
     this.getLeaveApprovalListByCompanyRef();
+    this.access.refresh();
+    this.showActionColumn = this.access.canApprove(this.featureRef);
+    this.headers = [
+      'Employee',
+      'Leave Request Type',
+      'Description',
+      'Date',
+      'Days',
+      'Approval Status',
+    ];
   }
 
+  noAccess() {
+    this.uiUtils.showWarningToster("You Don't have access of this feature");
+  }
   // Extracted from services date conversion //
   formatDate = (date: string | Date): string => {
     return this.DateconversionService.formatDate(date);
-  }
+  };
 
   getEmployeeListByCompanyRef = async () => {
     if (this.companyRef() <= 0) {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
-    let lst = await Employee.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    let lst = await Employee.FetchEntireListByCompanyRef(
+      this.companyRef(),
+      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+    );
     this.EmployeeList = lst;
-  }
+  };
 
   getLeaveApprovalListByCompanyRef = async () => {
     this.MasterList = [];
@@ -76,12 +97,15 @@ export class LeaveApprovalComponent implements OnInit {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
-    let lst = await LeaveRequest.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    let lst = await LeaveRequest.FetchEntireListByCompanyRef(
+      this.companyRef(),
+      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+    );
     this.MasterList = lst;
 
     this.DisplayMasterList = this.MasterList;
     this.loadPaginationData();
-  }
+  };
 
   getLeaveApprovalListByEmployeeRef = async () => {
     this.MasterList = [];
@@ -90,12 +114,15 @@ export class LeaveApprovalComponent implements OnInit {
       this.getLeaveApprovalListByCompanyRef();
       return;
     }
-    let lst = await LeaveRequest.FetchEntireListByEmployeeRef(this.Entity.p.EmployeeRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    let lst = await LeaveRequest.FetchEntireListByEmployeeRef(
+      this.Entity.p.EmployeeRef,
+      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+    );
     this.MasterList = lst;
 
     this.DisplayMasterList = this.MasterList;
     this.loadPaginationData();
-  }
+  };
 
   handleApproval = async (leaveapproval: LeaveRequest) => {
     this.isSaveDisabled = true;
@@ -117,20 +144,21 @@ export class LeaveApprovalComponent implements OnInit {
         const originalApprovedBy = this.Entity.p.LeaveApprovedBy;
         const originalCancelledBy = this.Entity.p.LeaveCancelledBy;
 
-        const currentEmployeeRef = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'));
+        const currentEmployeeRef = Number(
+          this.appStateManage.StorageKey.getItem('LoginEmployeeRef')
+        );
         this.Entity.p.LeaveApprovedBy = currentEmployeeRef;
         this.Entity.p.LeaveCancelledBy = currentEmployeeRef;
 
         if (selectedStatus === 'Approved') {
           this.Entity.p.IsApproved = 1;
-          this.Entity.p.LeaveApprovedBy = currentEmployeeRef
-          this.Entity.p.LeaveCancelledBy = currentEmployeeRef
+          this.Entity.p.LeaveApprovedBy = currentEmployeeRef;
+          this.Entity.p.LeaveCancelledBy = currentEmployeeRef;
           this.Entity.p.IsCancelled = 0;
-        }
-        else if (selectedStatus === 'Rejected') {
+        } else if (selectedStatus === 'Rejected') {
           this.Entity.p.IsApproved = 0;
-          this.Entity.p.LeaveApprovedBy = currentEmployeeRef
-          this.Entity.p.LeaveCancelledBy = currentEmployeeRef
+          this.Entity.p.LeaveApprovedBy = currentEmployeeRef;
+          this.Entity.p.LeaveCancelledBy = currentEmployeeRef;
           this.Entity.p.IsCancelled = 1;
         }
         const entityToSave = this.Entity.GetEditableVersion();
@@ -145,18 +173,21 @@ export class LeaveApprovalComponent implements OnInit {
           return;
         } else {
           if (selectedStatus === 'Approved') {
-            await this.uiUtils.showSuccessToster(`Leave has been approved successfully`);
+            await this.uiUtils.showSuccessToster(
+              `Leave has been approved successfully`
+            );
             this.isSaveDisabled = false;
-          }
-          else if (selectedStatus === 'Rejected') {
-            await this.uiUtils.showSuccessToster(`Leave has been rejected  successfully`);
+          } else if (selectedStatus === 'Rejected') {
+            await this.uiUtils.showSuccessToster(
+              `Leave has been rejected  successfully`
+            );
             this.isSaveDisabled = false;
           }
           this.getLeaveApprovalListByEmployeeRef();
         }
       }
     );
-  }
+  };
 
   // For Pagination  start ----
   loadPaginationData = () => {
@@ -166,12 +197,12 @@ export class LeaveApprovalComponent implements OnInit {
   paginatedList = () => {
     const start = (this.currentPage - 1) * this.pageSize;
     return this.DisplayMasterList.slice(start, start + this.pageSize);
-  }
+  };
 
   // 🔑 Whenever filteredList event is received
   onFilteredList(list: any[]) {
     this.DisplayMasterList = list;
-    this.currentPage = 1;   // reset to first page after filtering
+    this.currentPage = 1; // reset to first page after filtering
 
     this.loadPaginationData();
   }

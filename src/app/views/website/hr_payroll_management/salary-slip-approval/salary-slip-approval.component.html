@@ -42,10 +42,10 @@
             <td Class="tbldata" nzLeft>{{ (currentPage - 1) * pageSize + i + 1 }}</td>
             <td Class="tbldata">{{salaryslipapproval.p.EmployeeName}}</td>
             <td Class="tbldata">{{salaryslipapproval.p.Year}}</td>
-            <td Class="tbldata"> <b *ngFor="let month of salaryslipapproval.p.SelectedMonthsName">{{ month + ' ' }}</b>
+            <td Class="tbldata"> <b *ngFor="let month of salaryslipapproval.p.SelectedMonths">{{ getMonthName(month) + ' ' }}</b>
             <td Class="tbldata">
               <button class="status" [disabled]="isApprovalDisabled" *ngIf="!salaryslipapproval.p.IsApproved"
-                (click)="handleApproval(salaryslipapproval)" ngClass="pending">
+                (click)="access.canApprove(featureRef)? handleApproval(salaryslipapproval) : noAccess()" ngClass="pending">
                 Pending
               </button>
               <button class="status" *ngIf="salaryslipapproval.p.IsApproved" ngClass="approved">

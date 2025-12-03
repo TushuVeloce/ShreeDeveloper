@@ -8,7 +8,7 @@
         [filterFields]="['EmployeeName', 'MonthName', 'TotalWorkingDays', 'BasicSalary', 'GrossTotal', 'TotalDeduction', 'NetSalary']"
         (filteredList)="onFilteredList($event)"></app-shared-filter>
     </div>
-    <div class="col-4 mb-2" routerLinkActive="active">
+    <div class="col-4 mb-2" routerLinkActive="active" *ngIf="access.canAdd(featureRef)">
       <nz-button nz-button class="btn1" (click)='AddSalaryDetails()'>
         Add Salary Details
       </nz-button>
@@ -60,13 +60,13 @@
             <td Class="tbldata">{{salary.p.GrossTotal | currency : "INR" }}</td>
             <td Class="tbldata">{{salary.p.TotalDeduction | currency : "INR" }}</td>
             <td Class="tbldata">{{salary.p.NetSalary | currency : "INR" }}</td>
-            <td class="tbldata action-column">
-              <span style="margin-left: 9px;" (click)="onEditClicked(salary);">
+            <td class="tbldata action-column" *ngIf="showActionColumn">
+              <span style="margin-left: 9px;" (click)="onEditClicked(salary);" *ngIf="access.canEdit(featureRef)">
                 <img src="\assets\icons\edit.png" alt="logo" title="Edit" width="20px" height="20px" />
               </span>
-              <span style="margin-left: 9px;" (click)="onDeleteClicked(salary);">
+              <span style="margin-left: 9px;" (click)="onDeleteClicked(salary);" *ngIf="access.canDelete(featureRef)">
                 <img src="\assets\icons\delete.png" alt="logo" title="Delete" width="20px" height="20px" /></span>
-              <span style="margin-left: 9px;" (click)="openSalarySlipModal(salary)">
+              <span style="margin-left: 9px;" (click)="openSalarySlipModal(salary)" *ngIf="access.canPrint(featureRef)">
                 <img src="\assets\icons\printer.png" alt="logo" title="Delete" width="20px" height="20px" /></span>
             </td>
           </tr>
@@ -76,7 +76,6 @@
             <td class="tbldata">
               <b>{{ getTotalSalary() | currency : "INR" }}</b>
             </td>
-            <td class="tbldata" colspan="3"></td>
           </tr>
         </tbody>
       </nz-table>

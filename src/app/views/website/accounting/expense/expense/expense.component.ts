@@ -1,6 +1,12 @@
 import { Component, effect, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { DomainEnums, ModeOfPayments, OpeningBalanceModeOfPayments, PayerTypes } from 'src/app/classes/domain/domainenums/domainenums';
+import {
+  ApplicationFeatures,
+  DomainEnums,
+  ModeOfPayments,
+  OpeningBalanceModeOfPayments,
+  PayerTypes,
+} from 'src/app/classes/domain/domainenums/domainenums';
 import { Invoice } from 'src/app/classes/domain/entities/website/accounting/billing/invoice';
 import { DeleteExpenseCustomRequest } from 'src/app/classes/domain/entities/website/accounting/expense/DeleteExpenseCustomRequest';
 import { Expense } from 'src/app/classes/domain/entities/website/accounting/expense/expense';
@@ -15,6 +21,7 @@ import { AppStateManageService } from 'src/app/services/app-state-manage.service
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
 import { DateconversionService } from 'src/app/services/dateconversion.service';
 import { DTU } from 'src/app/services/dtu.service';
+import { FeatureAccessService } from 'src/app/services/feature-access.service';
 import { ScreenSizeService } from 'src/app/services/screensize.service';
 import { ServerCommunicatorService } from 'src/app/services/server-communicator.service';
 import { UIUtils } from 'src/app/services/uiutils.service';
@@ -34,7 +41,9 @@ export class ExpenseComponent implements OnInit {
   LedgerList: Ledger[] = [];
   SubLedgerList: SubLedger[] = [];
   Bill = ModeOfPayments.Bill;
-  ModeofPaymentList = DomainEnums.ModeOfPaymentsList().filter(item => item.Ref != this.Bill);
+  ModeofPaymentList = DomainEnums.ModeOfPaymentsList().filter(
+    (item) => item.Ref != this.Bill
+  );
   SearchString: string = '';
   SelectedExpense: Expense = Expense.CreateNewInstance();
   CustomerRef: number = 0;
@@ -43,8 +52,8 @@ export class ExpenseComponent implements OnInit {
   pageSize = 10; // Items per page
   currentPage = 1; // Initialize current page
   total = 0;
-  TotalInvoiceAmount: number = 0
-  TotalGivenAmount: number = 0
+  TotalInvoiceAmount: number = 0;
+  TotalGivenAmount: number = 0;
   RemainingAmountOfGrandTotal: number = 0;
   StartDate = '';
   EndDate = '';
@@ -52,16 +61,33 @@ export class ExpenseComponent implements OnInit {
 
   companyRef = this.companystatemanagement.SelectedCompanyRef;
 
-  Cash = OpeningBalanceModeOfPayments.Cash
-  ModeOfPayments = ModeOfPayments
+  Cash = OpeningBalanceModeOfPayments.Cash;
+  ModeOfPayments = ModeOfPayments;
   RecipientList: Invoice[] = [];
   RecipientTypesList = DomainEnums.RecipientTypesList();
 
   DealDoneCustomer = PayerTypes.DealDoneCustomer;
   PayerPlotNo: string = '';
 
-  headers: string[] = ['Date', 'Site Name', 'Ledger', 'Sub Ledger', 'Recipient Name', 'Reason', 'Bill Amount', 'Given Amount', 'Remaining Amount', 'Shree Balance', 'Mode of Payment', 'Action'];
-  printheaders: string[] = ['Sr.No.', 'Date', 'Site Name', 'Ledger', 'Sub Ledger', 'Recipient Name', 'Reason', 'Bill Amount', 'Given Amount', 'Remaining Amount', 'Shree Balance', 'Mode of Payment'];
+  // headers: string[] = ['Date', 'Site Name', 'Ledger', 'Sub Ledger', 'Recipient Name', 'Reason', 'Bill Amount', 'Given Amount', 'Remaining Amount', 'Shree Balance', 'Mode of Payment', 'Action'];
+  headers: string[] = [];
+  featureRef: ApplicationFeatures = ApplicationFeatures.Expense;
+  showActionColumn = false;
+
+  printheaders: string[] = [
+    'Sr.No.',
+    'Date',
+    'Site Name',
+    'Ledger',
+    'Sub Ledger',
+    'Recipient Name',
+    'Reason',
+    'Bill Amount',
+    'Given Amount',
+    'Remaining Amount',
+    'Shree Balance',
+    'Mode of Payment',
+  ];
   constructor(
     private uiUtils: UIUtils,
     private router: Router,
@@ -71,11 +97,12 @@ export class ExpenseComponent implements OnInit {
     private companystatemanagement: CompanyStateManagement,
     private dtu: DTU,
     private payloadPacketFacade: PayloadPacketFacade,
-    private serverCommunicator: ServerCommunicatorService
+    private serverCommunicator: ServerCommunicatorService,
+    public access: FeatureAccessService
   ) {
     effect(async () => {
-      this.Entity.p.ExpenseModeOfPayment = 0
-      this.Entity.p.Ref = 0
+      this.Entity.p.ExpenseModeOfPayment = 0;
+      this.Entity.p.Ref = 0;
       await this.getSiteListByCompanyRef();
       await this.getLedgerListByCompanyRef();
       await this.FetchEntireListByFilters();
@@ -88,7 +115,25 @@ export class ExpenseComponent implements OnInit {
     this.loadPaginationData();
 
     const pageSize = this.screenSizeService.getPageSize('withDropdown');
-    this.pageSize = pageSize - 6
+    this.pageSize = pageSize - 6;
+    this.access.refresh();
+    this.showActionColumn =
+      this.access.canEdit(this.featureRef) ||
+      this.access.canDelete(this.featureRef);
+    this.headers = [
+      'Date',
+      'Site Name',
+      'Ledger',
+      'Sub Ledger',
+      'Recipient Name',
+      'Reason',
+      'Bill Amount',
+      'Given Amount',
+      'Remaining Amount',
+      'Shree Balance',
+      'Mode of Payment',
+      ...(this.showActionColumn ? ['Action'] : []),
+    ];
   }
 
   getRecipientListByRecipientTypeRef = async () => {
@@ -102,63 +147,83 @@ export class ExpenseComponent implements OnInit {
     }
 
     this.RecipientList = [];
-    let lst = await Invoice.FetchRecipientByRecipientTypeRef(this.companyRef(), this.Entity.p.SiteRef, this.Entity.p.RecipientType, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    let lst = await Invoice.FetchRecipientByRecipientTypeRef(
+      this.companyRef(),
+      this.Entity.p.SiteRef,
+      this.Entity.p.RecipientType,
+      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+    );
     this.RecipientList = lst;
-  }
-
+  };
 
   public FormulateBankList = async () => {
     if (this.companyRef() <= 0) {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
-    let lst = await OpeningBalance.FetchEntireListByCompanyRef(this.companyRef(), async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg));
-    this.BankList = lst.filter((item) => item.p.BankAccountRef > 0 && (item.p.OpeningBalanceAmount > 0 || item.p.InitialBalance > 0));
+    let lst = await OpeningBalance.FetchEntireListByCompanyRef(
+      this.companyRef(),
+      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+    );
+    this.BankList = lst.filter(
+      (item) =>
+        item.p.BankAccountRef > 0 &&
+        (item.p.OpeningBalanceAmount > 0 || item.p.InitialBalance > 0)
+    );
   };
 
   getSiteListByCompanyRef = async () => {
-    this.Entity.p.SiteRef = 0
-    this.Entity.p.Ref = 0
+    this.Entity.p.SiteRef = 0;
+    this.Entity.p.Ref = 0;
     if (this.companyRef() <= 0) {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
-    let lst = await Site.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-    this.SiteList = lst;
-  }
-
-  getLedgerListByCompanyRef = async () => {
-    this.Entity.p.LedgerRef = 0
-    this.Entity.p.SubLedgerRef = 0
-    this.Entity.p.Ref = 0
-    if (this.companyRef() <= 0) {
-      await this.uiUtils.showErrorToster('Company not Selected');
-      return;
-    }
-    let lst = await Ledger.FetchEntireListByCompanyRef(this.companyRef(),
+    let lst = await Site.FetchEntireListByCompanyRef(
+      this.companyRef(),
       async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
     );
-    this.LedgerList = lst
+    this.SiteList = lst;
+  };
+
+  getLedgerListByCompanyRef = async () => {
+    this.Entity.p.LedgerRef = 0;
+    this.Entity.p.SubLedgerRef = 0;
+    this.Entity.p.Ref = 0;
+    if (this.companyRef() <= 0) {
+      await this.uiUtils.showErrorToster('Company not Selected');
+      return;
+    }
+    let lst = await Ledger.FetchEntireListByCompanyRef(
+      this.companyRef(),
+      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+    );
+    this.LedgerList = lst;
   };
 
   getSubLedgerListByLedgerRef = async (ledgerref: number) => {
-    this.Entity.p.SubLedgerRef = 0
-    this.Entity.p.Ref = 0
+    this.Entity.p.SubLedgerRef = 0;
+    this.Entity.p.Ref = 0;
     if (ledgerref <= 0) {
       await this.uiUtils.showErrorToster('Ledger not Selected');
       return;
     }
-    let lst = await SubLedger.FetchEntireListByLedgerRef(ledgerref, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    let lst = await SubLedger.FetchEntireListByLedgerRef(
+      ledgerref,
+      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+    );
     this.SubLedgerList = lst;
-  }
+  };
 
   ClearRef = () => {
-    this.Entity.p.Ref = 0
-  }
+    this.Entity.p.Ref = 0;
+  };
 
   filterByReason = () => {
-    this.DisplayMasterList = this.MasterList.filter((data) => data.p.Reason == this.Reason);
-  }
+    this.DisplayMasterList = this.MasterList.filter(
+      (data) => data.p.Reason == this.Reason
+    );
+  };
 
   FetchEntireListByFilters = async () => {
     this.MasterList = [];
@@ -168,8 +233,12 @@ export class ExpenseComponent implements OnInit {
       return;
     }
 
-    this.Entity.p.StartDate = this.dtu.ConvertStringDateToFullFormat(this.StartDate);
-    this.Entity.p.EndDate = this.dtu.ConvertStringDateToFullFormat(this.EndDate);
+    this.Entity.p.StartDate = this.dtu.ConvertStringDateToFullFormat(
+      this.StartDate
+    );
+    this.Entity.p.EndDate = this.dtu.ConvertStringDateToFullFormat(
+      this.EndDate
+    );
 
     let lst = await Expense.FetchEntireListByFilters(
       this.companyRef(),
@@ -183,7 +252,8 @@ export class ExpenseComponent implements OnInit {
       this.Entity.p.BankAccountRef,
       this.Entity.p.RecipientType,
       this.Entity.p.RecipientRef,
-      async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+    );
 
     this.MasterList = lst;
     this.DisplayMasterList = this.MasterList;
@@ -195,12 +265,12 @@ export class ExpenseComponent implements OnInit {
     //   this.RemainingAmountOfGrandTotal = this.DisplayMasterList[0].p.RemainingAmountOfGrandTotal;
     // }
     this.loadPaginationData();
-  }
+  };
 
   // Extracted from services date conversion //
   formatDate = (date: string | Date): string => {
     return this.DateconversionService.formatDate(date);
-  }
+  };
 
   onEditClicked = async (item: Expense) => {
     this.SelectedExpense = item.GetEditableVersion();
@@ -230,7 +300,8 @@ export class ExpenseComponent implements OnInit {
 
   onDeleteClicked = async (Expense: Expense) => {
     await this.uiUtils.showConfirmationMessage(
-      'Delete', `This process is <strong>IRREVERSIBLE!</strong> <br/>Are you sure that you want to DELETE this Expense?`,
+      'Delete',
+      `This process is <strong>IRREVERSIBLE!</strong> <br/>Are you sure that you want to DELETE this Expense?`,
       async () => {
         let req = new DeleteExpenseCustomRequest();
         req.Ref = Expense.p.Ref;
@@ -245,16 +316,19 @@ export class ExpenseComponent implements OnInit {
         let tdResult = JSON.parse(tr.Tag) as TransportData;
       }
     );
-    this.FetchEntireListByFilters()
-    this.loadPaginationData()
+    this.FetchEntireListByFilters();
+    this.loadPaginationData();
     this.SearchString = '';
   };
-
 
   printReport(): void {
     const printContents = document.getElementById('print-section')?.innerHTML;
     if (printContents) {
-      const popupWin = window.open('', '_blank', 'top=0,left=0,height=100%,width=auto');
+      const popupWin = window.open(
+        '',
+        '_blank',
+        'top=0,left=0,height=100%,width=auto'
+      );
       popupWin?.document.write(`
       <html>
         <head>
@@ -294,29 +368,32 @@ export class ExpenseComponent implements OnInit {
   paginatedList = () => {
     const start = (this.currentPage - 1) * this.pageSize;
     return this.DisplayMasterList.slice(start, start + this.pageSize);
-  }
+  };
 
   // 🔑 Whenever filteredList event is received
   onFilteredList(list: any[]) {
     this.DisplayMasterList = list;
-    this.currentPage = 1;   // reset to first page after filtering
+    this.currentPage = 1; // reset to first page after filtering
 
     this.loadPaginationData();
   }
 
   getTotalInvoice = () => {
-    this.TotalInvoice = this.DisplayMasterList.reduce((total: number, item: any) => {
-      return total + Number(item.p?.InvoiceAmount || 0);
-    }, 0);
+    this.TotalInvoice = this.DisplayMasterList.reduce(
+      (total: number, item: any) => {
+        return total + Number(item.p?.InvoiceAmount || 0);
+      },
+      0
+    );
 
     return this.TotalInvoice;
-  }
+  };
 
   getTotalGiven = () => {
     return this.DisplayMasterList.reduce((total: number, item: any) => {
       return total + Number(item.p?.GivenAmount || 0);
     }, 0);
-  }
+  };
 
   onPageChange = (pageIndex: number): void => {
     this.currentPage = pageIndex; // Update the current page
@@ -328,5 +405,5 @@ export class ExpenseComponent implements OnInit {
       return;
     }
     this.router.navigate(['/homepage/Website/Expense_Details']);
-  }
+  };
 }

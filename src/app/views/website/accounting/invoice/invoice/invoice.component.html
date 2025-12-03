@@ -7,7 +7,7 @@
       [filterFields]="['Date', 'InvoiceNo', 'SiteName','LedgerName','SubLedgerName','Description','RecipientName','InvoiceAmount']"
       (filteredList)="onFilteredList($event)"></app-shared-filter>
   </div>
-  <div class="col-4 mb-2" routerLinkActive="active">
+  <div class="col-4 mb-2" routerLinkActive="active" *ngIf="access.canAdd(featureRef)">
     <nz-button nz-button class="btn1" (click)="AddInvoice()">
       Add Bill
     </nz-button>
@@ -95,7 +95,6 @@
         <tr>
           <th class="tblheader" nzLeft>{{ 'SR.NO.' }}</th>
           <th *ngFor="let header of headers" class="tblheader">{{ header }}</th>
-          <th class="tblheader">{{ 'Action' }}</th>
         </tr>
       </thead>
       <tbody>
@@ -118,10 +117,10 @@
             <span style="margin-left: 9px; cursor: pointer" (click)="navigateToPrint(Invoice)">
               <img src="\assets\icons\printer.png" alt="logo" title="Print" width="20px" height="20px" /></span>
           </td> -->
-          <td class="tbldata action-column">
-            <Edit-Icon class="action-btn edit" (editClick)="onEditClicked(Invoice)" />
-            <Delete-Icon class="action-btn delete" (deleteClicked)="onDeleteClicked(Invoice)" />
-            <span style="margin-left: 9px; cursor: pointer" (click)="navigateToPrint(Invoice)">
+          <td class="tbldata action-column" *ngIf="showActionColumn">
+            <Edit-Icon class="action-btn edit" (editClick)="onEditClicked(Invoice)" *ngIf="access.canEdit(featureRef)"/>
+            <Delete-Icon class="action-btn delete" (deleteClicked)="onDeleteClicked(Invoice)"  *ngIf="access.canDelete(featureRef)"/>
+            <span style="margin-left: 9px; cursor: pointer" (click)="navigateToPrint(Invoice)" *ngIf="access.canPrint(featureRef)">
               <img src="\assets\icons\printer.png" alt="logo" title="Print" width="20px" height="20px" /></span>
           </td>
         </tr>
@@ -131,7 +130,6 @@
           <td class="tbldata">
             <b>{{ getTotalInvoice() | currency : "INR" }}</b>
           </td>
-          <td class="tbldata"></td>
         </tr>
       </tbody>
     </nz-table>

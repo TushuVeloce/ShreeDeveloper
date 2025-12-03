@@ -1,6 +1,12 @@
 import { Component, effect, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { DomainEnums, ModeOfPayments, OpeningBalanceModeOfPayments, PayerTypes } from 'src/app/classes/domain/domainenums/domainenums';
+import {
+  ApplicationFeatures,
+  DomainEnums,
+  ModeOfPayments,
+  OpeningBalanceModeOfPayments,
+  PayerTypes,
+} from 'src/app/classes/domain/domainenums/domainenums';
 import { Income } from 'src/app/classes/domain/entities/website/accounting/income/income';
 import { Ledger } from 'src/app/classes/domain/entities/website/masters/ledgermaster/ledger';
 import { OpeningBalance } from 'src/app/classes/domain/entities/website/masters/openingbalance/openingbalance';
@@ -10,6 +16,7 @@ import { AppStateManageService } from 'src/app/services/app-state-manage.service
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
 import { DateconversionService } from 'src/app/services/dateconversion.service';
 import { DTU } from 'src/app/services/dtu.service';
+import { FeatureAccessService } from 'src/app/services/feature-access.service';
 import { ScreenSizeService } from 'src/app/services/screensize.service';
 import { UIUtils } from 'src/app/services/uiutils.service';
 
@@ -25,12 +32,14 @@ export class IncomeComponent implements OnInit {
   AllList: Income[] = [];
   DisplayMasterList: Income[] = [];
   SiteList: Site[] = [];
-  Cash = OpeningBalanceModeOfPayments.Cash
+  Cash = OpeningBalanceModeOfPayments.Cash;
   BankList: OpeningBalance[] = [];
   LedgerList: Ledger[] = [];
   SubLedgerList: SubLedger[] = [];
   Bill = ModeOfPayments.Bill;
-  ModeofPaymentList = DomainEnums.ModeOfPaymentsList().filter(item => item.Ref != this.Bill);
+  ModeofPaymentList = DomainEnums.ModeOfPaymentsList().filter(
+    (item) => item.Ref != this.Bill
+  );
   SearchString: string = '';
   TotalIncome: number = 0;
   SelectedIncome: Income = Income.CreateNewInstance();
@@ -38,7 +47,7 @@ export class IncomeComponent implements OnInit {
   pageSize = 10; // Items per page
   currentPage = 1; // Initialize current page
   total = 0;
-  ModeOfPayments = ModeOfPayments
+  ModeOfPayments = ModeOfPayments;
 
   PayerList: Income[] = [];
   PayerTypesList = DomainEnums.PayerTypesList();
@@ -50,8 +59,23 @@ export class IncomeComponent implements OnInit {
 
   companyRef = this.companystatemanagement.SelectedCompanyRef;
 
-  headers: string[] = ['Date', 'Site Name', 'Ledger', 'Sub Ledger', 'Received By', 'Reason', 'Income Amount', 'Shree Balance', 'Mode of Payment', 'Action'];
-  printheaders: string[] = ['Sr.No.', 'Date', 'Site Name', 'Ledger', 'Sub Ledger', 'Received By', 'Reason', 'Income Amount', 'Shree Balance', 'Mode of Payment'];
+  // headers: string[] = ['Date', 'Site Name', 'Ledger', 'Sub Ledger', 'Received By', 'Reason', 'Income Amount', 'Shree Balance', 'Mode of Payment', 'Action'];
+  headers: string[] = [];
+  featureRef: ApplicationFeatures = ApplicationFeatures.Income;
+  showActionColumn = false;
+
+  printheaders: string[] = [
+    'Sr.No.',
+    'Date',
+    'Site Name',
+    'Ledger',
+    'Sub Ledger',
+    'Received By',
+    'Reason',
+    'Income Amount',
+    'Shree Balance',
+    'Mode of Payment',
+  ];
   constructor(
     private uiUtils: UIUtils,
     private router: Router,
@@ -60,10 +84,11 @@ export class IncomeComponent implements OnInit {
     private screenSizeService: ScreenSizeService,
     private companystatemanagement: CompanyStateManagement,
     private dtu: DTU,
+    public access: FeatureAccessService
   ) {
     effect(async () => {
-      this.Entity.p.IncomeModeOfPayment = 0
-      this.Entity.p.Ref = 0
+      this.Entity.p.IncomeModeOfPayment = 0;
+      this.Entity.p.Ref = 0;
       await this.getSiteListByCompanyRef();
       await this.getLedgerListByCompanyRef();
       await this.getIncomeListByCompanyRef();
@@ -76,40 +101,70 @@ export class IncomeComponent implements OnInit {
     this.appStateManage.setDropdownDisabled();
     this.loadPaginationData();
     const pageSize = this.screenSizeService.getPageSize('withDropdown');
-    this.pageSize = pageSize - 6
+    this.pageSize = pageSize - 6;
+    this.access.refresh();
+    this.showActionColumn =
+      this.access.canEdit(this.featureRef) ||
+      this.access.canDelete(this.featureRef);
+    this.headers = [
+      'Date',
+      'Site Name',
+      'Ledger',
+      'Sub Ledger',
+      'Received By',
+      'Reason',
+      'Income Amount',
+      'Shree Balance',
+      'Mode of Payment',
+      ...(this.showActionColumn ? ['Action'] : []),
+    ];
   }
 
   getSiteListByCompanyRef = async () => {
-    this.Entity.p.SiteRef = 0
-    this.Entity.p.Ref = 0
+    this.Entity.p.SiteRef = 0;
+    this.Entity.p.Ref = 0;
     if (this.companyRef() <= 0) {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
-    let lst = await Site.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    let lst = await Site.FetchEntireListByCompanyRef(
+      this.companyRef(),
+      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+    );
     this.SiteList = lst;
-  }
+  };
 
   public FormulateBankList = async () => {
     if (this.companyRef() <= 0) {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
-    let lst = await OpeningBalance.FetchEntireListByCompanyRef(this.companyRef(), async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg));
-    this.BankList = lst.filter((item) => item.p.BankAccountRef > 0 && (item.p.OpeningBalanceAmount > 0 || item.p.InitialBalance > 0));
+    let lst = await OpeningBalance.FetchEntireListByCompanyRef(
+      this.companyRef(),
+      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+    );
+    this.BankList = lst.filter(
+      (item) =>
+        item.p.BankAccountRef > 0 &&
+        (item.p.OpeningBalanceAmount > 0 || item.p.InitialBalance > 0)
+    );
   };
-
 
   onPayerChange = () => {
     let SingleRecord;
     try {
       if (this.Entity.p.PayerType == this.DealDoneCustomer) {
-        SingleRecord = this.PayerList.find((data) => data.p.PlotName == this.PayerPlotNo);
+        SingleRecord = this.PayerList.find(
+          (data) => data.p.PlotName == this.PayerPlotNo
+        );
       } else {
-        SingleRecord = this.PayerList.find((data) => data.p.Ref == this.Entity.p.PayerRef);
+        SingleRecord = this.PayerList.find(
+          (data) => data.p.Ref == this.Entity.p.PayerRef
+        );
       }
       if (SingleRecord?.p) {
-        this.Entity.p.IsRegisterCustomerRef = SingleRecord.p.IsRegisterCustomerRef;
+        this.Entity.p.IsRegisterCustomerRef =
+          SingleRecord.p.IsRegisterCustomerRef;
         this.Entity.p.PayerRef = SingleRecord.p.Ref;
         if (this.Entity.p.PayerType == this.DealDoneCustomer) {
           this.Entity.p.PlotName = SingleRecord.p.PlotName;
@@ -117,9 +172,8 @@ export class IncomeComponent implements OnInit {
         }
       }
       this.FetchEntireListByFilters();
-    } catch (error) {
-    }
-  }
+    } catch (error) {}
+  };
 
   getPayerListBySiteAndPayerType = async () => {
     this.Entity.p.PayerRef = 0;
@@ -132,34 +186,43 @@ export class IncomeComponent implements OnInit {
     if (this.Entity.p.PayerType <= 0) {
       return;
     }
-    let lst = await Income.FetchPayerNameByPayerTypeRef(this.Entity.p.SiteRef, this.companyRef(), this.Entity.p.PayerType, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    let lst = await Income.FetchPayerNameByPayerTypeRef(
+      this.Entity.p.SiteRef,
+      this.companyRef(),
+      this.Entity.p.PayerType,
+      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+    );
     this.PayerList = lst;
-  }
+  };
 
   getLedgerListByCompanyRef = async () => {
-    this.Entity.p.LedgerRef = 0
-    this.Entity.p.SubLedgerRef = 0
-    this.Entity.p.Ref = 0
+    this.Entity.p.LedgerRef = 0;
+    this.Entity.p.SubLedgerRef = 0;
+    this.Entity.p.Ref = 0;
     if (this.companyRef() <= 0) {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
-    let lst = await Ledger.FetchEntireListByCompanyRef(this.companyRef(),
+    let lst = await Ledger.FetchEntireListByCompanyRef(
+      this.companyRef(),
       async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
     );
-    this.LedgerList = lst
+    this.LedgerList = lst;
   };
 
   getSubLedgerListByLedgerRef = async (ledgerref: number) => {
-    this.Entity.p.SubLedgerRef = 0
-    this.Entity.p.Ref = 0
+    this.Entity.p.SubLedgerRef = 0;
+    this.Entity.p.Ref = 0;
     if (ledgerref <= 0) {
       await this.uiUtils.showErrorToster('Ledger not Selected');
       return;
     }
-    let lst = await SubLedger.FetchEntireListByLedgerRef(ledgerref, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    let lst = await SubLedger.FetchEntireListByLedgerRef(
+      ledgerref,
+      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+    );
     this.SubLedgerList = lst;
-  }
+  };
 
   FetchEntireListByFilters = async () => {
     this.MasterList = [];
@@ -169,8 +232,12 @@ export class IncomeComponent implements OnInit {
       return;
     }
 
-    this.Entity.p.StartDate = this.dtu.ConvertStringDateToFullFormat(this.StartDate);
-    this.Entity.p.EndDate = this.dtu.ConvertStringDateToFullFormat(this.EndDate);
+    this.Entity.p.StartDate = this.dtu.ConvertStringDateToFullFormat(
+      this.StartDate
+    );
+    this.Entity.p.EndDate = this.dtu.ConvertStringDateToFullFormat(
+      this.EndDate
+    );
 
     let lst = await Income.FetchEntireListByFilters(
       this.companyRef(),
@@ -184,16 +251,17 @@ export class IncomeComponent implements OnInit {
       this.Entity.p.PayerType,
       this.Entity.p.PayerRef,
       this.Entity.p.PlotRef,
-      async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+    );
     this.AllList = lst.filter((item) => item.p.Reason != '');
     this.MasterList = lst;
     this.DisplayMasterList = this.MasterList;
     this.loadPaginationData();
-  }
+  };
 
   ClearRef = () => {
-    this.Entity.p.Ref = 0
-  }
+    this.Entity.p.Ref = 0;
+  };
 
   getIncomeListByCompanyRef = async () => {
     this.MasterList = [];
@@ -202,21 +270,26 @@ export class IncomeComponent implements OnInit {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
-    let lst = await Income.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    let lst = await Income.FetchEntireListByCompanyRef(
+      this.companyRef(),
+      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+    );
     this.AllList = lst.filter((item) => item.p.Reason != '');
     this.MasterList = lst;
     this.DisplayMasterList = this.MasterList;
     this.loadPaginationData();
-  }
+  };
 
   // Extracted from services date conversion //
   formatDate = (date: string | Date): string => {
     return this.DateconversionService.formatDate(date);
-  }
+  };
 
   onEditClicked = async (item: Income) => {
     if (item.p.IsIncomeAutoGenerated) {
-      await this.uiUtils.showErrorToster('Edit Not allowed income Auto Generated');
+      await this.uiUtils.showErrorToster(
+        'Edit Not allowed income Auto Generated'
+      );
       return;
     }
     this.SelectedIncome = item.GetEditableVersion();
@@ -227,7 +300,9 @@ export class IncomeComponent implements OnInit {
 
   onDeleteClicked = async (Income: Income) => {
     if (Income.p.IsIncomeAutoGenerated) {
-      await this.uiUtils.showErrorToster('Edit Not allowed income Auto Generated');
+      await this.uiUtils.showErrorToster(
+        'Edit Not allowed income Auto Generated'
+      );
       return;
     }
     await this.uiUtils.showConfirmationMessage(
@@ -248,21 +323,30 @@ export class IncomeComponent implements OnInit {
   };
 
   filterByReason = () => {
-    this.DisplayMasterList = this.MasterList.filter((data) => data.p.Ref == this.Entity.p.Ref)
-  }
+    this.DisplayMasterList = this.MasterList.filter(
+      (data) => data.p.Ref == this.Entity.p.Ref
+    );
+  };
 
   getTotalIncome = () => {
-    this.TotalIncome = this.DisplayMasterList.reduce((total: number, item: any) => {
-      return total + Number(item.p?.IncomeAmount || 0);
-    }, 0);
+    this.TotalIncome = this.DisplayMasterList.reduce(
+      (total: number, item: any) => {
+        return total + Number(item.p?.IncomeAmount || 0);
+      },
+      0
+    );
 
     return this.TotalIncome;
-  }
+  };
 
   printIncome(): void {
     const printContents = document.getElementById('print-section')?.innerHTML;
     if (printContents) {
-      const popupWin = window.open('', '_blank', 'top=0,left=0,height=100%,width=auto');
+      const popupWin = window.open(
+        '',
+        '_blank',
+        'top=0,left=0,height=100%,width=auto'
+      );
       popupWin?.document.write(`
       <html>
         <head>
@@ -294,7 +378,6 @@ export class IncomeComponent implements OnInit {
     }
   }
 
-
   // For Pagination  start ----
   loadPaginationData = () => {
     this.total = this.DisplayMasterList.length; // Update total based on loaded data
@@ -303,12 +386,12 @@ export class IncomeComponent implements OnInit {
   paginatedList = () => {
     const start = (this.currentPage - 1) * this.pageSize;
     return this.DisplayMasterList.slice(start, start + this.pageSize);
-  }
+  };
 
   // 🔑 Whenever filteredList event is received
   onFilteredList(list: any[]) {
     this.DisplayMasterList = list;
-    this.currentPage = 1;   // reset to first page after filtering
+    this.currentPage = 1; // reset to first page after filtering
 
     this.loadPaginationData();
   }
@@ -323,6 +406,5 @@ export class IncomeComponent implements OnInit {
       return;
     }
     this.router.navigate(['/homepage/Website/Income_Details']);
-  }
+  };
 }
-

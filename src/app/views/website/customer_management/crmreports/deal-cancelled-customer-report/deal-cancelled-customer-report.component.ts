@@ -1,11 +1,13 @@
 import { Component, effect, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { ApplicationFeatures } from 'src/app/classes/domain/domainenums/domainenums';
 import { DealCancelledCustomer } from 'src/app/classes/domain/entities/website/customer_management/dealcancelledcustomer/dealcancelledcustomer';
 import { Site } from 'src/app/classes/domain/entities/website/masters/site/site';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
 import { DateconversionService } from 'src/app/services/dateconversion.service';
 import { DTU } from 'src/app/services/dtu.service';
+import { FeatureAccessService } from 'src/app/services/feature-access.service';
 import { ScreenSizeService } from 'src/app/services/screensize.service';
 import { UIUtils } from 'src/app/services/uiutils.service';
 
@@ -19,19 +21,37 @@ export class DealCancelledCustomerReportComponent implements OnInit {
   Entity: DealCancelledCustomer = DealCancelledCustomer.CreateNewInstance();
   MasterList: DealCancelledCustomer[] = [];
   DisplayMasterList: DealCancelledCustomer[] = [];
-  list: [] = []
+  list: [] = [];
   SiteList: Site[] = [];
   SearchString: string = '';
-  SelectedDealCancelledCustomer: DealCancelledCustomer = DealCancelledCustomer.CreateNewInstance();
+  SelectedDealCancelledCustomer: DealCancelledCustomer =
+    DealCancelledCustomer.CreateNewInstance();
   CustomerRef: number = 0;
   pageSize = 10;
   currentPage = 1;
   total = 0;
   companyRef = this.companystatemanagement.SelectedCompanyRef;
+  featureRef: ApplicationFeatures = ApplicationFeatures.DealCancelledCustomer;
 
-  headers: string[] = ['Site Name', 'Plot No', 'Customer Name', 'Address', 'City', 'Contact No', 'Reason '];
+  headers: string[] = [
+    'Site Name',
+    'Plot No',
+    'Customer Name',
+    'Address',
+    'City',
+    'Contact No',
+    'Reason ',
+  ];
 
-  constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private screenSizeService: ScreenSizeService, private companystatemanagement: CompanyStateManagement, private DateconversionService: DateconversionService, private dtu: DTU,
+  constructor(
+    private uiUtils: UIUtils,
+    private router: Router,
+    private appStateManage: AppStateManageService,
+    private screenSizeService: ScreenSizeService,
+    private companystatemanagement: CompanyStateManagement,
+    private DateconversionService: DateconversionService,
+    private dtu: DTU,
+    public access: FeatureAccessService
   ) {
     effect(async () => {
       await this.getSiteListByCompanyRef();
@@ -42,7 +62,8 @@ export class DealCancelledCustomerReportComponent implements OnInit {
   ngOnInit() {
     this.appStateManage.setDropdownDisabled();
     const pageSize = this.screenSizeService.getPageSize('withDropdown');
-    this.pageSize = pageSize
+    this.pageSize = pageSize;
+    this.access.refresh();
   }
 
   getSiteListByCompanyRef = async () => {
@@ -50,19 +71,22 @@ export class DealCancelledCustomerReportComponent implements OnInit {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
-    this.Entity.p.SiteRef = 0
-    let lst = await Site.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    this.Entity.p.SiteRef = 0;
+    let lst = await Site.FetchEntireListByCompanyRef(
+      this.companyRef(),
+      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+    );
     this.SiteList = lst;
     // if (this.SiteList.length > 0) {
     //   this.Entity.p.SiteRef = this.SiteList[0].p.Ref
     //   this.getDealCancelledCustomerListBySiteRef()
     // }
-  }
+  };
 
   // Extracted from services date conversion //
   formatDate = (date: string | Date): string => {
     return this.DateconversionService.formatDate(date);
-  }
+  };
 
   getDealCancelledCustomerListByCompanyRef = async () => {
     this.MasterList = [];
@@ -71,7 +95,8 @@ export class DealCancelledCustomerReportComponent implements OnInit {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
-    let lst = await DealCancelledCustomer.FetchEntireListByCompanyRef(this.companyRef(),
+    let lst = await DealCancelledCustomer.FetchEntireListByCompanyRef(
+      this.companyRef(),
       async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
     );
     this.MasterList = lst;
@@ -83,7 +108,9 @@ export class DealCancelledCustomerReportComponent implements OnInit {
     this.MasterList = [];
     this.DisplayMasterList = [];
 
-    let lst = await DealCancelledCustomer.FetchEntireListBySiteRef(this.Entity.p.SiteRef, this.companyRef(),
+    let lst = await DealCancelledCustomer.FetchEntireListBySiteRef(
+      this.Entity.p.SiteRef,
+      this.companyRef(),
       async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
     );
     this.MasterList = lst;
@@ -103,7 +130,7 @@ export class DealCancelledCustomerReportComponent implements OnInit {
   // 🔑 Whenever filteredList event is received
   onFilteredList(list: any[]) {
     this.DisplayMasterList = list;
-    this.currentPage = 1;   // reset to first page after filtering
+    this.currentPage = 1; // reset to first page after filtering
 
     this.loadPaginationData();
   }
@@ -115,7 +142,11 @@ export class DealCancelledCustomerReportComponent implements OnInit {
   printReport(): void {
     const printContents = document.getElementById('print-section')?.innerHTML;
     if (printContents) {
-      const popupWin = window.open('', '_blank', 'top=0,left=0,height=100%,width=auto');
+      const popupWin = window.open(
+        '',
+        '_blank',
+        'top=0,left=0,height=100%,width=auto'
+      );
       popupWin?.document.write(`
       <html>
         <head>
@@ -146,6 +177,4 @@ export class DealCancelledCustomerReportComponent implements OnInit {
       popupWin?.document.close();
     }
   }
-
 }
-

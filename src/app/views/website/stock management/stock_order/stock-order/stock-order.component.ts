@@ -81,7 +81,8 @@ export class StockOrderComponent implements OnInit {
     this.access.refresh();
     this.showActionColumn =
       this.access.canEdit(this.featureRef) ||
-      this.access.canDelete(this.featureRef) || this.access.canPrint(this.featureRef);
+      this.access.canDelete(this.featureRef) ||
+      this.access.canPrint(this.featureRef);
     this.headers = [
       'Site',
       'PO ID',
@@ -119,6 +120,9 @@ export class StockOrderComponent implements OnInit {
     ];
   }
 
+  noAccess() {
+    this.uiUtils.showWarningToster("You Don't have access of this feature");
+  }
   getSiteListByCompanyRef = async () => {
     this.Entity.p.SiteRef = 0;
     this.Entity.p.SiteName = '';

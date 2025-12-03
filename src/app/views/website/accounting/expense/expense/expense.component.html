@@ -7,7 +7,7 @@
       [filterFields]="['Date', 'SiteName', 'LedgerName','SubLedgerName','RecipientName','Reason','InvoiceAmount','GivenAmount','RemainingAmount','ShreesBalance','ModeOfPaymentName']"
       (filteredList)="onFilteredList($event)"></app-shared-filter>
   </div>
-  <div class="col-4 mb-2" routerLinkActive="active">
+  <div class="col-4 mb-2" routerLinkActive="active" *ngIf="access.canAdd(featureRef)">
     <nz-button nz-button class="btn1" (click)="AddExpense()">
       Add Expense
     </nz-button>
@@ -16,7 +16,7 @@
 <div class="row" *ngIf="DisplayMasterList.length > 0">
   <div class="col-4"></div>
   <div class="col-4"></div>
-  <div class="col-4 text-end">
+  <div class="col-4 text-end" *ngIf="access.canPrint(featureRef)">
     <img class="no-print" src="/assets/icons/printer.png" alt="Print" title="Print" width="30px" height="30px"
       style="cursor: pointer; padding-top: 4px" (click)="printReport()" />
   </div>
@@ -142,9 +142,9 @@
             <Edit-Icon (editClick)="onEditClicked(Expense)" />
             <Delete-Icon (deleteClicked)="onDeleteClicked(Expense)" />
           </td> -->
-          <td class="tbldata action-column">
-            <Edit-Icon class="action-btn edit" (editClick)="onEditClicked(Expense)" />
-            <Delete-Icon class="action-btn delete" (deleteClicked)="onDeleteClicked(Expense)" />
+          <td class="tbldata action-column" *ngIf="showActionColumn">
+            <Edit-Icon class="action-btn edit" (editClick)="onEditClicked(Expense)" *ngIf="access.canEdit(featureRef)"/>
+            <Delete-Icon class="action-btn delete" (deleteClicked)="onDeleteClicked(Expense)" *ngIf="access.canDelete(featureRef)"/>
           </td>
         </tr>
         <tr>

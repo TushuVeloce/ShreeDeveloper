@@ -1,6 +1,9 @@
 import { Component, effect, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { DomainEnums } from 'src/app/classes/domain/domainenums/domainenums';
+import {
+  ApplicationFeatures,
+  DomainEnums,
+} from 'src/app/classes/domain/domainenums/domainenums';
 import { Invoice } from 'src/app/classes/domain/entities/website/accounting/billing/invoice';
 import { Ledger } from 'src/app/classes/domain/entities/website/masters/ledgermaster/ledger';
 import { Site } from 'src/app/classes/domain/entities/website/masters/site/site';
@@ -9,6 +12,7 @@ import { AppStateManageService } from 'src/app/services/app-state-manage.service
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
 import { DateconversionService } from 'src/app/services/dateconversion.service';
 import { DTU } from 'src/app/services/dtu.service';
+import { FeatureAccessService } from 'src/app/services/feature-access.service';
 import { ScreenSizeService } from 'src/app/services/screensize.service';
 import { UIUtils } from 'src/app/services/uiutils.service';
 
@@ -39,7 +43,11 @@ export class InvoiceComponent implements OnInit {
 
   companyRef = this.companystatemanagement.SelectedCompanyRef;
 
-  headers: string[] = ['Date', 'Bill No', 'Site Name', 'Ledger', 'Sub Ledger', 'Reason', 'Recipient Name', 'Bill Amount'];
+  // headers: string[] = ['Date', 'Bill No', 'Site Name', 'Ledger', 'Sub Ledger', 'Reason', 'Recipient Name', 'Bill Amount'];
+  headers: string[] = [];
+  featureRef: ApplicationFeatures = ApplicationFeatures.Billing;
+  showActionColumn = false;
+
   constructor(
     private uiUtils: UIUtils,
     private router: Router,
@@ -48,9 +56,10 @@ export class InvoiceComponent implements OnInit {
     private companystatemanagement: CompanyStateManagement,
     private DateconversionService: DateconversionService,
     private dtu: DTU,
+    public access: FeatureAccessService
   ) {
     effect(async () => {
-      this.Entity.p.Ref = 0
+      this.Entity.p.Ref = 0;
       await this.getSiteListByCompanyRef();
       await this.getLedgerListByCompanyRef();
       // await this.getInvoiceListByCompanyRef();
@@ -62,22 +71,43 @@ export class InvoiceComponent implements OnInit {
     this.appStateManage.setDropdownDisabled();
     this.loadPaginationData();
     this.pageSize = this.screenSizeService.getPageSize('withoutDropdown');
+    this.access.refresh();
+    this.showActionColumn =
+      this.access.canPrint(this.featureRef) ||
+      this.access.canEdit(this.featureRef) ||
+      this.access.canDelete(this.featureRef);
+    this.headers = [
+      'Date',
+      'Bill No',
+      'Site Name',
+      'Ledger',
+      'Sub Ledger',
+      'Reason',
+      'Recipient Name',
+      'Bill Amount',
+      ...(this.showActionColumn ? ['Action'] : []),
+    ];
   }
 
   getSiteListByCompanyRef = async () => {
-    this.Entity.p.SiteRef = 0
-    this.Entity.p.Ref = 0
+    this.Entity.p.SiteRef = 0;
+    this.Entity.p.Ref = 0;
     if (this.companyRef() <= 0) {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
-    let lst = await Site.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    let lst = await Site.FetchEntireListByCompanyRef(
+      this.companyRef(),
+      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+    );
     this.SiteList = lst;
-  }
+  };
 
   filterByReason = () => {
-    this.DisplayMasterList = this.MasterList.filter((data) => data.p.Reason == this.Reason)
-  }
+    this.DisplayMasterList = this.MasterList.filter(
+      (data) => data.p.Reason == this.Reason
+    );
+  };
 
   getRecipientListByRecipientTypeRef = async () => {
     if (this.companyRef() <= 0) {
@@ -90,34 +120,43 @@ export class InvoiceComponent implements OnInit {
     }
 
     this.RecipientList = [];
-    let lst = await Invoice.FetchRecipientByRecipientTypeRef(this.companyRef(), this.Entity.p.SiteRef, this.Entity.p.RecipientType, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    let lst = await Invoice.FetchRecipientByRecipientTypeRef(
+      this.companyRef(),
+      this.Entity.p.SiteRef,
+      this.Entity.p.RecipientType,
+      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+    );
     this.RecipientList = lst;
-  }
+  };
 
   getLedgerListByCompanyRef = async () => {
-    this.Entity.p.LedgerRef = 0
-    this.Entity.p.SubLedgerRef = 0
-    this.Entity.p.Ref = 0
+    this.Entity.p.LedgerRef = 0;
+    this.Entity.p.SubLedgerRef = 0;
+    this.Entity.p.Ref = 0;
     if (this.companyRef() <= 0) {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
-    let lst = await Ledger.FetchEntireListByCompanyRef(this.companyRef(),
+    let lst = await Ledger.FetchEntireListByCompanyRef(
+      this.companyRef(),
       async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
     );
-    this.LedgerList = lst
+    this.LedgerList = lst;
   };
 
   getSubLedgerListByLedgerRef = async (ledgerref: number) => {
-    this.Entity.p.SubLedgerRef = 0
-    this.Entity.p.Ref = 0
+    this.Entity.p.SubLedgerRef = 0;
+    this.Entity.p.Ref = 0;
     if (ledgerref <= 0) {
       await this.uiUtils.showErrorToster('Ledger not Selected');
       return;
     }
-    let lst = await SubLedger.FetchEntireListByLedgerRef(ledgerref, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    let lst = await SubLedger.FetchEntireListByLedgerRef(
+      ledgerref,
+      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+    );
     this.SubLedgerList = lst;
-  }
+  };
 
   FetchEntireListByFilters = async () => {
     this.MasterList = [];
@@ -126,8 +165,12 @@ export class InvoiceComponent implements OnInit {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
-    this.Entity.p.StartDate = this.dtu.ConvertStringDateToFullFormat(this.Entity.p.StartDate);
-    this.Entity.p.EndDate = this.dtu.ConvertStringDateToFullFormat(this.Entity.p.EndDate);
+    this.Entity.p.StartDate = this.dtu.ConvertStringDateToFullFormat(
+      this.Entity.p.StartDate
+    );
+    this.Entity.p.EndDate = this.dtu.ConvertStringDateToFullFormat(
+      this.Entity.p.EndDate
+    );
 
     let lst = await Invoice.FetchEntireListByFilters(
       this.Entity.p.StartDate,
@@ -138,20 +181,24 @@ export class InvoiceComponent implements OnInit {
       this.Entity.p.RecipientRef,
       this.Entity.p.Ref,
       this.companyRef(),
-      async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+    );
     this.AllList = lst.filter(
       (item, index, self) =>
-        index === self.findIndex(t => t.p.Reason === item.p.Reason && item.p.Reason != '')
-    );;
+        index ===
+        self.findIndex(
+          (t) => t.p.Reason === item.p.Reason && item.p.Reason != ''
+        )
+    );
     this.MasterList = lst;
     this.DisplayMasterList = this.MasterList;
     console.log('this.DisplayMasterList :', this.DisplayMasterList);
     this.loadPaginationData();
-  }
+  };
 
   ClearRef = () => {
-    this.Entity.p.Ref = 0
-  }
+    this.Entity.p.Ref = 0;
+  };
 
   // getInvoiceListByCompanyRef = async () => {
   //   this.MasterList = [];
@@ -176,7 +223,9 @@ export class InvoiceComponent implements OnInit {
 
   onDeleteClicked = async (Invoice: Invoice) => {
     if (Invoice.p.IsInvoiceAutoGenerated) {
-      await this.uiUtils.showErrorToster("Bill is Auto Generated Can't be Deleted");
+      await this.uiUtils.showErrorToster(
+        "Bill is Auto Generated Can't be Deleted"
+      );
       return;
     }
     await this.uiUtils.showConfirmationMessage(
@@ -204,30 +253,33 @@ export class InvoiceComponent implements OnInit {
 
   navigateToPrint = async (item: Invoice) => {
     this.router.navigate(['/homepage/Website/Billing_Print'], {
-      state: { printData: item.GetEditableVersion() }
+      state: { printData: item.GetEditableVersion() },
     });
-  }
+  };
 
   paginatedList = () => {
     const start = (this.currentPage - 1) * this.pageSize;
     return this.DisplayMasterList.slice(start, start + this.pageSize);
-  }
+  };
 
   // 🔑 Whenever filteredList event is received
   onFilteredList(list: any[]) {
     this.DisplayMasterList = list;
-    this.currentPage = 1;   // reset to first page after filtering
+    this.currentPage = 1; // reset to first page after filtering
 
     this.loadPaginationData();
   }
 
   getTotalInvoice = () => {
-    this.TotalInvoice = this.DisplayMasterList.reduce((total: number, item: any) => {
-      return total + Number(item.p?.InvoiceAmount || 0);
-    }, 0);
+    this.TotalInvoice = this.DisplayMasterList.reduce(
+      (total: number, item: any) => {
+        return total + Number(item.p?.InvoiceAmount || 0);
+      },
+      0
+    );
 
     return this.TotalInvoice;
-  }
+  };
 
   onPageChange = (pageIndex: number): void => {
     this.currentPage = pageIndex; // Update the current page
@@ -236,7 +288,7 @@ export class InvoiceComponent implements OnInit {
   // Extracted from services date conversion //
   formatDate = (date: string | Date): string => {
     return this.DateconversionService.formatDate(date);
-  }
+  };
 
   AddInvoice = () => {
     if (this.companyRef() <= 0) {
@@ -244,5 +296,5 @@ export class InvoiceComponent implements OnInit {
       return;
     }
     this.router.navigate(['/homepage/Website/Billing_Details']);
-  }
+  };
 }

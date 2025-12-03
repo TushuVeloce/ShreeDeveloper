@@ -2,6 +2,7 @@ import { Component, effect, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import {
   AccountingReports,
+  ApplicationFeatures,
   DomainEnums,
   ModeOfPayments,
   OpeningBalanceModeOfPayments,
@@ -18,6 +19,7 @@ import { SubLedger } from 'src/app/classes/domain/entities/website/masters/suble
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
 import { DateconversionService } from 'src/app/services/dateconversion.service';
+import { FeatureAccessService } from 'src/app/services/feature-access.service';
 import { ScreenSizeService } from 'src/app/services/screensize.service';
 import { UIUtils } from 'src/app/services/uiutils.service';
 
@@ -72,13 +74,16 @@ export class AccountingReportComponent implements OnInit {
     'Mode of Payment',
     'Narration',
   ];
+   featureRef: ApplicationFeatures = ApplicationFeatures.OfficeReport;
+
   constructor(
     private uiUtils: UIUtils,
     private router: Router,
     private appStateManage: AppStateManageService,
     private screenSizeService: ScreenSizeService,
     private companystatemanagement: CompanyStateManagement,
-    private DateconversionService: DateconversionService
+    private DateconversionService: DateconversionService,
+     public access: FeatureAccessService
   ) {
     effect(async () => {
       this.Entity.p.AccountingReport = AccountingReports.CurrentFinancialYear;
@@ -98,6 +103,7 @@ export class AccountingReportComponent implements OnInit {
     this.loadPaginationData();
     const pageSize = this.screenSizeService.getPageSize('withDropdown');
     this.pageSize = pageSize - 6;
+    this.access.refresh();
   }
 
   getSiteListByCompanyRef = async () => {

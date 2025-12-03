@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { DomainEnums } from 'src/app/classes/domain/domainenums/domainenums';
 import { Employee } from 'src/app/classes/domain/entities/website/masters/employee/employee';
 import { SalarySlipRequest } from 'src/app/classes/domain/entities/website/request/salarysliprequest/salarysliprequest';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
@@ -52,6 +53,7 @@ export class SalarySlipApprovalMobileAppComponent implements OnInit {
   LoginToken = '';
   imageUrl: string | null = null;
   ProfilePicFile: File | null = null;
+  public monthList = DomainEnums.MonthList();
 
   constructor(
     private utils: Utils,
@@ -190,6 +192,10 @@ export class SalarySlipApprovalMobileAppComponent implements OnInit {
     this.MasterList = lst;
 
     this.DisplayMasterList = this.MasterList;
+  };
+
+  getMonthName = (ref: number) => {
+    return this.monthList.find((m) => m.Ref === ref)?.Name || '';
   };
 
   handleApproval = async (

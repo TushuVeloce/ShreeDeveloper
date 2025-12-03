@@ -56,7 +56,7 @@
           <td class="tbldata">
             <!-- PENDING -->
             <button class="status" *ngIf="!leaverequest.p.IsApproved && !leaverequest.p.IsCancelled"
-              [disabled]="isSaveDisabled" (click)="handleApproval(leaverequest)" ngClass="pending">
+              [disabled]="isSaveDisabled" (click)="access.canApprove(featureRef) ? handleApproval(leaverequest) :noAccess()" ngClass="pending">
               Pending
             </button>
 

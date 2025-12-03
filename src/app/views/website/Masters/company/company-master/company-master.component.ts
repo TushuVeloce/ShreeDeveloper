@@ -56,7 +56,7 @@ export class CompanyMasterComponent implements OnInit {
     this.ImageBaseUrl = this.baseUrl.GenerateImageBaseUrl();
     this.LoginToken = this.appStateManage.getLoginToken();
     this.pageSize = this.screenSizeService.getPageSize('withoutDropdown');
-    this.access.refresh()
+    this.access.refresh();
     this.showActionColumn = this.access.canEdit(this.featureRef) || this.access.canDelete(this.featureRef);
     this.headers = [
       'Logo',

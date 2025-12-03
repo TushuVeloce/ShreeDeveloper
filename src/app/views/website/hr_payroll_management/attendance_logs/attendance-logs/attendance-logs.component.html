@@ -21,7 +21,7 @@
       </button>
     </div>
     <div class="col-12 col-md-3"> </div>
-    <div class="col-12 col-md-2">
+    <div class="col-12 col-md-2" *ngIf="access.canAdd(featureRef)">
       <button type="button" class="mybtn" (click)="AddAttendance()">ADD ATTENDANCE</button>
     </div>
   </div>
@@ -147,7 +147,7 @@
             <td Class="tbldata" *ngIf="attendancelog.p.IsAbsent == false && attendancelog.p.IsLeave == false">
               <!-- PENDING -->
               <span class="status" ngClass="pending" *ngIf="!attendancelog.p.IsAttendanceVerified"
-                style="cursor: pointer;" (click)="ChangeAttendanceStatus(attendancelog)">
+                style="cursor: pointer;" (click)="access.canApprove(this.featureRef)?ChangeAttendanceStatus(attendancelog) : notAccess()">
                 Pending
               </span>
 
@@ -168,7 +168,7 @@
                 Absent
               </span>
             </td>
-            <td Class="tbldata action-column">
+            <td Class="tbldata action-column" *ngIf="showActionColumn">
               <span style="margin-left: 9px;" (click)="onEditClicked(attendancelog)">
                 <img src="/assets/icons/edit.png" alt="Edit" title="Edit" width="20px" height="20px" />
               </span>

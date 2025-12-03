@@ -87,7 +87,7 @@
                 <!-- PENDING -->
                 <span class="status" style="cursor: pointer;"
                   *ngIf="Order.p.MaterialPurchaseOrderStatus == MaterialPurchaseOrderStatus.Pending" ngClass="pending"
-                  (click)="NavigateOrderstatus(Order)">
+                  (click)="access.canApprove(featureRef) ? NavigateOrderstatus(Order) : noAccess()">
                   Pending
                 </span>
 

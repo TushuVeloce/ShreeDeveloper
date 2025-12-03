@@ -1,7 +1,9 @@
 import { Component, effect, OnInit } from '@angular/core';
+import { ApplicationFeatures } from 'src/app/classes/domain/domainenums/domainenums';
 import { CRMReports } from 'src/app/classes/domain/entities/website/customer_management/crmreports/crmreport';
 import { Site } from 'src/app/classes/domain/entities/website/masters/site/site';
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
+import { FeatureAccessService } from 'src/app/services/feature-access.service';
 import { UIUtils } from 'src/app/services/uiutils.service';
 
 @Component({
@@ -25,19 +27,22 @@ export class CustomerinfoReportComponent implements OnInit {
   total = 0;
 
   companyRef = this.companystatemanagement.SelectedCompanyRef;
-
+ featureRef: ApplicationFeatures = ApplicationFeatures.CustomerInfo;
   headers: string[] = ['Customer ID', 'Customer Name', 'Address', 'Contact No', 'PAN No', 'Aadhar No', 'Lead Source', 'Lead Handle By', 'Agent/Broker', 'Booking Remark', 'Plot No', 'Area in Sqm', 'Area in Sqft', 'Basic Rate', 'Discount Rate on Area', 'Discount On Plot Amount', 'Total Plot Amount', 'Government Recknor', 'Government Value', 'Value of Agreement', 'Reg Tax Value In %', 'Registration Fees', 'SD Tax Value In %', 'Stamp Duties', 'Goods Services Tax', 'Legal Charges', 'Total Extra Charges', 'Grand Total', 'Total Bank Recieved', 'Total Cash Recieved', 'Total Recieved (cash + cheque)', 'Total Cheque Balance', 'Total Cash Balance', 'Total Balance',];
 
   constructor(
     private uiUtils: UIUtils,
-    private companystatemanagement: CompanyStateManagement
+    private companystatemanagement: CompanyStateManagement,
+    public access: FeatureAccessService
   ) {
     effect(async () => {
       await this.FormulateSiteListByCompanyRef(); this.getCustomerReportByCompanyAndSiteRef();
     });
   }
 
-  ngOnInit() { }
+  ngOnInit() {
+     this.access.refresh()
+   }
 
 
   FormulateSiteListByCompanyRef = async () => {

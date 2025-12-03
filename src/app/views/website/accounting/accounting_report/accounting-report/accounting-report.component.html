@@ -10,7 +10,7 @@
   <div class="col-3 mb-1 search-container_light text-end">
     <p class="balance_title"><b>Shree Balance : {{Entity.p.ShreesBalance | currency : 'INR'}}</b></p>
   </div>
-  <div class="col-3 mb-1 text-end" *ngIf="DisplayMasterList.length > 0">
+  <div class="col-3 mb-1 text-end" *ngIf="DisplayMasterList.length > 0 && access.canPrint(featureRef)">
     <img class="no-print" src="/assets/icons/printer.png" alt="Print" title="Print" width="30px" height="30px"
       style="cursor: pointer; padding-top: 4px;" (click)="printReport()" />
   </div>

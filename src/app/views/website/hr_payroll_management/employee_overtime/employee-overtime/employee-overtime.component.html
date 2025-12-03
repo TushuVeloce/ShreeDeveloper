@@ -8,7 +8,7 @@
         [filterFields]="['Date', 'EmployeeName', 'FromTime', 'ToTime','DisplayOverTime']"
         (filteredList)="onFilteredList($event)"></app-shared-filter>
     </div>
-    <div class="col-4 mb-2" routerLinkActive="active">
+    <div class="col-4 mb-2" routerLinkActive="active" *ngIf="access.canAdd(featureRef)">
       <nz-button nz-button class="btn1" (click)='AddEmployeeOvertime()'>
         Add Overtime
       </nz-button>
@@ -37,7 +37,7 @@
             <td Class="tbldata">
               <!-- PENDING -->
               <span class="status" ngClass="pending" *ngIf="!overtime.p.IsOverTimeVerified" style="cursor: pointer;"
-                (click)="ChangeOvertimeStatus(overtime)">
+                (click)="access.canApprove(featureRef)? ChangeOvertimeStatus(overtime) : noAccess()">
                 Pending
               </span>
 
@@ -46,11 +46,11 @@
                 Approved
               </span>
             </td>
-            <td class="tbldata action-column">
-              <span style="margin-left: 9px;" (click)="onEditClicked(overtime);">
+            <td class="tbldata action-column" *ngIf="showActionColumn">
+              <span style="margin-left: 9px;" (click)="onEditClicked(overtime);" *ngIf="access.canEdit(featureRef)">
                 <img src="\assets\icons\edit.png" alt="logo" title="Edit" width="20px" height="20px" />
               </span>
-              <span style="margin-left: 9px;" (click)="onDeleteClicked(overtime);">
+              <span style="margin-left: 9px;" (click)="onDeleteClicked(overtime);" *ngIf="access.canDelete(featureRef)">
                 <img src="\assets\icons\delete.png" alt="logo" title="Delete" width="20px" height="20px" /></span>
             </td>
           </tr>

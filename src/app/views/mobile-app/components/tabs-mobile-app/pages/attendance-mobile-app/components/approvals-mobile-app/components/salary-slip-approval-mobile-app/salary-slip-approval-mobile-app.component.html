@@ -79,8 +79,8 @@
 
       <ion-label>
         <h3>{{ activity.p.EmployeeName }}</h3>
-        <p *ngFor="let item of activity.p.SelectedMonthsName">
-          {{ item }}
+        <p *ngFor="let item of activity.p.SelectedMonths">
+          {{ getMonthName(item) }}
         </p>
         <p>
           <strong>{{ activity.p.Year }}</strong>
