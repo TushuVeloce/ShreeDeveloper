@@ -1,10 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { CustomerStatus, DomainEnums } from 'src/app/classes/domain/domainenums/domainenums';
+import {
+  ApplicationFeatures,
+  CustomerStatus,
+  DomainEnums,
+} from 'src/app/classes/domain/domainenums/domainenums';
 import { CustomerEnquiry } from 'src/app/classes/domain/entities/website/customer_management/customerenquiry/customerenquiry';
 import { CustomerFollowUpProps } from 'src/app/classes/domain/entities/website/customer_management/customerfollowup/customerfollowup';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { DateconversionService } from 'src/app/services/dateconversion.service';
+import { FeatureAccessMobileAppService } from 'src/app/services/feature-access-mobile-app.service';
 import { FilterService } from 'src/app/services/filter.service';
 import { AlertService } from 'src/app/views/mobile-app/components/core/alert.service';
 import { HapticService } from 'src/app/views/mobile-app/components/core/haptic.service';
@@ -16,13 +21,14 @@ import { FilterItem } from 'src/app/views/mobile-app/components/shared/chip-filt
   selector: 'app-customer-enquiry-view-mobile-app',
   templateUrl: './customer-enquiry-view-mobile-app.component.html',
   styleUrls: ['./customer-enquiry-view-mobile-app.component.scss'],
-  standalone: false
+  standalone: false,
 })
 export class CustomerEnquiryViewMobileAppComponent implements OnInit {
   Entity: CustomerEnquiry = CustomerEnquiry.CreateNewInstance();
   CustomerEnquiryList: CustomerEnquiry[] = [];
   FilteredCustomerEnquiryList: CustomerEnquiry[] = [];
-  SelectedCustomerEnquiry: CustomerEnquiry = CustomerEnquiry.CreateNewInstance();
+  SelectedCustomerEnquiry: CustomerEnquiry =
+    CustomerEnquiry.CreateNewInstance();
 
   SearchString: string = '';
   ModalOpen: boolean = false;
@@ -37,12 +43,12 @@ export class CustomerEnquiryViewMobileAppComponent implements OnInit {
     { label: 'Interested', value: CustomerStatus.Interested },
     { label: 'In-process', value: CustomerStatus.LeadInprocess },
     { label: 'Closed', value: CustomerStatus.LeadClosed },
-    { label: 'Converted', value: CustomerStatus.ConvertToDeal }
+    { label: 'Converted', value: CustomerStatus.ConvertToDeal },
   ];
   filters: FilterItem[] = [];
   // Store current selected values here to preserve selections on filter reload
   selectedFilterValues: Record<string, any> = {};
-
+  featureRef: ApplicationFeatures = ApplicationFeatures.CustomerEnquiry;
 
   constructor(
     private router: Router,
@@ -52,13 +58,15 @@ export class CustomerEnquiryViewMobileAppComponent implements OnInit {
     private alertService: AlertService,
     public loadingService: LoadingService,
     private DateconversionService: DateconversionService,
-  ) { }
+    public access: FeatureAccessMobileAppService
+  ) {}
 
   ngOnInit = (): void => {
     // this.loadCRMIfCompanyExists();
-  }
+  };
 
   ionViewWillEnter = async () => {
+    this.access.refresh();
     await this.loadCRMIfCompanyExists();
     this.loadFilters();
   };
@@ -67,7 +75,7 @@ export class CustomerEnquiryViewMobileAppComponent implements OnInit {
     await this.loadCRMIfCompanyExists();
     this.loadFilters();
     (event.target as HTMLIonRefresherElement).complete();
-  }
+  };
 
   loadFilters = () => {
     this.filters = [
@@ -75,19 +83,23 @@ export class CustomerEnquiryViewMobileAppComponent implements OnInit {
         key: 'status',
         label: 'Status',
         multi: false,
-        options: this.CustomerStatusList.map(item => ({
+        options: this.CustomerStatusList.map((item) => ({
           Ref: item.Ref,
           Name: item.Name,
         })),
-        selected: this.selectedFilterValues['status'] > 0 ? this.selectedFilterValues['status'] : null,
-      }
+        selected:
+          this.selectedFilterValues['status'] > 0
+            ? this.selectedFilterValues['status']
+            : null,
+      },
     ];
-  }
+  };
 
   onFiltersChanged = async (updatedFilters: any[]) => {
     for (const filter of updatedFilters) {
       const selected = filter.selected;
-      const selectedValue = (selected === null || selected === undefined) ? null : selected;
+      const selectedValue =
+        selected === null || selected === undefined ? null : selected;
 
       // Save selected value to preserve after reload
       this.selectedFilterValues[filter.key] = selectedValue ?? null;
@@ -100,16 +112,18 @@ export class CustomerEnquiryViewMobileAppComponent implements OnInit {
     }
     this.filterCustomerList();
     this.loadFilters(); // Reload filters with updated options & preserve selections
-  }
+  };
   private loadCRMIfCompanyExists = async (): Promise<void> => {
-    this.companyRef = Number(this.appStateManagement.localStorage.getItem('SelectedCompanyRef'));
+    this.companyRef = Number(
+      this.appStateManagement.localStorage.getItem('SelectedCompanyRef')
+    );
     if (this.companyRef <= 0) {
       await this.toastService.present('company not selected', 1000, 'danger');
       await this.haptic.error();
       return;
     }
     await this.getCustomerEnquiryListByCompanyRef();
-  }
+  };
 
   getCustomerEnquiryListByCompanyRef = async () => {
     try {
@@ -129,14 +143,16 @@ export class CustomerEnquiryViewMobileAppComponent implements OnInit {
         }
       );
       this.CustomerEnquiryList = lst;
-      this.CustomerEnquiryList.forEach(e => e.p.CustomerFollowUps.push(CustomerFollowUpProps.Blank()))
+      this.CustomerEnquiryList.forEach((e) =>
+        e.p.CustomerFollowUps.push(CustomerFollowUpProps.Blank())
+      );
       this.FilteredCustomerEnquiryList = this.CustomerEnquiryList;
       this.filterCustomerList();
     } catch (error: any) {
     } finally {
       await this.loadingService.hide();
     }
-  }
+  };
 
   filterCustomerList = () => {
     if (this.selectedStatus === 0) {
@@ -146,7 +162,7 @@ export class CustomerEnquiryViewMobileAppComponent implements OnInit {
         (customer) => customer.p.CustomerStatus === this.selectedStatus
       );
     }
-  }
+  };
 
   onEditClicked = async (item: CustomerEnquiry) => {
     try {
@@ -154,9 +170,10 @@ export class CustomerEnquiryViewMobileAppComponent implements OnInit {
       this.SelectedCustomerEnquiry = item.GetEditableVersion();
       CustomerEnquiry.SetCurrentInstance(this.SelectedCustomerEnquiry);
       this.appStateManagement.StorageKey.setItem('Editable', 'Edit');
-      this.router.navigate(['mobile-app/tabs/dashboard/customer-relationship-management/customer-enquiry/edit']);
-    } catch (error: any) {
-    }
+      this.router.navigate([
+        'mobile-app/tabs/dashboard/customer-relationship-management/customer-enquiry/edit',
+      ]);
+    } catch (error: any) {}
   };
 
   onDeleteClicked = async (item: CustomerEnquiry) => {
@@ -170,8 +187,7 @@ export class CustomerEnquiryViewMobileAppComponent implements OnInit {
             text: 'Cancel',
             role: 'cancel',
             cssClass: 'custom-cancel',
-            handler: () => {
-            }
+            handler: () => {},
           },
           {
             text: 'Yes, Delete',
@@ -186,24 +202,22 @@ export class CustomerEnquiryViewMobileAppComponent implements OnInit {
                   );
                 });
                 await this.getCustomerEnquiryListByCompanyRef();
-              } catch (err) {
-              }
-            }
-          }
-        ]
+              } catch (err) {}
+            },
+          },
+        ],
       });
-    } catch (error: any) {
-    }
+    } catch (error: any) {}
   };
 
   onViewClicked = async (item: CustomerEnquiry) => {
     this.SelectedCustomerEnquiry = item;
     this.ModalOpen = true;
-  }
+  };
 
   closeModal = () => {
     this.ModalOpen = false;
-  }
+  };
 
   AddCustomerEnquiryForm = async () => {
     try {
@@ -212,20 +226,20 @@ export class CustomerEnquiryViewMobileAppComponent implements OnInit {
         await this.haptic.error();
         return;
       }
-      this.router.navigate(['mobile-app/tabs/dashboard/customer-relationship-management/customer-enquiry/add']);
-    } catch (error: any) {
-    }
-  }
+      this.router.navigate([
+        'mobile-app/tabs/dashboard/customer-relationship-management/customer-enquiry/add',
+      ]);
+    } catch (error: any) {}
+  };
 
   formatData = (list: any[]) => {
-    return list.map(item => ({
+    return list.map((item) => ({
       Ref: item.p.Ref,
-      Name: item.p.Name
+      Name: item.p.Name,
     }));
   };
 
   formatDate = (date: string | Date): string => {
     return this.DateconversionService.formatDate(date);
-  }
-
+  };
 }

@@ -1,12 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { DomainEnums, ExpenseTypes } from 'src/app/classes/domain/domainenums/domainenums';
+import {
+  ApplicationFeatures,
+  DomainEnums,
+  ExpenseTypes,
+} from 'src/app/classes/domain/domainenums/domainenums';
 import { Invoice } from 'src/app/classes/domain/entities/website/accounting/billing/invoice';
 import { Ledger } from 'src/app/classes/domain/entities/website/masters/ledgermaster/ledger';
 import { Site } from 'src/app/classes/domain/entities/website/masters/site/site';
 import { SubLedger } from 'src/app/classes/domain/entities/website/masters/subledgermaster/subledger';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { DateconversionService } from 'src/app/services/dateconversion.service';
+import { FeatureAccessMobileAppService } from 'src/app/services/feature-access-mobile-app.service';
 import { AlertService } from 'src/app/views/mobile-app/components/core/alert.service';
 import { HapticService } from 'src/app/views/mobile-app/components/core/haptic.service';
 import { LoadingService } from 'src/app/views/mobile-app/components/core/loading.service';
@@ -17,7 +22,7 @@ import { FilterItem } from 'src/app/views/mobile-app/components/shared/chip-filt
   selector: 'app-invoice-view-mobile-app',
   templateUrl: './invoice-view-mobile-app.component.html',
   styleUrls: ['./invoice-view-mobile-app.component.scss'],
-  standalone: false
+  standalone: false,
 })
 export class InvoiceViewMobileAppComponent implements OnInit {
   Entity: Invoice = Invoice.CreateNewInstance();
@@ -34,22 +39,43 @@ export class InvoiceViewMobileAppComponent implements OnInit {
   ReasonList: Invoice[] = [];
   LedgerList: Ledger[] = [];
   SubLedgerList: SubLedger[] = [];
-  MachineTableHeaderData = ['Machine Start Time', 'Machine End Time', 'Machine Worked Hours'];
-  LabourTableHeaderData = ['Labour Type', 'Days', 'Labour Quantity', 'Labour Rate', 'Labour Amount'];
-  MaterialTableHeaderData: string[] = ['Material', 'Unit', 'Order Quantity', 'Rate', 'Discount Rate', 'GST', 'Delivery Charges', 'Total Amount'];
+  MachineTableHeaderData = [
+    'Machine Start Time',
+    'Machine End Time',
+    'Machine Worked Hours',
+  ];
+  LabourTableHeaderData = [
+    'Labour Type',
+    'Days',
+    'Labour Quantity',
+    'Labour Rate',
+    'Labour Amount',
+  ];
+  MaterialTableHeaderData: string[] = [
+    'Material',
+    'Unit',
+    'Order Quantity',
+    'Rate',
+    'Discount Rate',
+    'GST',
+    'Delivery Charges',
+    'Total Amount',
+  ];
 
   RecipientList: Invoice[] = [];
   RecipientTypesList = DomainEnums.RecipientTypesList();
   // Store current selected values here to preserve selections on filter reload
   selectedFilterValues: Record<string, any> = {};
   MultipleHeaders: string[] = [
-      'Discription',
-      'Unit',
-      'Quantity ',
-      'Rate',
-      'Amount',
-    ];
-    MultipleExpenseRef: number = ExpenseTypes.MultipleExpense;
+    'Discription',
+    'Unit',
+    'Quantity ',
+    'Rate',
+    'Amount',
+  ];
+  MultipleExpenseRef: number = ExpenseTypes.MultipleExpense;
+  featureRef: ApplicationFeatures = ApplicationFeatures.Billing;
+  showActionColumn = false;
 
   constructor(
     private router: Router,
@@ -59,13 +85,19 @@ export class InvoiceViewMobileAppComponent implements OnInit {
     private haptic: HapticService,
     private alertService: AlertService,
     public loadingService: LoadingService,
-  ) { }
+    public access: FeatureAccessMobileAppService
+  ) {}
 
   ngOnInit = async () => {
     // await this.loadInvoiceIfEmployeeExists();
   };
 
   ionViewWillEnter = async () => {
+    this.access.refresh();
+    this.showActionColumn =
+      this.access.canPrint(this.featureRef) ||
+      this.access.canEdit(this.featureRef) ||
+      this.access.canDelete(this.featureRef);
     await this.loadInvoiceIfEmployeeExists();
     this.loadFilters();
   };
@@ -76,58 +108,76 @@ export class InvoiceViewMobileAppComponent implements OnInit {
         key: 'site',
         label: 'Site',
         multi: false,
-        options: this.SiteList.map(item => ({
+        options: this.SiteList.map((item) => ({
           Ref: item.p.Ref,
           Name: item.p.Name,
         })),
-        selected: this.selectedFilterValues['site'] > 0 ? this.selectedFilterValues['site'] : null,
+        selected:
+          this.selectedFilterValues['site'] > 0
+            ? this.selectedFilterValues['site']
+            : null,
       },
       {
         key: 'ledger',
         label: 'Ledger',
         multi: false,
-        options: this.LedgerList.map(item => ({
+        options: this.LedgerList.map((item) => ({
           Ref: item.p.Ref,
           Name: item.p.Name,
         })),
-        selected: this.selectedFilterValues['ledger'] > 0 ? this.selectedFilterValues['ledger'] : null,
+        selected:
+          this.selectedFilterValues['ledger'] > 0
+            ? this.selectedFilterValues['ledger']
+            : null,
       },
       {
         key: 'subledger',
         label: 'Sub Ledger',
         multi: false,
-        options: this.SubLedgerList.map(item => ({
+        options: this.SubLedgerList.map((item) => ({
           Ref: item.p.Ref,
           Name: item.p.Name,
         })),
-        selected: this.selectedFilterValues['subledger'] > 0 ? this.selectedFilterValues['subledger'] : null,
+        selected:
+          this.selectedFilterValues['subledger'] > 0
+            ? this.selectedFilterValues['subledger']
+            : null,
       },
       {
         key: 'ToWhomType',
         label: 'To Whom Type',
         multi: false,
         options: this.RecipientTypesList,
-        selected: this.selectedFilterValues['ToWhomType'] > 0 ? this.selectedFilterValues['ToWhomType'] : null,
+        selected:
+          this.selectedFilterValues['ToWhomType'] > 0
+            ? this.selectedFilterValues['ToWhomType']
+            : null,
       },
       {
         key: 'ToWhom',
         label: 'To Whom',
         multi: false,
-        options: this.RecipientList.map(item => ({
+        options: this.RecipientList.map((item) => ({
           Ref: item.p.Ref,
           Name: item.p.RecipientName,
         })),
-        selected: this.selectedFilterValues['ToWhom'] > 0 ? this.selectedFilterValues['ToWhom'] : null,
+        selected:
+          this.selectedFilterValues['ToWhom'] > 0
+            ? this.selectedFilterValues['ToWhom']
+            : null,
       },
       {
         key: 'reason',
         label: 'Reason',
         multi: false,
-        options: this.ReasonList.map(item => ({
+        options: this.ReasonList.map((item) => ({
           Ref: item.p.Ref,
           Name: item.p.Reason,
         })),
-        selected: this.selectedFilterValues['reason'] > 0 ? this.selectedFilterValues['reason'] : null,
+        selected:
+          this.selectedFilterValues['reason'] > 0
+            ? this.selectedFilterValues['reason']
+            : null,
       },
       // {
       //   key: 'modeOfPayment',
@@ -140,14 +190,13 @@ export class InvoiceViewMobileAppComponent implements OnInit {
       //   selected: this.selectedFilterValues['modeOfPayment'] > 0 ? this.selectedFilterValues['modeOfPayment'] : null,
       // }
     ];
-  }
-
+  };
 
   onFiltersChanged = async (updatedFilters: any[]) => {
-
     for (const filter of updatedFilters) {
       const selected = filter.selected;
-      const selectedValue = (selected === null || selected === undefined) ? null : selected;
+      const selectedValue =
+        selected === null || selected === undefined ? null : selected;
 
       // Save selected value to preserve after reload
       this.selectedFilterValues[filter.key] = selectedValue ?? null;
@@ -167,7 +216,8 @@ export class InvoiceViewMobileAppComponent implements OnInit {
 
         case 'ledger':
           this.Entity.p.LedgerRef = selectedValue ?? 0;
-          if (selectedValue != null) await this.getSubLedgerListByLedgerRef(selectedValue);  // Updates SubLedgerList
+          if (selectedValue != null)
+            await this.getSubLedgerListByLedgerRef(selectedValue); // Updates SubLedgerList
           break;
 
         case 'ToWhom':
@@ -178,7 +228,8 @@ export class InvoiceViewMobileAppComponent implements OnInit {
           this.Entity.p.RecipientType = selectedValue ?? 0;
           // this.Entity.p.RecipientRef = 0;
           // this.RecipientList=[];
-          if (selectedValue != null) await this.getRecipientListByRecipientTypeRef();  // Updates SubLedgerList
+          if (selectedValue != null)
+            await this.getRecipientListByRecipientTypeRef(); // Updates SubLedgerList
           break;
 
         case 'modeOfPayment':
@@ -188,12 +239,12 @@ export class InvoiceViewMobileAppComponent implements OnInit {
     }
     await this.FetchEntireListByFilters();
     this.loadFilters(); // Reload filters with updated options & preserve selections
-  }
+  };
 
   handleRefresh = async (event: CustomEvent) => {
     await this.loadInvoiceIfEmployeeExists();
     (event.target as HTMLIonRefresherElement).complete();
-  }
+  };
 
   convertTo12HourFormat = (time: string): string => {
     const [hourStr, minuteStr] = time.split(':');
@@ -205,13 +256,14 @@ export class InvoiceViewMobileAppComponent implements OnInit {
     hour = hour === 0 ? 12 : hour;
 
     return `${hour}:${minute.toString().padStart(2, '0')} ${ampm}`;
-  }
+  };
 
   private loadInvoiceIfEmployeeExists = async () => {
     try {
       await this.loadingService.show();
 
-      const company = this.appStateManage.localStorage.getItem('SelectedCompanyRef');
+      const company =
+        this.appStateManage.localStorage.getItem('SelectedCompanyRef');
       this.companyRef = Number(company || 0);
 
       if (this.companyRef <= 0) {
@@ -230,7 +282,7 @@ export class InvoiceViewMobileAppComponent implements OnInit {
     } finally {
       await this.loadingService.hide();
     }
-  }
+  };
 
   FetchEntireListByFilters = async () => {
     this.MasterList = [];
@@ -249,13 +301,14 @@ export class InvoiceViewMobileAppComponent implements OnInit {
       this.Entity.p.RecipientRef,
       this.Entity.p.Ref,
       this.companyRef,
-      async errMsg => {
+      async (errMsg) => {
         await this.toastService.present(errMsg, 1000, 'danger');
         await this.haptic.error();
-      });
+      }
+    );
     this.MasterList = lst;
     this.DisplayMasterList = this.MasterList;
-  }
+  };
 
   getRecipientListByRecipientTypeRef = async () => {
     if (this.companyRef <= 0) {
@@ -270,13 +323,18 @@ export class InvoiceViewMobileAppComponent implements OnInit {
     }
 
     this.RecipientList = [];
-    let lst = await Invoice.FetchRecipientByRecipientTypeRef(this.companyRef, this.Entity.p.SiteRef, this.Entity.p.RecipientType, async errMsg => {
-      await this.toastService.present('Error ' + errMsg, 1000, 'danger');
-      await this.haptic.error();
-    });
+    let lst = await Invoice.FetchRecipientByRecipientTypeRef(
+      this.companyRef,
+      this.Entity.p.SiteRef,
+      this.Entity.p.RecipientType,
+      async (errMsg) => {
+        await this.toastService.present('Error ' + errMsg, 1000, 'danger');
+        await this.haptic.error();
+      }
+    );
     this.RecipientList = lst;
     this.loadFilters();
-  }
+  };
 
   getSiteListByCompanyRef = async () => {
     if (this.companyRef <= 0) {
@@ -284,13 +342,16 @@ export class InvoiceViewMobileAppComponent implements OnInit {
       await this.haptic.error();
       return;
     }
-    const lst = await Site.FetchEntireListByCompanyRef(this.companyRef, async errMsg => {
-      await this.toastService.present('Error ' + errMsg, 1000, 'danger');
-      await this.haptic.error();
-    });
+    const lst = await Site.FetchEntireListByCompanyRef(
+      this.companyRef,
+      async (errMsg) => {
+        await this.toastService.present('Error ' + errMsg, 1000, 'danger');
+        await this.haptic.error();
+      }
+    );
     this.SiteList = lst;
     this.loadFilters();
-  }
+  };
 
   getLedgerListByCompanyRef = async () => {
     if (this.companyRef <= 0) {
@@ -298,10 +359,13 @@ export class InvoiceViewMobileAppComponent implements OnInit {
       await this.haptic.error();
       return;
     }
-    const lst = await Ledger.FetchEntireListByCompanyRef(this.companyRef, async errMsg => {
-      await this.toastService.present('Error ' + errMsg, 1000, 'danger');
-      await this.haptic.error();
-    });
+    const lst = await Ledger.FetchEntireListByCompanyRef(
+      this.companyRef,
+      async (errMsg) => {
+        await this.toastService.present('Error ' + errMsg, 1000, 'danger');
+        await this.haptic.error();
+      }
+    );
     this.LedgerList = lst;
     this.loadFilters();
   };
@@ -312,13 +376,16 @@ export class InvoiceViewMobileAppComponent implements OnInit {
       await this.haptic.error();
       return;
     }
-    const lst = await SubLedger.FetchEntireListByLedgerRef(ledgerref, async errMsg => {
-      await this.toastService.present('Error ' + errMsg, 1000, 'danger');
-      await this.haptic.error();
-    });
+    const lst = await SubLedger.FetchEntireListByLedgerRef(
+      ledgerref,
+      async (errMsg) => {
+        await this.toastService.present('Error ' + errMsg, 1000, 'danger');
+        await this.haptic.error();
+      }
+    );
     this.SubLedgerList = lst;
     this.loadFilters();
-  }
+  };
 
   getInvoiceListByCompanyRef = async () => {
     this.MasterList = [];
@@ -328,20 +395,25 @@ export class InvoiceViewMobileAppComponent implements OnInit {
       await this.haptic.warning();
       return;
     }
-    const lst = await Invoice.FetchEntireListByCompanyRef(this.companyRef, async errMsg => {
-      await this.toastService.present('Error ' + errMsg, 1000, 'danger');
-      await this.haptic.error();
-    });
+    const lst = await Invoice.FetchEntireListByCompanyRef(
+      this.companyRef,
+      async (errMsg) => {
+        await this.toastService.present('Error ' + errMsg, 1000, 'danger');
+        await this.haptic.error();
+      }
+    );
     this.MasterList = lst;
     this.ReasonList = lst.filter((item) => item.p.Reason != '');
     this.DisplayMasterList = this.MasterList;
-  }
+  };
 
   onEditClicked = async (item: Invoice) => {
     this.SelectedInvoice = item.GetEditableVersion();
     Invoice.SetCurrentInstance(this.SelectedInvoice);
     this.appStateManage.StorageKey.setItem('Editable', 'Edit');
-    await this.router.navigate(['/mobile-app/tabs/dashboard/accounting/invoice/edit']);
+    await this.router.navigate([
+      '/mobile-app/tabs/dashboard/accounting/invoice/edit',
+    ]);
   };
 
   onDeleteClicked = async (item: Invoice) => {
@@ -355,8 +427,7 @@ export class InvoiceViewMobileAppComponent implements OnInit {
             text: 'Cancel',
             role: 'cancel',
             cssClass: 'custom-cancel',
-            handler: () => {
-            }
+            handler: () => {},
           },
           {
             text: 'Yes, Delete',
@@ -376,25 +447,28 @@ export class InvoiceViewMobileAppComponent implements OnInit {
               } finally {
                 await this.loadingService.hide();
               }
-            }
-          }
-        ]
+            },
+          },
+        ],
       });
     } catch (error) {
       await this.toastService.present('Something went wrong', 1000, 'danger');
       await this.haptic.error();
     }
-  }
+  };
 
   navigateToPrint = async (item: Invoice) => {
-    this.router.navigate(['/mobile-app/tabs/dashboard/accounting/invoice/print'], {
-      state: { printData: item.GetEditableVersion() }
-    });
-  }
+    this.router.navigate(
+      ['/mobile-app/tabs/dashboard/accounting/invoice/print'],
+      {
+        state: { printData: item.GetEditableVersion() },
+      }
+    );
+  };
 
   formatDate = (date: string | Date): string => {
     return this.DateconversionService.formatDate(date);
-  }
+  };
 
   AddInvoice = () => {
     if (this.companyRef <= 0) {
@@ -403,15 +477,15 @@ export class InvoiceViewMobileAppComponent implements OnInit {
       return;
     }
     this.router.navigate(['mobile-app/tabs/dashboard/accounting/invoice/add']);
-  }
+  };
 
   openModal = (Invoice: any) => {
     this.SelectedInvoice = Invoice;
     this.modalOpen = true;
-  }
+  };
 
   closeModal = () => {
     this.modalOpen = false;
     this.SelectedInvoice = Invoice.CreateNewInstance();
-  }
+  };
 }

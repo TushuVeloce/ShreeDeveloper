@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {
   AccountingReports,
+  ApplicationFeatures,
   DomainEnums,
   ModeOfPayments,
   OpeningBalanceModeOfPayments,
@@ -16,6 +17,8 @@ import { Site } from 'src/app/classes/domain/entities/website/masters/site/site'
 import { SubLedger } from 'src/app/classes/domain/entities/website/masters/subledgermaster/subledger';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { DateconversionService } from 'src/app/services/dateconversion.service';
+import { FeatureAccessMobileAppService } from 'src/app/services/feature-access-mobile-app.service';
+import { FeatureAccessService } from 'src/app/services/feature-access.service';
 import { HapticService } from 'src/app/views/mobile-app/components/core/haptic.service';
 import { LoadingService } from 'src/app/views/mobile-app/components/core/loading.service';
 import { PDFService } from 'src/app/views/mobile-app/components/core/pdf.service';
@@ -78,6 +81,7 @@ export class OfficeViewMobileAppComponent implements OnInit {
 
   // Store current selected values here to preserve selections on filter reload
   selectedFilterValues: Record<string, any> = {};
+  featureRef: ApplicationFeatures = ApplicationFeatures.OfficeReport;
 
   constructor(
     private appStateManage: AppStateManageService,
@@ -85,11 +89,13 @@ export class OfficeViewMobileAppComponent implements OnInit {
     private toastService: ToastService,
     private haptic: HapticService,
     public loadingService: LoadingService,
-    private pdfService: PDFService
+    private pdfService: PDFService,
+    public access: FeatureAccessMobileAppService
   ) {}
 
   ngOnInit = async () => {
     // await this.loadAccountingReportIfEmployeeExists();
+     this.access.refresh();
   };
 
   ionViewWillEnter = async () => {

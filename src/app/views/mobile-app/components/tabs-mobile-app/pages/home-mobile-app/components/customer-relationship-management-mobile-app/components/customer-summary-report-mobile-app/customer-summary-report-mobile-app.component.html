@@ -9,7 +9,7 @@
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
 
-  <div style="display:flex; justify-content:flex-end; align-items:center; padding:12px 16px 0 16px;">
+  <div style="display:flex; justify-content:flex-end; align-items:center; padding:12px 16px 0 16px;" *ngIf="access.canPrint(featureRef)">
     <ion-button (click)="handlePrintOrShare()" size="small" fill="outline" color="primary">
       <ion-icon slot="start" name="share-outline"></ion-icon>
       Share

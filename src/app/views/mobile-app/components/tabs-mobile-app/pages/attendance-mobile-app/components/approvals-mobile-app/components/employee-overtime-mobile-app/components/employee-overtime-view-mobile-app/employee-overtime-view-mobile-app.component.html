@@ -52,7 +52,7 @@
     </div>
   </ng-template>
 
-  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed" *ngIf="access.canAdd(featureRef)">
     <ion-fab-button (click)="AddEmployeeOvertime()">
       <ion-icon name="add"></ion-icon>
     </ion-fab-button>

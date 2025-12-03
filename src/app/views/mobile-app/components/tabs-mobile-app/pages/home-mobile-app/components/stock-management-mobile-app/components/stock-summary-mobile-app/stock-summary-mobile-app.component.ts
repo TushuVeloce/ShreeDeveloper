@@ -1,9 +1,11 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { ApplicationFeatures } from 'src/app/classes/domain/domainenums/domainenums';
 import { Site } from 'src/app/classes/domain/entities/website/masters/site/site';
 import { StockSummary } from 'src/app/classes/domain/entities/website/stock_management/stock-summary/stoctsummary';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { BottomsheetMobileAppService } from 'src/app/services/bottomsheet-mobile-app.service';
 import { DateconversionService } from 'src/app/services/dateconversion.service';
+import { FeatureAccessMobileAppService } from 'src/app/services/feature-access-mobile-app.service';
 import { HapticService } from 'src/app/views/mobile-app/components/core/haptic.service';
 import { LoadingService } from 'src/app/views/mobile-app/components/core/loading.service';
 import { PDFService } from 'src/app/views/mobile-app/components/core/pdf.service';
@@ -14,10 +16,9 @@ import { FilterItem } from 'src/app/views/mobile-app/components/shared/chip-filt
   selector: 'app-stock-summary-mobile-app',
   templateUrl: './stock-summary-mobile-app.component.html',
   styleUrls: ['./stock-summary-mobile-app.component.scss'],
-  standalone: false
+  standalone: false,
 })
 export class StockSummaryMobileAppComponent implements OnInit {
-
   Entity: StockSummary = StockSummary.CreateNewInstance();
   MasterList: StockSummary[] = [];
   DisplayMasterList: StockSummary[] = [];
@@ -25,8 +26,20 @@ export class StockSummaryMobileAppComponent implements OnInit {
   SelectedStockSummary: StockSummary = StockSummary.CreateNewInstance();
   CustomerRef: number = 0;
   SiteList: Site[] = [];
-  headers: string[] = ['Sr.No.', 'Site Name', 'Material', 'Total Requisition Qty', 'Ordered Qty', 'Extra Ordered Qty', 'Total Inward Qty ', 'Inward Remaining Qty', 'Total Consumed Qty ', 'Transferred Out Qty ', 'Current Stock ', 'Ordered Remaining Qty'];
-
+  headers: string[] = [
+    'Sr.No.',
+    'Site Name',
+    'Material',
+    'Total Requisition Qty',
+    'Ordered Qty',
+    'Extra Ordered Qty',
+    'Total Inward Qty ',
+    'Inward Remaining Qty',
+    'Total Consumed Qty ',
+    'Transferred Out Qty ',
+    'Current Stock ',
+    'Ordered Remaining Qty',
+  ];
 
   ModalOpen: boolean = false;
 
@@ -41,6 +54,8 @@ export class StockSummaryMobileAppComponent implements OnInit {
 
   filters: FilterItem[] = [];
   selectedFilterValues: Record<string, any> = {};
+  featureRef: ApplicationFeatures = ApplicationFeatures.StockSummary;
+  showActionColumn = false;
 
   constructor(
     private appStateManagement: AppStateManageService,
@@ -49,13 +64,18 @@ export class StockSummaryMobileAppComponent implements OnInit {
     public loadingService: LoadingService,
     private bottomsheetMobileAppService: BottomsheetMobileAppService,
     private DateconversionService: DateconversionService,
-    private pdfService: PDFService
-  ) { }
+    private pdfService: PDFService,
+    public access: FeatureAccessMobileAppService
+  ) {}
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
   ionViewWillEnter = async () => {
+    this.access.refresh();
+    this.showActionColumn =
+      this.access.canPrint(this.featureRef) ||
+      this.access.canEdit(this.featureRef) ||
+      this.access.canDelete(this.featureRef);
     await this.loadStockSummaryReportIfCompanyExists();
     this.loadFilters();
   };
@@ -80,7 +100,11 @@ export class StockSummaryMobileAppComponent implements OnInit {
   // }
   async handlePrintOrShare() {
     if (this.DisplayMasterList.length == 0) {
-      await this.toastService.present('No Stock Summary Records Found', 1000, 'warning');
+      await this.toastService.present(
+        'No Stock Summary Records Found',
+        1000,
+        'warning'
+      );
       await this.haptic.warning();
       return;
     }
@@ -89,20 +113,36 @@ export class StockSummaryMobileAppComponent implements OnInit {
     const headers = this.headers;
     const data = this.DisplayMasterList.map((m, index) => [
       index + 1,
-      m.p.SiteName ? (m.p.SiteName) : '--',
-      m.p.MaterialName ? (m.p.MaterialName) : '--',
-      m.p.TotalOrderQtyPerMaterial ? (m.p.TotalOrderQtyPerMaterial) : '--',
-      m.p.TotalExtraOrderQty ? (m.p.TotalExtraOrderQty) : '--',
-      (m.p.TotalOrderQty && m.p.TotalOrderQty != 0) ? (m.p.TotalOrderQty) : '--',
-      (m.p.TotalInwardQty && m.p.TotalInwardQty != 0) ? (m.p.TotalInwardQty) : '--',
-      (m.p.InwardRemainingQty && m.p.InwardRemainingQty != 0) ? (m.p.InwardRemainingQty) : '--',
-      (m.p.TotalConsumedQty && m.p.TotalConsumedQty != 0) ? (m.p.TotalConsumedQty) : '--',
-      (m.p.TotalTransferredInQty && m.p.TotalTransferredInQty != 0) ? (m.p.TotalTransferredInQty) : '--',
-      (m.p.CurrentStock && m.p.CurrentStock != 0) ? (m.p.CurrentStock) : '--',
-      (m.p.OrderedRemainingQty && m.p.OrderedRemainingQty != 0) ? (m.p.OrderedRemainingQty) : '--',
+      m.p.SiteName ? m.p.SiteName : '--',
+      m.p.MaterialName ? m.p.MaterialName : '--',
+      m.p.TotalOrderQtyPerMaterial ? m.p.TotalOrderQtyPerMaterial : '--',
+      m.p.TotalExtraOrderQty ? m.p.TotalExtraOrderQty : '--',
+      m.p.TotalOrderQty && m.p.TotalOrderQty != 0 ? m.p.TotalOrderQty : '--',
+      m.p.TotalInwardQty && m.p.TotalInwardQty != 0 ? m.p.TotalInwardQty : '--',
+      m.p.InwardRemainingQty && m.p.InwardRemainingQty != 0
+        ? m.p.InwardRemainingQty
+        : '--',
+      m.p.TotalConsumedQty && m.p.TotalConsumedQty != 0
+        ? m.p.TotalConsumedQty
+        : '--',
+      m.p.TotalTransferredInQty && m.p.TotalTransferredInQty != 0
+        ? m.p.TotalTransferredInQty
+        : '--',
+      m.p.CurrentStock && m.p.CurrentStock != 0 ? m.p.CurrentStock : '--',
+      m.p.OrderedRemainingQty && m.p.OrderedRemainingQty != 0
+        ? m.p.OrderedRemainingQty
+        : '--',
     ]);
 
-    await this.pdfService.generatePdfAndHandleAction(null, 'Stock-Summary-Report.pdf', { headers, data }, false, 'l', [], 'Stock Summary Report');
+    await this.pdfService.generatePdfAndHandleAction(
+      null,
+      'Stock-Summary-Report.pdf',
+      { headers, data },
+      false,
+      'l',
+      [],
+      'Stock Summary Report'
+    );
   }
   loadFilters() {
     this.filters = [
@@ -110,19 +150,23 @@ export class StockSummaryMobileAppComponent implements OnInit {
         key: 'site',
         label: 'Site',
         multi: false,
-        options: this.SiteList.map(item => ({
+        options: this.SiteList.map((item) => ({
           Ref: item.p.Ref,
           Name: item.p.Name,
         })),
-        selected: this.selectedFilterValues['site'] > 0 ? this.selectedFilterValues['site'] : null,
-      }
+        selected:
+          this.selectedFilterValues['site'] > 0
+            ? this.selectedFilterValues['site']
+            : null,
+      },
     ];
   }
 
   async onFiltersChanged(updatedFilters: any[]) {
     for (const filter of updatedFilters) {
       const selected = filter.selected;
-      const selectedValue = (selected === null || selected === undefined) ? null : selected;
+      const selectedValue =
+        selected === null || selected === undefined ? null : selected;
 
       // Save selected value to preserve after reload
       this.selectedFilterValues[filter.key] = selectedValue ?? null;
@@ -145,8 +189,11 @@ export class StockSummaryMobileAppComponent implements OnInit {
     try {
       this.loadingService.show();
 
-      this.companyRef = Number(this.appStateManagement.localStorage.getItem('SelectedCompanyRef'));
-      this.companyName = this.appStateManagement.localStorage.getItem('companyName') || '';
+      this.companyRef = Number(
+        this.appStateManagement.localStorage.getItem('SelectedCompanyRef')
+      );
+      this.companyName =
+        this.appStateManagement.localStorage.getItem('companyName') || '';
 
       if (this.companyRef <= 0) {
         await this.toastService.present('Company not selected', 1000, 'danger');
@@ -158,7 +205,11 @@ export class StockSummaryMobileAppComponent implements OnInit {
       await this.getStockSummaryListByCompanyRef();
       this.loadFilters();
     } catch (error) {
-      await this.toastService.present('Error loading stock summary report', 1000, 'danger');
+      await this.toastService.present(
+        'Error loading stock summary report',
+        1000,
+        'danger'
+      );
       await this.haptic.error();
     } finally {
       this.loadingService.hide();
@@ -170,22 +221,33 @@ export class StockSummaryMobileAppComponent implements OnInit {
       this.SiteList = [];
 
       if (this.companyRef <= 0) {
-        await this.toastService.present('Company not selected', 1000, 'warning');
+        await this.toastService.present(
+          'Company not selected',
+          1000,
+          'warning'
+        );
         await this.haptic.warning();
         return;
       }
 
-      const lst = await Site.FetchEntireListByCompanyRef(this.companyRef, async errMsg => {
-        await this.toastService.present(errMsg, 1000, 'warning');
-        await this.haptic.warning();
-      });
+      const lst = await Site.FetchEntireListByCompanyRef(
+        this.companyRef,
+        async (errMsg) => {
+          await this.toastService.present(errMsg, 1000, 'warning');
+          await this.haptic.warning();
+        }
+      );
 
       this.SiteList = lst;
     } catch (error) {
-      await this.toastService.present('Error in FormulateSiteListByCompanyRef:' + error, 1000, 'warning');
+      await this.toastService.present(
+        'Error in FormulateSiteListByCompanyRef:' + error,
+        1000,
+        'warning'
+      );
       await this.haptic.warning();
     }
-  }
+  };
 
   getStockSummaryListByCompanyRef = async () => {
     this.MasterList = [];
@@ -195,13 +257,16 @@ export class StockSummaryMobileAppComponent implements OnInit {
       await this.haptic.error();
       return;
     }
-    let lst = await StockSummary.FetchEntireListByCompanyRef(this.companyRef, async errMsg => {
-      await this.toastService.present(errMsg, 1000, 'danger');
-      await this.haptic.error();
-    });
+    let lst = await StockSummary.FetchEntireListByCompanyRef(
+      this.companyRef,
+      async (errMsg) => {
+        await this.toastService.present(errMsg, 1000, 'danger');
+        await this.haptic.error();
+      }
+    );
     this.MasterList = lst;
     this.DisplayMasterList = this.MasterList;
-  }
+  };
 
   getStockSummaryListByCompanyRefAndSiteRef = async () => {
     this.MasterList = [];
@@ -210,7 +275,9 @@ export class StockSummaryMobileAppComponent implements OnInit {
       this.getStockSummaryListByCompanyRef();
       return;
     }
-    let lst = await StockSummary.FetchEntireListByCompanyRefAndSiteRef(this.companyRef, this.Entity.p.SiteRef,
+    let lst = await StockSummary.FetchEntireListByCompanyRefAndSiteRef(
+      this.companyRef,
+      this.Entity.p.SiteRef,
       async (errMsg) => {
         await this.toastService.present(errMsg, 1000, 'danger');
         await this.haptic.error();
@@ -223,21 +290,32 @@ export class StockSummaryMobileAppComponent implements OnInit {
   // Extracted from services date conversion //
   formatDate = (date: string | Date): string => {
     return this.DateconversionService.formatDate(date);
-  }
+  };
 
   public selectSiteBottomsheet = async (): Promise<void> => {
     try {
       const options = this.SiteList;
-      this.openSelectModal(options, this.selectedSite, false, 'Select Site', 1, (selected) => {
-        this.selectedSite = selected;
-        this.SiteName = selected[0].p.Name;
-        this.Entity.p.Ref = selected[0].p.Ref;
-      });
+      this.openSelectModal(
+        options,
+        this.selectedSite,
+        false,
+        'Select Site',
+        1,
+        (selected) => {
+          this.selectedSite = selected;
+          this.SiteName = selected[0].p.Name;
+          this.Entity.p.Ref = selected[0].p.Ref;
+        }
+      );
     } catch (error) {
-      await this.toastService.present('Error in selectSiteBottomsheet:' + error, 1000, 'danger');
+      await this.toastService.present(
+        'Error in selectSiteBottomsheet:' + error,
+        1000,
+        'danger'
+      );
       await this.haptic.error();
     }
-  }
+  };
 
   private async openSelectModal(
     dataList: any[],
@@ -247,16 +325,22 @@ export class StockSummaryMobileAppComponent implements OnInit {
     MaxSelection: number,
     updateCallback: (selected: any[]) => void
   ): Promise<void> {
-    const selected = await this.bottomsheetMobileAppService.openSelectModal(dataList, selectedItems, multiSelect, title, MaxSelection);
+    const selected = await this.bottomsheetMobileAppService.openSelectModal(
+      dataList,
+      selectedItems,
+      multiSelect,
+      title,
+      MaxSelection
+    );
     if (selected) updateCallback(selected);
   }
 
   onViewClicked = (item: StockSummary) => {
     this.SelectedStockSummary = item;
     this.ModalOpen = true;
-  }
+  };
 
   closeModal = () => {
     this.ModalOpen = false;
-  }
+  };
 }

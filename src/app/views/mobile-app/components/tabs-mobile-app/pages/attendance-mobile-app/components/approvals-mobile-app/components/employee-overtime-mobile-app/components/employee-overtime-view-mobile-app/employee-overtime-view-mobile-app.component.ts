@@ -1,10 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ActionSheetController } from '@ionic/angular';
+import { ApplicationFeatures } from 'src/app/classes/domain/domainenums/domainenums';
 import { EmployeeOvertime } from 'src/app/classes/domain/entities/website/HR_and_Payroll/Employee_Overtime/employeeovertime';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
 import { DateconversionService } from 'src/app/services/dateconversion.service';
+import { FeatureAccessMobileAppService } from 'src/app/services/feature-access-mobile-app.service';
 import { Utils } from 'src/app/services/utils.service';
 import { AlertService } from 'src/app/views/mobile-app/components/core/alert.service';
 import { HapticService } from 'src/app/views/mobile-app/components/core/haptic.service';
@@ -27,6 +29,9 @@ export class EmployeeOvertimeViewMobileAppComponent implements OnInit {
   currentPage = 1;
   pageSize = 10;
 
+  featureRef: ApplicationFeatures = ApplicationFeatures.EmployeeOvertime;
+  showActionColumn = false;
+
   constructor(
     private appStateManagement: AppStateManageService,
     private dateConversionService: DateconversionService,
@@ -37,10 +42,15 @@ export class EmployeeOvertimeViewMobileAppComponent implements OnInit {
     private companystatemanagement: CompanyStateManagement,
     private router: Router,
     private utils: Utils,
-    private actionSheetCtrl: ActionSheetController
+    private actionSheetCtrl: ActionSheetController,
+    public access: FeatureAccessMobileAppService
   ) {}
 
   async ngOnInit(): Promise<void> {
+    this.access.refresh();
+    this.showActionColumn =
+      this.access.canEdit(this.featureRef) ||
+      this.access.canDelete(this.featureRef);
     await this.loadInitialData();
   }
 
@@ -49,6 +59,10 @@ export class EmployeeOvertimeViewMobileAppComponent implements OnInit {
   }
 
   ionViewWillEnter = async (): Promise<void> => {
+    this.access.refresh();
+    this.showActionColumn =
+      this.access.canEdit(this.featureRef) ||
+      this.access.canDelete(this.featureRef);
     await this.loadInitialData();
   };
 
@@ -131,34 +145,46 @@ export class EmployeeOvertimeViewMobileAppComponent implements OnInit {
     const actionSheet = await this.actionSheetCtrl.create({
       header: 'Actions',
       buttons: [
-        {
-          text: 'Edit',
-          icon: 'create-outline',
-          handler: () => {
-            this.onEditClicked(overtime);
-          },
-          // You can define 'action-edit' in your SCSS for specific styling
-          cssClass: 'action-edit',
-        },
-        {
-          text: 'Delete',
-          icon: 'trash-outline',
-          role: 'destructive', // This role usually makes the text red by default
-          handler: () => {
-            this.onDeleteClicked(overtime);
-          },
-        },
-        {
-          text: 'Approve',
-          icon: 'checkmark-circle-outline',
-          handler: () => {
-            this.ChangeOvertimeStatus(overtime);
-          },
-          // Conditionally hide the button if overtime is already verified
-          // hidden: overtime.p.IsOverTimeVerified,
-          // You can define 'action-approve' in your SCSS for specific styling
-          cssClass: 'action-approve',
-        },
+        ...(this.access.canEdit(this.featureRef)
+          ? [
+              {
+                text: 'Edit',
+                icon: 'create-outline',
+                handler: () => {
+                  this.onEditClicked(overtime);
+                },
+                // You can define 'action-edit' in your SCSS for specific styling
+                cssClass: 'action-edit',
+              },
+            ]
+          : []),
+        ...(this.access.canDelete(this.featureRef)
+          ? [
+              {
+                text: 'Delete',
+                icon: 'trash-outline',
+                role: 'destructive', // This role usually makes the text red by default
+                handler: () => {
+                  this.onDeleteClicked(overtime);
+                },
+              },
+            ]
+          : []),
+        ...(this.access.canApprove(this.featureRef)
+          ? [
+              {
+                text: 'Approve',
+                icon: 'checkmark-circle-outline',
+                handler: () => {
+                  this.ChangeOvertimeStatus(overtime);
+                },
+                // Conditionally hide the button if overtime is already verified
+                // hidden: overtime.p.IsOverTimeVerified,
+                // You can define 'action-approve' in your SCSS for specific styling
+                cssClass: 'action-approve',
+              },
+            ]
+          : []),
         {
           text: 'Cancel',
           icon: 'close-circle-outline',

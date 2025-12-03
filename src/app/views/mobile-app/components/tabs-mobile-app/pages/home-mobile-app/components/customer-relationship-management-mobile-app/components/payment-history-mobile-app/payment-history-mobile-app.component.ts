@@ -1,10 +1,14 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { BookingRemarks } from 'src/app/classes/domain/domainenums/domainenums';
+import {
+  ApplicationFeatures,
+  BookingRemarks,
+} from 'src/app/classes/domain/domainenums/domainenums';
 import { Income } from 'src/app/classes/domain/entities/website/accounting/income/income';
 import { Plot } from 'src/app/classes/domain/entities/website/masters/plot/plot';
 import { Site } from 'src/app/classes/domain/entities/website/masters/site/site';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { DateconversionService } from 'src/app/services/dateconversion.service';
+import { FeatureAccessMobileAppService } from 'src/app/services/feature-access-mobile-app.service';
 import { HapticService } from 'src/app/views/mobile-app/components/core/haptic.service';
 import { LoadingService } from 'src/app/views/mobile-app/components/core/loading.service';
 import { PDFService } from 'src/app/views/mobile-app/components/core/pdf.service';
@@ -52,6 +56,8 @@ export class PaymentHistoryMobileAppComponent implements OnInit {
 
   filters: FilterItem[] = [];
   selectedFilterValues: Record<string, any> = {};
+  featureRef: ApplicationFeatures = ApplicationFeatures.PaymentHistoryReport;
+  showActionColumn = false;
 
   constructor(
     private appStateManage: AppStateManageService,
@@ -59,7 +65,8 @@ export class PaymentHistoryMobileAppComponent implements OnInit {
     private toastService: ToastService,
     private haptic: HapticService,
     public loadingService: LoadingService,
-    private pdfService: PDFService
+    private pdfService: PDFService,
+    public access: FeatureAccessMobileAppService
   ) {}
 
   ngOnInit = async () => {
@@ -67,6 +74,11 @@ export class PaymentHistoryMobileAppComponent implements OnInit {
   };
 
   ionViewWillEnter = async () => {
+    this.access.refresh();
+    this.showActionColumn =
+      this.access.canPrint(this.featureRef) ||
+      this.access.canEdit(this.featureRef) ||
+      this.access.canDelete(this.featureRef);
     await this.loadPaymentHistoryReportIfEmployeeExists();
     this.loadFilters();
   };

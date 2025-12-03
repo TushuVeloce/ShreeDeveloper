@@ -36,7 +36,7 @@
             </div>
           </div>
 
-          <div class="action-row">
+          <div class="action-row" *ngIf="showActionColumn">
             <ion-button fill="solid" size="small" color="primary" (click)="onFollowUpClick(item)">
               <ion-icon slot="start" name="people-outline"></ion-icon> Follow Up
             </ion-button>

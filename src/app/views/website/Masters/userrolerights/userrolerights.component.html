@@ -1,6 +1,6 @@
 <div>
   <div class="row">
-   <div class="col-4 mb-2">
+    <div class="col-4 mb-2">
       <h1 style="padding-top: 3px" class="title title_light">
         User Role Right
       </h1>
@@ -57,6 +57,7 @@
             <th class="tblheader" *ngIf="!hideEditDelete">Edit</th>
             <th class="tblheader" *ngIf="!hideEditDelete">Delete</th>
             <th class="tblheader" *ngIf="!hideEditDelete">View</th>
+            <th class="tblheader" *ngIf="!hideEditDelete">Approve</th>
             <th class="tblheader">Print</th>
             <th class="tblheader">Exports</th>
           </tr>
@@ -75,6 +76,9 @@
             </td>
             <td Class="tbldata" *ngIf="!hideEditDelete">
               <label nz-checkbox [(ngModel)]="feature.CanView"></label>
+            </td>
+            <td Class="tbldata" *ngIf="!hideEditDelete">
+              <label nz-checkbox [(ngModel)]="feature.CanApprove"></label>
             </td>
             <td Class="tbldata">
               <label nz-checkbox [(ngModel)]="feature.CanPrint"></label>

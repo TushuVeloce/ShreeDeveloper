@@ -36,7 +36,7 @@
         <p><strong>Employee:</strong> {{ slip.p.EmployeeName }}</p>
         <!-- <p><strong>Description:</strong> {{ slip.p }}</p> -->
 
-        <div class="action-buttons" *ngIf="!slip.p.IsApproved">
+        <div class="action-buttons" *ngIf="!slip.p.IsApproved && access.canDelete(featureRef)">
           <ion-button fill="outline" color="danger" (click)="onDeleteClicked(slip)">
             <ion-icon name="trash-outline" slot="start"></ion-icon>
             Delete Request
@@ -65,7 +65,7 @@
   </div>
 
   <!-- Floating Action Button -->
-  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed" *ngIf="featureRef">
     <ion-fab-button color="primary" (click)="addSalarySlipRequest()">
       <ion-icon name="add-outline"></ion-icon>
     </ion-fab-button>

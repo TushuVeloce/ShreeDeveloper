@@ -1,8 +1,10 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { ApplicationFeatures } from 'src/app/classes/domain/domainenums/domainenums';
 import { CRMReports } from 'src/app/classes/domain/entities/website/customer_management/crmreports/crmreport';
 import { Site } from 'src/app/classes/domain/entities/website/masters/site/site';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { BottomsheetMobileAppService } from 'src/app/services/bottomsheet-mobile-app.service';
+import { FeatureAccessMobileAppService } from 'src/app/services/feature-access-mobile-app.service';
 import { HapticService } from 'src/app/views/mobile-app/components/core/haptic.service';
 import { LoadingService } from 'src/app/views/mobile-app/components/core/loading.service';
 import { PDFService } from 'src/app/views/mobile-app/components/core/pdf.service';
@@ -43,6 +45,8 @@ export class CustomerSummaryReportMobileAppComponent implements OnInit {
   selectedFilterValues: Record<string, any> = {};
 
   @ViewChild('PrintContainer') printContainer!: ElementRef;
+  featureRef: ApplicationFeatures = ApplicationFeatures.CustomerSummary;
+  showActionColumn = false;
 
   constructor(
     private appStateManagement: AppStateManageService,
@@ -50,7 +54,8 @@ export class CustomerSummaryReportMobileAppComponent implements OnInit {
     private haptic: HapticService,
     public loadingService: LoadingService,
     private bottomsheetMobileAppService: BottomsheetMobileAppService,
-    private pdfService: PDFService
+    private pdfService: PDFService,
+    public access: FeatureAccessMobileAppService
   ) {}
 
   ngOnInit = (): void => {
@@ -58,6 +63,11 @@ export class CustomerSummaryReportMobileAppComponent implements OnInit {
   };
 
   ionViewWillEnter = async () => {
+    this.access.refresh();
+    this.showActionColumn =
+      this.access.canPrint(this.featureRef) ||
+      this.access.canEdit(this.featureRef) ||
+      this.access.canDelete(this.featureRef);
     await this.loadCustomerSummaryReportIfCompanyExists();
   };
 

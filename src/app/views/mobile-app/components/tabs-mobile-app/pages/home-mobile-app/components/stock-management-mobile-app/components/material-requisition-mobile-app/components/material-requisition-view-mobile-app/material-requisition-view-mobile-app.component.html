@@ -11,13 +11,13 @@
   <ion-list class="requisition-list" [lines]="'none'">
     <ng-container *ngIf="DisplayMasterList.length > 0">
       <ion-item-sliding *ngFor="let requisition of DisplayMasterList">
-        <ion-item-options side="start" *ngIf="isAnyMaterialPending(requisition)">
+        <ion-item-options side="start" *ngIf="isAnyMaterialPending(requisition) && access.canEdit(featureRef)">
           <ion-item-option color="primary" (click)="onEditClicked(requisition)">
             <ion-icon name="pencil-outline" slot="icon-only"></ion-icon>
           </ion-item-option>
         </ion-item-options>
         
-        <ion-item-options side="end" *ngIf="isAnyMaterialPending(requisition)">
+        <ion-item-options side="end" *ngIf="isAnyMaterialPending(requisition) && access.canDelete(featureRef)">
           <ion-item-option color="danger" (click)="onDeleteClicked(requisition)">
             <ion-icon name="trash-outline" slot="icon-only"></ion-icon>
           </ion-item-option>
@@ -113,7 +113,7 @@
     </ng-template>
   </ion-modal>
 
-  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed" *ngIf="access.canAdd(featureRef)">
     <ion-fab-button color="primary" (click)="AddMaterialRequisition()">
       <ion-icon name="add-outline"></ion-icon>
     </ion-fab-button>

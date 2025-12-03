@@ -39,8 +39,8 @@ import { BaseUrlService } from 'src/app/services/baseurl.service';
 import { NzAvatarModule } from 'ng-zorro-antd/avatar';
 import { NzBadgeModule } from 'ng-zorro-antd/badge';
 import { NzIconModule } from 'ng-zorro-antd/icon';
-import { FeatureAccessService } from 'src/app/services/feature-access.service';
 import { ApplicationFeatures } from 'src/app/classes/domain/domainenums/domainenums';
+import { FeatureAccessService } from 'src/app/services/feature-access.service';
 
 interface SubModule {
   Name: string;
@@ -81,15 +81,14 @@ interface notificationType {
   ],
   standalone: true,
 })
-
 export class SidebarlayoutComponent implements OnInit {
   isCollapsed = false;
   protected readonly date = new Date();
 
   companies = ['Company A', 'Company B', 'Company C'];
-  selectedCompany = 'Company A'; 
+  selectedCompany = 'Company A';
 
-  userAvatar = 'https://i.pravatar.cc/150?img=12'; 
+  userAvatar = 'https://i.pravatar.cc/150?img=12';
 
   isDarkMode: boolean = false;
   themeLabel: string = '';
@@ -128,7 +127,7 @@ export class SidebarlayoutComponent implements OnInit {
 
   currentRoute: string = '';
   routerChangedSubscription: Subscription | undefined;
-  activeModule: string | null = null; 
+  activeModule: string | null = null;
   activeSubmodule: string | null = null;
 
   CompanyList: Company[] = [];
@@ -231,7 +230,6 @@ export class SidebarlayoutComponent implements OnInit {
     return this.router.url.toLowerCase() === routeLink.toLowerCase();
   }
 
-
   isSubmenuOpen(module: module): boolean {
     if (!module.SubModuleList) return false;
     return module.SubModuleList.some((submodule: SubModule) =>
@@ -261,10 +259,9 @@ export class SidebarlayoutComponent implements OnInit {
           this.activeModule = module.Name;
           this.activeSubmodule = module.Name;
           routeFound = true;
-          break; 
+          break;
         }
-      }
-      else {
+      } else {
         const activeSubmodule = module.SubModuleList.find((submodule) =>
           this.isRouteActive(submodule.RouterLink)
         );
@@ -273,7 +270,7 @@ export class SidebarlayoutComponent implements OnInit {
           this.activeModule = module.Name;
           this.activeSubmodule = activeSubmodule.Name;
           routeFound = true;
-          break; 
+          break;
         }
       }
     }
@@ -305,7 +302,6 @@ export class SidebarlayoutComponent implements OnInit {
     this.GenerateAndSetMenuItemModuleList();
     this.FormulateCompanyList();
 
-    
     this.currentemployee = Number(
       this.appStateManage.StorageKey.getItem('LoginEmployeeRef')
     );
@@ -318,7 +314,7 @@ export class SidebarlayoutComponent implements OnInit {
     // Initialize active state based on the current URL immediately
     this.updateActiveModuleAndSubmodule();
     this.companyName = this.companystatemanagement.getCurrentCompanyName();
-    this.access.refresh()
+    this.access.refresh();
   }
 
   ngOnDestroy(): void {
@@ -414,7 +410,7 @@ export class SidebarlayoutComponent implements OnInit {
   }
 
   closeModal() {
-    this.isModalOpen = false; 
+    this.isModalOpen = false;
   }
 
   navigatetodashboard() {
@@ -464,421 +460,430 @@ export class SidebarlayoutComponent implements OnInit {
     }
   }
 
-private GenerateAndSetMenuItemModuleList = () => {
+  private GenerateAndSetMenuItemModuleList = () => {
+    let MasterSubModuleList = [
+      {
+        Name: 'Company',
+        RouterLink: '/homepage/Website/Company_Master',
+        LogoPath: '/assets/icons/Company Master.png',
+        FeatureRef: ApplicationFeatures.CompanyMaster,
+      },
+      {
+        Name: 'Owner',
+        RouterLink: '/homepage/Website/Owner_Master',
+        LogoPath: '/assets/icons/owner_master.png',
+        FeatureRef: ApplicationFeatures.OwnerMaster,
+      },
+      {
+        Name: 'Department',
+        RouterLink: '/homepage/Website/Department_Master',
+        LogoPath: '/assets/icons/Department Master.png',
+        FeatureRef: ApplicationFeatures.DepartmentMaster,
+      },
+      {
+        Name: 'Designation',
+        RouterLink: '/homepage/Website/Designation_Master',
+        LogoPath: '/assets/icons/Designation Master.png',
+        FeatureRef: ApplicationFeatures.DesignationMaster,
+      },
+      {
+        Name: 'User Role Right',
+        RouterLink: '/homepage/Website/User_Role_Rights',
+        LogoPath: '/assets/icons/User Role Right Master.png',
+        FeatureRef: ApplicationFeatures.UserRoleRightMaster,
+      },
+      {
+        Name: 'Employee',
+        RouterLink: '/homepage/Website/Employee_Master',
+        LogoPath: '/assets/icons/Employee Master.png',
+        FeatureRef: ApplicationFeatures.EmployeeMaster,
+      },
+      {
+        Name: 'Bank Account',
+        RouterLink: '/homepage/Website/Bank_Account_Master',
+        LogoPath: '/assets/icons/Bank Account Master.png',
+        FeatureRef: ApplicationFeatures.BankAccountMaster,
+      },
+      {
+        Name: 'Opening Balance',
+        RouterLink: '/homepage/Website/Opening_Balance_Master',
+        LogoPath: '/assets/icons/Bank Account Master.png',
+        FeatureRef: ApplicationFeatures.OpeningBalanceMaster,
+      },
+      {
+        Name: 'Financial Year',
+        RouterLink: '/homepage/Website/Financial_Year_Master',
+        LogoPath: '/assets/icons/Financial Year Master.png',
+        FeatureRef: ApplicationFeatures.FinancialYearMaster,
+      },
+      {
+        Name: 'Main Ledger',
+        RouterLink: '/homepage/Website/Account_Main_Ledger',
+        LogoPath: '/assets/icons/Account Main Ledger.png',
+        FeatureRef: ApplicationFeatures.MainLedgerMaster,
+      },
+      {
+        Name: 'Sub Ledger',
+        RouterLink: '/homepage/Website/Account_Sub_Ledger',
+        LogoPath: '/assets/icons/Account Sub Ledger.png',
+        FeatureRef: ApplicationFeatures.SubLedgerMaster,
+      },
+      {
+        Name: 'Stage',
+        RouterLink: '/homepage/Website/Stage_Master',
+        LogoPath: '/assets/icons/Stage Master.png',
+        FeatureRef: ApplicationFeatures.StageMaster,
+      },
+      {
+        Name: 'Unit',
+        RouterLink: '/homepage/Website/Unit_Master',
+        LogoPath: '/assets/icons/Unit Master.png',
+        FeatureRef: ApplicationFeatures.UnitMaster,
+      },
+      {
+        Name: 'Material',
+        RouterLink: '/homepage/Website/Material_Master',
+        LogoPath: '/assets/icons/Material Master.png',
+        FeatureRef: ApplicationFeatures.MaterialMaster,
+      },
+      {
+        Name: 'Vendor Service',
+        RouterLink: '/homepage/Website/Vendor_Services_Master',
+        LogoPath: '/assets/icons/Vendor Service Master.png',
+        FeatureRef: ApplicationFeatures.VendorServicesMaster,
+      },
+      {
+        Name: 'Vendor',
+        RouterLink: '/homepage/Website/Vendor_Master',
+        LogoPath: '/assets/icons/Vendor Master.png',
+        FeatureRef: ApplicationFeatures.VendorMaster,
+      },
+      {
+        Name: 'Recipient',
+        RouterLink: '/homepage/Website/Recipient_Master',
+        LogoPath: '/assets/icons/Employee Master.png',
+        FeatureRef: ApplicationFeatures.RecipientMaster,
+      },
+      {
+        Name: 'Payer',
+        RouterLink: '/homepage/Website/Payer_Master',
+        LogoPath: '/assets/icons/payer_master.png',
+        FeatureRef: ApplicationFeatures.PayerMaster,
+      },
+    ];
 
-  let MasterSubModuleList = [
-    {
-      Name: 'Company',
-      RouterLink: '/homepage/Website/Company_Master',
-      LogoPath: '/assets/icons/Company Master.png',
-      FeatureRef: ApplicationFeatures.CompanyMaster,
-    },
-    {
-      Name: 'Owner',
-      RouterLink: '/homepage/Website/Owner_Master',
-      LogoPath: '/assets/icons/owner_master.png',
-      FeatureRef: ApplicationFeatures.OwnerMaster,
-    },
-    {
-      Name: 'Department',
-      RouterLink: '/homepage/Website/Department_Master',
-      LogoPath: '/assets/icons/Department Master.png',
-      FeatureRef: ApplicationFeatures.DepartmentMaster,
-    },
-    {
-      Name: 'Designation',
-      RouterLink: '/homepage/Website/Designation_Master',
-      LogoPath: '/assets/icons/Designation Master.png',
-      FeatureRef: ApplicationFeatures.DesignationMaster,
-    },
-    {
-      Name: 'User Role Right',
-      RouterLink: '/homepage/Website/User_Role_Rights',
-      LogoPath: '/assets/icons/User Role Right Master.png',
-      FeatureRef: ApplicationFeatures.UserRoleRightMaster,
-    },
-    {
-      Name: 'Employee',
-      RouterLink: '/homepage/Website/Employee_Master',
-      LogoPath: '/assets/icons/Employee Master.png',
-      FeatureRef: ApplicationFeatures.EmployeeMaster,
-    },
-    {
-      Name: 'Bank Account',
-      RouterLink: '/homepage/Website/Bank_Account_Master',
-      LogoPath: '/assets/icons/Bank Account Master.png',
-      FeatureRef: ApplicationFeatures.BankAccountMaster,
-    },
-    {
-      Name: 'Opening Balance',
-      RouterLink: '/homepage/Website/Opening_Balance_Master',
-      LogoPath: '/assets/icons/Bank Account Master.png',
-      FeatureRef: ApplicationFeatures.OpeningBalanceMaster,
-    },
-    {
-      Name: 'Financial Year',
-      RouterLink: '/homepage/Website/Financial_Year_Master',
-      LogoPath: '/assets/icons/Financial Year Master.png',
-      FeatureRef: ApplicationFeatures.FinancialYearMaster,
-    },
-    {
-      Name: 'Main Ledger',
-      RouterLink: '/homepage/Website/Account_Main_Ledger',
-      LogoPath: '/assets/icons/Account Main Ledger.png',
-      FeatureRef: ApplicationFeatures.MainLedgerMaster,
-    },
-    {
-      Name: 'Sub Ledger',
-      RouterLink: '/homepage/Website/Account_Sub_Ledger',
-      LogoPath: '/assets/icons/Account Sub Ledger.png',
-      FeatureRef: ApplicationFeatures.SubLedgerMaster,
-    },
-    {
-      Name: 'Stage',
-      RouterLink: '/homepage/Website/Stage_Master',
-      LogoPath: '/assets/icons/Stage Master.png',
-      FeatureRef: ApplicationFeatures.StageMaster,
-    },
-    {
-      Name: 'Unit',
-      RouterLink: '/homepage/Website/Unit_Master',
-      LogoPath: '/assets/icons/Unit Master.png',
-      FeatureRef: ApplicationFeatures.UnitMaster,
-    },
-    {
-      Name: 'Material',
-      RouterLink: '/homepage/Website/Material_Master',
-      LogoPath: '/assets/icons/Material Master.png',
-      FeatureRef: ApplicationFeatures.MaterialMaster,
-    },
-    {
-      Name: 'Vendor Service',
-      RouterLink: '/homepage/Website/Vendor_Services_Master',
-      LogoPath: '/assets/icons/Vendor Service Master.png',
-      FeatureRef: ApplicationFeatures.VendorServicesMaster,
-    },
-    {
-      Name: 'Vendor',
-      RouterLink: '/homepage/Website/Vendor_Master',
-      LogoPath: '/assets/icons/Vendor Master.png',
-      FeatureRef: ApplicationFeatures.VendorMaster,
-    },
-    {
-      Name: 'Recipient',
-      RouterLink: '/homepage/Website/Recipient_Master',
-      LogoPath: '/assets/icons/Employee Master.png',
-      FeatureRef: ApplicationFeatures.RecipientMaster,
-    },
-    {
-      Name: 'Payer',
-      RouterLink: '/homepage/Website/Payer_Master',
-      LogoPath: '/assets/icons/payer_master.png',
-      FeatureRef: ApplicationFeatures.PayerMaster,
-    },
-  ];
+    let SiteManagementSubModuleList = [
+      {
+        Name: 'New Site',
+        RouterLink: '/homepage/Website/Site_Management',
+        LogoPath: '/assets/icons/New Site.png',
+        FeatureRef: ApplicationFeatures.NewSite,
+      },
+      {
+        Name: 'Plot Details',
+        RouterLink: '/homepage/Website/Plot_Master',
+        LogoPath: '/assets/icons/Plot Details.png',
+        FeatureRef: ApplicationFeatures.PlotDetails,
+      },
+    ];
 
-  let SiteManagementSubModuleList = [
-    {
-      Name: 'New Site',
-      RouterLink: '/homepage/Website/Site_Management',
-      LogoPath: '/assets/icons/New Site.png',
-      FeatureRef: ApplicationFeatures.NewSite,
-    },
-    {
-      Name: 'Plot Details',
-      RouterLink: '/homepage/Website/Plot_Master',
-      LogoPath: '/assets/icons/Plot Details.png',
-      FeatureRef: ApplicationFeatures.PlotDetails,
-    },
-  ];
+    let StockManagementSubModuleList = [
+      {
+        Name: 'Material Requisition',
+        RouterLink: '/homepage/Website/Material_Requisition',
+        LogoPath: '/assets/icons/material_requisition.png',
+        FeatureRef: ApplicationFeatures.MaterialRequisition,
+      },
+      {
+        Name: 'Stock Order',
+        RouterLink: '/homepage/Website/Stock_Order',
+        LogoPath: '/assets/icons/stock_order.png',
+        FeatureRef: ApplicationFeatures.StockOrder,
+      },
+      {
+        Name: 'Stock Inward',
+        RouterLink: '/homepage/Website/Stock_Inward',
+        LogoPath: '/assets/icons/stock_inward.png',
+        FeatureRef: ApplicationFeatures.StockInward,
+      },
+      {
+        Name: 'Stock Consume',
+        RouterLink: '/homepage/Website/Stock_Consume',
+        LogoPath: '/assets/icons/stock_consume.png',
+        FeatureRef: ApplicationFeatures.StockConsume,
+      },
+      {
+        Name: 'Stock Transfer',
+        RouterLink: '/homepage/Website/Stock_Transfer',
+        LogoPath: '/assets/icons/stock_transfer.png',
+        FeatureRef: ApplicationFeatures.StockTransfer,
+      },
+      {
+        Name: 'Stock Summary',
+        RouterLink: '/homepage/Website/Stock_Summary',
+        LogoPath: '/assets/icons/stock_summary.png',
+        FeatureRef: ApplicationFeatures.StockSummary,
+      },
+    ];
 
-  let StockManagementSubModuleList = [
-    {
-      Name: 'Material Requisition',
-      RouterLink: '/homepage/Website/Material_Requisition',
-      LogoPath: '/assets/icons/material_requisition.png',
-      FeatureRef: ApplicationFeatures.MaterialRequisition,
-    },
-    {
-      Name: 'Stock Order',
-      RouterLink: '/homepage/Website/Stock_Order',
-      LogoPath: '/assets/icons/stock_order.png',
-      FeatureRef: ApplicationFeatures.StockOrder,
-    },
-    {
-      Name: 'Stock Inward',
-      RouterLink: '/homepage/Website/Stock_Inward',
-      LogoPath: '/assets/icons/stock_inward.png',
-      FeatureRef: ApplicationFeatures.StockInward,
-    },
-    {
-      Name: 'Stock Consume',
-      RouterLink: '/homepage/Website/Stock_Consume',
-      LogoPath: '/assets/icons/stock_consume.png',
-      FeatureRef: ApplicationFeatures.StockConsume,
-    },
-    {
-      Name: 'Stock Transfer',
-      RouterLink: '/homepage/Website/Stock_Transfer',
-      LogoPath: '/assets/icons/stock_transfer.png',
-      FeatureRef: ApplicationFeatures.StockTransfer,
-    },
-    {
-      Name: 'Stock Summary',
-      RouterLink: '/homepage/Website/Stock_Summary',
-      LogoPath: '/assets/icons/stock_summary.png',
-      FeatureRef: ApplicationFeatures.StockSummary,
-    },
-  ];
+    let CustomerManagementSubModuleList = [
+      {
+        Name: 'Customer Enquiry',
+        RouterLink: '/homepage/Website/Customer_Enquiry',
+        LogoPath: '/assets/icons/Customer Enquiry.png',
+        FeatureRef: ApplicationFeatures.CustomerEnquiry,
+      },
+      {
+        Name: 'Customer Follow Up',
+        RouterLink: '/homepage/Website/Customer_FollowUp',
+        LogoPath: '/assets/icons/Customer Followup.png',
+        FeatureRef: ApplicationFeatures.CustomerFollowUp,
+      },
+      {
+        Name: 'Pending Follow Up',
+        RouterLink: '/homepage/Website/Pending_FollowUp',
+        LogoPath: '/assets/icons/pending_follow_up.png',
+        FeatureRef: ApplicationFeatures.PendingFollowUp,
+      },
+      {
+        Name: 'Registered Customer',
+        RouterLink: '/homepage/Website/Registered_Customer',
+        LogoPath: '/assets/icons/Registered Customer.png',
+        FeatureRef: ApplicationFeatures.RegisteredCustomer,
+      },
+      {
+        Name: 'Customer Summary',
+        RouterLink: '/homepage/Website/Customer_Summary_Report',
+        LogoPath: '/assets/icons/customer_summary_report.png',
+        FeatureRef: ApplicationFeatures.CustomerSummary,
+      },
+      {
+        Name: 'Customer Info',
+        RouterLink: '/homepage/Website/Customer_Info_Report',
+        LogoPath: '/assets/icons/customer_info_report.png',
+        FeatureRef: ApplicationFeatures.CustomerInfo,
+      },
+      {
+        Name: 'Customer Visit Report',
+        RouterLink: '/homepage/Website/Customer_Visit_Report',
+        LogoPath: '/assets/icons/customer_visit_report.png',
+        FeatureRef: ApplicationFeatures.CustomerVisitReport,
+      },
+      {
+        Name: 'Deal Cancelled Customer',
+        RouterLink: '/homepage/Website/Deal_Cancelled_Customer_Report',
+        LogoPath: '/assets/icons/Deal_Cancelled_Customer_Report.png',
+        FeatureRef: ApplicationFeatures.DealCancelledCustomer,
+      },
+      {
+        Name: 'Payment History Report',
+        RouterLink: '/homepage/Website/Payment_History_Report',
+        LogoPath: '/assets/icons/Payment_History_Report.png',
+        FeatureRef: ApplicationFeatures.PaymentHistoryReport,
+      },
+    ];
 
-  let CustomerManagementSubModuleList = [
-    {
-      Name: 'Customer Enquiry',
-      RouterLink: '/homepage/Website/Customer_Enquiry',
-      LogoPath: '/assets/icons/Customer Enquiry.png',
-      FeatureRef: ApplicationFeatures.CustomerEnquiry,
-    },
-    {
-      Name: 'Customer Follow Up',
-      RouterLink: '/homepage/Website/Customer_FollowUp',
-      LogoPath: '/assets/icons/Customer Followup.png',
-      FeatureRef: ApplicationFeatures.CustomerFollowUp,
-    },
-    {
-      Name: 'Pending Follow Up',
-      RouterLink: '/homepage/Website/Pending_FollowUp',
-      LogoPath: '/assets/icons/pending_follow_up.png',
-      FeatureRef: ApplicationFeatures.PendingFollowUp,
-    },
-    {
-      Name: 'Registered Customer',
-      RouterLink: '/homepage/Website/Registered_Customer',
-      LogoPath: '/assets/icons/Registered Customer.png',
-      FeatureRef: ApplicationFeatures.RegisteredCustomer,
-    },
-    {
-      Name: 'Customer Summary',
-      RouterLink: '/homepage/Website/Customer_Summary_Report',
-      LogoPath: '/assets/icons/customer_summary_report.png',
-      FeatureRef: ApplicationFeatures.CustomerSummary,
-    },
-    {
-      Name: 'Customer Info',
-      RouterLink: '/homepage/Website/Customer_Info_Report',
-      LogoPath: '/assets/icons/customer_info_report.png',
-      FeatureRef: ApplicationFeatures.CustomerInfo,
-    },
-    {
-      Name: 'Customer Visit Report',
-      RouterLink: '/homepage/Website/Customer_Visit_Report',
-      LogoPath: '/assets/icons/customer_visit_report.png',
-      FeatureRef: ApplicationFeatures.CustomerVisitReport,
-    },
-    {
-      Name: 'Deal Cancelled Customer',
-      RouterLink: '/homepage/Website/Deal_Cancelled_Customer_Report',
-      LogoPath: '/assets/icons/Deal_Cancelled_Customer_Report.png',
-      FeatureRef: ApplicationFeatures.DealCancelledCustomer,
-    },
-    {
-      Name: 'Payment History Report',
-      RouterLink: '/homepage/Website/Payment_History_Report',
-      LogoPath: '/assets/icons/Payment_History_Report.png',
-      FeatureRef: ApplicationFeatures.PaymentHistoryReport,
-    },
-  ];
+    let GovernmentOfficeSubModuleList = [
+      {
+        Name: 'Progress Report',
+        RouterLink: '/homepage/Website/Site_Progress_Report',
+        LogoPath: '/assets/icons/Progress Report.png',
+        FeatureRef: ApplicationFeatures.GovProgressReport,
+      },
+      {
+        Name: 'Document List',
+        RouterLink: '/homepage/Website/Document',
+        LogoPath: '/assets/icons/Document List.png',
+        FeatureRef: ApplicationFeatures.DocumentList,
+      },
+    ];
 
-  let GovernmentOfficeSubModuleList = [
-    {
-      Name: 'Progress Report',
-      RouterLink: '/homepage/Website/Site_Progress_Report',
-      LogoPath: '/assets/icons/Progress Report.png',
-      FeatureRef: ApplicationFeatures.GovProgressReport,
-    },
-    {
-      Name: 'Document List',
-      RouterLink: '/homepage/Website/Document',
-      LogoPath: '/assets/icons/Document List.png',
-      FeatureRef: ApplicationFeatures.DocumentList,
-    },
-  ];
+    let HrPayrollManagement = [
+      {
+        Name: 'Office Duty & Time',
+        RouterLink: '/homepage/Website/Office_Duty_Time',
+        LogoPath: '/assets/icons/Office Duty_Time.png',
+        FeatureRef: ApplicationFeatures.OfficeDutyTime,
+      },
+      {
+        Name: 'Attendance',
+        RouterLink: '/homepage/Website/Attendance_Logs',
+        LogoPath: '/assets/icons/Attendance.png',
+        FeatureRef: ApplicationFeatures.HRAttendance,
+      },
+      {
+        Name: 'Salary Generation',
+        RouterLink: '/homepage/Website/Salary_Generation',
+        LogoPath: '/assets/icons/Salary Genration.png',
+        FeatureRef: ApplicationFeatures.SalaryGeneration,
+      },
+      {
+        Name: 'Leave Approval',
+        RouterLink: '/homepage/Website/Leave_Approval',
+        LogoPath: '/assets/icons/Leave Approval.png',
+        FeatureRef: ApplicationFeatures.LeaveApproval,
+      },
+      {
+        Name: 'Salary Slip Approval',
+        RouterLink: '/homepage/Website/Salary_Slip_Approval',
+        LogoPath: '/assets/icons/Salary Slip Approval.png',
+        FeatureRef: ApplicationFeatures.SalarySlipApproval,
+      },
+      {
+        Name: 'Employee Overtime',
+        RouterLink: '/homepage/Website/Employee_Overtime',
+        LogoPath: '/assets/icons/overtime.png',
+        FeatureRef: ApplicationFeatures.EmployeeOvertime,
+      },
+      {
+        Name: 'Company Holidays',
+        RouterLink: '/homepage/Website/Company_Holidays',
+        LogoPath: '/assets/icons/holiday.png',
+        FeatureRef: ApplicationFeatures.CompanyHolidays,
+      },
+    ];
 
-  let HrPayrollManagement = [
-    {
-      Name: 'Office Duty & Time',
-      RouterLink: '/homepage/Website/Office_Duty_Time',
-      LogoPath: '/assets/icons/Office Duty_Time.png',
-      FeatureRef: ApplicationFeatures.OfficeDutyTime,
-    },
-    {
-      Name: 'Attendance',
-      RouterLink: '/homepage/Website/Attendance_Logs',
-      LogoPath: '/assets/icons/Attendance.png',
-      FeatureRef: ApplicationFeatures.HRAttendance,
-    },
-    {
-      Name: 'Salary Generation',
-      RouterLink: '/homepage/Website/Salary_Generation',
-      LogoPath: '/assets/icons/Salary Genration.png',
-      FeatureRef: ApplicationFeatures.SalaryGeneration,
-    },
-    {
-      Name: 'Leave Approval',
-      RouterLink: '/homepage/Website/Leave_Approval',
-      LogoPath: '/assets/icons/Leave Approval.png',
-      FeatureRef: ApplicationFeatures.LeaveApproval,
-    },
-    {
-      Name: 'Salary Slip Approval',
-      RouterLink: '/homepage/Website/Salary_Slip_Approval',
-      LogoPath: '/assets/icons/Salary Slip Approval.png',
-      FeatureRef: ApplicationFeatures.SalarySlipApproval,
-    },
-    {
-      Name: 'Employee Overtime',
-      RouterLink: '/homepage/Website/Employee_Overtime',
-      LogoPath: '/assets/icons/overtime.png',
-      FeatureRef: ApplicationFeatures.EmployeeOvertime,
-    },
-    {
-      Name: 'Company Holidays',
-      RouterLink: '/homepage/Website/Company_Holidays',
-      LogoPath: '/assets/icons/holiday.png',
-      FeatureRef: ApplicationFeatures.CompanyHolidays,
-    },
-  ];
+    let RequestSubModulelist = [
+      {
+        Name: 'Attendance',
+        RouterLink: '/homepage/Website/Employee_Attendance_Logs',
+        LogoPath: '/assets/icons/Employee Attendance Logs.png',
+        FeatureRef: ApplicationFeatures.EmployeeAttendance,
+      },
+      {
+        Name: 'Leave Request',
+        RouterLink: '/homepage/Website/Leave_Request',
+        LogoPath: '/assets/icons/Leave Requests.png',
+        FeatureRef: ApplicationFeatures.EmployeeLeaveRequest,
+      },
+      {
+        Name: 'Salary Slip Request',
+        RouterLink: '/homepage/Website/Salary_Slip_Request',
+        LogoPath: '/assets/icons/Salary Slip Request.png',
+        FeatureRef: ApplicationFeatures.EmployeeSalarySlipRequest,
+      },
+    ];
 
-  let RequestSubModulelist = [
-    {
-      Name: 'Attendance',
-      RouterLink: '/homepage/Website/Employee_Attendance_Logs',
-      LogoPath: '/assets/icons/Employee Attendance Logs.png',
-      FeatureRef: ApplicationFeatures.EmployeeAttendance,
-    },
-    {
-      Name: 'Leave Request',
-      RouterLink: '/homepage/Website/Leave_Request',
-      LogoPath: '/assets/icons/Leave Requests.png',
-      FeatureRef: ApplicationFeatures.EmployeeLeaveRequest,
-    },
-    {
-      Name: 'Salary Slip Request',
-      RouterLink: '/homepage/Website/Salary_Slip_Request',
-      LogoPath: '/assets/icons/Salary Slip Request.png',
-      FeatureRef: ApplicationFeatures.EmployeeSalarySlipRequest,
-    },
-  ];
+    let AccountingSubModuleList = [
+      {
+        Name: 'Billing',
+        RouterLink: '/homepage/Website/Billing',
+        LogoPath: '/assets/icons/invoice.png',
+        FeatureRef: ApplicationFeatures.Billing,
+      },
+      {
+        Name: 'Expense',
+        RouterLink: '/homepage/Website/Expense',
+        LogoPath: '/assets/icons/expense.png',
+        FeatureRef: ApplicationFeatures.Expense,
+      },
+      {
+        Name: 'Income',
+        RouterLink: '/homepage/Website/Income',
+        LogoPath: '/assets/icons/income.png',
+        FeatureRef: ApplicationFeatures.Income,
+      },
+      {
+        Name: 'Office Report',
+        RouterLink: '/homepage/Website/Accounting_Report',
+        LogoPath: '/assets/icons/office_report.png',
+        FeatureRef: ApplicationFeatures.OfficeReport,
+      },
+      {
+        Name: 'Bill Payable Report',
+        RouterLink: '/homepage/Website/Bill_Payable_Report',
+        LogoPath: '/assets/icons/office_report.png',
+        FeatureRef: ApplicationFeatures.BillPayableReport,
+      },
+    ];
 
-  let AccountingSubModuleList = [
-    {
-      Name: 'Billing',
-      RouterLink: '/homepage/Website/Billing',
-      LogoPath: '/assets/icons/invoice.png',
-      FeatureRef: ApplicationFeatures.Billing,
-    },
-    {
-      Name: 'Expense',
-      RouterLink: '/homepage/Website/Expense',
-      LogoPath: '/assets/icons/expense.png',
-      FeatureRef: ApplicationFeatures.Expense,
-    },
-    {
-      Name: 'Income',
-      RouterLink: '/homepage/Website/Income',
-      LogoPath: '/assets/icons/income.png',
-      FeatureRef: ApplicationFeatures.Income,
-    },
-    {
-      Name: 'Office Report',
-      RouterLink: '/homepage/Website/Accounting_Report',
-      LogoPath: '/assets/icons/office_report.png',
-      FeatureRef: ApplicationFeatures.OfficeReport,
-    },
-    {
-      Name: 'Bill Payable Report',
-      RouterLink: '/homepage/Website/Bill_Payable_Report',
-      LogoPath: '/assets/icons/office_report.png',
-      FeatureRef: ApplicationFeatures.BillPayableReport,
-    },
-  ];
-
-  let moduleListInternal = [
-    {
-      Name: 'Dashboards',
-      RouterLink: '/homepage/Website/',
-      WhiteLogo: '/assets/icons/dashboard.png',
-      // no FeatureRef in enum for this, so it’s always visible
-    },
-    {
-      Name: 'Master',
-      RouterLink: '',
-      WhiteLogo: '/assets/icons/Masters.png',
-      SubModuleList: MasterSubModuleList,
-    },
-    {
-      Name: 'Site Management',
-      RouterLink: '',
-      WhiteLogo: '/assets/icons/Site Management.png',
-      SubModuleList: SiteManagementSubModuleList,
-    },
-    {
-      Name: 'Stock Management',
-      RouterLink: '',
-      WhiteLogo: '/assets/icons/stock_management.png',
-      SubModuleList: StockManagementSubModuleList,
-    },
-    {
-      Name: 'Government Office',
-      RouterLink: '',
-      WhiteLogo: '/assets/icons/Government Office.png',
-      SubModuleList: GovernmentOfficeSubModuleList,
-    },
-    {
-      Name: 'CRM',
-      RouterLink: '',
-      WhiteLogo: '/assets/icons/Customer-Management.png',
-      SubModuleList: CustomerManagementSubModuleList,
-    },
-    {
-      Name: 'Registrar Office',
-      RouterLink: '/homepage/Website/Registrar_Office',
-      WhiteLogo: '/assets/icons/Registrar Office.png',
-      FeatureRef: ApplicationFeatures.RegistrarOffice, // if you later want to gate this
-    },
-    {
-      Name: 'Employee Request',
-      RouterLink: '',
-      WhiteLogo: '/assets/icons/Request.png',
-      SubModuleList: RequestSubModulelist,
-    },
-    {
-      Name: 'HR Management',
-      RouterLink: '',
-      WhiteLogo: '/assets/icons/Hr-Payroll Management.png',
-      SubModuleList: HrPayrollManagement,
-    },
-    {
-      Name: 'Accounting',
-      RouterLink: '',
-      WhiteLogo: '/assets/icons/Expense Type.png',
-      SubModuleList: AccountingSubModuleList,
-    },
-  ];
+    let moduleListInternal = [
+      {
+        Name: 'Dashboards',
+        RouterLink: '/homepage/Website/',
+        WhiteLogo: '/assets/icons/dashboard.png',
+        FeatureRef: ApplicationFeatures.Dashboard,
+      },
+      {
+        Name: 'Master',
+        RouterLink: '',
+        WhiteLogo: '/assets/icons/Masters.png',
+        SubModuleList: MasterSubModuleList,
+      },
+      {
+        Name: 'Site Management',
+        RouterLink: '',
+        WhiteLogo: '/assets/icons/Site Management.png',
+        SubModuleList: SiteManagementSubModuleList,
+      },
+      {
+        Name: 'Stock Management',
+        RouterLink: '',
+        WhiteLogo: '/assets/icons/stock_management.png',
+        SubModuleList: StockManagementSubModuleList,
+      },
+      {
+        Name: 'Government Office',
+        RouterLink: '',
+        WhiteLogo: '/assets/icons/Government Office.png',
+        SubModuleList: GovernmentOfficeSubModuleList,
+      },
+      {
+        Name: 'CRM',
+        RouterLink: '',
+        WhiteLogo: '/assets/icons/Customer-Management.png',
+        SubModuleList: CustomerManagementSubModuleList,
+      },
+      {
+        Name: 'Registrar Office',
+        RouterLink: '/homepage/Website/Registrar_Office',
+        WhiteLogo: '/assets/icons/Registrar Office.png',
+        FeatureRef: ApplicationFeatures.RegistrarOffice, // if you later want to gate this
+      },
+      {
+        Name: 'Employee Request',
+        RouterLink: '',
+        WhiteLogo: '/assets/icons/Request.png',
+        SubModuleList: RequestSubModulelist,
+      },
+      {
+        Name: 'HR Management',
+        RouterLink: '',
+        WhiteLogo: '/assets/icons/Hr-Payroll Management.png',
+        SubModuleList: HrPayrollManagement,
+      },
+      {
+        Name: 'Accounting',
+        RouterLink: '',
+        WhiteLogo: '/assets/icons/Expense Type.png',
+        SubModuleList: AccountingSubModuleList,
+      },
+    ];
 
  this.ModuleList = moduleListInternal
-  .map(mod => {
-    if (mod.SubModuleList) {
-      mod.SubModuleList = mod.SubModuleList
-        .filter(sub => this.access.hasAnyAccess(sub.FeatureRef));
-    }
-    return mod;
-  })
-  .filter(mod =>
-    mod.RouterLink || // direct route module
-    (mod.SubModuleList && mod.SubModuleList.length > 0) 
-    // ||
-    // this.access.isFeatureGroupEnabled(mod.FeatureRef) // optional, if you use groups
-  );
-};
+    .map((mod) => {
+      // CASE 1: Modules containing submodules
+      if (mod.SubModuleList) {
+        mod.SubModuleList = mod.SubModuleList.filter((sub) =>
+          this.access.hasAnyAccess(sub.FeatureRef)
+        );
 
+        // If at least 1 submodule exists → keep module
+        if (mod.SubModuleList.length > 0) return mod;
+
+        // Else remove module
+        return null;
+      }
+
+      // CASE 2: Direct route modules (Dashboard, Registrar Office)
+      if (mod.RouterLink && mod.FeatureRef) {
+        if (this.access.hasAnyAccess(mod.FeatureRef)) return mod;
+        return null;
+      }
+
+      // No access → remove
+      return null;
+    })
+    .filter((x) => x !== null);
+  };
 }

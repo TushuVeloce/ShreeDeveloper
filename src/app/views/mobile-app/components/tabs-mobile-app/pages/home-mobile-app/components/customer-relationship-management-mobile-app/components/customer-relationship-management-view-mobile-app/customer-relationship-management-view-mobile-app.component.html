@@ -63,8 +63,8 @@
       </a>
     </div>
 
-    <h2 class="section-title">Today's Reminders</h2>
-    <ion-row *ngIf="FilterFollowupList.length > 0">
+    <h2 class="section-title" *ngIf="access.hasAnyAccess(CustomerFollowUp)">Today's Reminders</h2>
+    <ion-row *ngIf="FilterFollowupList.length > 0 && access.hasAnyAccess(CustomerFollowUp)">
       <ion-col size="12" *ngFor="let reminder of FilterFollowupList">
         <ion-card class="reminder-card" button (click)="onFollowUpClick(reminder)">
           <ion-card-content>
@@ -78,7 +78,7 @@
       </ion-col>
     </ion-row>
 
-    <ion-row *ngIf="!FilterFollowupList.length && !loadingService.isLoaderActive()">
+    <ion-row *ngIf="!FilterFollowupList.length && !loadingService.isLoaderActive() && access.hasAnyAccess(CustomerFollowUp)">
       <ion-col size="12" class="ion-text-center">
         <div class="empty-state">
           <ion-icon name="notifications-off-outline"></ion-icon>

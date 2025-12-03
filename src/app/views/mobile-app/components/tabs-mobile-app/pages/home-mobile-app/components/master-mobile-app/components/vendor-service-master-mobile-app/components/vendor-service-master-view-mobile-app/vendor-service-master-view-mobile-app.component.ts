@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { ApplicationFeatures } from 'src/app/classes/domain/domainenums/domainenums';
 import { VendorService } from 'src/app/classes/domain/entities/website/masters/vendorservices/vendorservices';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
+import { FeatureAccessMobileAppService } from 'src/app/services/feature-access-mobile-app.service';
 import { Utils } from 'src/app/services/utils.service';
 import { AlertService } from 'src/app/views/mobile-app/components/core/alert.service';
 import { HapticService } from 'src/app/views/mobile-app/components/core/haptic.service';
@@ -34,6 +36,8 @@ export class VendorServiceMasterViewMobileAppComponent implements OnInit {
   currentPage = 1;
   total = 0;
   companyRef: number = 0;
+    featureRef: ApplicationFeatures = ApplicationFeatures.VendorServicesMaster;
+    showActionColumn = false;
 
   constructor(
     private router: Router,
@@ -43,12 +47,18 @@ export class VendorServiceMasterViewMobileAppComponent implements OnInit {
     private alertService: AlertService,
     public loadingService: LoadingService,
     private utils: Utils,
-    private companystatemanagement: CompanyStateManagement
+    private companystatemanagement: CompanyStateManagement,
+     public access: FeatureAccessMobileAppService
   ) {}
 
   ngOnInit() {}
 
   ionViewWillEnter = async () => {
+        this.access.refresh();
+    this.showActionColumn =
+      this.access.canPrint(this.featureRef) ||
+      this.access.canEdit(this.featureRef) ||
+      this.access.canDelete(this.featureRef);
     await this.loadVendorMasterIfCompanyExists();
   };
 

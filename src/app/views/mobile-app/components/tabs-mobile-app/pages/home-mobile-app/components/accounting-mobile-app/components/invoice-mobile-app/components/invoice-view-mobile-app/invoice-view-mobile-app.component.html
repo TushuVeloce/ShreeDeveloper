@@ -29,19 +29,19 @@
           </div>
         </div>
 
-        <div class="card-actions">
+        <div class="card-actions" *ngIf="showActionColumn">
           <ion-button fill="clear" color="tertiary" size="small"
-            (click)="$event.stopPropagation(); onEditClicked(invoice);">
+            (click)="$event.stopPropagation(); onEditClicked(invoice);" *ngIf="access.canEdit(featureRef)">
             <ion-icon name="pencil-outline" slot="start"></ion-icon>
             Edit
           </ion-button>
           <ion-button fill="clear" color="danger" size="small"
-            (click)="$event.stopPropagation(); onDeleteClicked(invoice);">
+            (click)="$event.stopPropagation(); onDeleteClicked(invoice);" *ngIf="access.canDelete(featureRef)">
             <ion-icon name="trash-outline" slot="start"></ion-icon>
             Delete
           </ion-button>
           <ion-button fill="clear" color="primary" size="small"
-            (click)="$event.stopPropagation(); navigateToPrint(invoice);">
+            (click)="$event.stopPropagation(); navigateToPrint(invoice);" *ngIf="access.canPrint(featureRef)">
             <ion-icon name="print-outline" slot="start"></ion-icon>
             Print
           </ion-button>
@@ -222,7 +222,7 @@
     </ng-template>
   </ion-modal>
 
-  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed" *ngIf="access.canAdd(featureRef)">
     <ion-fab-button (click)="AddInvoice()">
       <ion-icon name="add-outline"></ion-icon>
     </ion-fab-button>

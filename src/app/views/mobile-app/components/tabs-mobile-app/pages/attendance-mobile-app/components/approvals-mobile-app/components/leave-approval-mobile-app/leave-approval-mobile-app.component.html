@@ -107,7 +107,7 @@
 
         <div
           class="actions"
-          *ngIf="!activity.p.IsApproved && !activity.p.IsCancelled"
+          *ngIf="!activity.p.IsApproved && !activity.p.IsCancelled && access.canApprove(featureRef)"
         >
           <ion-button
             size="small"

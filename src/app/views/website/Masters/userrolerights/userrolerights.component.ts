@@ -144,6 +144,7 @@ export class UserrolerightsComponent implements OnInit {
             mod.CanView = f.CanView;
             mod.CanPrint = f.CanPrint;
             mod.CanExport = f.CanExport;
+            mod.CanApprove = f.CanApprove;
           }
         });
       });

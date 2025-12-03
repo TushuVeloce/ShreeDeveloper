@@ -14,6 +14,8 @@ import { HapticService } from 'src/app/views/mobile-app/components/core/haptic.s
 import { LoadingService } from 'src/app/views/mobile-app/components/core/loading.service';
 import { ToastService } from 'src/app/views/mobile-app/components/core/toast.service';
 import { Chart, registerables } from 'chart.js';
+import { FeatureAccessMobileAppService } from 'src/app/services/feature-access-mobile-app.service';
+import { ApplicationFeatures } from 'src/app/classes/domain/domainenums/domainenums';
 
 // Register Chart.js components
 Chart.register(...registerables);
@@ -76,7 +78,7 @@ export class CustomerRelationshipManagementViewMobileAppComponent
       },
     ],
   };
-
+  CustomerFollowUp : ApplicationFeatures = ApplicationFeatures.CustomerFollowUp
   // === Quick Action Grid Data ===
   public gridItems = [
     {
@@ -84,48 +86,56 @@ export class CustomerRelationshipManagementViewMobileAppComponent
       label: 'Customer Enquiry',
       routerPath:
         '/mobile-app/tabs/dashboard/customer-relationship-management/customer-enquiry',
+      Ref: ApplicationFeatures.CustomerEnquiry,
     },
     {
       icon: 'assets/icons/customer_followup_mobile_app.png',
       label: 'Followup',
       routerPath:
         '/mobile-app/tabs/dashboard/customer-relationship-management/customer-followup',
+      Ref: ApplicationFeatures.CustomerFollowUp,
     },
     {
       icon: 'assets/icons/pending_follow_up_mobile_app.png',
       label: 'Pending Followup',
       routerPath:
         '/mobile-app/tabs/dashboard/customer-relationship-management/pending-customer-followup',
+      Ref: ApplicationFeatures.PendingFollowUp,
     },
     {
       icon: 'assets/icons/customer_info_report_mobile_app.png',
       label: 'Customer Info Report',
       routerPath:
         '/mobile-app/tabs/dashboard/customer-relationship-management/customer-info-report',
+      Ref: ApplicationFeatures.CustomerInfo,
     },
     {
       icon: 'assets/icons/customer_summary_report_mobile_app.png',
       label: 'Customer Summary Report',
       routerPath:
         '/mobile-app/tabs/dashboard/customer-relationship-management/customer-summary-report',
+      Ref: ApplicationFeatures.CustomerSummary,
     },
     {
       icon: 'assets/icons/customer_visit_report_mobile_app.png',
       label: 'Customer Visit Report',
       routerPath:
         '/mobile-app/tabs/dashboard/customer-relationship-management/customer-visit-report',
+      Ref: ApplicationFeatures.CustomerVisitReport,
     },
     {
       icon: 'assets/icons/Payment_History_Report_md.png',
       label: 'Payment History Report',
       routerPath:
         '/mobile-app/tabs/dashboard/customer-relationship-management/payment-history-report',
+      Ref: ApplicationFeatures.PaymentHistoryReport,
     },
     {
       icon: 'assets/icons/Deal_Cancelled_Customer_Report_md.png',
       label: 'Deal Cancelled Customer Report',
       routerPath:
         '/mobile-app/tabs/dashboard/customer-relationship-management/deal-cancelled-customer-report',
+      Ref: ApplicationFeatures.DealCancelledCustomer,
     },
   ];
 
@@ -144,7 +154,8 @@ export class CustomerRelationshipManagementViewMobileAppComponent
     private dateconversionService: DateconversionService,
     private toastService: ToastService,
     private haptic: HapticService,
-    public loadingService: LoadingService
+    public loadingService: LoadingService,
+    public access: FeatureAccessMobileAppService
   ) {}
 
   ngOnInit = async () => {
@@ -163,11 +174,14 @@ export class CustomerRelationshipManagementViewMobileAppComponent
       this.monthlyTrendsChartRef,
       'line',
       this.monthlyTrendsData,
-      { responsive: true , plugins: { legend: { position: 'bottom' } }}
+      { responsive: true, plugins: { legend: { position: 'bottom' } } }
     );
   }
 
   ionViewWillEnter = async () => {
+    this.gridItems = this.gridItems.filter((item) =>
+      this.access.hasAnyAccess(item.Ref)
+    );
     await this.loadCRMData();
   };
 
@@ -217,8 +231,7 @@ export class CustomerRelationshipManagementViewMobileAppComponent
         this.strCDT = `${parts[0]}-${parts[1]}-${parts[2]}-00-00-00-000`;
         await this.fetchFollowUps();
       }
-    } catch (error) {
-    }
+    } catch (error) {}
   };
 
   private fetchFollowUps = async () => {
@@ -232,8 +245,7 @@ export class CustomerRelationshipManagementViewMobileAppComponent
         }
       );
       this.FilterFollowupList = followUps;
-    } catch (error) {
-    }
+    } catch (error) {}
   };
 
   // === Chart Helper Method ===
@@ -257,7 +269,6 @@ export class CustomerRelationshipManagementViewMobileAppComponent
       await this.router.navigate([
         'mobile-app/tabs/dashboard/customer-relationship-management/customer-followup/add',
       ]);
-    } catch (error) {
-    }
+    } catch (error) {}
   };
 }

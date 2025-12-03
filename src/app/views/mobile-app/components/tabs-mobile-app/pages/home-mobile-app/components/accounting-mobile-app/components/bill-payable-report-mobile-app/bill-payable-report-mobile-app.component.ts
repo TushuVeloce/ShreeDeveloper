@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { DomainEnums } from 'src/app/classes/domain/domainenums/domainenums';
+import { ApplicationFeatures, DomainEnums } from 'src/app/classes/domain/domainenums/domainenums';
 import { InvoiceSumExpenseSum } from 'src/app/classes/domain/entities/website/Dashboard/invoicesumexpensesum/invoicesumexpensesum';
 import { Site } from 'src/app/classes/domain/entities/website/masters/site/site';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { DateconversionService } from 'src/app/services/dateconversion.service';
+import { FeatureAccessMobileAppService } from 'src/app/services/feature-access-mobile-app.service';
 import { HapticService } from 'src/app/views/mobile-app/components/core/haptic.service';
 import { LoadingService } from 'src/app/views/mobile-app/components/core/loading.service';
 import { PDFService } from 'src/app/views/mobile-app/components/core/pdf.service';
@@ -54,17 +55,21 @@ export class BillPayableReportMobileAppComponent implements OnInit {
     'Total Cheque Received',
   ];
 
+  featureRef: ApplicationFeatures = ApplicationFeatures.Billing;
+
   constructor(
     private appStateManage: AppStateManageService,
     private dateConversionService: DateconversionService,
     private toastService: ToastService,
     private haptic: HapticService,
     public loadingService: LoadingService,
-    private pdfService: PDFService
+    private pdfService: PDFService,
+    public access: FeatureAccessMobileAppService
   ) {}
 
   ngOnInit = async () => {
     // ngOnInit should be lean. ionViewWillEnter is better for data loading.
+     this.access.refresh();
   };
 
   ionViewWillEnter = async () => {

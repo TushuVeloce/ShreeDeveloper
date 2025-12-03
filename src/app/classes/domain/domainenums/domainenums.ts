@@ -161,6 +161,8 @@ export enum ApplicationFeatures {
   Income = 620,
   OfficeReport = 630,
   BillPayableReport = 640,
+
+  Dashboard = 650,
 }
 
 // export enum LoginStatusModes {

@@ -17,6 +17,8 @@ import { HapticService } from 'src/app/views/mobile-app/components/core/haptic.s
 import { LoadingService } from 'src/app/views/mobile-app/components/core/loading.service';
 import { ToastService } from 'src/app/views/mobile-app/components/core/toast.service';
 import { Browser } from '@capacitor/browser';
+import { ApplicationFeatures } from 'src/app/classes/domain/domainenums/domainenums';
+import { FeatureAccessMobileAppService } from 'src/app/services/feature-access-mobile-app.service';
 
 @Component({
   selector: 'app-site-management-view-mobile-app',
@@ -58,6 +60,8 @@ export class SiteManagementViewMobileAppComponent implements OnInit {
   companyRef: number = 0;
   public selectedSiteId: number | null = null;
   public formattedSiteDetails: any[] = [];
+    featureRef: ApplicationFeatures = ApplicationFeatures.PlotDetails;
+    showActionColumn = false;
 
   constructor(
     private uiUtils: UIUtils,
@@ -68,12 +72,18 @@ export class SiteManagementViewMobileAppComponent implements OnInit {
     private toastService: ToastService,
     private haptic: HapticService,
     private alertService: AlertService,
-    public loadingService: LoadingService
+    public loadingService: LoadingService,
+     public access: FeatureAccessMobileAppService
   ) {}
 
   async ngOnInit(): Promise<void> {}
 
   ionViewWillEnter = async () => {
+        this.access.refresh();
+    this.showActionColumn =
+      this.access.canPrint(this.featureRef) ||
+      this.access.canEdit(this.featureRef) ||
+      this.access.canDelete(this.featureRef);
     await this.loadSiteIfCompanyExists();
   };
 

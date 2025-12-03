@@ -1,9 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { LeaveRequestType } from 'src/app/classes/domain/domainenums/domainenums';
+import {
+  ApplicationFeatures,
+  LeaveRequestType,
+} from 'src/app/classes/domain/domainenums/domainenums';
 import { LeaveRequest } from 'src/app/classes/domain/entities/website/request/leaverequest/leaverequest';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { DateconversionService } from 'src/app/services/dateconversion.service';
+import { FeatureAccessMobileAppService } from 'src/app/services/feature-access-mobile-app.service';
 import { AlertService } from 'src/app/views/mobile-app/components/core/alert.service';
 import { HapticService } from 'src/app/views/mobile-app/components/core/haptic.service';
 import { LoadingService } from 'src/app/views/mobile-app/components/core/loading.service';
@@ -35,6 +39,8 @@ export class LeaveRequestViewMobileAppComponent implements OnInit {
     { label: 'Pending', value: 0 },
     { label: 'Rejected', value: 2 },
   ];
+  featureRef: ApplicationFeatures = ApplicationFeatures.EmployeeLeaveRequest;
+  showActionColumn = false;
 
   constructor(
     private router: Router,
@@ -43,14 +49,23 @@ export class LeaveRequestViewMobileAppComponent implements OnInit {
     private toast: ToastService,
     private haptic: HapticService,
     private alert: AlertService,
-    public loadingService: LoadingService
+    public loadingService: LoadingService,
+    public access: FeatureAccessMobileAppService
   ) {}
 
   async ngOnInit() {
+    this.access.refresh();
+    this.showActionColumn =
+      this.access.canEdit(this.featureRef) ||
+      this.access.canDelete(this.featureRef);
     await this.initializeLeaveRequests();
   }
 
   async ionViewWillEnter() {
+    this.access.refresh();
+    this.showActionColumn =
+      this.access.canEdit(this.featureRef) ||
+      this.access.canDelete(this.featureRef);
     await this.initializeLeaveRequests();
   }
 

@@ -1,8 +1,4 @@
-import {
-  Component,
-  OnInit,
-  OnDestroy
-} from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { CustomerFollowUp } from 'src/app/classes/domain/entities/website/customer_management/customerfollowup/customerfollowup';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
@@ -12,7 +8,8 @@ import { LoadingService } from 'src/app/views/mobile-app/components/core/loading
 import { ToastService } from 'src/app/views/mobile-app/components/core/toast.service';
 import { ModalController, RefresherCustomEvent } from '@ionic/angular';
 import { DTU } from 'src/app/services/dtu.service';
-
+import { ApplicationFeatures } from 'src/app/classes/domain/domainenums/domainenums';
+import { FeatureAccessMobileAppService } from 'src/app/services/feature-access-mobile-app.service';
 
 @Component({
   selector: 'app-customer-followup-view-mobile-app',
@@ -26,7 +23,8 @@ export class CustomerFollowupViewMobileAppComponent
   public FilterFollowupList: CustomerFollowUp[] = [];
   public selectedDate: string; // Use a single variable for the selected date
   private companyRef: number = 0;
-
+  featureRef: ApplicationFeatures = ApplicationFeatures.CustomerFollowUp;
+  showActionColumn: boolean = false;
   constructor(
     private router: Router,
     private appStateManagement: AppStateManageService,
@@ -35,7 +33,8 @@ export class CustomerFollowupViewMobileAppComponent
     private toastService: ToastService,
     private haptic: HapticService,
     public loadingService: LoadingService,
-    private modalCtrl: ModalController
+    private modalCtrl: ModalController,
+    public access: FeatureAccessMobileAppService
   ) {
     // Initialize selectedDate to today's date in ISO format
     this.selectedDate = new Date().toISOString();
@@ -46,6 +45,12 @@ export class CustomerFollowupViewMobileAppComponent
   }
 
   ionViewWillEnter = async (): Promise<void> => {
+    this.access.refresh();
+    this.showActionColumn =
+      this.access.canAdd(this.featureRef) ||
+      this.access.canEdit(this.featureRef) ||
+      this.access.canDelete(this.featureRef);
+
     // Re-fetch data on view enter to ensure it's up-to-date
     await this.loadFollowUps();
   };

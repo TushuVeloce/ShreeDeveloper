@@ -135,7 +135,7 @@
     </ng-container>
   </ion-modal>
 
-  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed" *ngIf="access.canPrint(featureRef)">
     <ion-fab-button color="primary" (click)="handlePrintOrShare()">
       <ion-icon name="print-outline"></ion-icon>
     </ion-fab-button>

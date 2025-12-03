@@ -1,11 +1,15 @@
 import { Component, OnInit } from '@angular/core';
-import { LeaveRequestType } from 'src/app/classes/domain/domainenums/domainenums';
+import {
+  ApplicationFeatures,
+  LeaveRequestType,
+} from 'src/app/classes/domain/domainenums/domainenums';
 import { Employee } from 'src/app/classes/domain/entities/website/masters/employee/employee';
 import { LeaveRequest } from 'src/app/classes/domain/entities/website/request/leaverequest/leaverequest';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { BaseUrlService } from 'src/app/services/baseurl.service';
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
 import { DateconversionService } from 'src/app/services/dateconversion.service';
+import { FeatureAccessMobileAppService } from 'src/app/services/feature-access-mobile-app.service';
 import { UIUtils } from 'src/app/services/uiutils.service';
 import { Utils } from 'src/app/services/utils.service';
 import { AlertService } from 'src/app/views/mobile-app/components/core/alert.service';
@@ -51,6 +55,7 @@ export class LeaveApprovalMobileAppComponent implements OnInit {
   LoginToken = '';
   imageUrl: string | null = null;
   ProfilePicFile: File | null = null;
+  featureRef: ApplicationFeatures = ApplicationFeatures.LeaveApproval;
 
   constructor(
     private utils: Utils,
@@ -62,10 +67,12 @@ export class LeaveApprovalMobileAppComponent implements OnInit {
     private alertService: AlertService,
     public loadingService: LoadingService,
     private companystatemanagement: CompanyStateManagement,
-    private baseUrl: BaseUrlService
+    private baseUrl: BaseUrlService,
+    public access: FeatureAccessMobileAppService
   ) {}
 
   async ngOnInit() {
+    this.access.refresh();
     await this.loadAttendanceDetailsIfEmployeeExists();
   }
 
@@ -74,6 +81,7 @@ export class LeaveApprovalMobileAppComponent implements OnInit {
   }
 
   ionViewWillEnter = async () => {
+    this.access.refresh();
     await this.loadAttendanceDetailsIfEmployeeExists();
   };
 

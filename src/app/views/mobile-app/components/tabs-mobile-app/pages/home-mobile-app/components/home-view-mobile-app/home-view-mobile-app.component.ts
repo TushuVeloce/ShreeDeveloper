@@ -21,6 +21,7 @@ import { AlertService } from 'src/app/views/mobile-app/components/core/alert.ser
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { Expense } from 'src/app/classes/domain/entities/website/accounting/expense/expense';
 import {
+  ApplicationFeatures,
   AttendanceLocationType,
   AttendanceLogType,
   DomainEnums,
@@ -33,6 +34,7 @@ import {
   ValidMenuItemsStateManagementMobileApp,
 } from 'src/app/views/mobile-app/components/core/ValidMenuItemsStateManagementMobileApp';
 import { DashboardStats } from 'src/app/classes/domain/entities/website/Dashboard/stats/dashboardstats';
+import { FeatureAccessMobileAppService } from 'src/app/services/feature-access-mobile-app.service';
 
 // Register Chart.js components
 Chart.register(...registerables);
@@ -41,7 +43,8 @@ interface GridItem {
   icon: string;
   label: string;
   routerPath: string;
-  group: number;
+  Ref: number;
+  Members: number[];
 }
 
 @Component({
@@ -75,47 +78,70 @@ export class HomeViewMobileAppComponent
   public TotalIncome: number = 0;
   public LocationType = AttendanceLocationType;
 
-  public gridItems: GridItem[] = [];
-
-  private featureMap: {
-    [key: number]: {
-      label: string;
-      icon: string;
-      routerPath: string;
-      group: number;
-    };
-  } = {
-    100: {
+  public gridItems: GridItem[] = [
+    {
       label: 'Site',
       icon: 'assets/icons/site_management_mobile_app.png',
       routerPath: '/mobile-app/tabs/dashboard/site-management',
-      group: 20,
+      Ref: 10,
+      Members: [ApplicationFeatures.NewSite, ApplicationFeatures.PlotDetails],
     },
-    200: {
+    {
       label: 'Accounting',
       icon: 'assets/icons/report_mobile_app.png',
       routerPath: '/mobile-app/tabs/dashboard/accounting',
-      group: 20,
+      Ref: 20,
+      Members: [
+        ApplicationFeatures.Billing,
+        ApplicationFeatures.Income,
+        ApplicationFeatures.Expense,
+        ApplicationFeatures.OfficeReport,
+        ApplicationFeatures.BillPayableReport,
+      ],
     },
-    300: {
+    {
       label: 'Stock',
       icon: 'assets/icons/stock_mobile_app.png',
       routerPath: '/mobile-app/tabs/dashboard/stock-management',
-      group: 20,
+      Ref: 30,
+      Members: [
+        ApplicationFeatures.MaterialRequisition,
+        ApplicationFeatures.StockOrder,
+        ApplicationFeatures.StockInward,
+        ApplicationFeatures.StockConsume,
+        ApplicationFeatures.StockTransfer,
+        ApplicationFeatures.StockSummary,
+      ],
     },
-    400: {
+    {
       label: 'CRM',
       icon: 'assets/icons/crm_mobile_app.png',
       routerPath: '/mobile-app/tabs/dashboard/customer-relationship-management',
-      group: 20,
+      Ref: 40,
+      Members: [
+        ApplicationFeatures.CustomerEnquiry,
+        ApplicationFeatures.CustomerFollowUp,
+        ApplicationFeatures.PendingFollowUp,
+        ApplicationFeatures.CustomerInfo,
+        ApplicationFeatures.CustomerSummary,
+        ApplicationFeatures.CustomerVisitReport,
+        ApplicationFeatures.DealCancelledCustomer,
+        ApplicationFeatures.PaymentHistoryReport,
+      ],
     },
-    500: {
+    {
       label: 'Masters',
       icon: 'assets/icons/crm_mobile_app.png',
       routerPath: '/mobile-app/tabs/dashboard/masters',
-      group: 20,
+      Ref: 50,
+      Members: [
+        ApplicationFeatures.VendorMaster,
+        ApplicationFeatures.VendorServicesMaster,
+      ],
     },
-  }; // === Admin View Data ===
+  ];
+
+  // === Admin View Data ===
 
   public isAdmin = false;
   public totalBalance: number = 0;
@@ -127,6 +153,7 @@ export class HomeViewMobileAppComponent
 
   private bankBalanceData: any;
   DashboardStatsList: DashboardStats[] = [];
+  featureRef: ApplicationFeatures = ApplicationFeatures.Dashboard;
 
   constructor(
     private router: Router,
@@ -137,7 +164,7 @@ export class HomeViewMobileAppComponent
     private loadingService: LoadingService,
     private dateConversion: DateconversionService,
     private appState: AppStateManageService,
-    private validMenuItemsService: ValidMenuItemsStateManagementMobileApp
+    public access: FeatureAccessMobileAppService
   ) {}
 
   ngOnInit(): void {
@@ -147,6 +174,11 @@ export class HomeViewMobileAppComponent
       async () => {
         await this.showExitConfirmation();
       }
+    );
+    this.access.refresh();
+    // Filter grid items based on access
+    this.gridItems = this.gridItems.filter((item) =>
+      item.Members.some((member) => this.access.hasAnyAccess(member))
     );
   }
 
@@ -173,8 +205,6 @@ export class HomeViewMobileAppComponent
 
     await this.fetchServerTime();
     this.setGreeting(); // 1. Filter the Quick Actions grid based on permissions
-
-    this.filterGridItems(); // 2. Conditionally fetch data based on user role
 
     if (this.isAdmin) {
       await this.fetchAdminData();
@@ -240,286 +270,6 @@ export class HomeViewMobileAppComponent
     } finally {
       this.loadingService.hide();
     }
-  }
-
-  private filterGridItems(): void {
-    // const validMenu = this.validMenuItemsService.getValidMenuItems(); // console.log('validMenu :', validMenu); // Keeping console.log for debugging purposes // 1. Map and return GridItem or null
-    const validMenu = [
-      {
-        FeatureRef: 100,
-        FeatureName: 'UnitMaster',
-        FeatureGroupRef: 10,
-        CanAdd: true,
-        CanEdit: true,
-        CanDelete: true,
-        CanView: true,
-        CanPrint: true,
-        CanExport: true,
-      },
-      {
-        FeatureRef: 200,
-        FeatureName: 'MaterialMaster',
-        FeatureGroupRef: 10,
-        CanAdd: true,
-        CanEdit: true,
-        CanDelete: true,
-        CanView: true,
-        CanPrint: true,
-        CanExport: true,
-      },
-      {
-        FeatureRef: 300,
-        FeatureName: 'StageMaster',
-        FeatureGroupRef: 10,
-        CanAdd: true,
-        CanEdit: true,
-        CanDelete: true,
-        CanView: true,
-        CanPrint: true,
-        CanExport: true,
-      },
-      {
-        FeatureRef: 400,
-        FeatureName: 'MarketingTypeMaster',
-        FeatureGroupRef: 10,
-        CanAdd: true,
-        CanEdit: true,
-        CanDelete: true,
-        CanView: true,
-        CanPrint: true,
-        CanExport: true,
-      },
-      {
-        FeatureRef: 500,
-        FeatureName: 'VendorServicesMaster',
-        FeatureGroupRef: 10,
-        CanAdd: true,
-        CanEdit: true,
-        CanDelete: true,
-        CanView: true,
-        CanPrint: true,
-        CanExport: true,
-      },
-      {
-        FeatureRef: 600,
-        FeatureName: 'VendorMaster',
-        FeatureGroupRef: 10,
-        CanAdd: true,
-        CanEdit: true,
-        CanDelete: true,
-        CanView: true,
-        CanPrint: true,
-        CanExport: true,
-      },
-      {
-        FeatureRef: 700,
-        FeatureName: 'BankAccountMaster',
-        FeatureGroupRef: 10,
-        CanAdd: true,
-        CanEdit: true,
-        CanDelete: true,
-        CanView: true,
-        CanPrint: true,
-        CanExport: true,
-      },
-      {
-        FeatureRef: 800,
-        FeatureName: 'StateMaster',
-        FeatureGroupRef: 10,
-        CanAdd: true,
-        CanEdit: true,
-        CanDelete: true,
-        CanView: true,
-        CanPrint: true,
-        CanExport: true,
-      },
-      {
-        FeatureRef: 900,
-        FeatureName: 'CountryMaster',
-        FeatureGroupRef: 10,
-        CanAdd: true,
-        CanEdit: true,
-        CanDelete: true,
-        CanView: true,
-        CanPrint: true,
-        CanExport: true,
-      },
-      {
-        FeatureRef: 1000,
-        FeatureName: 'CityMaster',
-        FeatureGroupRef: 10,
-        CanAdd: true,
-        CanEdit: true,
-        CanDelete: true,
-        CanView: true,
-        CanPrint: true,
-        CanExport: true,
-      },
-      {
-        FeatureRef: 1100,
-        FeatureName: 'DepartmentMaster',
-        FeatureGroupRef: 10,
-        CanAdd: true,
-        CanEdit: true,
-        CanDelete: true,
-        CanView: true,
-        CanPrint: true,
-        CanExport: true,
-      },
-      {
-        FeatureRef: 1200,
-        FeatureName: 'DesignationMaster',
-        FeatureGroupRef: 10,
-        CanAdd: true,
-        CanEdit: true,
-        CanDelete: true,
-        CanView: true,
-        CanPrint: true,
-        CanExport: true,
-      },
-      {
-        FeatureRef: 1300,
-        FeatureName: 'UserRoleMaster',
-        FeatureGroupRef: 10,
-        CanAdd: true,
-        CanEdit: true,
-        CanDelete: true,
-        CanView: true,
-        CanPrint: true,
-        CanExport: true,
-      },
-      {
-        FeatureRef: 1400,
-        FeatureName: 'UserRoleRight',
-        FeatureGroupRef: 10,
-        CanAdd: true,
-        CanEdit: true,
-        CanDelete: true,
-        CanView: true,
-        CanPrint: true,
-        CanExport: true,
-      },
-      {
-        FeatureRef: 1500,
-        FeatureName: 'ExternalUserMaster',
-        FeatureGroupRef: 10,
-        CanAdd: true,
-        CanEdit: true,
-        CanDelete: true,
-        CanView: true,
-        CanPrint: true,
-        CanExport: true,
-      },
-      {
-        FeatureRef: 1600,
-        FeatureName: 'CompanyMaster',
-        FeatureGroupRef: 10,
-        CanAdd: true,
-        CanEdit: true,
-        CanDelete: true,
-        CanView: true,
-        CanPrint: true,
-        CanExport: true,
-      },
-      {
-        FeatureRef: 1700,
-        FeatureName: 'FinancialYearMaster',
-        FeatureGroupRef: 10,
-        CanAdd: true,
-        CanEdit: true,
-        CanDelete: true,
-        CanView: true,
-        CanPrint: true,
-        CanExport: true,
-      },
-      {
-        FeatureRef: 1800,
-        FeatureName: 'EmployeeMaster',
-        FeatureGroupRef: 10,
-        CanAdd: true,
-        CanEdit: true,
-        CanDelete: true,
-        CanView: true,
-        CanPrint: true,
-        CanExport: true,
-      },
-      {
-        FeatureRef: 1900,
-        FeatureName: 'AccountingTransaction',
-        FeatureGroupRef: 20,
-        CanAdd: true,
-        CanEdit: true,
-        CanDelete: true,
-        CanView: true,
-        CanPrint: true,
-        CanExport: true,
-      },
-      {
-        FeatureRef: 2000,
-        FeatureName: 'VendorReport',
-        FeatureGroupRef: 30,
-        CanAdd: true,
-        CanEdit: true,
-        CanDelete: true,
-        CanView: true,
-        CanPrint: true,
-        CanExport: true,
-      },
-      {
-        FeatureRef: 2100,
-        FeatureName: 'MaterialReport',
-        FeatureGroupRef: 30,
-        CanAdd: true,
-        CanEdit: true,
-        CanDelete: true,
-        CanView: true,
-        CanPrint: true,
-        CanExport: true,
-      },
-      {
-        FeatureRef: 2200,
-        FeatureName: 'EmployeeReport',
-        FeatureGroupRef: 30,
-        CanAdd: true,
-        CanEdit: true,
-        CanDelete: true,
-        CanView: true,
-        CanPrint: true,
-        CanExport: true,
-      },
-      {
-        FeatureRef: 2300,
-        FeatureName: 'MaterialTransaction',
-        FeatureGroupRef: 20,
-        CanAdd: true,
-        CanEdit: true,
-        CanDelete: true,
-        CanView: true,
-        CanPrint: true,
-        CanExport: true,
-      },
-    ];
-    const mappedItems = validMenu
-      .filter((item: MenuItem) => item.CanView) // Must have CanView permission
-      .map((item: MenuItem) => {
-        const mappedFeature = this.featureMap[item.FeatureRef]; // Return null if the feature is not mapped
-
-        if (!mappedFeature) {
-          return null;
-        } // Return the GridItem object
-
-        return {
-          label: mappedFeature.label || item.FeatureName,
-          icon: mappedFeature.icon,
-          routerPath: mappedFeature.routerPath,
-          group: mappedFeature.group,
-        } as GridItem;
-      }); // 2. Filter out null values, filter out group 10 (assuming masters), and sort // console.log('mappedItems :', mappedItems); // Keeping console.log for debugging purposes
-
-    this.gridItems = mappedItems
-      .filter((item): item is GridItem => item !== null) // Type Predicate fix to filter out nulls
-      .filter((item: GridItem) => item.group !== 10) // Further filtering (e.g., hiding masters)
-      .sort((a, b) => a.label.localeCompare(b.label));
   }
 
   setGreeting() {

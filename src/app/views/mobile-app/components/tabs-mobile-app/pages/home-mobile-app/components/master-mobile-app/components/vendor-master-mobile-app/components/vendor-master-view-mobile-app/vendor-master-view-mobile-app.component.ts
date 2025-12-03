@@ -11,6 +11,8 @@ import { LoadingService } from 'src/app/views/mobile-app/components/core/loading
 import { ToastService } from 'src/app/views/mobile-app/components/core/toast.service';
 import { FilterItem } from 'src/app/views/mobile-app/components/shared/chip-filter-mobile-app/chip-filter-mobile-app.component';
 import { InfiniteScrollCustomEvent } from '@ionic/angular';
+import { ApplicationFeatures } from 'src/app/classes/domain/domainenums/domainenums';
+import { FeatureAccessMobileAppService } from 'src/app/services/feature-access-mobile-app.service';
 
 @Component({
   selector: 'app-vendor-master-view-mobile-app',
@@ -38,6 +40,8 @@ export class VendorMasterViewMobileAppComponent {
   private readonly pageSize = 20;
   private currentPage = 1;
   canLoadMore = false; // Initial state is false until data is loaded
+  featureRef: ApplicationFeatures = ApplicationFeatures.VendorMaster;
+  showActionColumn = false;
 
   constructor(
     private router: Router,
@@ -46,10 +50,16 @@ export class VendorMasterViewMobileAppComponent {
     private haptic: HapticService,
     private alertService: AlertService,
     public loadingService: LoadingService,
-    private dateConversionService: DateconversionService // Renamed to follow convention
+    private dateConversionService: DateconversionService, // Renamed to follow convention
+    public access: FeatureAccessMobileAppService
   ) {} // 🔑 Primary loading logic for the view
 
   ionViewWillEnter = async () => {
+    this.access.refresh();
+    this.showActionColumn =
+      this.access.canPrint(this.featureRef) ||
+      this.access.canEdit(this.featureRef) ||
+      this.access.canDelete(this.featureRef);
     // Reset page and load data on entering the view
     this.currentPage = 1;
     this.MasterList = [];
@@ -284,7 +294,7 @@ export class VendorMasterViewMobileAppComponent {
       await this.toastService.present('Something went wrong', 1000, 'danger');
       await this.haptic.error();
     }
-  }; 
+  };
   private getVendorServiceListByCompanyRef = async (): Promise<
     VendorService[]
   > => {

@@ -1,10 +1,11 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
-import { DomainEnums, MaterialRequisitionStatuses } from 'src/app/classes/domain/domainenums/domainenums';
+import { ApplicationFeatures, DomainEnums, MaterialRequisitionStatuses } from 'src/app/classes/domain/domainenums/domainenums';
 import { Site } from 'src/app/classes/domain/entities/website/masters/site/site';
 import { MaterialRequisition } from 'src/app/classes/domain/entities/website/stock_management/material_requisition/materialrequisition';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { DateconversionService } from 'src/app/services/dateconversion.service';
+import { FeatureAccessMobileAppService } from 'src/app/services/feature-access-mobile-app.service';
 import { AlertService } from 'src/app/views/mobile-app/components/core/alert.service';
 import { HapticService } from 'src/app/views/mobile-app/components/core/haptic.service';
 import { LoadingService } from 'src/app/views/mobile-app/components/core/loading.service';
@@ -38,6 +39,8 @@ export class MaterialRequisitionViewMobileAppComponent implements OnInit, OnDest
   MaterialRequisitionStatuses = MaterialRequisitionStatuses;
 
   expandedRequisitions = new Set<number>();
+    featureRef: ApplicationFeatures = ApplicationFeatures.MaterialRequisition;
+    showActionColumn = false;
 
   constructor(
     private router: Router,
@@ -46,7 +49,8 @@ export class MaterialRequisitionViewMobileAppComponent implements OnInit, OnDest
     private toast: ToastService,
     private haptic: HapticService,
     private alert: AlertService,
-    public loadingService: LoadingService
+    public loadingService: LoadingService,
+     public access: FeatureAccessMobileAppService
   ) { }
 
   ngOnInit = async () => {
@@ -54,6 +58,11 @@ export class MaterialRequisitionViewMobileAppComponent implements OnInit, OnDest
   }
 
   ionViewWillEnter = async () => {
+        this.access.refresh();
+    this.showActionColumn =
+      this.access.canPrint(this.featureRef) ||
+      this.access.canEdit(this.featureRef) ||
+      this.access.canDelete(this.featureRef);
     await this.loadMaterialRequisitionIfEmployeeExists();
     this.loadFilters();
   }

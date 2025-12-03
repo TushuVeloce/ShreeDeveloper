@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { ApplicationFeatures } from 'src/app/classes/domain/domainenums/domainenums';
 import { Employee } from 'src/app/classes/domain/entities/website/masters/employee/employee';
 import { SalarySlipRequest } from 'src/app/classes/domain/entities/website/request/salarysliprequest/salarysliprequest';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
+import { FeatureAccessMobileAppService } from 'src/app/services/feature-access-mobile-app.service';
 import { AlertService } from 'src/app/views/mobile-app/components/core/alert.service';
 import { HapticService } from 'src/app/views/mobile-app/components/core/haptic.service';
 import { LoadingService } from 'src/app/views/mobile-app/components/core/loading.service';
@@ -33,6 +35,8 @@ export class SalarySlipRequestViewMobileAppComponent  implements OnInit {
   entity: SalarySlipRequest = SalarySlipRequest.CreateNewInstance();
   salarySlipRequestList: SalarySlipRequest[] = [];
   filteredSalarySlipRequestList: SalarySlipRequest[] = [];
+    featureRef: ApplicationFeatures = ApplicationFeatures.EmployeeSalarySlipRequest;
+    showActionColumn = false;
 
   constructor(
     private router: Router,
@@ -40,7 +44,8 @@ export class SalarySlipRequestViewMobileAppComponent  implements OnInit {
     private toastService: ToastService,
     private haptic: HapticService,
     private alertService: AlertService,
-    public loadingService: LoadingService
+    public loadingService: LoadingService,
+    public access: FeatureAccessMobileAppService
   ) { }
 
   ngOnInit(): void {
@@ -48,6 +53,10 @@ export class SalarySlipRequestViewMobileAppComponent  implements OnInit {
   }
 
   async ionViewWillEnter(): Promise<void> {
+        this.access.refresh();
+    this.showActionColumn =
+      this.access.canEdit(this.featureRef) ||
+      this.access.canDelete(this.featureRef);
     await this.loadSalaryslipIfCompanyExists(); // Refresh on enter
   }
 

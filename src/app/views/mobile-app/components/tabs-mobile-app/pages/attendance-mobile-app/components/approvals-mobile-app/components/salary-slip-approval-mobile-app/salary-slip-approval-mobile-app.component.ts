@@ -1,11 +1,15 @@
 import { Component, OnInit } from '@angular/core';
-import { DomainEnums } from 'src/app/classes/domain/domainenums/domainenums';
+import {
+  ApplicationFeatures,
+  DomainEnums,
+} from 'src/app/classes/domain/domainenums/domainenums';
 import { Employee } from 'src/app/classes/domain/entities/website/masters/employee/employee';
 import { SalarySlipRequest } from 'src/app/classes/domain/entities/website/request/salarysliprequest/salarysliprequest';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { BaseUrlService } from 'src/app/services/baseurl.service';
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
 import { DateconversionService } from 'src/app/services/dateconversion.service';
+import { FeatureAccessMobileAppService } from 'src/app/services/feature-access-mobile-app.service';
 import { UIUtils } from 'src/app/services/uiutils.service';
 import { Utils } from 'src/app/services/utils.service';
 import { AlertService } from 'src/app/views/mobile-app/components/core/alert.service';
@@ -54,6 +58,7 @@ export class SalarySlipApprovalMobileAppComponent implements OnInit {
   imageUrl: string | null = null;
   ProfilePicFile: File | null = null;
   public monthList = DomainEnums.MonthList();
+  featureRef: ApplicationFeatures = ApplicationFeatures.SalarySlipApproval;
 
   constructor(
     private utils: Utils,
@@ -65,10 +70,12 @@ export class SalarySlipApprovalMobileAppComponent implements OnInit {
     private alertService: AlertService,
     public loadingService: LoadingService,
     private companystatemanagement: CompanyStateManagement,
-    private baseUrl: BaseUrlService
+    private baseUrl: BaseUrlService,
+    public access: FeatureAccessMobileAppService
   ) {}
 
   async ngOnInit() {
+    this.access.refresh();
     await this.loadAttendanceDetailsIfEmployeeExists();
   }
 
@@ -77,6 +84,7 @@ export class SalarySlipApprovalMobileAppComponent implements OnInit {
   }
 
   ionViewWillEnter = async () => {
+    this.access.refresh();
     await this.loadAttendanceDetailsIfEmployeeExists();
   };
 

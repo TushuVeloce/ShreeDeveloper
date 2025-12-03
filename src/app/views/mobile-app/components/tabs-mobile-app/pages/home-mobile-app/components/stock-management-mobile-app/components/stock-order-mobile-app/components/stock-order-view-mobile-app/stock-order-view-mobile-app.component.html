@@ -18,11 +18,11 @@
                             <p class="site-name">Site: {{ order.p.SiteName || 'Unknown Site' }}</p>
                         </div>
                         <div class="action-buttons-card" (click)="$event.stopPropagation()"
-                            *ngIf="order.p.MaterialPurchaseOrderStatus == MaterialPurchaseOrderStatus.Pending">
-                            <ion-button fill="clear" color="primary" (click)="onEditClicked(order)">
+                            *ngIf="order.p.MaterialPurchaseOrderStatus == MaterialPurchaseOrderStatus.Pending && showActionColumn">
+                            <ion-button fill="clear" color="primary" (click)="onEditClicked(order)" *ngIf="access.canEdit(featureRef)">
                                 <ion-icon name="pencil-outline" slot="icon-only"></ion-icon>
                             </ion-button>
-                            <ion-button fill="clear" color="danger" (click)="onDeleteClicked(order)">
+                            <ion-button fill="clear" color="danger" (click)="onDeleteClicked(order)" *ngIf="access.canDelete(featureRef)">
                                 <ion-icon name="trash-outline" slot="icon-only"></ion-icon>
                             </ion-button>
                         </div>
@@ -143,7 +143,7 @@
                 </div>
             </ion-content>
             <ion-footer class="modal-footer-mobile-app"
-                *ngIf="SelectedOrder.p.MaterialPurchaseOrderStatus == MaterialPurchaseOrderStatus.Pending">
+                *ngIf="SelectedOrder.p.MaterialPurchaseOrderStatus == MaterialPurchaseOrderStatus.Pending && access.canApprove(featureRef)">
                 <div class="action-buttons-modal">
                     <ion-button color="danger" shape="round" expand="block"
                         (click)="SaveOrder(MaterialPurchaseOrderStatus.Incomplete)">
@@ -158,7 +158,7 @@
         </ng-template>
     </ion-modal>
 
-    <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab vertical="bottom" horizontal="end" slot="fixed" *ngIf="access.canAdd(featureRef)">
         <ion-fab-button color="primary" (click)="AddOrder()">
             <ion-icon name="add-outline"></ion-icon>
         </ion-fab-button>

@@ -1,14 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { SegmentValue } from '@ionic/angular';
 import {
+  ApplicationFeatures,
   AttendanceLocationType,
   AttendanceLogType,
   DomainEnums,
   LeaveRequestType,
 } from 'src/app/classes/domain/domainenums/domainenums';
-import {
-  AttendanceLog,
-} from 'src/app/classes/domain/entities/mobile-app/attendance-management/attendancelog';
+import { AttendanceLog } from 'src/app/classes/domain/entities/mobile-app/attendance-management/attendancelog';
 import { AttendanceLogs } from 'src/app/classes/domain/entities/website/HR_and_Payroll/attendancelogs/attendancelogs';
 import { Site } from 'src/app/classes/domain/entities/website/masters/site/site';
 import { PayloadPacketFacade } from 'src/app/classes/infrastructure/payloadpacket/payloadpacketfacade';
@@ -33,6 +32,7 @@ import {
   debounceTime,
   distinctUntilChanged,
 } from 'rxjs';
+import { FeatureAccessMobileAppService } from 'src/app/services/feature-access-mobile-app.service';
 
 @Component({
   selector: 'app-attendance-view-mobile-app',
@@ -99,10 +99,16 @@ export class AttendanceViewMobileAppComponent implements OnInit {
     private toastService: ToastService,
     private haptic: HapticService,
     public loadingService: LoadingService,
-    public locationMobileAppService: LocationMobileAppService
+    public locationMobileAppService: LocationMobileAppService,
+    public access: FeatureAccessMobileAppService
   ) {}
 
   ngOnInit = async () => {
+    this.access.refresh();
+    // Filter grid items based on access
+    this.gridItems = this.gridItems.filter((item) =>
+      item.Members.some((member: any) => this.access.hasAnyAccess(member))
+    );
     // Setup search filter observable
     combineLatest([
       this.employeeSearchTerm$.pipe(debounceTime(300), distinctUntilChanged()),
@@ -115,6 +121,11 @@ export class AttendanceViewMobileAppComponent implements OnInit {
   };
 
   ionViewWillEnter = async () => {
+    this.access.refresh();
+    // Filter grid items based on access
+    this.gridItems = this.gridItems.filter((item) =>
+      item.Members.some((member: any) => this.access.hasAnyAccess(member))
+    );
     await this.loadAttendanceIfEmployeeExists();
   };
 
@@ -124,11 +135,20 @@ export class AttendanceViewMobileAppComponent implements OnInit {
         icon: 'assets/icons/approvals_mobile_app.png',
         label: 'Approvals',
         routerPath: '/mobile-app/tabs/attendance/approvals',
+        Ref: 10,
+        Members: [
+          ApplicationFeatures.HRAttendance,
+          ApplicationFeatures.LeaveApproval,
+          ApplicationFeatures.SalarySlipApproval,
+          ApplicationFeatures.EmployeeOvertime,
+        ],
       },
       {
         icon: 'assets/icons/holiday_mobile_app.png',
         label: 'Holidays',
         routerPath: '/mobile-app/tabs/attendance/holidays',
+        Ref: 20,
+        Members: [ApplicationFeatures.CompanyHolidays],
       },
     ];
 
@@ -138,16 +158,22 @@ export class AttendanceViewMobileAppComponent implements OnInit {
           icon: 'assets/icons/salary_slip_request_mobile_app.png',
           label: 'Salary Slip',
           routerPath: '/mobile-app/tabs/attendance/salary-slip-request',
+          Ref: 30,
+          Members: [ApplicationFeatures.EmployeeSalarySlipRequest],
         },
         {
           icon: 'assets/icons/leave_requests_mobile_app.png',
           label: 'Leave',
           routerPath: '/mobile-app/tabs/attendance/leave-request',
+          Ref: 40,
+          Members: [ApplicationFeatures.EmployeeLeaveRequest],
         },
         {
           icon: 'assets/icons/attendance _mobile_app.png',
           label: 'Attendance',
           routerPath: '/mobile-app/tabs/attendance/all-attendance',
+          Ref: 50,
+          Members: [ApplicationFeatures.EmployeeAttendance],
         }
       );
     }
@@ -270,69 +296,71 @@ export class AttendanceViewMobileAppComponent implements OnInit {
     );
   };
 
-getCheckInData = async () => {
-  try {
-    // If employeeRef is not set, disable attendance and return.
-    if (this.employeeRef === 0) {
-      this.attendanceStatus = 'disabled';
-      return;
-    }
-
-    this.attendanceLog = AttendanceLog.CreateNewInstance();
-    this.checkInTime = '';
-    this.checkOutTime = '';
-
-    const strCurrentDateTime = await CurrentDateTimeRequest.GetCurrentDateTime();
-    const tranDate = this.dtu.ConvertStringDateToFullFormat(strCurrentDateTime.substring(0, 10));
-
-    const lst = await AttendanceLog.FetchEntireListByCompanyRef(
-      this.employeeRef,
-      this.companyRef,
-      tranDate,
-      async (errMsg) => {
-        this.toastService.present('Error ' + errMsg, 1000, 'danger');
-        await this.haptic.error();
+  getCheckInData = async () => {
+    try {
+      // If employeeRef is not set, disable attendance and return.
+      if (this.employeeRef === 0) {
+        this.attendanceStatus = 'disabled';
+        return;
       }
-    );
 
-    // Guard clause for empty list
-    if (!lst || lst.length === 0) {
-      this.attendanceStatus = 'notCheckedIn';
-      return;
+      this.attendanceLog = AttendanceLog.CreateNewInstance();
+      this.checkInTime = '';
+      this.checkOutTime = '';
+
+      const strCurrentDateTime =
+        await CurrentDateTimeRequest.GetCurrentDateTime();
+      const tranDate = this.dtu.ConvertStringDateToFullFormat(
+        strCurrentDateTime.substring(0, 10)
+      );
+
+      const lst = await AttendanceLog.FetchEntireListByCompanyRef(
+        this.employeeRef,
+        this.companyRef,
+        tranDate,
+        async (errMsg) => {
+          this.toastService.present('Error ' + errMsg, 1000, 'danger');
+          await this.haptic.error();
+        }
+      );
+
+      // Guard clause for empty list
+      if (!lst || lst.length === 0) {
+        this.attendanceStatus = 'notCheckedIn';
+        return;
+      }
+
+      const attendanceData = lst[0].p;
+
+      // First, check for 'onLeave' status as a priority.
+      if (attendanceData.IsLeave === 1) {
+        this.attendanceStatus = 'onLeave';
+        return;
+      }
+
+      // A more reliable way to determine status based on CheckInTime and CheckOutTime
+      if (attendanceData.CheckInTime && attendanceData.CheckOutTime) {
+        // Completed check-in/check-out cycle
+        this.attendanceStatus = 'checkedOut';
+        this.checkInTime = attendanceData.CheckInTime;
+        this.checkOutTime = attendanceData.CheckOutTime;
+      } else if (attendanceData.CheckInTime && !attendanceData.CheckOutTime) {
+        // User has checked in but not checked out yet
+        this.attendanceStatus = 'checkedIn';
+        this.checkInTime = attendanceData.CheckInTime;
+      } else {
+        // No check-in has been performed
+        this.attendanceStatus = 'notCheckedIn';
+      }
+    } catch (error) {
+      this.toastService.present(
+        'Unexpected error while fetching attendance.',
+        1000,
+        'danger'
+      );
+      await this.haptic.error();
     }
-
-    const attendanceData = lst[0].p;
-
-    // First, check for 'onLeave' status as a priority.
-    if (attendanceData.IsLeave === 1) {
-      this.attendanceStatus = 'onLeave';
-      return;
-    }
-
-    // A more reliable way to determine status based on CheckInTime and CheckOutTime
-    if (attendanceData.CheckInTime && attendanceData.CheckOutTime) {
-      // Completed check-in/check-out cycle
-      this.attendanceStatus = 'checkedOut';
-      this.checkInTime = attendanceData.CheckInTime;
-      this.checkOutTime = attendanceData.CheckOutTime;
-    } else if (attendanceData.CheckInTime && !attendanceData.CheckOutTime) {
-      // User has checked in but not checked out yet
-      this.attendanceStatus = 'checkedIn';
-      this.checkInTime = attendanceData.CheckInTime;
-    } else {
-      // No check-in has been performed
-      this.attendanceStatus = 'notCheckedIn';
-    }
-    
-  } catch (error) {
-    this.toastService.present(
-      'Unexpected error while fetching attendance.',
-      1000,
-      'danger'
-    );
-    await this.haptic.error();
-  }
-};
+  };
 
   //  getCheckInData = async () => {
   //   try {

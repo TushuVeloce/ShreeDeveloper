@@ -1,8 +1,5 @@
 <!-- Header -->
-<app-header-with-back-handler
-  title="Attendance Approval"
-  backRoute="mobile-app/tabs/attendance/approvals/"
->
+<app-header-with-back-handler title="Attendance Approval" backRoute="mobile-app/tabs/attendance/approvals/">
 </app-header-with-back-handler>
 
 <ion-content [fullscreen]="true" class="attendance-content">
@@ -25,15 +22,8 @@
 
       <ion-row>
         <ion-col size="12">
-          <ion-segment
-            [(ngModel)]="selectedPeriod"
-            class="modern-segment"
-            (ngModelChange)="filterRequestsByStatus()"
-          >
-            <ion-segment-button
-              *ngFor="let status of PeriodOptions"
-              [value]="status.value"
-            >
+          <ion-segment [(ngModel)]="selectedPeriod" class="modern-segment" (ngModelChange)="filterRequestsByStatus()">
+            <ion-segment-button *ngFor="let status of PeriodOptions" [value]="status.value">
               <ion-label>{{ status.label }}</ion-label>
             </ion-segment-button>
           </ion-segment>
@@ -46,25 +36,13 @@
   <ion-card class="filter-section" *ngIf="selectedPeriod !== 0">
     <ion-grid>
       <ion-row>
-        <ion-col
-          size="12"
-          size-md="6"
-          *ngIf="selectedPeriod == 1 || selectedPeriod == 2"
-        >
+        <ion-col size="12" size-md="6" *ngIf="selectedPeriod == 1 || selectedPeriod == 2">
           <h3>Employee</h3>
           <ion-item lines="none" class="custom-input">
             <ion-icon slot="start" name="person-circle-outline"></ion-icon>
-            <ion-select
-              mode="ios"
-              placeholder="Select Employee"
-              interface="action-sheet"
-              [(ngModel)]="selectEmployee"
-              (ionChange)="onEmployeeChange()"
-            >
-              <ion-select-option
-                *ngFor="let Employee of EmployeeList"
-                [value]="Employee.p.Ref"
-              >
+            <ion-select mode="ios" placeholder="Select Employee" interface="action-sheet" [(ngModel)]="selectEmployee"
+              (ionChange)="onEmployeeChange()">
+              <ion-select-option *ngFor="let Employee of EmployeeList" [value]="Employee.p.Ref">
                 {{ Employee.p.Name }}
               </ion-select-option>
             </ion-select>
@@ -73,17 +51,8 @@
 
         <ion-col size="12" size-md="6" *ngIf="selectedPeriod == 2">
           <h3>Month</h3>
-          <ion-segment
-            [(ngModel)]="selectMonth"
-            class="month-segment"
-            (ngModelChange)="onMonthChange()"
-            scrollable
-          >
-            <ion-segment-button
-              *ngFor="let month of MonthList"
-              [value]="month.Ref"
-              class="month-segment-button"
-            >
+          <ion-segment [(ngModel)]="selectMonth" class="month-segment" (ngModelChange)="onMonthChange()" scrollable>
+            <ion-segment-button *ngFor="let month of MonthList" [value]="month.Ref" class="month-segment-button">
               <ion-label>{{ month.Name }}</ion-label>
             </ion-segment-button>
           </ion-segment>
@@ -130,10 +99,10 @@
           <h2>{{ approval.p.EmployeeName }}</h2>
           <p>
             {{
-              approval.p.AttendanceLogDetailsArray[0]
-                ?.AttendenceLocationType === LocationType.Office
-                ? "Office"
-                : approval.p.AttendanceLogDetailsArray[0]?.SiteName || "--"
+            approval.p.AttendanceLogDetailsArray[0]
+            ?.AttendenceLocationType === LocationType.Office
+            ? "Office"
+            : approval.p.AttendanceLogDetailsArray[0]?.SiteName || "--"
             }}
           </p>
         </ion-label>
@@ -142,19 +111,16 @@
         </ion-badge>
       </ion-item>
 
-      <ion-card-content
-        *ngIf="!getItemIsLeave(approval)"
-        [ngClass]="getItemDisable(approval)"
-      >
+      <ion-card-content *ngIf="!getItemIsLeave(approval)" [ngClass]="getItemDisable(approval)">
         <ion-grid>
           <ion-row>
             <ion-col size="6">
               <strong>Check In</strong>
               <p>
                 {{
-                  approval.p.FirstCheckInTime
-                    ? convertTo12HourFormat(approval.p.FirstCheckInTime)
-                    : "--"
+                approval.p.FirstCheckInTime
+                ? convertTo12HourFormat(approval.p.FirstCheckInTime)
+                : "--"
                 }}
               </p>
               <span [ngClass]="getInRemarkColor(approval)">
@@ -165,9 +131,9 @@
               <strong>Check Out</strong>
               <p>
                 {{
-                  approval.p.LastCheckOutTime
-                    ? convertTo12HourFormat(approval.p.LastCheckOutTime)
-                    : "--"
+                approval.p.LastCheckOutTime
+                ? convertTo12HourFormat(approval.p.LastCheckOutTime)
+                : "--"
                 }}
               </p>
               <span [ngClass]="getOutRemarkColor(approval)">
@@ -187,27 +153,15 @@
             </ion-col>
           </ion-row>
           <!-- Action Buttons -->
-          <ion-row
-            class="action-buttons"
-            *ngIf="!approval.p.IsAttendanceVerified"
-          >
+          <ion-row class="action-buttons" *ngIf="!approval.p.IsAttendanceVerified">
             <ion-col size="6">
-              <ion-button
-                expand="block"
-                fill="solid"
-                color="warning"
-                (click)="openModal(approval)"
-              >
+              <ion-button expand="block" fill="solid" color="warning" (click)="openModal(approval)">
                 View Details
               </ion-button>
             </ion-col>
             <ion-col size="6">
-              <ion-button
-                expand="block"
-                fill="solid"
-                color="success"
-                (click)="ChangeAttendanceStatus(approval)"
-              >
+              <ion-button expand="block" fill="solid" color="success" (click)="ChangeAttendanceStatus(approval)"
+                *ngIf="access.canApprove(featureRef)">
                 Approve
               </ion-button>
             </ion-col>
@@ -232,11 +186,7 @@
   </div>
 
   <!-- Attendance Details Modal -->
-  <ion-modal
-    [isOpen]="isModalOpen"
-    (didDismiss)="closeModal()"
-    class="custom-modal-mobile-app"
-  >
+  <ion-modal [isOpen]="isModalOpen" (didDismiss)="closeModal()" class="custom-modal-mobile-app">
     <ng-template>
       <!-- Header -->
       <ion-header class="modal-toolbar-mobile-app">
@@ -331,29 +281,27 @@
 
         <!-- Logs List -->
         <ion-list lines="full" class="logs-list">
-          <div
-            *ngFor="
+          <div *ngFor="
               let item of SelectedAttendance?.p?.AttendanceLogDetailsArray;
               let i = index
-            "
-          >
+            ">
             <ion-item lines="none">
               <ion-label>
                 <h3>Log #{{ i + 1 }}</h3>
                 <p>
                   <strong>Check-In:</strong>
                   {{
-                    item.CheckInTime
-                      ? convertTo12HourFormat(item.CheckInTime)
-                      : "--"
+                  item.CheckInTime
+                  ? convertTo12HourFormat(item.CheckInTime)
+                  : "--"
                   }}
                 </p>
                 <p>
                   <strong>Check-Out:</strong>
                   {{
-                    item.CheckOutTime
-                      ? convertTo12HourFormat(item.CheckOutTime)
-                      : "--"
+                  item.CheckOutTime
+                  ? convertTo12HourFormat(item.CheckOutTime)
+                  : "--"
                   }}
                 </p>
               </ion-label>
@@ -364,19 +312,11 @@
                 <ion-col size="6" class="ion-text-center">
                   <div class="checkin-wrapper">
                     <ion-avatar class="checkin-avatar">
-                      <ng-container
-                        *ngIf="item.AttendanceLogPath1; else noSelfImg"
-                      >
-                        <img
-                          [src]="getImageURL(item.AttendanceLogPath1)"
-                          alt="Self Check-in"
-                        />
+                      <ng-container *ngIf="item.AttendanceLogPath1; else noSelfImg">
+                        <img [src]="getImageURL(item.AttendanceLogPath1)" alt="Self Check-in" />
                       </ng-container>
                       <ng-template #noSelfImg>
-                        <ion-icon
-                          name="image-outline"
-                          class="placeholder-icon"
-                        ></ion-icon>
+                        <ion-icon name="image-outline" class="placeholder-icon"></ion-icon>
                       </ng-template>
                     </ion-avatar>
                     <p class="checkin-label">Self</p>
@@ -387,19 +327,11 @@
                 <ion-col size="6" class="ion-text-center">
                   <div class="checkin-wrapper">
                     <ion-avatar class="checkin-avatar">
-                      <ng-container
-                        *ngIf="item.AttendanceLogPath2; else noWorkImg"
-                      >
-                        <img
-                          [src]="getImageURL(item.AttendanceLogPath2)"
-                          alt="Work Location Check-in"
-                        />
+                      <ng-container *ngIf="item.AttendanceLogPath2; else noWorkImg">
+                        <img [src]="getImageURL(item.AttendanceLogPath2)" alt="Work Location Check-in" />
                       </ng-container>
                       <ng-template #noWorkImg>
-                        <ion-icon
-                          name="image-outline"
-                          class="placeholder-icon"
-                        ></ion-icon>
+                        <ion-icon name="image-outline" class="placeholder-icon"></ion-icon>
                       </ng-template>
                     </ion-avatar>
                     <p class="checkin-label">Work Location</p>
@@ -413,12 +345,7 @@
 
       <!-- Footer -->
       <ion-footer class="modal-footer-mobile-app">
-        <ion-button
-          expand="block"
-          color="primary"
-          shape="round"
-          (click)="closeModal()"
-        >
+        <ion-button expand="block" color="primary" shape="round" (click)="closeModal()">
           Close
         </ion-button>
       </ion-footer>

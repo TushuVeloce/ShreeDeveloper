@@ -1,6 +1,7 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import {
+  ApplicationFeatures,
   AttendanceLocationType,
   AttendanceLogType,
   DomainEnums,
@@ -13,6 +14,7 @@ import { AppStateManageService } from 'src/app/services/app-state-manage.service
 import { BaseUrlService } from 'src/app/services/baseurl.service';
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
 import { DateconversionService } from 'src/app/services/dateconversion.service';
+import { FeatureAccessMobileAppService } from 'src/app/services/feature-access-mobile-app.service';
 import { UIUtils } from 'src/app/services/uiutils.service';
 import { Utils } from 'src/app/services/utils.service';
 import { AlertService } from 'src/app/views/mobile-app/components/core/alert.service';
@@ -198,6 +200,7 @@ export class AttendanceApprovalMobileAppComponent implements OnInit {
   isAdmin: boolean = false;
   employeeRef: number = 0;
   companyRef: number = 0;
+  featureRef: ApplicationFeatures = ApplicationFeatures.HRAttendance;
   
   constructor(
     private appStateManagement: AppStateManageService,
@@ -210,10 +213,12 @@ export class AttendanceApprovalMobileAppComponent implements OnInit {
     private utils: Utils,
     private router: Router,
     private baseUrl: BaseUrlService,
-    private gestureService: GestureService
+    private gestureService: GestureService,
+    public access: FeatureAccessMobileAppService
   ) {}
 
   async ngOnInit() {
+     this.access.refresh();
     await this.loadAttendanceDetailsIfEmployeeExists();
   }
 
@@ -222,6 +227,7 @@ export class AttendanceApprovalMobileAppComponent implements OnInit {
   }
 
   ionViewWillEnter = async () => {
+     this.access.refresh();
     await this.loadAttendanceDetailsIfEmployeeExists();
   };
 

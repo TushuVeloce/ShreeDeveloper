@@ -79,7 +79,7 @@
               <ion-icon name="eye-outline" slot="icon-only"></ion-icon>
             </ion-button>
             <ion-button fill="clear" size="small" color="primary" (click)="onDeleteClicked(leave)"
-              *ngIf="(leave.p.IsCancelled == 0 && leave.p.IsApproved == 0)">
+              *ngIf="(leave.p.IsCancelled == 0 && leave.p.IsApproved == 0 && access.canDelete(featureRef))">
               <ion-icon name="trash-outline" slot="icon-only"></ion-icon>
             </ion-button>
           </div>
@@ -113,7 +113,7 @@
 
 
   <!-- FAB -->
-  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed" *ngIf="access.canAdd(featureRef)">
     <ion-fab-button color="primary" (click)="addLeaveRequest()">
       <ion-icon name="add-outline"></ion-icon>
     </ion-fab-button>

@@ -29,7 +29,6 @@
       <ion-card
         *ngFor="let item of FilterFollowupList"
         class="followup-card"
-        (click)="onFollowUpClick(item)"
         button
       >
         <ion-card-content>
@@ -55,8 +54,8 @@
               <span class="value">{{ item.p.CustomerRequirement }}</span>
             </div>
           </div>
-          <div class="card-actions">
-            <ion-button fill="solid" size="small" color="primary">
+          <div class="card-actions" *ngIf="showActionColumn">
+            <ion-button fill="solid" size="small" color="primary"  (click)="onFollowUpClick(item)">
               <ion-icon slot="start" name="people-outline"></ion-icon> Follow Up
             </ion-button>
           </div>

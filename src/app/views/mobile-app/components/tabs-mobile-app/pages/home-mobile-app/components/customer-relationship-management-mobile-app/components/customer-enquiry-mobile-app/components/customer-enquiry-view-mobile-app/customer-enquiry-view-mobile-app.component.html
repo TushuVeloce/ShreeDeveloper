@@ -37,11 +37,11 @@
               <ion-icon slot="start" name="eye-outline"></ion-icon>
               View
             </ion-button>
-            <ion-button fill="outline" size="small" (click)="onEditClicked(item)">
+            <ion-button fill="outline" size="small" (click)="onEditClicked(item)" *ngIf="access.canEdit(featureRef)">
               <ion-icon slot="start" name="create-outline"></ion-icon>
               Edit
             </ion-button>
-            <ion-button fill="outline" size="small" (click)="onDeleteClicked(item)">
+            <ion-button fill="outline" size="small" (click)="onDeleteClicked(item)" *ngIf="access.canDelete(featureRef)">
               <ion-icon slot="start" name="trash-outline"></ion-icon>
               Delete
             </ion-button>
@@ -59,7 +59,7 @@
     </div>
   </ion-list>
 
-  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed" *ngIf="access.canAdd(featureRef)">
     <ion-fab-button color="primary" (click)="AddCustomerEnquiryForm()">
       <ion-icon name="add-outline"></ion-icon>
     </ion-fab-button>

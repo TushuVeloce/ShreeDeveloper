@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { ApplicationFeatures } from 'src/app/classes/domain/domainenums/domainenums';
 import { Site } from 'src/app/classes/domain/entities/website/masters/site/site';
 import { StockTransfer } from 'src/app/classes/domain/entities/website/stock_management/stock-transfer/stocktransfer';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { DateconversionService } from 'src/app/services/dateconversion.service';
+import { FeatureAccessMobileAppService } from 'src/app/services/feature-access-mobile-app.service';
 import { AlertService } from 'src/app/views/mobile-app/components/core/alert.service';
 import { HapticService } from 'src/app/views/mobile-app/components/core/haptic.service';
 import { LoadingService } from 'src/app/views/mobile-app/components/core/loading.service';
@@ -14,10 +16,9 @@ import { FilterItem } from 'src/app/views/mobile-app/components/shared/chip-filt
   selector: 'app-stock-transfer-view-mobile-app',
   templateUrl: './stock-transfer-view-mobile-app.component.html',
   styleUrls: ['./stock-transfer-view-mobile-app.component.scss'],
-  standalone: false
+  standalone: false,
 })
 export class StockTransferViewMobileAppComponent implements OnInit {
-
   Entity: StockTransfer = StockTransfer.CreateNewInstance();
   MasterList: StockTransfer[] = [];
   DisplayMasterList: StockTransfer[] = [];
@@ -30,6 +31,8 @@ export class StockTransferViewMobileAppComponent implements OnInit {
   modalOpen = false;
   filters: FilterItem[] = [];
   selectedFilterValues: Record<string, any> = {};
+  featureRef: ApplicationFeatures = ApplicationFeatures.StockTransfer;
+  showActionColumn = false;
 
   constructor(
     private router: Router,
@@ -39,11 +42,17 @@ export class StockTransferViewMobileAppComponent implements OnInit {
     private haptic: HapticService,
     private alertService: AlertService,
     public loadingService: LoadingService,
-  ) { }
+    public access: FeatureAccessMobileAppService
+  ) {}
 
-  ngOnInit = async () => { };
+  ngOnInit = async () => {};
 
   ionViewWillEnter = async () => {
+    this.access.refresh();
+    this.showActionColumn =
+      this.access.canPrint(this.featureRef) ||
+      this.access.canEdit(this.featureRef) ||
+      this.access.canDelete(this.featureRef);
     await this.loadStockTransferIfEmployeeExists();
     this.loadFilters();
   };
@@ -52,34 +61,51 @@ export class StockTransferViewMobileAppComponent implements OnInit {
     await this.loadStockTransferIfEmployeeExists();
     this.loadFilters();
     (event.target as HTMLIonRefresherElement).complete();
-  }
+  };
 
   loadFilters = () => {
-    this.FromSiteList = this.SiteList.filter(site => site.p.Ref !== this.Entity.p.ToSiteRef);
-    this.ToSiteList = this.SiteList.filter(site => site.p.Ref !== this.Entity.p.FromSiteRef);
+    this.FromSiteList = this.SiteList.filter(
+      (site) => site.p.Ref !== this.Entity.p.ToSiteRef
+    );
+    this.ToSiteList = this.SiteList.filter(
+      (site) => site.p.Ref !== this.Entity.p.FromSiteRef
+    );
 
     this.filters = [
       {
         key: 'fromsite',
         label: 'From Site',
         multi: false,
-        options: this.FromSiteList.map(item => ({ Ref: item.p.Ref, Name: item.p.Name })),
-        selected: this.selectedFilterValues['fromsite'] > 0 ? this.selectedFilterValues['fromsite'] : null,
+        options: this.FromSiteList.map((item) => ({
+          Ref: item.p.Ref,
+          Name: item.p.Name,
+        })),
+        selected:
+          this.selectedFilterValues['fromsite'] > 0
+            ? this.selectedFilterValues['fromsite']
+            : null,
       },
       {
         key: 'tosite',
         label: 'To Site',
         multi: false,
-        options: this.ToSiteList.map(item => ({ Ref: item.p.Ref, Name: item.p.Name })),
-        selected: this.selectedFilterValues['tosite'] > 0 ? this.selectedFilterValues['tosite'] : null,
-      }
+        options: this.ToSiteList.map((item) => ({
+          Ref: item.p.Ref,
+          Name: item.p.Name,
+        })),
+        selected:
+          this.selectedFilterValues['tosite'] > 0
+            ? this.selectedFilterValues['tosite']
+            : null,
+      },
     ];
-  }
+  };
 
   onFiltersChanged = async (updatedFilters: any[]) => {
     for (const filter of updatedFilters) {
       const selected = filter.selected;
-      const selectedValue = (selected === null || selected === undefined) ? null : selected;
+      const selectedValue =
+        selected === null || selected === undefined ? null : selected;
       this.selectedFilterValues[filter.key] = selectedValue ?? null;
 
       switch (filter.key) {
@@ -93,16 +119,21 @@ export class StockTransferViewMobileAppComponent implements OnInit {
     }
     await this.getStockTransferListByCompanyRefAndSiteRef();
     this.loadFilters();
-  }
+  };
 
   private loadStockTransferIfEmployeeExists = async () => {
     try {
       await this.loadingService.show();
-      const company = this.appStateManage.localStorage.getItem('SelectedCompanyRef');
+      const company =
+        this.appStateManage.localStorage.getItem('SelectedCompanyRef');
       this.companyRef = Number(company || 0);
 
       if (this.companyRef <= 0) {
-        await this.toastService.present('Company not selected', 1000, 'warning');
+        await this.toastService.present(
+          'Company not selected',
+          1000,
+          'warning'
+        );
         await this.haptic.warning();
         return;
       }
@@ -110,26 +141,37 @@ export class StockTransferViewMobileAppComponent implements OnInit {
       await this.getSiteListByCompanyRef();
       await this.getStockTransferListByCompanyRef();
     } catch (error) {
-      await this.toastService.present('Failed to load Stock Transfer', 1000, 'danger');
+      await this.toastService.present(
+        'Failed to load Stock Transfer',
+        1000,
+        'danger'
+      );
       await this.haptic.error();
     } finally {
       await this.loadingService.hide();
     }
-  }
+  };
 
   private async getSiteListByCompanyRef() {
     try {
       if (this.companyRef <= 0) return;
-      const lst = await Site.FetchEntireListByCompanyRef(this.companyRef, async (errMsg) => {
-        await this.toastService.present(errMsg, 1000, 'danger');
-        await this.haptic.error();
-      });
+      const lst = await Site.FetchEntireListByCompanyRef(
+        this.companyRef,
+        async (errMsg) => {
+          await this.toastService.present(errMsg, 1000, 'danger');
+          await this.haptic.error();
+        }
+      );
 
       this.SiteList = lst || [];
       this.Entity.p.FromSiteRef = 0;
       this.Entity.p.ToSiteRef = 0;
     } catch (err) {
-      await this.toastService.present('Error fetching site list:' + err, 1000, 'danger');
+      await this.toastService.present(
+        'Error fetching site list:' + err,
+        1000,
+        'danger'
+      );
       await this.haptic.error();
     }
   }
@@ -139,18 +181,25 @@ export class StockTransferViewMobileAppComponent implements OnInit {
       this.MasterList = [];
       this.DisplayMasterList = [];
 
-      const lst = await StockTransfer.FetchEntireListByCompanyRef(this.companyRef, async (errMsg) => {
-        await this.toastService.present(errMsg, 1000, 'danger');
-        await this.haptic.error();
-      });
+      const lst = await StockTransfer.FetchEntireListByCompanyRef(
+        this.companyRef,
+        async (errMsg) => {
+          await this.toastService.present(errMsg, 1000, 'danger');
+          await this.haptic.error();
+        }
+      );
 
       this.MasterList = lst || [];
       this.DisplayMasterList = [...this.MasterList];
     } catch (err) {
-      await this.toastService.present('Error fetching Stock Transfer list:' + err, 1000, 'danger');
+      await this.toastService.present(
+        'Error fetching Stock Transfer list:' + err,
+        1000,
+        'danger'
+      );
       await this.haptic.error();
     }
-  }
+  };
 
   private getStockTransferListByCompanyRefAndSiteRef = async () => {
     try {
@@ -170,20 +219,24 @@ export class StockTransferViewMobileAppComponent implements OnInit {
       this.MasterList = lst || [];
       this.DisplayMasterList = [...this.MasterList];
     } catch (err) {
-      await this.toastService.present('Error fetching Stock Transfer list:' + err, 1000, 'danger');
+      await this.toastService.present(
+        'Error fetching Stock Transfer list:' + err,
+        1000,
+        'danger'
+      );
       await this.haptic.error();
     }
-  }
+  };
 
   openModal = (StockTransfer: StockTransfer) => {
     this.SelectedStockTransfer = StockTransfer;
     this.modalOpen = true;
-  }
+  };
 
   closeModal = () => {
     this.modalOpen = false;
     this.SelectedStockTransfer = StockTransfer.CreateNewInstance();
-  }
+  };
 
   AddStockTransfer = async () => {
     if (this.companyRef <= 0) {
@@ -191,14 +244,18 @@ export class StockTransferViewMobileAppComponent implements OnInit {
       await this.haptic.warning();
       return;
     }
-    this.router.navigate(['/mobile-app/tabs/dashboard/stock-management/stock-transfer/add']);
+    this.router.navigate([
+      '/mobile-app/tabs/dashboard/stock-management/stock-transfer/add',
+    ]);
   };
 
   onEditClicked = async (item: StockTransfer) => {
     this.SelectedStockTransfer = item.GetEditableVersion();
     StockTransfer.SetCurrentInstance(this.SelectedStockTransfer);
     this.appStateManage.StorageKey.setItem('Editable', 'Edit');
-    await this.router.navigate(['/mobile-app/tabs/dashboard/stock-management/stock-transfer/edit']);
+    await this.router.navigate([
+      '/mobile-app/tabs/dashboard/stock-management/stock-transfer/edit',
+    ]);
   };
 
   onDeleteClicked = async (StockTransfer: StockTransfer) => {
@@ -212,7 +269,7 @@ export class StockTransferViewMobileAppComponent implements OnInit {
             text: 'Cancel',
             role: 'cancel',
             cssClass: 'custom-cancel',
-            handler: () => { },
+            handler: () => {},
           },
           {
             text: 'Yes, Delete',
@@ -222,7 +279,9 @@ export class StockTransferViewMobileAppComponent implements OnInit {
                 this.loadingService.show();
                 await StockTransfer.DeleteInstance(async () => {
                   await this.toastService.present(
-                    `Deleted Stock Transfer on ${this.formatDate(StockTransfer.p.Date)}!`,
+                    `Deleted Stock Transfer on ${this.formatDate(
+                      StockTransfer.p.Date
+                    )}!`,
                     1000,
                     'success'
                   );
@@ -234,7 +293,11 @@ export class StockTransferViewMobileAppComponent implements OnInit {
                   }
                 });
               } catch (err) {
-                await this.toastService.present('Failed to delete Stock Transfer', 1000, 'danger');
+                await this.toastService.present(
+                  'Failed to delete Stock Transfer',
+                  1000,
+                  'danger'
+                );
                 await this.haptic.error();
               } finally {
                 this.loadingService.hide();
@@ -252,5 +315,4 @@ export class StockTransferViewMobileAppComponent implements OnInit {
   formatDate = (date: string | Date): string => {
     return this.DateconversionService.formatDate(date);
   };
-
 }

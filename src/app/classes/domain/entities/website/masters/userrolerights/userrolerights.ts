@@ -23,6 +23,7 @@ export class FeatureProps {
   CanView: boolean = false;
   CanPrint: boolean = false;
   CanExport: boolean = false;
+  CanApprove: boolean = false;
 
 }
 

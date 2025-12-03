@@ -1,7 +1,9 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { ApplicationFeatures } from 'src/app/classes/domain/domainenums/domainenums';
 import { CRMReports } from 'src/app/classes/domain/entities/website/customer_management/crmreports/crmreport';
 import { Site } from 'src/app/classes/domain/entities/website/masters/site/site';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
+import { FeatureAccessMobileAppService } from 'src/app/services/feature-access-mobile-app.service';
 import { HapticService } from 'src/app/views/mobile-app/components/core/haptic.service';
 import { LoadingService } from 'src/app/views/mobile-app/components/core/loading.service';
 import { PDFService } from 'src/app/views/mobile-app/components/core/pdf.service';
@@ -66,13 +68,16 @@ export class CustomerInfoReportMobileAppComponent implements OnInit {
   filters: FilterItem[] = [];
   // Store current selected values here to preserve selections on filter reload
   selectedFilterValues: Record<string, any> = {};
+  featureRef: ApplicationFeatures = ApplicationFeatures.CustomerInfo;
+  showActionColumn = false;
 
   constructor(
     private appStateManagement: AppStateManageService,
     private toastService: ToastService,
     private haptic: HapticService,
     public loadingService: LoadingService,
-    private pdfService: PDFService
+    private pdfService: PDFService,
+    public access: FeatureAccessMobileAppService
   ) {}
 
   ngOnInit = (): void => {
@@ -80,6 +85,11 @@ export class CustomerInfoReportMobileAppComponent implements OnInit {
   };
 
   ionViewWillEnter = async () => {
+    this.access.refresh();
+    this.showActionColumn =
+      this.access.canPrint(this.featureRef) ||
+      this.access.canEdit(this.featureRef) ||
+      this.access.canDelete(this.featureRef);
     await this.loadCustomerInfoReportIfCompanyExists();
     this.loadFilters();
   };

@@ -29,14 +29,14 @@
           </div>
         </div>
 
-        <div class="card-actions">
+        <div class="card-actions" *ngIf="showActionColumn">
           <ion-button fill="clear" color="tertiary" size="small"
-            (click)="$event.stopPropagation(); onEditClicked(vendor);">
+            (click)="$event.stopPropagation(); onEditClicked(vendor);" *ngIf="access.canEdit(featureRef)">
             <ion-icon name="create-outline" slot="start"></ion-icon>
             Edit
           </ion-button>
           <ion-button fill="clear" color="danger" size="small"
-            (click)="$event.stopPropagation(); onDeleteClicked(vendor);">
+            (click)="$event.stopPropagation(); onDeleteClicked(vendor);" *ngIf="access.canDelete(featureRef)">
             <ion-icon name="trash-outline" slot="start"></ion-icon>
             Delete
           </ion-button>
@@ -175,7 +175,7 @@
     </ng-template>
   </ion-modal>
 
-  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed" *ngIf="access.canAdd(featureRef)">
     <ion-fab-button (click)="AddVendorForm()">
       <ion-icon name="add-outline"></ion-icon>
     </ion-fab-button>

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { Router } from '@angular/router';
-import { MaterialRequisitionStatuses } from 'src/app/classes/domain/domainenums/domainenums';
+import { ApplicationFeatures, MaterialRequisitionStatuses } from 'src/app/classes/domain/domainenums/domainenums';
 import { Site } from 'src/app/classes/domain/entities/website/masters/site/site';
 import { Order } from 'src/app/classes/domain/entities/website/stock_management/stock_order/order';
 import { OrderMaterialDetailProps } from 'src/app/classes/domain/entities/website/stock_management/stock_order/OrderMaterial/ordermaterial';
@@ -9,6 +9,7 @@ import { FileTransferObject } from 'src/app/classes/infrastructure/filetransfero
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { BaseUrlService } from 'src/app/services/baseurl.service';
 import { DateconversionService } from 'src/app/services/dateconversion.service';
+import { FeatureAccessMobileAppService } from 'src/app/services/feature-access-mobile-app.service';
 import { Utils } from 'src/app/services/utils.service';
 import { AlertService } from 'src/app/views/mobile-app/components/core/alert.service';
 import { HapticService } from 'src/app/views/mobile-app/components/core/haptic.service';
@@ -48,6 +49,8 @@ export class StockOrderViewMobileAppComponent implements OnInit {
 
   // Store current selected values here to preserve selections on filter reload
   selectedFilterValues: Record<string, any> = {};
+    featureRef: ApplicationFeatures = ApplicationFeatures.StockOrder;
+    showActionColumn = false;
 
   constructor(
     private router: Router,
@@ -60,6 +63,7 @@ export class StockOrderViewMobileAppComponent implements OnInit {
     private sanitizer: DomSanitizer,
     private baseUrl: BaseUrlService,
     private utils: Utils,
+     public access: FeatureAccessMobileAppService
   ) {
   }
 
@@ -68,6 +72,11 @@ export class StockOrderViewMobileAppComponent implements OnInit {
 
   }
   ionViewWillEnter = async () => {
+        this.access.refresh();
+    this.showActionColumn =
+      this.access.canPrint(this.featureRef) ||
+      this.access.canEdit(this.featureRef) ||
+      this.access.canDelete(this.featureRef);
     await this.loadMaterialRequisitionIfEmployeeExists();
     this.loadFilters();
   }
