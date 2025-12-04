@@ -206,7 +206,7 @@ export class HomeViewMobileAppComponent
     await this.fetchServerTime();
     this.setGreeting(); // 1. Filter the Quick Actions grid based on permissions
 
-    if (this.isAdmin) {
+    if (this.isAdmin || this.access.hasAnyAccess(this.featureRef)) {
       await this.fetchAdminData();
     } else {
       await this.fetchEmployeeData();
