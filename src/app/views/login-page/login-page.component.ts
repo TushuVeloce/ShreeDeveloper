@@ -12,14 +12,12 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
 import { ValidMenuItemsStateManagement } from 'src/app/services/ValidMenuItems';
 
-
 @Component({
   selector: 'app-login-page',
   templateUrl: './login-page.component.html',
   styleUrls: ['./login-page.component.scss'],
-  imports: [FormsModule, CommonModule, ReactiveFormsModule]
+  imports: [FormsModule, CommonModule, ReactiveFormsModule],
 })
-
 export class LoginPageComponent implements OnInit {
   isIosPlatform: boolean = false;
   isAndroidPlatform: boolean = false;
@@ -29,9 +27,17 @@ export class LoginPageComponent implements OnInit {
 
   isMobile: boolean = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 
-  constructor(private router: Router, private platform: Platform, private servercommunicator: ServerCommunicatorService, private uiUtils: UIUtils, private activatedRoute: ActivatedRoute, private sessionValues: SessionValues,
-    private appStateManage: AppStateManageService, private companystatemanagement: CompanyStateManagement, private validmenuitemsstatemanagement: ValidMenuItemsStateManagement) {
-
+  constructor(
+    private router: Router,
+    private platform: Platform,
+    private servercommunicator: ServerCommunicatorService,
+    private uiUtils: UIUtils,
+    private activatedRoute: ActivatedRoute,
+    private sessionValues: SessionValues,
+    private appStateManage: AppStateManageService,
+    private companystatemanagement: CompanyStateManagement,
+    private validmenuitemsstatemanagement: ValidMenuItemsStateManagement
+  ) {
     platform.ready().then(async () => {
       this.isIosPlatform = platform.is('ios');
       this.isAndroidPlatform = platform.is('android');
@@ -45,7 +51,6 @@ export class LoginPageComponent implements OnInit {
 
   // UserId: string = 'admin@gmail.com';
   // Password: string = '1234';
-
 
   ngOnInit() {
     let a = 1;
@@ -94,60 +99,85 @@ export class LoginPageComponent implements OnInit {
   // }
 
   Login = async () => {
-  if (!this.UserId) {
-    return this.uiUtils.showErrorMessage('Error', 'Please Enter Email ID');
-  }
-  if (!this.Password) {
-    return this.uiUtils.showErrorMessage('Error', 'Please Enter Password');
-  }
+    if (!this.UserId) {
+      return this.uiUtils.showErrorMessage('Error', 'Please Enter Email ID');
+    }
+    if (!this.Password) {
+      return this.uiUtils.showErrorMessage('Error', 'Please Enter Password');
+    }
 
-  let req = new UserLoginRequest();
-  req.UserId = this.UserId;
-  req.Password = this.Password;
-  req.LoginDeviceId = this.sessionValues.LoginDeviceId;
+    let req = new UserLoginRequest();
+    req.UserId = this.UserId;
+    req.Password = this.Password;
+    req.LoginDeviceId = this.sessionValues.LoginDeviceId;
 
-  const response = await this.servercommunicator.LoginUser(req);
-  console.log('response :', response);
+    const response = await this.servercommunicator.LoginUser(req);
+    console.log('response :', response);
 
-  if (!response.Successful) {
-    return this.uiUtils.showErrorMessage('Error', response.Message);
-  }
+    if (!response.Successful) {
+      return this.uiUtils.showErrorMessage('Error', response.Message);
+    }
 
-  // 👉 Save Login Token
-  this.appStateManage.setLoginToken(response.LoginToken);
+    // 👉 Save Login Token
+    this.appStateManage.setLoginToken(response.LoginToken);
 
-  // 👉 Save Logged In Employee (User)
-  this.appStateManage.setEmployeeRef(response.LoginEmployeeRef);
+    // 👉 Save Logged In Employee (User)
+    this.appStateManage.setEmployeeRef(response.LoginEmployeeRef);
 
-  // 👉 Save Role
-  // this.appStateManage.StorageKey.setItem("UserRole", response.Role.toString());
+    // 👉 Save Role
+    // this.appStateManage.StorageKey.setItem("UserRole", response.Role.toString());
 
-  // 👉 Save Feature Rights (Menu Items)
-  this.validmenuitemsstatemanagement.setValidMenuItems(response.ValidMenuItems);
-  this.appStateManage.StorageKey.setItem("ValidMenuItems", JSON.stringify(response.ValidMenuItems));
+    // 👉 Save Feature Rights (Menu Items)
+    this.validmenuitemsstatemanagement.setValidMenuItems(
+      response.ValidMenuItems
+    );
+    this.appStateManage.StorageKey.setItem(
+      'ValidMenuItems',
+      JSON.stringify(response.ValidMenuItems)
+    );
 
-  // 👉 Save Company Mapping
-  this.appStateManage.StorageKey.setItem("SelectedCompanyRef", response.LastSelectedCompanyRef.toString());
-  this.appStateManage.StorageKey.setItem("companyName", response.CompanyName);
-  this.companystatemanagement.setCompanyRef(response.LastSelectedCompanyRef, response.CompanyName);
+    // 👉 Save Company Mapping
+    this.appStateManage.StorageKey.setItem(
+      'SelectedCompanyRef',
+      response.LastSelectedCompanyRef.toString()
+    );
+    this.appStateManage.StorageKey.setItem('companyName', response.CompanyName);
+    this.companystatemanagement.setCompanyRef(
+      response.LastSelectedCompanyRef,
+      response.CompanyName
+    );
 
-  // 👉 Save User Name
-  this.appStateManage.StorageKey.setItem("UserDisplayName", response.UserDisplayName);
+    // 👉 Save User Name
+    this.appStateManage.StorageKey.setItem(
+      'UserDisplayName',
+      response.UserDisplayName
+    );
 
-  // 👉 Save Default User Flag
-  this.appStateManage.StorageKey.setItem("IsDefaultUser", response.IsDefault.toString());
+    // 👉 Save Default User Flag
+    this.appStateManage.StorageKey.setItem(
+      'IsDefaultUser',
+      response.IsDefault.toString()
+    );
+    this.appStateManage.StorageKey.setItem(
+      'SelectedCompanyRef',
+      response.LastSelectedCompanyRef.toString()
+    );
+    this.appStateManage.StorageKey.setItem('companyName', response.CompanyName);
+    this.appStateManage.StorageKey.setItem(
+      'LoginEmployeeRef',
+      response.LoginEmployeeRef.toString()
+    );
 
-  // 👉 Navigation
-  if (this.isMobile) {
-    await this.router.navigate(['/homepage']);
-  } else if (response.LoginForFirstTime == 0) {
-    this.router.navigate(['/create_password']);
-  } else {
-    await this.router.navigate(['/homepage/Website']);
-    this.appStateManage.triggerCompanyInit();
-  }
-}
-
+    // 👉 Navigation
+    if (this.isMobile) {
+      await this.router.navigate(['/homepage']);
+    } else if (response.LoginForFirstTime == 0) {
+      this.router.navigate(['/create_password']);
+    } else {
+      await this.router.navigate(['/homepage/Website']);
+      this.appStateManage.triggerCompanyInit();
+    }
+  };
 
   ForgetPassword = async () => {
     let body = {

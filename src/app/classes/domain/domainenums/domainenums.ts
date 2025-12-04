@@ -1075,6 +1075,8 @@ export class DomainEnums {
         return 'Office Report';
       case ApplicationFeatures.BillPayableReport:
         return 'Bill Payable Report';
+      case ApplicationFeatures.Dashboard:
+        return 'Dashboard';
 
       default:
         return '';
@@ -1675,6 +1677,11 @@ export class DomainEnums {
         Name: this.ApplicationFeatureName(
           ApplicationFeatures.BillPayableReport
         ),
+      },
+      {
+        Ref: ApplicationFeatures.Dashboard,
+        FeatureGroupRef: ApplicationFeatureGroups.Report,
+        Name: this.ApplicationFeatureName(ApplicationFeatures.Dashboard),
       },
     ];
 
