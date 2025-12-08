@@ -192,8 +192,10 @@ export class SidebarlayoutComponent implements OnInit {
     this.routerChangedSubscription = this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
         // this.previousRoute = this.currentRoute;
+        this.access.refresh()
         this.currentRoute = event.urlAfterRedirects;
         this.updateActiveModuleAndSubmodule(); // Update the active module and submodule
+        this.GenerateAndSetMenuItemModuleList();
       }
     });
   }
@@ -292,6 +294,7 @@ export class SidebarlayoutComponent implements OnInit {
   // --- Lifecycle and Backend Logic (Retained) ---
 
   async ngOnInit() {
+    this.access.refresh();
     await this.ongetcompany();
     this.appStateManagement.companyInit$.subscribe(() => {
       this.ongetcompany();
@@ -314,7 +317,6 @@ export class SidebarlayoutComponent implements OnInit {
     // Initialize active state based on the current URL immediately
     this.updateActiveModuleAndSubmodule();
     this.companyName = this.companystatemanagement.getCurrentCompanyName();
-    this.access.refresh();
   }
 
   ngOnDestroy(): void {
@@ -384,6 +386,8 @@ export class SidebarlayoutComponent implements OnInit {
         req.EmployeeRef = this.appStateManagement.getEmployeeRef();
         localStorage.removeItem('activeSubmodule');
         localStorage.removeItem('activeModule');
+        this.appStateManagement.localStorage.clear();
+        this.appStateManagement.StorageKey.clear();
         this.isCollapsed = false;
         this.activeModule = null;
         let _ = await this.servercommunicator.LogoutUser(req);
@@ -802,7 +806,7 @@ export class SidebarlayoutComponent implements OnInit {
         Name: 'Dashboards',
         RouterLink: '/homepage/Website/',
         WhiteLogo: '/assets/icons/dashboard.png',
-        FeatureRef: ApplicationFeatures.Dashboard,
+        FeatureRef: ApplicationFeatures.None,
       },
       {
         Name: 'Master',
@@ -862,6 +866,7 @@ export class SidebarlayoutComponent implements OnInit {
 
  this.ModuleList = moduleListInternal
     .map((mod) => {
+      this.access.refresh();
       // CASE 1: Modules containing submodules
       if (mod.SubModuleList) {
         mod.SubModuleList = mod.SubModuleList.filter((sub) =>
@@ -875,10 +880,15 @@ export class SidebarlayoutComponent implements OnInit {
         return null;
       }
 
-      // CASE 2: Direct route modules (Dashboard, Registrar Office)
+      // CASE 2: Direct route modules (Registrar Office)
       if (mod.RouterLink && mod.FeatureRef) {
         if (this.access.hasAnyAccess(mod.FeatureRef)) return mod;
         return null;
+      }
+      
+      // CASE 3: Dashboard
+      if (mod.RouterLink && mod.FeatureRef === ApplicationFeatures.None) {
+        return mod;
       }
 
       // No access → remove

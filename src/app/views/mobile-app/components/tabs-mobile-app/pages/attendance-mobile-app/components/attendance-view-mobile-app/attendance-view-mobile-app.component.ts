@@ -105,6 +105,7 @@ export class AttendanceViewMobileAppComponent implements OnInit {
 
   ngOnInit = async () => {
     this.access.refresh();
+    await this.loadAttendanceIfEmployeeExists();
     // Filter grid items based on access
     this.gridItems = this.gridItems.filter((item) =>
       item.Members.some((member: any) => this.access.hasAnyAccess(member))
@@ -117,16 +118,16 @@ export class AttendanceViewMobileAppComponent implements OnInit {
       this.filterEmployees(searchTerm);
     });
 
-    await this.loadAttendanceIfEmployeeExists();
   };
 
   ionViewWillEnter = async () => {
     this.access.refresh();
+    await this.loadAttendanceIfEmployeeExists();
+
     // Filter grid items based on access
     this.gridItems = this.gridItems.filter((item) =>
       item.Members.some((member: any) => this.access.hasAnyAccess(member))
     );
-    await this.loadAttendanceIfEmployeeExists();
   };
 
   private async buildGridItems() {

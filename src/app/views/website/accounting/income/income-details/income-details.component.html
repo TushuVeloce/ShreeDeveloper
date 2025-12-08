@@ -143,19 +143,20 @@
               placeholder="Enter Reason" />
           </div>
         </div>
-        <!-- <div class="col-md-4" style="margin-top: 1rem;" *ngIf="this.Entity.p.PayerType == EmployeeType">
-          <div>
-            <label>Balance Advance Amount</label>
-            <input type="text" [(ngModel)]="Entity.p.RemainingAdvance" name="RemainingAdvance" class="form-control"
-              id="RemainingAdvance" disabled placeholder="Enter Remaining Advance" />
-          </div>
-        </div> -->
-        <div class="" style="margin-top: 1rem">
+        <div class="" style="margin-top: 1rem" *ngIf="Entity.p.PayerType == EmployeeType">
           <div class="d-flex align-items-center mb-2">
             <label for="IsSalaryAdvanceReturn"><b>Salary Advance Return</b></label>
             <input type="checkbox" id="IsSalaryAdvanceReturn" [(ngModel)]="Entity.p.IsSalaryAdvanceReturn"
               name="IsSalaryAdvanceReturn" class="form-check-input me-4 mb-2 large-dark-checkbox"
               style="width: 20px; height: 20px; margin-left: 1rem" />
+          </div>
+        </div>
+        <div class="col-md-4" style="margin-top: 1rem;"
+          *ngIf="this.Entity.p.PayerType == EmployeeType && Entity.p.IsSalaryAdvanceReturn">
+          <div>
+            <label>Balance Advance Amount</label>
+            <input type="text" [(ngModel)]="Entity.p.RemainingAdvance" name="RemainingAdvance" class="form-control"
+              id="RemainingAdvance" disabled placeholder="Enter Remaining Advance" />
           </div>
         </div>
         <div class="col-md-4" style="margin-top: 1rem;">

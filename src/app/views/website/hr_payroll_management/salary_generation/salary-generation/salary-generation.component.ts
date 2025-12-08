@@ -154,6 +154,10 @@ export class SalaryGenerationComponent implements OnInit {
     );
     this.EmployeeList = lst;
   };
+  getEmployeeDateOfJoining = (employeeRef: number) => {
+    const emp = this.EmployeeList.find((e) => e.p.Ref === employeeRef);
+    return emp ? this.formatDate(emp.p.DateOfJoining) : null;
+  };
 
   getSalaryListByEmployeeAndMonth = async () => {
     this.MasterList = [];

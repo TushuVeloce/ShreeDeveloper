@@ -82,12 +82,12 @@
                 {{ detail.Date ? formatDate(detail.Date) : '--'}}
               </td>
 
-              <td class="tbldata" *ngIf="j === 0 && showActionColumn" [attr.rowspan]="Inward.p.MaterialInwardDetailsArray.length">
+              <td class="tbldata action-" *ngIf="j === 0 && showActionColumn" [attr.rowspan]="Inward.p.MaterialInwardDetailsArray.length">
                 <span style="margin-left: 5px; margin-right: 5px; cursor: pointer;" *ngIf="access.canPrint(featureRef)" (click)="navigateToPrint(Inward)">
-                  <img src="\assets\icons\printer.png" alt="logo" title="Print" width="20px" height="20px" />
+                  <img src="/assets/icons/edit.png" alt="Edit" title="Edit" width="20px" height="20px" />
                 </span>
                 <span style="margin-left: 5px;" (click)="onEditClicked(Inward)" *ngIf="access.canEdit(featureRef)">
-                  <img src="/assets/icons/edit.png" alt="Edit" title="Edit" width="20px" height="20px" />
+                  <img src="\assets\icons\edit.png" alt="Edit" title="Edit" width="20px" height="20px" />
                 </span>
               </td>
             </tr>

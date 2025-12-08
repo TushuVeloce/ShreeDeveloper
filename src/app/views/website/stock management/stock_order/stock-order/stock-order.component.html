@@ -85,6 +85,7 @@
               <!-- Optional: Requisition status -->
               <td class="tbldata" *ngIf="j === 0" [attr.rowspan]="Order.p.MaterialPurchaseOrderDetailsArray.length">
                 <!-- PENDING -->
+                  <!-- (click)="access.canApprove(featureRef) ? NavigateOrderstatus(Order) : noAccess() -->
                 <span class="status" style="cursor: pointer;"
                   *ngIf="Order.p.MaterialPurchaseOrderStatus == MaterialPurchaseOrderStatus.Pending" ngClass="pending"
                   (click)="access.canApprove(featureRef) ? NavigateOrderstatus(Order) : noAccess()">

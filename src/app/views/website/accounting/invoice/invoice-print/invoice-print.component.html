@@ -158,7 +158,7 @@
           </thead>
           <tbody>
             <tr>
-              <td style="padding: 8px; border: none;">2.</td>
+              <td style="padding: 8px; border: none;">1.</td>
               <td style="padding: 8px; border: none;">Diesel Supplied by Shree</td>
               <td style="padding: 8px; border: none;">{{ Entity.p.DieselQty }}</td>
               <td style="padding: 8px; border: none;">Liter</td>
@@ -181,6 +181,44 @@
               <td style="border: none;"></td>
               <td style="border: none;"></td>
               <td colspan="3" style="padding: 8px; border: none; text-align: end;"><strong>Inwords - {{
+                  totalAmountInWords(Entity.p.DieselAmount) }}</strong></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+            <!-- ==================================================== Mess Bill  ==================================================== -->
+      <div *ngIf="Entity.p.ExpenseTypeArray.includes(MachinaryExpenseRef) && Entity.p.MessAmount > 0">
+        <!-- Diesel Header -->
+        <div style="padding: 5px 2px 0 0; ">
+          <h4 style="color: maroon; text-align: center; margin-top: 10px; font-weight: 600;"> <b>Mess Details</b>
+          </h4>
+        </div>
+        <table style="width: 100%; border-collapse: collapse; text-align: center;">
+          <thead>
+            <tr style="background-color: maroon; color: white;">
+              <th style="padding: 8px; border: none;">Sr.No</th>
+              <th style="padding: 8px; border: none;">AMOUNT</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="padding: 8px; border: none;">1.</td>
+              <td style="padding: 8px; border: none;"> {{ Entity.p.DieselAmount | currency : "INR" }}</td>
+            </tr>
+            <!-- Total -->
+            <tr>
+              <td colspan="1"
+                style="padding: 8px; border: none; text-align: center; font-weight: bold; background-color: #fef4d4;">
+                <strong>TOTAL</strong>
+              </td>
+              <td style="padding: 8px; border: none; font-weight: bold; background-color: #fef4d4;"><strong>
+                  {{Entity.p.DieselAmount | currency : "INR"}}</strong>
+              </td>
+            </tr>
+            <!-- In Words -->
+            <tr>
+              <td colspan="2" style="padding: 8px; border: none; text-align: end;"><strong>Inwords - {{
                   totalAmountInWords(Entity.p.DieselAmount) }}</strong></td>
             </tr>
           </tbody>
@@ -387,9 +425,9 @@
         </tbody>
       </table>
 
-      <h4 style="background-color: #fef4d4; padding-left: 5%; text-align: end; margin-top: 10px; padding-top: 10px; padding-bottom: 10px;">
+      <h5 style="background-color: #fef4d4; padding-left: 5%; text-align: end; margin-top: 10px; padding-top: 10px; padding-bottom: 10px;">
         <strong>Total Bill Amount - {{Entity.p.InvoiceAmount | currency : "INR"}} </strong>
-      </h4>
+      </h5>
 
       <!-- Comments -->
       <div style="margin-top: 5px; ">
@@ -416,7 +454,7 @@
       <p style="text-align: center; line-height: 0.5;">If you have any questions about this invoice, please
         contact
       </p>
-      <p style="text-align: center; line-height: 0.5;">{{Entity.p.CompanyName}} {{Entity.p.Contacts}} </p>
+      <p style="text-align: center; line-height: 0.5;">{{Entity.p.CompanyName}} {{'+91'+Entity.p.Contacts}} </p>
       <h5 style="text-align: center; line-height: 0.5;"><strong><i>Thank You For Your Business!</i></strong></h5>
       <blockquote style="text-align: center; line-height: 0.5; margin-top: 2%; font-size: 12px;">
         <i>Computer Generated Print</i>

@@ -61,6 +61,7 @@ export class IncomeProps {
 
   public ShreesBalance: number = 0
   public IncomeModeOfPayment: number = 0
+  public RemainingAdvance: number = 0
   public ModeOfPaymentName: string = ''
   public IsSalaryAdvanceReturn: boolean = false
 
@@ -239,10 +240,13 @@ export class Income implements IPersistable<Income> {
     return Income.ListFromTransportData(tdResponse);
   }
 
-  public static async FetchToalAmountByCompanyAndPlotRef(CompanyRef: number, PlotRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+  public static async FetchToalAmountByCompanyAndPlotRef(CompanyRef: number, PlotRef: number,PayerType: number,PayerRef: number,SiteRef:number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let req = new TotalAmountFetchRequest();
     req.CompanyRef = CompanyRef;
     req.PlotRef = PlotRef;
+    req.PayerType = PayerType;
+    req.PayerRef = PayerRef;
+    req.SiteRef = SiteRef;
     let tdResponse = await Income.FetchTransportData(req, errorHandler) as TransportData;
     return Income.ListFromTransportData(tdResponse);
   }

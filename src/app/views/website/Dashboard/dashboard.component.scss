@@ -1,237 +1,330 @@
-.card-container {
-  display: flex;
-  gap: 1rem;
-  flex-wrap: wrap;
-  /* allows wrapping on smaller screens */
-  justify-content: space-between;
+/* ================= VARIABLES ================= */
+:host {
+  --primary-earth: #8d5b4c; /* Modern Terracotta */
+  --primary-earth-light: #d9d9d9; /* Very light tint for backgrounds */
+  --secondary-text: #64748b; /* Slate gray for subtitles */
+  --dark-text: #1e293b; /* Dark slate for headings */
+  --success-green: #10b981;
+  --danger-red: #ef4444;
+  --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05),
+    0 2px 4px -1px rgba(0, 0, 0, 0.03);
+  --card-radius: 16px;
+  --transition: all 0.3s ease;
 }
 
-.balance-card {
-  flex: 1 1 300px;
-  /* min width 300px, flexible */
-  max-width: 390px;
-  min-height: 180px;
+/* ================= GLOBAL LAYOUT ================= */
+.dashboard-container {
+  padding: 0.5rem;
+  // background-color: #f8fafc; /* Very light gray background for the whole page */
+  min-height: 100vh;
+}
+
+/* ================= TOP CARDS (BALANCE) ================= */
+.card-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.balance-card,
+.bank-card {
+  background: white;
+  border-radius: var(--card-radius);
+  padding: 1.5rem;
+  box-shadow: var(--card-shadow);
+  border: 2px solid rgba(0, 0, 0, 0.04); /* Subtle border */
+  position: relative;
+  overflow: hidden;
+  transition: var(--transition);
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  justify-content: space-between;
+  min-height: 160px;
+  border-color: #8d5b4c;
 
-  padding: 1rem;
-  border-radius: 10px;
-  border: 1px solid #7a1e1e;
-  font-family: "Segoe UI", sans-serif;
-  text-align: center;
-  box-sizing: border-box;
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  }
 
-  /* Smooth shadow */
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
-
-  position: relative;
-  /* parent needs to be relative */
-
-  h4 {
+  /* Decorative Side accent instead of full border */
+  &::before {
+    content: "";
     position: absolute;
-    top: 0.8rem;
-    /* space from top */
-    left: 1rem;
-    /* space from left */
-    font-size: clamp(0.9rem, 2vw, 1rem);
-    color: #5a2a2a;
-    font-weight: 500;
-    margin: 0;
-  }
-
-  h2 {
-    margin-top: 0.5rem;
-    /* push value below heading */
-    font-size: clamp(1.4rem, 3vw, 2rem);
-    font-weight: 500;
-    color: #7a1e1e;
-  }
-
-  p {
-    font-size: clamp(0.75rem, 1.5vw, 0.9rem);
-    color: #7a3a3a;
-    margin-top: 0.3rem;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 6px;
   }
 }
 
-/* Background colors */
+/* Specific Card Themes */
 .shree {
-  background: #f4c5bb;
+  &::before {
+    background: #e07a5f;
+  } /* Terra Cotta */
+  .icon-bg {
+    background: rgba(224, 122, 95, 0.1);
+    color: #e07a5f;
+  }
 }
 
 .cash {
-  background: #fde7e7;
+  &::before {
+    background: #3d405b;
+  } /* Dark Slate */
+  .icon-bg {
+    background: rgba(61, 64, 91, 0.1);
+    color: #3d405b;
+  }
 }
 
 .bank {
-  background: #f5e5d6;
+  &::before {
+    background: #81b29a;
+  } /* Sage Green */
+  .icon-bg {
+    background: rgba(129, 178, 154, 0.1);
+    color: #81b29a;
+  }
 }
 
-.bank-card {
-  flex: 1 1 300px;
-  max-width: 390px;
-  min-height: 180px;
+.card-header-row {
   display: flex;
-  flex-direction: column;
-  padding: 0.5rem;
-  border-radius: 10px;
-  border: 1px solid #7a1e1e;
-  font-family: "Segoe UI", sans-serif;
-  box-sizing: border-box;
-  text-align: center;
-
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
-  position: relative;
-}
-
-.bank-card .center {
-  flex: 1;
-  /* take remaining space */
-  display: flex;
-  justify-content: center;
-  align-items: start;
-}
-
-.bank-card h2 {
-  margin-top: 25px;
-  font-size: clamp(1.4rem, 3vw, 2rem);
-  font-weight: 500;
-  color: #7a1e1e;
-}
-
-
-// ================================ Chart =======================================
-
-.chart-container {
-  display: flex;
-  gap: 5px;
-  flex-wrap: wrap;
   justify-content: space-between;
-  margin-top: 10px;
-  /* allow wrapping on small screens */
+  align-items: flex-start;
+  margin-bottom: 1rem;
+
+  h4 {
+    font-size: 0.95rem;
+    color: var(--secondary-text);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin: 0;
+  }
+
+  .icon-bg {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+  }
+}
+
+.card-amount {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--dark-text);
+  margin: 0;
+  letter-spacing: -0.5px;
+}
+
+.card-subtext {
+  font-size: 0.85rem;
+  color: var(--secondary-text);
+  margin-top: 0.5rem;
+}
+
+/* ================= CHART SECTION ================= */
+.chart-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 1rem;
+  align-items: stretch; /* ⭐ Ensure same height */
+}
+
+@media (max-width: 768px) {
+  .chart-container {
+    grid-template-columns: 1fr;
+  } /* Stack on mobile */
 }
 
 .chart-card {
-  flex: 1 1 calc(50% - 5px);
-  max-width: calc(50% - 5px);
+  background: white;
+  border-radius: var(--card-radius);
   padding: 1rem;
-  border: 1px solid #7a1e1e;
-  border-radius: 10px;
-  background: #fff;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
-  position: relative;
+  box-shadow: var(--card-shadow);
+  border: 1px solid rgba(0, 0, 0, 0.04);
+  border-color: #8d5b4c;
+
   display: flex;
   flex-direction: column;
-  align-items: center; // keep chart centered
+  height: 100%;
 }
 
-.chart-card canvas {
-  width: 100% !important;
-  height: 280px !important; // fixed height for ALL charts
-}
-
-.doughnut {
-  max-width: 450px; // don’t let doughnut blow up horizontally
-  max-height: 300px; // don’t let doughnut blow up horizontally
+.chart-canvas-wrapper {
+  width: 100%;
+  height: 300px;   /* ⭐ SAME height for both charts */
   display: flex;
-  justify-content: space-evenly;
+  justify-content: center;
+  align-items: center;
 }
 
-.chart-card p {
-  top: 0.8rem;
-  font-size: 1rem;
-  color: #7a1e1e;
-  font-weight: 600;
-  margin: 0;
+.chart-canvas-wrapper canvas {
+  max-width: 100%;
+  max-height: 100%;
+  // width: 300px !important;   /* ⭐ Prevent stretching */
+  height: 300px !important;  /* ⭐ Keep perfect circle */
+  object-fit: contain;
 }
+
 
 .chart-header {
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-between;
-  width: 100%;
-  // gap: 2rem;
-  margin-bottom: 0.5rem;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  gap: 10px;
+
+  .title-group {
+    p {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--dark-text);
+      margin: 0;
+    }
+    span {
+      display: flex;
+      margin-top: 30px;
+      font-size: 0.85rem;
+      color: var(--secondary-text);
+      font-weight: 500;
+    }
+  }
+
+  .filter-group {
+    display: flex;
+    gap: 10px;
+    flex: 1;
+    justify-content: flex-end;
+    min-width: 200px;
+  }
+}
+.title-card {
+  background: white;
+  border-radius: var(--card-radius);
+  padding: 1rem;
+  box-shadow: var(--card-shadow);
+  margin-bottom: 2rem;
+  border: none !important;
+}
+/* ================= CRM FUNNEL SECTION ================= */
+.modern-card {
+  background: white;
+  border-radius: var(--card-radius);
+  padding: 1.5rem;
+  box-shadow: var(--card-shadow);
+  margin-bottom: 2rem;
+  border: 1px solid #8d5b4c !important;
 }
 
+.section-title {
+  color: var(--dark-text);
+  font-weight: 700;
+  font-size: 1.25rem;
+  margin-bottom: 0;
+}
 
-/* Brown theme styling */
-.border-brown {
-  border: 2px solid #a0522d !important;
+.funnel-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+.funnel-item {
+  background: var(--primary-earth-light);
   border-radius: 12px;
-}
+  padding: 1.5rem;
+  text-align: center;
+  transition: var(--transition);
+  border: 1px solid transparent;
+  border-color: #8d5b4c;
 
-.text-brown {
-  color: #5a2d0c !important;
-}
-
-.inner-card {
-  background: #fff;
-  border: 2px solid #d2a679;
-  border-radius: 10px;
-  transition: transform 0.2s;
-}
-
-.inner-card:hover {
-  transform: scale(1.03);
-}
-
-/* Table adjustments */
-.table th {
-  font-weight: 600;
-  background-color: #f9f9f9 !important;
-}
-
-.table td {
-  color: #333;
-}
-
-
-// ====================================== NZ Dropdown Input CSS ======================= //
-
-.nzSelect-light {
-  .ant-select-selector {
-    background-color: #f8efe2;
-    /* White background */
-    color: #000000;
-    border: 0.2px solid rgb(133, 130, 130);
-    border-radius: 7px !important;
+  &:hover {
+    border-color: var(--primary-earth);
+    background: white;
   }
 
-  &:hover .ant-select-selector {
-    border-color: var(--ion-color-primary-tint) !important;
+  p {
+    color: var(--secondary-text);
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
   }
 
-  .ant-select-focused .ant-select-selector,
-  .ant-select-selector:focus-within {
-    border-color: var(--ion-color-primary-tint) !important;
-  }
-
-  .ant-select-clear {
-    color: black !important;
-  }
-
-  .anticon {
-    color: black !important;
+  h4 {
+    color: var(--primary-earth);
+    font-size: 1.75rem;
+    font-weight: 800;
+    margin: 0;
   }
 }
 
-.ant-select-item-option-selected:not(.ant-select-item-option-disabled) {
-  background-color: #f8efe2 !important;
+/* ================= TABLE STYLES ================= */
+.custom-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0 0.5rem; /* Floating rows effect */
+  thead th {
+    background: transparent;
+    color: var(--secondary-text);
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 1px;
+    border: none;
+    padding: 1rem;
+  }
+
+  tbody tr {
+    background: white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+    transition: var(--transition);
+
+    // &:hover {
+    //   transform: scale(1.01);
+    //   box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    // }
+  }
+
+  td {
+    padding: 1rem;
+    color: var(--dark-text);
+    font-weight: 500;
+    border-top: 1px solid rgba(0, 0, 0, 0.08);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+
+    &:first-child {
+      border-top-left-radius: 10px;
+      border-bottom-left-radius: 10px;
+      border-left: 1px solid rgba(0, 0, 0, 0.08);
+    }
+    &:last-child {
+      border-top-right-radius: 10px;
+      border-bottom-right-radius: 10px;
+      border-right: 1px solid rgba(0, 0, 0, 0.08);
+    }
+  }
 }
 
-.ant-empty-description {
-  color: black !important;
+/* ================= NZ SELECT OVERRIDES ================= */
+/* Making the select blend in better */
+.nzSelect-light .ant-select-selector {
+  background-color: #f1f5f9 !important; /* Slate 100 */
+  border: 1px solid transparent !important;
+  border-radius: 8px !important;
+  color: var(--dark-text) !important;
+  font-weight: 500;
+  box-shadow: none !important;
 }
 
-::ng-deep .ant-dropdown {
-  font-family: "Poppins" !important;
-  font-size: 16px !important;
+.nzSelect-light:hover .ant-select-selector {
+  background-color: #e2e8f0 !important; /* Slate 200 */
 }
-
-::ng-deep .ant-dropdown-menu-item {
-  font-family: "Poppins" !important;
-}
-
-// ====================================== NZ Dropdown Input CSS End ======================= //

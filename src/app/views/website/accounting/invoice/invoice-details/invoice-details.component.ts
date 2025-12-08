@@ -208,6 +208,7 @@ export class InvoiceDetailsComponent implements OnInit {
       this.ExpenseTypeArrayList = this.ExpenseTypeArrayList.filter(
         (data) => data.Ref != this.StockExpenseRef
       );
+      
       this.strCDT = await CurrentDateTimeRequest.GetCurrentDateTime();
       let parts = this.strCDT.substring(0, 16).split('-');
       this.Entity.p.Date = `${parts[0]}-${parts[1]}-${parts[2]}`;
@@ -987,13 +988,13 @@ export class InvoiceDetailsComponent implements OnInit {
   };
 
   SaveInvoiceMaster = async () => {
-    if (this.Entity.p.InvoiceAmount < 0) {
-      await this.uiUtils.showErrorMessage(
-        'Error',
-        'Bill amount should be greater than zero.'
-      );
-      return;
-    }
+    // if (this.Entity.p.InvoiceAmount < 0) {
+    //   await this.uiUtils.showErrorMessage(
+    //     'Error',
+    //     'Bill amount should be greater than zero.'
+    //   );
+    //   return;
+    // }
     this.Entity.p.CompanyRef =
       this.companystatemanagement.getCurrentCompanyRef();
     this.Entity.p.CompanyName =

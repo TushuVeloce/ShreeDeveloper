@@ -1,11 +1,21 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { NgModel } from '@angular/forms';
 import { Router } from '@angular/router';
-import { ValidationMessages, ValidationPatterns, AttendanceHandleByRefs } from 'src/app/classes/domain/constants';
-import { AttendanceLocationType, DomainEnums } from 'src/app/classes/domain/domainenums/domainenums';
+import {
+  ValidationMessages,
+  ValidationPatterns,
+  AttendanceHandleByRefs,
+} from 'src/app/classes/domain/constants';
+import {
+  AttendanceLocationType,
+  DomainEnums,
+} from 'src/app/classes/domain/domainenums/domainenums';
 import { OfficeDutyandTime } from 'src/app/classes/domain/entities/website/HR_and_Payroll/Office_Duty_and_Time/officedutyandtime';
 import { WebAttendaneLog } from 'src/app/classes/domain/entities/website/HR_and_Payroll/web_attendance_log/web_attendance_log/webattendancelog';
-import { WebAttendaneLogDetailsLog, WebAttendaneLogDetailsLogProps } from 'src/app/classes/domain/entities/website/HR_and_Payroll/web_attendance_log/web_attendance_log_details/webattendancelogdetails';
+import {
+  WebAttendaneLogDetailsLog,
+  WebAttendaneLogDetailsLogProps,
+} from 'src/app/classes/domain/entities/website/HR_and_Payroll/web_attendance_log/web_attendance_log_details/webattendancelogdetails';
 import { Employee } from 'src/app/classes/domain/entities/website/masters/employee/employee';
 import { Site } from 'src/app/classes/domain/entities/website/masters/site/site';
 import { CurrentDateTimeRequest } from 'src/app/classes/infrastructure/request_response/currentdatetimerequest';
@@ -27,20 +37,21 @@ export class AttendanceDetailsComponent implements OnInit {
   public IsNewEntity: boolean = true;
   isSaveDisabled: boolean = false;
   DetailsFormTitle: 'New Attendance' | 'Edit Attendance' = 'New Attendance';
-  IsDropdownDisabled: boolean = false
+  IsDropdownDisabled: boolean = false;
   InitialEntity: WebAttendaneLog = null as any;
   EmployeeList: Employee[] = [];
   SiteList: Site[] = [];
-  editingIndex: null | undefined | number
+  editingIndex: null | undefined | number;
   ModalEditable: boolean = false;
   isModalOpen: boolean = false;
-  newAttendance: WebAttendaneLogDetailsLogProps = WebAttendaneLogDetailsLogProps.Blank();
+  newAttendance: WebAttendaneLogDetailsLogProps =
+    WebAttendaneLogDetailsLogProps.Blank();
   AttendanceLocationTypeList = DomainEnums.AttendanceLocationTypeList();
   AttendanceLocationType = AttendanceLocationType;
   companyRef = this.companystatemanagement.SelectedCompanyRef;
-  strCDT: string = ''
-  Date: string = ''
-  CurrentDate: string = ''
+  strCDT: string = '';
+  Date: string = '';
+  CurrentDate: string = '';
   OfficeDutyandTime: OfficeDutyandTime[] = [];
 
   FirstOvertimeHrs: number = 0;
@@ -53,8 +64,8 @@ export class AttendanceDetailsComponent implements OnInit {
   ToTime: string = '';
   OvertimeGraceTimeInMins: string = '';
 
-  ImageBaseUrl: string = "";
-  TimeStamp = Date.now()
+  ImageBaseUrl: string = '';
+  TimeStamp = Date.now();
   LoginToken = '';
 
   imagePostSelfieView: string = '';
@@ -69,12 +80,19 @@ export class AttendanceDetailsComponent implements OnInit {
   FirstCheckInTime: Date | null = null;
   LastCheckOutTime: Date | null = null;
 
-  baseHeaders: string[] = ['Sr. No', 'Site Name', 'Check In Time', 'Check Out Time', 'Working Hours', 'Action'];
+  baseHeaders: string[] = [
+    'Sr. No',
+    'Site Name',
+    'Check In Time',
+    'Check Out Time',
+    'Working Hours',
+    'Action',
+  ];
 
-  NameWithoutNos: string = ValidationPatterns.NameWithoutNos
+  NameWithoutNos: string = ValidationPatterns.NameWithoutNos;
 
-  NameWithoutNosMsg: string = ValidationMessages.NameWithoutNosMsg
-  RequiredFieldMsg: string = ValidationMessages.RequiredFieldMsg
+  NameWithoutNosMsg: string = ValidationMessages.NameWithoutNosMsg;
+  RequiredFieldMsg: string = ValidationMessages.RequiredFieldMsg;
 
   @ViewChild('FromDateCtrl') FromDateInputControl!: NgModel;
 
@@ -87,8 +105,8 @@ export class AttendanceDetailsComponent implements OnInit {
     private appStateManage: AppStateManageService,
     private utils: Utils,
     private companystatemanagement: CompanyStateManagement,
-    private baseUrl: BaseUrlService,
-  ) { }
+    private baseUrl: BaseUrlService
+  ) {}
 
   async ngOnInit() {
     this.appStateManage.setDropdownDisabled(true);
@@ -99,26 +117,38 @@ export class AttendanceDetailsComponent implements OnInit {
 
     if (this.appStateManage.StorageKey.getItem('Editable') == 'Edit') {
       this.IsNewEntity = false;
-      this.DetailsFormTitle = this.IsNewEntity ? 'New Attendance' : 'Edit Attendance';
+      this.DetailsFormTitle = this.IsNewEntity
+        ? 'New Attendance'
+        : 'Edit Attendance';
       this.Entity = WebAttendaneLog.GetCurrentInstance();
-      this.appStateManage.StorageKey.removeItem('Editable')
-      this.Date = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.TransDateTime);
+      this.appStateManage.StorageKey.removeItem('Editable');
+      this.Date = this.dtu.ConvertStringDateToShortFormat(
+        this.Entity.p.TransDateTime
+      );
 
       if (this.Entity.p.AttendanceLogDetailsArray.length > 0) {
         this.imagePostSelfieView = `${this.ImageBaseUrl}${this.Entity.p.AttendanceLogDetailsArray[0].AttendanceLogPath1}/${this.LoginToken}?${this.TimeStamp}`;
-        this.Entity.p.AttendanceLogPath1 = this.Entity.p.AttendanceLogDetailsArray[0].AttendanceLogPath1;
+        this.Entity.p.AttendanceLogPath1 =
+          this.Entity.p.AttendanceLogDetailsArray[0].AttendanceLogPath1;
 
         this.imagePostSiteView = `${this.ImageBaseUrl}${this.Entity.p.AttendanceLogDetailsArray[0].AttendanceLogPath2}/${this.LoginToken}?${this.TimeStamp}`;
-        this.Entity.p.AttendanceLogPath2 = this.Entity.p.AttendanceLogDetailsArray[this.Entity.p.AttendanceLogDetailsArray.length - 1].AttendanceLogPath2;
+        this.Entity.p.AttendanceLogPath2 =
+          this.Entity.p.AttendanceLogDetailsArray[
+            this.Entity.p.AttendanceLogDetailsArray.length - 1
+          ].AttendanceLogPath2;
       }
       if (this.Entity.p.FirstCheckInTime) {
-        this.FirstCheckInTime = this.convertToFullTime(this.Entity.p.FirstCheckInTime);
+        this.FirstCheckInTime = this.convertToFullTime(
+          this.Entity.p.FirstCheckInTime
+        );
       }
 
       if (this.Entity.p.FirstCheckInTime) {
-        this.LastCheckOutTime = this.convertToFullTime(this.Entity.p.LastCheckOutTime);
+        this.LastCheckOutTime = this.convertToFullTime(
+          this.Entity.p.LastCheckOutTime
+        );
       }
-      this.calculateFirstLastCheckInOutWorkingHours()
+      this.calculateFirstLastCheckInOutWorkingHours();
       this.getDefaultWorkingHrsByEmployeeRef();
     } else {
       this.Entity = WebAttendaneLog.CreateNewInstance();
@@ -129,7 +159,10 @@ export class AttendanceDetailsComponent implements OnInit {
       this.Date = `${parts[0]}-${parts[1]}-${parts[2]}`;
       this.CurrentDate = `${parts[0]}-${parts[1]}-${parts[2]}`;
     }
-    this.InitialEntity = Object.assign(WebAttendaneLog.CreateNewInstance(), this.utils.DeepCopy(this.Entity)) as WebAttendaneLog;
+    this.InitialEntity = Object.assign(
+      WebAttendaneLog.CreateNewInstance(),
+      this.utils.DeepCopy(this.Entity)
+    ) as WebAttendaneLog;
   }
 
   getEmployeeListByCompanyRef = async () => {
@@ -137,9 +170,12 @@ export class AttendanceDetailsComponent implements OnInit {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
-    let lst = await Employee.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    let lst = await Employee.FetchEntireListByCompanyRef(
+      this.companyRef(),
+      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+    );
     this.EmployeeList = lst;
-  }
+  };
 
   getSiteListByCompanyRef = async () => {
     let lst = await Site.FetchEntireListByCompanyRef(
@@ -154,7 +190,10 @@ export class AttendanceDetailsComponent implements OnInit {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
-    let lst = await OfficeDutyandTime.FetchEntireListByEmployeeRef(this.Entity.p.EmployeeRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    let lst = await OfficeDutyandTime.FetchEntireListByEmployeeRef(
+      this.Entity.p.EmployeeRef,
+      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+    );
     if (lst.length > 0) {
       this.ActualLateMarkTime = lst[0].p.ActualLateMarkTime;
       this.LateMarkGraceTimeInMins = lst[0].p.LateMarkGraceTimeInMins;
@@ -166,17 +205,18 @@ export class AttendanceDetailsComponent implements OnInit {
 
       this.ActualTotalWorkingHrs = lst[0].p.TotalWorkingHrs;
     }
-  }
+  };
 
   onSiteSelection = () => {
     if (this.newAttendance.SiteRef == 0) {
-      this.newAttendance.SiteName = 'Office'
+      this.newAttendance.SiteName = 'Office';
     } else {
-      const SingleRecord = this.SiteList.find(data => data.p.Ref == this.newAttendance.SiteRef);
-      if (SingleRecord)
-        this.newAttendance.SiteName = SingleRecord.p.Name
+      const SingleRecord = this.SiteList.find(
+        (data) => data.p.Ref == this.newAttendance.SiteRef
+      );
+      if (SingleRecord) this.newAttendance.SiteName = SingleRecord.p.Name;
     }
-  }
+  };
 
   isImageFile(filePath: string): boolean {
     if (!filePath) return false;
@@ -191,7 +231,7 @@ export class AttendanceDetailsComponent implements OnInit {
     } else {
       window.open(this.imagePostSelfiViewUrl, '_blank');
     }
-  }
+  };
 
   SiteFileNavigation = (File: string) => {
     if (File) {
@@ -199,8 +239,7 @@ export class AttendanceDetailsComponent implements OnInit {
     } else {
       window.open(this.imagePostSiteView, '_blank');
     }
-  }
-
+  };
 
   openModal = () => {
     if (this.Entity.p.EmployeeRef <= 0) {
@@ -209,7 +248,7 @@ export class AttendanceDetailsComponent implements OnInit {
     }
     this.isModalOpen = true;
     this.ModalEditable = false;
-  }
+  };
 
   closeModal = async () => {
     this.isModalOpen = false;
@@ -218,15 +257,14 @@ export class AttendanceDetailsComponent implements OnInit {
   };
 
   editAttendane(index: number) {
-    this.isModalOpen = true
-    this.newAttendance = { ...this.Entity.p.AttendanceLogDetailsArray[index] }
+    this.isModalOpen = true;
+    this.newAttendance = { ...this.Entity.p.AttendanceLogDetailsArray[index] };
 
     this.CheckInTime = this.convertToFullTime(this.newAttendance.CheckInTime);
     this.CheckOutTime = this.convertToFullTime(this.newAttendance.CheckOutTime);
     this.ModalEditable = true;
     this.editingIndex = index;
   }
-
 
   removeAttendane = async (index: number) => {
     await this.uiUtils.showConfirmationMessage(
@@ -237,20 +275,20 @@ export class AttendanceDetailsComponent implements OnInit {
         this.Entity.p.AttendanceLogDetailsArray.splice(index, 1);
       }
     );
-  }
+  };
 
   convertFractionTimeToHM = (fractionTime: number) => {
     const hours = Math.floor(fractionTime);
     const fractionalMinutes = fractionTime - hours;
 
     // Convert fractional part (base 100) to minutes (base 60)
-    const minutes = Math.round(fractionalMinutes * 100 * 60 / 100);
+    const minutes = Math.round((fractionalMinutes * 100 * 60) / 100);
 
     // Pad minutes with leading zero if needed
     const paddedMinutes = String(minutes).padStart(2, '0');
 
     return `${hours}h ${paddedMinutes}m`;
-  }
+  };
 
   convertIOS12To24HoursFormat = (value: Date | null) => {
     if (value) {
@@ -260,44 +298,68 @@ export class AttendanceDetailsComponent implements OnInit {
     } else {
       return '';
     }
-  }
+  };
 
   convertTo12Hour = (time24: string): string => {
     if (!time24) {
       return '';
     }
-    const [hourStr, minute] = time24.split(":");
+    const [hourStr, minute] = time24.split(':');
     let hour = parseInt(hourStr, 10);
-    const ampm = hour >= 12 ? "PM" : "AM";
+    const ampm = hour >= 12 ? 'PM' : 'AM';
 
     hour = hour % 12;
     hour = hour === 0 ? 12 : hour; // Handle midnight (0 -> 12 AM) and noon (12 -> 12 PM)
 
     return `${hour}:${minute} ${ampm}`;
-  }
+  };
 
   convertToFullTime(timeStr: string): Date {
     const [hours, minutes] = timeStr.split(':').map(Number);
     const now = new Date();
-    return new Date(now.getFullYear(), now.getMonth(), now.getDate(), hours, minutes, 0);
+    return new Date(
+      now.getFullYear(),
+      now.getMonth(),
+      now.getDate(),
+      hours,
+      minutes,
+      0
+    );
   }
 
-    calculateFirstLastCheckInOutWorkingHours = () => {
+  calculateFirstLastCheckInOutWorkingHours = () => {
     if (!this.FirstCheckInTime) {
-      return
+      return;
     }
 
-    this.Entity.p.FirstCheckInTime = this.convertIOS12To24HoursFormat(this.FirstCheckInTime);
-    this.Entity.p.LastCheckOutTime = this.convertIOS12To24HoursFormat(this.LastCheckOutTime);
+    this.Entity.p.FirstCheckInTime = this.convertIOS12To24HoursFormat(
+      this.FirstCheckInTime
+    );
+    this.Entity.p.LastCheckOutTime = this.convertIOS12To24HoursFormat(
+      this.LastCheckOutTime
+    );
 
     // Fallback to "00:00" if either is missing or invalid
-    if (!this.Entity.p.FirstCheckInTime || !this.Entity.p.LastCheckOutTime.includes(":")) return 0;
+    if (
+      !this.Entity.p.FirstCheckInTime ||
+      !this.Entity.p.LastCheckOutTime.includes(':')
+    )
+      return 0;
 
-    const [inHour, inMin] = this.Entity.p.FirstCheckInTime.split(':').map(Number);
-    const [outHour, outMin] = (this.Entity.p.LastCheckOutTime && this.Entity.p.LastCheckOutTime.includes(":") ? this.Entity.p.LastCheckOutTime : "00:00").split(':').map(Number);
+    const [inHour, inMin] =
+      this.Entity.p.FirstCheckInTime.split(':').map(Number);
+    const [outHour, outMin] = (
+      this.Entity.p.LastCheckOutTime &&
+      this.Entity.p.LastCheckOutTime.includes(':')
+        ? this.Entity.p.LastCheckOutTime
+        : '00:00'
+    )
+      .split(':')
+      .map(Number);
 
     // Check for invalid numbers
-    if (isNaN(inHour) || isNaN(inMin) || isNaN(outHour) || isNaN(outMin)) return 0;
+    if (isNaN(inHour) || isNaN(inMin) || isNaN(outHour) || isNaN(outMin))
+      return 0;
 
     const inDate = new Date();
     inDate.setHours(inHour, inMin, 0, 0);
@@ -321,26 +383,45 @@ export class AttendanceDetailsComponent implements OnInit {
     const hours = Math.floor(diffMinutes / 60);
     const minutes = diffMinutes % 60;
 
-    this.Entity.p.DisplayTotalWorkingHrs = `${hours}h ${minutes.toString().padStart(2, '0')}m`;
+    this.Entity.p.DisplayTotalWorkingHrs = `${hours}h ${minutes
+      .toString()
+      .padStart(2, '0')}m`;
     return;
-  }
+  };
 
   calculateWorkingHours = () => {
     if (!this.CheckOutTime) {
-      return
+      return;
     }
 
-    this.newAttendance.CheckInTime = this.convertIOS12To24HoursFormat(this.CheckInTime);
-    this.newAttendance.CheckOutTime = this.convertIOS12To24HoursFormat(this.CheckOutTime);
+    this.newAttendance.CheckInTime = this.convertIOS12To24HoursFormat(
+      this.CheckInTime
+    );
+    this.newAttendance.CheckOutTime = this.convertIOS12To24HoursFormat(
+      this.CheckOutTime
+    );
 
     // Fallback to "00:00" if either is missing or invalid
-    if (!this.newAttendance.CheckInTime || !this.newAttendance.CheckInTime.includes(":")) return 0;
+    if (
+      !this.newAttendance.CheckInTime ||
+      !this.newAttendance.CheckInTime.includes(':')
+    )
+      return 0;
 
-    const [inHour, inMin] = this.newAttendance.CheckInTime.split(':').map(Number);
-    const [outHour, outMin] = (this.newAttendance.CheckOutTime && this.newAttendance.CheckOutTime.includes(":") ? this.newAttendance.CheckOutTime : "00:00").split(':').map(Number);
+    const [inHour, inMin] =
+      this.newAttendance.CheckInTime.split(':').map(Number);
+    const [outHour, outMin] = (
+      this.newAttendance.CheckOutTime &&
+      this.newAttendance.CheckOutTime.includes(':')
+        ? this.newAttendance.CheckOutTime
+        : '00:00'
+    )
+      .split(':')
+      .map(Number);
 
     // Check for invalid numbers
-    if (isNaN(inHour) || isNaN(inMin) || isNaN(outHour) || isNaN(outMin)) return 0;
+    if (isNaN(inHour) || isNaN(inMin) || isNaN(outHour) || isNaN(outMin))
+      return 0;
 
     const inDate = new Date();
     inDate.setHours(inHour, inMin, 0, 0);
@@ -364,24 +445,34 @@ export class AttendanceDetailsComponent implements OnInit {
     const hours = Math.floor(diffMinutes / 60);
     const minutes = diffMinutes % 60;
 
-    this.newAttendance.DisplayWorkingHrs = `${hours}h ${minutes.toString().padStart(2, '0')}m`;
+    this.newAttendance.DisplayWorkingHrs = `${hours}h ${minutes
+      .toString()
+      .padStart(2, '0')}m`;
     return;
-  }
+  };
 
   IsLateMarkChange = () => {
     if (this.Entity.p.IsLateMark || this.Entity.p.IsHalfDay) {
       this.Entity.p.TotalWorkingHrs = this.ActualTotalWorkingHrs / 2;
-      this.Entity.p.DisplayTotalWorkingHrs = this.convertFractionTimeToHM(this.Entity.p.TotalWorkingHrs);
+      this.Entity.p.DisplayTotalWorkingHrs = this.convertFractionTimeToHM(
+        this.Entity.p.TotalWorkingHrs
+      );
     } else {
-      this.Entity.p.TotalWorkingHrs = this.Entity.p.AttendanceLogDetailsArray.reduce((total: number, item: any) => {
-        return total + Number(item.WorkingHrs || 0);
-      }, 0);
+      this.Entity.p.TotalWorkingHrs =
+        this.Entity.p.AttendanceLogDetailsArray.reduce(
+          (total: number, item: any) => {
+            return total + Number(item.WorkingHrs || 0);
+          },
+          0
+        );
 
       this.Entity.p.TotalLateMarkHrs = 0;
       this.Entity.p.DisplayTotalLateMarkHrs = '0h 00m';
-      this.Entity.p.DisplayTotalWorkingHrs = this.convertFractionTimeToHM(this.Entity.p.TotalWorkingHrs);
+      this.Entity.p.DisplayTotalWorkingHrs = this.convertFractionTimeToHM(
+        this.Entity.p.TotalWorkingHrs
+      );
     }
-  }
+  };
 
   calculateLateMarkHrs = () => {
     const actualLateMarkTime = this.ActualLateMarkTime; // this.ActualLateMarkTime
@@ -389,12 +480,14 @@ export class AttendanceDetailsComponent implements OnInit {
     const graceMinutes = Number(this.LateMarkGraceTimeInMins); // this.LateMarkGraceTimeInMins
 
     // Convert ActualLateMarkTime to Date
-    const [lateHour, lateMin, lateSec] = actualLateMarkTime.split(":").map(Number);
+    const [lateHour, lateMin, lateSec] = actualLateMarkTime
+      .split(':')
+      .map(Number);
     const lateMarkDate = new Date();
     lateMarkDate.setHours(lateHour, lateMin, lateSec || 0, 0);
 
     // Convert CheckInTime to Date
-    const [inHour, inMin] = checkInTime.split(":").map(Number);
+    const [inHour, inMin] = checkInTime.split(':').map(Number);
     const checkInDate = new Date();
     checkInDate.setHours(inHour, inMin, 0, 0);
 
@@ -410,17 +503,18 @@ export class AttendanceDetailsComponent implements OnInit {
 
       this.Entity.p.IsLateMark = true;
       this.Entity.p.TotalLateMarkHrs = parseFloat(decimalHours.toFixed(2));
-      this.Entity.p.DisplayTotalLateMarkHrs = `${hours}h ${minutes}m`
+      this.Entity.p.DisplayTotalLateMarkHrs = `${hours}h ${minutes}m`;
 
       this.Entity.p.TotalWorkingHrs = this.ActualTotalWorkingHrs / 2;
 
       // Set Working Hours to Half
-      this.Entity.p.DisplayTotalWorkingHrs = this.convertFractionTimeToHM(this.Entity.p.TotalWorkingHrs);
-
+      this.Entity.p.DisplayTotalWorkingHrs = this.convertFractionTimeToHM(
+        this.Entity.p.TotalWorkingHrs
+      );
     } else {
       this.Entity.p.IsLateMark = false;
       this.Entity.p.TotalLateMarkHrs = 0;
-      this.Entity.p.DisplayTotalLateMarkHrs = '0h 00m'
+      this.Entity.p.DisplayTotalLateMarkHrs = '0h 00m';
     }
     return;
   };
@@ -434,112 +528,165 @@ export class AttendanceDetailsComponent implements OnInit {
       return this.uiUtils.showWarningToster('Check Out Time cannot be blank.');
     }
 
-
     if (this.newAttendance.CheckOutTime) {
       if (this.newAttendance.CheckOutTime < this.newAttendance.CheckInTime) {
-        return this.uiUtils.showWarningToster('Check Out time should be after Check In.');
+        return this.uiUtils.showWarningToster(
+          'Check Out time should be after Check In.'
+        );
       }
     }
 
     this.onSiteSelection();
 
-    if (this.editingIndex !== null && this.editingIndex !== undefined && this.editingIndex >= 0) {
+    if (
+      this.editingIndex !== null &&
+      this.editingIndex !== undefined &&
+      this.editingIndex >= 0
+    ) {
       if (this.editingIndex != 0) {
         if (this.Entity.p.AttendanceLogDetailsArray.length > 1) {
-          if (this.Entity.p.AttendanceLogDetailsArray[this.Entity.p.AttendanceLogDetailsArray.length - 2].CheckOutTime == '') {
-            return this.uiUtils.showWarningToster('Next Check In time should be after previous Check Out.');
+          if (
+            this.Entity.p.AttendanceLogDetailsArray[
+              this.Entity.p.AttendanceLogDetailsArray.length - 2
+            ].CheckOutTime == ''
+          ) {
+            return this.uiUtils.showWarningToster(
+              'Next Check In time should be after previous Check Out.'
+            );
           }
 
-          if (this.Entity.p.AttendanceLogDetailsArray[this.Entity.p.AttendanceLogDetailsArray.length - 2].CheckOutTime > this.newAttendance.CheckInTime) {
-            return this.uiUtils.showWarningToster('Next Check In time should be after previous Check Out.');
+          if (
+            this.Entity.p.AttendanceLogDetailsArray[
+              this.Entity.p.AttendanceLogDetailsArray.length - 2
+            ].CheckOutTime > this.newAttendance.CheckInTime
+          ) {
+            return this.uiUtils.showWarningToster(
+              'Next Check In time should be after previous Check Out.'
+            );
           }
         }
       }
-      this.Entity.p.AttendanceLogDetailsArray[this.editingIndex] = { ...this.newAttendance };
+      this.Entity.p.AttendanceLogDetailsArray[this.editingIndex] = {
+        ...this.newAttendance,
+      };
       await this.uiUtils.showSuccessToster('Attendance updated successfully');
       this.isModalOpen = false;
-
     } else {
       if (this.Entity.p.AttendanceLogDetailsArray.length > 0) {
-        if (this.Entity.p.AttendanceLogDetailsArray[this.Entity.p.AttendanceLogDetailsArray.length - 1].CheckOutTime == '') {
-          return this.uiUtils.showWarningToster('Next Check In time should be after previous Check Out.');
+        if (
+          this.Entity.p.AttendanceLogDetailsArray[
+            this.Entity.p.AttendanceLogDetailsArray.length - 1
+          ].CheckOutTime == ''
+        ) {
+          return this.uiUtils.showWarningToster(
+            'Next Check In time should be after previous Check Out.'
+          );
         }
 
-        if (this.Entity.p.AttendanceLogDetailsArray[this.Entity.p.AttendanceLogDetailsArray.length - 1].CheckOutTime > this.newAttendance.CheckInTime) {
-          return this.uiUtils.showWarningToster('Next Check In time should be after previous Check Out.');
+        if (
+          this.Entity.p.AttendanceLogDetailsArray[
+            this.Entity.p.AttendanceLogDetailsArray.length - 1
+          ].CheckOutTime > this.newAttendance.CheckInTime
+        ) {
+          return this.uiUtils.showWarningToster(
+            'Next Check In time should be after previous Check Out.'
+          );
         }
       }
       this.isSaveDisabled = true;
-      let AttendaneDetailsLogInstance = new WebAttendaneLogDetailsLog(this.newAttendance, true);
+      let AttendaneDetailsLogInstance = new WebAttendaneLogDetailsLog(
+        this.newAttendance,
+        true
+      );
 
-      this.Entity.p.AttendanceLogDetailsArray.push({ ...AttendaneDetailsLogInstance.p });
+      this.Entity.p.AttendanceLogDetailsArray.push({
+        ...AttendaneDetailsLogInstance.p,
+      });
       await this.uiUtils.showSuccessToster('Attendance added successfully');
       this.isSaveDisabled = false;
     }
 
     this.newAttendance = WebAttendaneLogDetailsLogProps.Blank();
 
-    this.CheckInTime = null
-    this.CheckOutTime = null
+    this.CheckInTime = null;
+    this.CheckOutTime = null;
     this.editingIndex = null;
-    this.Entity.p.FirstCheckInTime = this.Entity.p.AttendanceLogDetailsArray[0].CheckInTime;
-    this.Entity.p.LastCheckOutTime = this.Entity.p.AttendanceLogDetailsArray[this.Entity.p.AttendanceLogDetailsArray.length - 1].CheckOutTime;
+    this.Entity.p.FirstCheckInTime =
+      this.Entity.p.AttendanceLogDetailsArray[0].CheckInTime;
+    this.Entity.p.LastCheckOutTime =
+      this.Entity.p.AttendanceLogDetailsArray[
+        this.Entity.p.AttendanceLogDetailsArray.length - 1
+      ].CheckOutTime;
 
-    this.FirstCheckInTime = this.convertToFullTime(this.Entity.p.FirstCheckInTime);
-    this.LastCheckOutTime = this.convertToFullTime(this.Entity.p.LastCheckOutTime);
+    this.FirstCheckInTime = this.convertToFullTime(
+      this.Entity.p.FirstCheckInTime
+    );
+    this.LastCheckOutTime = this.convertToFullTime(
+      this.Entity.p.LastCheckOutTime
+    );
 
     this.IsLateMarkChange();
     if (!this.Entity.p.IsHalfDay) {
       this.calculateLateMarkHrs();
     }
-  }
+  };
 
   SaveAttendence = async () => {
     this.isSaveDisabled = true;
-    this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef()
+    this.Entity.p.CompanyRef =
+      this.companystatemanagement.getCurrentCompanyRef();
     if (this.Entity.p.CreatedBy == 0) {
-      this.Entity.p.CreatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
-      this.Entity.p.UpdatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
+      this.Entity.p.CreatedBy = Number(
+        this.appStateManage.StorageKey.getItem('LoginEmployeeRef')
+      );
+      this.Entity.p.UpdatedBy = Number(
+        this.appStateManage.StorageKey.getItem('LoginEmployeeRef')
+      );
     }
 
     this.Entity.p.IsAttendanceVerified = true;
 
-    this.Entity.p.TransDateTime = this.dtu.ConvertStringDateToFullFormat(this.Date);
+    this.Entity.p.TransDateTime = this.dtu.ConvertStringDateToFullFormat(
+      this.Date
+    );
     console.log('this.Entity :', this.Entity);
     let entityToSave = this.Entity.GetEditableVersion();
-    let entitiesToSave = [entityToSave]
+    let entitiesToSave = [entityToSave];
     let tr = await this.utils.SavePersistableEntities(entitiesToSave);
     if (!tr.Successful) {
       this.isSaveDisabled = false;
       this.uiUtils.showErrorMessage('Error', tr.Message);
-      return
-    }
-    else {
+      return;
+    } else {
       this.isSaveDisabled = false;
       if (this.IsNewEntity) {
         await this.uiUtils.showSuccessToster('Attendance saved successfully');
         this.Entity = WebAttendaneLog.CreateNewInstance();
+        this.FirstCheckInTime = null;
+        this.LastCheckOutTime = null;
         this.resetAllControls();
       } else {
         await this.uiUtils.showSuccessToster('Attendance Updated successfully');
       }
       await this.router.navigate(['/homepage/Website/Attendance_Logs']);
     }
-  }
+  };
 
   BackAttendence = async () => {
     if (!this.utils.AreEqual(this.InitialEntity, this.Entity)) {
-      await this.uiUtils.showConfirmationMessage('Cancel',
+      await this.uiUtils.showConfirmationMessage(
+        'Cancel',
         `This process is IRREVERSIBLE!
       <br/>
       Are you sure that you want to Cancel this Attendance Form?`,
         async () => {
           await this.router.navigate(['/homepage/Website/Attendance_Logs']);
-        });
+        }
+      );
     } else {
       await this.router.navigate(['/homepage/Website/Attendance_Logs']);
     }
-  }
+  };
 
   selectAllValue(event: MouseEvent): void {
     const input = event.target as HTMLInputElement;
@@ -552,6 +699,5 @@ export class AttendanceDetailsComponent implements OnInit {
 
     // reset dirty
     this.FromDateInputControl.control.markAsPristine();
-  }
+  };
 }
-

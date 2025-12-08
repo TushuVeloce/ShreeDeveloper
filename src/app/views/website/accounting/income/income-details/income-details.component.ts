@@ -1,7 +1,12 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { ValidationMessages } from 'src/app/classes/domain/constants';
-import { DomainEnums, ModeOfPayments, PayerTypes, RecipientTypes, } from 'src/app/classes/domain/domainenums/domainenums';
+import {
+  DomainEnums,
+  ModeOfPayments,
+  PayerTypes,
+  RecipientTypes,
+} from 'src/app/classes/domain/domainenums/domainenums';
 import { Expense } from 'src/app/classes/domain/entities/website/accounting/expense/expense';
 import { Income } from 'src/app/classes/domain/entities/website/accounting/income/income';
 import { Ledger } from 'src/app/classes/domain/entities/website/masters/ledgermaster/ledger';
@@ -33,8 +38,8 @@ export class IncomeDetailsComponent implements OnInit {
   ShreeBalance: number = 0;
   UnitList: Unit[] = [];
   PayerList: Income[] = [];
-  PayerNameInput: boolean = false
-  PayerNameReadOnly: boolean = false
+  PayerNameInput: boolean = false;
+  PayerNameReadOnly: boolean = false;
   isSaveDisabled: boolean = false;
   isPayerSaveDisabled: boolean = false;
   DetailsFormTitle: 'New Income' | 'Edit Income' = 'New Income';
@@ -42,10 +47,12 @@ export class IncomeDetailsComponent implements OnInit {
   InitialEntity: Income = null as any;
   companyRef = this.companystatemanagement.SelectedCompanyRef;
   BankList: OpeningBalance[] = [];
-  Cash = ModeOfPayments.Cash
-  Bill = ModeOfPayments.Bill
-  RecipientType = RecipientTypes.Recipient
-  ModeofPaymentList = DomainEnums.ModeOfPaymentsList().filter(item => item.Ref !== this.Bill);
+  Cash = ModeOfPayments.Cash;
+  Bill = ModeOfPayments.Bill;
+  RecipientType = RecipientTypes.Recipient;
+  ModeofPaymentList = DomainEnums.ModeOfPaymentsList().filter(
+    (item) => item.Ref !== this.Bill
+  );
   PayerTypesList = DomainEnums.PayerTypesList();
   DealDoneCustomer = PayerTypes.DealDoneCustomer;
   EmployeeType = PayerTypes.Employee;
@@ -55,7 +62,7 @@ export class IncomeDetailsComponent implements OnInit {
 
   Date: string = '';
 
-  RequiredFieldMsg: string = ValidationMessages.RequiredFieldMsg
+  RequiredFieldMsg: string = ValidationMessages.RequiredFieldMsg;
 
   constructor(
     private router: Router,
@@ -64,34 +71,36 @@ export class IncomeDetailsComponent implements OnInit {
     private utils: Utils,
     private dtu: DTU,
     private companystatemanagement: CompanyStateManagement
-  ) { }
+  ) {}
 
   async ngOnInit() {
     this.appStateManage.setDropdownDisabled(true);
     await this.getUnitList();
     await this.getSiteListByCompanyRef();
     await this.getLedgerListByCompanyRef();
-    await this.getCurrentBalanceByCompanyRef();
     this.FormulateBankList();
     if (this.appStateManage.StorageKey.getItem('Editable') == 'Edit') {
       this.IsNewEntity = false;
       this.DetailsFormTitle = this.IsNewEntity ? 'New Income' : 'Edit Income';
       this.Entity = Income.GetCurrentInstance();
       this.Date = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.Date);
-      await this.getPayerListBySiteAndPayerType()
+      await this.getPayerListBySiteAndPayerType();
       this.appStateManage.StorageKey.removeItem('Editable');
       this.PayerPlotNo = this.Entity.p.PlotName;
       await this.getSubLedgerListByLedgerRef(this.Entity.p.LedgerRef);
-      await this.onPayerChange()
+      await this.onPayerChange();
       this.OldIncomeAmount = this.Entity.p.IncomeAmount;
 
-      this.Entity.p.UpdatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
+      this.Entity.p.UpdatedBy = Number(
+        this.appStateManage.StorageKey.getItem('LoginEmployeeRef')
+      );
     } else {
       this.Entity = Income.CreateNewInstance();
       Income.SetCurrentInstance(this.Entity);
       let strCDT = await CurrentDateTimeRequest.GetCurrentDateTime();
       this.Date = strCDT.substring(0, 10);
     }
+    await this.getCurrentBalanceByCompanyRef();
 
     this.InitialEntity = Object.assign(
       Income.CreateNewInstance(),
@@ -103,25 +112,34 @@ export class IncomeDetailsComponent implements OnInit {
   focusInput = () => {
     let txtName = document.getElementById('Date')!;
     txtName.focus();
-  }
+  };
 
   getUnitList = async () => {
-    let lst = await Unit.FetchEntireList(async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    let lst = await Unit.FetchEntireList(
+      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+    );
     this.UnitList = lst;
-  }
+  };
 
   public FormulateBankList = async () => {
     if (this.companyRef() <= 0) {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
-    let lst = await OpeningBalance.FetchEntireListByCompanyRef(this.companyRef(), async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg));
-    this.BankList = lst.filter((item) => item.p.BankAccountRef > 0 && (item.p.OpeningBalanceAmount > 0 || item.p.InitialBalance > 0));
+    let lst = await OpeningBalance.FetchEntireListByCompanyRef(
+      this.companyRef(),
+      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+    );
+    this.BankList = lst.filter(
+      (item) =>
+        item.p.BankAccountRef > 0 &&
+        (item.p.OpeningBalanceAmount > 0 || item.p.InitialBalance > 0)
+    );
   };
 
   OnModeChange = () => {
-    this.Entity.p.BankAccountRef = 0
-  }
+    this.Entity.p.BankAccountRef = 0;
+  };
 
   CalculateShreeBalance = () => {
     // 1. Calculate the New Remaining Plot Amount
@@ -129,37 +147,52 @@ export class IncomeDetailsComponent implements OnInit {
     // For an edit, the starting balance is the old remaining amount plus the old income amount.
     if (this.IsNewEntity) {
       // New entry: RemainingPlotAmount is simply the starting value minus the new income
-      this.Entity.p.RemainingPlotAmount = Number((this.RemainingPlotAmount - this.Entity.p.IncomeAmount).toFixed(2));
+      this.Entity.p.RemainingPlotAmount = Number(
+        (this.RemainingPlotAmount - this.Entity.p.IncomeAmount).toFixed(2)
+      );
     } else {
       // Edit existing entry:
       // a) Revert the old transaction: OldRemainingPlotAmount + OldIncomeAmount
       // b) Apply the new transaction: (Result of 'a') - New IncomeAmount
-      const plotAmountBeforeTransaction = Number((this.RemainingPlotAmount + this.OldIncomeAmount).toFixed(2));
-      this.Entity.p.RemainingPlotAmount = Number((plotAmountBeforeTransaction - this.Entity.p.IncomeAmount).toFixed(2));
+      const plotAmountBeforeTransaction = Number(
+        (this.RemainingPlotAmount + this.OldIncomeAmount).toFixed(2)
+      );
+      this.Entity.p.RemainingPlotAmount = Number(
+        (plotAmountBeforeTransaction - this.Entity.p.IncomeAmount).toFixed(2)
+      );
     }
 
     // 2. Calculate the New Shree's Balance
     if (this.IsNewEntity) {
       // New entry: Shree's Balance increases by the new IncomeAmount
-      this.Entity.p.ShreesBalance = Number((this.ShreeBalance + this.Entity.p.IncomeAmount).toFixed(2));
+      this.Entity.p.ShreesBalance = Number(
+        (this.ShreeBalance + this.Entity.p.IncomeAmount).toFixed(2)
+      );
     } else {
       // Edit existing entry:
       // The net change is (New Income - Old Income)
-      const netIncomeChange = Number((this.Entity.p.IncomeAmount - this.OldIncomeAmount).toFixed(2));
+      const netIncomeChange = Number(
+        (this.Entity.p.IncomeAmount - this.OldIncomeAmount).toFixed(2)
+      );
       // Apply the net change to the Shree's Balance before the transaction
-      this.Entity.p.ShreesBalance = Number((this.ShreeBalance + netIncomeChange).toFixed(2));
+      this.Entity.p.ShreesBalance = Number(
+        (this.ShreeBalance + netIncomeChange).toFixed(2)
+      );
     }
-  }
+  };
 
   getCurrentBalanceByCompanyRef = async () => {
     if (this.companyRef() <= 0) {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
-    let lst = await Expense.FetchCurrentBalanceByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    let lst = await Expense.FetchCurrentBalanceByCompanyRef(
+      this.companyRef(),
+      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+    );
     this.Entity.p.ShreesBalance = lst[0].p.ShreesBalance;
     this.ShreeBalance = lst[0].p.ShreesBalance;
-  }
+  };
 
   getPayerListBySiteAndPayerType = async () => {
     this.PayerList = [];
@@ -171,32 +204,64 @@ export class IncomeDetailsComponent implements OnInit {
       // await this.uiUtils.showErrorToster('Payer Type not Selected');
       return;
     }
-    let lst = await Income.FetchPayerNameByPayerTypeRef(this.Entity.p.SiteRef, this.companyRef(), this.Entity.p.PayerType, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    let lst = await Income.FetchPayerNameByPayerTypeRef(
+      this.Entity.p.SiteRef,
+      this.companyRef(),
+      this.Entity.p.PayerType,
+      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+    );
     this.PayerList = lst;
     console.log(' PayerList lst :', lst);
-  }
+  };
 
   onPayerChange = async () => {
     let SingleRecord;
     try {
       if (this.Entity.p.PayerType == this.DealDoneCustomer) {
-        SingleRecord = this.PayerList.find((data) => data.p.PlotName == this.PayerPlotNo);
+        SingleRecord = this.PayerList.find(
+          (data) => data.p.PlotName == this.PayerPlotNo
+        );
       } else {
-        SingleRecord = this.PayerList.find((data) => data.p.Ref == this.Entity.p.PayerRef);
+        SingleRecord = this.PayerList.find(
+          (data) => data.p.Ref == this.Entity.p.PayerRef
+        );
       }
 
       if (SingleRecord?.p) {
-        this.Entity.p.IsRegisterCustomerRef = SingleRecord.p.IsRegisterCustomerRef;
+        this.Entity.p.IsRegisterCustomerRef =
+          SingleRecord.p.IsRegisterCustomerRef;
         this.Entity.p.PayerRef = SingleRecord.p.Ref;
         if (this.Entity.p.PayerType == this.DealDoneCustomer) {
           this.Entity.p.PlotRef = SingleRecord.p.PlotRef;
           this.Entity.p.PlotName = SingleRecord.p.PlotName;
-          let lst = await Income.FetchToalAmountByCompanyAndPlotRef(this.companyRef(), this.Entity.p.PlotRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+          let lst = await Income.FetchToalAmountByCompanyAndPlotRef(
+            this.companyRef(),
+            this.Entity.p.PlotRef,
+            0,
+            0,
+            0,
+            async (errMsg) =>
+              await this.uiUtils.showErrorMessage('Error', errMsg)
+          );
           if (lst.length > 0) {
             this.Entity.p.TotalPlotAmount = lst[0].p.TotalPlotAmount;
             this.Entity.p.RemainingPlotAmount = lst[0].p.RemainingPlotAmount;
             this.RemainingPlotAmount = lst[0].p.RemainingPlotAmount;
             this.Entity.p.PlotGrandTotal = lst[0].p.PlotGrandTotal;
+          }
+        } else if (this.Entity.p.PayerType == this.EmployeeType) {
+          let lst = await Income.FetchToalAmountByCompanyAndPlotRef(
+            this.companyRef(),
+            0,
+            this.Entity.p.PayerType,
+            this.Entity.p.PayerRef,
+            this.Entity.p.SiteRef,
+            async (errMsg) =>
+              await this.uiUtils.showErrorMessage('Error', errMsg)
+          );
+          console.log('lst :', lst);
+          if (lst.length > 0) {
+            this.Entity.p.RemainingAdvance = lst[0].p.RemainingAdvance;
           }
         } else {
           this.Entity.p.TotalPlotAmount = 0;
@@ -207,35 +272,40 @@ export class IncomeDetailsComponent implements OnInit {
           this.Entity.p.PlotName = '';
         }
       }
-    } catch (error) {
-    }
-  }
+    } catch (error) {}
+  };
 
   AddPayerName = () => {
-    this.Entity.p.PayerRef = 0
-    this.PayerEntity.p.Name = ''
-    this.PayerNameInput = true
-  }
+    this.Entity.p.PayerRef = 0;
+    this.PayerEntity.p.Name = '';
+    this.PayerNameInput = true;
+  };
 
   cancelPayerName = () => {
-    this.PayerNameInput = false
-    this.PayerEntity.p.Name = ''
-  }
+    this.PayerNameInput = false;
+    this.PayerEntity.p.Name = '';
+  };
 
   SaveNewPayerName = async () => {
     if (this.PayerEntity.p.Name == '') {
       this.uiUtils.showErrorToster('Payer Name can not be Blank');
-      return
+      return;
     }
     if (this.isPayerSaveDisabled == true) {
-      return
+      return;
     }
     this.isPayerSaveDisabled = true;
-    this.PayerEntity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef();
-    this.PayerEntity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName();
+    this.PayerEntity.p.CompanyRef =
+      this.companystatemanagement.getCurrentCompanyRef();
+    this.PayerEntity.p.CompanyName =
+      this.companystatemanagement.getCurrentCompanyName();
     if (this.PayerEntity.p.CreatedBy == 0) {
-      this.PayerEntity.p.CreatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
-      this.PayerEntity.p.UpdatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
+      this.PayerEntity.p.CreatedBy = Number(
+        this.appStateManage.StorageKey.getItem('LoginEmployeeRef')
+      );
+      this.PayerEntity.p.UpdatedBy = Number(
+        this.appStateManage.StorageKey.getItem('LoginEmployeeRef')
+      );
     }
     let entityToSave = this.PayerEntity.GetEditableVersion();
     let entitiesToSave = [entityToSave];
@@ -249,22 +319,24 @@ export class IncomeDetailsComponent implements OnInit {
       this.isPayerSaveDisabled = false;
       if (this.IsNewEntity) {
         await this.uiUtils.showSuccessToster('Payer Name saved successfully');
-        this.PayerNameInput = false
-        await this.getPayerListBySiteAndPayerType()
+        this.PayerNameInput = false;
+        await this.getPayerListBySiteAndPayerType();
         this.PayerEntity = Payer.CreateNewInstance();
       }
     }
   };
-
 
   getSiteListByCompanyRef = async () => {
     if (this.companyRef() <= 0) {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
-    let lst = await Site.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    let lst = await Site.FetchEntireListByCompanyRef(
+      this.companyRef(),
+      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+    );
     this.SiteList = lst;
-  }
+  };
 
   onSiteChange = () => {
     this.Entity.p.TotalPlotAmount = 0;
@@ -277,18 +349,19 @@ export class IncomeDetailsComponent implements OnInit {
     this.Entity.p.SubLedgerRef = 0;
     this.Entity.p.PayerType = 0;
     this.Entity.p.PlotName = '';
-  }
+  };
 
   getLedgerListByCompanyRef = async () => {
     if (this.companyRef() <= 0) {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
-    this.Entity.p.SubLedgerRef = 0
-    let lst = await Ledger.FetchEntireListByCompanyRef(this.companyRef(),
+    this.Entity.p.SubLedgerRef = 0;
+    let lst = await Ledger.FetchEntireListByCompanyRef(
+      this.companyRef(),
       async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
     );
-    this.LedgerList = lst
+    this.LedgerList = lst;
   };
 
   getSubLedgerListByLedgerRef = async (ledgerref: number) => {
@@ -296,12 +369,15 @@ export class IncomeDetailsComponent implements OnInit {
       await this.uiUtils.showErrorToster('Ledger not Selected');
       return;
     }
-    let lst = await SubLedger.FetchEntireListByLedgerRef(ledgerref, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    let lst = await SubLedger.FetchEntireListByLedgerRef(
+      ledgerref,
+      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+    );
     this.SubLedgerList = lst;
     if (lst.length < 0) {
       this.Entity.p.SubLedgerRef = 0;
     }
-  }
+  };
 
   onTypeChange = () => {
     this.Entity.p.PayerRef = 0;
@@ -312,15 +388,21 @@ export class IncomeDetailsComponent implements OnInit {
     this.Entity.p.RemainingPlotAmount = 0;
     this.RemainingPlotAmount = 0;
     this.Entity.p.PlotGrandTotal = 0;
-  }
+  };
 
   SaveIncome = async () => {
     this.isSaveDisabled = true;
-    this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef();
-    this.Entity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName();
+    this.Entity.p.CompanyRef =
+      this.companystatemanagement.getCurrentCompanyRef();
+    this.Entity.p.CompanyName =
+      this.companystatemanagement.getCurrentCompanyName();
     if (this.Entity.p.CreatedBy == 0) {
-      this.Entity.p.CreatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
-      this.Entity.p.UpdatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
+      this.Entity.p.CreatedBy = Number(
+        this.appStateManage.StorageKey.getItem('LoginEmployeeRef')
+      );
+      this.Entity.p.UpdatedBy = Number(
+        this.appStateManage.StorageKey.getItem('LoginEmployeeRef')
+      );
     }
     this.Entity.p.Date = this.dtu.ConvertStringDateToFullFormat(this.Date);
     let entityToSave = this.Entity.GetEditableVersion();
@@ -337,7 +419,6 @@ export class IncomeDetailsComponent implements OnInit {
         await this.uiUtils.showSuccessToster('Income saved successfully');
         this.Entity = Income.CreateNewInstance();
         this.getCurrentBalanceByCompanyRef();
-
       } else {
         await this.uiUtils.showSuccessToster('Income Updated successfully');
         await this.router.navigate(['/homepage/Website/Income']);
@@ -352,16 +433,17 @@ export class IncomeDetailsComponent implements OnInit {
 
   BackIncome = async () => {
     if (!this.utils.AreEqual(this.InitialEntity, this.Entity)) {
-      await this.uiUtils.showConfirmationMessage('Cancel',
+      await this.uiUtils.showConfirmationMessage(
+        'Cancel',
         `This process is IRREVERSIBLE!
       <br/>
       Are you sure that you want to Cancel this Income Form?`,
         async () => {
           await this.router.navigate(['/homepage/Website/Income']);
-        });
+        }
+      );
     } else {
       await this.router.navigate(['/homepage/Website/Income']);
     }
-  }
+  };
 }
-

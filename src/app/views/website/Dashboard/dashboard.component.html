@@ -1,215 +1,206 @@
-<div>
+<div class="dashboard-container">
+
   <ng-template #noDataTpl>
-    <div style="text-align: center; color: rgba(0, 0, 0, 0.25);">
-      No Data
+    <div style="text-align: center; color: rgba(0, 0, 0, 0.4); padding: 10px;">
+      No Data Available
     </div>
   </ng-template>
-  <div class="card-container">
-    <!-- Shree Balance -->
+
+  <div class="w-full">
+    <div class="title-card">
+      <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+        <h5 class="section-title">Welcome, {{ userName }}!</h5>
+        <h5 class="section-title">{{ greeting }}</h5>
+      </div>
+    </div>
+  </div>
+
+  <div class="card-container" *ngIf="isAdmin || access.hasAnyAccess(featureRef)">
     <div class="balance-card shree">
-      <h4>Shree Balance</h4>
-      <h2><span>{{ shreeBalance | currency : "INR" }}</span></h2>
-      <p>Cash Balance + Bank Balance</p>
-    </div>
-
-    <!-- Cash Balance -->
-    <div class="balance-card cash">
-      <h4>Cash Balance</h4>
-      <h2><span>{{ cashBalance | currency : "INR" }}</span></h2>
-    </div>
-
-    <!-- All Bank -->
-    <div class="bank-card bank">
+      <div class="card-header-row">
+        <h4>Shree Balance</h4>
+        <div class="icon-bg">
+          <i class="fa-solid fa-wallet"></i>
+        </div>
+      </div>
       <div>
-        <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear id="BankAccountRef"
-          name="BankAccountRef" [nzSize]="'large'" [(ngModel)]="BankAccountRef"
-          (ngModelChange)="getBankCurrentBalance()">
-          <nz-option [nzValue]="0" [nzLabel]="'All Banks'">
-          </nz-option>
-          <nz-option *ngFor="let bank of BankList" [nzValue]="bank.p.BankAccountRef" [nzLabel]="bank.p.BankName">
-          </nz-option>
-        </nz-select>
+        <h2 class="card-amount">{{ shreeBalance | currency : "INR" }}</h2>
+        <p class="card-subtext">Total Cash Balance + Bank Balance</p>
       </div>
+    </div>
 
-      <div class="center">
-        <h2><span>{{ bankBalance | currency : "INR" }}</span></h2>
+    <div class="balance-card cash">
+      <div class="card-header-row">
+        <h4>Cash Balance</h4>
+        <div class="icon-bg">
+          <i class="fa-solid fa-money-bill-wave"></i>
+        </div>
+      </div>
+      <div>
+        <h2 class="card-amount">{{ cashBalance | currency : "INR" }}</h2>
+        <p class="card-subtext">Cash Available</p>
+      </div>
+    </div>
+
+    <div class="bank-card bank">
+      <div class="card-header-row" style="width: 100%; align-items: center;">
+        <div style="flex: 1;">
+          <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
+            id="BankAccountRef" name="BankAccountRef" [nzSize]="'large'" [(ngModel)]="BankAccountRef"
+            (ngModelChange)="getBankCurrentBalance()" style="width: 100%;">
+            <nz-option [nzValue]="0" [nzLabel]="'All Banks'"></nz-option>
+            <nz-option *ngFor="let bank of BankList" [nzValue]="bank.p.BankAccountRef"
+              [nzLabel]="bank.p.BankName"></nz-option>
+          </nz-select>
+        </div>
+        <div class="icon-bg" style="margin-left: 10px;">
+          <i class="fa-solid fa-building-columns"></i>
+        </div>
+      </div>
+      <div style="margin-top: auto;">
+        <h2 class="card-amount">{{ bankBalance | currency : "INR" }}</h2>
+        <p class="card-subtext">Current Account Balance</p>
       </div>
     </div>
   </div>
 
-  <div class="chart-container">
-    <!-- Card 1 -->
+  <div class="chart-container" *ngIf="isAdmin || access.hasAnyAccess(featureRef)">
     <div class="chart-card">
       <div class="chart-header">
-        <p>Income VS Expense <br>
-          <span style="font-size: 13px;">{{this.TotalIncome | currency : "INR"}} VS {{this.TotalExpense | currency :
-            "INR"}}</span>
-        </p>
-        <div style="width: 25%;">
-          <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear id="BarSiteRef"
-            name="BarSiteRef" [nzSize]="'large'" [(ngModel)]="BarSiteRef" (ngModelChange)="getDashboardStats()">
-            <nz-option [nzValue]="0" [nzLabel]="'All Site'">
-            </nz-option>
-            <nz-option *ngFor="let site of SiteList" [nzValue]="site.p.Ref" [nzLabel]="site.p.Name">
-            </nz-option>
-          </nz-select>
+        <div class="title-group">
+          <p>Income VS Expense</p>
+          <span>Inc: {{TotalIncome | currency:"INR" : 'symbol' : '1.0-0'}} vs Exp: {{TotalExpense | currency:"INR" :
+            'symbol' : '1.0-0'}}</span>
         </div>
-        <div style="width: 25%;">
-          <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear id="BarFilterType"
-            name="BarFilterType" [nzSize]="'large'" [(ngModel)]="BarFilterType" (ngModelChange)="getDashboardStats()">
-            <nz-option [nzValue]="57" [nzLabel]="'Weekly'"> </nz-option>
-            <nz-option [nzValue]="63" [nzLabel]="'Monthly'"> </nz-option>
-          </nz-select>
-        </div>
-        <div *ngIf="BarFilterType == 63" style="width: 20%;">
-          <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
-            id="SelectedBarMonths" name="SelectedBarMonths" [nzSize]="'large'" [(ngModel)]="SelectedBarMonths"
+
+        <div class="filter-group">
+          <nz-select class="nzSelect-light" style="width: 120px;" [(ngModel)]="BarSiteRef"
             (ngModelChange)="getDashboardStats()">
-            <nz-option *ngFor="let SelectedBarMonths of MonthList" [nzValue]="SelectedBarMonths.Ref"
-              [nzLabel]="SelectedBarMonths.Name">
-            </nz-option>
+            <nz-option [nzValue]="0" [nzLabel]="'All Sites'"></nz-option>
+            <nz-option *ngFor="let site of SiteList" [nzValue]="site.p.Ref" [nzLabel]="site.p.Name"></nz-option>
+          </nz-select>
+
+          <nz-select class="nzSelect-light" style="width: 100px;" [(ngModel)]="BarFilterType"
+            (ngModelChange)="getDashboardStats()">
+            <nz-option [nzValue]="57" [nzLabel]="'Weekly'"></nz-option>
+            <nz-option [nzValue]="63" [nzLabel]="'Monthly'"></nz-option>
+          </nz-select>
+
+          <nz-select *ngIf="BarFilterType == 63" class="nzSelect-light" style="width: 120px;"
+            [(ngModel)]="SelectedBarMonths" (ngModelChange)="getDashboardStats()">
+            <nz-option *ngFor="let m of MonthList" [nzValue]="m.Ref" [nzLabel]="m.Name"></nz-option>
           </nz-select>
         </div>
       </div>
-      <canvas id="barChart"></canvas>
+      <canvas id="barChart" class="doughnut"></canvas>
     </div>
 
-    <!-- Card 2 -->
     <div class="chart-card">
       <div class="chart-header">
-        <p>Expense Breakdown</p>
-        <div style="width: 25%;">
-          <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
-            id="DoughnutSiteRef" name="DoughnutSiteRef" [nzSize]="'large'" [(ngModel)]="DoughnutSiteRef"
-            (ngModelChange)="getDashboardStats()">
-            <nz-option [nzValue]="0" [nzLabel]="'All Site'">
-            </nz-option>
-            <nz-option *ngFor="let site of SiteList" [nzValue]="site.p.Ref" [nzLabel]="site.p.Name">
-            </nz-option>
-          </nz-select>
+        <div class="title-group">
+          <p>Expense Breakdown</p>
         </div>
-        <div style="width: 25%;">
-          <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear id="DoughnutMonth"
-            name="DoughnutMonth" [nzSize]="'large'" [(ngModel)]="DoughnutFilterType"
+        <div class="filter-group">
+          <nz-select class="nzSelect-light" style="width: 120px;" [(ngModel)]="DoughnutSiteRef"
             (ngModelChange)="getDashboardStats()">
-            <nz-option [nzValue]="57" [nzLabel]="'Weekly'"> </nz-option>
-            <nz-option [nzValue]="63" [nzLabel]="'Monthly'"> </nz-option>
+            <nz-option [nzValue]="0" [nzLabel]="'All Sites'"></nz-option>
+            <nz-option *ngFor="let site of SiteList" [nzValue]="site.p.Ref" [nzLabel]="site.p.Name"></nz-option>
           </nz-select>
-        </div>
-        <div *ngIf="DoughnutFilterType == 63" style="width: 20%;">
-          <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
-            id="SelectedDoughnutMonths" name="SelectedDoughnutMonths" [nzSize]="'large'"
-            [(ngModel)]="SelectedDoughnutMonths" (ngModelChange)="getDashboardStats()">
-            <nz-option *ngFor="let SelectedDoughnutMonths of MonthList" [nzValue]="SelectedDoughnutMonths.Ref"
-              [nzLabel]="SelectedDoughnutMonths.Name">
-            </nz-option>
+
+          <nz-select class="nzSelect-light" style="width: 100px;" [(ngModel)]="DoughnutFilterType"
+            (ngModelChange)="getDashboardStats()">
+            <nz-option [nzValue]="57" [nzLabel]="'Weekly'"></nz-option>
+            <nz-option [nzValue]="63" [nzLabel]="'Monthly'"></nz-option>
+          </nz-select>
+
+          <nz-select class="nzSelect-light" style="width: 100px;" [(ngModel)]="SelectedDoughnutMonths"
+            (ngModelChange)="getDashboardStats()" *ngIf="DoughnutFilterType === 63">
+            <nz-option *ngFor="let month of MonthList" [nzValue]="month.Ref" [nzLabel]="month.Name"></nz-option>
           </nz-select>
         </div>
       </div>
-
-      <canvas id="doughnutChart" class="doughnut"></canvas>
+      <div class="chart-canvas-wrapper">
+        <canvas id="doughnutChart"></canvas>
+      </div>
     </div>
   </div>
 
-  <div class="w-full my-4">
-    <!-- CRM Funnel -->
-    <div class="card border-brown p-3 mb-4">
-      <div class="d-flex justify-content-between align-items-center mb-3">
-        <h5 class="text-brown fw-bold mb-0">CRM Funnel</h5>
-        <div style="width: 25%;">
-          <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear id="CRMSiteRef"
-            name="CRMSiteRef" [nzSize]="'large'" [(ngModel)]="CRMSiteRef" (ngModelChange)="getDashboardStats()">
-            <nz-option [nzValue]="0" [nzLabel]="'All Site'">
-            </nz-option>
-            <nz-option *ngFor="let site of SiteList" [nzValue]="site.p.Ref" [nzLabel]="site.p.Name">
-            </nz-option>
-          </nz-select>
-        </div>
-        <div style="width: 25%;">
-          <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear id="CRMFilterType"
-            name="CRMFilterType" [nzSize]="'large'" [(ngModel)]="CRMFilterType" (ngModelChange)="getDashboardStats()">
-            <nz-option [nzValue]="57" [nzLabel]="'Weekly'"> </nz-option>
-            <nz-option [nzValue]="63" [nzLabel]="'Monthly'"> </nz-option>
-          </nz-select>
-        </div>
-        <div *ngIf="CRMFilterType == 63" style="width: 20%;">
-          <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
-            id="SelectedCRMMonths" name="SelectedCRMMonths" [nzSize]="'large'" [(ngModel)]="SelectedCRMMonths"
+  <div class="w-full my-4" *ngIf="isAdmin || access.hasAnyAccess(featureRef)">
+    <div class="modern-card">
+      <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+        <h5 class="section-title">CRM Funnel Overview</h5>
+
+        <div class="d-flex gap-2">
+          <nz-select class="nzSelect-light" style="width: 140px;" [(ngModel)]="CRMSiteRef"
             (ngModelChange)="getDashboardStats()">
-            <nz-option *ngFor="let SelectedCRMMonths of MonthList" [nzValue]="SelectedCRMMonths.Ref"
-              [nzLabel]="SelectedCRMMonths.Name">
-            </nz-option>
+            <nz-option [nzValue]="0" [nzLabel]="'All Sites'"></nz-option>
+            <nz-option *ngFor="let site of SiteList" [nzValue]="site.p.Ref" [nzLabel]="site.p.Name"></nz-option>
+          </nz-select>
+
+          <nz-select class="nzSelect-light" style="width: 100px;" [(ngModel)]="CRMFilterType"
+            (ngModelChange)="getDashboardStats()">
+            <nz-option [nzValue]="57" [nzLabel]="'Weekly'"></nz-option>
+            <nz-option [nzValue]="63" [nzLabel]="'Monthly'"></nz-option>
+          </nz-select>
+
+          <nz-select *ngIf="CRMFilterType == 63" class="nzSelect-light" style="width: 120px;"
+            [(ngModel)]="SelectedCRMMonths" (ngModelChange)="getDashboardStats()">
+            <nz-option *ngFor="let m of MonthList" [nzValue]="m.Ref" [nzLabel]="m.Name"></nz-option>
           </nz-select>
         </div>
       </div>
 
-      <div class="row text-center">
-        <div class="col-md-3">
-          <div class="inner-card border-brown p-3 rounded">
-            <p class="fw-semibold mb-2">Total Enquiry</p>
-            <h4 class="text-danger fw-bold">🏠 {{TotalEnquiries}}</h4>
-          </div>
+      <div class="funnel-grid">
+        <div class="funnel-item">
+          <p>Total Enquiries</p>
+          <h4>{{TotalEnquiries}}</h4>
         </div>
-        <div class="col-md-3">
-          <div class="inner-card border-brown p-3 rounded">
-            <p class="fw-semibold mb-2">Total Plots</p>
-            <h4 class="text-danger fw-bold">🏠 {{TotalNoOfPlots}}</h4>
-          </div>
+        <div class="funnel-item">
+          <p>Total Plots</p>
+          <h4>{{TotalNoOfPlots}}</h4>
         </div>
-        <div class="col-md-3">
-          <div class="inner-card border-brown p-3 rounded">
-            <p class="fw-semibold mb-2">Sold Plots</p>
-            <h4 class="text-danger fw-bold">🏠 {{TotalNoOfSoldPlots}}</h4>
-          </div>
+        <div class="funnel-item">
+          <p>Sold Plots</p>
+          <h4>{{TotalNoOfSoldPlots}}</h4>
         </div>
-        <div class="col-md-3">
-          <div class="inner-card border-brown p-3 rounded">
-            <p class="fw-semibold mb-2">Revenue Generated</p>
-            <h4 class="text-danger fw-bold"> {{TotalRevenueGenerated | currency : "INR" }}</h4>
-          </div>
+        <div class="funnel-item">
+          <p>Revenue</p>
+          <h4 style="color: var(--success-green);">{{TotalRevenueGenerated | currency : "INR" : 'symbol' : '1.0-0' }}
+          </h4>
         </div>
       </div>
     </div>
 
-    <!-- Bills Payable Summary -->
-    <div class="card border-brown p-3">
-      <div class="d-flex justify-content-between align-items-center mb-3">
-        <h5 class="text-brown fw-bold mb-0">Bills Payable Summary</h5>
-        <div style="width: 25%;">
-          <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
-            nzPlaceHolder="Select" [nzSize]="'large'" name="SiteRef" [(ngModel)]="BillsPayableSiteRef" required
-            id="SiteRef" (ngModelChange)="'getInvoiceSumExpenseSumListByCompanySiteMonthFilterType()';">
-            <nz-option nzLabel="All Sites" [nzValue]="0"></nz-option>
+    <div class="modern-card">
+      <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+        <h5 class="section-title">Bills Payable</h5>
+        <div class="d-flex gap-2">
+          <nz-select class="nzSelect-light" style="width: 150px;" [(ngModel)]="BillsPayableSiteRef"
+            (ngModelChange)="getInvoiceSumExpenseSumListByCompanySiteMonthFilterType()">
+            <nz-option [nzValue]="0" [nzLabel]="'All Sites'"></nz-option>
             <nz-option *ngFor="let Site of SiteList" [nzValue]="Site.p.Ref" [nzLabel]="Site.p.Name"></nz-option>
           </nz-select>
-        </div>
-        <div style="width: 25%;">
-          <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
-            id="BillPayableFilterType" name="BillPayableFilterType" [nzSize]="'large'"
-            [(ngModel)]="BillPayableFilterType"
+
+          <nz-select class="nzSelect-light" style="width: 100px;" [(ngModel)]="BillPayableFilterType"
             (ngModelChange)="getInvoiceSumExpenseSumListByCompanySiteMonthFilterType()">
-            <nz-option [nzValue]="57" [nzLabel]="'Weekly'"> </nz-option>
-            <nz-option [nzValue]="63" [nzLabel]="'Monthly'"> </nz-option>
+            <nz-option [nzValue]="57" [nzLabel]="'Weekly'"></nz-option>
+            <nz-option [nzValue]="63" [nzLabel]="'Monthly'"></nz-option>
           </nz-select>
-        </div>
-        <div *ngIf="BillPayableFilterType == 63" style="width: 20%;">
-          <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
-            id="SelectedBillPayableMonths" name="SelectedBillPayableMonths" [nzSize]="'large'"
+
+          <nz-select *ngIf="BillPayableFilterType == 63" class="nzSelect-light" style="width: 120px;"
             [(ngModel)]="SelectedBillPayableMonths"
             (ngModelChange)="getInvoiceSumExpenseSumListByCompanySiteMonthFilterType()">
-            <nz-option *ngFor="let SelectedBillPayableMonths of MonthList" [nzValue]="SelectedBillPayableMonths.Ref"
-              [nzLabel]="SelectedBillPayableMonths.Name">
-            </nz-option>
+            <nz-option *ngFor="let m of MonthList" [nzValue]="m.Ref" [nzLabel]="m.Name"></nz-option>
           </nz-select>
         </div>
       </div>
 
       <div class="table-responsive">
-        <table class="table align-middle text-center">
-          <thead class="table-light">
+        <table class="custom-table">
+          <thead>
             <tr>
               <th>Sr. No.</th>
-              <th>Vendor Name</th>
+              <th>Vendor</th>
               <th>Site</th>
               <th>Bill Amount</th>
               <th>Given Amount</th>
@@ -218,28 +209,64 @@
           <tbody *ngIf="InvoiceSumExpenseSumList.length > 0">
             <tr *ngFor="let rec of InvoiceSumExpenseSumList | slice : 0 : 10; index as i">
               <td>{{ i + 1 }}</td>
-              <td>{{ rec.p.SiteName }}</td>
-              <td>{{ rec.p.RecipientName }}</td>
-              <td>{{ rec.p.InvoiceAmount | currency : 'INR' }}</td>
-              <td>{{ rec.p.GivenAmount | currency : 'INR' }}</td>
+              <td style="font-weight: 600;">{{ rec.p.RecipientName }}</td>
+              <td>
+                <span style="background: #f1f5f9; padding: 4px 8px; border-radius: 4px; font-size: 0.8rem;">
+                  {{ rec.p.SiteName }}
+                </span>
+              </td>
+              <td style="color: var(--danger-red);">{{ rec.p.InvoiceAmount | currency : 'INR' }}</td>
+              <td style="color: var(--success-green);">{{ rec.p.GivenAmount | currency : 'INR' }}</td>
             </tr>
-
-            <!-- Read More Button -->
             <tr *ngIf="InvoiceSumExpenseSumList.length > 10">
-              <td colspan="5">
-                <a style="cursor:pointer; font-weight:600; color:#8b4513;" (click)="goToBillsPayablePage()">
-                  Read More →
+              <td colspan="5" class="text-center">
+                <a style="cursor:pointer; color: var(--primary-earth); font-weight:600;"
+                  (click)="goToBillsPayablePage()">
+                  View All Transactions →
                 </a>
               </td>
             </tr>
           </tbody>
-
         </table>
-        <div *ngIf="InvoiceSumExpenseSumList.length === 0" class="card-body_light">
-          <div style="height: 200px" class="d-flex align-items-center justify-content-center">
-            <span class="title_light"> Data Not Found</span>
-          </div>
+
+        <div *ngIf="InvoiceSumExpenseSumList.length === 0" class="d-flex align-items-center justify-content-center"
+          style="height: 150px; background: #fafafa; border-radius: 8px;">
+          <span style="color: #999;">No pending bills found.</span>
         </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="w-full my-4" *ngIf="!isAdmin">
+    <div class="modern-card">
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <h5 class="section-title">Today's Attendance</h5>
+      </div>
+
+      <div class="table-responsive">
+        <table class="custom-table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Employee</th>
+              <th>Location</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let person of todayAttendanceList; index as i">
+              <td>{{ i + 1 }}</td>
+              <td style="font-weight: 600;">{{ person.p.EmployeeName || '-' }}</td>
+              <td>{{ person.p.AttendanceLogDetailsArray[0]?.AttendenceLocationType === LocationType.Office ? 'Head
+                Office' : (person.p.AttendanceLogDetailsArray[0]?.SiteName || '--') }}</td>
+              <td>
+                <ion-badge [color]="getStatusColor(person)" style="padding: 6px 10px; font-weight: 500;">
+                  {{ getStatusText(person) }}
+                </ion-badge>
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
   </div>

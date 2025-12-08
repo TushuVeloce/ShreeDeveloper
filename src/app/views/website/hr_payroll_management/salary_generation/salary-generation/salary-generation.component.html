@@ -126,10 +126,10 @@
             {{EmployeeDesignation}}
           </div>
           <div class="col-md-3 mb-2">
-            <strong>Salary per Month :</strong>
+            <strong>Date of Joining :</strong>
           </div>
           <div class="col-md-3 mb-2">
-            {{ Entity.p.BasicSalary }}
+            {{ getEmployeeDateOfJoining(Entity.p.EmployeeRef) || "--" }}
           </div>
           <div class="col-md-3 mb-2">
             <strong>Total Worked Days :</strong>
@@ -144,13 +144,13 @@
             {{EmployeeBankName}}
           </div>
           <div class="col-md-3 mb-2">
-            <strong>Banck Branch :</strong>
+            <strong>Bank Branch :</strong>
           </div>
           <div class="col-md-3 mb-2">
             {{EmployeeBankBranch}}
           </div>
           <div class="col-md-3 mb-2">
-            <strong>Banck Account No :</strong>
+            <strong>Bank Account No :</strong>
           </div>
           <div class="col-md-3 mb-2">
             {{EmployeeBankAccountNo}}

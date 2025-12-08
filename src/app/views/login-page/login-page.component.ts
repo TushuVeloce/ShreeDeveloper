@@ -11,6 +11,7 @@ import { UIUtils } from 'src/app/services/uiutils.service';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
 import { ValidMenuItemsStateManagement } from 'src/app/services/ValidMenuItems';
+import { FeatureAccessService } from 'src/app/services/feature-access.service';
 
 @Component({
   selector: 'app-login-page',
@@ -36,7 +37,8 @@ export class LoginPageComponent implements OnInit {
     private sessionValues: SessionValues,
     private appStateManage: AppStateManageService,
     private companystatemanagement: CompanyStateManagement,
-    private validmenuitemsstatemanagement: ValidMenuItemsStateManagement
+    private validmenuitemsstatemanagement: ValidMenuItemsStateManagement,
+    public access: FeatureAccessService
   ) {
     platform.ready().then(async () => {
       this.isIosPlatform = platform.is('ios');
@@ -167,7 +169,7 @@ export class LoginPageComponent implements OnInit {
       'LoginEmployeeRef',
       response.LoginEmployeeRef.toString()
     );
-
+    this.access.refresh();
     // 👉 Navigation
     if (this.isMobile) {
       await this.router.navigate(['/homepage']);

@@ -200,23 +200,12 @@
             <label *ngIf="Entity.p.RecipientType == EmployeeType &&  Entity.p.IsSalaryExpense">Net Salary</label>
             <label *ngIf="Entity.p.RecipientType != EmployeeType">Bill Amount</label>
             <input type="text" appCommaFormat [(ngModel)]="Entity.p.InvoiceAmount"
-              (ngModelChange)="Entity.p.GivenAmount = 0; Entity.p.DiscountAmount = 0" name="InvoiceAmount" class="form-control" id="InvoiceAmount"
-              required placeholder="Enter InvoiceAmount" #InvoiceAmountCtrl="ngModel"
-              (blur)="InvoiceAmountCtrl.control.markAsTouched()" (click)="selectAllValue($event)" />
+              (ngModelChange)="Entity.p.GivenAmount = 0; Entity.p.DiscountAmount = 0" name="InvoiceAmount"
+              class="form-control" id="InvoiceAmount" required placeholder="Enter InvoiceAmount"
+              #InvoiceAmountCtrl="ngModel" (blur)="InvoiceAmountCtrl.control.markAsTouched()"
+              (click)="selectAllValue($event)" />
             <div *ngIf="(InvoiceAmountCtrl.invalid && (InvoiceAmountCtrl.touched || InvoiceAmountCtrl.dirty))">
               <span class="validation-text" *ngIf="InvoiceAmountCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-4" style="margin-top: 1rem;">
-          <div>
-            <label>Given Amount</label>
-            <input type="text" appCommaFormat [(ngModel)]="Entity.p.GivenAmount" name="GivenAmount" class="form-control"
-              id="GivenAmount" required placeholder="Enter GivenAmount" #GivenAmountCtrl="ngModel"
-              (blur)="GivenAmountCtrl.control.markAsTouched()" (click)="selectAllValue($event)"
-              (ngModelChange)="CalculateRemainingAmountandBalance()" />
-            <div *ngIf="(GivenAmountCtrl.invalid && (GivenAmountCtrl.touched || GivenAmountCtrl.dirty))">
-              <span class="validation-text" *ngIf="GivenAmountCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
             </div>
           </div>
         </div>
@@ -226,10 +215,21 @@
             <input type="text" appCommaFormat [(ngModel)]="Entity.p.DiscountAmount" name="DiscountAmount"
               class="form-control" id="DiscountAmount" required placeholder="Enter Discount Amount"
               #DiscountAmountCtrl="ngModel" (blur)="DiscountAmountCtrl.control.markAsTouched()"
-              (click)="selectAllValue($event)" (ngModelChange)="CalculateRemainingAmountandBalance()" />
+              (click)="selectAllValue($event)" (ngModelChange)="IsDiscountEditing = true; CalculateRemainingAmountandBalance()" />
             <div *ngIf="(DiscountAmountCtrl.invalid && (DiscountAmountCtrl.touched || DiscountAmountCtrl.dirty))">
-              <span class="validation-text"
-                *ngIf="DiscountAmountCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
+              <span class="validation-text" *ngIf="DiscountAmountCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4" style="margin-top: 1rem;">
+          <div>
+            <label>Given Amount</label>
+            <input type="text" appCommaFormat [(ngModel)]="Entity.p.GivenAmount" name="GivenAmount" class="form-control"
+              id="GivenAmount" required placeholder="Enter GivenAmount" #GivenAmountCtrl="ngModel"
+              (blur)="GivenAmountCtrl.control.markAsTouched()" (click)="selectAllValue($event)"
+              (ngModelChange)="IsDiscountEditing = false;CalculateRemainingAmountandBalance()" />
+            <div *ngIf="(GivenAmountCtrl.invalid && (GivenAmountCtrl.touched || GivenAmountCtrl.dirty))">
+              <span class="validation-text" *ngIf="GivenAmountCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
             </div>
           </div>
         </div>

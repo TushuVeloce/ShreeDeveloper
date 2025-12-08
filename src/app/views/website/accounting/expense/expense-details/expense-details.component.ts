@@ -71,6 +71,7 @@ export class ExpenseDetailsComponent implements OnInit {
   PayerPlotNo: number = 0;
   OldGivenAmount: number = 0;
   IncomeBankList: BankAccount[] = [];
+  IsDiscountEditing : boolean = false;
 
   RequiredFieldMsg: string = ValidationMessages.RequiredFieldMsg;
 
@@ -439,40 +440,40 @@ export class ExpenseDetailsComponent implements OnInit {
     } catch (error) {}
   };
 
-  CalculateRemainingAmountandBalance = () => {
-    this.Entity.p.RemainingAmount = Number((this.Entity.p.InvoiceAmount - this.Entity.p.DiscountAmount - this.Entity.p.GivenAmount).toFixed(2));
-    // if (this.Entity.p.GivenAmount <= this.Entity.p.InvoiceAmount) {
-    // } else {
-    //   this.Entity.p.RemainingAmount = 0;
-    // }
+CalculateRemainingAmountandBalance = () => {
+  const invoice = Number(this.Entity.p.InvoiceAmount) || 0;
+  const discount = Number(this.Entity.p.DiscountAmount) || 0;
+  let given = Number(this.Entity.p.GivenAmount) || 0;
 
-    if (this.PaymentType == this.TypeofEmployeePayments.Advance) {
-      this.Entity.p.InvoiceAmount = this.Entity.p.GivenAmount;
-    }
+  // --- 1️⃣ Auto Set Given Amount When Discount Changes ---
+  if (this.IsDiscountEditing) {
+    given = invoice - discount;
+    this.Entity.p.GivenAmount = Number(given.toFixed(2));
+  }
 
-    if (this.IsNewEntity) {
-      if (this.Entity.p.GivenAmount <= this.Entity.p.ShreesBalance) {
-        this.Entity.p.ShreesBalance = Number((this.ShreeBalance - this.Entity.p.GivenAmount).toFixed(2));
-      } else {
-        this.Entity.p.ShreesBalance = -Number((this.Entity.p.GivenAmount - this.ShreeBalance).toFixed(2));
-      }
+  // --- 2️⃣ Remaining Amount ---
+  this.Entity.p.RemainingAmount = Number((invoice - discount - given).toFixed(2));
+
+  // --- 3️⃣ Shree Balance Update ---
+  if (this.IsNewEntity) {
+    if (given <= this.ShreeBalance) {
+      this.Entity.p.ShreesBalance = Number((this.ShreeBalance - given).toFixed(2));
     } else {
-
-      let currentExpenseAmount = 0;
-
-      if (this.Entity.p.GivenAmount > this.OldGivenAmount) {
-        currentExpenseAmount = this.Entity.p.GivenAmount - this.OldGivenAmount;
-        this.Entity.p.ShreesBalance = Number((this.ShreeBalance - currentExpenseAmount).toFixed(2));
-      } else {
-        currentExpenseAmount = this.OldGivenAmount - this.Entity.p.GivenAmount;
-        this.Entity.p.ShreesBalance = Number((this.ShreeBalance + currentExpenseAmount).toFixed(2));
-      }
+      this.Entity.p.ShreesBalance = -Number((given - this.ShreeBalance).toFixed(2));
     }
+  } else {
+    let currentExpenseAmount = 0;
 
-    if (this.Entity.p.IsAdvancePayment) {
-      this.Entity.p.TotalAdvance = this.Entity.p.RemainingAdvance + this.Entity.p.GivenAmount
+    if (given > this.OldGivenAmount) {
+      currentExpenseAmount = given - this.OldGivenAmount;
+      this.Entity.p.ShreesBalance = Number((this.ShreeBalance - currentExpenseAmount).toFixed(2));
+    } else {
+      currentExpenseAmount = this.OldGivenAmount - given;
+      this.Entity.p.ShreesBalance = Number((this.ShreeBalance + currentExpenseAmount).toFixed(2));
     }
   }
+};
+
 
   // CalculateRemainingAmountandBalance = () => {
   //   const invoice = Number(this.Entity.p.InvoiceAmount) || 0;

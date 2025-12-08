@@ -135,8 +135,14 @@
     </ion-item>
 
     <!-- Salary Advance Return Amount -->
-    <ion-item class="input-item"  *ngIf="Entity.p.PayerType == EmployeeType">
+    <ion-item class="input-item" *ngIf="Entity.p.PayerType == EmployeeType">
       <ion-checkbox [(ngModel)]="Entity.p.IsSalaryAdvanceReturn">Salary Advance Return</ion-checkbox>
+    </ion-item>
+
+    <!-- Balance Advance Amount -->
+    <ion-item class="input-item" *ngIf="Entity.p.PayerType == EmployeeType && Entity.p.IsSalaryAdvanceReturn">
+      <ion-input label="Balance Advance Amount" labelPlacement="floating" placeholder="Enter Balance Advance Amount"
+        [(ngModel)]="Entity.p.RemainingAdvance" [disabled]="'true'"></ion-input>
     </ion-item>
 
     <!-- Income Amount -->

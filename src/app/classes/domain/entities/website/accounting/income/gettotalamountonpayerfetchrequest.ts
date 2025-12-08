@@ -15,6 +15,7 @@ export class TotalAmountFetchRequest {
   Refs: number[] = [];
   CompanyRef = 0;
   PayerTypes: number[] = [];
+  PayerType: number = 0;
   PlotRef = 0;
   PlotRefs: number[] = [];
   LedgerRefs: number[] = [];
@@ -24,6 +25,7 @@ export class TotalAmountFetchRequest {
   EndDate: string = '';
   BankAccountRefs: number[] = [];
   PayerRefs: number[] = [];
+  PayerRef: number = 0;
 
   public MergeIntoTransportData = (td: TransportData) => {
     let coll = DataContainerService.GetInstance().GetOrCreateCollection(td.MainData, TotalAmountFetchRequest.FetchRequestType) as DataCollection;
