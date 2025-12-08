@@ -257,8 +257,7 @@
             <tr *ngFor="let person of todayAttendanceList; index as i">
               <td>{{ i + 1 }}</td>
               <td style="font-weight: 600;">{{ person.p.EmployeeName || '-' }}</td>
-              <td>{{ person.p.AttendanceLogDetailsArray[0]?.AttendenceLocationType === LocationType.Office ? 'Head
-                Office' : (person.p.AttendanceLogDetailsArray[0]?.SiteName || '--') }}</td>
+              <td>{{ person.p.AttendanceLogDetailsArray[0]?.AttendenceLocationType === LocationType.Office ? 'Office' : (person.p.AttendanceLogDetailsArray[0]?.SiteName || '--') }}</td>
               <td>
                 <ion-badge [color]="getStatusColor(person)" style="padding: 6px 10px; font-weight: 500;">
                   {{ getStatusText(person) }}
