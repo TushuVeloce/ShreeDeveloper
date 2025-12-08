@@ -965,7 +965,6 @@ export class ExpensesDetailsMobileAppComponent implements OnInit {
         );
       }
     }
-    console.log('this.Entity :', this.Entity);
   };
 
   AddRecipientName = () => {

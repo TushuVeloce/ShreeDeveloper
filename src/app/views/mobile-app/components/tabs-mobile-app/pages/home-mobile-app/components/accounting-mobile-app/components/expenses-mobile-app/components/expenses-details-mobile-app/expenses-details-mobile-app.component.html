@@ -246,7 +246,7 @@
     <ion-item class="input-item">
       <ion-input label="Given Amount" labelPlacement="floating" placeholder="Enter Given Amount"
         [(ngModel)]="Entity.p.GivenAmount"
-        (ngModelChange)="IsDiscountEditing = true; CalculateRemainingAmountandBalance()" type="number"
+        (ngModelChange)="IsDiscountEditing = false; CalculateRemainingAmountandBalance()" type="number"
         clearOnEdit="true" clearInput="true"></ion-input>
     </ion-item>
 

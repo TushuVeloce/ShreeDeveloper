@@ -362,6 +362,71 @@ export class IncomeDetailsMobileAppComponent implements OnInit {
     this.ShreeBalance = lst[0].p.ShreesBalance;
   };
 
+  // onPayerChange = async () => {
+  //   let SingleRecord;
+  //   try {
+  //     if (this.Entity.p.PayerType == this.DealDoneCustomer) {
+  //       SingleRecord = this.PayerList.find(
+  //         (data) => data.p.PlotName == this.PayerPlotNo
+  //       );
+  //     } else {
+  //       SingleRecord = this.PayerList.find(
+  //         (data) => data.p.Ref == this.Entity.p.PayerRef
+  //       );
+  //     }
+
+  //     if (SingleRecord?.p) {
+  //       this.Entity.p.IsRegisterCustomerRef =
+  //         SingleRecord.p.IsRegisterCustomerRef;
+  //       this.Entity.p.PayerRef = SingleRecord.p.Ref;
+  //       if (this.Entity.p.PayerType == this.DealDoneCustomer) {
+  //         this.Entity.p.PlotRef = SingleRecord.p.PlotRef;
+  //         this.Entity.p.PlotName = SingleRecord.p.PlotName;
+  //         let lst = await Income.FetchToalAmountByCompanyAndPlotRef(
+  //           this.companyRef,
+  //           this.Entity.p.PlotRef,
+  //           0,
+  //           0,
+  //           0,
+  //           async (errMsg) => {
+  //             await this.toastService.present(
+  //               'Error ' + errMsg,
+  //               1000,
+  //               'danger'
+  //             );
+  //             await this.haptic.error();
+  //           }
+  //         );
+  //         if (lst.length > 0) {
+  //           this.Entity.p.TotalPlotAmount = lst[0].p.TotalPlotAmount;
+  //           this.Entity.p.RemainingPlotAmount = lst[0].p.RemainingPlotAmount;
+  //           this.RemainingPlotAmount = lst[0].p.RemainingPlotAmount;
+  //           this.Entity.p.PlotGrandTotal = lst[0].p.PlotGrandTotal;
+  //         }
+  //       } else if (this.Entity.p.PayerType == this.EmployeeType) {
+  //         let lst = await Income.FetchToalAmountByCompanyAndPlotRef(
+  //           this.companyRef,
+  //           0,
+  //           this.Entity.p.PayerType,
+  //           this.Entity.p.PayerRef,
+  //           this.Entity.p.SiteRef,
+  //           async (errMsg) =>
+  //             await this.toastService.present('Error ' + errMsg, 1000, 'danger')
+  //         );
+  //         if (lst.length > 0) {
+  //           this.Entity.p.RemainingAdvance = lst[0].p.RemainingAdvance;
+  //         }
+  //       } else {
+  //         this.Entity.p.TotalPlotAmount = 0;
+  //         this.Entity.p.RemainingPlotAmount = 0;
+  //         this.RemainingPlotAmount = 0;
+  //         this.Entity.p.PlotGrandTotal = 0;
+  //         this.Entity.p.PlotRef = 0;
+  //         this.Entity.p.PlotName = '';
+  //       }
+  //     }
+  //   } catch (error) {}
+  // };
   onPayerChange = async () => {
     let SingleRecord;
     try {
@@ -388,14 +453,8 @@ export class IncomeDetailsMobileAppComponent implements OnInit {
             0,
             0,
             0,
-            async (errMsg) => {
-              await this.toastService.present(
-                'Error ' + errMsg,
-                1000,
-                'danger'
-              );
-              await this.haptic.error();
-            }
+            async (errMsg) =>
+              await this.toastService.present('Error ' + errMsg, 1000, 'danger')
           );
           if (lst.length > 0) {
             this.Entity.p.TotalPlotAmount = lst[0].p.TotalPlotAmount;
@@ -413,6 +472,7 @@ export class IncomeDetailsMobileAppComponent implements OnInit {
             async (errMsg) =>
               await this.toastService.present('Error ' + errMsg, 1000, 'danger')
           );
+          console.log('lst :', lst);
           if (lst.length > 0) {
             this.Entity.p.RemainingAdvance = lst[0].p.RemainingAdvance;
           }
