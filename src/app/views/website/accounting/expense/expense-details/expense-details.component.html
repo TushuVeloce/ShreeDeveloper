@@ -209,7 +209,7 @@
             </div>
           </div>
         </div>
-        <div class="col-md-4" style="margin-top: 1rem;">
+        <div class="col-md-4" style="margin-top: 1rem;" *ngIf="!Entity.p.IsAdvancePayment">
           <div>
             <label>Discount Amount</label>
             <input type="text" appCommaFormat [(ngModel)]="Entity.p.DiscountAmount" name="DiscountAmount"

@@ -235,7 +235,7 @@
     </ion-item>
 
     <!-- Discount Amount -->
-    <ion-item class="input-item">
+    <ion-item class="input-item" *ngIf="!Entity.p.IsAdvancePayment">
       <ion-input label="Discount Amount" labelPlacement="floating" placeholder="Enter Discount Amount"
         [(ngModel)]="Entity.p.DiscountAmount"
         (ngModelChange)="IsDiscountEditing = true; CalculateRemainingAmountandBalance()" type="number"
