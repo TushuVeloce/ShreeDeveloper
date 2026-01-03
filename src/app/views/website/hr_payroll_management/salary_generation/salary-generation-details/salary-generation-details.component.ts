@@ -1,7 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { DomainEnums } from 'src/app/classes/domain/domainenums/domainenums';
-import { SalaryGeneration, SalaryGenerationProps } from 'src/app/classes/domain/entities/website/HR_and_Payroll/Salary_Generation/salarygeneration';
+import {
+  SalaryGeneration,
+  SalaryGenerationProps,
+} from 'src/app/classes/domain/entities/website/HR_and_Payroll/Salary_Generation/salarygeneration';
 import { SalaryGenerationCustomRequest } from 'src/app/classes/domain/entities/website/HR_and_Payroll/Salary_Generation/salarygenerationcustomrequest';
 import { Employee } from 'src/app/classes/domain/entities/website/masters/employee/employee';
 import { TransportData } from 'src/app/classes/infrastructure/transportdata';
@@ -23,7 +26,8 @@ export class SalaryGenerationDetailsComponent implements OnInit {
   Entity: SalaryGeneration = SalaryGeneration.CreateNewInstance();
   private IsNewEntity: boolean = true;
   isSaveDisabled: boolean = false;
-  DetailsFormTitle: 'New Salary Details' | 'Edit Salary Details' = 'New Salary Details';
+  DetailsFormTitle: 'New Salary Details' | 'Edit Salary Details' =
+    'New Salary Details';
   IsDropdownDisabled: boolean = false;
   InitialEntity: SalaryGeneration = null as any;
   EmployeeList: Employee[] = [];
@@ -32,20 +36,32 @@ export class SalaryGenerationDetailsComponent implements OnInit {
   companyName = this.companystatemanagement.SelectedCompanyName;
   companyRef = this.companystatemanagement.SelectedCompanyRef;
   GrossTotal = 0;
+  LateMarkDays = 0;
 
-  constructor(private router: Router, private uiUtils: UIUtils, private appStateManage: AppStateManageService, private utils: Utils, private companystatemanagement: CompanyStateManagement, private serverCommunicator: ServerCommunicatorService, private payloadPacketFacade: PayloadPacketFacade) { }
-
+  constructor(
+    private router: Router,
+    private uiUtils: UIUtils,
+    private appStateManage: AppStateManageService,
+    private utils: Utils,
+    private companystatemanagement: CompanyStateManagement,
+    private serverCommunicator: ServerCommunicatorService,
+    private payloadPacketFacade: PayloadPacketFacade
+  ) {}
 
   ngOnInit() {
-    this.getEmployeeListByCompanyRef()
+    this.getEmployeeListByCompanyRef();
     this.appStateManage.setDropdownDisabled(true);
     if (this.appStateManage.StorageKey.getItem('Editable') == 'Edit') {
       this.IsNewEntity = false;
-      this.isEmployeeDisabled = true
-      this.DetailsFormTitle = this.IsNewEntity ? 'New Salary Details' : 'Edit Salary Details';
+      this.isEmployeeDisabled = true;
+      this.DetailsFormTitle = this.IsNewEntity
+        ? 'New Salary Details'
+        : 'Edit Salary Details';
       this.Entity = SalaryGeneration.GetCurrentInstance();
       this.appStateManage.StorageKey.removeItem('Editable');
-      this.Entity.p.UpdatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
+      this.Entity.p.UpdatedBy = Number(
+        this.appStateManage.StorageKey.getItem('LoginEmployeeRef')
+      );
     } else {
       this.Entity = SalaryGeneration.CreateNewInstance();
       SalaryGeneration.SetCurrentInstance(this.Entity);
@@ -60,18 +76,25 @@ export class SalaryGenerationDetailsComponent implements OnInit {
   focusInput = () => {
     let txtName = document.getElementById('EmployeeRef')!;
     txtName.focus();
-  }
+  };
 
   getEmployeeListByCompanyRef = async () => {
-    let lst = await Employee.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    let lst = await Employee.FetchEntireListByCompanyRef(
+      this.companyRef(),
+      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+    );
     this.EmployeeList = lst;
-  }
+  };
 
   calculategrosstotal = () => {
-    const Total = this.GrossTotal + this.Entity.p.TotalAllowance + this.Entity.p.TotalIncentive + this.Entity.p.Other
+    const Total =
+      this.GrossTotal +
+      this.Entity.p.TotalAllowance +
+      this.Entity.p.TotalIncentive +
+      this.Entity.p.Other;
     this.Entity.p.GrossTotal = parseFloat(Total.toFixed(2));
-    this.calculatenetsalary()
-  }
+    this.calculatenetsalary();
+  };
 
   calculatetotaldeduction = () => {
     const tds = Number(this.Entity.p.TDS) || 0;
@@ -81,12 +104,12 @@ export class SalaryGenerationDetailsComponent implements OnInit {
     const totalleavededuction = Number(this.Entity.p.TotalLeaveDeduction) || 0;
 
     const TotalDeduction = tds + pf + advance + totalleavededuction;
-    const RemainingAdvance = advancepayment - advance
+    const RemainingAdvance = advancepayment - advance;
 
     this.Entity.p.RemainingAdvance = parseFloat(RemainingAdvance.toFixed(2));
     this.Entity.p.TotalDeduction = parseFloat(TotalDeduction.toFixed(2));
     this.calculatenetsalary();
-  }
+  };
 
   calculatenetsalary = () => {
     const tds = Number(this.Entity.p.TDS) || 0;
@@ -96,7 +119,7 @@ export class SalaryGenerationDetailsComponent implements OnInit {
     const NetSalary = this.Entity.p.GrossTotal - SalaryDeduction;
 
     this.Entity.p.NetSalary = parseFloat(NetSalary.toFixed(2));
-  }
+  };
 
   selectAllValue(event: MouseEvent): void {
     const input = event.target as HTMLInputElement;
@@ -104,65 +127,83 @@ export class SalaryGenerationDetailsComponent implements OnInit {
   }
 
   ClearValues = () => {
-    this.Entity.p.TotalAllowance = 0
-    this.Entity.p.TotalIncentive = 0
-    this.Entity.p.Other = 0
-    this.Entity.p.PF = 0
-    this.Entity.p.TDS = 0
-    this.Entity.p.AdvanceDeduction = 0
-    this.calculategrosstotal()
-    this.calculatetotaldeduction()
-  }
+    this.Entity.p.TotalAllowance = 0;
+    this.Entity.p.TotalIncentive = 0;
+    this.Entity.p.Other = 0;
+    this.Entity.p.PF = 0;
+    this.Entity.p.TDS = 0;
+    this.Entity.p.AdvanceDeduction = 0;
+    this.calculategrosstotal();
+    this.calculatetotaldeduction();
+  };
 
   EmployeeData = async (employee: number, month: number) => {
     if (month != 0) {
-      const selectedMonthData = this.MonthList.find(m => m.Ref === month);
+      const selectedMonthData = this.MonthList.find((m) => m.Ref === month);
       if (selectedMonthData) {
         this.Entity.p.TotalDays = selectedMonthData.Days;
       }
     } else {
       this.Entity.p.TotalDays = 0;
     }
-    this.Entity.p.TotalWorkingDays = 0
-    this.Entity.p.TotalOverTimeHrs = 0
-    this.Entity.p.BasicSalary = 0
-    this.Entity.p.AdvancePayment = 0
+    this.Entity.p.TotalWorkingDays = 0;
+    this.Entity.p.TotalOverTimeHrs = 0;
+    this.Entity.p.BasicSalary = 0;
+    this.Entity.p.AdvancePayment = 0;
     if (employee === 0 || month === 0) {
       return;
     }
-    let lst = await SalaryGeneration.FetchEmployeeDataByEmployeeRefandMonth(this.companyRef(), employee, month, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    let lst = await SalaryGeneration.FetchEmployeeDataByEmployeeRefandMonth(
+      this.companyRef(),
+      employee,
+      month,
+      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+    );
 
     if (lst.length > 0) {
-      this.Entity.p.TotalWorkingDays = Number(lst[0].p.TotalWorkingDays)
-      this.Entity.p.BasicSalary = Number(lst[0].p.BasicSalary)
-      this.Entity.p.TotalLeaveDeduction = Number(lst[0].p.TotalLeaveDeduction)
-      this.Entity.p.AdvancePayment = Number(lst[0].p.AdvancePayment)
-      this.Entity.p.TotalOverTimeHrs = Number(lst[0].p.TotalOverTimeHrs)
+      this.Entity.p.TotalWorkingDays = Number(lst[0].p.TotalWorkingDays);
+      this.Entity.p.BasicSalary = Number(lst[0].p.BasicSalary);
+      this.Entity.p.TotalLeaveDeduction = Number(lst[0].p.TotalLeaveDeduction);
+      this.Entity.p.AdvancePayment = Number(lst[0].p.AdvancePayment);
+      this.Entity.p.TotalOverTimeHrs = Number(lst[0].p.TotalOverTimeHrs);
       this.Entity.p.DisplayTotalOverTimeHrs = lst[0].p.DisplayTotalOverTimeHrs;
-      this.Entity.p.OverTimeHrsRate = Number(lst[0].p.OverTimeHrsRate)
-      this.Entity.p.TotalOverTimeSalary = Number(lst[0].p.TotalOverTimeSalary)
-      this.Entity.p.TotalWorkedDays = Number(lst[0].p.TotalWorkedDays)
-      this.Entity.p.TotalFullDayLeavesWithAbsent = Number(lst[0].p.TotalFullDayLeavesWithAbsent)
-      this.Entity.p.HalfDayLeaves = Number(lst[0].p.HalfDayLeaves)
-      this.Entity.p.FullDayWorked = Number(lst[0].p.FullDayWorked)
-      this.Entity.p.TotalFullDaysSalary = Number(lst[0].p.TotalFullDaysSalary)
-      this.Entity.p.HalfDaysIncludingLateMarks = Number(lst[0].p.HalfDaysIncludingLateMarks)
-      this.Entity.p.TotalHalfDaysAndLateMarkDaysSalary = Number(lst[0].p.TotalHalfDaysAndLateMarkDaysSalary)
-      this.Entity.p.RemainingAdvance = Number(lst[0].p.RemainingAdvance)
-      this.Entity.p.TotalDeduction = Number(lst[0].p.TotalLeaveDeduction)
-      this.Entity.p.GrossTotal = Number(lst[0].p.GrossTotal)
-      this.GrossTotal = Number(lst[0].p.GrossTotal)
+      this.Entity.p.OverTimeHrsRate = Number(lst[0].p.OverTimeHrsRate);
+      this.Entity.p.TotalOverTimeSalary = Number(lst[0].p.TotalOverTimeSalary);
+      this.Entity.p.TotalWorkedDays = Number(lst[0].p.TotalWorkedDays);
+      this.Entity.p.TotalFullDayLeavesWithAbsent = Number(
+        lst[0].p.TotalFullDayLeavesWithAbsent
+      );
+      this.Entity.p.HalfDayLeaves = Number(lst[0].p.HalfDayLeaves);
+      this.Entity.p.FullDayWorked = Number(lst[0].p.FullDayWorked);
+      this.Entity.p.TotalFullDaysSalary = Number(lst[0].p.TotalFullDaysSalary);
+      this.Entity.p.HalfDaysIncludingLateMarks = Number(
+        lst[0].p.HalfDaysIncludingLateMarks
+      );
+      this.Entity.p.TotalHalfDaysAndLateMarkDaysSalary = Number(
+        lst[0].p.TotalHalfDaysAndLateMarkDaysSalary
+      );
+      this.Entity.p.RemainingAdvance = Number(lst[0].p.RemainingAdvance);
+      this.Entity.p.TotalDeduction = Number(lst[0].p.TotalLeaveDeduction);
+      this.Entity.p.GrossTotal = Number(lst[0].p.GrossTotal);
+      this.GrossTotal = Number(lst[0].p.GrossTotal);
+      this.LateMarkDays = Number(lst[0].p.HalfDaysIncludingLateMarks)- Number(lst[0].p.HalfDayLeaves);
 
-      await this.calculatetotaldeduction()
+      await this.calculatetotaldeduction();
     }
-  }
+  };
 
   SaveSalaryGeneration = async () => {
-    this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef();
-    this.Entity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName();
+    this.Entity.p.CompanyRef =
+      this.companystatemanagement.getCurrentCompanyRef();
+    this.Entity.p.CompanyName =
+      this.companystatemanagement.getCurrentCompanyName();
     if (this.Entity.p.CreatedBy == 0) {
-      this.Entity.p.CreatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
-      this.Entity.p.UpdatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
+      this.Entity.p.CreatedBy = Number(
+        this.appStateManage.StorageKey.getItem('LoginEmployeeRef')
+      );
+      this.Entity.p.UpdatedBy = Number(
+        this.appStateManage.StorageKey.getItem('LoginEmployeeRef')
+      );
     }
     let entityToSave = this.Entity.GetEditableVersion();
     let entitiesToSave = [entityToSave];
@@ -176,10 +217,14 @@ export class SalaryGenerationDetailsComponent implements OnInit {
     } else {
       this.isSaveDisabled = false;
       if (this.IsNewEntity) {
-        await this.uiUtils.showSuccessToster('Salary Generation Details saved successfully');
+        await this.uiUtils.showSuccessToster(
+          'Salary Generation Details saved successfully'
+        );
         this.Entity = SalaryGeneration.CreateNewInstance();
       } else {
-        await this.uiUtils.showSuccessToster('Salary Generation Details Updated successfully');
+        await this.uiUtils.showSuccessToster(
+          'Salary Generation Details Updated successfully'
+        );
         await this.router.navigate(['/homepage/Website/Salary_Generation']);
       }
     }
@@ -187,15 +232,17 @@ export class SalaryGenerationDetailsComponent implements OnInit {
 
   BackSalaryGenaration = async () => {
     if (!this.utils.AreEqual(this.InitialEntity, this.Entity)) {
-      await this.uiUtils.showConfirmationMessage('Cancel',
+      await this.uiUtils.showConfirmationMessage(
+        'Cancel',
         `This process is IRREVERSIBLE!
       <br/>
       Are you sure that you want to Cancel this Salary Generation Form?`,
         async () => {
           await this.router.navigate(['/homepage/Website/Salary_Generation']);
-        });
+        }
+      );
     } else {
       await this.router.navigate(['/homepage/Website/Salary_Generation']);
     }
-  }
+  };
 }
