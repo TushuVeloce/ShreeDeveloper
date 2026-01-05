@@ -49,6 +49,8 @@ export class SalaryGenerationProps {
   public AdvancePayment: number = 0;
   public NetSalary: number = 0;
   public SalarySlipMonthIndicator: string = '';
+  public HalfDaySystemGeneratedTotalWorkingHrs: number = 0;
+  public FullDaySystemGeneratedTotalWorkingHrs: number = 0;
   public AdvanceDeduction: number = 0;
   public DisplayTotalOverTimeHrs: string = '';
   public OverTimeHrsRate: number = 0;
