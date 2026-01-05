@@ -48,6 +48,11 @@
             placeholder="Enter TotalDays" disabled />
         </div>
         <div class="col-md-4">
+          <label>Holidays</label>
+          <input type="number" name="Holidays" class="form-control" id="Holidays" [(ngModel)]="LateMarkDays"
+            placeholder="LateMark Day" disabled />
+        </div>
+        <div class="col-md-4">
           <label>Working Days</label>
           <input type="number" name="TotalWorkingDays" class="form-control" id="TotalWorkingDays"
             [(ngModel)]="Entity.p.TotalWorkingDays" placeholder="Total Working Days" disabled />
@@ -69,6 +74,12 @@
             [(ngModel)]="Entity.p.FullDayWorked" placeholder="Full Day Worked" disabled />
         </div>
         <div class="col-md-4">
+          <label>Full Day Worked Hrs (With OT)</label>
+          <input type="text" name="FullDaySystemGeneratedTotalWorkingHrs" class="form-control"
+            id="FullDaySystemGeneratedTotalWorkingHrs" [(ngModel)]="Entity.p.FullDaySystemGeneratedTotalWorkingHrs"
+            placeholder="Total Full Days Hrs" disabled />
+        </div>
+        <div class="col-md-4">
           <label>Half Days</label>
           <input type="number" name="HalfDayLeaves" class="form-control" id="HalfDayLeaves"
             [(ngModel)]="Entity.p.HalfDayLeaves" placeholder="Half Day Leaves" disabled />
@@ -79,7 +90,13 @@
             placeholder="LateMark Day" disabled />
         </div>
         <div class="col-md-4">
-          <label>Over Time Hours</label>
+          <label>Half Day / Late Mark Hrs (With OT)</label>
+          <input type="text" name="HalfDaySystemGeneratedTotalWorkingHrs" class="form-control"
+            id="HalfDaySystemGeneratedTotalWorkingHrs" [(ngModel)]="Entity.p.HalfDaySystemGeneratedTotalWorkingHrs"
+            placeholder="Total Half Day Hrs" disabled />
+        </div>
+        <div class="col-md-4">
+          <label>Total Over Time Hours</label>
           <input type="text" name="DisplayTotalOverTimeHrs" class="form-control" id="DisplayTotalOverTimeHrs"
             [(ngModel)]="Entity.p.DisplayTotalOverTimeHrs" placeholder="Display Total Over Time Hrs" disabled />
         </div>
@@ -103,8 +120,13 @@
             (ngModelChange)="calculategrosstotal()" (click)="selectAllValue($event)" />
         </div>
         <div class="col-md-4">
-          <label>Full Day Salary With Overtime</label>
-          <input type="text" appCommaFormat name="TotalFullDaysSalary" class="form-control" id="TotalFullDaysSalary"
+          <label>Holidays Salary</label>
+          <input type="text" name="HolidaysSalary" class="form-control" id="HolidaysSalary" [(ngModel)]="HolidaysSalary"
+            placeholder="Holidays Salary" disabled />
+        </div>
+        <div class="col-md-4">
+          <label>Full Day Salary (With OT)</label>
+          <input type="text" name="TotalFullDaysSalary" class="form-control" id="TotalFullDaysSalary"
             [(ngModel)]="Entity.p.TotalFullDaysSalary" placeholder="Full Day Salary" disabled />
         </div>
         <!-- <div class="col-md-4">
@@ -113,7 +135,7 @@
             [(ngModel)]="Entity.p.HalfDaysIncludingLateMarks" placeholder="Half Days Including Late Marks" disabled />
         </div> -->
         <div class="col-md-4">
-          <label>Half Day / Late Mark Salary</label>
+          <label>Half Day / Late Mark Salary (With OT)</label>
           <input type="text" appCommaFormat name="TotalHalfDaysAndLateMarkDaysSalary" class="form-control"
             id="TotalHalfDaysAndLateMarkDaysSalary" [(ngModel)]="Entity.p.TotalHalfDaysAndLateMarkDaysSalary"
             placeholder="Half Day / Late Mark Salary" disabled />

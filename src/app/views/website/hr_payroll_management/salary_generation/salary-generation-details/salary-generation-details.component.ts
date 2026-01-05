@@ -36,7 +36,9 @@ export class SalaryGenerationDetailsComponent implements OnInit {
   companyName = this.companystatemanagement.SelectedCompanyName;
   companyRef = this.companystatemanagement.SelectedCompanyRef;
   GrossTotal = 0;
-  LateMarkDays = 0;
+  LateMarkDays: number = 0;
+  Holidays: number = 0;
+  HolidaysSalary: number = 0;
 
   constructor(
     private router: Router,
@@ -170,6 +172,12 @@ export class SalaryGenerationDetailsComponent implements OnInit {
       this.Entity.p.OverTimeHrsRate = Number(lst[0].p.OverTimeHrsRate);
       this.Entity.p.TotalOverTimeSalary = Number(lst[0].p.TotalOverTimeSalary);
       this.Entity.p.TotalWorkedDays = Number(lst[0].p.TotalWorkedDays);
+      this.Entity.p.HalfDaySystemGeneratedTotalWorkingHrs = Number(
+        lst[0].p.HalfDaySystemGeneratedTotalWorkingHrs
+      );
+      this.Entity.p.FullDaySystemGeneratedTotalWorkingHrs = Number(
+        lst[0].p.FullDaySystemGeneratedTotalWorkingHrs
+      );
       this.Entity.p.TotalFullDayLeavesWithAbsent = Number(
         lst[0].p.TotalFullDayLeavesWithAbsent
       );
@@ -186,7 +194,18 @@ export class SalaryGenerationDetailsComponent implements OnInit {
       this.Entity.p.TotalDeduction = Number(lst[0].p.TotalLeaveDeduction);
       this.Entity.p.GrossTotal = Number(lst[0].p.GrossTotal);
       this.GrossTotal = Number(lst[0].p.GrossTotal);
-      this.LateMarkDays = Number(lst[0].p.HalfDaysIncludingLateMarks)- Number(lst[0].p.HalfDayLeaves);
+      this.LateMarkDays =
+        Number(lst[0].p.HalfDaysIncludingLateMarks) -
+        Number(lst[0].p.HalfDayLeaves);
+      this.Holidays =
+        Number(lst[0].p.TotalDays) - Number(lst[0].p.TotalWorkingDays);
+      this.HolidaysSalary =
+        Math.round(
+          (Number(lst[0].p.GrossTotal) -
+            Number(lst[0].p.TotalFullDaysSalary) -
+            Number(lst[0].p.TotalHalfDaysAndLateMarkDaysSalary)) *
+            100
+        ) / 100;
 
       await this.calculatetotaldeduction();
     }
