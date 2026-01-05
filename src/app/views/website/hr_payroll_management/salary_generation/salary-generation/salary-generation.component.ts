@@ -43,13 +43,16 @@ export class SalaryGenerationComponent implements OnInit {
   total = 0;
   CompanyList: Company[] = [];
   EmployeeList: Employee[] = [];
-  CompanyAddress: string = '';
+  CompanyAddress1: string = '';
+  CompanyAddress2: string = '';
   CompanyEmail: string = '';
+  CompanyContacts: string = '';
   EmployeeDesignation: string = '';
   EmployeeBankName: string = '';
   EmployeeBankBranch: string = '';
   EmployeeBankAccountNo: string = '';
   EmployeeBankIFSCCode: string = '';
+  EmployeeDepartmentName: string = '';
   Month: number = 0;
   EmployeeRef: number = 0;
   MonthList = DomainEnums.MonthList(true, '--Select Month List--');
@@ -116,6 +119,7 @@ export class SalaryGenerationComponent implements OnInit {
   };
 
   openSalarySlipModal = async (SalaryGeneration: SalaryGeneration) => {
+  console.log('SalaryGeneration :', SalaryGeneration);
     this.isModalVisible = true;
     this.Entity = SalaryGeneration;
     if (this.Entity.p.CompanyRef != 0) {
@@ -123,8 +127,10 @@ export class SalaryGenerationComponent implements OnInit {
         (item) => item.p.Ref == this.Entity.p.CompanyRef
       );
       {
-        this.CompanyAddress = companydetails?.p?.AddressLine1 || '';
+        this.CompanyAddress1 = companydetails?.p?.AddressLine1 || '';
+        this.CompanyAddress2 = companydetails?.p?.AddressLine2 || '';
         this.CompanyEmail = companydetails?.p?.EmailId || '';
+        this.CompanyContacts = companydetails?.p?.Contacts || '';
       }
     }
     if (this.Entity.p.EmployeeRef != 0) {
@@ -139,6 +145,7 @@ export class SalaryGenerationComponent implements OnInit {
       this.EmployeeBankBranch = lst?.p?.BranchName || '';
       this.EmployeeBankAccountNo = lst?.p?.BanckAccountNo || '';
       this.EmployeeBankIFSCCode = lst?.p?.IFSC || '';
+      this.EmployeeDepartmentName = lst?.p?.DepartmentName || '';
     }
   };
 
@@ -260,5 +267,13 @@ export class SalaryGenerationComponent implements OnInit {
 
   printPage() {
     window.print();
+  }
+  printSlip() {
+    const printContent = document.getElementById('salarySlip')!.innerHTML;
+    const originalContent = document.body.innerHTML;
+
+    document.body.innerHTML = printContent;
+    window.print();
+    document.body.innerHTML = originalContent;
   }
 }

@@ -91,142 +91,158 @@
   </div>
 
 
-  <div *ngIf="isModalVisible" (click)="isModalVisible = false"
-    class="custom-modal-overlay d-flex justify-content-center align-items-center">
-    <div class="custom-modal bg-white rounded shadow p-4" #printSection>
+  <!-- Salary Slip Modal -->
+  <div *ngIf="isModalVisible" class="custom-modal-overlay" (click)="isModalVisible = false">
 
-      <!-- Modal Header -->
-      <div class="custom-modal-header mb-3">
-        <div class="d-flex justify-content-between align-items-center flex-wrap">
-          <div class="d-flex align-items-center mb-2 mb-md-0 ">
-            <img src="/assets/logos/ShreeIcon.png" alt="Company Logo"
-              style="width: 40px; height: 40px; margin-right: 10px;">
-            <h4 class="mb-0" style="color: #7F2525;">{{ Entity.p.CompanyName }}</h4>
-          </div>
-          <h6 class="text-muted mb-0">Date: {{formatDate(Entity.p.TransDateTime)}}</h6>
+    <div class="custom-modal" (click)="$event.stopPropagation()" #printSection>
+
+      <div id="salarySlip" class="salary-slip-container">
+
+        <!-- Header -->
+        <div class="text-center mb-3">
+          <img src="/assets/logos/ShreeIcon.png" class="salary-logo mb-2" />
+          <h4 class="fw-bold mb-1">{{ Entity.p.CompanyName }}</h4>
+          <div>{{ CompanyAddress1 }}</div>
+          <div>{{ CompanyAddress2 }}</div>
+          <div>Contact: {{ CompanyContacts }} | Email: {{ CompanyEmail }}</div>
+          <hr />
+          <h5 class="fw-bold">
+            SALARY SLIP FOR THE MONTH OF {{ Entity.p.MonthName }}
+          </h5>
         </div>
-        <h6 class="mt-2">{{ CompanyAddress }}</h6>
-        <h6>{{ CompanyEmail }}</h6>
+
+        <!-- Personal & Statutory Details -->
+        <table class="table table-bordered">
+          <thead class="table-success text-center">
+            <tr>
+              <th colspan="2">Personal Details</th>
+              <th colspan="2">Statutory Details</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Employee Name</td>
+              <td>{{ Entity.p.EmployeeName }}</td>
+              <td>Bank Name</td>
+              <td>{{ EmployeeBankName }}</td>
+            </tr>
+            <tr>
+              <td>Designation</td>
+              <td>{{ EmployeeDesignation }}</td>
+              <td>Bank Account</td>
+              <td>{{ EmployeeBankAccountNo }}</td>
+            </tr>
+            <tr>
+              <td>Department</td>
+              <td>{{ EmployeeDepartmentName }}</td>
+              <td>IFSC</td>
+              <td>{{ EmployeeBankIFSCCode }}</td>
+            </tr>
+            <tr>
+              <td>Date of Joining</td>
+              <td>{{ getEmployeeDateOfJoining(Entity.p.EmployeeRef) }}</td>
+              <td></td>
+              <td></td>
+            </tr>
+          </tbody>
+        </table>
+
+        <!-- Leave Details -->
+        <table class="table table-bordered text-center">
+          <thead class="table-success">
+            <tr>
+              <th>Total Days</th>
+              <th>Paid Days</th>
+              <th>Leaves</th>
+              <th>Worked Days</th>
+              <th>Over Time Hours</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>{{Entity.p.TotalDays}}</td>
+              <td>{{Entity.p.TotalWorkingDays}}</td>
+              <td>{{Entity.p.TotalFullDayLeavesWithAbsent}}</td>
+              <td>{{Entity.p.TotalWorkedDays}}</td>
+              <td>{{Entity.p.TotalOverTimeHrs}}</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <!-- Earnings & Deductions -->
+        <table class="table table-bordered">
+          <thead class="table-success text-center">
+            <tr>
+              <th>Earnings</th>
+              <th>Gross</th>
+              <th>Actual</th>
+              <th>Deductions</th>
+              <th>Actual</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Basic Salary</td>
+              <td>{{ Entity.p.BasicSalary }}</td>
+              <td>{{ Entity.p.GrossTotal - (Entity.p.TotalAllowance + Entity.p.TotalIncentive + Entity.p.Other +
+                Entity.p.TotalOverTimeSalary)}}</td>
+             <td>PF</td>
+              <td>{{ Entity.p.PF || 0 }}</td>
+            </tr>
+            <tr>
+              <td>Allowance</td>
+              <td>{{ Entity.p.TotalAllowance || 0 }}</td>
+              <td>{{ Entity.p.TotalAllowance || 0 }}</td>
+               <td>TDS</td>
+              <td>{{ Entity.p.TDS || 0 }}</td>
+            </tr>
+            <tr>
+              <td>Incentive</td>
+              <td>{{ Entity.p.TotalIncentive + Entity.p.TotalOverTimeSalary || 0 }}</td>
+              <td>{{ Entity.p.TotalIncentive + Entity.p.TotalOverTimeSalary || 0 }}</td>
+              <td>Advance Deduction</td>
+              <td>{{ Entity.p.AdvanceDeduction || 0 }}</td>
+            </tr>
+            <tr>
+              <td>Other</td>
+              <td>{{ Entity.p.Other || 0 }}</td>
+              <td>{{ Entity.p.Other || 0 }}</td>
+            </tr>
+            <tr class="fw-bold">
+              <td>Gross Salary</td>
+              <td> {{
+                (
+                Entity.p.BasicSalary +
+                Entity.p.TotalAllowance +
+                Entity.p.TotalIncentive +
+                Entity.p.Other +
+                Entity.p.TotalOverTimeSalary
+                ) | number:'1.2-2'
+                }}</td>
+              <td>{{ Entity.p.GrossTotal || 0 }}</td>
+              <td>Total Deduction</td>
+              <td>{{ (Entity.p.PF + Entity.p.TDS + Entity.p.AdvanceDeduction ) || 0 }}</td>
+            </tr>
+            <tr class="fw-bold">
+              <td colspan="3">Net Salary Payable</td>
+              <td colspan="2">{{ Entity.p.NetSalary || 0 }}</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <p class="text-center fw-bold mt-2">
+          It is a computer-generated payslip, no signature required
+        </p>
       </div>
 
-      <!-- Modal Body -->
-      <div class="custom-modal-body">
-        <!-- Employee & Attendance Details -->
-        <div class="row mb-3" style="font-size: 15px;">
-          <div class="col-md-3 mb-2">
-            <strong>Employee Name :</strong>
-          </div>
-          <div class="col-md-3 mb-2">
-            {{ Entity.p.EmployeeName }}
-          </div>
-          <div class="col-md-3 mb-2">
-            <strong>Designation :</strong>
-          </div>
-          <div class="col-md-3 mb-2">
-            {{EmployeeDesignation}}
-          </div>
-          <div class="col-md-3 mb-2">
-            <strong>Date of Joining :</strong>
-          </div>
-          <div class="col-md-3 mb-2">
-            {{ getEmployeeDateOfJoining(Entity.p.EmployeeRef) || "--" }}
-          </div>
-          <div class="col-md-3 mb-2">
-            <strong>Total Worked Days :</strong>
-          </div>
-          <div class="col-md-3 mb-2">
-            {{ Entity.p.TotalWorkingDays }}
-          </div>
-          <div class="col-md-3 mb-2">
-            <strong>Banck Name :</strong>
-          </div>
-          <div class="col-md-3 mb-2">
-            {{EmployeeBankName}}
-          </div>
-          <div class="col-md-3 mb-2">
-            <strong>Bank Branch :</strong>
-          </div>
-          <div class="col-md-3 mb-2">
-            {{EmployeeBankBranch}}
-          </div>
-          <div class="col-md-3 mb-2">
-            <strong>Bank Account No :</strong>
-          </div>
-          <div class="col-md-3 mb-2">
-            {{EmployeeBankAccountNo}}
-          </div>
-          <div class="col-md-3 mb-2">
-            <strong>IFSC Code :</strong>
-          </div>
-          <div class="col-md-3 mb-2">
-            {{EmployeeBankIFSCCode}}
-          </div>
-        </div>
-        <div class="table-container">
-          <table class="table table-bordered text-center">
-            <thead class="bg-light">
-              <tr>
-                <th colspan="2">EARNINGS</th>
-                <th colspan="2">DEDUCTIONS</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>Basic Salary</td>
-                <td>{{ Entity.p.BasicSalary | currency:'INR' }}</td>
-                <td>TDS</td>
-                <td>{{ Entity.p.TDS | currency:'INR' }}</td>
-              </tr>
-              <tr>
-                <td>Travel Allowance</td>
-                <td>{{ Entity.p.TotalAllowance | currency:'INR' }}</td>
-                <td>PF</td>
-                <td>{{ Entity.p.PF | currency:'INR' }}</td>
-              </tr>
-              <tr>
-                <td>Incentives</td>
-                <td>{{ Entity.p.TotalIncentive | currency:'INR' }}</td>
-                <td>Total Leaves Deduction</td>
-                <td>{{ Entity.p.TotalLeaveDeduction | currency:'INR' }}</td>
-              </tr>
-              <tr>
-                <td>Other</td>
-                <td>{{ Entity.p.Other | currency:'INR' }}</td>
-                <td>Advance Deduction</td>
-                <td>{{ Entity.p.AdvanceDeduction | currency:'INR' }}</td>
-              </tr>
-              <tr class="fw-bold">
-                <td>Gross Salary</td>
-                <td>{{ Entity.p.GrossTotal | currency:'INR' }}</td>
-                <td>Total Deduction</td>
-                <td>{{ Entity.p.TotalDeduction | currency:'INR' }}</td>
-              </tr>
-              <tr class="bg-secondary text-white fw-bold">
-                <td>Net Salary</td>
-                <td>{{ Entity.p.NetSalary | currency:'INR' }}</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-        <!-- Footer Details -->
-        <div class="custom-modal-footer mt-4">
-          <!-- Signatures -->
-          <div class="row mt-8">
-            <div class="col-md-6 text-start d-flex flex-column align-items-left justify-content-center">
-              <h6 class="mb-0">Stamp : {{Entity.p.CompanyName}}</h6>
-            </div>
-            <div class="col-md-6 text-center d-flex flex-column align-items-center">
-              <h6 class="mb-0">Signature : {{UserDisplayName}}</h6>
-            </div>
-            <div class=" col-md-6 text-end mt-1">
-              <img src="/assets/icons/printer.png" alt="Print" style="cursor: pointer;" width="34px" height="34px"
-                (click)="printPage()" />
-            </div>
-          </div>
-          <!-- Close Button -->
-          <!-- <div class="text-end mt-1">
-        <button nz-button nzType="primary" (click)="isModalVisible = false">Close</button>
-      </div> -->
-        </div>
+      <div class="text-center mt-3 no-print">
+         <button class="btn btn-primary me-2" (click)="isModalVisible=false">
+          Back
+        </button>
+        <button class="btn btn-primary me-2" (click)="printSlip()">
+          Print Salary Slip
+        </button>
       </div>
+
     </div>
+  </div>
