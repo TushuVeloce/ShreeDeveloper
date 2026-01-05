@@ -64,6 +64,9 @@ export class SalaryGenerationDetailsComponent implements OnInit {
       this.Entity.p.UpdatedBy = Number(
         this.appStateManage.StorageKey.getItem('LoginEmployeeRef')
       );
+      this.EmployeeData(this.Entity.p.EmployeeRef, this.Entity.p.Month); 
+      this.calculategrosstotal();
+      // this.ClearValues()
     } else {
       this.Entity = SalaryGeneration.CreateNewInstance();
       SalaryGeneration.SetCurrentInstance(this.Entity);
