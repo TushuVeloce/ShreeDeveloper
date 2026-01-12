@@ -59,7 +59,6 @@ export class LoginMobileAppComponent implements OnInit {
     }
 
     // Store login session data
-    console.log('response :', response);
     this.appStateManage.setEmployeeRef(response.LoginEmployeeRef);
     this.appStateManage.setLoginTokenForMobile(response.LoginToken);
     this.companystatemanagement.setCompanyRef(response.LastSelectedCompanyRef, response.CompanyName);

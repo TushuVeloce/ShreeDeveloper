@@ -123,7 +123,6 @@ export class VendorMasterDetailsMobileAppComponent implements OnInit {
 
   private validateForm(): boolean {
     const v = this.FormEntity; // Check mandatory fields
-    console.log('v :', v);
 
     if (!v.p.Name || !v.p.MobileNo || !v.p.AddressLine1) {
       this.toastService.present(

@@ -472,7 +472,6 @@ export class IncomeDetailsMobileAppComponent implements OnInit {
             async (errMsg) =>
               await this.toastService.present('Error ' + errMsg, 1000, 'danger')
           );
-          console.log('lst :', lst);
           if (lst.length > 0) {
             this.Entity.p.RemainingAdvance = lst[0].p.RemainingAdvance;
           }

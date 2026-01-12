@@ -93,7 +93,6 @@ export class SalarySlipApprovalComponent implements OnInit {
       async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
     );
     this.MasterList = lst;
-    console.log('lst :', lst);
 
     this.DisplayMasterList = this.MasterList;
     this.loadPaginationData();

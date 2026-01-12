@@ -101,7 +101,6 @@ export class ServerCommunicatorService {
     try {
 
       let pktResult: PayloadPacket = null as any;
-      // console.log(pkt);
       if (pkt.Payload.RequestType === RequestTypes.Fetch) method = 'FetchAcceptRequest';
       else if (pkt.Payload.RequestType === RequestTypes.CustomProcess) method = 'CustomAcceptRequest';
       else if (pkt.Payload.RequestType === RequestTypes.Deletion) method = 'DeleteAcceptRequest';

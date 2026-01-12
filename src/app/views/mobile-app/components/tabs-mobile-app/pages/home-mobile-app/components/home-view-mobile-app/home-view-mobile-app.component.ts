@@ -603,7 +603,6 @@ export class HomeViewMobileAppComponent
     );
 
     this.DashboardStatsList = lst;
-    console.log('lst :', lst);
 
     this.ExpenseGraphList = lst[0].p.IncomeExpenseAmountByPeriodList.map(
       (item) => item.TotalGivenAmount

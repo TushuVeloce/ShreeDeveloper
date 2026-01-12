@@ -1322,7 +1322,6 @@ export class ExpensesDetailsMobileAppComponent implements OnInit {
           if (!selected || selected.length === 0) return;
 
           this.selectedRecipientName = selected;
-          console.log('selected :', selected);
           this.Entity.p.RecipientRef = selected[0].p.Ref;
           this.RecipientName = selected[0].p.Name;
           this.PayerPlotNo = selected[0].p.PlotName || ''; // ✅ now you can directly access it

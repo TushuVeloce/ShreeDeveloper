@@ -37,7 +37,6 @@ export class LocationService {
             const userLat = coordinates.coords.latitude;
             const userLon = coordinates.coords.longitude;
 
-            console.log(`📍 User Location: Lat ${userLat}, Lon ${userLon}`);
 
             // Calculate distance to office
             const distance = this.calculateDistance(
@@ -47,7 +46,6 @@ export class LocationService {
                 officeLocation.longitude
             );
 
-            console.log(`🏢 Distance from Office: ${distance.toFixed(2)} meters`);
 
             // Return structured data
             return {

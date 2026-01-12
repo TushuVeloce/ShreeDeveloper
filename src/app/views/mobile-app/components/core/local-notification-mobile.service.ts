@@ -70,7 +70,6 @@ export class NotificationService {
 
   async cancelAll() {
     await LocalNotifications.cancel({ notifications: [] });
-    console.log('🔕 All notifications cancelled.');
   }
 
   async scheduleDailyNotification(title: string, body: string, hour: number, minute: number) {
@@ -93,7 +92,6 @@ export class NotificationService {
       ],
     });
 
-    console.log(`📅 Daily notification set for ${hour}:${minute}`);
   }
 
   async cancelRecurring(id: number) {
@@ -101,7 +99,6 @@ export class NotificationService {
       notifications: [{ id }],
     });
 
-    console.log(`❌ Notification with ID ${id} cancelled.`);
   }
 }
 

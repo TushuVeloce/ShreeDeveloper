@@ -119,7 +119,6 @@ export class SalaryGenerationComponent implements OnInit {
   };
 
   openSalarySlipModal = async (SalaryGeneration: SalaryGeneration) => {
-    console.log('SalaryGeneration :', SalaryGeneration);
     this.isModalVisible = true;
     this.Entity = SalaryGeneration;
     if (this.Entity.p.CompanyRef != 0) {

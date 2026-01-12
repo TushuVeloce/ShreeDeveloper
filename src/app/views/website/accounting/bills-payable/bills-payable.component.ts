@@ -110,7 +110,6 @@ export class BillsPayableComponent implements OnInit {
         async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
       );
     this.MasterList = lst;
-    console.log('this.MasterList :', this.MasterList);
     this.DisplayMasterList = lst;
     this.loadPaginationData();
   };

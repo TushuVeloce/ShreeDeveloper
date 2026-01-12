@@ -114,7 +114,6 @@ export class LoginPageComponent implements OnInit {
     req.LoginDeviceId = this.sessionValues.LoginDeviceId;
 
     const response = await this.servercommunicator.LoginUser(req);
-    console.log('response :', response);
 
     if (!response.Successful) {
       return this.uiUtils.showErrorMessage('Error', response.Message);

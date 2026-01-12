@@ -285,12 +285,10 @@ export class InvoiceDetailsComponent implements OnInit {
       this.companyRef(),
       async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
     );
-    console.log('vendor services lst :', lst);
     this.VendorServiceListByVendor = lst;
   };
 
   getVendorServiceListByVendorRef = async (VendorRef: number) => {
-  console.log('VendorRef :', VendorRef);
     if (this.IsNewEntity) {
       this.Entity.p.VendorServiceRef = 0;
     }
@@ -308,7 +306,6 @@ export class InvoiceDetailsComponent implements OnInit {
       async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
     );
     this.VendorServiceList = lst.p.ServiceListSuppliedByVendor;
-    console.log('lst :', lst);
     this.VendorServiceListByVendor = []; // Clear existing list first
     if (this.VendorServiceList.length > 0) {
       await this.FormulateVendorServiceList();

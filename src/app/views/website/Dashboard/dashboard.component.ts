@@ -655,7 +655,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
           async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
         );
       this.InvoiceSumExpenseSumList = lst || [];
-      console.log('this.InvoiceSumExpenseSumList :', this.InvoiceSumExpenseSumList);
     } catch (err) {
       console.error('getInvoiceSumExpenseSumList error', err);
       await this.uiUtils.showErrorToster('Failed to load invoice / expense summary.');

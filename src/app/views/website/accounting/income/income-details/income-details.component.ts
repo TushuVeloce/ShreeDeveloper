@@ -211,7 +211,6 @@ export class IncomeDetailsComponent implements OnInit {
       async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
     );
     this.PayerList = lst;
-    console.log(' PayerList lst :', lst);
   };
 
   onPayerChange = async () => {
@@ -259,7 +258,6 @@ export class IncomeDetailsComponent implements OnInit {
             async (errMsg) =>
               await this.uiUtils.showErrorMessage('Error', errMsg)
           );
-          console.log('lst :', lst);
           if (lst.length > 0) {
             this.Entity.p.RemainingAdvance = lst[0].p.RemainingAdvance;
           }
