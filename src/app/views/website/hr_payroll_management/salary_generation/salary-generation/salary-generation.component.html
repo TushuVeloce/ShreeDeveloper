@@ -92,156 +92,164 @@
 
 
   <!-- Salary Slip Modal -->
-  <div *ngIf="isModalVisible" class="custom-modal-overlay" (click)="isModalVisible = false">
+  <div *ngIf="isModalVisible" class="custom-modal-overlay" (click)="isModalVisible=false">
 
-    <div class="custom-modal" (click)="$event.stopPropagation()" #printSection>
+    <div class="custom-modal" (click)="$event.stopPropagation()">
 
       <div id="salarySlip" class="salary-slip-container">
 
-        <!-- Header -->
-        <div class="text-center mb-3">
-          <img src="/assets/logos/ShreeIcon.png" class="salary-logo mb-2" />
-          <h4 class="fw-bold mb-1">{{ Entity.p.CompanyName }}</h4>
-          <div>{{ CompanyAddress1 }}</div>
-          <div>{{ CompanyAddress2 }}</div>
-          <div>Contact: {{ CompanyContacts }} | Email: {{ CompanyEmail }}</div>
-          <hr />
-          <h5 class="fw-bold">
-            SALARY SLIP FOR THE MONTH OF {{ Entity.p.MonthName }}
-          </h5>
+        <!-- Company Letterhead -->
+        <div class="letterhead">
+          <div class="letterhead-top">
+            <div class="company-logo">
+              <img src="/assets/logos/ShreeIcon.png" alt="Company Logo" />
+            </div>
+
+            <div class="company-info">
+              <h4 class="company-name">{{ Entity.p.CompanyName || '--' }}</h4>
+              <div class="company-address">
+                {{ CompanyAddress1 || '--' }}<br />
+                {{ CompanyAddress2 || '--' }}
+              </div>
+              <div class="company-contact">
+                Contact: {{ CompanyContacts || '--' }} |
+                Email: {{ CompanyEmail || '--' }}
+              </div>
+            </div>
+          </div>
+
+          <div class="letterhead-title">
+            SALARY SLIP FOR THE MONTH OF {{ Entity.p.MonthName || '--' }}
+          </div>
         </div>
 
         <!-- Personal & Statutory Details -->
-        <table class="table table-bordered">
-          <thead class="table-success text-center">
-            <tr>
-              <th colspan="2">Personal Details</th>
-              <th colspan="2">Statutory Details</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>Employee Name</td>
-              <td>{{ Entity.p.EmployeeName }}</td>
-              <td>Bank Name</td>
-              <td>{{ EmployeeBankName }}</td>
-            </tr>
-            <tr>
-              <td>Designation</td>
-              <td>{{ EmployeeDesignation }}</td>
-              <td>Bank Account</td>
-              <td>{{ EmployeeBankAccountNo }}</td>
-            </tr>
-            <tr>
-              <td>Department</td>
-              <td>{{ EmployeeDepartmentName }}</td>
-              <td>IFSC</td>
-              <td>{{ EmployeeBankIFSCCode }}</td>
-            </tr>
-            <tr>
-              <td>Date of Joining</td>
-              <td>{{ getEmployeeDateOfJoining(Entity.p.EmployeeRef) }}</td>
-              <td></td>
-              <td></td>
-            </tr>
-          </tbody>
-        </table>
+        <div class="table-responsive">
+          <table class="table table-bordered">
+            <thead class="table-success">
+              <tr>
+                <th colspan="2">Personal Details</th>
+                <th colspan="2">Statutory Details</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Employee Name</td>
+                <td>{{ Entity.p.EmployeeName || '--' }}</td>
+                <td>Bank Name</td>
+                <td>{{ EmployeeBankName || '--' }}</td>
+              </tr>
+              <tr>
+                <td>Designation</td>
+                <td>{{ EmployeeDesignation || '--' }}</td>
+                <td>Bank Account</td>
+                <td>{{ EmployeeBankAccountNo || '--' }}</td>
+              </tr>
+              <tr>
+                <td>Department</td>
+                <td>{{ EmployeeDepartmentName || '--' }}</td>
+                <td>IFSC</td>
+                <td>{{ EmployeeBankIFSCCode || '--' }}</td>
+              </tr>
+              <tr>
+                <td>Date Of Joining</td>
+                <td>{{ getEmployeeDateOfJoining(Entity.p.EmployeeRef) || '--' }}</td>
+                <td></td>
+                <td></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
 
         <!-- Leave Details -->
-        <table class="table table-bordered text-center">
-          <thead class="table-success">
-            <tr>
-              <th>Total Days</th>
-              <th>Paid Days</th>
-              <th>Leaves</th>
-              <th>Worked Days</th>
-              <th>Over Time Hours</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>{{Entity.p.TotalDays}}</td>
-              <td>{{Entity.p.TotalWorkingDays}}</td>
-              <td>{{Entity.p.TotalFullDayLeavesWithAbsent}}</td>
-              <td>{{Entity.p.TotalWorkedDays}}</td>
-              <td>{{Entity.p.TotalOverTimeHrs}}</td>
-            </tr>
-          </tbody>
-        </table>
+        <div class="table-responsive">
+          <table class="table table-bordered">
+            <thead class="table-success">
+              <tr>
+                <th>Total Days</th>
+                <th>Paid Days</th>
+                <th>Leaves</th>
+                <th>Worked Days</th>
+                <th>OT Hours</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>{{ Entity.p.TotalDays || 0 }}</td>
+                <td>{{ Entity.p.TotalWorkingDays || 0 }}</td>
+                <td>{{ Entity.p.TotalFullDayLeavesWithAbsent || 0 }}</td>
+                <td>{{ Entity.p.TotalWorkedDays || 0 }}</td>
+                <td>{{ Entity.p.TotalOverTimeHrs || 0 }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
 
         <!-- Earnings & Deductions -->
-        <table class="table table-bordered">
-          <thead class="table-success text-center">
-            <tr>
-              <th>Earnings</th>
-              <th>Gross</th>
-              <th>Actual</th>
-              <th>Deductions</th>
-              <th>Actual</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>Basic Salary</td>
-              <td>{{ Entity.p.BasicSalary }}</td>
-              <td>{{ Entity.p.GrossTotal - (Entity.p.TotalAllowance + Entity.p.TotalIncentive + Entity.p.Other +
-                Entity.p.TotalOverTimeSalary)}}</td>
-             <td>PF</td>
-              <td>{{ Entity.p.PF || 0 }}</td>
-            </tr>
-            <tr>
-              <td>Allowance</td>
-              <td>{{ Entity.p.TotalAllowance || 0 }}</td>
-              <td>{{ Entity.p.TotalAllowance || 0 }}</td>
-               <td>TDS</td>
-              <td>{{ Entity.p.TDS || 0 }}</td>
-            </tr>
-            <tr>
-              <td>Incentive</td>
-              <td>{{ Entity.p.TotalIncentive + Entity.p.TotalOverTimeSalary || 0 }}</td>
-              <td>{{ Entity.p.TotalIncentive + Entity.p.TotalOverTimeSalary || 0 }}</td>
-              <td>Advance Deduction</td>
-              <td>{{ Entity.p.AdvanceDeduction || 0 }}</td>
-            </tr>
-            <tr>
-              <td>Other</td>
-              <td>{{ Entity.p.Other || 0 }}</td>
-              <td>{{ Entity.p.Other || 0 }}</td>
-            </tr>
-            <tr class="fw-bold">
-              <td>Gross Salary</td>
-              <td> {{
-                (
-                Entity.p.BasicSalary +
-                Entity.p.TotalAllowance +
-                Entity.p.TotalIncentive +
-                Entity.p.Other +
-                Entity.p.TotalOverTimeSalary
-                ) | number:'1.2-2'
-                }}</td>
-              <td>{{ Entity.p.GrossTotal || 0 }}</td>
-              <td>Total Deduction</td>
-              <td>{{ (Entity.p.PF + Entity.p.TDS + Entity.p.AdvanceDeduction ) || 0 }}</td>
-            </tr>
-            <tr class="fw-bold">
-              <td colspan="3">Net Salary Payable</td>
-              <td colspan="2">{{ Entity.p.NetSalary || 0 }}</td>
-            </tr>
-          </tbody>
-        </table>
+        <div class="table-responsive">
+          <table class="table table-bordered">
+            <thead class="table-success">
+              <tr>
+                <th>Earnings</th>
+                <th>Gross</th>
+                <th>Actual</th>
+                <th>Deductions</th>
+                <th>Actual</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Basic Salary</td>
+                <td>{{ Entity.p.BasicSalary || 0}}</td>
+                <td>{{ (Entity.p.GrossTotal - (Entity.p.TotalAllowance + Entity.p.TotalIncentive + Entity.p.Other +
+                  Entity.p.TotalOverTimeSalary)) || 0}}</td>
+                <td>PF</td>
+                <td>{{ Entity.p.PF || 0 }}</td>
+              </tr>
+              <tr>
+                <td>Allowance</td>
+                <td>{{ Entity.p.TotalAllowance || 0 }}</td>
+                <td>{{ Entity.p.TotalAllowance || 0 }}</td>
+                <td>TDS</td>
+                <td>{{ Entity.p.TDS || 0 }}</td>
+              </tr>
+              <tr>
+                <td>Incentive</td>
+                <td>{{ Entity.p.TotalIncentive + Entity.p.TotalOverTimeSalary || 0 }}</td>
+                <td>{{ Entity.p.TotalIncentive + Entity.p.TotalOverTimeSalary || 0 }}</td>
+                <td>Advance Deduction</td>
+                <td>{{ Entity.p.AdvanceDeduction || 0 }}</td>
+              </tr>
+              <tr>
+                <td>Other</td>
+                <td>{{ Entity.p.Other || 0 }}</td>
+                <td>{{ Entity.p.Other || 0 }}</td>
+              </tr>
+              <tr class="fw-bold">
+                <td>Gross Salary</td>
+                <td> {{ ( Entity.p.BasicSalary + Entity.p.TotalAllowance + Entity.p.TotalIncentive + Entity.p.Other +
+                  Entity.p.TotalOverTimeSalary ) | number:'1.2-2' }}</td>
+                <td>{{ Entity.p.GrossTotal || 0 }}</td>
+                <td>Total Deduction</td>
+                <td>{{ (Entity.p.PF + Entity.p.TDS + Entity.p.AdvanceDeduction ) || 0 }}</td>
+              </tr>
+              <tr class="fw-bold">
+                <td colspan="3">Net Salary Payable</td>
+                <td colspan="2">{{ Entity.p.NetSalary || 0 }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
 
         <p class="text-center fw-bold mt-2">
-          It is a computer-generated payslip, no signature required
+          This is a computer-generated payslip. No signature required.
         </p>
+
       </div>
 
       <div class="text-center mt-3 no-print">
-         <button class="btn btn-primary me-2" (click)="isModalVisible=false">
-          Back
-        </button>
-        <button class="btn btn-primary me-2" (click)="printSlip()">
-          Print Salary Slip
-        </button>
+        <button class="btn btn-secondary me-2" (click)="isModalVisible=false">Back</button>
+        <button class="btn btn-primary" (click)="printSlip()">Print</button>
       </div>
 
     </div>

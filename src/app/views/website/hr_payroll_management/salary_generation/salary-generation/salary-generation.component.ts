@@ -119,7 +119,7 @@ export class SalaryGenerationComponent implements OnInit {
   };
 
   openSalarySlipModal = async (SalaryGeneration: SalaryGeneration) => {
-  console.log('SalaryGeneration :', SalaryGeneration);
+    console.log('SalaryGeneration :', SalaryGeneration);
     this.isModalVisible = true;
     this.Entity = SalaryGeneration;
     if (this.Entity.p.CompanyRef != 0) {
@@ -265,15 +265,21 @@ export class SalaryGenerationComponent implements OnInit {
     this.router.navigate(['/homepage/Website/Salary_Generation_Details']);
   };
 
-  printPage() {
-    window.print();
-  }
   printSlip() {
-    const printContent = document.getElementById('salarySlip')!.innerHTML;
-    const originalContent = document.body.innerHTML;
+    const originalTitle = document.title;
+    document.title = `Salary Slip - ${this.Entity.p.EmployeeName} - ${this.Entity.p.MonthName}`;
+    // Close modal AFTER print dialog closes
+    const closeAfterPrint = () => {
+      this.isModalVisible = false;
+      window.removeEventListener('afterprint', closeAfterPrint);
+    };
 
-    document.body.innerHTML = printContent;
+    window.addEventListener('afterprint', closeAfterPrint);
+
     window.print();
-    document.body.innerHTML = originalContent;
+    
+    setTimeout(() => {
+      document.title = originalTitle;
+    }, 500);
   }
 }
