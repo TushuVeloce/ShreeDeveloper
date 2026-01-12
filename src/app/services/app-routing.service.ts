@@ -21,7 +21,6 @@ export class AppRoutingService {
   }
 
   Navigation = async (routerlink: string, data: any) => {
-    console.log(data.state);
 
     let obj = {
       Data: data.state,
